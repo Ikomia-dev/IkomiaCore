@@ -1,0 +1,8 @@
+IkomiaCore.pro.user
+LocalSettings.pri
+Build
+Doc/API/html
+Doc/API/latex
+Doc/Internal/html
+Doc/Internal/latex
+.idea
