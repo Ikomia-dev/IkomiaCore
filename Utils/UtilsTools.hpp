@@ -342,11 +342,11 @@ namespace Ikomia
             }
             inline QString      getCurrentVersionNumber()
             {
-                return "0.6.1";
+                return "0.7.0";
             }
             inline QString      getCurrentVersionName()
             {
-                return "0.6.1";
+                return "0.7.0";
             }
             inline std::string  getIkomiaLibFolder()
             {
@@ -1027,7 +1027,7 @@ namespace Ikomia
             }
             inline std::string  getCurrentApiVersion()
             {
-                return "0.6.1";
+                return "0.7.0";
             }
         }
 
