@@ -67,14 +67,14 @@ centos7 {
     unix:!macx: INCLUDEPATH += /work/shared/local/lib/python3.7/site-packages/numpy/core/include/               # NUMPY path for CENTOS 7
 }
 else {
-    win32: INCLUDEPATH += $$(ProgramW6432)/Python$${PYTHON_VERSION_EXT}/include
+    win32: INCLUDEPATH += $$(ProgramW6432)/Python$${PYTHON_VERSION_NO_DOT}/include
     win32: INCLUDEPATH += $$PWD/../numpy/numpy/core/include                                             # NUMPY path for Windows
-    macx: pythonPath = /usr/local/python$${PYTHON_VERSION}                                              #/usr/local/opt/python/Frameworks/Python.framework/Versions/3.7
-    macx: INCLUDEPATH += $$pythonPath/include/python$${PYTHON_VERSION}m
+    macx: pythonPath = /usr/local/python$${PYTHON_VERSION_DOT}                                              #/usr/local/opt/python/Frameworks/Python.framework/Versions/3.7
+    macx: INCLUDEPATH += $$pythonPath/include/python$${PYTHON_VERSION_DOT}m
     macx: INCLUDEPATH += $$pythonPath/lib/python$${PYTHON_VERSION}/site-packages/numpy/core/include
-    unix:!macx: INCLUDEPATH += /usr/include/python$${PYTHON_VERSION_EXT}
-    unix:!macx: INCLUDEPATH += /usr/local/include/python$${PYTHON_VERSION}
-    unix:!macx: INCLUDEPATH += /usr/lib/python$${PYTHON_VERSION}/site-packages/numpy/core/include/      # NUMPY path for Arch
+    unix:!macx: INCLUDEPATH += /usr/include/python$${PYTHON_VERSION_DOT}
+    unix:!macx: INCLUDEPATH += /usr/local/include/python$${PYTHON_VERSION_DOT}
+    unix:!macx: INCLUDEPATH += /usr/lib/python$${PYTHON_VERSION_DOT}/site-packages/numpy/core/include/      # NUMPY path for Arch
 }
 
 # Boost
@@ -115,20 +115,20 @@ centos7 {
 macx: LIBS += -L/usr/local/lib/
 
 # Python3
-win32: LIBS += -L$$(ProgramW6432)/Python$${PYTHON_VERSION_EXT}/libs
-win32: LIBS += -L$$(ProgramW6432)/Python$${PYTHON_VERSION_EXT}/
-win32: LIBS += -lpython$${PYTHON_VERSION_EXT}
+win32: LIBS += -L$$(ProgramW6432)/Python$${PYTHON_VERSION_NO_DOT}/libs
+win32: LIBS += -L$$(ProgramW6432)/Python$${PYTHON_VERSION_NO_DOT}/
+win32: LIBS += -lpython$${PYTHON_VERSION_NO_DOT}
 macx: LIBS += -L$$pythonPath/lib
-macx: LIBS += -lpython$${PYTHON_VERSION}
-unix:!macx: LIBS += -lpython$${PYTHON_VERSION_EXT}
+macx: LIBS += -lpython$${PYTHON_VERSION_DOT}
+unix:!macx: LIBS += -lpython$${PYTHON_VERSION_DOT}
 
 # Boost
 win32: LIBS += -L$$(PROGRAMFILES)/Boost/lib
 win32: LIBS += -lboost_filesystem-vc$${BOOST_VC_VERSION}-mt-x64-$${BOOST_VERSION} -lboost_system-vc$${BOOST_VC_VERSION}-mt-x64-$${BOOST_VERSION} -lboost_python$${PYTHON_VERSION_EXT}-vc$${BOOST_VC_VERSION}-mt-x64-$${BOOST_VERSION}
 centos7 {
-    unix:!macx: libs += -lboost_filesystem -lboost_system -lboost_python37
+    unix:!macx: libs += -lboost_filesystem -lboost_system -lboost_python$${PYTHON_VERSION_NO_DOT}
 } else {
-    unix:!macx: libs += -lboost_filesystem -lboost_system -lboost_python3
+    unix:!macx: libs += -lboost_filesystem -lboost_system -lboost_python$${PYTHON_VERSION_NO_DOT}
 }
 macx: LIBS += -lboost_filesystem -lboost_system -lboost_python37
 
