@@ -990,7 +990,7 @@ namespace Ikomia
             }
             inline PluginState  getCppState(const QString& version)
             {
-                const std::set<QString> breakChanges = {"0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0", "0.6.1"};
+                const std::set<QString> breakChanges = {"0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0", "0.6.1", "0.7.0"};
                 for(auto it=breakChanges.begin(); it!=breakChanges.end(); ++it)
                 {
                     if(version < *it)
