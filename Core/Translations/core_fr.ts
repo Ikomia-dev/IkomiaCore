@@ -18,7 +18,7 @@
 <context>
     <name>CGraphicsText</name>
     <message>
-        <location filename="../Graphics/CGraphicsText.cpp" line="174"/>
+        <location filename="../Graphics/CGraphicsText.cpp" line="181"/>
         <source>Text Area</source>
         <translation>Zone de texte</translation>
     </message>
@@ -63,19 +63,27 @@
         <translation>Centre de gravité</translation>
     </message>
     <message>
-        <location filename="../Data/CMeasure.cpp" line="91"/>
         <source>Bounding box</source>
-        <translation>Rectangle englobant</translation>
+        <translation type="vanished">Rectangle englobant</translation>
+    </message>
+    <message>
+        <source>Oriented bounding box</source>
+        <translation type="vanished">Rectangle orienté englobant</translation>
+    </message>
+    <message>
+        <location filename="../Data/CMeasure.cpp" line="91"/>
+        <source>Box</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../Data/CMeasure.cpp" line="92"/>
-        <source>Oriented bounding box</source>
-        <translation>Rectangle orienté englobant</translation>
+        <source>Oriented box</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../Data/CMeasure.cpp" line="93"/>
         <source>Equivalent diameter</source>
-        <translation>Diamètre équivalent</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../Data/CMeasure.cpp" line="94"/>
@@ -85,17 +93,17 @@
     <message>
         <location filename="../Data/CMeasure.cpp" line="95"/>
         <source>Circularity</source>
-        <translation>Circularité</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../Data/CMeasure.cpp" line="96"/>
         <source>Solidity</source>
-        <translation>Compacité</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../Data/CMeasure.cpp" line="97"/>
         <source>Custom measure</source>
-        <translation>Mesure personnalisée</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../Main/CoreTools.hpp" line="72"/>

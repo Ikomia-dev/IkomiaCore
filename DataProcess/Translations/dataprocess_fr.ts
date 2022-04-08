@@ -3486,6 +3486,7 @@
         <location filename="../Process/Core/CCut.hpp" line="155"/>
         <location filename="../Process/Core/CFillHoles.hpp" line="99"/>
         <location filename="../Process/Core/CGraphicsToBinary.h" line="72"/>
+        <location filename="../Process/Core/CObjDetectFilter.cpp" line="113"/>
         <location filename="../Process/Core/CPlotMerge.hpp" line="171"/>
         <location filename="../Process/Core/CRgbHlsThreshold.cpp" line="229"/>
         <source>:/Images/default-process.png</source>
@@ -3497,6 +3498,7 @@
     </message>
     <message>
         <location filename="../Process/Core/CBlobMeasure.h" line="86"/>
+        <location filename="../Process/Core/CObjDetectFilter.cpp" line="111"/>
         <source>This process extract connected components from binary image and calculate selected measures for each.</source>
         <translation>Ce traitement extrait les composantes connexes à partir d&apos;une image binaire puis calcule les mesures choisies pour chaque objet identifié.</translation>
     </message>
@@ -3519,6 +3521,7 @@
         <location filename="../Process/Core/CCut.hpp" line="154"/>
         <location filename="../Process/Core/CFillHoles.hpp" line="98"/>
         <location filename="../Process/Core/CGraphicsToBinary.h" line="71"/>
+        <location filename="../Process/Core/CObjDetectFilter.cpp" line="112"/>
         <source>Core/Utils</source>
         <translation></translation>
     </message>
@@ -3630,7 +3633,7 @@
         <location filename="../Process/OpenCV/dnn/COcvDnnColorization.hpp" line="195"/>
         <location filename="../Process/OpenCV/dnn/COcvDnnDetector.hpp" line="517"/>
         <location filename="../Process/OpenCV/dnn/COcvDnnSegmentation.h" line="94"/>
-        <location filename="../Process/OpenCV/features2d/COcvAGAST.hpp" line="130"/>
+        <location filename="../Process/OpenCV/features2d/COcvAGAST.hpp" line="131"/>
         <location filename="../Process/OpenCV/features2d/COcvAKAZE.hpp" line="154"/>
         <location filename="../Process/OpenCV/features2d/COcvBFMatcher.hpp" line="148"/>
         <location filename="../Process/OpenCV/features2d/COcvBRISK.hpp" line="140"/>
@@ -3658,8 +3661,8 @@
         <location filename="../Process/OpenCV/imgproc/COcvLaplacian.hpp" line="132"/>
         <location filename="../Process/OpenCV/imgproc/COcvMedian.hpp" line="120"/>
         <location filename="../Process/OpenCV/imgproc/COcvMorphologyEx.hpp" line="150"/>
-        <location filename="../Process/OpenCV/imgproc/COcvResize.hpp" line="141"/>
-        <location filename="../Process/OpenCV/imgproc/COcvRotateEx.hpp" line="143"/>
+        <location filename="../Process/OpenCV/imgproc/COcvResize.hpp" line="148"/>
+        <location filename="../Process/OpenCV/imgproc/COcvRotateEx.hpp" line="150"/>
         <location filename="../Process/OpenCV/imgproc/COcvSobel.hpp" line="144"/>
         <location filename="../Process/OpenCV/imgproc/COcvThreshold.hpp" line="167"/>
         <location filename="../Process/OpenCV/imgproc/COcvWatershed.hpp" line="144"/>
@@ -3675,7 +3678,7 @@
         <location filename="../Process/OpenCV/photo/COcvDenoiseTVL1.hpp" line="144"/>
         <location filename="../Process/OpenCV/photo/COcvDetailEnhance.hpp" line="126"/>
         <location filename="../Process/OpenCV/photo/COcvEdgePreservingFilter.hpp" line="129"/>
-        <location filename="../Process/OpenCV/photo/COcvFastNlMeans.hpp" line="148"/>
+        <location filename="../Process/OpenCV/photo/COcvFastNlMeans.hpp" line="158"/>
         <location filename="../Process/OpenCV/photo/COcvFastNlMeansMulti.hpp" line="157"/>
         <location filename="../Process/OpenCV/photo/COcvIlluminationChange.hpp" line="131"/>
         <location filename="../Process/OpenCV/photo/COcvInpaint.hpp" line="128"/>
@@ -4166,12 +4169,12 @@
         <translation type="vanished">Facemark LBF</translation>
     </message>
     <message>
-        <location filename="../Process/OpenCV/features2d/COcvAGAST.hpp" line="128"/>
+        <location filename="../Process/OpenCV/features2d/COcvAGAST.hpp" line="129"/>
         <source>This process implements the AGAST keypoint detector.</source>
         <translation>Ce traitement implémente le détecteur de points d&apos;intérêts AGAST.</translation>
     </message>
     <message>
-        <location filename="../Process/OpenCV/features2d/COcvAGAST.hpp" line="129"/>
+        <location filename="../Process/OpenCV/features2d/COcvAGAST.hpp" line="130"/>
         <location filename="../Process/OpenCV/features2d/COcvAKAZE.hpp" line="153"/>
         <location filename="../Process/OpenCV/features2d/COcvBRISK.hpp" line="139"/>
         <location filename="../Process/OpenCV/features2d/COcvFAST.hpp" line="129"/>
@@ -4267,7 +4270,7 @@
     </message>
     <message>
         <location filename="../Process/OpenCV/imgproc/COcvBilateral.hpp" line="127"/>
-        <location filename="../Process/OpenCV/photo/COcvFastNlMeans.hpp" line="146"/>
+        <location filename="../Process/OpenCV/photo/COcvFastNlMeans.hpp" line="156"/>
         <location filename="../Process/OpenCV/ximgproc/COcvAdaptiveManifold.hpp" line="142"/>
         <source>This process smoothes your image with an edge-preserving filter (blur homogeneous area and keep borders intact).</source>
         <translation>Ce traitement lisse l&apos;image à l&apos;aide d&apos;un filtre préservant les contours (lissage fort sur les zones homogènes et zones avec contours laissées intactes).</translation>
@@ -4408,13 +4411,13 @@
         <translation type="vanished">Redimensionner</translation>
     </message>
     <message>
-        <location filename="../Process/OpenCV/imgproc/COcvResize.hpp" line="139"/>
+        <location filename="../Process/OpenCV/imgproc/COcvResize.hpp" line="146"/>
         <source>This process resize your image.</source>
         <translation>Cette traitement permet de redimensionner l&apos;image.</translation>
     </message>
     <message>
-        <location filename="../Process/OpenCV/imgproc/COcvResize.hpp" line="140"/>
-        <location filename="../Process/OpenCV/imgproc/COcvRotateEx.hpp" line="142"/>
+        <location filename="../Process/OpenCV/imgproc/COcvResize.hpp" line="147"/>
+        <location filename="../Process/OpenCV/imgproc/COcvRotateEx.hpp" line="149"/>
         <source>OpenCV/Main modules/Image processing/Geometric image transformations</source>
         <translation></translation>
     </message>
@@ -4423,7 +4426,7 @@
         <translation type="vanished">Rotation2</translation>
     </message>
     <message>
-        <location filename="../Process/OpenCV/imgproc/COcvRotateEx.hpp" line="141"/>
+        <location filename="../Process/OpenCV/imgproc/COcvRotateEx.hpp" line="148"/>
         <source>This process applies scaled rotation of any angle in degree.</source>
         <translation>Ce traitement applique une rotation d&apos;un angle quelconque en degré.</translation>
     </message>
@@ -4542,7 +4545,7 @@
     </message>
     <message>
         <location filename="../Process/OpenCV/photo/COcvDenoiseTVL1.hpp" line="143"/>
-        <location filename="../Process/OpenCV/photo/COcvFastNlMeans.hpp" line="147"/>
+        <location filename="../Process/OpenCV/photo/COcvFastNlMeans.hpp" line="157"/>
         <location filename="../Process/OpenCV/photo/COcvFastNlMeansMulti.hpp" line="156"/>
         <source>OpenCV/Main modules/Computational photography/Denoising</source>
         <translation></translation>
@@ -5409,47 +5412,47 @@
         <translation>Ce traitement réalise une opération de défloutage de l&apos;image basée sur l&apos;algorithme de Lucy-Richardson.</translation>
     </message>
     <message>
-        <location filename="../Core/CWorkflow.cpp" line="902"/>
+        <location filename="../Core/CWorkflow.cpp" line="942"/>
         <source>No valid connection available, please check input/output data types.</source>
         <translation>Aucune connexion possible, merci de vérifier les types de données d&apos;entrée/sortie.</translation>
     </message>
     <message>
-        <location filename="../Core/CWorkflow.cpp" line="935"/>
+        <location filename="../Core/CWorkflow.cpp" line="975"/>
         <source>Invalid connection between output #%1 of %2 (%3) and input #%4 of %5 (%6)</source>
         <translation>Connexion invalide entre la sortie #%1 de %2 (%3) et l&apos;entrée #%4 de %5 (%6)</translation>
     </message>
     <message>
-        <location filename="../Core/CWorkflow.cpp" line="1004"/>
+        <location filename="../Core/CWorkflow.cpp" line="1044"/>
         <source>One connection has been removed</source>
         <translation>Une connexion a été supprimée</translation>
     </message>
     <message>
-        <location filename="../Core/CWorkflow.cpp" line="1192"/>
+        <location filename="../Core/CWorkflow.cpp" line="1263"/>
         <source>Workflow stop requested by user</source>
         <translation>Arrêt du workflow demandé par l&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../Core/CWorkflow.cpp" line="1238"/>
+        <location filename="../Core/CWorkflow.cpp" line="1309"/>
         <source>Stopping workflow...</source>
         <translation>Workflow en cours d&apos;arrêt...</translation>
     </message>
     <message>
-        <location filename="../Core/CWorkflow.cpp" line="1268"/>
+        <location filename="../Core/CWorkflow.cpp" line="1339"/>
         <source>No possible connection to input #%1</source>
         <translation>Aucune connexion possible à l&apos;entrée #%1</translation>
     </message>
     <message>
-        <location filename="../Core/CWorkflow.cpp" line="1290"/>
+        <location filename="../Core/CWorkflow.cpp" line="1361"/>
         <source>Data type mismatch on input #%1 between type %2 and type %3</source>
         <translation>Incompatibilité de type de données sur l&apos;entrée #%1 entre %2 et %3</translation>
     </message>
     <message>
-        <location filename="../Core/CRunTaskManager.cpp" line="46"/>
+        <location filename="../Core/CRunTaskManager.cpp" line="45"/>
         <source>Invalid task</source>
         <translation>Tâche invalide</translation>
     </message>
     <message>
-        <location filename="../Core/CRunTaskManager.cpp" line="98"/>
+        <location filename="../Core/CRunTaskManager.cpp" line="97"/>
         <source>Different volume dimensions</source>
         <translation>Dimensions de volume différentes</translation>
     </message>
@@ -5461,8 +5464,8 @@
         <translation>Dataset d&apos;images annotées au format Ikomia (Deep Learning).</translation>
     </message>
     <message>
-        <location filename="../IO/CNumericIO.hpp" line="206"/>
-        <location filename="../IO/CNumericIO.hpp" line="213"/>
+        <location filename="../IO/CNumericIO.h" line="206"/>
+        <location filename="../IO/CNumericIO.h" line="213"/>
         <source>Numerical values structured as table data (headers, labels and values).
 Can be displayed as table or plot.</source>
         <translation>Valeurs numériques structurées en tableau (entêtes, intitulés et valeurs).
@@ -5529,10 +5532,10 @@ Peut aussi réprésenter une frame de vidéo.</translation>
     </message>
     <message>
         <location filename="../IO/CVideoIO.cpp" line="90"/>
-        <location filename="../IO/CVideoIO.cpp" line="98"/>
         <location filename="../IO/CVideoIO.cpp" line="106"/>
         <location filename="../IO/CVideoIO.cpp" line="114"/>
         <location filename="../IO/CVideoIO.cpp" line="122"/>
+        <location filename="../IO/CVideoIO.cpp" line="130"/>
         <source>Video buffer pointer is null.</source>
         <translation>Video buffer pointer is null.</translation>
     </message>
