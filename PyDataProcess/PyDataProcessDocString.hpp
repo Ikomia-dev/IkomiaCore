@@ -21,7 +21,7 @@
 #define PYDATAPROCESSDOCSTRING_HPP
 
 constexpr auto _moduleDocString =
-        "Module offering all features to implement image processing plugins that can be used in the Ikomia workflow. "
+        "Module offering all features to implement image processing plugins that can be used in Ikomia workflows. It consists of Python bindings from C++ Ikomia Core.\n\n"
         "The system uses factory design pattern to allow integration of third-party plugins. "
         "So when you want to add your own plugin, you have to implement (override) three factory classes derived from the followings:\n\n"
         "- :py:class:`~ikomia.dataprocess.pydataprocess.CPluginProcessInterface`: abstract base class exposing the two factories required by the plugin engine (task and widget)\n"

@@ -21,7 +21,7 @@
 #define PYUTILSDOCSTRING_HPP
 
 
-constexpr auto _moduleDocString = "Module offering various helper tools.\n";
+constexpr auto _moduleDocString = "Module offering various helper tools. It consists of Python bindings from C++ Ikomia Core.\n";
 
 constexpr auto _getCurrentVersionDocString =
         "Get the current API version.\n\n"
