@@ -27,6 +27,7 @@
 #include "Main/CoreTools.hpp"
 #include "Graphics/CGraphicsLayer.h"
 #include "IO/CGraphicsInput.h"
+#include "IO/CVideoIO.h"
 
 //-------------------//
 //- Class CWorkflow -//
@@ -39,6 +40,7 @@ CWorkflow::CWorkflow() : CWorkflowTask()
     m_runningTask = boost::graph_traits<WorkflowGraph>::null_vertex();
     m_signalHandler = std::make_unique<CWorkflowSignalHandler>();
     m_runMgr.setCfg(&m_cfg);
+    initDefaultConfig();
 }
 
 CWorkflow::CWorkflow(const std::string &name) : CWorkflowTask(name)
@@ -49,6 +51,7 @@ CWorkflow::CWorkflow(const std::string &name) : CWorkflowTask(name)
     m_runningTask = boost::graph_traits<WorkflowGraph>::null_vertex();
     m_signalHandler = std::make_unique<CWorkflowSignalHandler>();
     m_runMgr.setCfg(&m_cfg);
+    initDefaultConfig();
 }
 
 CWorkflow::CWorkflow(const std::string &name, CProcessRegistration *pTaskRegistration, CTaskIORegistration *pIORegistration, const GraphicsContextPtr &contextPtr)
@@ -63,6 +66,7 @@ CWorkflow::CWorkflow(const std::string &name, CProcessRegistration *pTaskRegistr
     m_pTaskRegistration = pTaskRegistration;
     m_pTaskIORegistration = pIORegistration;
     m_graphicsContextPtr = contextPtr;
+    initDefaultConfig();
 }
 
 CWorkflow::CWorkflow(const CWorkflow &workflow) : CWorkflowTask(workflow)
@@ -75,7 +79,7 @@ CWorkflow::CWorkflow(const CWorkflow &workflow) : CWorkflowTask(workflow)
     m_lastTaskAdded = workflow.m_lastTaskAdded;
     m_activeTask = workflow.m_activeTask;
     m_runningTask = workflow.m_runningTask;
-    m_bAutoSave = workflow.m_bAutoSave;
+    m_cfg = workflow.m_cfg;
     m_signalHandler = std::make_unique<CWorkflowSignalHandler>();
     m_runMgr.setCfg(&m_cfg);
 }
@@ -90,7 +94,7 @@ CWorkflow::CWorkflow(const CWorkflow&& workflow) : CWorkflowTask(workflow)
     m_lastTaskAdded = std::move(workflow.m_lastTaskAdded);
     m_activeTask = std::move(workflow.m_activeTask);
     m_runningTask = std::move(workflow.m_runningTask);
-    m_bAutoSave = std::move(workflow.m_bAutoSave);
+    m_cfg = std::move(workflow.m_cfg);
     m_signalHandler = std::make_unique<CWorkflowSignalHandler>();
     m_runMgr.setCfg(&m_cfg);
 }
@@ -112,7 +116,8 @@ CWorkflow &CWorkflow::operator=(const CWorkflow &workflow)
     m_lastTaskAdded = workflow.m_lastTaskAdded;
     m_activeTask = workflow.m_activeTask;
     m_runningTask = workflow.m_runningTask;
-    m_bAutoSave = workflow.m_bAutoSave;
+    m_cfg = workflow.m_cfg;
+    m_runMgr.setCfg(&m_cfg);
     return *this;
 }
 
@@ -127,7 +132,8 @@ CWorkflow &CWorkflow::operator=(const CWorkflow&& workflow)
     m_lastTaskAdded = std::move(workflow.m_lastTaskAdded);
     m_activeTask = std::move(workflow.m_activeTask);
     m_runningTask = std::move(workflow.m_runningTask);
-    m_bAutoSave = std::move(workflow.m_bAutoSave);
+    m_cfg = workflow.m_cfg;
+    m_runMgr.setCfg(&m_cfg);
     return *this;
 }
 
@@ -139,6 +145,15 @@ WorkflowTaskPtr CWorkflow::operator[](WorkflowVertex v)
 WorkflowEdgePtr CWorkflow::operator[](WorkflowEdge e)
 {
     return m_graph[e];
+}
+
+void CWorkflow::initDefaultConfig()
+{
+    m_cfg["AutoSave"] = "0";
+    m_cfg["BatchMode"] = "0";
+    m_cfg["ForceBatchMode"] = "0";
+    m_cfg["WholeVideo"] = "0";
+    m_cfg["GraphicsEmbedded"] = "0";
 }
 
 /***********/
@@ -167,7 +182,8 @@ void CWorkflow::setInput(const WorkflowTaskIOPtr &pInput, size_t index, bool bNe
     if(pActiveTask)
         pActiveTask->globalInputChanged(bNewSequence);
 
-    if(bNewSequence && !m_bForceBatchMode)
+    bool bforceBatchMode = std::stoi(m_cfg.at("ForceBatchMode"));
+    if(bNewSequence && !bforceBatchMode)
         checkBatchModeState();
 
     startIOAnalysis(m_root);
@@ -249,14 +265,14 @@ void CWorkflow::setCfgEntry(const std::string &key, const std::string &value)
 
 void CWorkflow::setAutoSave(bool bEnable)
 {
-    m_bAutoSave = bEnable;
-    auto vertexRangeIt = boost::vertices(m_graph);
+    m_cfg["AutoSave"] = std::to_string(bEnable);
 
-    for(auto it=vertexRangeIt.first; it!=vertexRangeIt.second; ++it)
+    auto vertexRangeIt = boost::vertices(m_graph);
+    for (auto it=vertexRangeIt.first; it!=vertexRangeIt.second; ++it)
     {
         WorkflowTaskPtr taskPtr = m_graph[*it];
         if(*it != m_root && taskPtr)
-            taskPtr->setAutoSave(m_bAutoSave);
+            taskPtr->setAutoSave(bEnable);
     }
 }
 
@@ -819,7 +835,7 @@ bool CWorkflow::isLeafTask(const WorkflowVertex &id) const
 
 bool CWorkflow::isBatchMode() const
 {
-    return m_bBatchMode;
+    return std::stoi(m_cfg.at("BatchMode"));
 }
 
 /***********/
@@ -896,7 +912,7 @@ WorkflowVertex CWorkflow::addTask(const WorkflowTaskPtr& pNewTask)
     connectSignals(pNewTask);
     pNewTask->setOutputFolder(m_outputFolder);
     pNewTask->setGraphicsContext(m_graphicsContextPtr);
-    pNewTask->setAutoSave(m_bAutoSave);
+    pNewTask->setAutoSave(std::stoi(m_cfg.at("AutoSave")));
     m_lastTaskAdded = boost::add_vertex(pNewTask, m_graph);
     return m_lastTaskAdded;
 }
@@ -911,7 +927,7 @@ void CWorkflow::replaceTask(const WorkflowTaskPtr &pNewTask, const WorkflowVerte
         connectSignals(pNewTask);
         m_graph[id] = pNewTask;
         pNewTask->setOutputFolder(m_outputFolder);
-        pNewTask->setAutoSave(m_bAutoSave);
+        pNewTask->setAutoSave(std::stoi(m_cfg.at("AutoSave")));
     }
 }
 
@@ -1121,9 +1137,8 @@ void CWorkflow::clearOutputDataTo(const WorkflowVertex &id)
 
 void CWorkflow::forceBatchMode(bool bEnable)
 {
-    m_bBatchMode = bEnable;
-    m_bForceBatchMode = bEnable;
-    m_runMgr.setBatchMode(bEnable);
+    m_cfg["BatchMode"] = std::to_string(bEnable);
+    m_cfg["ForceBatchMode"] = std::to_string(bEnable);
 }
 
 void CWorkflow::run()
@@ -1138,10 +1153,7 @@ void CWorkflow::run()
     clearAllOutputData();
     auto tasks = getForwardPassTasks(m_root);
     updateCompositeInputName();
-
-    for(size_t i=0; i<tasks.size(); ++i)
-        runTask(tasks[i]);        
-
+    runTasks(tasks);
     emit m_signalHandler->doFinishWorkflow();
 }
 
@@ -1156,79 +1168,21 @@ void CWorkflow::runFrom(const WorkflowVertex &id)
     auto tasks = getForwardPassTasks(id);
 
     // Search for and run all task not already executed before id
-    bool flag = m_graph[id]->getOutputs().empty();
-    if(flag == true)
+    if (!getParents(id).empty())
     {
         std::vector<WorkflowVertex> taskToExecute;
         findTaskToExecute(taskToExecute, id);
 
         if(taskToExecute.empty() == false)
-            runNeededTask(taskToExecute);
-        else
-        {
-            auto pTask = m_graph[id];
-            if(pTask == nullptr)
-                throw CException(CoreExCode::INVALID_PARAMETER, "Null pointer exception", __func__, __FILE__, __LINE__);
-
-            //Fill inputs of current task
-            auto inEdgesIt = boost::in_edges(id, m_graph);
-            for(auto it=inEdgesIt.first; it!=inEdgesIt.second; ++it)
-            {
-                auto srcVertex = boost::source(*it, m_graph);
-                auto pSrcTask = m_graph[srcVertex];
-                auto pEdge = m_graph[*it];
-
-                if(pSrcTask)
-                    pTask->setInput(pSrcTask->getOutput(pEdge->getSourceIndex()), pEdge->getTargetIndex());
-            }
-        }
+            tasks.insert(tasks.begin(), taskToExecute.begin(), taskToExecute.end());
     }
 
     //Traverse graph and run each task
     Utils::print("Workflow started", QtMsgType::QtDebugMsg);
     clearOutputs();
     updateCompositeInputName();
-
-    for(size_t i=0; i<tasks.size(); ++i)
-        runTask(tasks[i]);
-
+    runTasks(tasks);
     emit m_signalHandler->doFinishWorkflow();
-}
-
-void CWorkflow::runLastTask()
-{
-    runTo(m_lastTaskAdded);
-}
-
-void CWorkflow::runNeededTask(const std::vector<WorkflowVertex>& taskToExecute)
-{
-    for(auto vertexIt=taskToExecute.begin(); vertexIt!=taskToExecute.end() && m_bStopped == false; ++vertexIt)
-    {
-        auto pTask = m_graph[*vertexIt];
-        if(pTask == nullptr)
-            throw CException(CoreExCode::INVALID_PARAMETER, "Null pointer exception", __func__, __FILE__, __LINE__);
-        else
-        {
-            //Fill inputs
-            auto inEdgesIt = boost::in_edges(*vertexIt, m_graph);
-            for(auto it=inEdgesIt.first; it!=inEdgesIt.second; ++it)
-            {
-                auto srcVertex = boost::source(*it, m_graph);
-                auto pSrcTask = m_graph[srcVertex];
-                auto pEdge = m_graph[*it];
-
-                if(pSrcTask)
-                    pTask->setInput(pSrcTask->getOutput(pEdge->getSourceIndex()), pEdge->getTargetIndex());
-            }
-            runTask(*vertexIt);
-        }
-    }
-
-    if(m_bStopped == true)
-    {
-        m_bStopped = false;
-        throw CException(CoreExCode::PROCESS_CANCELLED, "Stop workflow requested", __func__, __FILE__, __LINE__);
-    }
 }
 
 void CWorkflow::runTo(const WorkflowVertex& id)
@@ -1246,8 +1200,101 @@ void CWorkflow::runTo(const WorkflowVertex& id)
     findTaskToExecute(taskToExecute, id);
     updateCompositeInputName();
     // Run tasks
-    runNeededTask(taskToExecute);
+    runTasks(taskToExecute);
     emit m_signalHandler->doFinishWorkflow();
+}
+
+void CWorkflow::runLastTask()
+{
+    runTo(m_lastTaskAdded);
+}
+
+void CWorkflow::runTasks(const std::vector<WorkflowVertex>& taskToExecute)
+{
+    if (std::stoi(m_cfg["WholeVideo"]))
+        runTasksVideo(taskToExecute);
+    else
+        runTasksSimple(taskToExecute);
+}
+
+void CWorkflow::runTasksSimple(const std::vector<WorkflowVertex> &taskToExecute)
+{
+    for(auto vertexIt=taskToExecute.begin(); vertexIt!=taskToExecute.end() && m_bStopped == false; ++vertexIt)
+    {
+        auto pTask = m_graph[*vertexIt];
+        if(pTask == nullptr)
+            throw CException(CoreExCode::INVALID_PARAMETER, "Null pointer exception", __func__, __FILE__, __LINE__);
+
+        //Fill inputs
+        auto inEdgesIt = boost::in_edges(*vertexIt, m_graph);
+        for(auto it=inEdgesIt.first; it!=inEdgesIt.second; ++it)
+        {
+            auto srcVertex = boost::source(*it, m_graph);
+            auto pSrcTask = m_graph[srcVertex];
+            auto pEdge = m_graph[*it];
+
+            if(pSrcTask)
+                pTask->setInput(pSrcTask->getOutput(pEdge->getSourceIndex()), pEdge->getTargetIndex());
+        }
+        runTask(*vertexIt);
+    }
+
+    if(m_bStopped == true)
+    {
+        m_bStopped = false;
+        throw CException(CoreExCode::PROCESS_CANCELLED, "Stop workflow requested", __func__, __FILE__, __LINE__);
+    }
+}
+
+void CWorkflow::runTasksVideo(const std::vector<WorkflowVertex> &taskToExecute)
+{
+    bool bImageSequence = false;
+    const std::set<IODataType> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
+
+    //Get video inputs
+    auto videoInputs = getInputs(videoTypes);
+    if(videoInputs.size() == 0)
+        throw CException(CoreExCode::INVALID_USAGE, "No video input for workflow execution", __func__, __FILE__, __LINE__);;
+
+    for(size_t i=0; i<videoInputs.size(); ++i)
+    {
+        auto inputPtr = std::static_pointer_cast<CVideoIO>(videoInputs[i]);
+
+        //Check source type
+        auto infoPtr = std::static_pointer_cast<CDataVideoInfo>(inputPtr->getDataInfo());
+        if(infoPtr && infoPtr->m_sourceType == CDataVideoBuffer::IMAGE_SEQUENCE)
+            bImageSequence = true;
+
+        // Set video position to the first image for processing all the video
+        inputPtr->setVideoPos(0);
+        // Start acquisition
+        inputPtr->startVideo();
+    }
+
+    auto infoPtr = std::static_pointer_cast<CDataVideoInfo>(videoInputs[0]->getDataInfo());
+    for(int i=0; i<infoPtr->m_frameCount && !m_bStop; ++i)
+    {
+        try
+        {
+            for(size_t j=0; j<videoInputs.size(); ++j)
+            {
+                auto inputPtr = std::static_pointer_cast<CVideoIO>(videoInputs[j]);
+                inputPtr->setFrameToRead(i);
+            }
+            runTasksSimple(taskToExecute);
+        }
+        catch(CException& e)
+        {
+            if(e.getCode() == CoreExCode::TIMEOUT_REACHED)
+                break;
+        }
+    }
+
+    for(size_t i=0; i<videoInputs.size(); ++i)
+    {
+        auto inputPtr = std::static_pointer_cast<CVideoIO>(videoInputs[i]);
+        inputPtr->stopVideo();
+    }
 }
 
 void CWorkflow::runTask(const WorkflowVertex& id)
@@ -1377,7 +1424,7 @@ void CWorkflow::analyzeTaskIO(const WorkflowVertex &id)
         }
 
         // Update batch input flag
-        taskPtr->setBatchInput(m_bBatchMode);
+        taskPtr->setBatchInput(std::stoi(m_cfg.at("BatchMode")));
 
         //Notify view to update task item (IO ports - actions), connections in view are automatically deleted here
         emit pSignalHandler->doUpdateTaskItemView(taskPtr, id);
@@ -1427,7 +1474,7 @@ bool CWorkflow::checkConnection(const WorkflowVertex &src, size_t srcIndex, cons
 
 void CWorkflow::checkBatchModeState()
 {
-    m_bBatchMode = false;
+    bool batchMode = false;
     for(size_t i=0; i<m_inputBatchState.size(); ++i)
     {
         if(m_inputBatchState[i] == true)
@@ -1438,13 +1485,13 @@ void CWorkflow::checkBatchModeState()
                 WorkflowEdgePtr edge = m_graph[*it];
                 if(edge->getSourceIndex() == i)
                 {
-                    m_bBatchMode = true;
+                    batchMode = true;
                     break;
                 }
             }
         }
     }
-    m_runMgr.setBatchMode(m_bBatchMode);
+    m_cfg["BatchMode"] = std::to_string(batchMode);
 }
 
 void CWorkflow::updateHash()
@@ -1854,10 +1901,6 @@ void CWorkflow::manageOutputs(const WorkflowVertex& taskId)
                 pTargetTask->setInput(pTask->getOutput(pEdge->getSourceIndex()), pEdge->getTargetIndex());
         }
     }
-
-    // Auto-save outputs if in batch mode
-    if(m_bBatchMode || m_bAutoSave)
-        pTask->saveOutputs(m_compositeInputName);
 }
 
 //-------------------//

@@ -95,6 +95,11 @@ void CVideoIO::setFrameToRead(int index)
     m_frameIndex = index;
 }
 
+void CVideoIO::setDataInfo(const CDataInfoPtr &infoPtr)
+{
+    m_infoPtr = infoPtr;
+}
+
 void CVideoIO::startVideo()
 {
     if(m_pVideoBuffer)

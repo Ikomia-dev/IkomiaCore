@@ -116,6 +116,7 @@ void C2dImageTask::updateStaticOutputs()
     bool bInputVolume = false;
     bool bInputVideo = false;
     bool bInputStream = false;
+    CDataInfoPtr infoPtr = nullptr;
 
     for(size_t i=0; i<getInputCount(); ++i)
     {
@@ -135,6 +136,7 @@ void C2dImageTask::updateStaticOutputs()
         {
             // Find input video data type
             bInputVideo = true;
+            infoPtr = getInput(i)->getDataInfo();
             break;
         }
         else if(getInputDataType(i) == IODataType::LIVE_STREAM ||
@@ -177,7 +179,7 @@ void C2dImageTask::updateStaticOutputs()
 
         for(size_t i=0; i<getOutputCount(); ++i)
         {
-            auto convertedIO = CConvertIO::convertToVideoIO(getOutput(i));
+            auto convertedIO = CConvertIO::convertToVideoIO(getOutput(i), infoPtr);
             if(convertedIO)
                 setOutput(convertedIO, i);
         }

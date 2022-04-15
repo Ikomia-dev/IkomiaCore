@@ -31,7 +31,6 @@ class CRunTaskManager
 
         CRunTaskManager();
 
-        void    setBatchMode(bool bEnable);
         void    setCfg(std::map<std::string, std::string>* pCfg);
 
         void    run(const WorkflowTaskPtr& pTask, const std::string inputName);
@@ -44,11 +43,13 @@ class CRunTaskManager
         void    runVideoProcess(const WorkflowTaskPtr& taskPtr, const std::string &inputName);
         void    runWholeVideoProcess(const WorkflowTaskPtr& taskPtr, const std::string &inputName);
 
-        void    saveVideoOutputs(const WorkflowTaskPtr &taskPtr, const InputOutputVect& outputs, const std::shared_ptr<CDataVideoInfo> &inputInfo);
+        void    manageOutputs(const WorkflowTaskPtr& taskPtr, const std::string& inputName);
+
+        void    saveVideoOutputs(const WorkflowTaskPtr &taskPtr, const std::string &inputName);
+        //void    saveVideoOutputs(const WorkflowTaskPtr &taskPtr, const InputOutputVect& outputs, const std::shared_ptr<CDataVideoInfo> &inputInfo);
 
     private:
 
-        bool                m_bBatchMode = false;
         std::atomic_bool    m_bStop{false};
         size_t              m_outputVideoId = SIZE_MAX;
         std::map<std::string, std::string>* m_pCfg = nullptr;

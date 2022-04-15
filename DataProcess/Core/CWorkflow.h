@@ -185,9 +185,9 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
 
         void                            run() override;
         void                            runFrom(const WorkflowVertex& id);
-        void                            runLastTask();
-        void                            runNeededTask(const std::vector<WorkflowVertex>& taskToExecute);
         void                            runTo(const WorkflowVertex& id);
+        void                            runLastTask();
+        void                            runTasks(const std::vector<WorkflowVertex>& taskToExecute);
         void                            runTask(const WorkflowVertex &id);
 
         void                            startIOAnalysis(const WorkflowVertex &idFrom);
@@ -220,6 +220,8 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
 
     private:
 
+        void                            initDefaultConfig();
+
         size_t                          getProgressSteps(const std::vector<WorkflowVertex>& tasks) const;
         std::vector<WorkflowVertex>     getForwardPassTasks(const WorkflowVertex& startVertex);
         std::vector<WorkflowVertex>     getSelfInputTasks() const;
@@ -237,6 +239,9 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         std::vector<std::pair<size_t, size_t> > findConnectionPorts(const WorkflowVertex& srcId, const WorkflowVertex& dstId);
 
         void                            resetTaskInput(WorkflowTaskPtr& taskPtr, size_t index);
+
+        void                            runTasksSimple(const std::vector<WorkflowVertex>& taskToExecute);
+        void                            runTasksVideo(const std::vector<WorkflowVertex>& taskToExecute);
 
         void                            onTaskInputRemoved(size_t index);
         void                            onTaskOutputRemoved(size_t index);
@@ -264,9 +269,6 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         WorkflowVertex          m_runningTask;
         std::vector<bool>       m_inputBatchState;
         std::atomic<bool>       m_bStopped{false};
-        bool                    m_bBatchMode = false;
-        bool                    m_bForceBatchMode = false;
-        bool                    m_bAutoSave = false;
         CProcessRegistration*   m_pTaskRegistration = nullptr;
         CTaskIORegistration*    m_pTaskIORegistration = nullptr;
         GraphicsContextPtr      m_graphicsContextPtr = nullptr;

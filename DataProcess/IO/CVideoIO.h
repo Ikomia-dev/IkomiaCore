@@ -99,6 +99,11 @@ class DATAPROCESSSHARED_EXPORT CVideoIO : public CImageIO
          * @param index: index of the frame.
          */
         void                setFrameToRead(int index);
+        /**
+         * @brief Set video info (width, height, fps...).
+         * @param infoPtr: CDataInfo based object.
+         */
+        void                setDataInfo(const CDataInfoPtr& infoPtr);
 
         /**
          * @brief Gets the total number of frames for the video.
