@@ -21,7 +21,7 @@
 #define PYCOREDOCSTRING_HPP
 
 constexpr auto _moduleDocString =
-        "Module offering core features to handle **tasks**, **I/O**, **parameters** and **widgets**.\n\n"
+        "Module offering core features to handle **tasks**, **I/O**, **parameters** and **widgets**. It consists of Python bindings from C++ Ikomia Core.\n\n"
         "The extension capability of Ikomia platform is based on inheritance and this module offers the main base classes. "
         "The system uses the concept of worflow to process images. "
         "A worflow is a graph composed of processing tasks, each task comes with its parameters, its inputs and its outputs. "

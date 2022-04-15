@@ -1059,6 +1059,19 @@ namespace Ikomia
             }
         }
 
+        namespace Jupyter
+        {
+            inline std::string getServerUri()
+            {
+                return "http://localhost:8888";
+            }
+
+            inline std::string getNotebookDir()
+            {
+                return Utils::Plugin::getPythonPath();
+            }
+        }
+
         inline void print(const QString& msg, const QtMsgType type=QtMsgType::QtInfoMsg)
         {
             if(IkomiaApp::isAppStarted())

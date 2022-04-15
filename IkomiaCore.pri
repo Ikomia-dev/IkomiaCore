@@ -51,8 +51,8 @@ centos7 {
     # Global include
     unix:!macx: INCLUDEPATH += /work/shared/local/include
     # Python include
-    unix:!macx: INCLUDEPATH += /work/shared/local/include/python3.7m
-    unix:!macx: INCLUDEPATH += /work/shared/local/lib/python3.7/site-packages/numpy/core/include/           # NUMPY path for CENTOS 7
+    unix:!macx: INCLUDEPATH += /work/shared/local/include/python$${PYTHON_VERSION_DOT}
+    unix:!macx: INCLUDEPATH += /work/shared/local/lib/python$${PYTHON_VERSION_DOT}/site-packages/numpy/core/include/           # NUMPY path for CENTOS 7
 }
 else {
     win32: INCLUDEPATH += $$(ProgramW6432)/Python$${PYTHON_VERSION_NO_DOT}/include
@@ -80,7 +80,8 @@ macx: INCLUDEPATH += /usr/local/include/vtk-$${VTK_VERSION}
 centos7 {
     unix:!macx: INCLUDEPATH += /work/shared/local/include/opencv4
 }
-win32: INCLUDEPATH += $$(ProgramW6432)/OpenCV/include
+win32:ik_cpu: INCLUDEPATH += $$(ProgramW6432)/OpenCV/cpu/include
+win32:!ik_cpu: INCLUDEPATH += $$(ProgramW6432)/OpenCV/cuda/include
 unix:!macx: INCLUDEPATH += /usr/local/include/opencv4
 macx: INCLUDEPATH += /usr/local/include/opencv4
 
@@ -125,12 +126,14 @@ win32: LIBS += -L$$(ProgramW6432)/VTK/lib
 win32: LIBS += -L$$(ProgramW6432)/VTK/bin
 
 # OpenCV
-win32: LIBS += -L$$(ProgramW6432)/OpenCV/x64/vc$${MSVC_VERSION}/lib
-win32: LIBS += -L$$(ProgramW6432)/OpenCV/x64/vc$${MSVC_VERSION}/bin
+win32:ik_cpu: LIBS += -L$$(ProgramW6432)/OpenCV/cpu/x64/vc$${MSVC_VERSION}/lib
+win32:ik_cpu: LIBS += -L$$(ProgramW6432)/OpenCV/cpu/x64/vc$${MSVC_VERSION}/bin
+win32:!ik_cpu: LIBS += -L$$(ProgramW6432)/OpenCV/cuda/x64/vc$${MSVC_VERSION}/lib
+win32:!ik_cpu: LIBS += -L$$(ProgramW6432)/OpenCV/cuda/x64/vc$${MSVC_VERSION}/bin
 
 # CUDA + OpenCL
-win32: LIBS += -L'$$(ProgramW6432)/NVIDIA GPU Computing Toolkit/CUDA/v$${CUDA_VERSION}/lib/x64'
-win32: LIBS += -L'$$(ProgramW6432)/NVIDIA GPU Computing Toolkit/CUDA/v$${CUDA_VERSION}/bin'
+win32:!ik_cpu: LIBS += -L'$$(ProgramW6432)/NVIDIA GPU Computing Toolkit/CUDA/v$${CUDA_VERSION}/lib/x64'
+win32:!ik_cpu: LIBS += -L'$$(ProgramW6432)/NVIDIA GPU Computing Toolkit/CUDA/v$${CUDA_VERSION}/bin'
 unix:!macx: LIBS += -L/usr/lib64/nvidia/
 unix:!macx: LIBS += -L/usr/local/cuda/lib64/ # centos 7
 
