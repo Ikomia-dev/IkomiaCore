@@ -91,18 +91,18 @@ CMat CDataVideoIO::read(const SubsetBounds &bounds)
         return CMat();
 }
 
-CMat CDataVideoIO::readLive()
+CMat CDataVideoIO::readLive(int timeout)
 {
     if(m_pVideoIO)
-        return m_pVideoIO->readLive();
+        return m_pVideoIO->readLive(timeout);
     else
         return CMat();
 }
 
-CMat CDataVideoIO::readLive(const SubsetBounds& bounds)
+CMat CDataVideoIO::readLive(const SubsetBounds& bounds, int timeout)
 {
     if(m_pVideoIO)
-        return m_pVideoIO->readLive(bounds);
+        return m_pVideoIO->readLive(bounds, timeout);
     else
         return CMat();
 }
@@ -139,18 +139,18 @@ void CDataVideoIO::stopRead()
         throw CException(CoreExCode::NULL_POINTER, "Stop read error: invalid DataImageIO object", __func__, __FILE__, __LINE__);
 }
 
-void CDataVideoIO::waitWriteFinished()
+void CDataVideoIO::waitWriteFinished(int timeout)
 {
     if(m_pVideoIO)
-        m_pVideoIO->waitWriteFinished();
+        m_pVideoIO->waitWriteFinished(timeout);
     else
         throw CException(CoreExCode::NULL_POINTER, "Wait write finished error: invalid DataImageIO object", __func__, __FILE__, __LINE__);
 }
 
-void CDataVideoIO::closeCamera()
+void CDataVideoIO::close()
 {
     if(m_pVideoIO)
-        m_pVideoIO->closeCamera();
+        m_pVideoIO->close();
     else
         throw CException(CoreExCode::NULL_POINTER, "Stop camera error: invalid DataImageIO object", __func__, __FILE__, __LINE__);
 }

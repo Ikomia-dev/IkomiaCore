@@ -358,10 +358,6 @@ BOOST_PYTHON_MODULE(pycore)
     ;
 
     //Overload member functions
-    size_t (CWorkflowTask::*getProgressSteps1)() = &CWorkflowTask::getProgressSteps;
-    size_t (CWorkflowTask::*getProgressSteps2)(size_t) = &CWorkflowTask::getProgressSteps;
-    size_t (CWorkflowTaskWrap::*default_getProgressSteps1)() = &CWorkflowTaskWrap::default_getProgressSteps;
-    size_t (CWorkflowTaskWrap::*default_getProgressSteps2)(size_t) = &CWorkflowTaskWrap::default_getProgressSteps;
     InputOutputVect (CWorkflowTask::*getInputs)() const = &CWorkflowTask::getInputs;
     InputOutputVect (CWorkflowTask::*getOutputs)() const = &CWorkflowTask::getOutputs;
     void (CWorkflowTask::*addInputRef)(const WorkflowTaskIOPtr&) = &CWorkflowTask::addInput;
@@ -395,8 +391,7 @@ BOOST_PYTHON_MODULE(pycore)
         .def("getParamValues", &CWorkflowTask::getParamValues, _getParamValuesDocString, args("self"))
         .def("getOutputDataType", &CWorkflowTask::getOutputDataType, _getOutputDataTypeDocString, args("self", "index"))
         .def("getElapsedTime", &CWorkflowTask::getElapsedTime, _getElapsedTimeDocString, args("self"))
-        .def("getProgressSteps", getProgressSteps1, default_getProgressSteps1, _getProgressSteps1DocString, args("self"))
-        .def("getProgressSteps", getProgressSteps2, default_getProgressSteps2, _getProgressSteps2DocString, args("self", "unit_elt_count"))
+        .def("getProgressSteps", &CWorkflowTaskWrap::getProgressSteps, &CWorkflowTaskWrap::default_getProgressSteps, _getProgressStepsDocString, args("self"))
         .def("isGraphicsChangedListening", &CWorkflowTask::isGraphicsChangedListening, &CWorkflowTaskWrap::default_isGraphicsChangedListening, _isGraphicsChangedListeningDocString, args("self"))
         .def("addInput", addInputRef, &CWorkflowTaskWrap::default_addInput, _addInputDocString, args("self", "input"))
         .def("addOutput", addOutputRef, &CWorkflowTaskWrap::default_addOutput, _addOutputDocString, args("self", "output"))

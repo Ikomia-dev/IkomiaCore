@@ -234,7 +234,7 @@ CDataVideoBuffer::Type CVideoDataManager::getSourceType() const
     return static_cast<CDataVideoBuffer::Type>(infoPtr->m_sourceType);
 }
 
-CMat CVideoDataManager::playVideo(CDataset<CMat> &dataset)
+CMat CVideoDataManager::playVideo(CDataset<CMat> &dataset, int timeout)
 {
     auto datasetInfo = dataset.getDataInfo();
     m_pCurrentVideoIn = getVideoIO(datasetInfo[0]->getFileName());
@@ -249,7 +249,7 @@ CMat CVideoDataManager::playVideo(CDataset<CMat> &dataset)
 
     CMat data;
     if(m_bLive)
-        data = m_pCurrentVideoIn->readLive();
+        data = m_pCurrentVideoIn->readLive(timeout);
     else
         data = m_pCurrentVideoIn->read();
 
@@ -257,7 +257,7 @@ CMat CVideoDataManager::playVideo(CDataset<CMat> &dataset)
     return data;
 }
 
-CMat CVideoDataManager::playVideo(CDataset<CMat>& dataset, const SubsetBounds& subsetBounds)
+CMat CVideoDataManager::playVideo(CDataset<CMat>& dataset, const SubsetBounds& subsetBounds, int timeout)
 {
     m_pCurrentVideoIn = getVideoIO(dataset.getDataInfo().at(0)->getFileName());
     if(m_pCurrentVideoIn == nullptr)
@@ -270,7 +270,7 @@ CMat CVideoDataManager::playVideo(CDataset<CMat>& dataset, const SubsetBounds& s
 
     CMat data;
     if(m_bLive)
-        data = m_pCurrentVideoIn->readLive(subsetBounds);
+        data = m_pCurrentVideoIn->readLive(subsetBounds, timeout);
     else
         data = m_pCurrentVideoIn->read(subsetBounds);
 
@@ -303,11 +303,11 @@ void CVideoDataManager::stopReadVideo()
         m_pCurrentVideoIn->stopRead();
 }
 
-void CVideoDataManager::waitWriteFinished()
+void CVideoDataManager::waitWriteFinished(int timeout)
 {
     if(m_pCurrentVideoOut)
     {
-        m_pCurrentVideoOut->waitWriteFinished();
+        m_pCurrentVideoOut->waitWriteFinished(timeout);
         auto filenames = m_pCurrentVideoOut->getFileNames(SubsetBounds());
 
         if(filenames.size() > 0)
@@ -315,9 +315,9 @@ void CVideoDataManager::waitWriteFinished()
     }
 }
 
-void CVideoDataManager::closeCamera()
+void CVideoDataManager::close()
 {
     if(m_pCurrentVideoIn)
-        m_pCurrentVideoIn->closeCamera();
+        m_pCurrentVideoIn->close();
 }
 

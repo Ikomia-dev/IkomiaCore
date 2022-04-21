@@ -63,35 +63,6 @@ size_t CVideoTrackingTaskWrap::default_getProgressSteps()
     }
 }
 
-size_t CVideoTrackingTaskWrap::getProgressSteps(size_t unitEltCount)
-{
-    CPyEnsureGIL gil;
-    try
-    {
-        if(override getProgressStepsOver = this->get_override("getProgressSteps"))
-            return getProgressStepsOver(unitEltCount);
-
-        return CVideoTrackingTask::getProgressSteps(unitEltCount);
-    }
-    catch(boost::python::error_already_set&)
-    {
-        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
-    }
-}
-
-size_t CVideoTrackingTaskWrap::default_getProgressSteps(size_t unitEltCount)
-{
-    CPyEnsureGIL gil;
-    try
-    {
-        return this->CVideoTrackingTask::getProgressSteps(unitEltCount);
-    }
-    catch(boost::python::error_already_set&)
-    {
-        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
-    }
-}
-
 void CVideoTrackingTaskWrap::setActive(bool bActive)
 {
     CPyEnsureGIL gil;

@@ -39,20 +39,19 @@ class CRunTaskManager
 
     private:
 
-        void    runImageProcess2D(const WorkflowTaskPtr& taskPtr, const std::string &inputName);
-        void    runVideoProcess(const WorkflowTaskPtr& taskPtr, const std::string &inputName);
-        void    runWholeVideoProcess(const WorkflowTaskPtr& taskPtr, const std::string &inputName);
+        void    runImageProcess2D(const WorkflowTaskPtr& taskPtr);
+        void    runVideoProcess(const WorkflowTaskPtr& taskPtr);
 
         void    manageOutputs(const WorkflowTaskPtr& taskPtr, const std::string& inputName);
 
         void    saveVideoOutputs(const WorkflowTaskPtr &taskPtr, const std::string &inputName);
-        //void    saveVideoOutputs(const WorkflowTaskPtr &taskPtr, const InputOutputVect& outputs, const std::shared_ptr<CDataVideoInfo> &inputInfo);
 
     private:
 
         std::atomic_bool    m_bStop{false};
         size_t              m_outputVideoId = SIZE_MAX;
         std::map<std::string, std::string>* m_pCfg = nullptr;
+        const int           m_timeout = 30000; //in milliseconds
 };
 
 #endif // CRUNTASKMANAGER_H

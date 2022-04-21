@@ -109,6 +109,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         void                            setTaskActionFlag(const WorkflowVertex &id, ActionFlag action, bool bEnable);
         void                            setInputBatchState(size_t index, bool bBatch);
         void                            setCfgEntry(const std::string& key, const std::string& value);
+        void                            setConfig(const MapString& conf);
         void                            setAutoSave(bool bEnable);
 
         //Getters
@@ -139,6 +140,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         WorkflowVertex                  getEdgeTarget(const WorkflowEdge& id);
         uint                            getHashValue() const;
         size_t                          getProgressSteps() override;
+        size_t                          getProgressSteps(bool bTaskStepsOnly);
         size_t                          getProgressStepsFrom(const WorkflowVertex& idFrom) const;
         size_t                          getProgressStepsTo(const WorkflowVertex& idTo) const;
         GraphicsInputPtr                getGraphicsInput(const WorkflowTaskPtr& pTask);
@@ -147,6 +149,8 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         CDataInfoPtr                    getIOInfo(const WorkflowVertex& id, size_t index, bool bInput);
         std::vector<IODataType>         getRootTargetTypes() const;
         std::vector<std::string>        getRequiredTasks(const std::string& path);
+        MapString                       getConfig() const;
+        std::string                     getLastRunFolder() const;
 
         bool                            isRoot(const WorkflowVertex& id) const;
         bool                            isModified() const;
@@ -181,8 +185,6 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         void                            clearOutputDataFrom(const WorkflowVertex& id);
         void                            clearOutputDataTo(const WorkflowVertex& id);
 
-        void                            forceBatchMode(bool bEnable);
-
         void                            run() override;
         void                            runFrom(const WorkflowVertex& id);
         void                            runTo(const WorkflowVertex& id);
@@ -209,7 +211,6 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         void                            load(const std::string& path);
 
         void                            notifyGraphicsChanged();
-
         void                            notifyVideoStart(int frameCount) override;
 
         void                            workflowStarted() override;
@@ -262,6 +263,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         std::string             m_keywords;
         std::string             m_compositeInputName;
         std::string             m_startDate;
+        std::string             m_folder;
         WorkflowGraph           m_graph;
         WorkflowVertex          m_root;
         WorkflowVertex          m_lastTaskAdded;
@@ -273,7 +275,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         CTaskIORegistration*    m_pTaskIORegistration = nullptr;
         GraphicsContextPtr      m_graphicsContextPtr = nullptr;
         CRunTaskManager         m_runMgr;
-        std::map<std::string, std::string>  m_cfg;
+        MapString               m_cfg;
 };
 
 //---------------------------//
@@ -299,15 +301,16 @@ class CProgressStepVisitor: public boost::default_bfs_visitor
 {
     public:
 
-        CProgressStepVisitor(size_t unitEltCount, size_t& stepCount);
+        CProgressStepVisitor(size_t& stepCount, bool isBatchMode, bool isWholeVideo);
         CProgressStepVisitor(size_t&&) = delete; //prevent rvalue binding
 
         void    discover_vertex(WorkflowVertex vertexId, const WorkflowGraph& graph);
 
     private:
 
-        size_t     m_unitEltCount;
-        size_t&    m_stepcount;
+        bool    m_isBatchMode = false;
+        bool    m_isWholeVideo = false;
+        size_t& m_stepcount;
 };
 
 //------------------------------//

@@ -459,17 +459,6 @@ size_t CWorkflowTask::getProgressSteps()
     return 0;
 }
 
-size_t CWorkflowTask::getProgressSteps(size_t unitEltCount)
-{
-    if(isActionFlagEnable(ActionFlag::APPLY_VOLUME) ||
-            hasInput(IODataType::VIDEO) ||
-            hasInput(IODataType::VIDEO_BINARY) ||
-            hasInput(IODataType::VIDEO_LABEL))
-        return unitEltCount * getProgressSteps();
-    else
-        return getProgressSteps();
-}
-
 double CWorkflowTask::getElapsedTime() const
 {
     return m_elapsedTime;

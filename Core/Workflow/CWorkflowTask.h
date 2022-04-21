@@ -355,13 +355,6 @@ class CORESHARED_EXPORT CWorkflowTask
          */
         virtual size_t              getProgressSteps();
         /**
-         * @brief Gets the number of progress steps when the systems runs the task.
-         * It takes into account the number of unit element to process.
-         * @param Number of unit elements. See CWorkflowTaskIO for more details.
-         * @return Number of steps.
-         */
-        virtual size_t              getProgressSteps(size_t unitEltCount);
-        /**
          * @brief Gets the time of the last execution.
          * @return Elapsed time in milliseconds.
          */

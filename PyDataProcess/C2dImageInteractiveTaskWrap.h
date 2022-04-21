@@ -40,9 +40,6 @@ class C2dImageInteractiveTaskWrap: public C2dImageInteractiveTask, public wrappe
         virtual size_t  getProgressSteps();
         size_t          default_getProgressSteps();
 
-        virtual size_t  getProgressSteps(size_t unitEltCount);
-        size_t          default_getProgressSteps(size_t unitEltCount);
-
         virtual void    setActive(bool bActive);
         void            default_setActive(bool bActive);
 

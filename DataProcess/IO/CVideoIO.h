@@ -165,11 +165,11 @@ class DATAPROCESSSHARED_EXPORT CVideoIO : public CImageIO
         /**
          * @brief Starts the video
          */
-        void                startVideo();
+        void                startVideo(int timeout);
         /**
          * @brief Writes the video to disk. The path is built from the current video path and the given name.
          */
-        void                startVideoWrite(int width, int height, int frames, int fps=25, int fourcc=-1);
+        void                startVideoWrite(int width, int height, int frames, int fps=25, int fourcc=-1, int timeout=-1);
         /**
          * @brief Stops the video
          */
@@ -193,13 +193,19 @@ class DATAPROCESSSHARED_EXPORT CVideoIO : public CImageIO
          */
         void                clearData() override;
         /**
+         * @brief Performs a copy of the static information from input/output to another input/output.
+         * @details For this class, the channel count is the only static data.
+         * @param ioPtr: input/output to copy static data from.
+         */
+        void                copyStaticData(const WorkflowTaskIOPtr& ioPtr) override;
+        /**
          * @brief Blocks current thread until video write operation finish
          */
-        void                waitWriteFinished();
+        void                waitWriteFinished(int timeout);
         /**
          * @brief Blocks current thread until video fram from read operation is available
          */
-        void                waitReadImage() const;
+        void                waitReadImage(int timeout) const;
 
         /**
          * @brief Makes a deep copy and returns it.

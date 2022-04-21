@@ -417,12 +417,6 @@ BOOST_PYTHON_MODULE(pydataprocess)
     //------------------------//
     //----- C2dImageTask -----//
     //------------------------//
-    //Overload member functions
-    size_t (C2dImageTask::*getProgressSteps1)() = &C2dImageTask::getProgressSteps;
-    size_t (C2dImageTask::*getProgressSteps2)(size_t) = &C2dImageTask::getProgressSteps;
-    size_t (C2dImageTaskWrap::*default_getProgressSteps1)() = &C2dImageTaskWrap::default_getProgressSteps;
-    size_t (C2dImageTaskWrap::*default_getProgressSteps2)(size_t) = &C2dImageTaskWrap::default_getProgressSteps;
-
     class_<C2dImageTaskWrap, bases<CWorkflowTask>, std::shared_ptr<C2dImageTaskWrap>>("C2dImageTask", _imageProcess2dDocString)
         .def(init<>("Default constructor"))
         .def(init<bool>(_ctor1ImageProcess2dDocString))
@@ -438,8 +432,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("createGraphicsMask", &C2dImageTask::createGraphicsMask, _createGraphicsMaskDocString, args("self", "width", "height", "graphics"))
         .def("applyGraphicsMask", &C2dImageTask::applyGraphicsMask, _applyGraphicsMaskDocString, args("self", "src", "dst", "index"))
         .def("applyGraphicsMaskToBinary", &C2dImageTask::applyGraphicsMaskToBinary, _applyGraphicsMaskToBinaryDocString, args("self", "src", "dst", "index"))
-        .def("getProgressSteps", getProgressSteps1, default_getProgressSteps1, _getProgressStepsDocString, args("self"))
-        .def("getProgressSteps", getProgressSteps2, default_getProgressSteps2, _getProgressStepsDocString, args("self", "unit_elt_count"))
+        .def("getProgressSteps", &C2dImageTaskWrap::getProgressSteps, &C2dImageTaskWrap::default_getProgressSteps, _getProgressStepsDocString, args("self"))
         .def("getGraphicsMask", &C2dImageTask::getGraphicsMask, _getGraphicsMaskDocString, args("self", "index"))
         .def("isMaskAvailable", &C2dImageTask::isMaskAvailable, _isMaskAvailableDocString, args("self", "index"))
         .def("run", &C2dImageTask::run, &C2dImageTaskWrap::default_run, _runDocString, args("self"))
@@ -454,12 +447,6 @@ BOOST_PYTHON_MODULE(pydataprocess)
     //-----------------------------------//
     //----- C2dImageInteractiveTask -----//
     //-----------------------------------//
-    //Overload member functions
-    size_t (C2dImageInteractiveTask::*getProgressSteps3)() = &C2dImageInteractiveTask::getProgressSteps;
-    size_t (C2dImageInteractiveTask::*getProgressSteps4)(size_t) = &C2dImageInteractiveTask::getProgressSteps;
-    size_t (C2dImageInteractiveTaskWrap::*default_getProgressSteps3)() = &C2dImageInteractiveTaskWrap::default_getProgressSteps;
-    size_t (C2dImageInteractiveTaskWrap::*default_getProgressSteps4)(size_t) = &C2dImageInteractiveTaskWrap::default_getProgressSteps;
-
     class_<C2dImageInteractiveTaskWrap, bases<C2dImageTask>, std::shared_ptr<C2dImageInteractiveTaskWrap>>("C2dImageInteractiveTask", _interactiveImageProcess2d)
         .def(init<>("Default constructor"))
         .def(init<const std::string&>(_ctorInteractiveImageProcessDocString))
@@ -469,8 +456,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("endTaskRun", &C2dImageInteractiveTask::endTaskRun, &C2dImageInteractiveTaskWrap::default_endTaskRun, _endTaskRunDocString, args("self"))
         .def("graphicsChanged", &C2dImageInteractiveTask::graphicsChanged, &C2dImageInteractiveTaskWrap::default_graphicsChanged, _graphicsChangedInteractiveDocString, args("self"))
         .def("globalInputChanged", &C2dImageInteractiveTask::globalInputChanged, &C2dImageInteractiveTaskWrap::default_globalInputChanged, _globalInputChangedInteractiveDocString, args("self", "is_new_sequence"))
-        .def("getProgressSteps", getProgressSteps3, default_getProgressSteps3, _getProgressStepsDocString, args("self"))
-        .def("getProgressSteps", getProgressSteps4, default_getProgressSteps4, _getProgressStepsDocString, args("self", "unit_elt_count"))
+        .def("getProgressSteps", &C2dImageInteractiveTaskWrap::getProgressSteps, &C2dImageInteractiveTaskWrap::default_getProgressSteps, _getProgressStepsDocString, args("self"))
         .def("getInteractionMask", &C2dImageInteractiveTask::getInteractionMask, _getInteractionMaskDocString, args("self"))
         .def("getBlobs", &C2dImageInteractiveTask::getBlobs, _getBlobsDocString, args("self"))
         .def("createInteractionMask", &C2dImageInteractiveTask::createInteractionMask, _createInteractionMaskDocString, args("self", "width", "height"))
@@ -487,12 +473,6 @@ BOOST_PYTHON_MODULE(pydataprocess)
     //----------------------//
     //----- CVideoTask -----//
     //----------------------//
-    //Overload member functions
-    size_t (CVideoTask::*getProgressSteps5)() = &CVideoTask::getProgressSteps;
-    size_t (CVideoTask::*getProgressSteps6)(size_t) = &CVideoTask::getProgressSteps;
-    size_t (CVideoTaskWrap::*default_getProgressSteps5)() = &CVideoTaskWrap::default_getProgressSteps;
-    size_t (CVideoTaskWrap::*default_getProgressSteps6)(size_t) = &CVideoTaskWrap::default_getProgressSteps;
-
     class_<CVideoTaskWrap, bases<C2dImageTask>, std::shared_ptr<CVideoTaskWrap>>("CVideoTask", _videoProcessDocString)
         .def(init<>("Default constructor"))
         .def(init<const std::string&>(_ctorVideoProcessDocString))
@@ -504,8 +484,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("notifyVideoEnd", &CVideoTask::notifyVideoEnd, &CVideoTaskWrap::default_notifyVideoEnd, _notifyVideoEndDocString, args("self"))
         .def("graphicsChanged", &CVideoTask::graphicsChanged, &CVideoTaskWrap::default_graphicsChanged, _graphicsChangedDocString, args("self"))
         .def("globalInputChanged", &CVideoTask::globalInputChanged, &CVideoTaskWrap::default_globalInputChanged, _globalInputChangedDocString, args("self", "is_new_sequence"))
-        .def("getProgressSteps", getProgressSteps5, default_getProgressSteps5, _getProgressStepsDocString, args("self"))
-        .def("getProgressSteps", getProgressSteps6, default_getProgressSteps6, _getProcessFactoryDocString, args("self", "unit_elt_count"))
+        .def("getProgressSteps", &CVideoTaskWrap::getProgressSteps, &CVideoTaskWrap::default_getProgressSteps, _getProgressStepsDocString, args("self"))
         .def("run", &CVideoTask::run, &CVideoTaskWrap::default_run, _runDocString, args("self"))
         .def("stop", &CVideoTask::stop, &CVideoTaskWrap::default_stop, _stopDocString, args("self"))
         .def("emitAddSubProgressSteps", &CVideoTaskWrap::emitAddSubProgressSteps, _emitAddSubProgressSteps, args("self", "count"))
@@ -517,12 +496,6 @@ BOOST_PYTHON_MODULE(pydataprocess)
     //------------------------//
     //----- CVideoOFTask -----//
     //------------------------//
-    //Overload member functions
-    size_t (CVideoOFTask::*getProgressSteps7)() = &CVideoOFTask::getProgressSteps;
-    size_t (CVideoOFTask::*getProgressSteps8)(size_t) = &CVideoOFTask::getProgressSteps;
-    size_t (CVideoOFTaskWrap::*default_getProgressSteps7)() = &CVideoOFTaskWrap::default_getProgressSteps;
-    size_t (CVideoOFTaskWrap::*default_getProgressSteps8)(size_t) = &CVideoOFTaskWrap::default_getProgressSteps;
-
     class_<CVideoOFTaskWrap, bases<CVideoTask>, std::shared_ptr<CVideoOFTaskWrap>>("CVideoOFTask", _videoProcessOFDocString)
         .def(init<>("Default constructor"))
         .def(init<const std::string&>(_ctorVideoProcessOFDocString))
@@ -532,8 +505,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("endTaskRun", &CVideoOFTask::endTaskRun, &CVideoOFTaskWrap::default_endTaskRun, _endTaskRunDocString, args("self"))
         .def("graphicsChanged", &CVideoOFTask::graphicsChanged, &CVideoOFTaskWrap::default_graphicsChanged, _graphicsChangedDocString, args("self"))
         .def("globalInputChanged", &CVideoOFTask::globalInputChanged, &CVideoOFTaskWrap::default_globalInputChanged, _globalInputChangedDocString, args("self" "is_new_sequence"))
-        .def("getProgressSteps", getProgressSteps7, default_getProgressSteps7, _getProgressStepsDocString, args("self"))
-        .def("getProgressSteps", getProgressSteps8, default_getProgressSteps8, _getProgressStepsDocString, args("self", "unit_elt_count"))
+        .def("getProgressSteps", &CVideoOFTaskWrap::getProgressSteps, &CVideoOFTaskWrap::default_getProgressSteps, _getProgressStepsDocString, args("self"))
         .def("run", &CVideoOFTask::run, &CVideoOFTaskWrap::default_run, _runDocString, args("self"))
         .def("stop", &CVideoOFTask::stop, &CVideoOFTaskWrap::default_stop, _stopDocString, args("self"))
         .def("emitAddSubProgressSteps", &CVideoOFTaskWrap::emitAddSubProgressSteps, _emitAddSubProgressSteps, args("self", "count"))
@@ -547,12 +519,6 @@ BOOST_PYTHON_MODULE(pydataprocess)
     //------------------------------//
     //----- CVideoTrackingTask -----//
     //------------------------------//
-    //Overload member functions
-    size_t (CVideoTrackingTask::*getProgressSteps9)() = &CVideoTrackingTask::getProgressSteps;
-    size_t (CVideoTrackingTask::*getProgressSteps10)(size_t) = &CVideoTrackingTask::getProgressSteps;
-    size_t (CVideoTrackingTaskWrap::*default_getProgressSteps9)() = &CVideoTrackingTaskWrap::default_getProgressSteps;
-    size_t (CVideoTrackingTaskWrap::*default_getProgressSteps10)(size_t) = &CVideoTrackingTaskWrap::default_getProgressSteps;
-
     class_<CVideoTrackingTaskWrap, bases<CVideoTask>, std::shared_ptr<CVideoTrackingTaskWrap>>("CVideoTrackingTask", _videoProcessTrackingDocString)
         .def(init<>("Default constructor"))
         .def(init<const std::string&>(_ctorVideoTrackingDocString))
@@ -562,8 +528,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("endTaskRun", &CVideoTrackingTask::endTaskRun, &CVideoTrackingTaskWrap::default_endTaskRun, _endTaskRunDocString, args("self"))
         .def("graphicsChanged", &CVideoTrackingTask::graphicsChanged, &CVideoTrackingTaskWrap::default_graphicsChanged, _graphicsChangedDocString, args("self"))
         .def("globalInputChanged", &CVideoTrackingTask::globalInputChanged, &CVideoTrackingTaskWrap::default_globalInputChanged, _globalInputChangedDocString, args("self", "is_new_sequence"))
-        .def("getProgressSteps", getProgressSteps9, default_getProgressSteps9, _getProgressStepsDocString, args("self"))
-        .def("getProgressSteps", getProgressSteps10, default_getProgressSteps10, _getProgressStepsDocString, args("self" "unit_elt_count"))
+        .def("getProgressSteps", &CVideoTrackingTaskWrap::getProgressSteps, &CVideoTrackingTaskWrap::default_getProgressSteps, _getProgressStepsDocString, args("self"))
         .def("run", &CVideoTrackingTask::run, &CVideoTrackingTaskWrap::default_run, _runDocString, args("self"))
         .def("stop", &CVideoTrackingTask::stop, &CVideoTrackingTaskWrap::default_stop, _stopDocString, args("self"))
         .def("emitAddSubProgressSteps", &CVideoTrackingTaskWrap::emitAddSubProgressSteps, _emitAddSubProgressSteps, args("self", "count"))
@@ -577,12 +542,6 @@ BOOST_PYTHON_MODULE(pydataprocess)
     //-------------------------//
     //----- CDnnTrainTask -----//
     //-------------------------//
-    //Overload member functions
-    size_t (CDnnTrainTask::*getProgressSteps11)() = &CDnnTrainTask::getProgressSteps;
-    size_t (CDnnTrainTask::*getProgressSteps12)(size_t) = &CDnnTrainTask::getProgressSteps;
-    size_t (CDnnTrainTaskWrap::*default_getProgressSteps11)() = &CDnnTrainTaskWrap::default_getProgressSteps;
-    size_t (CDnnTrainTaskWrap::*default_getProgressSteps12)(size_t) = &CDnnTrainTaskWrap::default_getProgressSteps;
-
     class_<CDnnTrainTaskWrap, bases<CWorkflowTask>, std::shared_ptr<CDnnTrainTaskWrap>>("CDnnTrainTask", _dnnTrainProcessDocString)
         .def(init<>("Default constructor"))
         .def(init<const std::string&>(_ctor1DnnTrainProcessDocString))
@@ -591,8 +550,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("beginTaskRun", &CDnnTrainTask::beginTaskRun, &CDnnTrainTaskWrap::default_beginTaskRun, _beginTaskRunDocString, args("self"))
         .def("endTaskRun", &CDnnTrainTask::endTaskRun, &CDnnTrainTaskWrap::default_endTaskRun, _endTaskRunDocString, args("self"))
         .def("getTensorboardLogDir", &CDnnTrainTask::getTensorboardLogDir, _getTensorboardLogDirDocString, args("self"))
-        .def("getProgressSteps", getProgressSteps11, default_getProgressSteps11, _getProgressStepsDocString, args("self"))
-        .def("getProgressSteps", getProgressSteps12, default_getProgressSteps12, _getProgressStepsDocString, args("self", "unit_elt_count"))
+        .def("getProgressSteps", &CDnnTrainTaskWrap::getProgressSteps, &CDnnTrainTaskWrap::default_getProgressSteps, _getProgressStepsDocString, args("self"))
         .def("run", &CDnnTrainTask::run, &CDnnTrainTaskWrap::default_run, _runDocString, args("self"))
         .def("stop", &CDnnTrainTask::stop, &CDnnTrainTaskWrap::default_stop, _stopDocString, args("self"))
         .def("emitAddSubProgressSteps", &CDnnTrainTaskWrap::emitAddSubProgressSteps, _emitAddSubProgressSteps, args("self", "count"))

@@ -37,7 +37,7 @@ ImageIOPtr CConvertIO::convertToImageIO(const WorkflowTaskIOPtr &ioFrom)
     return nullptr;
 }
 
-VideoIOPtr CConvertIO::convertToVideoIO(const WorkflowTaskIOPtr &ioFrom, const CDataInfoPtr& infoPtr)
+VideoIOPtr CConvertIO::convertToVideoIO(const WorkflowTaskIOPtr &ioFrom)
 {
     auto dataType = CConvertIO::getTargetVideoType(ioFrom->getDataType());
     if(dataType != IODataType::NONE)
@@ -46,7 +46,6 @@ VideoIOPtr CConvertIO::convertToVideoIO(const WorkflowTaskIOPtr &ioFrom, const C
         videoIOPtr->CWorkflowTaskIO::operator=(*ioFrom);
         videoIOPtr->setDataType(dataType);
         videoIOPtr->setSaveFormat(DataFileFormat::AVI);
-        videoIOPtr->setDataInfo(infoPtr);
         return videoIOPtr;
     }
     return nullptr;

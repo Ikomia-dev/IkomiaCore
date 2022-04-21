@@ -29,7 +29,7 @@ CVirtualVideoIO::~CVirtualVideoIO()
 {
 }
 
-void CVirtualVideoIO::closeCamera()
+void CVirtualVideoIO::close()
 {
     throw CException(CoreExCode::NOT_IMPLEMENTED, "Video IO: function not implemented");
 }

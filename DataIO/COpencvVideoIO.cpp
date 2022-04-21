@@ -132,12 +132,12 @@ CMat COpencvVideoIO::read(const SubsetBounds &subset)
     }
 }
 
-CMat COpencvVideoIO::readLive()
+CMat COpencvVideoIO::readLive(int timeout)
 {
     if(!m_pVideoBuffer->isReadStarted())
     {
         m_pVideoBuffer->clearRead();
-        m_pVideoBuffer->startRead();
+        m_pVideoBuffer->startRead(timeout);
     }
 
     CMat frame = m_pVideoBuffer->read();
@@ -147,10 +147,10 @@ CMat COpencvVideoIO::readLive()
     return frame;
 }
 
-CMat COpencvVideoIO::readLive(const SubsetBounds& subset)
+CMat COpencvVideoIO::readLive(const SubsetBounds& subset, int timeout)
 {
     if(!m_pVideoBuffer->isReadStarted())
-        m_pVideoBuffer->startRead();
+        m_pVideoBuffer->startRead(timeout);
 
     cv::Rect roi;
     CMat frame = m_pVideoBuffer->read();
@@ -234,16 +234,16 @@ void COpencvVideoIO::stopRead()
     m_pVideoBuffer->stopRead();
 }
 
-void COpencvVideoIO::waitWriteFinished()
+void COpencvVideoIO::waitWriteFinished(int timeout)
 {
-    assert(m_pVideoBuffer);
-    m_pVideoBuffer->waitWriteFinished();
+    if (m_pVideoBuffer);
+        m_pVideoBuffer->waitWriteFinished(timeout);
 }
 
-void COpencvVideoIO::closeCamera()
+void COpencvVideoIO::close()
 {
-    assert(m_pVideoBuffer);
-    m_pVideoBuffer->closeCamera();
+    if (m_pVideoBuffer);
+        m_pVideoBuffer->close();
 }
 
 Dimensions COpencvVideoIO::dimensions()

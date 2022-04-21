@@ -151,9 +151,10 @@ void CWorkflow::initDefaultConfig()
 {
     m_cfg["AutoSave"] = "0";
     m_cfg["BatchMode"] = "0";
-    m_cfg["ForceBatchMode"] = "0";
     m_cfg["WholeVideo"] = "0";
     m_cfg["GraphicsEmbedded"] = "0";
+    m_cfg["VideoReadTimeout"] = "5000"; //in milliseconds
+    m_cfg["VideoWriteTimeout"] = "60000"; //in milliseconds
 }
 
 /***********/
@@ -182,8 +183,7 @@ void CWorkflow::setInput(const WorkflowTaskIOPtr &pInput, size_t index, bool bNe
     if(pActiveTask)
         pActiveTask->globalInputChanged(bNewSequence);
 
-    bool bforceBatchMode = std::stoi(m_cfg.at("ForceBatchMode"));
-    if(bNewSequence && !bforceBatchMode)
+    if(bNewSequence)
         checkBatchModeState();
 
     startIOAnalysis(m_root);
@@ -261,6 +261,11 @@ void CWorkflow::setInputBatchState(size_t index, bool bBatch)
 void CWorkflow::setCfgEntry(const std::string &key, const std::string &value)
 {
     m_cfg[key] = value;
+}
+
+void CWorkflow::setConfig(const MapString &conf)
+{
+    m_cfg = conf;
 }
 
 void CWorkflow::setAutoSave(bool bEnable)
@@ -504,14 +509,9 @@ size_t CWorkflow::getProgressStepsFrom(const WorkflowVertex &idFrom) const
         return 0;
 
     size_t steps = 0;
-    size_t unitEltNb = 1;
-
-    for(size_t i=0; i<getInputCount(); ++i)
-        unitEltNb = std::max(unitEltNb, getInput(i)->getUnitElementCount());
-
     VertexIndexMap mapIndex;
     auto propMapIndex = createBfsPropertyMap(mapIndex);
-    CProgressStepVisitor visitor(unitEltNb, steps);
+    CProgressStepVisitor visitor(steps, isBatchMode(), std::stoi(m_cfg.at("WholeVideo")));
     boost::breadth_first_search(m_graph, idFrom, boost::visitor(visitor).vertex_index_map(propMapIndex));
 
     //Manage self input tasks => orphans not accessible by bfs algorithm
@@ -522,7 +522,7 @@ size_t CWorkflow::getProgressStepsFrom(const WorkflowVertex &idFrom) const
         for(size_t j=0; j<childs.size(); ++j)
         {
             auto taskPtr = m_graph[childs[j]];
-            steps += taskPtr->getProgressSteps(unitEltNb);
+            steps += taskPtr->getProgressSteps();
         }
     }
     return steps;
@@ -540,15 +540,22 @@ size_t CWorkflow::getProgressStepsTo(const WorkflowVertex &idTo) const
 size_t CWorkflow::getProgressSteps(const std::vector<WorkflowVertex> &tasks) const
 {
     size_t steps = 0;
-    size_t unitEltNb = 1;
-
-    for(size_t i=0; i<getInputCount(); ++i)
-        unitEltNb = std::max(unitEltNb, getInput(i)->getUnitElementCount());
 
     for(size_t i=0; i<tasks.size(); ++i)
     {
         auto pTask = m_graph[tasks[i]];
-        steps += pTask->getProgressSteps(unitEltNb);
+        bool applyUnitEltCount = !isBatchMode() && (std::stoi(m_cfg.at("WholeVideo")) || pTask->isActionFlagEnable(CWorkflowTask::ActionFlag::APPLY_VOLUME));
+
+        if (applyUnitEltCount)
+        {
+            size_t unitEltCount = 1;
+            for(size_t i=0; i<pTask->getInputCount(); ++i)
+                unitEltCount = std::max(unitEltCount, pTask->getInput(i)->getUnitElementCount());
+
+            steps += pTask->getProgressSteps() * unitEltCount;
+        }
+        else
+            steps += pTask->getProgressSteps();
     }
     return steps;
 }
@@ -784,6 +791,16 @@ std::vector<std::string> CWorkflow::getRequiredTasks(const std::string &path)
         taskNames.push_back(name);
     }
     return taskNames;
+}
+
+MapString CWorkflow::getConfig() const
+{
+    return m_cfg;
+}
+
+std::string CWorkflow::getLastRunFolder() const
+{
+    return m_folder;
 }
 
 bool CWorkflow::isRoot(const WorkflowVertex &id) const
@@ -1135,12 +1152,6 @@ void CWorkflow::clearOutputDataTo(const WorkflowVertex &id)
     }
 }
 
-void CWorkflow::forceBatchMode(bool bEnable)
-{
-    m_cfg["BatchMode"] = std::to_string(bEnable);
-    m_cfg["ForceBatchMode"] = std::to_string(bEnable);
-}
-
 void CWorkflow::run()
 {
     std::lock_guard<std::mutex> lock(m_mutex);
@@ -1152,7 +1163,6 @@ void CWorkflow::run()
     clearOutputs();
     clearAllOutputData();
     auto tasks = getForwardPassTasks(m_root);
-    updateCompositeInputName();
     runTasks(tasks);
     emit m_signalHandler->doFinishWorkflow();
 }
@@ -1180,7 +1190,6 @@ void CWorkflow::runFrom(const WorkflowVertex &id)
     //Traverse graph and run each task
     Utils::print("Workflow started", QtMsgType::QtDebugMsg);
     clearOutputs();
-    updateCompositeInputName();
     runTasks(tasks);
     emit m_signalHandler->doFinishWorkflow();
 }
@@ -1198,7 +1207,6 @@ void CWorkflow::runTo(const WorkflowVertex& id)
     std::vector<WorkflowVertex> taskToExecute;
     taskToExecute.push_back(id);
     findTaskToExecute(taskToExecute, id);
-    updateCompositeInputName();
     // Run tasks
     runTasks(taskToExecute);
     emit m_signalHandler->doFinishWorkflow();
@@ -1211,6 +1219,9 @@ void CWorkflow::runLastTask()
 
 void CWorkflow::runTasks(const std::vector<WorkflowVertex>& taskToExecute)
 {
+    updateCompositeInputName();
+    m_folder = getOutputFolder() + m_startDate;
+
     if (std::stoi(m_cfg["WholeVideo"]))
         runTasksVideo(taskToExecute);
     else
@@ -1248,52 +1259,65 @@ void CWorkflow::runTasksSimple(const std::vector<WorkflowVertex> &taskToExecute)
 
 void CWorkflow::runTasksVideo(const std::vector<WorkflowVertex> &taskToExecute)
 {
-    bool bImageSequence = false;
+    InputOutputVect videoInputs;
     const std::set<IODataType> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
 
     //Get video inputs
-    auto videoInputs = getInputs(videoTypes);
-    if(videoInputs.size() == 0)
-        throw CException(CoreExCode::INVALID_USAGE, "No video input for workflow execution", __func__, __FILE__, __LINE__);;
+    auto inputs = getInputs();
+    for(size_t i=0; i<inputs.size(); ++i)
+    {
+        if (isInputConnected(i))
+        {
+            auto it = videoTypes.find(inputs[i]->getDataType());
+            if (it != videoTypes.end())
+                videoInputs.push_back(inputs[i]);
+        }
+    }
 
-    for(size_t i=0; i<videoInputs.size(); ++i)
+    if (videoInputs.size() == 0)
+        throw CException(CoreExCode::INVALID_USAGE, "No video input for workflow execution", __func__, __FILE__, __LINE__);
+
+    for (size_t i=0; i<videoInputs.size(); ++i)
     {
         auto inputPtr = std::static_pointer_cast<CVideoIO>(videoInputs[i]);
-
-        //Check source type
-        auto infoPtr = std::static_pointer_cast<CDataVideoInfo>(inputPtr->getDataInfo());
-        if(infoPtr && infoPtr->m_sourceType == CDataVideoBuffer::IMAGE_SEQUENCE)
-            bImageSequence = true;
-
         // Set video position to the first image for processing all the video
         inputPtr->setVideoPos(0);
         // Start acquisition
-        inputPtr->startVideo();
+        inputPtr->startVideo(std::stod(m_cfg["VideoReadTimeout"]));
     }
 
     auto infoPtr = std::static_pointer_cast<CDataVideoInfo>(videoInputs[0]->getDataInfo());
-    for(int i=0; i<infoPtr->m_frameCount && !m_bStop; ++i)
+    for (int i=0; i<infoPtr->m_frameCount && !m_bStop; ++i)
     {
-        try
+        for(size_t j=0; j<videoInputs.size(); ++j)
         {
-            for(size_t j=0; j<videoInputs.size(); ++j)
-            {
-                auto inputPtr = std::static_pointer_cast<CVideoIO>(videoInputs[j]);
-                inputPtr->setFrameToRead(i);
-            }
-            runTasksSimple(taskToExecute);
+            auto inputPtr = std::static_pointer_cast<CVideoIO>(videoInputs[j]);
+            inputPtr->setFrameToRead(i);
         }
-        catch(CException& e)
-        {
-            if(e.getCode() == CoreExCode::TIMEOUT_REACHED)
-                break;
-        }
+        runTasksSimple(taskToExecute);
     }
 
-    for(size_t i=0; i<videoInputs.size(); ++i)
+    for (size_t i=0; i<videoInputs.size(); ++i)
     {
         auto inputPtr = std::static_pointer_cast<CVideoIO>(videoInputs[i]);
         inputPtr->stopVideo();
+    }
+
+    //Wait for write video threads to finish
+    for (size_t i=0; i<taskToExecute.size(); ++i)
+    {
+        auto taskPtr = m_graph[taskToExecute[i]];
+        if (taskPtr->isAutoSave())
+        {
+            auto videoOutputs = taskPtr->getOutputs(videoTypes);
+            for (size_t i=0; i<videoOutputs.size(); ++i)
+            {
+                auto outputPtr = std::static_pointer_cast<CVideoIO>(videoOutputs[i]);
+                outputPtr->waitWriteFinished(std::stoi(m_cfg["VideoWriteTimeout"]));
+                outputPtr->stopVideoWrite();
+                outputPtr->setVideoPos(0);
+            }
+        }
     }
 }
 
@@ -1311,14 +1335,12 @@ void CWorkflow::runTask(const WorkflowVertex& id)
         }
 
         // Update output folder
-        auto baseFolder = taskPtr->getOutputFolder();
-        taskPtr->setOutputFolder(baseFolder + m_startDate + "/" + taskPtr->getName() + "/");
+        taskPtr->setOutputFolder(m_folder + "/" + taskPtr->getName() + "/");
         // Run task
         setRunningTask(id);
         m_runMgr.run(taskPtr, m_compositeInputName);
+
         manageOutputs(id);
-        // Restore output folder
-        taskPtr->setOutputFolder(baseFolder);
 
         auto pSignalHandler = static_cast<CWorkflowSignalHandler*>(m_signalHandler.get());
         emit pSignalHandler->doFinishTask(id, CWorkflowTask::State::VALIDATE);
@@ -2014,16 +2036,29 @@ void CFindChildVisitor::discover_vertex(WorkflowVertex vertexId, const WorkflowG
 //------------------------------//
 //- Class CProgressStepVisitor -//
 //------------------------------//
-CProgressStepVisitor::CProgressStepVisitor(size_t unitEltCount, size_t& stepCount) : m_stepcount(stepCount)
+CProgressStepVisitor::CProgressStepVisitor(size_t& stepCount, bool isBatchMode, bool isWholeVideo) : m_stepcount(stepCount)
 {
-    m_unitEltCount = unitEltCount;
+    m_isBatchMode = isBatchMode;
+    m_isWholeVideo = isWholeVideo;
 }
 
 void CProgressStepVisitor::discover_vertex(WorkflowVertex vertexId, const WorkflowGraph &graph)
 {
     auto pTask = graph[vertexId];
-    if(pTask)
-        m_stepcount += pTask->getProgressSteps(m_unitEltCount);
+    if (pTask)
+    {
+        bool applyUnitEltCount = !m_isBatchMode && (m_isWholeVideo || pTask->isActionFlagEnable(CWorkflowTask::ActionFlag::APPLY_VOLUME));
+        if (applyUnitEltCount)
+        {
+            size_t unitEltCount = 1;
+            for (size_t i=0; i<pTask->getInputCount(); ++i)
+                unitEltCount = std::max(unitEltCount, pTask->getInput(i)->getUnitElementCount());
+
+            m_stepcount += pTask->getProgressSteps() * unitEltCount;
+        }
+        else
+            m_stepcount += pTask->getProgressSteps();
+    }
 }
 
 //----------------------------//

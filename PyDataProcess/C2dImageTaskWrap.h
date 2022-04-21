@@ -44,9 +44,6 @@ class C2dImageTaskWrap : public C2dImageTask, public wrapper<C2dImageTask>
         virtual size_t  getProgressSteps() override;
         size_t          default_getProgressSteps();
 
-        virtual size_t  getProgressSteps(size_t unitEltCount) override;
-        size_t          default_getProgressSteps(size_t unitEltCount);
-
         virtual void    setActive(bool bActive) override;
         void            default_setActive(bool bActive);
 

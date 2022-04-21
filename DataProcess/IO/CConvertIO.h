@@ -32,7 +32,7 @@ class CConvertIO
         CConvertIO();
 
         static ImageIOPtr    convertToImageIO(const WorkflowTaskIOPtr& ioFrom);
-        static VideoIOPtr    convertToVideoIO(const WorkflowTaskIOPtr& ioFrom, const CDataInfoPtr &infoPtr);
+        static VideoIOPtr    convertToVideoIO(const WorkflowTaskIOPtr& ioFrom);
         static VideoIOPtr    convertToStreamIO(const WorkflowTaskIOPtr& ioFrom);
         static ImageIOPtr    convertToVolumeIO(const WorkflowTaskIOPtr& ioFrom);
 

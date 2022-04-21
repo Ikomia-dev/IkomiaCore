@@ -152,6 +152,7 @@ namespace Ikomia
     constexpr double _pi = 3.14159265358979323846;
 
     using MapIntStr = std::map<int, std::string>;
+    using MapString = std::map<std::string, std::string>;
     using UMapString = std::unordered_map<std::string, std::string>;
     using PairString = std::pair<std::string, std::string>;
     using VectorString = std::vector<std::string>;

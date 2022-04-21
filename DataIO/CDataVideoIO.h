@@ -50,8 +50,8 @@ class DATAIOSHARED_EXPORT CDataVideoIO
 
         CMat                            read();
         CMat                            read(const SubsetBounds& bounds);
-        CMat                            readLive();
-        CMat                            readLive(const SubsetBounds& bounds);
+        CMat                            readLive(int timeout);
+        CMat                            readLive(const SubsetBounds& bounds, int timeout);
 
         void                            write(const CMat &image);
         void                            write(const CMat &image, const std::string& path);
@@ -59,9 +59,9 @@ class DATAIOSHARED_EXPORT CDataVideoIO
         void                            stopWrite();
         void                            stopRead();
 
-        void                            waitWriteFinished();
+        void                            waitWriteFinished(int timeout);
 
-        void                            closeCamera();
+        void                            close();
 
         static IODataType               dataType(const std::string& fileName);
 

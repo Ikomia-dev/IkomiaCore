@@ -32,90 +32,90 @@ class CQueue
 
         T       pop()
         {
-            std::unique_lock<std::mutex> mlock(mutex_);
-            while (queue_.empty())
+            std::unique_lock<std::mutex> mlock(m_mutex);
+            while (m_queue.empty())
             {
-                if (cancelled_)
+                if (m_cancelled)
                     throw CException(CoreExCode::PROCESS_CANCELLED, "Threaded queue cancelled.");
 
-                if(cond_.wait_for(mlock, std::chrono::milliseconds(timeout_)) == std::cv_status::timeout)
+                if(m_cond.wait_for(mlock, std::chrono::milliseconds(m_timeout)) == std::cv_status::timeout)
                     throw CException(CoreExCode::TIMEOUT_REACHED, "Threaded queue timeout.");
 
-                if (cancelled_)
+                if (m_cancelled)
                     throw CException(CoreExCode::PROCESS_CANCELLED, "Threaded queue cancelled");
             }
-            auto item = queue_.front();
-            queue_.pop();
+            auto item = m_queue.front();
+            m_queue.pop();
             return item;
         }
         void    pop(T& item)
         {
-            std::unique_lock<std::mutex> mlock(mutex_);
-            while (queue_.empty())
+            std::unique_lock<std::mutex> mlock(m_mutex);
+            while (m_queue.empty())
             {
-                if (cancelled_)
+                if (m_cancelled)
                     throw CException(CoreExCode::PROCESS_CANCELLED, "Threaded queue cancelled.");
 
-                if(cond_.wait_for(mlock, std::chrono::milliseconds(timeout_)) == std::cv_status::timeout)
+                if(m_cond.wait_for(mlock, std::chrono::milliseconds(m_timeout)) == std::cv_status::timeout)
                     throw CException(CoreExCode::TIMEOUT_REACHED, "Threaded queue timeout.");
 
-                if (cancelled_)
+                if (m_cancelled)
                     throw CException(CoreExCode::PROCESS_CANCELLED, "Threaded queue cancelled.");
             }
-            item = queue_.front();
-            queue_.pop();
+            item = m_queue.front();
+            m_queue.pop();
         }
         void    push(T const& item)
         {
-            std::unique_lock<std::mutex> mlock(mutex_);
-            queue_.push(item);
+            std::unique_lock<std::mutex> mlock(m_mutex);
+            m_queue.push(item);
             mlock.unlock();
-            cond_.notify_one();
+            m_cond.notify_one();
         }
         void    push(T&& item)
         {
-            std::unique_lock<std::mutex> mlock(mutex_);
-            queue_.push(std::move(item));
+            std::unique_lock<std::mutex> mlock(m_mutex);
+            m_queue.push(std::move(item));
             mlock.unlock();
-            cond_.notify_one();
+            m_cond.notify_one();
         }
 
         size_t  size() const
         {
-            return queue_.size();;
+            return m_queue.size();;
         }
         void    clear()
         {
             std::queue<T> empty;
-            std::unique_lock<std::mutex> mlock(mutex_);
-            std::swap( queue_, empty );
+            std::unique_lock<std::mutex> mlock(m_mutex);
+            std::swap( m_queue, empty );
             mlock.unlock();
-            cond_.notify_one();
+            m_cond.notify_one();
         }
         void    cancel()
         {
-            std::unique_lock<std::mutex> mlock(mutex_);
-            cancelled_ = true;
-            cond_.notify_all();
+            std::unique_lock<std::mutex> mlock(m_mutex);
+            m_cancelled = true;
+            m_cond.notify_all();
         }
         void    activate()
         {
-            std::unique_lock<std::mutex> mlock(mutex_);
-            cancelled_ = false;
-            cond_.notify_all();
+            std::unique_lock<std::mutex> mlock(m_mutex);
+            m_cancelled = false;
+            m_cond.notify_all();
         }
         void    setTimeout(int ms)
         {
-            timeout_ = ms;
+            m_timeout = ms;
         }
 
     private:
 
-        std::queue<T>           queue_;
-        std::mutex              mutex_;
-        std::condition_variable cond_;
-        bool                    cancelled_ = false;
-        int                     timeout_ = 5000; // In milliseconds
+        std::queue<T>           m_queue;
+        std::mutex              m_mutex;
+        std::condition_variable m_cond;
+        bool                    m_cancelled = false;
+        int                     m_timeout = 5000; // In milliseconds
 };
 
 #endif // CQUEUE_HPP

@@ -405,16 +405,8 @@ constexpr auto _getParamValuesDocString =
         "Returns:\n"
         "   :py:class:`ikomia.core.pycore.ParamMap`: dict-like structure of string pairs (parameter name, value)\n";
 
-constexpr auto _getProgressSteps1DocString =
+constexpr auto _getProgressStepsDocString =
         "Get the number of progress steps when the system runs the task.\n\n"
-        "Returns:\n"
-        "   int: steps count\n";
-
-constexpr auto _getProgressSteps2DocString =
-        "Get the number of progress steps when the systems runs the task. "
-        "It takes into account the number of unit element to process.\n\n"
-        "Args:\n"
-        "   unit_elt_count (int): unit elements count. See :py:class:`~ikomia.core.pycore.CWorkflowTaskIO` for more details.\n\n"
         "Returns:\n"
         "   int: steps count\n";
 

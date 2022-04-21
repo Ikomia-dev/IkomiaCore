@@ -58,6 +58,8 @@ class CORESHARED_EXPORT CDataVideoInfo : public CDataImageInfo
         int     m_fourcc = 0;
 };
 
+using CDataVideoInfoPtr = std::shared_ptr<CDataVideoInfo>;
+
 /** @endcond */
 
 #endif // CDATAVIDEOINFO_H

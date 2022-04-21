@@ -48,26 +48,37 @@ CVideoIO::CVideoIO(IODataType data, const CMat& image, const std::string& name) 
 
 CVideoIO::CVideoIO(const CVideoIO &io) : CImageIO(io)
 {
+    m_frameIndex = io.m_frameIndex;
+    m_frameIndexRead = io.m_frameIndexRead;
 }
 
 CVideoIO::CVideoIO(const CVideoIO&& io) : CImageIO(io)
 {
+    m_frameIndex = std::move(io.m_frameIndex);
+    m_frameIndexRead = std::move(io.m_frameIndexRead);
 }
 
 CVideoIO &CVideoIO::operator=(const CVideoIO& io)
 {
     CImageIO::operator=(io);
+    m_frameIndex = io.m_frameIndex;
+    m_frameIndexRead = io.m_frameIndexRead;
     return *this;
 }
 
 CVideoIO &CVideoIO::operator=(const CVideoIO&& io)
 {
     CImageIO::operator=(io);
+    m_frameIndex = std::move(io.m_frameIndex);
+    m_frameIndexRead = std::move(io.m_frameIndexRead);
     return *this;
 }
 
 void CVideoIO::setVideoPath(const std::string& path)
 {
+    if (m_pVideoBuffer && m_pVideoBuffer->getCurrentPath() == path)
+        return;
+
     std::string extension = Utils::File::extension(path);
     if(CDataVideoIO::isVideoFormat(extension, true))
     {
@@ -100,11 +111,11 @@ void CVideoIO::setDataInfo(const CDataInfoPtr &infoPtr)
     m_infoPtr = infoPtr;
 }
 
-void CVideoIO::startVideo()
+void CVideoIO::startVideo(int timeout)
 {
     if(m_pVideoBuffer)
     {
-        m_pVideoBuffer->startRead();
+        m_pVideoBuffer->startRead(timeout);
         m_frameIndexRead = -1;
     }
     else
@@ -119,10 +130,10 @@ void CVideoIO::stopVideo()
         throw CException(CoreExCode::NULL_POINTER, QObject::tr("Video buffer pointer is null.").toStdString(), __func__, __FILE__, __LINE__);
 }
 
-void CVideoIO::startVideoWrite(int width, int height, int frames, int fps, int fourcc)
+void CVideoIO::startVideoWrite(int width, int height, int frames, int fps, int fourcc, int timeout)
 {
     if(m_pVideoBuffer)
-        m_pVideoBuffer->startWrite(width, height, frames, fps, fourcc);
+        m_pVideoBuffer->startWrite(width, height, frames, fps, fourcc, timeout);
     else
         throw CException(CoreExCode::NULL_POINTER, QObject::tr("Video buffer pointer is null.").toStdString(), __func__, __FILE__, __LINE__);
 }
@@ -159,7 +170,7 @@ bool CVideoIO::hasVideo()
 
 CMat CVideoIO::getImage()
 {
-    if(m_pVideoBuffer && m_pVideoBuffer->isReadStarted())
+    if(m_pVideoBuffer && m_pVideoBuffer->hasReadImage())
     {
         // Do not read image from source multiple times if we get it already
         if(m_frameIndex != m_frameIndexRead)
@@ -214,7 +225,7 @@ size_t CVideoIO::getUnitElementCount() const
     if(m_pVideoBuffer)
         return m_pVideoBuffer->getFrameCount();
     else
-        return 0;
+        return 1;
 }
 
 CDataInfoPtr CVideoIO::getDataInfo()
@@ -270,15 +281,29 @@ void CVideoIO::clearData()
     m_image.release();
 }
 
-void CVideoIO::waitWriteFinished()
+void CVideoIO::copyStaticData(const WorkflowTaskIOPtr &ioPtr)
 {
-    m_pVideoBuffer->waitWriteFinished();
+    CImageIO::copyStaticData(ioPtr);
+
+    auto videoIoPtr = std::dynamic_pointer_cast<CVideoIO>(ioPtr);
+    if (videoIoPtr)
+    {
+        auto infoPtr = videoIoPtr->getDataInfo();
+        if (infoPtr)
+            setDataInfo(infoPtr);
+    }
 }
 
-void CVideoIO::waitReadImage() const
+void CVideoIO::waitWriteFinished(int timeout)
 {
     if(m_pVideoBuffer)
-        while(!m_pVideoBuffer->hasReadImage());
+        m_pVideoBuffer->waitWriteFinished(timeout);
+}
+
+void CVideoIO::waitReadImage(int timeout) const
+{
+    if(m_pVideoBuffer)
+        m_pVideoBuffer->waitReadFinished(timeout);
 }
 
 std::shared_ptr<CVideoIO> CVideoIO::clone() const

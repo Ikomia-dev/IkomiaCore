@@ -45,8 +45,8 @@ class DATAIOSHARED_EXPORT COpencvVideoIO : public CVirtualVideoIO
 
         CMat            read() override;
         CMat            read(const SubsetBounds& subset) override;
-        CMat            readLive() override;
-        CMat            readLive(const SubsetBounds& subset) override;
+        CMat            readLive(int timeout) override;
+        CMat            readLive(const SubsetBounds& subset, int timeout) override;
 
         void            write(const CMat& image) override;
         void            write(const CMat& image, const std::string& path) override;
@@ -54,9 +54,9 @@ class DATAIOSHARED_EXPORT COpencvVideoIO : public CVirtualVideoIO
         void            stopWrite() override;
         void            stopRead() override;
 
-        void            waitWriteFinished() override;
+        void            waitWriteFinished(int timeout) override;
 
-        void            closeCamera() override;
+        void            close() override;
 
     private:
 
@@ -66,19 +66,12 @@ class DATAIOSHARED_EXPORT COpencvVideoIO : public CVirtualVideoIO
         // IMAGE
         int                 m_imgWidth = 0;
         int                 m_imgHeight = 0;
-        /*int                 m_imgDepth = 0;
-        int                 m_imgNbband = 0;
-        int                 m_imgNbBit = 0;
-        int                 m_imgBitMin = 0;
-        int                 m_imgBitMax = 0;*/
         int                 m_imgCvType = 0;
-
         // VIDEO
         int                 m_width = 0;
         int                 m_height = 0;
         int                 m_fps = 0;
         int                 m_frameCount = 0;
-        //int                 m_currentPos = 0;
         int                 m_fourcc = 0;
 };
 #endif // COPENCVVIDEOIO_H

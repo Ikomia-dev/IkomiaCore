@@ -50,17 +50,17 @@ class DATAMANAGEMENTSHARED_EXPORT CVideoDataManager : public CDataManager<CMat>
         CDataVideoInfoPtr   getDataVideoInfoPtr();
         CDataVideoBuffer::Type  getSourceType() const;
 
-        CMat                playVideo(CDataset<CMat> &dataset);
-        CMat                playVideo(CDataset<CMat> &dataset, const SubsetBounds& subsetBounds);
+        CMat                playVideo(CDataset<CMat> &dataset, int timeout);
+        CMat                playVideo(CDataset<CMat> &dataset, const SubsetBounds& subsetBounds, int timeout);
 
         void                writeVideo(const CMat& image, const std::string& path);
 
         void                stopWriteVideo();
         void                stopReadVideo();
 
-        void                waitWriteFinished();
+        void                waitWriteFinished(int timeout);
 
-        void                closeCamera();
+        void                close();
 
     private:
 

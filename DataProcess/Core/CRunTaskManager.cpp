@@ -46,13 +46,13 @@ void CRunTaskManager::run(const WorkflowTaskPtr &pTask, const std::string inputN
             pTask->run();
             break;
         case CWorkflowTask::Type::IMAGE_PROCESS_2D:
-            runImageProcess2D(pTask, inputName);
+            runImageProcess2D(pTask);
             break;
         case CWorkflowTask::Type::IMAGE_PROCESS_3D:
             pTask->run();
             break;
         case CWorkflowTask::Type::VIDEO:
-            runVideoProcess(pTask, inputName);
+            runVideoProcess(pTask);
             break;
     }
     manageOutputs(pTask, inputName);
@@ -65,14 +65,13 @@ void CRunTaskManager::stop(const WorkflowTaskPtr &taskPtr)
         taskPtr->stop();
 }
 
-void CRunTaskManager::runImageProcess2D(const WorkflowTaskPtr &taskPtr, const std::string& inputName)
+void CRunTaskManager::runImageProcess2D(const WorkflowTaskPtr &taskPtr)
 {
     //Thread safety -> scoped lock for all inputs/outputs
     //Access through CObjectLocker<CWorkflowTaskIO> ioLock(*ioPtr);
     //auto inputLocks = taskPtr->createInputScopedLocks();
     //auto outputLocks = taskPtr->createOutputScopedLocks();
     const std::set<IODataType> volumeTypes = {IODataType::VOLUME, IODataType::VOLUME_LABEL, IODataType::VOLUME_BINARY};
-    const std::set<IODataType> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
     bool batchMode = std::stoi(m_pCfg->at("BatchMode"));
 
     if(taskPtr->hasInput(volumeTypes) &&
@@ -132,129 +131,32 @@ void CRunTaskManager::runImageProcess2D(const WorkflowTaskPtr &taskPtr, const st
             pOutput->setImage(volumes[i]);
         }
     }
-    else if(taskPtr->hasInput(videoTypes) && batchMode == true)
-    {
-        runWholeVideoProcess(taskPtr, inputName);
-    }
     else
     {
         taskPtr->run();
     }
 }
 
-void CRunTaskManager::runVideoProcess(const WorkflowTaskPtr& taskPtr, const std::string& inputName)
+void CRunTaskManager::runVideoProcess(const WorkflowTaskPtr& taskPtr)
 {
-    bool batchMode = std::stoi(m_pCfg->at("BatchMode"));
-    if (batchMode)
-    {
-        runWholeVideoProcess(taskPtr, inputName);
-    }
-    else
-    {
-        const std::set<IODataType> videoTypes = {
-            IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY,
-            IODataType::LIVE_STREAM, IODataType::LIVE_STREAM_LABEL, IODataType::LIVE_STREAM_BINARY};
-
-        //Get video inputs
-        auto videoInputs = taskPtr->getInputs(videoTypes);
-        if(videoInputs.size() == 0)
-            return;
-
-        //Run process
-        taskPtr->run();
-    }
-}
-
-void CRunTaskManager::runWholeVideoProcess(const WorkflowTaskPtr &taskPtr, const std::string& inputName)
-{
-    bool bImageSequence = false;
-    const std::set<IODataType> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
+    const std::set<IODataType> videoTypes = {
+        IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY,
+        IODataType::LIVE_STREAM, IODataType::LIVE_STREAM_LABEL, IODataType::LIVE_STREAM_BINARY
+    };
 
     //Get video inputs
     auto videoInputs = taskPtr->getInputs(videoTypes);
     if(videoInputs.size() == 0)
         return;
 
-    //Get video outputs
-    auto videoOutputs = taskPtr->getOutputs(videoTypes);
-    if(videoOutputs.size() == 0)
-        return;
-
-    for(size_t i=0; i<videoInputs.size(); ++i)
-    {
-        auto inputPtr = std::static_pointer_cast<CVideoIO>(videoInputs[i]);
-
-        //Check source type
-        auto infoPtr = std::static_pointer_cast<CDataVideoInfo>(inputPtr->getDataInfo());
-        if(infoPtr && infoPtr->m_sourceType == CDataVideoBuffer::IMAGE_SEQUENCE)
-            bImageSequence = true;
-
-        // Set video position to the first image for processing all the video
-        inputPtr->setVideoPos(0);
-        // Start acquisition
-        inputPtr->startVideo();
-    }
-
-    auto infoPtr = std::static_pointer_cast<CDataVideoInfo>(videoInputs[0]->getDataInfo());
-    for(size_t i=0; i<videoOutputs.size(); ++i)
-    {
-        // Set save path
-        std::string outPath;
-        auto outputPtr = std::static_pointer_cast<CVideoIO>(videoOutputs[i]);
-        Utils::File::createDirectory(taskPtr->getOutputFolder());
-
-        if(bImageSequence)
-            outPath = taskPtr->getOutputFolder() + inputName + "_" + std::to_string(i+1) + "_%04d.png";
-        else
-            outPath = taskPtr->getOutputFolder() + inputName + "_" + std::to_string(i+1) + ".avi";
-
-        outputPtr->addTemporaryFile(outPath);
-        outputPtr->setVideoPath(outPath);
-    }
-
-    for(int i=0; i<infoPtr->m_frameCount && !m_bStop; ++i)
-    {
-        try
-        {
-            for(size_t j=0; j<videoInputs.size(); ++j)
-            {
-                auto inputPtr = std::static_pointer_cast<CVideoIO>(videoInputs[j]);
-                inputPtr->setFrameToRead(i);
-            }
-            // Run process
-            taskPtr->run();
-            // Save video outputs
-            //saveVideoOutputs(taskPtr, videoOutputs, infoPtr);
-        }
-        catch(CException& e)
-        {
-            if(e.getCode() == CoreExCode::TIMEOUT_REACHED)
-                break;
-        }
-    }
-
-    for(size_t i=0; i<videoInputs.size(); ++i)
-    {
-        auto inputPtr = std::static_pointer_cast<CVideoIO>(videoInputs[i]);
-        inputPtr->stopVideo();
-    }
-
-    for(size_t i=0; i<videoOutputs.size(); ++i)
-    {
-        auto outputPtr = std::static_pointer_cast<CVideoIO>(videoOutputs[i]);
-        outputPtr->waitWriteFinished();
-        outputPtr->stopVideoWrite();
-        outputPtr->setVideoPos(0);
-    }
+    //Run process
+    taskPtr->run();
 }
 
 void CRunTaskManager::manageOutputs(const WorkflowTaskPtr &taskPtr, const std::string& inputName)
 {
-    // Auto-save outputs if in batch mode
-    bool autoSave = std::stoi(m_pCfg->at("AutoSave")) || taskPtr->isAutoSave();
-    bool batchMode = std::stoi(m_pCfg->at("BatchMode"));
-
-    if (batchMode || autoSave)
+    // Auto-save outputs if mode is enabled
+    if (taskPtr->isAutoSave())
     {
         if (std::stoi(m_pCfg->at("WholeVideo")))
             saveVideoOutputs(taskPtr, inputName);
@@ -302,9 +204,6 @@ void CRunTaskManager::saveVideoOutputs(const WorkflowTaskPtr &taskPtr, const std
         else
             outPath = taskPtr->getOutputFolder() + inputName + "_" + std::to_string(i+1) + ".avi";
 
-        if (!Utils::File::isFileExist(outPath))
-            outputPtr->addTemporaryFile(outPath);
-
         outputPtr->setVideoPath(outPath);
     }
 
@@ -321,7 +220,7 @@ void CRunTaskManager::saveVideoOutputs(const WorkflowTaskPtr &taskPtr, const std
 
         // Start video write if needed
         if(outputPtr->isWriteStarted() == false)
-            outputPtr->startVideoWrite(img.getNbCols(), img.getNbRows(), infoPtr->m_frameCount, infoPtr->m_fps, infoPtr->m_fourcc);
+            outputPtr->startVideoWrite(img.getNbCols(), img.getNbRows(), infoPtr->m_frameCount, infoPtr->m_fps, infoPtr->m_fourcc, m_timeout);
 
         if(bEmbedGraphics && graphicsOutputs.size() > 0)
         {
@@ -339,45 +238,4 @@ void CRunTaskManager::saveVideoOutputs(const WorkflowTaskPtr &taskPtr, const std
         outputPtr->writeImage(img);
     }
 }
-
-/*void CRunTaskManager::saveVideoOutputs(const WorkflowTaskPtr &taskPtr, const InputOutputVect &outputs, const std::shared_ptr<CDataVideoInfo>& inputInfo)
-{
-    bool bEmbedGraphics = false;
-    InputOutputVect graphicsOutputs;
-
-    if(m_pCfg)
-    {
-        auto it = m_pCfg->find("GraphicsEmbedded");
-        if(it != m_pCfg->end())
-            bEmbedGraphics = std::stoi(it->second);
-    }
-
-    if(bEmbedGraphics)
-        graphicsOutputs = taskPtr->getOutputs({IODataType::OUTPUT_GRAPHICS});
-
-    for(size_t i=0; i<outputs.size(); ++i)
-    {
-        auto outputPtr = std::static_pointer_cast<CVideoIO>(outputs[i]);
-        CMat img = outputPtr->getImage();
-
-        // Start video write if needed
-        if(outputPtr->isWriteStarted() == false)
-            outputPtr->startVideoWrite(img.getNbCols(), img.getNbRows(), inputInfo->m_frameCount, inputInfo->m_fps, inputInfo->m_fourcc);
-
-        if(bEmbedGraphics && graphicsOutputs.size() > 0)
-        {
-            for(size_t j=0; j<graphicsOutputs.size(); ++j)
-            {
-                auto graphicsOutPtr = std::static_pointer_cast<CGraphicsOutput>(graphicsOutputs[j]);
-                if(graphicsOutPtr->getImageIndex() == (int)i)
-                {
-                    CGraphicsConversion graphicsConv((int)img.getNbCols(), (int)img.getNbRows());
-                    for(auto it : graphicsOutPtr->getItems())
-                        it->insertToImage(img, graphicsConv, false, false);
-                }
-            }
-        }
-        outputPtr->writeImage(img);
-    }
-}*/
 

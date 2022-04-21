@@ -17,8 +17,11 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+#include <future>
+#include <thread>
 #include "CDataVideoBuffer.h"
 #include "UtilsTools.hpp"
+#include "CTimer.hpp"
 
 CDataVideoBuffer::CDataVideoBuffer()
 {
@@ -37,13 +40,13 @@ CDataVideoBuffer::CDataVideoBuffer(const std::string &path, int frameCount)
 
 CDataVideoBuffer::~CDataVideoBuffer()
 {
-    stopRead();
-    stopWrite();
+    close();
 }
 
-void CDataVideoBuffer::closeCamera()
+void CDataVideoBuffer::close()
 {
     stopRead();
+    stopWrite();
     m_reader.release();
 }
 
@@ -55,7 +58,10 @@ void CDataVideoBuffer::openVideo()
             return;
         case OPENNI_STREAM:
             if(!m_reader.open(cv::CAP_OPENNI))
+            {
+                close();
                 throw CException(DataIOExCode::FILE_NOT_EXISTS, "Failed to open video file or camera", __func__, __FILE__, __LINE__);
+            }
             break;
 
         case ID_STREAM:
@@ -77,7 +83,10 @@ void CDataVideoBuffer::openVideo()
     if(m_type != OPENNI_STREAM)
     {
         if(!m_reader.isOpened())
+        {
+            close();
             throw CException(DataIOExCode::FILE_NOT_EXISTS, "Failed to open video file or camera", __func__, __FILE__, __LINE__);
+        }
 
         // Parameter not available for image sequence
         m_nbFrames = m_reader.get(cv::CAP_PROP_FRAME_COUNT);
@@ -93,7 +102,7 @@ void CDataVideoBuffer::openVideo()
     }
 }
 
-void CDataVideoBuffer::startRead()
+void CDataVideoBuffer::startRead(int timeout)
 {
     if(m_bStopRead)
         m_bStopRead = false;
@@ -105,13 +114,9 @@ void CDataVideoBuffer::startRead()
         openVideo();
 
     m_bError = false;
+    m_timeout = timeout;
     m_queueRead.activate();
-
-    auto future = QtConcurrent::run([=]
-    {
-        updateRead();
-    });
-    m_watcherRead.setFuture(future);
+    m_readFuture = Utils::async([this]{ updateRead(); });
 }
 
 void CDataVideoBuffer::stopRead()
@@ -119,8 +124,8 @@ void CDataVideoBuffer::stopRead()
     m_bStopRead = true;
     m_queueRead.cancel();
 
-    if(m_watcherRead.isRunning())
-        m_watcherRead.waitForFinished();
+    if (isReadStarted())
+        m_readFuture.wait();
 
     m_queueRead.clear();
 
@@ -133,9 +138,8 @@ void CDataVideoBuffer::stopRead()
 void CDataVideoBuffer::pauseRead()
 {
     m_bStopRead = true;
-
-    if(m_watcherRead.isRunning())
-        m_watcherRead.waitForFinished();
+    if (isReadStarted())
+        m_readFuture.wait();
 }
 
 void CDataVideoBuffer::clearRead()
@@ -143,51 +147,65 @@ void CDataVideoBuffer::clearRead()
     m_queueRead.clear();
 }
 
-void CDataVideoBuffer::startWrite(int width, int height, int nbFrames, int fps, int fourcc)
+void CDataVideoBuffer::startWrite(int width, int height, int nbFrames, int fps, int fourcc, int timeout)
 {
     if(m_bStopWrite)
         m_bStopWrite = false;
 
+    m_bError = false;
     m_width = width;
     m_height = height;
     m_nbFrames = nbFrames;
     m_fps = fps;
     m_fourcc = fourcc;
+    m_timeout = timeout;
     isWritable(); // may throw
+
+    if (m_timeout != -1)
+        m_queueWrite.setTimeout(m_timeout);
+
     m_queueWrite.activate();
     m_writeFuture = Utils::async([this]{ updateWrite(); });
 }
 
-void CDataVideoBuffer::startStreamWrite(int width, int height, int fps, int fourcc)
+void CDataVideoBuffer::startStreamWrite(int width, int height, int fps, int fourcc, int timeout)
 {
     if(m_bStopWrite)
         m_bStopWrite = false;
 
+    m_bError = false;
     m_width = width;
     m_height = height;
     m_fps = fps;
     m_fourcc = fourcc;
+    m_timeout = timeout;
     isWritable(); // may throw
+
+    if (m_timeout != -1)
+        m_queueWrite.setTimeout(m_timeout);
+
     m_queueWrite.activate();
     m_writeFuture = Utils::async([this]{ updateStreamWrite(); });
 }
 
 void CDataVideoBuffer::stopWrite()
 {
-    // If already stopped
-    if(m_bStopWrite)
-        return;
-
     m_bStopWrite = true;
     m_queueWrite.cancel();
-    m_writeFuture.wait();
+
+    if (isWriteStarted())
+        m_writeFuture.wait();
+
     m_queueWrite.clear();
 }
 
 CMat CDataVideoBuffer::read()
 {
     if(m_bError)
+    {
+        close();
         throw CException(CoreExCode::PROCESS_CANCELLED, m_lastErrorMsg, __func__, __FILE__, __LINE__);
+    }
 
     CMat img;
     try
@@ -205,6 +223,7 @@ CMat CDataVideoBuffer::read()
     }
     catch(std::exception& e)
     {
+        close();
         throw CException(CoreExCode::TIMEOUT_REACHED, e.what() + tr("No more images to read.").toStdString(), __func__, __FILE__, __LINE__);
     }
     return img;
@@ -212,6 +231,12 @@ CMat CDataVideoBuffer::read()
 
 void CDataVideoBuffer::write(CMat image)
 {
+    if(m_bError)
+    {
+        close();
+        throw CException(CoreExCode::PROCESS_CANCELLED, m_lastErrorMsg, __func__, __FILE__, __LINE__);
+    }
+
     if(image.empty() == false)
     {
         // VideoWriter can only write 3-channels images
@@ -254,16 +279,14 @@ CMat CDataVideoBuffer::snapshot(int pos)
     bool bRet = m_reader.grab();
     if(bRet == false)
     {
-        stopRead();
-        stopWrite();
+        close();
         throw CException(DataIOExCode::FILE_NOT_EXISTS, "Failed to snap image", __func__, __FILE__, __LINE__);
     }
 
     bRet = m_reader.retrieve(image, m_mode);
     if(bRet == false)
     {
-        stopRead();
-        stopWrite();
+        close();
         throw CException(DataIOExCode::FILE_NOT_EXISTS, "Failed to snap image", __func__, __FILE__, __LINE__);
     }
 
@@ -271,14 +294,32 @@ CMat CDataVideoBuffer::snapshot(int pos)
     return image;
 }
 
-void CDataVideoBuffer::waitWriteFinished()
+void CDataVideoBuffer::waitWriteFinished(int timeout)
 {
-    if(m_writeFuture.valid())
-        m_writeFuture.wait();
-
+    if (m_writeFuture.valid())
+    {
+        if (timeout == -1)
+            m_writeFuture.wait();
+        else
+            m_writeFuture.wait_for(std::chrono::milliseconds(timeout));
+    }
     m_bStopWrite = true;
     m_queueWrite.cancel();
     m_queueWrite.clear();
+}
+
+void CDataVideoBuffer::waitReadFinished(int timeout)
+{
+    if (m_readFuture.valid())
+    {
+        if (timeout == -1)
+            m_readFuture.wait();
+        else
+            m_readFuture.wait_for(std::chrono::milliseconds(timeout));
+    }
+    m_bStopRead = true;
+    m_queueRead.cancel();
+    m_queueRead.clear();
 }
 
 bool CDataVideoBuffer::hasReadImage() const
@@ -288,7 +329,15 @@ bool CDataVideoBuffer::hasReadImage() const
 
 bool CDataVideoBuffer::isReadStarted() const
 {
-    return !m_bStopRead || hasReadImage();
+    using namespace std::chrono_literals;
+    bool isValid = m_readFuture.valid();
+    if (!isValid)
+        return false;
+    else
+    {
+        auto status = m_readFuture.wait_for(0ms);
+        return status != std::future_status::ready;
+    }
 }
 
 bool CDataVideoBuffer::isReadOpened() const
@@ -315,7 +364,15 @@ bool CDataVideoBuffer::hasWriteImage() const
 
 bool CDataVideoBuffer::isWriteStarted() const
 {
-    return !m_bStopWrite || hasWriteImage();
+    using namespace std::chrono_literals;
+    bool isValid = m_writeFuture.valid();
+    if (!isValid)
+        return false;
+    else
+    {
+        auto status = m_writeFuture.wait_for(0ms);
+        return status != std::future_status::ready;
+    }
 }
 
 void CDataVideoBuffer::setVideoPath(const std::string& path)
@@ -339,8 +396,10 @@ void CDataVideoBuffer::setQueueSize(size_t queueSize)
 void CDataVideoBuffer::setPosition(int pos)
 {
     if(m_type != IMAGE_SEQUENCE && pos >= m_nbFrames)
+    {
+        close();
         throw CException(DataIOExCode::VIDEO_WRONG_IMG_NUMBERS, "Invalid frame number", __func__, __FILE__, __LINE__);
-
+    }
     m_mutex.lock();
     m_currentPos = pos;
     m_reader.set(cv::CAP_PROP_POS_FRAMES, pos);
@@ -372,11 +431,6 @@ void CDataVideoBuffer::setMode(int mode)
 void CDataVideoBuffer::setFourCC(int code)
 {
     m_fourcc = code;
-}
-
-void CDataVideoBuffer::setMaxFailureCount(int nb)
-{
-    m_maxFailureCount = nb;
 }
 
 std::string CDataVideoBuffer::getCurrentPath() const
@@ -451,9 +505,11 @@ CDataVideoBuffer::Type CDataVideoBuffer::getSourceType() const
 void CDataVideoBuffer::updateRead()
 {
     int grabCount = 0;
-    int failureCount = 0;
+    Utils::CTimer timer;
+    timer.start();
+    double waiting_period = timer.get_elapsed_ms();
 
-    while(m_bStopRead == false && failureCount <= m_maxFailureCount)
+    while(m_bStopRead == false && waiting_period <= m_timeout)
     {
         if(m_nbFrames != -1 && grabCount == m_nbFrames)
         {
@@ -462,21 +518,21 @@ void CDataVideoBuffer::updateRead()
         }
 
         CMat frame;
-        if(m_queueRead.size() < m_queueSize && m_queueWrite.size() < m_queueSize)
+        if(m_queueRead.size() < m_queueSize)
         {
             try
             {
                 if(!m_reader.grab())
                 {
                     m_lastErrorMsg = "OpenCV VideoCapture::grab() function failed.";
-                    failureCount++;
+                    Utils::print(m_lastErrorMsg, QtDebugMsg);
                     continue;
                 }
 
                 if(!m_reader.retrieve(frame, m_mode))
                 {
                     m_lastErrorMsg = "OpenCV VideoCapture::retrieve() function failed.";
-                    failureCount++;
+                    Utils::print(m_lastErrorMsg, QtDebugMsg);
                     continue;
                 }
 
@@ -501,19 +557,17 @@ void CDataVideoBuffer::updateRead()
                     // For video files, we buffer frames in the queue
                     m_queueRead.push(dst);
                 }
-                //Reset successive failure count
-                failureCount = 0;
+                //Reset timeout when success
+                waiting_period = timer.get_elapsed_ms();
             }
             catch(std::exception& e)
             {
                 m_lastErrorMsg = e.what();
-                failureCount++;
+                Utils::print(m_lastErrorMsg, QtDebugMsg);
             }
         }
     }
-
-    if(failureCount > m_maxFailureCount)
-        m_bError = true;
+    m_bError = waiting_period > m_timeout;
 }
 
 void CDataVideoBuffer::updateWrite()
@@ -534,13 +588,14 @@ void CDataVideoBuffer::updateStreamWrite()
     writer.open(m_path, m_fourcc, (double)m_fps, cv::Size(m_width, m_height));
     if(!writer.isOpened())
     {
-        Utils::print("Failed to open video writer:" + m_path, QtCriticalMsg);
+        m_bError = true;
+        m_lastErrorMsg = "Failed to open video writer:" + m_path;
         return;
     }
 
-    try
+    while(m_bStopWrite == false && m_bError == false)
     {
-        while(m_bStopWrite == false)
+        try
         {
             cv::Mat img = m_queueWrite.pop();
             if(!img.empty())
@@ -550,20 +605,34 @@ void CDataVideoBuffer::updateStreamWrite()
                 m_mutex.unlock();
             }
         }
-    }
-    catch(std::exception& e)
-    {
-        // Nothing more to process, we're done
-        Utils::print(std::string("Stream writing ended: ") + e.what(), QtWarningMsg);
+        catch(CException& e)
+        {
+            if (e.getCode() == CoreExCode::TIMEOUT_REACHED && m_timeout == -1)
+            {
+                // If no timeout is set, just log event
+                m_queueWrite.activate();
+                Utils::print(e.what(), QtDebugMsg);
+            }
+            else
+            {
+                m_bError = true;
+                m_lastErrorMsg = std::string("Stream writing ended: ") + e.what();
+            }
+        }
+        catch(std::exception& e)
+        {
+            m_bError = true;
+            m_lastErrorMsg = std::string("Stream writing ended: ") + e.what();
+        }
     }
 }
 
 void CDataVideoBuffer::writeImageSequenceThread()
 {
-    try
+    int count = 0;
+    while(m_bStopWrite == false && count < m_nbFrames && m_bError == false)
     {
-        int count = 0;
-        while(m_bStopWrite == false && count < m_nbFrames)
+        try
         {
             cv::Mat img = m_queueWrite.pop();
             if(!img.empty())
@@ -573,11 +642,25 @@ void CDataVideoBuffer::writeImageSequenceThread()
                 count++;
             }
         }
-    }
-    catch(std::exception& e)
-    {
-        // Nothing more to process, we're done
-        Utils::print(e.what(), QtCriticalMsg);
+        catch(CException& e)
+        {
+            if (e.getCode() == CoreExCode::TIMEOUT_REACHED && m_timeout == -1)
+            {
+                // If no timeout is set, just log event
+                m_queueWrite.activate();
+                Utils::print(e.what(), QtDebugMsg);
+            }
+            else
+            {
+                m_bError = true;
+                m_lastErrorMsg = std::string("Image sequence writing ended: ") + e.what();
+            }
+        }
+        catch(std::exception& e)
+        {
+            m_bError = true;
+            m_lastErrorMsg = std::string("Image sequence writing ended: ") + e.what();
+        }
     }
 }
 
@@ -592,34 +675,48 @@ void CDataVideoBuffer::writeVideoThread()
 
     if(!writer.isOpened())
     {
-        Utils::print("Failed to open video writer:" + m_path, QtCriticalMsg);
+        m_bError = true;
+        m_lastErrorMsg = "Failed to open video writer:" + m_path;
         return;
     }
 
     int count = 0;
-
-    try
+    while(m_bStopWrite == false && count < m_nbFrames && m_bError == false)
     {
-        while(m_bStopWrite == false && count < m_nbFrames)
+        try
         {
             cv::Mat img = m_queueWrite.pop();
             if(!img.empty())
             {
                 m_mutex.lock();
                 writer.write(img);
-                m_mutex.unlock();
                 count++;
+                m_mutex.unlock();
             }
         }
-        writer.release();
+        catch(CException& e)
+        {
+            if (e.getCode() == CoreExCode::TIMEOUT_REACHED && m_timeout == -1)
+            {
+                // If no timeout is set, just log event
+                m_queueWrite.activate();
+                Utils::print(e.what(), QtDebugMsg);
+            }
+            else
+            {
+                m_bError = true;
+                m_lastErrorMsg = "Video writing ended: " + std::to_string(count) + "/" + std::to_string(m_nbFrames) + " images written.";
+                m_lastErrorMsg += " Error occured:" + std::string(e.what());
+            }
+        }
+        catch(std::exception& e)
+        {
+            m_bError = true;
+            m_lastErrorMsg = "Video writing ended: " + std::to_string(count) + "/" + std::to_string(m_nbFrames) + " images written.";
+            m_lastErrorMsg += " Error occured:" + std::string(e.what());
+        }
     }
-    catch(std::exception& e)
-    {
-        // Nothing more to process, we're done
-        std::string msg = "Write thread finished: " + std::to_string(count) + "/" + std::to_string(m_nbFrames) + " images written.";
-        msg += " Error occured:" + std::string(e.what());
-        Utils::print(msg, QtWarningMsg);
-    }
+    writer.release();
 }
 
 bool CDataVideoBuffer::isStreamSource() const
@@ -645,13 +742,19 @@ void CDataVideoBuffer::openStreamFromId(int id)
 #endif
 
     if(!m_reader.open(id, api))
+    {
+        close();
         throw CException(DataIOExCode::FILE_NOT_EXISTS, "Failed to open video file or camera", __func__, __FILE__, __LINE__);
+    }
 }
 
 void CDataVideoBuffer::openStreamFromIP(const std::string& ipAdress)
 {
     if(!m_reader.open(ipAdress))
+    {
+        close();
         throw CException(DataIOExCode::FILE_NOT_EXISTS, "Failed to open video file or camera", __func__, __FILE__, __LINE__);
+    }
 }
 
 void CDataVideoBuffer::openStreamFromPath(const std::string& path)
@@ -668,14 +771,20 @@ void CDataVideoBuffer::openStreamFromPath(const std::string& path)
     {
         // /dev/video* -> open with V4L backend
         if(!m_reader.open(path, api))
-            throw CException(DataIOExCode::FILE_NOT_EXISTS, "Failed to open video file or camera", __func__, __FILE__, __LINE__);
+        {
+            close();
+            throw CException(DataIOExCode::FILE_NOT_EXISTS, std::string("Failed to open camera: ") + path, __func__, __FILE__, __LINE__);
+        }
     }
     else
     {
         // video file: open with default backend (FFMPEG)
         // NB: boost::filesystem::exists(path) has been removed but maybe needed for a special case??
         if(!m_reader.open(path))
-            throw CException(DataIOExCode::FILE_NOT_EXISTS, "Failed to open video file or camera", __func__, __FILE__, __LINE__);
+        {
+            close();
+            throw CException(DataIOExCode::FILE_NOT_EXISTS, std::string("Failed to open video file or camera: ") + path, __func__, __FILE__, __LINE__);
+        }
     }
 }
 
@@ -735,7 +844,7 @@ void CDataVideoBuffer::isWritable()
     cv::VideoWriter writer;
     if(writer.open(m_path, m_fourcc, (double)m_fps, cv::Size(m_width, m_height)) == false)
     {
-        m_bStopWrite = true;
+        close();
         throw CException(DataIOExCode::FILE_NOT_EXISTS, "Failed to open video writer:" + m_path, __func__, __FILE__, __LINE__);
     }
 }

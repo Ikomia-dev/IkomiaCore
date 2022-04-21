@@ -178,17 +178,17 @@ class CDataIO : public _CDataIO
             else
                 return _DataType();
         }
-        _DataType                       readLive()
+        _DataType                       readLive(int timeout)
         {
             if(m_pDataIO)
-                return m_pDataIO->readLive();
+                return m_pDataIO->readLive(timeout);
             else
                 return _DataType();
         }
-        _DataType                       readLive(const SubsetBounds& subset)
+        _DataType                       readLive(const SubsetBounds& subset, int timeout)
         {
             if(m_pDataIO)
-                return m_pDataIO->readLive(subset);
+                return m_pDataIO->readLive(subset, timeout);
             else
                 return _DataType();
         }
@@ -223,18 +223,18 @@ class CDataIO : public _CDataIO
                 throw CException(CoreExCode::NULL_POINTER, "Stop read error: invalid DataIO object", __func__, __FILE__, __LINE__);
         }
 
-        void                            waitWriteFinished()
+        void                            waitWriteFinished(int timeout)
         {
             if(m_pDataIO)
-                m_pDataIO->waitWriteFinished();
+                m_pDataIO->waitWriteFinished(timeout);
             else
                 throw CException(CoreExCode::NULL_POINTER, "Wait write finished error: invalid DataIO object", __func__, __FILE__, __LINE__);
         }
 
-        void                            closeCamera()
+        void                            close()
         {
             if(m_pDataIO)
-                m_pDataIO->closeCamera();
+                m_pDataIO->close();
             else
                 throw CException(CoreExCode::NULL_POINTER, "Stop Write error: invalid DataIO object", __func__, __FILE__, __LINE__);
         }

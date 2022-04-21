@@ -63,9 +63,6 @@ class CWorkflowTaskWrap : public CWorkflowTask, public wrapper<CWorkflowTask>
         size_t  getProgressSteps() override;
         size_t  default_getProgressSteps();
 
-        size_t  getProgressSteps(size_t unitEltCount) override;
-        size_t  default_getProgressSteps(size_t unitEltCount);
-
         bool    isGraphicsChangedListening() const override;
         bool    default_isGraphicsChangedListening() const;
 

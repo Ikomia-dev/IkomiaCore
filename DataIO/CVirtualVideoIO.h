@@ -81,9 +81,9 @@ class DATAIOSHARED_EXPORT CVirtualVideoIO
          * @return CMat
          */
         virtual CMat            read() = 0;
-        virtual CMat            readLive() = 0;
+        virtual CMat            readLive(int timeout) = 0;
         virtual CMat            read(const SubsetBounds& subset) = 0;
-        virtual CMat            readLive(const SubsetBounds& subset) = 0;
+        virtual CMat            readLive(const SubsetBounds& subset, int timeout) = 0;
 
         virtual void            write(const CMat& /*image*/) = 0;
         virtual void            write(const CMat& /*image*/, const std::string& /*path*/) = 0;
@@ -91,9 +91,9 @@ class DATAIOSHARED_EXPORT CVirtualVideoIO
         virtual void            stopWrite() = 0;
         virtual void            stopRead() = 0;
 
-        virtual void            waitWriteFinished() = 0;
+        virtual void            waitWriteFinished(int timeout) = 0;
 
-        virtual void            closeCamera();
+        virtual void            close();
 
     protected:
 

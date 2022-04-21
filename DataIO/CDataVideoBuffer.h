@@ -46,23 +46,24 @@ class DATAIOSHARED_EXPORT CDataVideoBuffer: public QObject
         CDataVideoBuffer(const std::string& path, int frameCount);
         ~CDataVideoBuffer();
 
-        void            closeCamera();
+        void            close();
         void            openVideo();
 
-        void            startRead();
+        void            startRead(int timeout);
         void            stopRead();
         void            pauseRead();
         void            clearRead();
 
-        void            startWrite(int width, int height, int nbFrames, int fps=25, int fourcc=-1);
-        void            startStreamWrite(int width, int height, int fps=25, int fourcc=-1);
+        void            startWrite(int width, int height, int nbFrames, int fps=25, int fourcc=-1, int timeout=-1);
+        void            startStreamWrite(int width, int height, int fps=25, int fourcc=-1, int timeout=-1);
         void            stopWrite();
 
         CMat            read();
         void            write(CMat image);
         CMat            snapshot(int pos = -1);
 
-        void            waitWriteFinished();
+        void            waitWriteFinished(int timeout);
+        void            waitReadFinished(int timeout);
 
         bool            hasReadImage() const;
         bool            isReadStarted() const;
@@ -80,7 +81,6 @@ class DATAIOSHARED_EXPORT CDataVideoBuffer: public QObject
         void            setFrameCount(int nb);
         void            setMode(int mode);
         void            setFourCC(int code);
-        void            setMaxFailureCount(int nb);
 
         std::string     getCurrentPath() const;
         std::string     getSourceName() const;
@@ -122,8 +122,7 @@ class DATAIOSHARED_EXPORT CDataVideoBuffer: public QObject
         std::string             m_lastErrorMsg;
         size_t                  m_queueSize = 128;
         std::mutex              m_mutex;
-        QFutureWatcher<void>    m_watcherRead;
-        QFutureWatcher<void>    m_watcherWrite;
+        std::future<void>       m_readFuture;
         std::future<void>       m_writeFuture;
         std::atomic_bool        m_bStopRead{true};
         std::atomic_bool        m_bStopWrite{true};
@@ -137,7 +136,7 @@ class DATAIOSHARED_EXPORT CDataVideoBuffer: public QObject
         int                     m_currentPos = 0;
         int                     m_mode = 0;
         int                     m_writeAPI = cv::CAP_FFMPEG;
-        int                     m_maxFailureCount = 10;
+        int                     m_timeout = 5000; // in milliseconds
 };
 
 using CDataVideoBufferPtr = std::unique_ptr<CDataVideoBuffer>;
