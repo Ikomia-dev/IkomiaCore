@@ -354,17 +354,20 @@ void CGraphicsConversion::insertToImage(CMat &image, const CGraphicsText *pItem,
     cv::Point pos = cv::Point(rc.x(), rc.y());
     cv::Scalar color(pItem->defaultTextColor().red(), pItem->defaultTextColor().green(), pItem->defaultTextColor().blue());
     double fontScale = Utils::Font::getQtToOcvFontScaleFactor(pItem->font().pointSize());
-    int thickness = pItem->font().bold() == true ? 2 : 1;
+
+    int thickness = 1;
+    if (pItem->font().pointSize() > 16 && pItem->font().bold())
+        thickness = 2;
 
     int fontFace = cv::FONT_HERSHEY_SIMPLEX;
     if(pItem->font().italic())
         fontFace |= cv::FONT_ITALIC;
 
+    int baseline = 0;
+    cv::Size textSize = cv::getTextSize(text, fontFace, fontScale, thickness, &baseline);
+
     if(bMultiline)
     {
-        int baseline = 0;
-        cv::Size textSize = cv::getTextSize(text, fontFace, fontScale, thickness, &baseline);
-
         while(endPos != std::string::npos)
         {
             std::string lineText = text.substr(startPos, endPos - startPos);
@@ -377,7 +380,14 @@ void CGraphicsConversion::insertToImage(CMat &image, const CGraphicsText *pItem,
         cv::putText(image, lineText, pos, fontFace, fontScale, color, thickness, cv::LINE_AA);
     }
     else
+    {
+        int margin = 0.2 * textSize.height;
+        // Light gray background
+        cv::Scalar bckColor(200, 200, 200);
+        cv::Rect rcBck(pos.x - margin, pos.y - textSize.height - margin, textSize.width + 2*margin, textSize.height + baseline + 2*margin);
+        cv::rectangle(image, rcBck, bckColor, cv::FILLED);
         cv::putText(image, text, pos, fontFace, fontScale, color, thickness, cv::LINE_AA);
+    }
 }
 
 void CGraphicsConversion::insertToImage(CMat &image, const CGraphicsComplexPolygon *pItem, bool bForceFill, bool bBinary)
@@ -621,7 +631,10 @@ void CGraphicsConversion::insertToImage(CMat &image, const CProxyGraphicsText *p
     bool bMultiline = (endPos = pItem->m_text.find('\n')) != std::string::npos;
     cv::Point pos = cv::Point(pItem->m_x, pItem->m_y);
     double fontScale = Utils::Font::getQtToOcvFontScaleFactor(pItem->m_property.m_fontSize);
-    int thickness = pItem->m_property.m_bBold == true ? 2 : 1;
+
+    int thickness = 1;
+    if (pItem->m_property.m_fontSize > 16 && pItem->m_property.m_bBold)
+        thickness = 2;
 
     cv::Scalar color;
     if(bgr)
@@ -633,11 +646,11 @@ void CGraphicsConversion::insertToImage(CMat &image, const CProxyGraphicsText *p
     if(pItem->m_property.m_bItalic)
         fontFace |= cv::FONT_ITALIC;
 
+    int baseline = 0;
+    cv::Size textSize = cv::getTextSize(pItem->m_text, fontFace, fontScale, thickness, &baseline);
+
     if(bMultiline)
     {
-        int baseline = 0;
-        cv::Size textSize = cv::getTextSize(pItem->m_text, fontFace, fontScale, thickness, &baseline);
-
         while(endPos != std::string::npos)
         {
             std::string lineText = pItem->m_text.substr(startPos, endPos - startPos);
@@ -650,7 +663,14 @@ void CGraphicsConversion::insertToImage(CMat &image, const CProxyGraphicsText *p
         cv::putText(image, lineText, pos, fontFace, fontScale, color, thickness, cv::LINE_AA);
     }
     else
+    {
+        int margin = 0.2 * textSize.height;
+        // Light gray background
+        cv::Scalar bckColor(200, 200, 200);
+        cv::Rect rcBck(pos.x - margin, pos.y - textSize.height - margin, textSize.width + 2*margin, textSize.height + baseline + 2*margin);
+        cv::rectangle(image, rcBck, bckColor, cv::FILLED);
         cv::putText(image, pItem->m_text, pos, fontFace, fontScale, color, thickness, cv::LINE_AA);
+    }
 }
 
 void CGraphicsConversion::insertToImage(CMat &image, const CProxyGraphicsComplexPoly *pItem, bool bForceFill, bool bBinary, bool bgr)

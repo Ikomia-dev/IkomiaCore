@@ -298,8 +298,8 @@ namespace Ikomia
         {
             inline double   getQtToOcvFontScaleFactor(int size)
             {
-                //OpenCV scale factor of 1.0 corresponds approximatively to Qt font size of 25
-                return (double)size / 25.0;
+                //OpenCV scale factor of 1.0 corresponds approximatively to Qt font size of 30
+                return (double)size / 30.0;
             }
         }
 
