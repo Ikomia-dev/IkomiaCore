@@ -19,7 +19,10 @@
 
 #include "PyDataIO.h"
 #include "Data/CvMatNumpyArrayConverter.h"
+#include "PyDataIODocString.hpp"
 #include "COpencvImageIO.h"
+#include "CDataImageIO.h"
+#include "CDataVideoIO.h"
 
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #define PY_ARRAY_UNIQUE_SYMBOL IKOMIA_ARRAY_API
@@ -45,13 +48,43 @@ BOOST_PYTHON_MODULE(pydataio)
     to_python_converter<CMat, BoostCvMatToNumpyArrayConverter>();
     BoostNumpyArrayToCvMatConverter();
 
+    //------------------------//
+    //----- CDataImageIO -----//
+    //------------------------//
+    //Overloaded member functions
+    CMat (CDataImageIO::*read_img)() = &CDataImageIO::read;
+
+    class_<CDataImageIO, boost::noncopyable>("CDataImageIO", _dataImageIODocString, init<const std::string&>(_ctorDataImageIO))
+        .def("read", read_img, _readDataImageDocString)
+        .def("write", &CDataImageIO::write, _writeDataImageDocString)
+        .def("isImageFormat", &CDataImageIO::isImageFormat, _isImageFormatDocString).staticmethod("isImageFormat")
+    ;
+
+    //------------------------//
+    //----- CDataVideoIO -----//
+    //------------------------//
+    //Overloaded member functions
+    CMat (CDataVideoIO::*read_video)() = &CDataVideoIO::read;
+    void (CDataVideoIO::*write_video1)(const CMat&) = &CDataVideoIO::write;
+    void (CDataVideoIO::*write_video2)(const CMat&, const std::string&) = &CDataVideoIO::write;
+
+    class_<CDataVideoIO, boost::noncopyable>("CDataImageIO", _dataVideoIODocString, init<const std::string&>(_ctorDataVideoIO))
+        .def("read", read_video, _readDataVideoDocString)
+        .def("write", write_video1, _writeDataVideo1DocString)
+        .def("write", write_video2, _writeDataVideo2DocString)
+        .def("stopRead", &CDataVideoIO::stopRead, _stopReadDocString)
+        .def("stopWrite", &CDataVideoIO::stopWrite, _stopWriteDocString)
+        .def("waitWriteFinished", &CDataVideoIO::waitWriteFinished, _waitWriteFinishedDocString)
+        .def("isVideoFormat", &CDataVideoIO::isVideoFormat, _isVideoFormatDocString).staticmethod("isVideoFormat")
+    ;
+
     //--------------------------//
     //----- COpencvImageIO -----//
     //--------------------------//
     //Overloaded member functions
-    CMat (COpencvImageIO::*read1)() = &COpencvImageIO::read;
+    CMat (COpencvImageIO::*read_ocv1)() = &COpencvImageIO::read;
 
     class_<COpencvImageIO>("COpencvImageIO", init<const std::string&>())
-        .def("read", read1)
+        .def("read", read_ocv1)
     ;
 }

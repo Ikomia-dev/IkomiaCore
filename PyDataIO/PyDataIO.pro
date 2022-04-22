@@ -28,6 +28,7 @@ SOURCES += \
 HEADERS += \
         ../Core/Data/CvMatNumpyArrayConverter.h \
         PyDataIO.h \
+        PyDataIODocString.hpp \
         PyDataIOGlobal.hpp
 
 #Make install directive
