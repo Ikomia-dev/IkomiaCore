@@ -216,51 +216,6 @@ namespace Ikomia
                 return ret;
             }
 
-            inline void         print(const std::string& msg, const QtMsgType type=QtMsgType::QtInfoMsg)
-            {
-                auto strMsg = str(msg);
-                object file;
-
-                switch(type)
-                {
-                    case QtDebugMsg:
-                    case QtInfoMsg:
-                    default:
-                        try
-                        {
-                            file = import("sys").attr("stdout");
-                        }
-                        catch (const error_already_set &)
-                        {
-                            /* If print() is called from code that is executed as
-                             * part of garbage collection during interpreter shutdown,
-                             * importing 'sys' can fail. Give up rather than crashing the
-                             * interpreter in this case. */
-                            return;
-                        }
-                        break;
-
-                    case QtWarningMsg:
-                    case QtCriticalMsg:
-                    case QtFatalMsg:
-                        try
-                        {
-                            file = import("sys").attr("stderr");
-                        }
-                        catch (const error_already_set &)
-                        {
-                            /* If print() is called from code that is executed as
-                             * part of garbage collection during interpreter shutdown,
-                             * importing 'sys' can fail. Give up rather than crashing the
-                             * interpreter in this case. */
-                            return;
-                        }
-                        break;
-                }
-                auto write = file.attr("write");
-                write(strMsg);
-            }
-
             inline std::string  getIkomiaApiLibFolder()
             {
                 try
@@ -296,6 +251,60 @@ namespace Ikomia
                     return "";
                 }
                 return "";
+            }
+
+            inline void         print(const std::string& msg, const QtMsgType type=QtMsgType::QtInfoMsg)
+            {
+                auto strMsg = str(msg);
+                object file;
+
+                switch(type)
+                {
+                    case QtDebugMsg:
+                    {
+                        // Log file only
+                        std::ofstream logfile;
+                        logfile.open(getIkomiaApiFolder() + "/log.txt", std::ios_base::app);
+                        logfile << "DEBUG:" << msg;
+                        break;
+                    }
+                    case QtInfoMsg:
+                    default:
+                        try
+                        {
+                            file = import("sys").attr("stdout");
+                            auto write = file.attr("write");
+                            write(strMsg);
+                        }
+                        catch (const error_already_set &)
+                        {
+                            /* If print() is called from code that is executed as
+                             * part of garbage collection during interpreter shutdown,
+                             * importing 'sys' can fail. Give up rather than crashing the
+                             * interpreter in this case. */
+                            return;
+                        }
+                        break;
+
+                    case QtWarningMsg:
+                    case QtCriticalMsg:
+                    case QtFatalMsg:
+                        try
+                        {
+                            file = import("sys").attr("stderr");
+                            auto write = file.attr("write");
+                            write(strMsg);
+                        }
+                        catch (const error_already_set &)
+                        {
+                            /* If print() is called from code that is executed as
+                             * part of garbage collection during interpreter shutdown,
+                             * importing 'sys' can fail. Give up rather than crashing the
+                             * interpreter in this case. */
+                            return;
+                        }
+                        break;
+                }
             }
         }
 

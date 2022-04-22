@@ -135,7 +135,7 @@ void CIkomiaRegistry::_loadCppPlugin(const QString &fileName)
             // Check if plugin is loaded or root component instantiated
             if(pObject == nullptr)
             {
-                std::cerr << QString("Plugin %1 could not be loaded: %2.").arg(fileName).arg(pLoader->errorString()).toStdString();
+                Utils::print(QString("Plugin %1 could not be loaded: %2.").arg(fileName).arg(pLoader->errorString()).toStdString(), QtWarningMsg);
                 return;
             }
 
@@ -143,14 +143,14 @@ void CIkomiaRegistry::_loadCppPlugin(const QString &fileName)
             CPluginProcessInterface* pPlugin = qobject_cast<CPluginProcessInterface*>(pObject);
             if(pPlugin == nullptr)
             {
-                std::cerr << QString("Plugin %1 interface is not valid.").arg(fileName).toStdString();
+                Utils::print(QString("Plugin %1 interface is not valid.").arg(fileName).toStdString(), QtWarningMsg);
                 return;
             }
 
             auto taskFactoryPtr = pPlugin->getProcessFactory();
             if(taskFactoryPtr == nullptr)
             {
-                std::cerr << QString("Plugin %1 has no process factory.").arg(fileName).toStdString();
+                Utils::print(QString("Plugin %1 has no process factory.").arg(fileName).toStdString(), QtWarningMsg);
                 return;
             }
             taskFactoryPtr->getInfo().setInternal(false);
@@ -166,7 +166,7 @@ void CIkomiaRegistry::_loadCppPlugin(const QString &fileName)
                         .arg(QString::fromStdString(taskFactoryPtr->getInfo().getName()))
                         .arg(version)
                         .arg(Utils::IkomiaApp::getCurrentVersionNumber());
-                std::cerr << str.toStdString();
+                Utils::print(str.toStdString(), QtWarningMsg);
                 return;
             }
             else if(state == PluginState::UPDATED)
@@ -174,7 +174,7 @@ void CIkomiaRegistry::_loadCppPlugin(const QString &fileName)
                 QString str = QString("Plugin %1 is not compatible: you must update Ikomia Studio to version %2.")
                         .arg(QString::fromStdString(taskFactoryPtr->getInfo().getName()))
                         .arg(version);
-                std::cerr << str.toStdString();
+                Utils::print(str.toStdString(), QtWarningMsg);
                 return;
             }
 
@@ -182,17 +182,17 @@ void CIkomiaRegistry::_loadCppPlugin(const QString &fileName)
             if(widgetFactoryPtr == nullptr)
             {
                 QString str = QString("Plugin %1 has no widget factory.").arg(QString::fromStdString(taskFactoryPtr->getInfo().getName()));
-                std::cerr << str.toStdString();
+                Utils::print(str.toStdString(), QtWarningMsg);
                 return;
             }
 
             m_processRegistrator.registerProcess(taskFactoryPtr, widgetFactoryPtr);
-            std::cout << QString("Plugin %1 is loaded.").arg(fileName).toStdString() << std::endl;
+            Utils::print(QString("Plugin %1 is loaded.").arg(fileName).toStdString(), QtDebugMsg);
         }
     }
     catch(std::exception& e)
     {
-        std::cerr << QString("Plugin %1 failed to load:").arg(fileName).toStdString();
-        std::cerr << e.what();
+        auto msg = QString("Plugin %1 failed to load: ").arg(fileName).toStdString();
+        Utils::print(msg + e.what(), QtWarningMsg);
     }
 }
