@@ -69,8 +69,6 @@
 #include <linux/videodev2.h>
 #endif
 
-#define IK_PYTHON_API
-
 ///@cond INTERNAL
 
 namespace Ikomia
@@ -1114,27 +1112,28 @@ namespace Ikomia
             }
             else
             {
-#ifdef IK_PYTHON_API
-                Python::print(msg.toStdString() + "\n", type);
-#else
-                switch(type)
+                if (Py_IsInitialized())
+                    Python::print(msg.toStdString() + "\n", type);
+                else
                 {
-                    case QtDebugMsg:
-                    case QtInfoMsg:
-                        std::cout << msg.toStdString() << std::endl;
-                        break;
+                    switch(type)
+                    {
+                        case QtDebugMsg:
+                        case QtInfoMsg:
+                            std::cout << msg.toStdString() << std::endl;
+                            break;
 
-                    case QtWarningMsg:
-                    case QtCriticalMsg:
-                    case QtFatalMsg:
-                        std::cerr << msg.toStdString() << std::endl;
-                        break;
+                        case QtWarningMsg:
+                        case QtCriticalMsg:
+                        case QtFatalMsg:
+                            std::cerr << msg.toStdString() << std::endl;
+                            break;
 
-                    default:
-                        std::cout << msg.toStdString() << std::endl;
-                        break;
+                        default:
+                            std::cout << msg.toStdString() << std::endl;
+                            break;
+                    }
                 }
-#endif
             }
         }
 
@@ -1171,27 +1170,28 @@ namespace Ikomia
             }
             else
             {
-#ifdef IK_PYTHON_API
-                Python::print(msg + "\n", type);
-#else
-                switch(type)
+                if (Py_IsInitialized())
+                    Python::print(msg + "\n", type);
+                else
                 {
-                    case QtDebugMsg:
-                    case QtInfoMsg:
-                        std::cout << msg << std::endl;
-                        break;
+                    switch(type)
+                    {
+                        case QtDebugMsg:
+                        case QtInfoMsg:
+                            std::cout << msg << std::endl;
+                            break;
 
-                    case QtWarningMsg:
-                    case QtCriticalMsg:
-                    case QtFatalMsg:
-                        std::cerr << msg << std::endl;
-                        break;
+                        case QtWarningMsg:
+                        case QtCriticalMsg:
+                        case QtFatalMsg:
+                            std::cerr << msg << std::endl;
+                            break;
 
-                    default:
-                        std::cout << msg << std::endl;
-                        break;
+                        default:
+                            std::cout << msg << std::endl;
+                            break;
+                    }
                 }
-#endif
             }
         }
 

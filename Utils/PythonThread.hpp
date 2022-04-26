@@ -45,8 +45,16 @@ class CPyEnsureGIL
 {
     public:
 
-        CPyEnsureGIL() : _state(PyGILState_Ensure()){}
-        ~CPyEnsureGIL(){ PyGILState_Release(_state); }
+        CPyEnsureGIL()
+        {
+            if (Py_IsInitialized())
+                _state = PyGILState_Ensure();
+        }
+        ~CPyEnsureGIL()
+        {
+            if (Py_IsInitialized())
+                PyGILState_Release(_state);
+        }
 
     private:
 
