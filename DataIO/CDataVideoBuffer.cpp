@@ -324,6 +324,9 @@ void CDataVideoBuffer::waitReadFinished(int timeout)
 
 bool CDataVideoBuffer::hasReadImage() const
 {
+    Utils::CTimer timer;
+    timer.start();
+    while(m_queueRead.size() == 0 && timer.get_total_elapsed_ms() <= m_timeout);
     return m_queueRead.size() > 0;
 }
 
