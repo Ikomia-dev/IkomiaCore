@@ -41,12 +41,14 @@ static bool init_numpy()
 
 BOOST_PYTHON_MODULE(pydataio)
 {
+    // Enable user-defined docstrings and python signatures, while disabling the C++ signatures
+    docstring_options local_docstring_options(true, true, false);
+
+    // Set the docstring of the current module scope
+    scope().attr("__doc__") = _moduleDocString;
+
     //Numpy initialization
     init_numpy();
-
-    //CMat <-> Numpy NdArray converters
-    to_python_converter<CMat, BoostCvMatToNumpyArrayConverter>();
-    BoostNumpyArrayToCvMatConverter();
 
     //------------------------//
     //----- CDataImageIO -----//
@@ -68,7 +70,7 @@ BOOST_PYTHON_MODULE(pydataio)
     void (CDataVideoIO::*write_video1)(const CMat&) = &CDataVideoIO::write;
     void (CDataVideoIO::*write_video2)(const CMat&, const std::string&) = &CDataVideoIO::write;
 
-    class_<CDataVideoIO, boost::noncopyable>("CDataImageIO", _dataVideoIODocString, init<const std::string&>(_ctorDataVideoIO))
+    class_<CDataVideoIO, boost::noncopyable>("CDataVideoIO", _dataVideoIODocString, init<const std::string&>(_ctorDataVideoIO))
         .def("read", read_video, _readDataVideoDocString)
         .def("write", write_video1, _writeDataVideo1DocString)
         .def("write", write_video2, _writeDataVideo2DocString)
@@ -76,15 +78,5 @@ BOOST_PYTHON_MODULE(pydataio)
         .def("stopWrite", &CDataVideoIO::stopWrite, _stopWriteDocString)
         .def("waitWriteFinished", &CDataVideoIO::waitWriteFinished, _waitWriteFinishedDocString)
         .def("isVideoFormat", &CDataVideoIO::isVideoFormat, _isVideoFormatDocString).staticmethod("isVideoFormat")
-    ;
-
-    //--------------------------//
-    //----- COpencvImageIO -----//
-    //--------------------------//
-    //Overloaded member functions
-    CMat (COpencvImageIO::*read_ocv1)() = &COpencvImageIO::read;
-
-    class_<COpencvImageIO>("COpencvImageIO", init<const std::string&>())
-        .def("read", read_ocv1)
     ;
 }
