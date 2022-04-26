@@ -46,6 +46,19 @@ CVideoIO::CVideoIO(IODataType data, const CMat& image, const std::string& name) 
     m_saveFormat = DataFileFormat::AVI;
 }
 
+CVideoIO::CVideoIO(IODataType data, const std::string &name): CImageIO(data, name)
+{
+    m_description = QObject::tr("Video with read/write capabilities.").toStdString();
+    m_saveFormat = DataFileFormat::AVI;
+}
+
+CVideoIO::CVideoIO(IODataType data, const std::string &name, const std::string &path): CImageIO(data, name)
+{
+    m_description = QObject::tr("Video with read/write capabilities.").toStdString();
+    m_saveFormat = DataFileFormat::AVI;
+    setVideoPath(path);
+}
+
 CVideoIO::CVideoIO(const CVideoIO &io) : CImageIO(io)
 {
     m_frameIndex = io.m_frameIndex;

@@ -335,7 +335,7 @@ constexpr auto _ctor3imageProcessIODocString =
         "   arg4 (str): input or output name\n";
 
 constexpr auto _ctor4imageProcessIODocString =
-        "Construct a CImageIO instance with the given data type, name and the image loaded from the given path. "
+        "Construct a CImageIO instance with the given data type and identification name. "
         "The data type must be one of these values:\n\n"
         "- IODataType.IMAGE\n"
         "- IODataType.IMAGE_BINARY\n"
@@ -349,7 +349,7 @@ constexpr auto _ctor4imageProcessIODocString =
         "   arg3 (str): input or output name\n";
 
 constexpr auto _ctor5imageProcessIODocString =
-        "Construct a CImageIO instance with the given data type, name and the image loaded from the given path. "
+        "Construct a CImageIO instance with the given data type, identification name and the image loaded from the given path. "
         "The data type must be one of these values:\n\n"
         "- IODataType.IMAGE\n"
         "- IODataType.IMAGE_BINARY\n"
@@ -693,6 +693,35 @@ constexpr auto _ctor3VideoProcessIODocString =
         "   arg2 (:py:class:`~ikomia.core.pycore.IODataType`): data type\n\n"
         "   arg3 (Numpy array): 2D image\n\n"
         "   arg4 (str): input or output name\n";
+
+constexpr auto _ctor4VideoProcessIODocString =
+        "Construct a CVideoIO instance with the given data type and identification name. "
+        "The data type must be one of these values:\n\n"
+        "- IODataType.IMAGE\n"
+        "- IODataType.IMAGE_BINARY\n"
+        "- IODataType.IMAGE_LABEL\n"
+        "- IODataType.VOLUME\n"
+        "- IODataType.VOLUME_BINARY\n"
+        "- IODataType.VOLUME_LABEL\n\n"
+        "Args:\n"
+        "   arg1: self\n\n"
+        "   arg2 (:py:class:`~ikomia.core.pycore.IODataType`): data type\n\n"
+        "   arg3 (str): input or output name\n";
+
+constexpr auto _ctor5VideoProcessIODocString =
+        "Construct a CImageIO instance with the given data type, identification name and video path . "
+        "The data type must be one of these values:\n\n"
+        "- IODataType.IMAGE\n"
+        "- IODataType.IMAGE_BINARY\n"
+        "- IODataType.IMAGE_LABEL\n"
+        "- IODataType.VOLUME\n"
+        "- IODataType.VOLUME_BINARY\n"
+        "- IODataType.VOLUME_LABEL\n\n"
+        "Args:\n"
+        "   arg1: self\n\n"
+        "   arg2 (:py:class:`~ikomia.core.pycore.IODataType`): data type\n\n"
+        "   arg3 (str): input or output name\n\n"
+        "   arg4 (str): video path\n";
 
 constexpr auto _setVideoPathDocString =
         "Set the source path of the video.\n\n"
@@ -1398,6 +1427,19 @@ constexpr auto _wfSetAutoSaveDocString =
         "to set your custom folder). By default, outputs are saved in *user_folder/Ikomia/Workflows*.\n\n"
         "Args:\n\n"
         "   enable (bool): True or False\n";
+
+constexpr auto _wfSetCfgEntryDocString =
+        "Set special workflow configuration parameters. It consists of key-value string pairs that aim to adjust the "
+        "workflow execution behavior. Possible parameters are:\n\n"
+        "- Autosave (boolean - default: False): enable/disable saving outputs to disk for all tasks during execution.\n"
+        "- BatchMode (boolean - default: False): enable/disable batch processing.\n"
+        "- WholeVideo (boolean - default: False): enable/disable processing all frames of a video.\n"
+        "- GraphicsEmbedded (boolean - default: False): enable/disable burning of associated graphics items into output images.\n"
+        "- VideoReadTimeout (integer - default: 5s): timeout for reading video or camera frames in milliseconds.\n"
+        "- VideoWriteTimeout (integer - default: 1min): timeout for writing video or camera frames in milliseconds.\n\n"
+        "Args:\n\n"
+        "   key (str): parameter name\n\n"
+        "   value (str): parameter value. You have to take care of string conversion.\n";
 
 constexpr auto _wfGetTaskCountDocString =
         "Get the number of tasks in the workflow.\n\n"

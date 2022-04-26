@@ -35,6 +35,14 @@ CVideoIOWrap::CVideoIOWrap(IODataType dataType, const CMat &image, const std::st
 {
 }
 
+CVideoIOWrap::CVideoIOWrap(IODataType dataType, const std::string &name): CVideoIO(dataType, name)
+{
+}
+
+CVideoIOWrap::CVideoIOWrap(IODataType dataType, const std::string &name, const std::string &path): CVideoIO(dataType, name, path)
+{
+}
+
 CVideoIOWrap::CVideoIOWrap(const CVideoIO &io) : CVideoIO(io)
 {
 }

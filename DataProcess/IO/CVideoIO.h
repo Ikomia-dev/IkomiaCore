@@ -53,17 +53,29 @@ class DATAPROCESSSHARED_EXPORT CVideoIO : public CImageIO
         /**
          * @brief Constructs a CVideoIO instance with the given video output type and the given name.
          * @param data: see ::IODataType for details.
-         * @param name: input or output name.
+         * @param image: CMat object for C++ and Numpy array for Python.
          */
         CVideoIO(IODataType data, const CMat& image);
         /**
          * @brief Constructs a CVideoIO instance with the given video output type, name and the given image.
-         * @details By default, the image output type is set to the standard one. See ::IODataType for details.
          * @param data: see ::IODataType for details.
-         * @param name: input or output name.
          * @param image: CMat object for C++ and Numpy array for Python.
+         * @param name: input or output name.
          */
         CVideoIO(IODataType data, const CMat& image, const std::string& name);
+        /**
+         * @brief Constructs a CVideoIO instance with the given image output type and the name.
+         * @param data: see ::IODataType for details.
+         * @param name: input or output name.
+         */
+        CVideoIO(IODataType data, const std::string& name);
+        /**
+         * @brief Constructs a CVideoIO instance with the given image output type and the image path.
+         * @param data: see ::IODataType for details.
+         * @param name: input or output name.
+         * @param path: path to video file.
+         */
+        CVideoIO(IODataType data, const std::string& name, const std::string& path);
         /**
          * @brief Copy constructor.
          */
