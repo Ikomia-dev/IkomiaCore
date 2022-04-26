@@ -664,7 +664,7 @@ void CCoreGraphicsTests::conversionTest()
 
     auto items2 = conv.binaryMaskToGraphics(binary, nullptr, {255,0,0}, {255,0,0}, 1);
     //Each letter of text count as object
-    QVERIFY(items2.size() == 11);
+    QVERIFY(items2.size() == items.size());
 
     //All objects are CGraphicsPolygon or CComplexGraphicsPolygon
     int nbComplexPoly = 0;
@@ -673,7 +673,7 @@ void CCoreGraphicsTests::conversionTest()
         if(items2[i]->type() == CGraphicsComplexPolygon::Type)
             nbComplexPoly++;
     }
-    QVERIFY(nbComplexPoly == 2);
+    QVERIFY(nbComplexPoly == 1);
 }
 
 //Need a valid QApplication to test CGraphicsText

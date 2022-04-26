@@ -8,7 +8,7 @@ CWorkflowTests::CWorkflowTests(QObject *parent) : QObject(parent)
 {
 }
 
-void CWorkflowTests::WorkflowConstructors()
+void CWorkflowTests::workflowConstructors()
 {
     CWorkflow Workflow1;
     QVERIFY(Workflow1.getName().empty());
@@ -50,7 +50,7 @@ void CWorkflowTests::WorkflowConstructors()
     QVERIFY(Workflow4.getSignalRawPtr() != Workflow2.getSignalRawPtr());
 }
 
-void CWorkflowTests::WorkflowSetters()
+void CWorkflowTests::workflowSetters()
 {
     CWorkflow Workflow("MyWorkflow");
 
@@ -75,7 +75,7 @@ void CWorkflowTests::WorkflowSetters()
     QVERIFY(Workflow.getActiveTaskId() == Workflow.getRootId());
 }
 
-void CWorkflowTests::WorkflowInputs()
+void CWorkflowTests::workflowInputs()
 {
     CWorkflow Workflow("MyWorkflow");
     auto pRootTask = Workflow.getTask(Workflow.getRootId());
@@ -138,7 +138,7 @@ void CWorkflowTests::WorkflowInputs()
     QVERIFY(pRootTask->getValidInputCount() == 0);
 }
 
-void CWorkflowTests::WorkflowTaskConnection()
+void CWorkflowTests::workflowTaskConnection()
 {
     CWorkflow Workflow("MyWorkflow");
     auto rootId = Workflow.getRootId();
@@ -235,7 +235,7 @@ void CWorkflowTests::WorkflowTaskConnection()
     }
 }
 
-void CWorkflowTests::WorkflowStructure()
+void CWorkflowTests::workflowStructure()
 {
     CWorkflow Workflow("MyWorkflow");
     QVERIFY(Workflow.isRoot(Workflow.getRootId()) == true);
@@ -286,7 +286,7 @@ void CWorkflowTests::buildSimpleWorkflow()
     auto factory = m_processRegister.getProcessFactory();
 
     //Add bilateral filter
-    std::string name = tr("Bilateral Filter").toStdString();
+    std::string name = "ocv_bilateral_filter";
     auto pTaskParam = std::make_shared<COcvBilateralParam>();
     auto pBilateral = factory.createObject(name, pTaskParam);
     QVERIFY(pBilateral != nullptr);
@@ -323,47 +323,52 @@ void CWorkflowTests::buildSimpleWorkflow()
 
 void CWorkflowTests::buildSingleLineWorkflow()
 {
-    CWorkflow Workflow("Single line Workflow");
+    CWorkflow wf("Single line Workflow");
     auto nullVertex = boost::graph_traits<WorkflowGraph>::null_vertex();
     auto factory = m_processRegister.getProcessFactory();
 
     //Add bilateral filter
-    std::string name = tr("Bilateral Filter").toStdString();
+    std::string name = "ocv_bilateral_filter";
     auto pBilateralParam = std::make_shared<COcvBilateralParam>();
     auto pBilateral = factory.createObject(name, pBilateralParam);
-    auto bilateraId = Workflow.addTask(pBilateral);
-    Workflow.connect(nullVertex, 0, bilateraId, 0);
+    QVERIFY(pBilateral != nullptr);
+    auto bilateraId = wf.addTask(pBilateral);
+    wf.connect(nullVertex, 0, bilateraId, 0);
 
     //Add box filter
-    name = tr("Box Filter").toStdString();
+    name = "ocv_box_filter";
     auto pBoxFilterParam = std::make_shared<COcvBoxFilterParam>();
     auto pBoxFilter = factory.createObject(name, pBoxFilterParam);
-    auto boxFilterId = Workflow.addTask(pBoxFilter);
-    Workflow.connect(bilateraId, 0, boxFilterId, 0);
+    QVERIFY(pBoxFilter != nullptr);
+    auto boxFilterId = wf.addTask(pBoxFilter);
+    wf.connect(bilateraId, 0, boxFilterId, 0);
 
     //Add Detail enhance filter
-    name = tr("Detail Enhance Filter").toStdString();
+    name = "ocv_detail_enhance_filter";
     auto pDetailEnhanceParam = std::make_shared<COcvDetailEnhanceParam>();
     auto pDetailEnhance = factory.createObject(name, pDetailEnhanceParam);
-    auto detailEnhanceId = Workflow.addTask(pDetailEnhance);
-    Workflow.connect(boxFilterId, 0, detailEnhanceId, 0);
+    QVERIFY(pDetailEnhance != nullptr);
+    auto detailEnhanceId = wf.addTask(pDetailEnhance);
+    wf.connect(boxFilterId, 0, detailEnhanceId, 0);
 
     //Add gray conversion filter
-    name = tr("Color Conversion").toStdString();
+    name = "ocv_color_conversion";
     auto pCvtColorParam = std::make_shared<COcvCvtColorParam>();
     auto pCvtColor = factory.createObject(name, pCvtColorParam);
-    auto cvtColorId = Workflow.addTask(pCvtColor);
-    Workflow.connect(detailEnhanceId, 0, cvtColorId, 0);
+    QVERIFY(pCvtColor != nullptr);
+    auto cvtColorId = wf.addTask(pCvtColor);
+    wf.connect(detailEnhanceId, 0, cvtColorId, 0);
 
     //Add cascade classifier
-    name = tr("Cascade Classifier Filter").toStdString();
+    name = "ocv_cascade_classifier";
     std::string modelFile = "/usr/share/opencv/haarcascades/haarcascade_eye.xml";
     //std::string modelFile = "/usr/share/opencv/haarcascades/haarcascade_frontalface_default.xml";
     //std::string modelFile = "/usr/share/opencv/haarcascades/haarcascade_frontalface_alt2.xml";
     auto pCascadeClassifierParam = std::make_shared<COcvCascadeClassifierParam>(modelFile);
     auto pCascadeClassifier = factory.createObject(name, pCascadeClassifierParam);
-    auto cascadeClassifierId = Workflow.addTask(pCascadeClassifier);
-    Workflow.connect(cvtColorId, 0, cascadeClassifierId, 0);
+    QVERIFY(pCascadeClassifier != nullptr);
+    auto cascadeClassifierId = wf.addTask(pCascadeClassifier);
+    wf.connect(cvtColorId, 0, cascadeClassifierId, 0);
 
     //Add image input
     auto pInput = std::make_shared<CImageIO>();
@@ -371,11 +376,11 @@ void CWorkflowTests::buildSingleLineWorkflow()
     pInput->setImage(loadSampleImage());
     QVERIFY(pInput->isDataAvailable());
     //showImage("Workflow input", pInput->m_image);
-    Workflow.addInput(pInput);
+    wf.addInput(pInput);
 
     try
     {
-        Workflow.run();
+        wf.run();
     }
     catch(std::exception& e)
     {
@@ -383,65 +388,70 @@ void CWorkflowTests::buildSingleLineWorkflow()
     }
 
     //Get output
-    auto pOutput = std::dynamic_pointer_cast<CImageIO>(Workflow.getOutput(0));
+    auto pOutput = std::dynamic_pointer_cast<CImageIO>(wf.getOutput(0));
     QVERIFY(pOutput != nullptr);
     QVERIFY(pOutput->isDataAvailable());
 }
 
 void CWorkflowTests::buildTwoLinesWorkflow()
 {
-    CWorkflow Workflow("Two lines Workflow");
+    CWorkflow wf("Two lines Workflow");
     auto nullVertex = boost::graph_traits<WorkflowGraph>::null_vertex();
     auto factory = m_processRegister.getProcessFactory();
 
     //---------- First line ----------//
     //Add bilateral filter
-    std::string name = tr("Bilateral Filter").toStdString();
+    std::string name = "ocv_bilateral_filter";
     auto pBilateralParam = std::make_shared<COcvBilateralParam>();
     auto pBilateral = factory.createObject(name, pBilateralParam);
-    auto bilateraId = Workflow.addTask(pBilateral);
-    Workflow.connect(nullVertex, 0, bilateraId, 0);
+    QVERIFY(pBilateral != nullptr);
+    auto bilateraId = wf.addTask(pBilateral);
+    wf.connect(nullVertex, 0, bilateraId, 0);
 
     //Add box filter
-    name = tr("Box Filter").toStdString();
+    name = "ocv_box_filter";
     auto pBoxFilterParam = std::make_shared<COcvBoxFilterParam>();
     auto pBoxFilter = factory.createObject(name, pBoxFilterParam);
-    auto boxFilterId = Workflow.addTask(pBoxFilter);
-    Workflow.connect(bilateraId, 0, boxFilterId, 0);
+    QVERIFY(pBoxFilter != nullptr);
+    auto boxFilterId = wf.addTask(pBoxFilter);
+    wf.connect(bilateraId, 0, boxFilterId, 0);
 
     //---------- Second line ----------//
     //Add Adaptive manifold filter
-    name = tr("Adaptive Manifold Filter").toStdString();
+    name = "ocv_adaptive_manifold_filter";
     auto pAdaptiveManifoldParam = std::make_shared<COcvAdaptiveManifoldParam>();
     auto pAdaptiveManifold = factory.createObject(name, pAdaptiveManifoldParam);
-    auto adaptiveManifoldId = Workflow.addTask(pAdaptiveManifold);
-    Workflow.connect(nullVertex, 0, adaptiveManifoldId, 0);
+    QVERIFY(pAdaptiveManifold != nullptr);
+    auto adaptiveManifoldId = wf.addTask(pAdaptiveManifold);
+    wf.connect(nullVertex, 0, adaptiveManifoldId, 0);
 
     //Add Detail enhance filter
-    name = tr("Detail Enhance Filter").toStdString();
+    name = "ocv_detail_enhance_filter";
     auto pDetailEnhanceParam = std::make_shared<COcvDetailEnhanceParam>();
     auto pDetailEnhance = factory.createObject(name, pDetailEnhanceParam);
-    auto detailEnhanceId = Workflow.addTask(pDetailEnhance);
-    Workflow.connect(adaptiveManifoldId, 0, detailEnhanceId, 0);
+    QVERIFY(pDetailEnhance != nullptr);
+    auto detailEnhanceId = wf.addTask(pDetailEnhance);
+    wf.connect(adaptiveManifoldId, 0, detailEnhanceId, 0);
 
     //---------- Join lines ----------//
     //Add Add weighted operation
-    name = tr("Add Weighted").toStdString();
+    name = "ocv_add_weighted";
     auto pAddWeightedParam = std::make_shared<COcvAddWeightedParam>();
     auto pAddWeighted = factory.createObject(name, pAddWeightedParam);
-    auto addWeightedId = Workflow.addTask(pAddWeighted);
-    Workflow.connect(boxFilterId, 0, addWeightedId, 0);
-    Workflow.connect(detailEnhanceId, 0, addWeightedId, 1);
+    QVERIFY(pAddWeighted != nullptr);
+    auto addWeightedId = wf.addTask(pAddWeighted);
+    wf.connect(boxFilterId, 0, addWeightedId, 0);
+    wf.connect(detailEnhanceId, 0, addWeightedId, 1);
 
     //Add image input
     auto pInput = std::make_shared<CImageIO>();
     pInput->setImage(loadSampleImage());
     //showImage("Workflow input", pInput->m_image);
-    Workflow.addInput(pInput);
+    wf.addInput(pInput);
 
     try
     {
-        Workflow.run();
+        wf.run();
     }
     catch(std::exception& e)
     {
@@ -465,16 +475,18 @@ void CWorkflowTests::buildNestedWorkflows()
         auto pNestedWorkflow = std::make_shared<CWorkflow>("NestedWorkflow");
         pNestedWorkflow->setInput(std::make_shared<CImageIO>(), 0, true);
         //Add Detail enhance filter
-        std::string name = tr("Detail Enhance Filter").toStdString();
+        std::string name = "ocv_detail_enhance_filter";
         auto pDetailEnhanceParam = std::make_shared<COcvDetailEnhanceParam>();
         auto pDetailEnhance = factory.createObject(name, pDetailEnhanceParam);
+        QVERIFY(pDetailEnhance != nullptr);
         auto detailEnhanceId = pNestedWorkflow->addTask(pDetailEnhance);
         pNestedWorkflow->connect(nullVertex, 0, detailEnhanceId, 0);
 
         //Add gray conversion filter
-        name = tr("Color Conversion").toStdString();
+        name = "ocv_color_conversion";
         auto pCvtColorParam = std::make_shared<COcvCvtColorParam>();
         auto pCvtColor = factory.createObject(name, pCvtColorParam);
+        QVERIFY(pCvtColor != nullptr);
         auto cvtColorId = pNestedWorkflow->addTask(pCvtColor);
         pNestedWorkflow->connect(detailEnhanceId, 0, cvtColorId, 0);
         pNestedWorkflow->addOutput(pCvtColor->getOutput(0));
@@ -482,9 +494,10 @@ void CWorkflowTests::buildNestedWorkflows()
         //---------- Main Workflow ----------//
         CWorkflow mainWorkflow("MainWorkflow");
         //Add bilateral filter
-        name = tr("Bilateral Filter").toStdString();
+        name = "ocv_bilateral_filter";
         auto pBilateralParam = std::make_shared<COcvBilateralParam>();
         auto pBilateral = factory.createObject(name, pBilateralParam);
+        QVERIFY(pBilateral != nullptr);
         auto bilateraId = mainWorkflow.addTask(pBilateral);
         mainWorkflow.connect(nullVertex, 0, bilateraId, 0);
 
@@ -493,10 +506,11 @@ void CWorkflowTests::buildNestedWorkflows()
         mainWorkflow.connect(bilateraId, 0, nestedWorkflowId, 0);
 
         //Add cascade classifier
-        name = tr("Cascade Classifier Filter").toStdString();
+        name = "ocv_cascade_classifier";
         std::string modelFile = "/usr/local/share/opencv/haarcascades/haarcascade_frontalface_alt2.xml";
         auto pCascadeClassifierParam = std::make_shared<COcvCascadeClassifierParam>(modelFile);
         auto pCascadeClassifier = factory.createObject(name, pCascadeClassifierParam);
+        QVERIFY(pCascadeClassifier != nullptr);
         auto cascadeClassifierId = mainWorkflow.addTask(pCascadeClassifier);
         mainWorkflow.connect(nestedWorkflowId, 0, cascadeClassifierId, 0);
 

@@ -127,6 +127,7 @@ void CDataIOTest::playVideo()
 {
     try
     {
+        const int timeout = 5000;
         // Threaded video reading
         std::string videoPath = UnitTest::getDataPath() + "/Videos/video.avi";
         CDataIO<CDataVideoIO, CMat> videoIO(videoPath);
@@ -138,7 +139,7 @@ void CDataIOTest::playVideo()
         // framecount - 1  because the frame count is not well estimated for our test video
         for(int i=0; i<videoDataInfoPtr->m_frameCount-1; ++i)
         {
-            CMat frame = videoIO.readLive();
+            CMat frame = videoIO.readLive(timeout);
             QVERIFY(frame.data != nullptr);
         }
 
@@ -198,11 +199,13 @@ void CDataIOTest::writeVideo()
     std::string videoPath = UnitTest::getDataPath() + "/Videos/tmp.avi";
     CDataIO<CDataVideoIO, CMat> videoIO_1(videoPath);
 
+    const int timeout = 500;
     const int frameCount = 500;
+
     for(int i=0; i<frameCount; ++i)
         videoIO_1.write(frame);
 
-    videoIO_1.waitWriteFinished();
+    videoIO_1.waitWriteFinished(timeout);
     QVERIFY(boost::filesystem::exists(videoPath));
     boost::filesystem::path boostPath1(videoPath);
     boost::filesystem::remove(boostPath1);
@@ -214,7 +217,7 @@ void CDataIOTest::writeVideo()
     for(int i=0; i<frameCount; ++i)
         videoIO_2.write(frame);
 
-    videoIO_2.waitWriteFinished();
+    videoIO_2.waitWriteFinished(timeout);
     QVERIFY(boost::filesystem::exists(videoPath));
     boost::filesystem::path boostPath2(videoPath);
     boost::filesystem::remove(boostPath2);

@@ -23,51 +23,51 @@ void COcvProcessTests::init()
 void COcvProcessTests::bckSubCnt()
 {
     enableImageTypeFromDepth({CV_8U});
-    runStdTest1("CNT background substractor", std::make_shared<COcvBckgndSubCntParam>(), 0, 1);
+    runStdTest1("ocv_bck_substractor_cnt", std::make_shared<COcvBckgndSubCntParam>(), 0, 1);
 }
 
 void COcvProcessTests::bckSubGmg()
 {
     enableImageTypeFromDepth({CV_8U, CV_16U, CV_32F});
-    runStdTest1("GMG background substractor", std::make_shared<COcvBckgndSubGmgParam>(), 0, 1);
+    runStdTest1("ocv_bck_substractor_gmg", std::make_shared<COcvBckgndSubGmgParam>(), 0, 1);
 }
 
 void COcvProcessTests::bckSubGsoc()
 {
     enableImageTypeFromDepth({CV_8U, CV_32F});
-    runStdTest1("GSOC background substractor", std::make_shared<COcvBckgndSubGsocParam>(), 0, 1);
+    runStdTest1("ocv_bck_substractor_gsoc", std::make_shared<COcvBckgndSubGsocParam>(), 0, 1);
 }
 
 void COcvProcessTests::bckSubLsbp()
 {
     enableImageTypeFromDepth({CV_8U, CV_32F});
-    runStdTest1("LSBP background substractor", std::make_shared<COcvBckgndSubLsbpParam>(), 0, 1);
+    runStdTest1("ocv_bck_substractor_lspb", std::make_shared<COcvBckgndSubLsbpParam>(), 0, 1);
 }
 
 void COcvProcessTests::bckSubMog()
 {
     enableImageTypeFromDepth({CV_8U});
-    runStdTest1("MOG background substractor", std::make_shared<COcvBckgndSubMogParam>(), 0, 1);
+    runStdTest1("ocv_bck_substractor_mog", std::make_shared<COcvBckgndSubMogParam>(), 0, 1);
 }
 
 void COcvProcessTests::retina()
 {
     enableAllImageTypes();
     auto paramPtr = std::make_shared<COcvRetinaParam>();
-    runStdTest1("Retina", paramPtr, 0, 1);
+    runStdTest1("ocv_retina", paramPtr, 0, 1);
     paramPtr->m_bUseOCL = true;
-    runOpenCL("Retina", paramPtr, 0);
+    runOpenCL("ocv_retina", paramPtr, 0);
 }
 
 void COcvProcessTests::retinaSegmentation()
 {
     enableImageTypeFromType({CV_8UC1, CV_8UC3, CV_8SC1, CV_8SC3, CV_16UC1, CV_16SC1, CV_16FC1, CV_16FC3, CV_32SC1, CV_32FC1, CV_32FC3, CV_64FC1});
-    runStdTest1("RetinaSegmentation", std::make_shared<COcvRetinaSegmentationParam>(), 0, 1);
+    runStdTest1("ocv_retina_segmentation", std::make_shared<COcvRetinaSegmentationParam>(), 0, 1);
 }
 
 void COcvProcessTests::dft()
 {
-    const std::string name = "Discrete Fourier Transform";
+    const std::string name = "ocv_dft";
     auto paramPtr = std::make_shared<COcvDftParam>();
     enableImageTypeFromChannels(1);
     runNoInput(name, paramPtr);
@@ -77,12 +77,12 @@ void COcvProcessTests::dft()
 void COcvProcessTests::exp()
 {
     enableAllImageTypes();
-    runStdTest1("Exponent", std::make_shared<CWorkflowTaskParam>(), 0, 1);
+    runStdTest1("ocv_exp", std::make_shared<CWorkflowTaskParam>(), 0, 1);
 }
 
 void COcvProcessTests::extractChannel()
 {
-    const std::string name = "Extract channel";
+    const std::string name = "ocv_extract_channel";
     auto paramPtr = std::make_shared<COcvExtractChannelParam>();
 
     enableAllImageTypes();
@@ -98,91 +98,91 @@ void COcvProcessTests::extractChannel()
 void COcvProcessTests::flip()
 {
     enableAllImageTypes();
-    runStdTest1("Flip", std::make_shared<COcvFlipParam>(), 0, 1);
+    runStdTest1("ocv_flip", std::make_shared<COcvFlipParam>(), 0, 1);
 }
 
 void COcvProcessTests::inRange()
 {
     enableAllImageTypes();
-    runStdTest1("InRange", std::make_shared<COcvInRangeParam>(), 0, 1);
+    runStdTest1("ocv_in_range", std::make_shared<COcvInRangeParam>(), 0, 1);
 }
 
 void COcvProcessTests::kmeans()
 {
     enableAllImageTypes();
-    runStdTest1("K-means", std::make_shared<COcvKMeansParam>(), 0, 1);
+    runStdTest1("ocv_kmeans", std::make_shared<COcvKMeansParam>(), 0, 1);
 }
 
 void COcvProcessTests::log()
 {
     enableAllImageTypes();
-    runStdTest1("Log", std::make_shared<CWorkflowTaskParam>(), 0, 1);
+    runStdTest1("ocv_log", std::make_shared<CWorkflowTaskParam>(), 0, 1);
 }
 
 void COcvProcessTests::negative()
 {
     enableAllImageTypes();
-    runStdTest1("Negative", std::make_shared<COcvNegativeParam>(), 0, 1);
+    runStdTest1("ocv_negative", std::make_shared<COcvNegativeParam>(), 0, 1);
 }
 
 void COcvProcessTests::normalize()
 {
     enableAllImageTypes();
-    runStdTest1("Normalize", std::make_shared<COcvNormalizeParam>(), 0, 1);
+    runStdTest1("ocv_normalize", std::make_shared<COcvNormalizeParam>(), 0, 1);
 }
 
 void COcvProcessTests::rotate()
 {
     enableAllImageTypes();
-    runStdTest1("Rotate", std::make_shared<COcvRotateParam>(), 0, 1);
+    runStdTest1("ocv_rotate", std::make_shared<COcvRotateParam>(), 0, 1);
 }
 
 void COcvProcessTests::agast()
 {
     enableImageTypeFromType({CV_8UC1, CV_8UC3, CV_16UC3, CV_32FC3});
-    runStdTest1("AGAST", std::make_shared<COcvAGASTParam>(), 0, 1);
+    runStdTest1("ocv_agast", std::make_shared<COcvAGASTParam>(), 0, 1);
 }
 
 void COcvProcessTests::akaze()
 {
     enableImageTypeFromType({CV_8UC1, CV_8UC3, CV_16UC1, CV_16UC3, CV_32FC1, CV_32FC3});
-    runStdTest1("AKAZE", std::make_shared<COcvAKAZEParam>(), 0, 1);
+    runStdTest1("ocv_akaze", std::make_shared<COcvAKAZEParam>(), 0, 1);
 }
 
 void COcvProcessTests::brisk()
 {
     enableImageTypeFromType({CV_8UC1, CV_8UC3});
-    runStdTest1("BRISK", std::make_shared<COcvBRISKParam>(), 0, 1);
+    runStdTest1("ocv_brisk", std::make_shared<COcvBRISKParam>(), 0, 1);
 }
 
 void COcvProcessTests::fast()
 {
     enableImageTypeFromType({CV_8UC1, CV_8UC3, CV_16UC3, CV_32FC3});
-    runStdTest1("FAST", std::make_shared<COcvFASTParam>(), 0, 1);
+    runStdTest1("ocv_fast", std::make_shared<COcvFASTParam>(), 0, 1);
 }
 
 void COcvProcessTests::gftt()
 {
     enableImageTypeFromType({CV_8UC1, CV_8UC3, CV_32FC3});
-    runStdTest1("GFTTDetector", std::make_shared<COcvGFTTParam>(), 0, 1);
+    runStdTest1("ocv_gftt_detector", std::make_shared<COcvGFTTParam>(), 0, 1);
 }
 
 void COcvProcessTests::kaze()
 {
     enableImageTypeFromType({CV_8UC1, CV_8UC3, CV_16UC1, CV_16UC3, CV_32FC1, CV_32FC3});
-    runStdTest1("KAZE", std::make_shared<COcvKAZEParam>(), 0, 1);
+    runStdTest1("ocv_kaze", std::make_shared<COcvKAZEParam>(), 0, 1);
 }
 
 void COcvProcessTests::orb()
 {
     enableImageTypeFromType({CV_8UC1, CV_8UC3, CV_16UC3, CV_32FC3});
-    runStdTest1("ORB", std::make_shared<COcvORBParam>(), 0, 1);
+    runStdTest1("ocv_orb", std::make_shared<COcvORBParam>(), 0, 1);
 }
 
 void COcvProcessTests::simpleBlobDetector()
 {
     enableImageTypeFromType({CV_8UC1, CV_8UC3});
-    runStdTest1("SimpleBlobDetector", std::make_shared<COcvSimpleBlobDetectorParam>(), 0, 1);
+    runStdTest1("ocv_simple_blob_detector", std::make_shared<COcvSimpleBlobDetectorParam>(), 0, 1);
 }
 
 void COcvProcessTests::initImageTypes()
@@ -363,6 +363,7 @@ void COcvProcessTests::runImage(const std::string algoName, const WorkflowTaskPa
 
 void COcvProcessTests::runVideo(const std::string algoName, const WorkflowTaskParamPtr& paramPtr, int inputIndex, int graphicsInputIndex)
 {
+    const int timeout = 3000;
     auto factory = m_processRegister.getProcessFactory();
     auto processPtr = factory.createObject(algoName, std::move(paramPtr));
     QVERIFY(processPtr != nullptr);
@@ -377,11 +378,13 @@ void COcvProcessTests::runVideo(const std::string algoName, const WorkflowTaskPa
     // Set video position to the first image for processing all the video
     m_videoInputPtr->setVideoPos(0);
     // Start acquisition
-    m_videoInputPtr->startVideo();
+    m_videoInputPtr->startVideo(timeout);
 
     for(size_t i=0; i<m_videoInputPtr->getVideoFrameCount() && i<m_maxFrames; ++i)
+    {
+        m_videoInputPtr->setFrameToRead(i);
         processPtr->run();
-
+    }
     m_videoInputPtr->stopVideo();
 }
 

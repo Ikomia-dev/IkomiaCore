@@ -11,7 +11,10 @@ SUBDIRS += \
     DataProcessTests \
     DataSamples \
     UtilsTests \
-    VolumeRenderTests \
     DataPlotTests
+
+enableTestCL {
+    SUBDIRS += VolumeRenderTests
+}
 
 QMAKE_EXTRA_TARGETS += vera++

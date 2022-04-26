@@ -17,11 +17,11 @@ class CWorkflowTests : public QObject
 
     private slots:
 
-        void            WorkflowConstructors();
-        void            WorkflowSetters();
-        void            WorkflowInputs();
-        void            WorkflowTaskConnection();
-        void            WorkflowStructure();
+        void            workflowConstructors();
+        void            workflowSetters();
+        void            workflowInputs();
+        void            workflowTaskConnection();
+        void            workflowStructure();
 
         void            buildSimpleWorkflow();
         void            buildSingleLineWorkflow();
