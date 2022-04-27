@@ -315,14 +315,14 @@ namespace Ikomia
             }
             inline std::string  getIkomiaFolder()
             {
-                if(isAppStarted())
+                if(isAppStarted() || !Py_IsInitialized())
                     return QDir::homePath().toStdString() + "/Ikomia";
                 else
                     return Utils::Python::getIkomiaApiFolder();
             }
             inline QString      getQIkomiaFolder()
             {
-                if(isAppStarted())
+                if(isAppStarted() || !Py_IsInitialized())
                     return QDir::homePath() + "/Ikomia";
                 else
                     return QString::fromStdString(Utils::Python::getIkomiaApiFolder());
