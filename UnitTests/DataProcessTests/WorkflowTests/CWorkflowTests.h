@@ -28,6 +28,8 @@ class CWorkflowTests : public QObject
         void            buildTwoLinesWorkflow();
         void            buildNestedWorkflows();
 
+        void            runOnVideo();
+
     private:
 
         WorkflowTaskPtr createTask(IODataType inputType, IODataType outputType);
@@ -42,7 +44,8 @@ class CWorkflowTests : public QObject
 
     private:
 
-        CProcessRegistration m_processRegister;
+        CProcessRegistration    m_processRegister;
+        CTaskIORegistration     m_ioRegistrator;
 };
 
 #endif // CPROCESSWorkflowTESTS_H

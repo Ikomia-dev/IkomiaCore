@@ -10,7 +10,7 @@ void COcvProcessTests::initTestCase()
 {
     m_image = loadSampleImage();
 
-    std::string imagePath = UnitTest::getDataPath() + "/Videos/video.avi";
+    std::string imagePath = UnitTest::getDataPath() + "/Videos/highway.avi";
     m_videoInputPtr = std::make_shared<CVideoIO>();
     m_videoInputPtr->setVideoPath(imagePath);
 }

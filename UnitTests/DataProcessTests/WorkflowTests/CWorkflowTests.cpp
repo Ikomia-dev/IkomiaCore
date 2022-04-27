@@ -534,6 +534,33 @@ void CWorkflowTests::buildNestedWorkflows()
     }
 }
 
+void CWorkflowTests::runOnVideo()
+{
+    CWorkflow wf("Test", &m_processRegister, &m_ioRegistrator, nullptr);
+    std::string wfOutputFolder = Utils::IkomiaApp::getIkomiaFolder() + "/Workflows/" + wf.getName() + "/";
+    wf.setOutputFolder(wfOutputFolder);
+    std::string wfPath = UnitTest::getDataPath() + "/Workflows/WorkflowTest1.json";
+
+    try
+    {
+        wf.load(wfPath);
+
+        std::string videoPath = UnitTest::getDataPath() + "/Videos/basketball.mp4";
+        auto inputPtr = std::make_shared<CVideoIO>(IODataType::VIDEO, "video", videoPath);
+        QVERIFY(inputPtr);
+
+        wf.setInput(inputPtr, 0, true);
+        wf.setAutoSave(true);
+        wf.setCfgEntry("WholeVideo", std::to_string(true));
+        wf.updateStartTime();
+        wf.run();
+    }
+    catch(std::exception& e)
+    {
+        QFAIL(e.what());
+    }
+}
+
 WorkflowTaskPtr CWorkflowTests::createTask(IODataType inputType, IODataType outputType)
 {
     auto pTask = std::make_shared<CWorkflowTask>();

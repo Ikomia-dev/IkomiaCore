@@ -2,6 +2,7 @@
     <qresource prefix="/">
         <file>../Data/Images/Lena.png</file>
         <file>../Data/Workflows/WorkflowTest1.pcl</file>
-        <file>../Data/Videos/video.avi</file>
+        <file>../Data/Videos/basketball.mp4</file>
+        <file>../Data/Videos/highway.avi</file>
     </qresource>
 </RCC>

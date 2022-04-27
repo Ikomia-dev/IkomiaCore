@@ -85,7 +85,7 @@ void CDataIOTest::readVideoFrame()
         QVERIFY_EXCEPTION_THROWN(videoIO_1.read(), std::exception);
 
         //Test valid video reading
-        std::string videoPath = UnitTest::getDataPath() + "/Videos/video.avi";
+        std::string videoPath = UnitTest::getDataPath() + "/Videos/highway.avi";
         CDataIO<CDataVideoIO, CMat> videoIO_2(videoPath);
 
         //Dimensions checking
@@ -129,7 +129,7 @@ void CDataIOTest::playVideo()
     {
         const int timeout = 5000;
         // Threaded video reading
-        std::string videoPath = UnitTest::getDataPath() + "/Videos/video.avi";
+        std::string videoPath = UnitTest::getDataPath() + "/Videos/highway.avi";
         CDataIO<CDataVideoIO, CMat> videoIO(videoPath);
 
         // Play video
@@ -227,7 +227,7 @@ void CDataIOTest::testTools()
 {
     auto path = UnitTest::getDataPath() + "/Images/Lena.png";
     QVERIFY(boost::filesystem::exists(path) == true);
-    path = UnitTest::getDataPath() + "/Videos/video.avi";
+    path = UnitTest::getDataPath() + "/Videos/highway.avi";
     QVERIFY(boost::filesystem::exists(path) == true);
 }
 
