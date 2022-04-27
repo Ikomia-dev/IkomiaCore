@@ -21,6 +21,7 @@
 #include "Data/CDataVideoInfo.h"
 #include "CDataVideoIO.h"
 #include "UtilsTools.hpp"
+#include "Data/CDataConversion.h"
 
 CVideoIO::CVideoIO() : CImageIO(IODataType::VIDEO, "CVideoIO")
 {
@@ -168,10 +169,18 @@ void CVideoIO::writeImage(CMat image)
 {
     assert(m_pVideoBuffer);
     CMat tmp;
-    if(image.channels() == 1)
-        cv::cvtColor(image, tmp, cv::COLOR_GRAY2BGR);
+
+    // 8 bits unsigned only for OpenCV video writter
+    int depth = image.depth();
+    if (depth != CV_8U)
+        CDataConversion::to8Bits(image, tmp);
     else
-        cv::cvtColor(image, tmp, cv::COLOR_RGB2BGR);
+        tmp = image;
+
+    if (image.channels() == 1)
+        cv::cvtColor(tmp, tmp, cv::COLOR_GRAY2BGR);
+    else
+        cv::cvtColor(tmp, tmp, cv::COLOR_RGB2BGR);
 
     m_pVideoBuffer->write(tmp);
 }
