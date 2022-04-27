@@ -37,9 +37,6 @@ class CORESHARED_EXPORT CDataConversion
 
         static QImage   CMatToQImage(CMat imgSrc, bool bCopy = false);
         static void     grayscaleToAlpha(const CMat& src, CMat& dst);
-
-    private:
-
         static void     to8Bits(const CMat& src, CMat& dst);
 };
 

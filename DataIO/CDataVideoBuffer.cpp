@@ -121,13 +121,7 @@ void CDataVideoBuffer::startRead(int timeout)
 
 void CDataVideoBuffer::stopRead()
 {
-    m_bStopRead = true;
-    m_queueRead.cancel();
-
-    if (isReadStarted())
-        m_readFuture.wait();
-
-    m_queueRead.clear();
+    waitReadFinished(m_timeout);
 
     if(m_type != OPENNI_STREAM)
         m_reader.set(cv::CAP_PROP_POS_FRAMES, 0);
@@ -190,13 +184,7 @@ void CDataVideoBuffer::startStreamWrite(int width, int height, int fps, int four
 
 void CDataVideoBuffer::stopWrite()
 {
-    m_bStopWrite = true;
-    m_queueWrite.cancel();
-
-    if (isWriteStarted())
-        m_writeFuture.wait();
-
-    m_queueWrite.clear();
+    waitWriteFinished(m_timeout);
 }
 
 CMat CDataVideoBuffer::read()
@@ -324,10 +312,15 @@ void CDataVideoBuffer::waitReadFinished(int timeout)
 
 bool CDataVideoBuffer::hasReadImage() const
 {
-    Utils::CTimer timer;
-    timer.start();
-    while(m_queueRead.size() == 0 && timer.get_total_elapsed_ms() <= m_timeout);
-    return m_queueRead.size() > 0;
+    if (isReadStarted())
+    {
+        Utils::CTimer timer;
+        timer.start();
+        while(m_queueRead.size() == 0 && timer.get_total_elapsed_ms() <= m_timeout);
+        return m_queueRead.size() > 0;
+    }
+    else
+        return m_queueRead.size() > 0;
 }
 
 bool CDataVideoBuffer::isReadStarted() const
@@ -398,7 +391,7 @@ void CDataVideoBuffer::setQueueSize(size_t queueSize)
 
 void CDataVideoBuffer::setPosition(int pos)
 {
-    if(m_type != IMAGE_SEQUENCE && pos >= m_nbFrames)
+    if(m_type != IMAGE_SEQUENCE && pos >= m_nbFrames && pos != 0)
     {
         close();
         throw CException(DataIOExCode::VIDEO_WRONG_IMG_NUMBERS, "Invalid frame number", __func__, __FILE__, __LINE__);
@@ -510,9 +503,8 @@ void CDataVideoBuffer::updateRead()
     int grabCount = 0;
     Utils::CTimer timer;
     timer.start();
-    double waiting_period = timer.get_elapsed_ms();
 
-    while(m_bStopRead == false && waiting_period <= m_timeout)
+    while(m_bStopRead == false && timer.get_total_elapsed_ms() <= m_timeout)
     {
         if(m_nbFrames != -1 && grabCount == m_nbFrames)
         {
@@ -520,57 +512,65 @@ void CDataVideoBuffer::updateRead()
             break;
         }
 
-        CMat frame;
-        if(m_queueRead.size() < m_queueSize)
+        if(m_queueRead.size() >= m_queueSize)
         {
-            try
+            // Queue is full, we have to wait
+            timer.start();
+            continue;
+        }
+
+        try
+        {
+            if(!m_reader.grab())
             {
-                if(!m_reader.grab())
-                {
-                    m_lastErrorMsg = "OpenCV VideoCapture::grab() function failed.";
-                    Utils::print(m_lastErrorMsg, QtDebugMsg);
-                    continue;
-                }
-
-                if(!m_reader.retrieve(frame, m_mode))
-                {
-                    m_lastErrorMsg = "OpenCV VideoCapture::retrieve() function failed.";
-                    Utils::print(m_lastErrorMsg, QtDebugMsg);
-                    continue;
-                }
-
-                CMat dst;
-                grabCount++;
-
-                if(frame.channels() > 1)
-                    cv::cvtColor(frame, dst, cv::COLOR_BGR2RGB);
-                else
-                    dst = frame.clone();
-
-                if(isStreamSource())
-                {
-                    //For stream, we replace the current frame
-                    if(m_queueRead.size() > 0)
-                        m_queueRead.pop();
-
-                    m_queueRead.push(dst);
-                }
-                else
-                {
-                    // For video files, we buffer frames in the queue
-                    m_queueRead.push(dst);
-                }
-                //Reset timeout when success
-                waiting_period = timer.get_elapsed_ms();
-            }
-            catch(std::exception& e)
-            {
-                m_lastErrorMsg = e.what();
+                m_lastErrorMsg = "OpenCV VideoCapture::grab() function failed.";
                 Utils::print(m_lastErrorMsg, QtDebugMsg);
+                // Sleep to avoid failing too many times
+                std::this_thread::sleep_for(std::chrono::milliseconds(m_timeout/5));
+                continue;
             }
+
+            CMat frame;
+            if(!m_reader.retrieve(frame, m_mode))
+            {
+                m_lastErrorMsg = "OpenCV VideoCapture::retrieve() function failed.";
+                Utils::print(m_lastErrorMsg, QtDebugMsg);
+                // Sleep to avoid failing too many times
+                std::this_thread::sleep_for(std::chrono::milliseconds(m_timeout/5));
+                continue;
+            }
+
+            CMat dst;
+            grabCount++;
+
+            if(frame.channels() > 1)
+                cv::cvtColor(frame, dst, cv::COLOR_BGR2RGB);
+            else
+                dst = frame.clone();
+
+            if(isStreamSource())
+            {
+                //For stream, we replace the current frame
+                if(m_queueRead.size() > 0)
+                    m_queueRead.pop();
+
+                m_queueRead.push(dst);
+            }
+            else
+            {
+                // For video files, we buffer frames in the queue
+                m_queueRead.push(dst);
+            }
+            //Reset timeout when success
+            timer.start();
+        }
+        catch(std::exception& e)
+        {
+            m_lastErrorMsg = e.what();
+            Utils::print(m_lastErrorMsg, QtDebugMsg);
         }
     }
-    m_bError = waiting_period > m_timeout;
+    m_bError = timer.get_total_elapsed_ms() > m_timeout;
 }
 
 void CDataVideoBuffer::updateWrite()
@@ -610,6 +610,7 @@ void CDataVideoBuffer::updateStreamWrite()
         }
         catch(CException& e)
         {
+            m_mutex.unlock();
             if (e.getCode() == CoreExCode::TIMEOUT_REACHED && m_timeout == -1)
             {
                 // If no timeout is set, just log event
@@ -624,6 +625,7 @@ void CDataVideoBuffer::updateStreamWrite()
         }
         catch(std::exception& e)
         {
+            m_mutex.unlock();
             m_bError = true;
             m_lastErrorMsg = std::string("Stream writing ended: ") + e.what();
         }
@@ -699,6 +701,7 @@ void CDataVideoBuffer::writeVideoThread()
         }
         catch(CException& e)
         {
+            m_mutex.unlock();
             if (e.getCode() == CoreExCode::TIMEOUT_REACHED && m_timeout == -1)
             {
                 // If no timeout is set, just log event
@@ -714,6 +717,7 @@ void CDataVideoBuffer::writeVideoThread()
         }
         catch(std::exception& e)
         {
+            m_mutex.unlock();
             m_bError = true;
             m_lastErrorMsg = "Video writing ended: " + std::to_string(count) + "/" + std::to_string(m_nbFrames) + " images written.";
             m_lastErrorMsg += " Error occured:" + std::string(e.what());

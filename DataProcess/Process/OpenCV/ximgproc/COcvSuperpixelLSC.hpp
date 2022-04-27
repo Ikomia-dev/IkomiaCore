@@ -78,7 +78,7 @@ class COcvSuperpixelLSC : public C2dImageTask
             m_pParam = std::make_shared<COcvSuperpixelLSCParam>(*pParam);
         }
 
-        size_t     getProgressSteps() override
+        size_t  getProgressSteps() override
         {
             return 3;
         }
@@ -129,7 +129,9 @@ class COcvSuperpixelLSC : public C2dImageTask
             endTaskRun();
             emit m_signalHandler->doProgress();
         }
+
     private:
+
         cv::Ptr<cv::ximgproc::SuperpixelLSC> m_pSuperpixel;
 };
 

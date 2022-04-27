@@ -893,6 +893,8 @@ void CWorkflow::addInput(const WorkflowTaskIOPtr& pInput)
     auto pRootTask = m_graph[m_root];
     pRootTask->addInput(pInput);
     pRootTask->addOutput(pInput);
+    checkBatchModeState();
+    startIOAnalysis(m_root);
 }
 
 void CWorkflow::addInput(const WorkflowTaskIOPtr&& pInput)
@@ -901,6 +903,8 @@ void CWorkflow::addInput(const WorkflowTaskIOPtr&& pInput)
     auto pRootTask = m_graph[m_root];
     pRootTask->addInput(pInput);
     pRootTask->addOutput(pInput);
+    checkBatchModeState();
+    startIOAnalysis(m_root);
 }
 
 void CWorkflow::addInputs(const InputOutputVect &inputs)
@@ -909,6 +913,8 @@ void CWorkflow::addInputs(const InputOutputVect &inputs)
     auto pRootTask = m_graph[m_root];
     pRootTask->addInputs(inputs);
     pRootTask->addOutputs(inputs);
+    checkBatchModeState();
+    startIOAnalysis(m_root);
 }
 
 void CWorkflow::removeInput(size_t index)
@@ -1259,7 +1265,7 @@ void CWorkflow::runTasksSimple(const std::vector<WorkflowVertex> &taskToExecute)
 
 void CWorkflow::runTasksVideo(const std::vector<WorkflowVertex> &taskToExecute)
 {
-    InputOutputVect videoInputs;
+    InputOutputVect videoInputs, videoOutputs;
     const std::set<IODataType> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
 
     //Get video inputs
@@ -1277,47 +1283,67 @@ void CWorkflow::runTasksVideo(const std::vector<WorkflowVertex> &taskToExecute)
     if (videoInputs.size() == 0)
         throw CException(CoreExCode::INVALID_USAGE, "No video input for workflow execution", __func__, __FILE__, __LINE__);
 
+    //Get video outputs
+    for (size_t i=0; i<taskToExecute.size(); ++i)
+    {
+        auto taskPtr = m_graph[taskToExecute[i]];
+        if (taskPtr->isAutoSave())
+        {
+            auto outputs = taskPtr->getOutputs(videoTypes);
+            videoOutputs.insert(videoOutputs.end(), outputs.begin(), outputs.end());
+        }
+    }
+
     for (size_t i=0; i<videoInputs.size(); ++i)
     {
         auto inputPtr = std::static_pointer_cast<CVideoIO>(videoInputs[i]);
         // Set video position to the first image for processing all the video
         inputPtr->setVideoPos(0);
         // Start acquisition
-        inputPtr->startVideo(std::stod(m_cfg["VideoReadTimeout"]));
+        inputPtr->startVideo(std::stoi(m_cfg["VideoReadTimeout"]));
     }
 
-    auto infoPtr = std::static_pointer_cast<CDataVideoInfo>(videoInputs[0]->getDataInfo());
-    for (int i=0; i<infoPtr->m_frameCount && !m_bStop; ++i)
+    try
     {
-        for(size_t j=0; j<videoInputs.size(); ++j)
+        auto infoPtr = std::static_pointer_cast<CDataVideoInfo>(videoInputs[0]->getDataInfo());
+        for (int i=0; i<infoPtr->m_frameCount && !m_bStop; ++i)
         {
-            auto inputPtr = std::static_pointer_cast<CVideoIO>(videoInputs[j]);
-            inputPtr->setFrameToRead(i);
-        }
-        runTasksSimple(taskToExecute);
-    }
-
-    for (size_t i=0; i<videoInputs.size(); ++i)
-    {
-        auto inputPtr = std::static_pointer_cast<CVideoIO>(videoInputs[i]);
-        inputPtr->stopVideo();
-    }
-
-    //Wait for write video threads to finish
-    for (size_t i=0; i<taskToExecute.size(); ++i)
-    {
-        auto taskPtr = m_graph[taskToExecute[i]];
-        if (taskPtr->isAutoSave())
-        {
-            auto videoOutputs = taskPtr->getOutputs(videoTypes);
-            for (size_t i=0; i<videoOutputs.size(); ++i)
+            for(size_t j=0; j<videoInputs.size(); ++j)
             {
-                auto outputPtr = std::static_pointer_cast<CVideoIO>(videoOutputs[i]);
-                outputPtr->waitWriteFinished(std::stoi(m_cfg["VideoWriteTimeout"]));
-                outputPtr->stopVideoWrite();
-                outputPtr->setVideoPos(0);
+                auto inputPtr = std::static_pointer_cast<CVideoIO>(videoInputs[j]);
+                inputPtr->setFrameToRead(i);
             }
+            runTasksSimple(taskToExecute);
         }
+    }
+    catch(std::exception& e)
+    {
+        stopVideoRead(videoInputs);
+        stopVideoWrite(videoOutputs);
+        throw;
+    }
+
+    //Wait for read/write video threads to finish
+    stopVideoRead(videoInputs);
+    stopVideoWrite(videoOutputs);
+}
+
+void CWorkflow::stopVideoRead(const InputOutputVect& ioVect)
+{
+    for (size_t i=0; i<ioVect.size(); ++i)
+    {
+        auto ioPtr = std::static_pointer_cast<CVideoIO>(ioVect[i]);
+        ioPtr->stopVideo();
+    }
+}
+
+void CWorkflow::stopVideoWrite(const InputOutputVect &ioVect)
+{
+    for (size_t i=0; i<ioVect.size(); ++i)
+    {
+        auto ioPtr = std::static_pointer_cast<CVideoIO>(ioVect[i]);
+        ioPtr->stopVideoWrite();
+        ioPtr->setVideoPos(0);
     }
 }
 
