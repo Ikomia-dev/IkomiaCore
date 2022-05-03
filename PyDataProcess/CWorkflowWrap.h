@@ -41,7 +41,7 @@ class CWorkflowWrap: public CWorkflow, public wrapper<CWorkflow>
         WorkflowTaskPtr             getTask(std::intptr_t id);
         double                      getElapsedTimeTo(std::intptr_t id);
         std::vector<std::intptr_t>  getParents(std::intptr_t id);
-        std::vector<std::intptr_t>  getChilds(std::intptr_t id);
+        std::vector<std::intptr_t>  getChildren(std::intptr_t id);
         std::vector<size_t>         getInEdges(std::intptr_t id);
         std::vector<size_t>         getOutEdges(std::intptr_t id);
         boost::python::tuple        getEdgeInfo(size_t id);

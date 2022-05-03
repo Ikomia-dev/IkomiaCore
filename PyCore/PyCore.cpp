@@ -68,7 +68,7 @@ void exposeCPoint(const std::string& className)
 BOOST_PYTHON_MODULE(pycore)
 {
     // Enable user-defined docstrings and python signatures, while disabling the C++ signatures
-    docstring_options local_docstring_options(true, true, false);
+    docstring_options core_docstring_options(true, true, false);
 
     // Set the docstring of the current module scope
     scope().attr("__doc__") = _moduleDocString;
@@ -133,13 +133,13 @@ BOOST_PYTHON_MODULE(pycore)
     //Base class of all graphics items
     class_<CGraphicsItemWrap, std::shared_ptr<CGraphicsItemWrap>, boost::noncopyable>("CGraphicsItem", _graphicsItemDocString, init<>("Default constructor"))
         .def(init<GraphicsItem>("Constructor with item type definition"))
-        .def("setCategory", pure_virtual(&CProxyGraphicsItem::setCategory), _setGraphicsCategoryDocString, args("self", "category"))
+        .def("getBoundingRect", pure_virtual(&CProxyGraphicsItem::getBoundingRect), _getGraphicsBoundRectDocString, args("self"))
+        .def("getCategory", pure_virtual(&CProxyGraphicsItem::getCategory), _getGraphicsCategoryDocString, args("self"))
         .def("getId", &CProxyGraphicsItem::getId, _getGraphicsIdDocString, args("self"))
         .def("getType", &CProxyGraphicsItem::getType, _getGraphicsTypeDocString, args("self"))
-        .def("getCategory", pure_virtual(&CProxyGraphicsItem::getCategory), _getGraphicsCategoryDocString, args("self"))
-        .def("isTextItem", &CProxyGraphicsItem::isTextItem, &CGraphicsItemWrap::default_isTextItem, _isGraphicsTextItemDocString, args("self"))
         .def("insertToImage", pure_virtual(&CGraphicsItemWrap::insertToImage), "**Internal use only.**")
-        .def("getBoundingRect", pure_virtual(&CProxyGraphicsItem::getBoundingRect), _getGraphicsBoundRectDocString, args("self"))
+        .def("isTextItem", &CProxyGraphicsItem::isTextItem, &CGraphicsItemWrap::default_isTextItem, _isGraphicsTextItemDocString, args("self"))
+        .def("setCategory", pure_virtual(&CProxyGraphicsItem::setCategory), _setGraphicsCategoryDocString, args("self", "category"))
     ;
 
     //Complex polygon
@@ -370,12 +370,14 @@ BOOST_PYTHON_MODULE(pycore)
         .add_property("type", &CWorkflowTask::getType, "Main purpose or data type on which the task is dedicated to.")
         .add_property("name", &CWorkflowTask::getName, &CWorkflowTask::setName, "Task name (must be unique)")
         .def(self_ns::str(self_ns::self))
+        .def("setAutoSave", &CWorkflowTask::setAutoSave, _setAutoSaveDocString, args("self", "enable"))
         .def("setInputDataType", &CWorkflowTask::setInputDataType, &CWorkflowTaskWrap::default_setInputDataType, _setInputDataTypeDocString, args("self", "data_type", "index"))
         .def("setInput", &CWorkflowTask::setInput, &CWorkflowTaskWrap::default_setInput, _setInputDocString, args("self", "input", "index", "is_new_sequence"))
         .def("setInputs", &CWorkflowTask::setInputs, &CWorkflowTaskWrap::default_setInputs, _setInputsDocString, args("self", "inputs", "is_new_sequence"))
         .def("setOutputDataType", &CWorkflowTask::setOutputDataType, &CWorkflowTaskWrap::default_setOutputDataType, _setOutputDataTypeDocString, args("self", "data_type", "index"))
         .def("setOutput", &CWorkflowTask::setOutput, &CWorkflowTaskWrap::default_setOutput, _setOutputDocString, args("self", "output", "index"))
         .def("setOutputs", &CWorkflowTask::setOutputs, &CWorkflowTaskWrap::default_setOutputs, _setOutputsDocString, args("self", "outputs"))
+        .def("setOutputFolder", &CWorkflowTask::setOutputFolder, _setOutputFolderDocString, args("self", "folder"))
         .def("setParam", &CWorkflowTask::setParam, _setParamDocString, args("self", "param"))
         .def("setParamValues", &CWorkflowTask::setParamValues, _setParamValuesDocString, args("self", "values"))
         .def("setActionFlag", &CWorkflowTask::setActionFlag, _setActionFlagDocString, args("self", "action", "is_enable"))

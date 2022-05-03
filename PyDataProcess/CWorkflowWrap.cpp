@@ -57,7 +57,7 @@ std::vector<intptr_t> CWorkflowWrap::getParents(intptr_t id)
     return parents;
 }
 
-std::vector<intptr_t> CWorkflowWrap::getChilds(intptr_t id)
+std::vector<intptr_t> CWorkflowWrap::getChildren(intptr_t id)
 {
     WorkflowVertex vertex = reinterpret_cast<WorkflowVertex>(id);
     auto vertices = CWorkflow::getChilds(vertex);

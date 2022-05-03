@@ -185,10 +185,10 @@ constexpr auto _addObjMeasuresDocString =
 //----- CNumericIO -----//
 //----------------------//
 constexpr auto _featureProcessIODocString =
-        "Define input or output for a task dedicated to manage numeric values. "
-        "C++ implementation uses template to handle various data types. In Python, Ikomia API exposes only the double precision (float) specialization. "
-        "The class is designed to handle numeric values, "
-        "it consists on a list of float values, a list of associated labels and a display type (see :py:class:`NumericOutputType`). "
+        "Define input or output for a task dedicated to manage data values. "
+        "C++ implementation uses template to handle various data types. In Python, Ikomia API exposes only the double precision (float) and string specializations. "
+        "The class is designed to handle row/column data structure, "
+        "it consists on a list of values, a list of associated labels and a display type (see :py:class:`NumericOutputType`). "
         "For the specific case of plot display, a plot type property is available (see :py:class:`PlotType`). "
         "Derived from :py:class:`~ikomia.core.pycore.CWorkflowTaskIO`\n\n";
 
@@ -1269,7 +1269,8 @@ constexpr auto _manageOutputsDocString =
 //----- CDnnTrainTask -----//
 //-------------------------//
 constexpr auto _dnnTrainProcessDocString =
-        "Internal use only";
+        "Internal use only. Use the pure Python implementation :py:class:`~ikomia.dnn.dnntrain.TrainProcess` "
+        "to create training algorithms.\n\n";
 
 constexpr auto _ctor1DnnTrainProcessDocString =
         "Internal use only";
@@ -1357,13 +1358,13 @@ constexpr auto _registerTaskDocString =
         "Add new algorithm factory to Ikomia registry.\n"
         "Once registered, you are able to instanciate algorithm object and use it inside a workflow.\n\n"
         "Args:\n\n"
-        "   :py:class:`~ikomia.dataprocess.pydataprocess.CTaskFactory` or derived: task factory\n";
+        "   factory (:py:class:`~ikomia.dataprocess.pydataprocess.CTaskFactory` based object): task factory\n";
 
 constexpr auto _registerIODocString =
         "Add new input/output factory to Ikomia registry.\n"
         "Once registered, you are able to instanciate input or ouput and use it inside a task.\n\n"
         "Args:\n\n"
-        "   :py:class:`~ikomia.core.pycore.CTaskIOFactory` or derived: I/O factory\n";
+        "   factory (:py:class:`~ikomia.core.pycore.CTaskIOFactory` based object): I/O factory\n";
 
 constexpr auto _loadCppPluginDocString =
         "Load C++ algorithm to Ikomia registry.\n\n"
@@ -1472,7 +1473,7 @@ constexpr auto _wfGetParentsDocString =
         "Returns:\n\n"
         "   int list: parent identifiers\n";
 
-constexpr auto _wfGetChildsDocString =
+constexpr auto _wfGetChildrenDocString =
         "Get child task identifiers of the task specified by the given identifier.\n"
         "Task connected to the outputs of a given task is designated as child or target.\n\n"
         "Args:\n\n"
@@ -1551,7 +1552,7 @@ constexpr auto _wfGetRequiredTasks =
 constexpr auto _wfAddInputDocString =
         "Add global input to the workflow.\n\n"
         "Args:\n\n"
-        "   input (:py:class:`~ikomia.core.pycore.CWorkflowTaskIO` or derived)\n";
+        "   input (:py:class:`~ikomia.core.pycore.CWorkflowTaskIO` based object): input object\n";
 
 constexpr auto _wfAddTaskDocString =
         "Add new task to the workflow.\n\n"
@@ -1591,13 +1592,13 @@ constexpr auto _wfDeleteEdgeDocString =
         "   id (int): edge identifier\n";
 
 constexpr auto _wfRunDocString =
-        "Launch workflow execution.\n"
+        "Launch workflow execution. "
         "Each :py:class:`~ikomia.core.pycore.CWorkflowTask` object or derived must "
         "reimplement the *run()* function that will be called in the right order by the workflow. "
         "Please note that global inputs should be set before calling this function.\n";
 
 constexpr auto _wfStopDocString =
-        "Stop workflow execution.\n"
+        "Stop workflow execution."
         "Each :py:class:`~ikomia.core.pycore.CWorkflowTask` object or derived must "
         "reimplement the *stop()* function that will be called by the workflow. "
         "Depending on the process implementation, stop may not be instantaneous.\n";
