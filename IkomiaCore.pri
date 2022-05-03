@@ -51,14 +51,14 @@ centos7 {
     # Global include
     unix:!macx: INCLUDEPATH += /work/shared/local/include
     # Python include
-    unix:!macx: INCLUDEPATH += /work/shared/local/include/python$${PYTHON_VERSION_DOT}
-    unix:!macx: INCLUDEPATH += /work/shared/local/lib/python$${PYTHON_VERSION_DOT}/site-packages/numpy/core/include/           # NUMPY path for CENTOS 7
+    unix:!macx: INCLUDEPATH += /work/shared/local/include/python$${PYTHON_VERSION_DOT_M}
+    unix:!macx: INCLUDEPATH += /work/shared/local/lib/python$${PYTHON_VERSION_DOT}/site-packages/numpy/core/include/    # NUMPY path for CENTOS 7
 }
 else {
     win32: INCLUDEPATH += $$(ProgramW6432)/Python$${PYTHON_VERSION_NO_DOT}/include
-    win32: INCLUDEPATH += $$PWD/../numpy/numpy/core/include                                              # NUMPY path for Windows
+    win32: INCLUDEPATH += $$PWD/../numpy/numpy/core/include                                                     # NUMPY path for Windows
     macx: pythonPath = /usr/local/python$${PYTHON_VERSION_DOT}                                                  # /usr/local/opt/python/Frameworks/Python.framework/Versions/3.7
-    macx: INCLUDEPATH += $$pythonPath/include/python$${PYTHON_VERSION_DOT}m
+    macx: INCLUDEPATH += $$pythonPath/include/python$${PYTHON_VERSION_DOT_M}
     macx: INCLUDEPATH += $$pythonPath/lib/python$${PYTHON_VERSION_DOT}/site-packages/numpy/core/include
     unix:!macx: INCLUDEPATH += /usr/include/python$${PYTHON_VERSION_DOT}
     unix:!macx: INCLUDEPATH += /usr/local/include/python$${PYTHON_VERSION_DOT}
@@ -72,7 +72,7 @@ centos7 {
 }
 win32: INCLUDEPATH += $$(ProgramW6432)/VTK/include/vtk-$${VTK_VERSION}
 unix:!macx: INCLUDEPATH += /usr/include/vtk/8.1.1/
-unix:!macx: INCLUDEPATH += /usr/local/include/vtk-$${VTK_VERSION}/                                          # Add path for VTK on CENTOS 6
+unix:!macx: INCLUDEPATH += /usr/local/include/vtk-$${VTK_VERSION}/                                              # Add path for VTK on CENTOS 6
 unix:!macx: INCLUDEPATH += /usr/include/vtk
 macx: INCLUDEPATH += /usr/local/include/vtk-$${VTK_VERSION}
 
