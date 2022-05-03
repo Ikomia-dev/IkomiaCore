@@ -120,7 +120,7 @@ win32: LIBS += -L$$(ProgramW6432)/Python$${PYTHON_VERSION_NO_DOT}/
 win32: LIBS += -lpython$${PYTHON_VERSION_NO_DOT}
 macx: LIBS += -L$$pythonPath/lib
 macx: LIBS += -lpython$${PYTHON_VERSION_DOT}
-unix:!macx: LIBS += -lpython$${PYTHON_VERSION_DOT}
+unix:!macx: LIBS += -lpython$${PYTHON_VERSION_DOT_M}
 
 # Boost
 win32: LIBS += -L$$(PROGRAMFILES)/Boost/lib
