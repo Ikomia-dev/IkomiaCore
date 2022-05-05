@@ -46,11 +46,6 @@ CDnnTrainTask::CDnnTrainTask(const std::string &name, const std::shared_ptr<CWor
         m_pParam = std::make_shared<CWorkflowTaskParam>();
 }
 
-std::string CDnnTrainTask::getTensorboardLogDir() const
-{
-    return Utils::Tensorboard::getLogDirUri();
-}
-
 void CDnnTrainTask::enableMlflow(bool bEnable)
 {
     m_bOpenMlflow = bEnable;

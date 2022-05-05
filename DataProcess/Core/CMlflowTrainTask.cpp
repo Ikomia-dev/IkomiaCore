@@ -259,6 +259,10 @@ void CMlflowTrainTask::initMlFlow()
     {
         CPyEnsureGIL gil;
 
+        // Check mlflow server
+        object monitoring = import("ikomia.dnn.monitoring");
+        monitoring.attr("check_mlflow_server")();
+
         // Create experiment
         auto date = "experiment_" + QDateTime::currentDateTime().toString(Qt::ISODate).toStdString();
         str strDate(date);

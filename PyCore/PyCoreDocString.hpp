@@ -400,7 +400,7 @@ constexpr auto _getParamDocString =
 constexpr auto _getParamValuesDocString =
         "Get values of task parameters.\n\n"
         "Returns:\n\n"
-        "   :py:class:`ikomia.core.pycore.ParamMap`: dict-like structure of string pairs (parameter name, value)\n";
+        "   :py:class:`~ikomia.core.pycore.ParamMap`: dict-like structure of string pairs (parameter name, value)\n";
 
 constexpr auto _getProgressStepsDocString =
         "Get the number of progress steps when the system runs the task.\n\n"

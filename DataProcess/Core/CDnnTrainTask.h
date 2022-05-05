@@ -39,24 +39,16 @@ class DATAPROCESSSHARED_EXPORT CDnnTrainTask : public CWorkflowTask
 
         ~CDnnTrainTask() = default;
 
-        std::string     getTensorboardLogDir() const;
-
         void            enableMlflow(bool bEnable);
         void            enableTensorboard(bool bEnable);
 
-        /**
-         * @brief See CWorkflowTask::beginTaskRun.
-         */
         virtual void    beginTaskRun() override;
-        /**
-         * @brief See CWorkflowTask::endTaskRun.
-         */
         virtual void    endTaskRun() override;
 
     private:
 
-        bool    m_bOpenMlflow = true;
-        bool    m_bOpenTensorboad = true;
+        bool            m_bOpenMlflow = true;
+        bool            m_bOpenTensorboad = true;
 };
 
 #endif // CDNNTRAINTASK_H
