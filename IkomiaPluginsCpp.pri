@@ -84,7 +84,8 @@ win32: INCLUDEPATH += $$(PROGRAMFILES)/Boost/include/boost-$${BOOST_VERSION}
 centos7 {
     unix:!macx: INCLUDEPATH += /work/shared/local/include/opencv4
 }
-win32: INCLUDEPATH += $$(PROGRAMFILES)/OpenCV/include
+win32:ik_cpu: INCLUDEPATH += $$(ProgramW6432)/OpenCV/cpu/include
+win32:!ik_cpu: INCLUDEPATH += $$(ProgramW6432)/OpenCV/cuda/include
 unix:!macx: INCLUDEPATH += /usr/local/include/opencv4
 macx: INCLUDEPATH += /usr/local/include/opencv4
 
@@ -124,7 +125,7 @@ unix:!macx: LIBS += -lpython$${PYTHON_VERSION_DOT_M}
 
 # Boost
 win32: LIBS += -L$$(PROGRAMFILES)/Boost/lib
-win32: LIBS += -lboost_filesystem-vc$${BOOST_VC_VERSION}-mt-x64-$${BOOST_VERSION} -lboost_system-vc$${BOOST_VC_VERSION}-mt-x64-$${BOOST_VERSION} -lboost_python$${PYTHON_VERSION_EXT}-vc$${BOOST_VC_VERSION}-mt-x64-$${BOOST_VERSION}
+win32: LIBS += -lboost_filesystem-vc$${BOOST_VC_VERSION}-mt-x64-$${BOOST_VERSION} -lboost_system-vc$${BOOST_VC_VERSION}-mt-x64-$${BOOST_VERSION} -lboost_python$${PYTHON_VERSION_NO_DOT}-vc$${BOOST_VC_VERSION}-mt-x64-$${BOOST_VERSION}
 centos7 {
     unix:!macx: libs += -lboost_filesystem -lboost_system -lboost_python$${PYTHON_VERSION_NO_DOT}
 } else {
@@ -133,11 +134,12 @@ centos7 {
 macx: LIBS += -lboost_filesystem -lboost_system -lboost_python37
 
 # OpenCV
-win32: LIBS += -L$$(ProgramW6432)/OpenCV/x64/vc$${MSVC_VERSION}/lib
+win32:ik_cpu: LIBS += -L$$(ProgramW6432)/OpenCV/cpu/x64/vc$${MSVC_VERSION}/lib
+win32:!ik_cpu: LIBS += -L$$(ProgramW6432)/OpenCV/cuda/x64/vc$${MSVC_VERSION}/lib
 
 # Cuda + OpenCL
-win32: LIBS += -L$$(PROGRAMFILES)/OpenCL/lib
-win32: LIBS += -L'$$(ProgramW6432)/NVIDIA GPU Computing Toolkit/CUDA/v$${CUDA_VERSION}/lib/x64'
+win32:!ik_cpu: LIBS += -L$$(PROGRAMFILES)/OpenCL/lib
+win32:!ik_cpu: LIBS += -L'$$(ProgramW6432)/NVIDIA GPU Computing Toolkit/CUDA/v$${CUDA_VERSION}/lib/x64'
 unix:!macx: LIBS += -L/usr/lib64/nvidia/
 unix:!macx: LIBS += -L/usr/local/cuda/lib64/ # centos 7
 
