@@ -43,7 +43,7 @@ class DATAIOSHARED_EXPORT CDataVideoBuffer: public QObject
 
         CDataVideoBuffer();
         CDataVideoBuffer(const std::string& path);
-        CDataVideoBuffer(const std::string& path, int frameCount);
+        CDataVideoBuffer(const std::string& path, size_t frameCount);
         ~CDataVideoBuffer();
 
         void            close();
@@ -54,13 +54,14 @@ class DATAIOSHARED_EXPORT CDataVideoBuffer: public QObject
         void            pauseRead();
         void            clearRead();
 
-        void            startWrite(int width, int height, int nbFrames, int fps=25, int fourcc=-1, int timeout=-1);
-        void            startStreamWrite(int width, int height, int fps=25, int fourcc=-1, int timeout=-1);
+        void            startWrite(int width, int height, size_t nbFrames, size_t fps=25, int fourcc=-1, int timeout=-1);
+        void            startStreamWrite(int width, int height, size_t fps=25, int fourcc=-1, int timeout=-1);
         void            stopWrite();
 
         CMat            read();
         void            write(CMat image);
-        CMat            snapshot(int pos = -1);
+        CMat            grab();
+        CMat            grab(size_t pos);
 
         void            waitWriteFinished(int timeout);
         void            waitReadFinished(int timeout);
@@ -75,18 +76,18 @@ class DATAIOSHARED_EXPORT CDataVideoBuffer: public QObject
 
         void            setVideoPath(const std::string& path);
         void            setQueueSize(size_t queueSize);
-        void            setPosition(int pos);
-        void            setFPS(int fps);
+        void            setPosition(size_t pos);
+        void            setFPS(size_t fps);
         void            setSize(int width, int height);
-        void            setFrameCount(int nb);
+        void            setFrameCount(size_t nb);
         void            setMode(int mode);
         void            setFourCC(int code);
 
         std::string     getCurrentPath() const;
         std::string     getSourceName() const;
-        int             getFrameCount() const;
-        int             getCurrentPos() const;
-        int             getFPS() const;
+        size_t          getFrameCount() const;
+        size_t          getCurrentPos() const;
+        size_t          getFPS() const;
         int             getWidth() const;
         int             getHeight() const;
         int             getCodec() const;
@@ -128,12 +129,12 @@ class DATAIOSHARED_EXPORT CDataVideoBuffer: public QObject
         std::atomic_bool        m_bStopWrite{true};
         std::atomic_bool        m_bError{false};
         Type                    m_type = VIDEO;
-        int                     m_fps = 0;
+        size_t                  m_fps = 0;
+        size_t                  m_nbFrames = 0;
+        size_t                  m_currentPos = 0;
         int                     m_width = 0;
         int                     m_height = 0;
-        int                     m_nbFrames = 0;
         int                     m_fourcc = -1;
-        int                     m_currentPos = 0;
         int                     m_mode = 0;
         int                     m_writeAPI = cv::CAP_FFMPEG;
         int                     m_timeout = 5000; // in milliseconds

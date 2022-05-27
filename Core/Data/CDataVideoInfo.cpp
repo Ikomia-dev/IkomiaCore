@@ -38,7 +38,7 @@ CDataVideoInfo::CDataVideoInfo(IODataType type, const std::string &fileName): CD
 {
 }
 
-CDataVideoInfo::CDataVideoInfo(int fps, int frameCount, int currentPos, int fourcc) : CDataImageInfo(IODataType::VIDEO)
+CDataVideoInfo::CDataVideoInfo(size_t fps, size_t frameCount, size_t currentPos, int fourcc) : CDataImageInfo(IODataType::VIDEO)
 {
     m_fps = fps;
     m_frameCount = frameCount;

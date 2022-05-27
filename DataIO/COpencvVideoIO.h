@@ -70,8 +70,8 @@ class DATAIOSHARED_EXPORT COpencvVideoIO : public CVirtualVideoIO
         // VIDEO
         int                 m_width = 0;
         int                 m_height = 0;
-        int                 m_fps = 0;
-        int                 m_frameCount = 0;
+        size_t              m_fps = 0;
+        size_t              m_frameCount = 0;
         int                 m_fourcc = 0;
 };
 #endif // COPENCVVIDEOIO_H

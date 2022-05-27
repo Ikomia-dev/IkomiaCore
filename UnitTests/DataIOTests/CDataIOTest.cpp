@@ -137,7 +137,7 @@ void CDataIOTest::playVideo()
         QVERIFY(videoDataInfoPtr != nullptr);
 
         // framecount - 1  because the frame count is not well estimated for our test video
-        for(int i=0; i<videoDataInfoPtr->m_frameCount-1; ++i)
+        for(size_t i=0; i<videoDataInfoPtr->m_frameCount-1; ++i)
         {
             CMat frame = videoIO.readLive(timeout);
             QVERIFY(frame.data != nullptr);

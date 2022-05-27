@@ -32,7 +32,7 @@ CDataVideoBuffer::CDataVideoBuffer(const std::string &path)
     setVideoPath(path);
 }
 
-CDataVideoBuffer::CDataVideoBuffer(const std::string &path, int frameCount)
+CDataVideoBuffer::CDataVideoBuffer(const std::string &path, size_t frameCount)
 {
     setVideoPath(path);
     m_nbFrames = frameCount;
@@ -89,10 +89,24 @@ void CDataVideoBuffer::openVideo()
         }
 
         // Parameter not available for image sequence
-        m_nbFrames = m_reader.get(cv::CAP_PROP_FRAME_COUNT);
-        m_fps = m_reader.get(cv::CAP_PROP_FPS);
+        double frameCount = m_reader.get(cv::CAP_PROP_FRAME_COUNT);
+        double fps = m_reader.get(cv::CAP_PROP_FPS);
 
-        if(m_fps <= 0)
+        if (fps > 1000)
+        {
+            // Handle invalid fps values retrieved by OpenCV
+            m_nbFrames = frameCount * (25 / fps);
+            m_fps = 25;
+            m_reader.set(cv::CAP_PROP_FRAME_COUNT, m_nbFrames);
+            m_reader.set(cv::CAP_PROP_FPS, m_fps);
+        }
+        else
+        {
+            m_fps = fps;
+            m_nbFrames = frameCount;
+        }
+
+        if(m_fps == 0)
             m_fps = 25;
 
         m_width = m_reader.get(cv::CAP_PROP_FRAME_WIDTH);
@@ -141,7 +155,7 @@ void CDataVideoBuffer::clearRead()
     m_queueRead.clear();
 }
 
-void CDataVideoBuffer::startWrite(int width, int height, int nbFrames, int fps, int fourcc, int timeout)
+void CDataVideoBuffer::startWrite(int width, int height, size_t nbFrames, size_t fps, int fourcc, int timeout)
 {
     if(m_bStopWrite)
         m_bStopWrite = false;
@@ -162,7 +176,7 @@ void CDataVideoBuffer::startWrite(int width, int height, int nbFrames, int fps, 
     m_writeFuture = Utils::async([this]{ updateWrite(); });
 }
 
-void CDataVideoBuffer::startStreamWrite(int width, int height, int fps, int fourcc, int timeout)
+void CDataVideoBuffer::startStreamWrite(int width, int height, size_t fps, int fourcc, int timeout)
 {
     if(m_bStopWrite)
         m_bStopWrite = false;
@@ -237,7 +251,39 @@ void CDataVideoBuffer::write(CMat image)
     }
 }
 
-CMat CDataVideoBuffer::snapshot(int pos)
+CMat CDataVideoBuffer::grab()
+{
+    if(!isReadOpened())
+        openVideo();
+
+    pauseRead();
+
+    if(m_currentPos >= m_nbFrames)
+    {
+        m_currentPos = 0;
+        m_reader.set(cv::CAP_PROP_POS_FRAMES, m_currentPos);
+    }
+
+    CMat image;
+    bool bRet = m_reader.grab();
+    if(bRet == false)
+    {
+        close();
+        throw CException(DataIOExCode::FILE_NOT_EXISTS, "Failed to snap image", __func__, __FILE__, __LINE__);
+    }
+
+    bRet = m_reader.retrieve(image, m_mode);
+    if(bRet == false)
+    {
+        close();
+        throw CException(DataIOExCode::FILE_NOT_EXISTS, "Failed to snap image", __func__, __FILE__, __LINE__);
+    }
+
+    m_currentPos++;
+    return image;
+}
+
+CMat CDataVideoBuffer::grab(size_t pos)
 {
     if(!isReadOpened())
         openVideo();
@@ -246,20 +292,15 @@ CMat CDataVideoBuffer::snapshot(int pos)
 
     if(m_type != OPENNI_STREAM)
     {
-        if(pos != -1 && m_currentPos != pos)
+        if(pos > m_nbFrames)
+        {
+            m_currentPos = 0;
+            m_reader.set(cv::CAP_PROP_POS_FRAMES, m_currentPos);
+        }
+        else if(m_currentPos != pos)
         {
             m_currentPos = pos;
             m_reader.set(cv::CAP_PROP_POS_FRAMES, pos);
-        }
-        else if(pos > m_nbFrames)
-        {
-            m_currentPos = 0;
-            m_reader.set(cv::CAP_PROP_POS_FRAMES, m_currentPos);
-        }
-        else if(m_currentPos >= m_nbFrames)
-        {
-            m_currentPos = 0;
-            m_reader.set(cv::CAP_PROP_POS_FRAMES, m_currentPos);
         }
     }
 
@@ -389,7 +430,7 @@ void CDataVideoBuffer::setQueueSize(size_t queueSize)
     m_queueSize = queueSize;
 }
 
-void CDataVideoBuffer::setPosition(int pos)
+void CDataVideoBuffer::setPosition(size_t pos)
 {
     if(m_type != IMAGE_SEQUENCE && pos >= m_nbFrames && pos != 0)
     {
@@ -403,7 +444,7 @@ void CDataVideoBuffer::setPosition(int pos)
     m_mutex.unlock();
 }
 
-void CDataVideoBuffer::setFPS(int fps)
+void CDataVideoBuffer::setFPS(size_t fps)
 {
     m_fps = fps;
 }
@@ -414,7 +455,7 @@ void CDataVideoBuffer::setSize(int width, int height)
     m_height = height;
 }
 
-void CDataVideoBuffer::setFrameCount(int nb)
+void CDataVideoBuffer::setFrameCount(size_t nb)
 {
     m_nbFrames = nb;
 }
@@ -463,17 +504,17 @@ std::string CDataVideoBuffer::getSourceName() const
     return name;
 }
 
-int CDataVideoBuffer::getFrameCount() const
+size_t CDataVideoBuffer::getFrameCount() const
 {
     return m_nbFrames;
 }
 
-int CDataVideoBuffer::getCurrentPos() const
+size_t CDataVideoBuffer::getCurrentPos() const
 {
     return m_currentPos;
 }
 
-int CDataVideoBuffer::getFPS() const
+size_t CDataVideoBuffer::getFPS() const
 {
     return m_fps;
 }
@@ -500,13 +541,13 @@ CDataVideoBuffer::Type CDataVideoBuffer::getSourceType() const
 
 void CDataVideoBuffer::updateRead()
 {
-    int grabCount = 0;
+    size_t grabCount = 0;
     Utils::CTimer timer;
     timer.start();
 
     while(m_bStopRead == false && timer.get_total_elapsed_ms() <= m_timeout)
     {
-        if(m_nbFrames != -1 && grabCount == m_nbFrames)
+        if(m_nbFrames != 0 && grabCount == m_nbFrames)
         {
             m_bStopRead = true;
             break;
@@ -634,7 +675,7 @@ void CDataVideoBuffer::updateStreamWrite()
 
 void CDataVideoBuffer::writeImageSequenceThread()
 {
-    int count = 0;
+    size_t count = 0;
     while(m_bStopWrite == false && count < m_nbFrames && m_bError == false)
     {
         try
@@ -685,7 +726,7 @@ void CDataVideoBuffer::writeVideoThread()
         return;
     }
 
-    int count = 0;
+    size_t count = 0;
     while(m_bStopWrite == false && count < m_nbFrames && m_bError == false)
     {
         try

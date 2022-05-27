@@ -105,12 +105,12 @@ class DATAPROCESSSHARED_EXPORT CVideoIO : public CImageIO
          * @brief Sets the current frame of the video.
          * @param pos: index of the frame.
          */
-        void                setVideoPos(int pos);
+        void                setVideoPos(size_t pos);
         /**
          * @brief Set index of the next frame to read.
          * @param index: index of the frame.
          */
-        void                setFrameToRead(int index);
+        void                setFrameToRead(size_t index);
         /**
          * @brief Set video info (width, height, fps...).
          * @param infoPtr: CDataInfo based object.
@@ -137,12 +137,12 @@ class DATAPROCESSSHARED_EXPORT CVideoIO : public CImageIO
          * @param pos: index of the frame.
          * @return Image as CMat for C++ and Numpy array for Python.
          */
-        CMat                getSnapshot(int pos = -1);
+        CMat                getSnapshot(size_t pos);
         /**
          * @brief Gets the current frame index.
          * @return Current frame index.
          */
-        int                 getCurrentPos() const;
+        size_t              getCurrentPos() const;
 
         CMat                getStaticImage() const;
 

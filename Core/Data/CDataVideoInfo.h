@@ -36,7 +36,7 @@ class CORESHARED_EXPORT CDataVideoInfo : public CDataImageInfo
         CDataVideoInfo(IODataType type);
         CDataVideoInfo(const std::string &fileName);
         CDataVideoInfo(IODataType type, const std::string &fileName);
-        CDataVideoInfo(int fps, int frameCount, int currentPos, int fourcc);
+        CDataVideoInfo(size_t fps, size_t frameCount, size_t currentPos, int fourcc);
         CDataVideoInfo(const CDataVideoInfo& info);
         CDataVideoInfo(CDataVideoInfo&& info);
 
@@ -52,9 +52,9 @@ class CORESHARED_EXPORT CDataVideoInfo : public CDataImageInfo
     public:
 
         int     m_sourceType = 0;
-        int     m_fps = 0;
-        int     m_frameCount = 0;
-        int     m_currentPos = 0;
+        size_t  m_fps = 0;
+        size_t  m_frameCount = 0;
+        size_t  m_currentPos = 0;
         int     m_fourcc = 0;
 };
 

@@ -1306,7 +1306,7 @@ void CWorkflow::runTasksVideo(const std::vector<WorkflowVertex> &taskToExecute)
     try
     {
         auto infoPtr = std::static_pointer_cast<CDataVideoInfo>(videoInputs[0]->getDataInfo());
-        for (int i=0; i<infoPtr->m_frameCount && !m_bStop; ++i)
+        for (size_t i=0; i<infoPtr->m_frameCount && !m_bStop; ++i)
         {
             for(size_t j=0; j<videoInputs.size(); ++j)
             {

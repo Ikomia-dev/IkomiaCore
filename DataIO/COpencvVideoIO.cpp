@@ -70,7 +70,7 @@ VectorString COpencvVideoIO::fileNames(const SubsetBounds &bounds)
 
 CMat COpencvVideoIO::read()
 {
-    CMat frame = m_pVideoBuffer->snapshot();
+    CMat frame = m_pVideoBuffer->grab();
 
     m_imgCvType = frame.type();
     m_imgWidth = frame.cols;
@@ -93,7 +93,7 @@ CMat COpencvVideoIO::read(const SubsetBounds &subset)
         }
     }
 
-    CMat frame = m_pVideoBuffer->snapshot();
+    CMat frame = m_pVideoBuffer->grab();
     m_imgCvType = frame.type();
     m_imgWidth = frame.cols;
     m_imgHeight = frame.rows;
@@ -236,13 +236,13 @@ void COpencvVideoIO::stopRead()
 
 void COpencvVideoIO::waitWriteFinished(int timeout)
 {
-    if (m_pVideoBuffer);
+    if (m_pVideoBuffer)
         m_pVideoBuffer->waitWriteFinished(timeout);
 }
 
 void COpencvVideoIO::close()
 {
-    if (m_pVideoBuffer);
+    if (m_pVideoBuffer)
         m_pVideoBuffer->close();
 }
 
