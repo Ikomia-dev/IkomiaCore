@@ -65,19 +65,18 @@ class CPlotScaleDraw: public QwtScaleDraw
         }
 
     private:
+
         const QStringList m_labels;
 };
 
 class CPlotBarChart: public QwtPlotBarChart
 {
     public:
-        CPlotBarChart():
-            QwtPlotBarChart()
+        CPlotBarChart(): QwtPlotBarChart()
         {
-            setLayoutPolicy( AutoAdjustSamples );
-            setLayoutHint( 4.0 ); // minimum width for a single bar
-
-            setSpacing( 10 ); // spacing between bars
+            setLayoutPolicy(AutoAdjustSamples);
+            setLayoutHint(4.0); // minimum width for a single bar
+            setSpacing(10);     // spacing between bars
         }
 
         void addData( const QVector<double>& data, const QStringList &titles = QStringList(), const QList<QColor> &color = {} )
@@ -104,24 +103,24 @@ class CPlotBarChart: public QwtPlotBarChart
 
         void setTitle(const QString& name, int id)
         {
-            assert(id<m_titles.size());
-            m_titles[id] = name;
+            if (id < m_titles.size())
+                m_titles[id] = name;
         }
         void setColor(const QColor& color, int id)
         {
-            assert(id<m_colors.size());
-            m_colors[id] = color;
+            if (id < m_colors.size())
+                m_colors[id] = color;
         }
         QColor getColor(int id)
         {
-            assert(id<m_colors.size());
-            return m_colors[id];
+            if (id < m_colors.size())
+                return m_colors[id];
+            else
+                return QColor();
         }
-        virtual QwtColumnSymbol *specialSymbol(
-            int index, const QPointF& ) const
+        virtual QwtColumnSymbol *specialSymbol(int index, const QPointF& ) const
         {
             // we want to have individual colors for each bar
-
             QwtColumnSymbol *symbol = new QwtColumnSymbol( QwtColumnSymbol::Box );
             symbol->setLineWidth( 2 );
             symbol->setFrameStyle( QwtColumnSymbol::Raised );
@@ -146,6 +145,7 @@ class CPlotBarChart: public QwtPlotBarChart
         }
 
     private:
+
         QList<QColor> m_colors;
         QList<QString> m_titles;
 };
@@ -181,17 +181,14 @@ void CSimpleBarPlot::setOrientation(Qt::Orientation orient)
     {
         m_axisX = QwtPlot::xBottom;
         m_axisY = QwtPlot::yLeft;
-
         m_pSimpleBar->setOrientation( Qt::Vertical );
     }
     else
     {
         m_axisX = QwtPlot::yLeft;
         m_axisY = QwtPlot::xBottom;
-
         m_pSimpleBar->setOrientation( Qt::Horizontal );
     }
-
     updateAxis();
 }
 
@@ -203,10 +200,8 @@ Qt::Orientation CSimpleBarPlot::getOrientation()
 void CSimpleBarPlot::addData(const QVector<double>& data, const QStringList& titles, const QList<QColor>& colors)
 {
     assert(m_pSimpleBar);
-
     m_pSimpleBar->addData(data, titles, colors);
     m_titles = titles;
-
     updateLegend();
     updateAxis();
 }
@@ -216,7 +211,6 @@ void CSimpleBarPlot::setPlotName(const QString& name, int id)
     assert(id<m_titles.size());
     m_titles[id] = name;
     m_pSimpleBar->setTitle(name, id);
-
     updateLegend();
     updateAxis();
 }
@@ -224,7 +218,6 @@ void CSimpleBarPlot::setPlotName(const QString& name, int id)
 void CSimpleBarPlot::setColor(const QColor& color, int id)
 {
     m_pSimpleBar->setColor(color, id);
-
     updateLegend();
     replot();
 }
