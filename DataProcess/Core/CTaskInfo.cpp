@@ -220,6 +220,30 @@ void CTaskInfo::setInternal(bool bInternal)
     m_bInternal = bInternal;
 }
 
+std::string CTaskInfo::getOSName() const
+{
+    std::string osName = "Any";
+    switch(m_os)
+    {
+        case OSType::LINUX:
+            osName = "Linux";
+            break;
+        case OSType::WIN:
+            osName = "Windows";
+            break;
+        case OSType::OSX:
+            osName = "MacOS";
+            break;
+        case OSType::ALL:
+            osName = "Any";
+            break;
+        default:
+            osName = "Any";
+            break;
+    }
+    return osName;
+}
+
 std::ostream& operator<<(std::ostream& os, const CTaskInfo& info)
 {
     os << "Name: " << info.m_name << std::endl;
@@ -241,7 +265,6 @@ std::ostream& operator<<(std::ostream& os, const CTaskInfo& info)
     os << "Repository: " << info.m_repo << std::endl;
     std::string language = info.m_language == ApiLanguage::CPP ? "C++" : "Python";
     os << "Language: " << language << std::endl;
-    std::string system = info.m_os == OSType::LINUX ? "Linux" : (info.m_os == OSType::WIN ? "Windows" : "MacOS");
-    os << "OS: " << system << std::endl;
+    os << "OS: " << info.getOSName() << std::endl;
     return os;
 }

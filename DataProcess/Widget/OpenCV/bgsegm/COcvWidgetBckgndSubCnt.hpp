@@ -51,7 +51,7 @@ class COcvWidgetBckgndSubCnt : public CWorkflowTaskWidget
             m_pSpinMinPxStability->setRange(1, 1000);
             m_pSpinMinPxStability->setValue(m_pParam->m_minPixelStability);
 
-            auto pLabelMaxPxStability = new QLabel(tr("Minimum pixel stability"));
+            auto pLabelMaxPxStability = new QLabel(tr("Maximum pixel stability"));
             m_pSpinMaxPxStability = new QSpinBox;
             m_pSpinMaxPxStability->setSingleStep(1);
             m_pSpinMaxPxStability->setRange(1, 10000);
