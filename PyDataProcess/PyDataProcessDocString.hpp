@@ -200,24 +200,24 @@ constexpr auto _ctorFeatureIODocString =
 constexpr auto _addValueList1DocString =
         "Append a new value list.\n\n"
         "Args:\n"
-        "   values (list): list of float values\n";
+        "   values (list): list of values (float or string)\n";
 
 constexpr auto _addValueList2DocString =
         "Append a new value list with the corresponding header label. A header label can be seen as a column name in a table representation.\n\n"
         "Args:\n"
-        "   values (list): list of float values\n\n"
+        "   values (list): list of values (float or string)\n\n"
         "   header_label (str): header label\n";
 
 constexpr auto _addValueList3DocString =
         "Append a new value list with a label for each value.\n\n"
         "Args:\n"
-        "   values (list): list of float values\n\n"
+        "   values (list): list of values (float or string)\n\n"
         "   labels (list of str): store label for each numeric value\n";
 
 constexpr auto _addValueList4DocString =
         "Append a new value list with the corresponding header label and a label for each value.\n\n"
         "Args:\n"
-        "   values (list): list of float values\n\n"
+        "   values (list): list of values (float or string)\n\n"
         "   header_label (str): header label\n\n"
         "   labels (list of str): store label for each numeric value\n";
 
@@ -240,7 +240,7 @@ constexpr auto _getAllHeaderLabelsDocString =
 constexpr auto _getAllValueListDocString =
         "Get all value lists.\n\n"
         "Returns:\n"
-        "   list of list of float: all values\n";
+        "   list of list (float or string): all values\n";
 
 constexpr auto _getOutputTypeDocString =
         "Get output display type. Can be one of the values defined in :py:class:`NumericOutputType`.\n\n"
@@ -261,7 +261,7 @@ constexpr auto _getValueListDocString =
         "Args:\n"
         "   index (int): index of value list\n\n"
         "Returns:\n"
-        "   list: float values\n";
+        "   list (float or string): values\n";
 
 constexpr auto _isDataAvailableDerivedDocString =
         "See :py:meth:`~ikomia.core.pycore.CWorkflowTaskIO.isDataAvailable`.\n";
