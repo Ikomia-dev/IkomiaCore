@@ -228,6 +228,8 @@ class CORESHARED_EXPORT CWorkflowTaskIO
          */
         void                addTemporaryFile(const std::string& path);
 
+        virtual void        load(const std::string& path);
+
         /**
          * @brief Save the input or output data to disk using information set with setSaveInfo().
          * Should be overriden for custom input or output.

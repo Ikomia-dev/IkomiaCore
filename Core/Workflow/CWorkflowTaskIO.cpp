@@ -258,6 +258,11 @@ void CWorkflowTaskIO::addTemporaryFile(const std::string &path)
     m_tempFiles.insert(path);
 }
 
+void CWorkflowTaskIO::load(const std::string &path)
+{
+    Q_UNUSED(path);
+}
+
 void CWorkflowTaskIO::save()
 {
 }
