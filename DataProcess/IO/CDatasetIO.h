@@ -53,7 +53,7 @@ class DATAPROCESSSHARED_EXPORT CDatasetIO: public CWorkflowTaskIO
 
         void                                        save(const std::string& path) override;
 
-        bool                                        load(const std::string& path);
+        void                                        load(const std::string& path);
 
     private:
 

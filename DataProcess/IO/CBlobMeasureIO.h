@@ -79,6 +79,8 @@ class DATAPROCESSSHARED_EXPORT CBlobMeasureIO : public CWorkflowTaskIO
 
         void                    clearData() override;
 
+        void                    load(const std::string& path) override;
+
         void                    save() override;
         void                    save(const std::string &path) override;
 
@@ -87,6 +89,8 @@ class DATAPROCESSSHARED_EXPORT CBlobMeasureIO : public CWorkflowTaskIO
     private:
 
         std::set<std::string>   getMeasuresNames() const;
+
+        void                    loadCSV(const std::string& path);
 
         void                    saveCSV(const std::string &path) const;
         void                    saveXML(const std::string &path) const;

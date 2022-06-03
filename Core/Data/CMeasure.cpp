@@ -98,3 +98,27 @@ std::string CMeasure::getName(int id)
     }
     return name;
 }
+
+CMeasure::Id CMeasure::getIdFromName(const std::string &name)
+{
+    if (name == QObject::tr("Surface").toStdString())
+        return Id::SURFACE;
+    else if (name == QObject::tr("Perimeter").toStdString())
+        return Id::PERIMETER;
+    else if (name == QObject::tr("Centroid").toStdString())
+        return Id::CENTROID;
+    else if (name == QObject::tr("Box").toStdString())
+        return Id::BBOX;
+    else if (name == QObject::tr("Oriented box").toStdString())
+        return Id::ORIENTED_BBOX;
+    else if (name == QObject::tr("Equivalent diameter").toStdString())
+        return Id::EQUIVALENT_DIAMETER;
+    else if (name == QObject::tr("Elongation").toStdString())
+        return Id::ELONGATION;
+    else if (name == QObject::tr("Circularity").toStdString())
+        return Id::CIRCULARITY;
+    else if (name == QObject::tr("Solidity").toStdString())
+        return Id::SOLIDITY;
+    else
+        return Id::CUSTOM;
+}

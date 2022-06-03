@@ -91,13 +91,12 @@ void CDatasetIO::save(const std::string &path)
         jsonFile.write(m_json.toJson());
 }
 
-bool CDatasetIO::load(const std::string &path)
+void CDatasetIO::load(const std::string &path)
 {
     QFile jsonFile(QString::fromStdString(path));
     if(jsonFile.open(QFile::ReadOnly | QFile::Text) == false)
-        return false;
+        throw CException(CoreExCode::INVALID_FILE, "Failed to open dataset file: " + path);
 
     m_json = QJsonDocument::fromJson(jsonFile.readAll());
     jsonFile.close();
-    return true;
 }

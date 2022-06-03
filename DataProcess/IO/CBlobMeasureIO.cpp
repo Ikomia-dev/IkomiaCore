@@ -151,6 +151,19 @@ int CBlobMeasureIO::getBlobMeasureIndex(size_t index, int id)
     return getBlobMeasureIndex(index, CMeasure::getName(id));
 }
 
+std::set<std::string> CBlobMeasureIO::getMeasuresNames() const
+{
+    std::set<std::string> names;
+    //Iterate throw objects (ie lines)
+    for(size_t i=0; i<m_measures.size(); ++i)
+    {
+        //Iterate throw object measures (ie columns)
+        for(size_t j=0; j<m_measures[i].size(); ++j)
+            names.insert(m_measures[i][j].m_measure.m_name);
+    }
+    return names;
+}
+
 bool CBlobMeasureIO::isDataAvailable() const
 {
     return m_measures.size() > 0;
@@ -173,6 +186,50 @@ void CBlobMeasureIO::clearData()
     m_measures.clear();
 }
 
+void CBlobMeasureIO::load(const std::string &path)
+{
+    auto extension = Utils::File::extension(path);
+    if (extension == ".csv")
+        return loadCSV(path);
+    else
+        throw CException(CoreExCode::NOT_IMPLEMENTED, "File format not available yet, please use .csv files.", __func__, __FILE__, __LINE__);
+}
+
+void CBlobMeasureIO::loadCSV(const std::string &path)
+{
+    std::string line;
+    std::ifstream file(path);
+
+    // Header labels: object index, id, category and list of measure
+    std::getline(file, line);
+    std::vector<std::string> measureNames;
+    Utils::String::tokenize(line, measureNames, ";");
+
+    // Get objects measure
+    while (std::getline(file, line))
+    {
+        ObjectMeasures measures;
+        std::vector<std::string> strData;
+        Utils::String::tokenize(line, strData, ";");
+
+        for (size_t i=3; i<strData.size(); ++i)
+        {
+            auto measureId = CMeasure::getIdFromName(measureNames[i]);
+            CMeasure measure(measureId, measureNames[i]);
+
+            std::vector<std::string> strValues;
+            Utils::String::tokenize(strData[i], strValues, "-");
+
+            std::vector<double> values;
+            for (size_t j=0; j<strValues.size(); ++j)
+                values.push_back(std::stod(strValues[j]));
+
+            measures.push_back(CObjectMeasure(measure, values, std::stoi(strData[1]), strData[2]));
+        }
+        m_measures.push_back(measures);
+    }
+}
+
 void CBlobMeasureIO::save()
 {
     std::string path = m_saveFolder + m_saveBaseName + Utils::Data::getFileFormatExtension(m_saveFormat);
@@ -186,19 +243,6 @@ void CBlobMeasureIO::save(const std::string &path)
         saveCSV(path);
     else if(extension == ".xml")
         saveXML(path);
-}
-
-std::set<std::string> CBlobMeasureIO::getMeasuresNames() const
-{
-    std::set<std::string> names;
-    //Iterate throw objects (ie lines)
-    for(size_t i=0; i<m_measures.size(); ++i)
-    {
-        //Iterate throw object measures (ie columns)
-        for(size_t j=0; j<m_measures[i].size(); ++j)
-            names.insert(m_measures[i][j].m_measure.m_name);
-    }
-    return names;
 }
 
 void CBlobMeasureIO::saveCSV(const std::string &path) const
