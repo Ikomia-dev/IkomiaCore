@@ -28,6 +28,7 @@
 #include "Graphics/CGraphicsComplexPolygon.h"
 #include "Graphics/CGraphicsRectangle.h"
 #include "Graphics/CGraphicsText.h"
+#include "Graphics/CGraphicsRegistration.h"
 #include "CGraphicsInput.h"
 
 CGraphicsOutput::CGraphicsOutput() : CWorkflowTaskIO(IODataType::OUTPUT_GRAPHICS, "CGraphicsOutput")
@@ -238,6 +239,11 @@ CGraphicsOutput::GraphicsOutputPtr CGraphicsOutput::clone() const
     return std::static_pointer_cast<CGraphicsOutput>(cloneImp());
 }
 
+WorkflowTaskIOPtr CGraphicsOutput::cloneImp() const
+{
+    return std::shared_ptr<CGraphicsOutput>(new CGraphicsOutput(*this));
+}
+
 void CGraphicsOutput::save()
 {
     std::string path = m_saveFolder + m_saveBaseName + Utils::Data::getFileFormatExtension(m_saveFormat);
@@ -261,14 +267,46 @@ void CGraphicsOutput::save(const std::string &path)
         itemArray.append(itemObj);
     }
     root["items"] = itemArray;
+    root["imageIndex"] = m_imageIndex;
 
     QJsonDocument jsonDoc(root);
     jsonFile.write(jsonDoc.toJson());
 }
 
-WorkflowTaskIOPtr CGraphicsOutput::cloneImp() const
+void CGraphicsOutput::load(const std::string &path)
 {
-    return std::shared_ptr<CGraphicsOutput>(new CGraphicsOutput(*this));
+    auto extension = Utils::File::extension(path);
+    if (extension != ".json")
+        throw CException(CoreExCode::NOT_IMPLEMENTED, "File format not available yet, please use .json files.", __func__, __FILE__, __LINE__);
+
+    QFile jsonFile(QString::fromStdString(path));
+    if(!jsonFile.open(QFile::ReadOnly | QFile::Text))
+        throw CException(CoreExCode::INVALID_FILE, "Couldn't read file:" + path, __func__, __FILE__, __LINE__);
+
+    QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonFile.readAll()));
+    if(jsonDoc.isNull() || jsonDoc.isEmpty())
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading graphics: invalid JSON structure", __func__, __FILE__, __LINE__);
+
+    QJsonObject root = jsonDoc.object();
+    if(root.isEmpty())
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading graphics: empty JSON structure", __func__, __FILE__, __LINE__);
+
+    m_layerName = root["layer"].toString().toStdString();
+    m_imageIndex = root["imageIndex"].toInt();
+
+    // Load items
+    m_items.clear();
+    CGraphicsRegistration registry;
+    auto factory = registry.getProxyFactory();
+    QJsonArray items = root["items"].toArray();
+
+    for(int i=0; i<items.size(); ++i)
+    {
+        QJsonObject item = items[i].toObject();
+        auto itemPtr = factory.createObject(static_cast<size_t>(item["type"].toInt()));
+        itemPtr->fromJson(item);
+        m_items.push_back(itemPtr);
+    }
 }
 
 

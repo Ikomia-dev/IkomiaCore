@@ -88,6 +88,7 @@ class DATAPROCESSSHARED_EXPORT CGraphicsOutput : public CWorkflowTaskIO
 
         void                        save() override;
         void                        save(const std::string &path) override;
+        void                        load(const std::string &path) override;
 
     private:
 

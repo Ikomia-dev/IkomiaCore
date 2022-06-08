@@ -377,8 +377,8 @@ class CNumericIO : public CNumericIOBase
             auto extension = Utils::File::extension(path);
             if(extension == ".csv")
                 saveCSV(path);
-            else if(extension == ".xml")
-                saveXML(path);
+            else
+                throw CException(CoreExCode::NOT_IMPLEMENTED, "Export format not available yet", __func__, __FILE__, __LINE__);
         }
 
     private:
@@ -444,11 +444,6 @@ class CNumericIO : public CNumericIOBase
                 }
             }
             file.close();
-        }
-        void                        saveXML(const std::string &path) const
-        {
-            Q_UNUSED(path);
-            throw CException(CoreExCode::NOT_IMPLEMENTED, "Feature not available yet", __func__, __FILE__, __LINE__);
         }
 
     private:

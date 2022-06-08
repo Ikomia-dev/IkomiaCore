@@ -93,7 +93,6 @@ class DATAPROCESSSHARED_EXPORT CBlobMeasureIO : public CWorkflowTaskIO
         void                    loadCSV(const std::string& path);
 
         void                    saveCSV(const std::string &path) const;
-        void                    saveXML(const std::string &path) const;
 
         virtual std::shared_ptr<CWorkflowTaskIO> cloneImp() const override;
 

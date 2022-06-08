@@ -241,8 +241,8 @@ void CBlobMeasureIO::save(const std::string &path)
     auto extension = Utils::File::extension(path);
     if(extension == ".csv")
         saveCSV(path);
-    else if(extension == ".xml")
-        saveXML(path);
+    else
+        throw CException(CoreExCode::NOT_IMPLEMENTED, "Export format not available yet", __func__, __FILE__, __LINE__);
 }
 
 void CBlobMeasureIO::saveCSV(const std::string &path) const
@@ -291,12 +291,6 @@ void CBlobMeasureIO::saveCSV(const std::string &path) const
         file << "\n";
     }
     file.close();
-}
-
-void CBlobMeasureIO::saveXML(const std::string &path) const
-{
-    Q_UNUSED(path);
-    throw CException(CoreExCode::NOT_IMPLEMENTED, "Feature not available yet", __func__, __FILE__, __LINE__);
 }
 
 std::shared_ptr<CBlobMeasureIO> CBlobMeasureIO::clone() const

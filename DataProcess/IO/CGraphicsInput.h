@@ -68,6 +68,10 @@ class DATAPROCESSSHARED_EXPORT CGraphicsInput : public CWorkflowTaskIO
 
         GraphicsInputPtr    clone() const;
 
+        void                load(const std::string &path) override;
+
+        void                save(const std::string &path) override;
+
     private:
 
         virtual WorkflowTaskIOPtr cloneImp() const override;

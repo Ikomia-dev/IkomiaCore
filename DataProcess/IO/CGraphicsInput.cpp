@@ -19,7 +19,11 @@
 
 #include "CGraphicsInput.h"
 #include "Graphics/CGraphicsLayer.h"
+#include "Graphics/CGraphicsRegistration.h"
 #include "CGraphicsOutput.h"
+#include "UtilsTools.hpp"
+#include <QJsonDocument>
+#include <QJsonArray>
 
 CGraphicsInput::CGraphicsInput() : CWorkflowTaskIO(IODataType::INPUT_GRAPHICS, "CGraphicsInput")
 {
@@ -180,4 +184,66 @@ CGraphicsInput::GraphicsInputPtr CGraphicsInput::clone() const
 std::shared_ptr<CWorkflowTaskIO> CGraphicsInput::cloneImp() const
 {
     return std::shared_ptr<CGraphicsInput>(new CGraphicsInput(*this));
+}
+
+void CGraphicsInput::load(const std::string &path)
+{
+    auto extension = Utils::File::extension(path);
+    if (extension != ".json")
+        throw CException(CoreExCode::NOT_IMPLEMENTED, "File format not available yet, please use .json files.", __func__, __FILE__, __LINE__);
+
+    QFile jsonFile(QString::fromStdString(path));
+    if(!jsonFile.open(QFile::ReadOnly | QFile::Text))
+        throw CException(CoreExCode::INVALID_FILE, "Couldn't read file:" + path, __func__, __FILE__, __LINE__);
+
+    QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonFile.readAll()));
+    if(jsonDoc.isNull() || jsonDoc.isEmpty())
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading graphics: invalid JSON structure", __func__, __FILE__, __LINE__);
+
+    QJsonObject root = jsonDoc.object();
+    if(root.isEmpty())
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading graphics: empty JSON structure", __func__, __FILE__, __LINE__);
+
+    // Load items
+    m_items.clear();
+    CGraphicsRegistration registry;
+    auto factory = registry.getProxyFactory();
+    QJsonArray items = root["items"].toArray();
+
+    for(int i=0; i<items.size(); ++i)
+    {
+        QJsonObject item = items[i].toObject();
+        auto itemPtr = factory.createObject(static_cast<size_t>(item["type"].toInt()));
+        itemPtr->fromJson(item);
+        m_items.push_back(itemPtr);
+    }
+}
+
+void CGraphicsInput::save(const std::string &path)
+{
+    auto extension = Utils::File::extension(path);
+    if (extension != ".json")
+        throw CException(CoreExCode::NOT_IMPLEMENTED, "File format not available yet, please use .json files.", __func__, __FILE__, __LINE__);
+
+    QFile jsonFile(QString::fromStdString(path));
+    if(!jsonFile.open(QFile::WriteOnly | QFile::Text))
+        throw CException(CoreExCode::INVALID_FILE, "Couldn't write file:" + path, __func__, __FILE__, __LINE__);
+
+    QJsonObject root;
+    if (m_pLayer)
+        root["layer"] = m_pLayer->getName();
+    else
+        root["layer"] = "InputLayer";
+
+    QJsonArray itemArray;
+    for(size_t i=0; i<m_items.size(); ++i)
+    {
+        QJsonObject itemObj;
+        m_items[i]->toJson(itemObj);
+        itemArray.append(itemObj);
+    }
+    root["items"] = itemArray;
+
+    QJsonDocument jsonDoc(root);
+    jsonFile.write(jsonDoc.toJson());
 }
