@@ -64,6 +64,8 @@ class CORESHARED_EXPORT CProxyGraphicsRect: public CProxyGraphicsItem
 
         void                    toJson(QJsonObject &obj) const override;
 
+        void                    fromJson(const QJsonObject& obj) override;
+
     public:
 
         float                   m_x = 0.0;
@@ -71,6 +73,27 @@ class CORESHARED_EXPORT CProxyGraphicsRect: public CProxyGraphicsItem
         float                   m_width = 0.0;
         float                   m_height = 0.0;
         CGraphicsRectProperty   m_property;
+};
+
+//-----------------------------------------------------------------------
+//- Class CProxyGraphicsRectFactory
+//- Factory for dynamic CProxyGraphicsRect instanciation (from type)
+//-----------------------------------------------------------------------
+class CProxyGraphicsRectFactory: public CProxyGraphicsFactory
+{
+    public:
+
+        CProxyGraphicsRectFactory()
+        {
+            m_type = static_cast<size_t>(GraphicsItem::RECTANGLE);
+        }
+
+        ~CProxyGraphicsRectFactory(){}
+
+        ProxyGraphicsItemPtr  create() override
+        {
+            return std::make_shared<CProxyGraphicsRect>();
+        }
 };
 
 //--------------------------

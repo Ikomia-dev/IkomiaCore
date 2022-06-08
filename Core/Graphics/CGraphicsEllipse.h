@@ -64,6 +64,8 @@ class CORESHARED_EXPORT CProxyGraphicsEllipse: public CProxyGraphicsItem
 
         void                        toJson(QJsonObject& obj) const override;
 
+        void                        fromJson(const QJsonObject& obj) override;
+
     public:
 
         float                       m_x = 0.0;
@@ -71,6 +73,27 @@ class CORESHARED_EXPORT CProxyGraphicsEllipse: public CProxyGraphicsItem
         float                       m_width = 0.0;
         float                       m_height = 0.0;
         CGraphicsEllipseProperty    m_property;
+};
+
+//-----------------------------------------------------------------------
+//- Class CProxyGraphicsComplexPolyFactory
+//- Factory for dynamic CProxyGraphicsComplexPoly instanciation (from type)
+//-----------------------------------------------------------------------
+class CProxyGraphicsEllipseFactory: public CProxyGraphicsFactory
+{
+    public:
+
+        CProxyGraphicsEllipseFactory()
+        {
+            m_type = static_cast<size_t>(GraphicsItem::ELLIPSE);
+        }
+
+        ~CProxyGraphicsEllipseFactory(){}
+
+        ProxyGraphicsItemPtr  create() override
+        {
+            return std::make_shared<CProxyGraphicsEllipse>();
+        }
 };
 
 //------------------------

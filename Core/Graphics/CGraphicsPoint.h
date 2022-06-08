@@ -57,10 +57,33 @@ class CORESHARED_EXPORT CProxyGraphicsPoint: public CProxyGraphicsItem
 
         void                    toJson(QJsonObject &obj) const override;
 
+        void                    fromJson(const QJsonObject& obj) override;
+
     public:
 
         CPointF                 m_point;
         CGraphicsPointProperty  m_property;
+};
+
+//-----------------------------------------------------------------------
+//- Class CProxyGraphicsPointFactory
+//- Factory for dynamic CProxyGraphicsPoint instanciation (from type)
+//-----------------------------------------------------------------------
+class CProxyGraphicsPointFactory: public CProxyGraphicsFactory
+{
+    public:
+
+        CProxyGraphicsPointFactory()
+        {
+            m_type = static_cast<size_t>(GraphicsItem::POINT);
+        }
+
+        ~CProxyGraphicsPointFactory(){}
+
+        ProxyGraphicsItemPtr  create() override
+        {
+            return std::make_shared<CProxyGraphicsPoint>();
+        }
 };
 
 //----------------------

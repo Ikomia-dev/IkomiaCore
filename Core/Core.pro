@@ -28,10 +28,12 @@ SOURCES += \
         Graphics/CGraphicsPolygon.cpp \
         Graphics/CGraphicsPolyline.cpp \
         Graphics/CGraphicsRectangle.cpp \
+        Graphics/CGraphicsRegistration.cpp \
         Graphics/CGraphicsText.cpp \
         Graphics/CGraphicsConversion.cpp \
         Graphics/CGraphicsPoint.cpp \
         Graphics/CGraphicsContext.cpp \
+        Graphics/GraphicsProperty.cpp \
         Workflow/CViewPropertyIO.cpp \
         Workflow/CWorkflowTask.cpp \
         Workflow/CWorkflowTaskIO.cpp \
@@ -52,8 +54,8 @@ HEADERS += \
         Data/CDataDicomInfo.h \
         Data/CDataVideoInfo.h \
         Graphics/CGraphicsItem.hpp \
+        Graphics/CGraphicsRegistration.h \
         Graphics/CPoint.hpp \
-        Graphics/GraphicsProperty.hpp \
         Graphics/CGraphicsLayer.h \
         Graphics/CGraphicsJSON.h \
         Graphics/CGraphicsComplexPolygon.h \
@@ -65,6 +67,7 @@ HEADERS += \
         Graphics/CGraphicsPoint.h \
         Graphics/CGraphicsConversion.h \
         Graphics/CGraphicsContext.h \
+        Graphics/GraphicsProperty.h \
         Workflow/CViewPropertyIO.h \
         Main/CoreDefine.hpp \
         Main/CoreTools.hpp \

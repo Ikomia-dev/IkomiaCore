@@ -292,6 +292,15 @@ namespace Ikomia
                 }
                 return pLayer;
             }
+            inline CColor           colorFromJson(const QJsonObject &obj)
+            {
+                CColor color;
+                color.push_back(obj["r"].toInt());
+                color.push_back(obj["g"].toInt());
+                color.push_back(obj["b"].toInt());
+                color.push_back(obj["a"].toInt());
+                return color;
+            }
         }
 
         namespace Font

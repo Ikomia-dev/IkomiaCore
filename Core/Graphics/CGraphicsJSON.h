@@ -26,7 +26,7 @@
 #include <QJsonObject>
 #include <QPen>
 #include "Main/CoreGlobal.hpp"
-#include "GraphicsProperty.hpp"
+#include "GraphicsProperty.h"
 
 /** @cond INTERNAL */
 

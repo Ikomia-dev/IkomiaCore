@@ -23,7 +23,6 @@ SOURCES += \
         CException.cpp \
         CLogManager.cpp \
         CMemoryInfo.cpp \
-        Markup.cpp \
         CProgressSignalHandler.cpp \
         CWindowsDeviceEnumerator.cpp \
         Widgets/CBrowseFileWidget.cpp \
@@ -47,7 +46,6 @@ HEADERS += \
         CTimer.hpp \
         UtilsGlobal.hpp \
         PythonThread.hpp \
-        Markup.h \
         CProgressSignalHandler.h \
         CWindowsDeviceEnumerator.h \
         Widgets/CBrowseFileWidget.h \
@@ -101,6 +99,3 @@ INSTALLS += deployIncludeWidget
 win32:CONFIG(release, debug|release): LIBS += -lopencv_core$${OPENCV_VERSION}
 else:win32:CONFIG(debug, debug|release): LIBS += -lopencv_core$${OPENCV_VERSION}d
 unix:LIBS += -lopencv_core
-
-#libiconv for Markup
-macx: LIBS += -liconv

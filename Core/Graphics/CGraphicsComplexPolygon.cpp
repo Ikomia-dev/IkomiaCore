@@ -173,6 +173,32 @@ void CProxyGraphicsComplexPoly::toJson(QJsonObject &obj) const
     obj["properties"] = CGraphicsJSON::toJsonObject(m_property);
 }
 
+void CProxyGraphicsComplexPoly::fromJson(const QJsonObject &obj)
+{
+    CProxyGraphicsItem::fromJson(obj);
+    auto outerPtArray = obj["outer"].toArray();
+
+    for (int i=0; i<outerPtArray.size(); ++i)
+    {
+        auto pointObj = outerPtArray[i].toObject();
+        m_outer.push_back(CPointF(pointObj["x"].toDouble(), pointObj["y"].toDouble()));
+    }
+
+    auto innerArray = obj["inners"].toArray();
+    for (int i=0; i<innerArray.size(); ++i)
+    {
+        PolygonF inner;
+        auto innerPtArray = innerArray[i].toArray();
+        for (int j=0; j<innerPtArray.size(); ++j)
+        {
+            auto pointObj = innerPtArray[i].toObject();
+            inner.push_back(CPointF(pointObj["x"].toDouble(), pointObj["y"].toDouble()));
+        }
+        m_inners.push_back(inner);
+    }
+    m_property.fromJson(obj["properties"].toObject());
+}
+
 //-------------------------------
 //- Class CGraphicsComplexPolygon
 //-------------------------------

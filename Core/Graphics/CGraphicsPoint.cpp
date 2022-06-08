@@ -115,6 +115,14 @@ void CProxyGraphicsPoint::toJson(QJsonObject &obj) const
     obj["properties"] = CGraphicsJSON::toJsonObject(m_property);
 }
 
+void CProxyGraphicsPoint::fromJson(const QJsonObject &obj)
+{
+    CProxyGraphicsItem::fromJson(obj);
+    m_point.m_x = obj["x"].toDouble();
+    m_point.m_y = obj["y"].toDouble();
+    m_property.fromJson(obj["properties"].toObject());
+}
+
 //----------------------
 //- Class CGraphicsPoint
 //----------------------

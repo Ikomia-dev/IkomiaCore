@@ -17,22 +17,30 @@
 // along with this program; if not, write to the Free Software Foundation,
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-#ifndef GRAPHICSPROPERTY_HPP
-#define GRAPHICSPROPERTY_HPP
+#ifndef GRAPHICSPROPERTY_H
+#define GRAPHICSPROPERTY_H
 
 #include "Main/CoreDefine.hpp"
+#include <QJsonObject>
 
-/** @file GraphicsProperty.hpp */
+/** @file GraphicsProperty.h */
 
+//----------------------------//
+//- CGraphicsEllipseProperty -//
+//----------------------------//
 class CGraphicsEllipseProperty
 {
     public:
 
-        CColor      getPenColor() const { return m_penColor; }
-        CColor      getBrushColor() const { return m_brushColor; }
+        CColor      getPenColor() const;
+        CColor      getBrushColor() const;
 
-        void        setPenColor(const CColor& color) { m_penColor = color; }
-        void        setBrushColor(const CColor& color) { m_brushColor = color; }
+        void        setPenColor(const CColor& color);
+        void        setBrushColor(const CColor& color);
+
+        void        fromJson(const QJsonObject& obj);
+
+    public:
 
         CColor      m_penColor = {255,0,0,255};
         CColor      m_brushColor =  {255,0,0,0};
@@ -40,15 +48,22 @@ class CGraphicsEllipseProperty
         std::string m_category = "Default";
 };
 
+//--------------------------//
+//- CGraphicsPointProperty -//
+//--------------------------//
 class CGraphicsPointProperty
 {
     public:
 
-        CColor      getPenColor() const { return m_penColor; }
-        CColor      getBrushColor() const { return m_brushColor; }
+        CColor      getPenColor() const;
+        CColor      getBrushColor() const;
 
-        void        setPenColor(const CColor& color) { m_penColor = color; }
-        void        setBrushColor(const CColor& color) { m_brushColor = color; }
+        void        setPenColor(const CColor& color);
+        void        setBrushColor(const CColor& color);
+
+        void        fromJson(const QJsonObject& obj);
+
+    public:
 
         CColor      m_penColor = {255,0,0,255};
         CColor      m_brushColor = {255,0,0,255};
@@ -56,15 +71,22 @@ class CGraphicsPointProperty
         std::string m_category = "Default";
 };
 
+//----------------------------//
+//- CGraphicsPolygonProperty -//
+//----------------------------//
 class CGraphicsPolygonProperty
 {
     public:
 
-        CColor      getPenColor() const { return m_penColor; }
-        CColor      getBrushColor() const { return m_brushColor; }
+        CColor      getPenColor() const;
+        CColor      getBrushColor() const;
 
-        void        setPenColor(const CColor& color) { m_penColor = color; }
-        void        setBrushColor(const CColor& color) { m_brushColor = color; }
+        void        setPenColor(const CColor& color);
+        void        setBrushColor(const CColor& color);
+
+        void        fromJson(const QJsonObject &obj);
+
+    public:
 
         CColor      m_penColor = {255,0,0,255};
         CColor      m_brushColor = {255,0,0,0};
@@ -72,27 +94,40 @@ class CGraphicsPolygonProperty
         std::string m_category = "Default";
 };
 
+//-----------------------------//
+//- CGraphicsPolylineProperty -//
+//-----------------------------//
 class CGraphicsPolylineProperty
 {
     public:
 
-        CColor      getColor() const { return m_penColor; }
-        void        setColor(const CColor& color) { m_penColor = color; }
+        CColor      getColor() const;
+        void        setColor(const CColor& color);
+        void        fromJson(const QJsonObject &obj);
+
+    public:
 
         CColor      m_penColor = {255,0,0,255};
         int         m_lineSize = 2;
         std::string m_category = "Default";
 };
 
+//-------------------------//
+//- CGraphicsRectProperty -//
+//-------------------------//
 class CGraphicsRectProperty
 {
     public:
 
-        CColor      getPenColor() const { return m_penColor; }
-        CColor      getBrushColor() const { return m_brushColor; }
+        CColor      getPenColor() const;
+        CColor      getBrushColor() const;
 
-        void        setPenColor(const CColor& color) { m_penColor = color; }
-        void        setBrushColor(const CColor& color) { m_brushColor = color; }
+        void        setPenColor(const CColor& color);
+        void        setBrushColor(const CColor& color);
+
+        void        fromJson(const QJsonObject& obj);
+
+    public:
 
         CColor      m_penColor = {255,0,0,255};
         CColor      m_brushColor = {255,0,0,0};
@@ -100,12 +135,18 @@ class CGraphicsRectProperty
         std::string m_category = "Default";
 };
 
+//-------------------------//
+//- CGraphicsTextProperty -//
+//-------------------------//
 class CGraphicsTextProperty
 {
     public:
 
-        CColor      getColor() const { return m_color; }
-        void        setColor(const CColor& color) { m_color = color; }
+        CColor      getColor() const;
+        void        setColor(const CColor& color);
+        void        fromJson(const QJsonObject& obj);
+
+    public:
 
         CColor      m_color = {255,0,0,255};
         std::string m_fontName = "Helvetica";
@@ -117,4 +158,4 @@ class CGraphicsTextProperty
         std::string m_category = "Default";
 };
 
-#endif // GRAPHICSPROPERTY_HPP
+#endif // GRAPHICSPROPERTY_H

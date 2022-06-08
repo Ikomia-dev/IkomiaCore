@@ -164,6 +164,15 @@ void CProxyGraphicsText::toJson(QJsonObject &obj) const
     obj["properties"] = CGraphicsJSON::toJsonObject(m_property);
 }
 
+void CProxyGraphicsText::fromJson(const QJsonObject &obj)
+{
+    CProxyGraphicsItem::fromJson(obj);
+    m_x = obj["x"].toDouble();
+    m_y = obj["y"].toDouble();
+    m_text = obj["text"].toString().toStdString();
+    m_property.fromJson(obj["properties"].toObject());
+}
+
 //---------------------
 //- Class CGraphicsText
 //---------------------

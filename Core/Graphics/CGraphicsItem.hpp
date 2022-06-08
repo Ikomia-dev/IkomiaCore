@@ -51,13 +51,13 @@ class CProxyGraphicsItem
 
         virtual ~CProxyGraphicsItem() = default;
 
-        virtual void            setCategory(const std::string& category) = 0;
+        virtual void                setCategory(const std::string& category) = 0;
 
-        size_t                  getId() const
+        size_t                      getId() const
         {
             return m_id;
         }
-        size_t                  getType() const
+        size_t                      getType() const
         {
             return static_cast<size_t>(m_type);
         }
@@ -65,30 +65,36 @@ class CProxyGraphicsItem
         virtual QRectF              getBoundingQRect() const = 0;
         virtual std::vector<float>  getBoundingRect() const = 0;
 
-        virtual bool            isTextItem() const
+        virtual bool                isTextItem() const
         {
             return false;
         }
-        bool                    isUsedGlobalContext() const
+        bool                        isUsedGlobalContext() const
         {
             return m_bUseGlobalContext;
         }
 
-        virtual void            insertToImage(CMat& image, CGraphicsConversion& filler, bool bForceFill, bool bBinary, bool bgr=false) const = 0;
+        virtual void                insertToImage(CMat& image, CGraphicsConversion& filler, bool bForceFill, bool bBinary, bool bgr=false) const = 0;
 
-        virtual void            translate(float dx, float dy) = 0;
+        virtual void                translate(float dx, float dy) = 0;
 
         virtual std::shared_ptr<CProxyGraphicsItem> clone() const = 0;
 
-        virtual void            toJson(QJsonObject& obj) const
+        virtual void                toJson(QJsonObject& obj) const
         {
             obj["id"] = (qint64)m_id;
             obj["type"] = (int)m_type;
         }
 
+        virtual void                fromJson(const QJsonObject& obj)
+        {
+            m_id = static_cast<size_t>(obj["id"].toInt());
+            m_type = static_cast<GraphicsItem>(obj["type"].toInt());
+        }
+
     private:
 
-        static size_t           getNextId()
+        static size_t               getNextId()
         {
             // Use static function scope variable to correctly define lifespan of object.
             static size_t nextId = 0;
@@ -106,6 +112,46 @@ class CProxyGraphicsItem
 };
 
 using ProxyGraphicsItemPtr = std::shared_ptr<CProxyGraphicsItem>;
+
+//-----------------------------------------------
+//- Class CProxyGraphicsFactory
+//- Factory to instanciate non Qt graphics item
+//-----------------------------------------------
+class CProxyGraphicsFactory
+{
+    public:
+
+        CProxyGraphicsFactory(){}
+        virtual ~CProxyGraphicsFactory(){}
+
+        size_t                          getType() const
+        {
+            return m_type;
+        }
+
+        virtual ProxyGraphicsItemPtr    create() = 0;
+
+    protected:
+
+        size_t m_type = static_cast<size_t>(GraphicsItem::POLYGON);
+};
+
+using ProxyGraphicsFactories = std::vector<std::shared_ptr<CProxyGraphicsFactory>>;
+
+class CProxyGraphicsAbstractFactory: public CAbstractFactory<size_t, ProxyGraphicsItemPtr>
+{
+    public:
+
+        ProxyGraphicsFactories& getList()
+        {
+            return m_factories;
+        }
+
+    private:
+
+        ProxyGraphicsFactories m_factories;
+};
+
 
 //------------------------------------------------
 //- Class CGraphicsItem

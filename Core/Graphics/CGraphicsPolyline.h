@@ -58,10 +58,33 @@ class CORESHARED_EXPORT CProxyGraphicsPolyline: public CProxyGraphicsItem
 
         void                        toJson(QJsonObject &obj) const override;
 
+        void                        fromJson(const QJsonObject &obj) override;
+
     public:
 
         std::vector<CPointF>        m_points;
         CGraphicsPolylineProperty   m_property;
+};
+
+//-----------------------------------------------------------------------
+//- Class CProxyGraphicsComplexPolyFactory
+//- Factory for dynamic CProxyGraphicsPolyline instanciation (from type)
+//-----------------------------------------------------------------------
+class CProxyGraphicsPolylineFactory: public CProxyGraphicsFactory
+{
+    public:
+
+        CProxyGraphicsPolylineFactory()
+        {
+            m_type = static_cast<size_t>(GraphicsItem::POLYLINE);
+        }
+
+        ~CProxyGraphicsPolylineFactory(){}
+
+        ProxyGraphicsItemPtr  create() override
+        {
+            return std::make_shared<CProxyGraphicsPolyline>();
+        }
 };
 
 //-------------------------

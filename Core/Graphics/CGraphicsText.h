@@ -64,12 +64,35 @@ class CORESHARED_EXPORT CProxyGraphicsText: public CProxyGraphicsItem
 
         void                    toJson(QJsonObject &obj) const override;
 
+        void                    fromJson(const QJsonObject& obj) override;
+
     public:
 
         float                   m_x = 0;
         float                   m_y = 0;
         std::string             m_text;
         CGraphicsTextProperty   m_property;
+};
+
+//-----------------------------------------------------------------------
+//- Class CProxyGraphicsTextFactory
+//- Factory for dynamic CProxyGraphicsText instanciation (from type)
+//-----------------------------------------------------------------------
+class CProxyGraphicsTextFactory: public CProxyGraphicsFactory
+{
+    public:
+
+        CProxyGraphicsTextFactory()
+        {
+            m_type = static_cast<size_t>(GraphicsItem::TEXT);
+        }
+
+        ~CProxyGraphicsTextFactory(){}
+
+        ProxyGraphicsItemPtr  create() override
+        {
+            return std::make_shared<CProxyGraphicsText>();
+        }
 };
 
 //---------------------

@@ -149,6 +149,16 @@ void CProxyGraphicsEllipse::toJson(QJsonObject &obj) const
     obj["properties"] = CGraphicsJSON::toJsonObject(m_property);
 }
 
+void CProxyGraphicsEllipse::fromJson(const QJsonObject &obj)
+{
+    CProxyGraphicsItem::fromJson(obj);
+    m_x = obj["x"].toDouble();
+    m_y = obj["y"].toDouble();
+    m_width = obj["width"].toDouble();
+    m_height = obj["height"].toDouble();
+    m_property.fromJson(obj["properties"].toObject());
+}
+
 //------------------------
 //- Class CGraphicsEllipse
 //------------------------

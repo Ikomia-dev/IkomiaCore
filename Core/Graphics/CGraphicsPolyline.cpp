@@ -135,6 +135,20 @@ void CProxyGraphicsPolyline::toJson(QJsonObject &obj) const
     obj["properties"] = CGraphicsJSON::toJsonObject(m_property);
 }
 
+void CProxyGraphicsPolyline::fromJson(const QJsonObject &obj)
+{
+    CProxyGraphicsItem::fromJson(obj);
+    m_points.clear();
+    auto pointArray = obj["polyline"].toArray();
+
+    for (int i=0; i<pointArray.size(); ++i)
+    {
+        auto pointObj = pointArray[i].toObject();
+        m_points.push_back(CPointF(pointObj["x"].toDouble(), pointObj["y"].toDouble()));
+    }
+    m_property.fromJson(obj["properties"].toObject());
+}
+
 //-------------------------
 //- Class CGraphicsPolyline
 //-------------------------
