@@ -12,7 +12,7 @@ void CIOTests::initTestCase()
 
 void CIOTests::blobMeasureIOSave()
 {
-    auto blobIO = CBlobMeasureIO();
+    CBlobMeasureIO blobIO;
     fillBlobMeasureIO(blobIO);
 
     std::string path = UnitTest::getDataPath() + "/blobMeasureIO.csv";
@@ -25,12 +25,12 @@ void CIOTests::blobMeasureIOSave()
 void CIOTests::blobMeasureIOLoad()
 {
     const int objCount = 5;
-    auto blobIO = CBlobMeasureIO();
+    CBlobMeasureIO blobIO;
     fillBlobMeasureIO(blobIO);
     std::string path = UnitTest::getDataPath() + "/blobMeasureIO.csv";
     blobIO.save(path);
 
-    auto blobIOLoad = CBlobMeasureIO();
+    CBlobMeasureIO blobIOLoad;
     blobIOLoad.load(path);
 
     auto measures = blobIOLoad.getMeasures();
@@ -64,6 +64,109 @@ void CIOTests::fillBlobMeasureIO(CBlobMeasureIO &io)
         results.emplace_back(CObjectMeasure(CMeasure::Id::BBOX, {0, 0, 200, 300}, i, labels[i]));
         io.addObjectMeasures(results);
     }
+}
+
+void CIOTests::graphicsInputSave()
+{
+    CGraphicsInput graphicsIn;
+    graphicsIn.setItems(createGraphics());
+
+    std::string path = UnitTest::getDataPath() + "/graphicsInput.json";
+    graphicsIn.save(path);
+    QVERIFY(boost::filesystem::exists(path));
+    boost::filesystem::path boostPath(path);
+    boost::filesystem::remove(boostPath);
+}
+
+void CIOTests::graphicsInputLoad()
+{
+    CGraphicsInput graphicsIn;
+    graphicsIn.setItems(createGraphics());
+    std::string path = UnitTest::getDataPath() + "/graphicsInput.json";
+    graphicsIn.save(path);
+
+    CGraphicsInput graphicsInLoad;
+    graphicsInLoad.load(path);
+    auto items = graphicsInLoad.getItems();
+    QVERIFY(items.size() == 7);
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsEllipse>(items[0]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsRect>(items[1]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsPolyline>(items[2]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsPolygon>(items[3]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsComplexPoly>(items[4]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsPoint>(items[5]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsText>(items[6]));
+}
+
+void CIOTests::graphicsOutputSave()
+{
+    CGraphicsOutput graphicsOut;
+    graphicsOut.setItems(createGraphics());
+
+    std::string path = UnitTest::getDataPath() + "/graphicsInput.json";
+    graphicsOut.save(path);
+    QVERIFY(boost::filesystem::exists(path));
+    boost::filesystem::path boostPath(path);
+    boost::filesystem::remove(boostPath);
+}
+
+void CIOTests::graphicsOutputLoad()
+{
+    CGraphicsOutput graphicsOut;
+    graphicsOut.setItems(createGraphics());
+    std::string path = UnitTest::getDataPath() + "/graphicsInput.json";
+    graphicsOut.save(path);
+
+    CGraphicsOutput graphicsOutLoad;
+    graphicsOutLoad.load(path);
+    auto items = graphicsOutLoad.getItems();
+    QVERIFY(items.size() == 7);
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsEllipse>(items[0]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsRect>(items[1]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsPolyline>(items[2]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsPolygon>(items[3]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsComplexPoly>(items[4]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsPoint>(items[5]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsText>(items[6]));
+}
+
+std::vector<ProxyGraphicsItemPtr> CIOTests::createGraphics()
+{
+    std::vector<ProxyGraphicsItemPtr> items;
+
+    //Ellipse
+    auto ellipse = std::make_shared<CProxyGraphicsEllipse>(10, 10, 50, 75);
+    items.push_back(ellipse);
+
+    //Rectangle
+    auto rectangle = std::make_shared<CProxyGraphicsRect>(120, 10, 50, 50);
+    items.push_back(rectangle);
+
+    //Polyline
+    std::vector<CPointF> pts1 = {CPointF(300, 30), CPointF(500, 600), CPointF(700, 100)};
+    auto polyline = std::make_shared<CProxyGraphicsPolyline>(pts1);
+    items.push_back(polyline);
+
+    //Polygon
+    std::vector<CPointF> pts2 = {CPointF(50, 350), CPointF(150, 450), CPointF(200, 700), CPointF(50, 750), CPointF(30, 500)};
+    auto polygon = std::make_shared<CProxyGraphicsPolygon>(pts2);
+    items.push_back(polygon);
+
+    //Complex polygon
+    PolygonF outer = {CPointF(750, 350), CPointF(850, 450), CPointF(900, 700), CPointF(800, 750), CPointF(730, 450)};
+    std::vector<PolygonF> inners = {{CPointF(750, 400), CPointF(800, 700), CPointF(810, 450)}};
+    auto complexPoly = std::make_shared<CProxyGraphicsComplexPoly>(outer, inners);
+    items.push_back(complexPoly);
+
+    //Point
+    auto point = std::make_shared<CProxyGraphicsPoint>(CPointF(160, 120));
+    items.push_back(point);
+
+    //Text
+    auto text = std::make_shared<CProxyGraphicsText>("Test", 100, 100);
+    items.push_back(text);
+
+    return items;
 }
 
 QTEST_GUILESS_MAIN(CIOTests)

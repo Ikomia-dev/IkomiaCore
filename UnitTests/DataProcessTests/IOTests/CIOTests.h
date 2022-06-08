@@ -19,9 +19,17 @@ class CIOTests: public QObject
         void    blobMeasureIOSave();
         void    blobMeasureIOLoad();
 
+        void    graphicsInputSave();
+        void    graphicsInputLoad();
+
+        void    graphicsOutputSave();
+        void    graphicsOutputLoad();
+
     private:
 
         void    fillBlobMeasureIO(CBlobMeasureIO& io);
+
+        std::vector<ProxyGraphicsItemPtr> createGraphics();
 };
 
 #endif // CIOTESTS_H
