@@ -24,7 +24,7 @@
 
 #include <memory>
 #include "Main/CoreGlobal.hpp"
-#include "Graphics/GraphicsProperty.hpp"
+#include "Graphics/GraphicsProperty.h"
 
 /** @cond INTERNAL */
 
@@ -38,18 +38,18 @@ class CORESHARED_EXPORT CGraphicsContext
         void                        setCurrentCategory(const std::string &category);
 
         GraphicsShape               getTool() const;
-        CGraphicsPointProperty*      getPointPropertyPtr();
-        CGraphicsPointProperty       getPointProperty() const;
-        CGraphicsEllipseProperty*    getEllipsePropertyPtr();
-        CGraphicsEllipseProperty     getEllipseProperty() const;
-        CGraphicsRectProperty*       getRectPropertyPtr();
-        CGraphicsRectProperty        getRectProperty() const;
-        CGraphicsPolygonProperty*    getPolygonPropertyPtr();
-        CGraphicsPolygonProperty     getPolygonProperty() const;
-        CGraphicsPolylineProperty*   getPolylinePropertyPtr();
-        CGraphicsPolylineProperty    getPolylineProperty() const;
-        CGraphicsTextProperty*       getTextPropertyPtr();
-        CGraphicsTextProperty        getTextProperty() const;
+        CGraphicsPointProperty*     getPointPropertyPtr();
+        CGraphicsPointProperty      getPointProperty() const;
+        CGraphicsEllipseProperty*   getEllipsePropertyPtr();
+        CGraphicsEllipseProperty    getEllipseProperty() const;
+        CGraphicsRectProperty*      getRectPropertyPtr();
+        CGraphicsRectProperty       getRectProperty() const;
+        CGraphicsPolygonProperty*   getPolygonPropertyPtr();
+        CGraphicsPolygonProperty    getPolygonProperty() const;
+        CGraphicsPolylineProperty*  getPolylinePropertyPtr();
+        CGraphicsPolylineProperty   getPolylineProperty() const;
+        CGraphicsTextProperty*      getTextPropertyPtr();
+        CGraphicsTextProperty       getTextProperty() const;
 
     private:
 
