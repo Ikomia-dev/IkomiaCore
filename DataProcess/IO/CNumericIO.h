@@ -169,11 +169,6 @@ class CNumericIOBase: public CWorkflowTaskIO
 
         virtual VectorOfStringVector getAllValuesAsString() const = 0;
 
-        virtual void                save(const std::string &path) override
-        {
-            Q_UNUSED(path);
-        }
-
     protected:
 
         NumericOutputType                       m_outputType = NumericOutputType::TABLE;
@@ -375,10 +370,19 @@ class CNumericIO : public CNumericIOBase
         void                        save(const std::string& path) override
         {
             auto extension = Utils::File::extension(path);
-            if(extension == ".csv")
-                saveCSV(path);
-            else
+            if(extension != ".csv")
                 throw CException(CoreExCode::NOT_IMPLEMENTED, "Export format not available yet", __func__, __FILE__, __LINE__);
+
+            saveCSV(path);
+        }
+
+        void                        load(const std::string& path) override
+        {
+            auto extension = Utils::File::extension(path);
+            if(extension != ".csv")
+                throw CException(CoreExCode::NOT_IMPLEMENTED, "Load format not available yet", __func__, __FILE__, __LINE__);
+
+            loadCSV(path);
         }
 
     private:
@@ -393,6 +397,12 @@ class CNumericIO : public CNumericIOBase
             std::ofstream file;
             file.open(path, std::ios::out | std::ios::trunc);
 
+            //Output type
+            file << "Output type" << ";" << std::to_string(static_cast<int>(m_outputType)) << std::endl;
+
+            //Plot type
+            file << "Plot type" << ";" << std::to_string(static_cast<int>(m_plotType)) << std::endl;
+
             //Write header labels
             if(m_headerLabels.size() > 0)
             {
@@ -403,6 +413,8 @@ class CNumericIO : public CNumericIOBase
                     file << m_headerLabels[i] + ";";
                 file << "\n";
             }
+            else
+                file << "No headers" << std::endl;
 
             //Count rows
             size_t nbRow = 0;
@@ -446,17 +458,31 @@ class CNumericIO : public CNumericIOBase
             file.close();
         }
 
+        void                        loadCSV(const std::string& path)
+        {
+            Q_UNUSED(path);
+        }
+
     private:
 
         VectorOfNumericValues       m_values;
 };
 
-// Partial specialization
+// Partial specializations
 template <>
 DATAPROCESSSHARED_EXPORT CNumericIOBase::VectorOfStringVector CNumericIO<std::string>::getAllValuesAsString() const;
 
 template <>
 DATAPROCESSSHARED_EXPORT void CNumericIO<std::string>::saveCSV(const std::string &path) const;
+
+template <>
+DATAPROCESSSHARED_EXPORT void CNumericIO<std::string>::loadCSV(const std::string &path);
+
+template <>
+DATAPROCESSSHARED_EXPORT void CNumericIO<double>::loadCSV(const std::string &path);
+
+template <>
+DATAPROCESSSHARED_EXPORT void CNumericIO<int>::loadCSV(const std::string &path);
 
 
 class DATAPROCESSSHARED_EXPORT CNumericIOFactory: public CWorkflowTaskIOFactory

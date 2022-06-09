@@ -226,7 +226,6 @@ class DATAPROCESSSHARED_EXPORT CVideoIO : public CImageIO
         std::shared_ptr<CVideoIO> clone() const;
 
         void                save() override;
-        void                save(const std::string &path) override;
 
     private:
 

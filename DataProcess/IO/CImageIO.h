@@ -200,6 +200,7 @@ class DATAPROCESSSHARED_EXPORT CImageIO : public CWorkflowTaskIO
 
         void            save() override;
         void            save(const std::string &path) override;
+        void            load(const std::string &path) override;
 
         /**
          * @brief Performs a deep copy the this instance

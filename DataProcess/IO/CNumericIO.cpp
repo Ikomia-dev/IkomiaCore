@@ -12,6 +12,12 @@ void CNumericIO<std::string>::saveCSV(const std::string &path) const
     std::ofstream file;
     file.open(path, std::ios::out | std::ios::trunc);
 
+    //Output type
+    file << "Output type" << ";" << std::to_string(static_cast<int>(m_outputType)) << std::endl;
+
+    //Plot type
+    file << "Plot type" << ";" << std::to_string(static_cast<int>(m_plotType)) << std::endl;
+
     //Write header labels
     if(m_headerLabels.size() > 0)
     {
@@ -22,6 +28,8 @@ void CNumericIO<std::string>::saveCSV(const std::string &path) const
             file << m_headerLabels[i] + ";";
         file << "\n";
     }
+    else
+        file << "No headers" << std::endl;
 
     //Count rows
     size_t nbRow = 0;
@@ -63,4 +71,216 @@ void CNumericIO<std::string>::saveCSV(const std::string &path) const
         }
     }
     file.close();
+}
+
+template <>
+void CNumericIO<std::string>::loadCSV(const std::string &path)
+{
+    std::string line;
+    std::ifstream file(path);
+    std::vector<std::string> lineValues;
+    std::vector<std::vector<std::string>> rowValues;
+
+    //Output type
+    std::getline(file, line);
+    Utils::String::tokenize(line, lineValues, ";");
+
+    if (lineValues.size() == 2)
+        m_outputType = static_cast<NumericOutputType>(std::stoi(lineValues[1]));
+
+    //Plot type
+    std::getline(file, line);
+    Utils::String::tokenize(line, lineValues, ";");
+
+    if (lineValues.size() == 2)
+        m_plotType = static_cast<PlotType>(std::stoi(lineValues[1]));
+
+    // Header labels
+    std::getline(file, line);
+    Utils::String::tokenize(line, lineValues, ";");
+
+    if (lineValues.size() > 0 && lineValues[0] != "No headers")
+        m_headerLabels = lineValues;
+
+    // Values
+    while (std::getline(file, line))
+    {
+        Utils::String::tokenize(line, lineValues, ";");
+        rowValues.push_back(lineValues);
+    }
+
+    // Transpose row/column
+    size_t cols = 0;
+    for(size_t i=0; i<rowValues.size(); ++i)
+        cols = std::max(cols, rowValues[i].size());
+
+    m_values.resize(cols);
+    for (size_t i=0; i<m_values.size(); ++i)
+        m_values[i].resize(rowValues.size());
+
+    for (size_t i=0; i<rowValues.size(); ++i)
+        for (size_t j=0; j<rowValues[i].size(); ++j)
+            m_values[j][i] = rowValues[i][j];
+}
+
+template <>
+void CNumericIO<double>::loadCSV(const std::string &path)
+{
+    std::string line;
+    std::ifstream file(path);
+    std::vector<std::string> lineValues;
+    double val;
+    std::vector<std::vector<double>> rowValues;
+    std::vector<std::vector<std::string>> rowLabels;
+
+    //Output type
+    std::getline(file, line);
+    Utils::String::tokenize(line, lineValues, ";");
+
+    if (lineValues.size() == 2)
+        m_outputType = static_cast<NumericOutputType>(std::stoi(lineValues[1]));
+
+    //Plot type
+    std::getline(file, line);
+    Utils::String::tokenize(line, lineValues, ";");
+
+    if (lineValues.size() == 2)
+        m_plotType = static_cast<PlotType>(std::stoi(lineValues[1]));
+
+    // Header labels
+    std::getline(file, line);
+    Utils::String::tokenize(line, lineValues, ";");
+
+    if (lineValues.size() > 0 && lineValues[0] != "No headers")
+        m_headerLabels = lineValues;
+
+    while (std::getline(file, line))
+    {
+        std::vector<double> values;
+        std::vector<std::string> labels;
+        Utils::String::tokenize(line, lineValues, ";");
+
+        for (size_t i=0; i<lineValues.size(); ++i)
+        {
+            try
+            {
+                val = std::stod(lineValues[i]);
+                values.push_back(val);
+            }
+            catch(std::exception& e)
+            {
+                //It's a row label
+                labels.push_back(lineValues[i]);
+            }
+        }
+        rowValues.push_back(values);
+        rowLabels.push_back(labels);
+    }
+
+    // Transpose row/column for values
+    size_t cols = 0;
+    for(size_t i=0; i<rowValues.size(); ++i)
+        cols = std::max(cols, rowValues[i].size());
+
+    m_values.resize(cols);
+    for (size_t i=0; i<m_values.size(); ++i)
+        m_values[i].resize(rowValues.size());
+
+    for (size_t i=0; i<rowValues.size(); ++i)
+        for (size_t j=0; j<rowValues[i].size(); ++j)
+            m_values[j][i] = rowValues[i][j];
+
+    // Transpose row/column for labels
+    cols = 0;
+    for(size_t i=0; i<rowLabels.size(); ++i)
+        cols = std::max(cols, rowLabels[i].size());
+
+    m_valueLabels.resize(cols);
+    for (size_t i=0; i<m_valueLabels.size(); ++i)
+        m_valueLabels[i].resize(rowLabels.size());
+
+    for (size_t i=0; i<rowLabels.size(); ++i)
+        for (size_t j=0; j<rowLabels[i].size(); ++j)
+            m_valueLabels[j][i] = rowLabels[i][j];
+}
+
+template <>
+void CNumericIO<int>::loadCSV(const std::string &path)
+{
+    std::string line;
+    std::ifstream file(path);
+    std::vector<std::string> lineValues;
+    int val;
+    std::vector<std::vector<int>> rowValues;
+    std::vector<std::vector<std::string>> rowLabels;
+
+    //Output type
+    std::getline(file, line);
+    Utils::String::tokenize(line, lineValues, ";");
+
+    if (lineValues.size() == 2)
+        m_outputType = static_cast<NumericOutputType>(std::stoi(lineValues[1]));
+
+    //Plot type
+    std::getline(file, line);
+    Utils::String::tokenize(line, lineValues, ";");
+
+    if (lineValues.size() == 2)
+        m_plotType = static_cast<PlotType>(std::stoi(lineValues[1]));
+
+    // Header labels
+    std::getline(file, line);
+    Utils::String::tokenize(line, lineValues, ";");
+
+    if (lineValues.size() > 0 && lineValues[0] != "No headers")
+        m_headerLabels = lineValues;
+
+    while (std::getline(file, line))
+    {
+        std::vector<int> values;
+        std::vector<std::string> labels;
+        Utils::String::tokenize(line, lineValues, ";");
+
+        for (size_t i=0; i<lineValues.size(); ++i)
+        {
+            try
+            {
+                val = std::stoi(lineValues[i]);
+                values.push_back(val);
+            }
+            catch(std::exception& e)
+            {
+                //It's a row label
+                labels.push_back(lineValues[i]);
+            }
+        }
+        rowValues.push_back(values);
+        rowLabels.push_back(labels);
+    }
+
+    // Transpose row/column for values
+    size_t cols = 0;
+    for(size_t i=0; i<rowValues.size(); ++i)
+        cols = std::max(cols, rowValues[i].size());
+
+    m_values.resize(cols);
+    for (size_t i=0; i<m_values.size(); ++i)
+        m_values[i].resize(rowValues.size());
+
+    for (size_t i=0; i<rowValues.size(); ++i)
+        for (size_t j=0; j<rowValues[i].size(); ++j)
+            m_values[j][i] = rowValues[i][j];
+
+    // Transpose row/column for labels
+    cols = 0;
+    for(size_t i=0; i<rowLabels.size(); ++i)
+        cols = std::max(cols, rowLabels[i].size());
+
+    m_valueLabels.resize(cols);
+    for (size_t i=0; i<m_valueLabels.size(); ++i)
+        m_valueLabels[i].resize(rowLabels.size());
+
+    for (size_t i=0; i<rowLabels.size(); ++i)
+        for (size_t j=0; j<rowLabels[i].size(); ++j)
+            m_valueLabels[j][i] = rowLabels[i][j];
 }

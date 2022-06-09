@@ -25,9 +25,17 @@ class CIOTests: public QObject
         void    graphicsOutputSave();
         void    graphicsOutputLoad();
 
+        void    numericIODoubleSave();
+        void    numericIODoubleLoad();
+
+        void    numericIOStringSave();
+        void    numericIOStringLoad();
+
     private:
 
         void    fillBlobMeasureIO(CBlobMeasureIO& io);
+        void    fillNumericIO(CNumericIO<double>& io);
+        void    fillNumericIO(CNumericIO<std::string>& io);
 
         std::vector<ProxyGraphicsItemPtr> createGraphics();
 };

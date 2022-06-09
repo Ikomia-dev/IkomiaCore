@@ -333,6 +333,15 @@ void CImageIO::save(const std::string &path)
     io.write(m_image);
 }
 
+void CImageIO::load(const std::string &path)
+{
+    CDataImageIO io(path);
+    m_image = io.read();
+    m_channelCount = m_image.channels();
+    m_dimCount = m_image.dims;
+    m_bNewDataInfo = true;
+}
+
 std::shared_ptr<CImageIO> CImageIO::clone() const
 {
     return std::static_pointer_cast<CImageIO>(cloneImp());

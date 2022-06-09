@@ -338,11 +338,6 @@ void CVideoIO::save()
     m_tempFiles.clear();
 }
 
-void CVideoIO::save(const std::string &path)
-{
-    Q_UNUSED(path);
-}
-
 std::shared_ptr<CWorkflowTaskIO> CVideoIO::cloneImp() const
 {
     return std::shared_ptr<CVideoIO>(new CVideoIO(*this));

@@ -169,4 +169,102 @@ std::vector<ProxyGraphicsItemPtr> CIOTests::createGraphics()
     return items;
 }
 
+void CIOTests::numericIODoubleSave()
+{
+    CNumericIO<double> numericIO;
+    fillNumericIO(numericIO);
+    std::string path = UnitTest::getDataPath() + "/numericIO.csv";
+    numericIO.save(path);
+
+    QVERIFY(boost::filesystem::exists(path));
+    boost::filesystem::path boostPath(path);
+    boost::filesystem::remove(boostPath);
+}
+
+void CIOTests::numericIODoubleLoad()
+{
+    CNumericIO<double> numericIO;
+    fillNumericIO(numericIO);
+    std::string path = UnitTest::getDataPath() + "/numericIO.csv";
+    numericIO.save(path);
+
+    CNumericIO<double> numericIOLoad;
+    numericIOLoad.load(path);
+    QVERIFY(numericIOLoad.getOutputType() == NumericOutputType::TABLE);
+    QVERIFY(numericIOLoad.getPlotType() == PlotType::CURVE);
+    QVERIFY(numericIOLoad.getAllHeaderLabels().size() == 4);
+    QVERIFY(numericIOLoad.getAllValueLabels().size() == 0);
+    auto values = numericIOLoad.getAllValues();
+    QVERIFY(values.size() == 4);
+
+    for (size_t i=0; i<values.size(); ++i)
+        QVERIFY(values[i].size() == 6);
+
+    boost::filesystem::path boostPath(path);
+    boost::filesystem::remove(boostPath);
+}
+
+void CIOTests::fillNumericIO(CNumericIO<double> &io)
+{
+    std::vector<std::string> headerLabels = {"id", "surface", "perimeter", "diameter"};
+    std::vector<double> ids = {1, 2, 3, 4, 5, 6};
+    std::vector<double> surfaces = {17.2, 33, 5.6, 107, 89.8, 0.2};
+    std::vector<double> perimeters = {21, 28.5, 10, 221, 79.5, 1.1};
+    std::vector<double> diameters = {6, 4, 2, 33, 14, 0.1};
+
+    io.addValueList(ids, headerLabels[0]);
+    io.addValueList(surfaces, headerLabels[1]);
+    io.addValueList(perimeters, headerLabels[2]);
+    io.addValueList(diameters, headerLabels[3]);
+}
+
+void CIOTests::numericIOStringSave()
+{
+    CNumericIO<std::string> numericIO;
+    fillNumericIO(numericIO);
+    std::string path = UnitTest::getDataPath() + "/numericIO.csv";
+    numericIO.save(path);
+
+    QVERIFY(boost::filesystem::exists(path));
+    boost::filesystem::path boostPath(path);
+    boost::filesystem::remove(boostPath);
+}
+
+void CIOTests::numericIOStringLoad()
+{
+    CNumericIO<std::string> numericIO;
+    fillNumericIO(numericIO);
+    std::string path = UnitTest::getDataPath() + "/numericIO.csv";
+    numericIO.save(path);
+
+    CNumericIO<std::string> numericIOLoad;
+    numericIOLoad.load(path);
+    QVERIFY(numericIOLoad.getOutputType() == NumericOutputType::TABLE);
+    QVERIFY(numericIOLoad.getPlotType() == PlotType::CURVE);
+    QVERIFY(numericIOLoad.getAllHeaderLabels().size() == 4);
+    QVERIFY(numericIOLoad.getAllValueLabels().size() == 0);
+    auto values = numericIOLoad.getAllValues();
+    QVERIFY(values.size() == 4);
+
+    for (size_t i=0; i<values.size(); ++i)
+        QVERIFY(values[i].size() == 6);
+
+    boost::filesystem::path boostPath(path);
+    boost::filesystem::remove(boostPath);
+}
+
+void CIOTests::fillNumericIO(CNumericIO<std::string> &io)
+{
+    std::vector<std::string> headerLabels = {"name", "category", "description", "date"};
+    std::vector<std::string> names = {"titi", "tata", "tutu", "toto", "toutou", "toitoi"};
+    std::vector<std::string> categories = {"cat", "dog", "lion", "elefant", "tiger", "horse"};
+    std::vector<std::string> descriptions = {"animal", "animal", "sauvage animal", "sauvage animal", "sauvage animal", "animal"};
+    std::vector<std::string> dates = {"10/10/2020", "02/08/1999", "23/05/2011", "17/03/2018", "09/12/2000", "14/07/2021"};
+
+    io.addValueList(names, headerLabels[0]);
+    io.addValueList(categories, headerLabels[1]);
+    io.addValueList(descriptions, headerLabels[2]);
+    io.addValueList(dates, headerLabels[3]);
+}
+
 QTEST_GUILESS_MAIN(CIOTests)
