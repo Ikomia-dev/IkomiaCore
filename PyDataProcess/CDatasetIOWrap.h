@@ -53,6 +53,9 @@ class CDatasetIOWrap : public CDatasetIO, public wrapper<CDatasetIO>
 
         void                                save(const std::string& path) override;
         void                                default_save(const std::string& path);
+
+        void                                load(const std::string& path) override;
+        void                                default_load(const std::string& path);
 };
 
 #endif // CDATASETIOWRAP_H

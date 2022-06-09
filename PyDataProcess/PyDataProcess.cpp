@@ -64,6 +64,7 @@ void exposeNumericIO(const std::string& className)
     void (CNumericIO<Type>::*addValueList2)(const std::vector<Type>&, const std::string&) = &CNumericIO<Type>::addValueList;
     void (CNumericIO<Type>::*addValueList3)(const std::vector<Type>&, const std::vector<std::string>&) = &CNumericIO<Type>::addValueList;
     void (CNumericIO<Type>::*addValueList4)(const std::vector<Type>&, const std::string&, const std::vector<std::string>&) = &CNumericIO<Type>::addValueList;
+    void (CNumericIO<Type>::*saveNumeric)(const std::string&) = &CNumericIO<Type>::save;
 
     class_<CNumericIOWrap<Type>, bases<CWorkflowTaskIO>, std::shared_ptr<CNumericIOWrap<Type>>>(className.c_str(), _featureProcessIODocString)
         .def(init<>("Default constructor"))
@@ -85,6 +86,8 @@ void exposeNumericIO(const std::string& className)
         .def("isDataAvailable", &CNumericIO<Type>::isDataAvailable, &CNumericIOWrap<Type>::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
         .def("clearData", &CNumericIO<Type>::clearData, &CNumericIOWrap<Type>::default_clearData, _clearDataDerivedDocString, args("self"))
         .def("copyStaticData", &CNumericIO<Type>::copyStaticData, &CNumericIOWrap<Type>::default_copyStaticData, _copyStaticDataDerivedDocString, args("self", "io"))
+        .def("load", &CNumericIO<Type>::load, _numericIOLoadDocString, args("self", "path"))
+        .def("save", saveNumeric, _numericIOSaveDocString, args("self", "path"))
     ;
 }
 
@@ -198,6 +201,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
     //--------------------------//
     //----- CBlobMeasureIO -----//
     //--------------------------//
+    void (CBlobMeasureIO::*saveBlob)(const std::string&) = &CBlobMeasureIO::save;
+
     class_<CBlobMeasureIO, bases<CWorkflowTaskIO>, std::shared_ptr<CBlobMeasureIO>>("CBlobMeasureIO", _measureIODocString)
         .def(init<>("Default constructor"))
         .def(init<const std::string&>(_ctorMeasureIODocString))
@@ -208,11 +213,15 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("addObjectMeasure", &CBlobMeasureIO::addObjectMeasure, _addObjMeasureDocString, args("self", "measure"))
         .def("addObjectMeasures", &CBlobMeasureIO::addObjectMeasures, _addObjMeasuresDocString, args("self", "measures"))
         .def("clearData", &CBlobMeasureIO::clearData, _clearDataDerivedDocString, args("self"))
+        .def("load", &CBlobMeasureIO::load, _blobMeasureIOLoadDocString, args("self", "path"))
+        .def("save", saveBlob, _blobMeasureIOSaveDocString, args("self", "path"))
     ;
 
     //--------------------------//
     //----- CGraphicsInput -----//
     //--------------------------//
+    void (CGraphicsInput::*saveGraphicsIn)(const std::string&) = &CGraphicsInput::save;
+
     class_<CGraphicsInputWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CGraphicsInputWrap>>("CGraphicsInput", _graphicsInputDocString)
         .def(init<>("Default constructor"))
         .def(init<const std::string&>(_ctorGraphicsInDocString))
@@ -221,6 +230,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("getItems", &CGraphicsInput::getItems, _getItemsDocString, args("self"))
         .def("isDataAvailable", &CGraphicsInput::isDataAvailable, &CGraphicsInputWrap::default_isDataAvailable, _isGraphicsDataAvailableDocString, args("self"))
         .def("clearData", &CGraphicsInput::clearData, &CGraphicsInputWrap::default_clearData, _clearGraphicsDataDocString, args("self"))
+        .def("load", &CGraphicsInput::load, _graphicsInputLoadDocString, args("self", "path"))
+        .def("save", saveGraphicsIn, _graphicsInputSaveDocString, args("self", "path"))
     ;
 
     //---------------------------//
@@ -240,6 +251,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
     ProxyGraphicsItemPtr (CGraphicsOutput::*addComplexPolygon2)(const PolygonF&, const std::vector<PolygonF>&, const CGraphicsPolygonProperty&) = &CGraphicsOutput::addComplexPolygon;
     ProxyGraphicsItemPtr (CGraphicsOutput::*addText1)(const std::string&, float x, float y) = &CGraphicsOutput::addText;
     ProxyGraphicsItemPtr (CGraphicsOutput::*addText2)(const std::string&, float x, float y, const CGraphicsTextProperty&) = &CGraphicsOutput::addText;
+    void (CGraphicsOutput::*saveGraphicsOut)(const std::string&) = &CGraphicsOutput::save;
 
     class_<CGraphicsOutput, bases<CWorkflowTaskIO>, std::shared_ptr<CGraphicsOutput>>("CGraphicsOutput", _graphicsOutputDocString)
         .def(init<>("Default constructor"))
@@ -263,6 +275,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("addComplexPolygon", addComplexPolygon2, _addComplexPolygon2DocString, args("self", "outer", "inners", "properties"))
         .def("addText", addText1, _addText1DocString, args("self", "text", "x", "y"))
         .def("addText", addText2, _addText2DocString, args("self", "text", "x", "y", "properties"))
+        .def("load", &CGraphicsOutput::load, _graphicsOutputLoadDocString, args("self", "path"))
+        .def("save", saveGraphicsOut, _graphicsOutputSaveDocString, args("self", "path"))
     ;
 
     //--------------------//
@@ -272,6 +286,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
     void (CImageIO::*drawGraphicsOut)(const GraphicsOutputPtr&) = &CImageIO::drawGraphics;
     CMat (CImageIO::*getImageWithGraphicsIn)(const GraphicsInputPtr&) = &CImageIO::getImageWithGraphics;
     CMat (CImageIO::*getImageWithGraphicsOut)(const GraphicsOutputPtr&) = &CImageIO::getImageWithGraphics;
+    void (CImageIO::*saveImageIO)(const std::string&) = &CImageIO::save;
 
     class_<CImageIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CImageIOWrap>>("CImageIO", _imageProcessIODocString)
         .def(init<>("Default constructor"))
@@ -298,6 +313,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("copyStaticData", &CImageIO::copyStaticData, &CImageIOWrap::default_copyStaticData, _copyImageStaticDataDocString, args("self", "io"))
         .def("drawGraphics", drawGraphicsIn, _drawGraphicsInDocString, args("self", "graphics"))
         .def("drawGraphics", drawGraphicsOut, _drawGraphicsOutDocString, args("self", "graphics"))
+        .def("load", &CImageIO::load, _imageIOLoadDocString, args("self", "path"))
+        .def("save", saveImageIO, _imageIOSaveDocString, args("self", "path"))
     ;
 
     //----------------------//
@@ -399,6 +416,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("isDataAvailable", &CDatasetIOWrap::isDataAvailable, &CDatasetIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
         .def("clearData", &CDatasetIOWrap::clearData, &CDatasetIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
         .def("save", &CDatasetIOWrap::save, &CDatasetIOWrap::default_save, _saveDocStr)
+        .def("load", &CDatasetIOWrap::load, &CDatasetIOWrap::default_load, _loadDocStr)
     ;
 
     //--------------------//

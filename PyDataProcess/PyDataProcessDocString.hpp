@@ -179,7 +179,17 @@ constexpr auto _addObjMeasureDocString =
 constexpr auto _addObjMeasuresDocString =
         "Add a new list of measures for a blob.\n"
         "Args:\n"
-        "measures (list of :py:class:`~ikomia.dataprocess.pydataprocess.CObjectMeasure`)\n";
+        "   measures (list of :py:class:`~ikomia.dataprocess.pydataprocess.CObjectMeasure`)\n";
+
+constexpr auto _blobMeasureIOLoadDocString =
+        "Load blob measure I/O data from previously exported file. The file must be in CSV format.\n\n"
+        "Args:\n\n"
+        "   path (str)\n";
+
+constexpr auto _blobMeasureIOSaveDocString =
+        "Save blob measure I/O data to file. The file must be in CSV format.\n\n"
+        "Args:\n\n"
+        "   path (str)\n";
 
 //----------------------//
 //----- CNumericIO -----//
@@ -276,6 +286,16 @@ constexpr auto _setPlotTypeDocString =
         "Only used if output display type is set to PLOT (see :py:meth:`setOutputType`).\n\n"
         "Args:\n"
         "   type (PlotType): plot type\n";
+
+constexpr auto _numericIOLoadDocString =
+        "Load data values (double or string) from previsouly exported file. At this time, file must be in CSV format.\n\n"
+        "Args:\n\n"
+        "   path (str)\n";
+
+constexpr auto _numericIOSaveDocString =
+        "Save data values (double or string) to file. At this time, file must be in CSV format.\n\n"
+        "Args:\n\n"
+        "   path (str)\n";
 
 //--------------------//
 //----- CImageIO -----//
@@ -463,6 +483,16 @@ constexpr auto _drawGraphicsOutDocString =
         "Args:\n"
         "   graphics (:py:class:`~ikomia.dataprocess.pydataprocess.CGraphicsOutput`)\n";
 
+constexpr auto _imageIOLoadDocString =
+        "Load image IO data from image file. As we use OpenCV as our image reader backend, the file must be a valid OpenCV format.\n\n"
+        "Args:\n\n"
+        "   path (str)\n";
+
+constexpr auto _imageIOSaveDocString =
+        "Save image IO data to file. As we use OpenCV as our image reader backend, the file must be a valid OpenCV format.\n\n"
+        "Args:\n\n"
+        "   path (str)\n";
+
 //--------------------------//
 //----- CGraphicsInput -----//
 //--------------------------//
@@ -494,6 +524,16 @@ constexpr auto _isGraphicsDataAvailableDocString =
 
 constexpr auto _clearGraphicsDataDocString =
         "Clear input data.\n";
+
+constexpr auto _graphicsInputLoadDocString =
+        "Load graphics input from previsouly exported file. The file must be in JSON format.\n\n"
+        "Args:\n\n"
+        "   path (str)\n";
+
+constexpr auto _graphicsInputSaveDocString =
+        "Save graphics input data to file. The file must be in JSON format.\n\n"
+        "Args:\n\n"
+        "   path (str)\n";
 
 //---------------------------//
 //----- CGraphicsOutput -----//
@@ -637,6 +677,16 @@ constexpr auto _addText2DocString =
         "   x (float): x-coordinate of the top-left point.\n\n"
         "   y (float): y-coordinate of the top-left point.\n\n"
         "   properties (:py:class:`~ikomia.core.pycore.GraphicsTextProperty`): display properties\n";
+
+constexpr auto _graphicsOutputLoadDocString =
+        "Load graphics output from previsouly exported file. The file must be in JSON format.\n\n"
+        "Args:\n\n"
+        "   path (str)\n";
+
+constexpr auto _graphicsOutputSaveDocString =
+        "Save graphics output data to file. The file must be in JSON format.\n\n"
+        "Args:\n\n"
+        "   path (str)\n";
 
 //--------------------//
 //----- CVideoIO -----//
@@ -939,6 +989,11 @@ constexpr auto _getSourceFormatDocStr =
 
 constexpr auto _saveDocStr =
         "Virtual method to reimplement, save dataset structure as JSON.\n\n"
+        "Args:\n"
+        "   str: file path\n";
+
+constexpr auto _loadDocStr =
+        "Virtual method to reimplement, load dataset structure from JSON.\n\n"
         "Args:\n"
         "   str: file path\n";
 

@@ -262,4 +262,33 @@ void CDatasetIOWrap::default_save(const std::string &path)
     }
 }
 
+void CDatasetIOWrap::load(const std::string &path)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override overMeth = this->get_override("load"))
+            overMeth(path);
+        else
+            CDatasetIO::load(path);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CDatasetIOWrap::default_load(const std::string &path)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->CDatasetIO::load(path);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 
