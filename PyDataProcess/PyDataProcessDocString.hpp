@@ -489,7 +489,7 @@ constexpr auto _imageIOLoadDocString =
         "   path (str)\n";
 
 constexpr auto _imageIOSaveDocString =
-        "Save image IO data to file. As we use OpenCV as our image reader backend, the file must be a valid OpenCV format.\n\n"
+        "Save image IO data to file. As we use OpenCV as our image writer backend, the file must be a valid OpenCV format.\n\n"
         "Args:\n\n"
         "   path (str)\n";
 
