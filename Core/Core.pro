@@ -114,7 +114,7 @@ deployIncludeGraphics.files = \
         Graphics/CGraphicsConversion.h \
         Graphics/CGraphicsContext.h \
         Graphics/CPoint.hpp \
-        Graphics/GraphicsProperty.hpp
+        Graphics/GraphicsProperty.h
 
 deployIncludeWorkflow.path = ../Build/Include/Core/Workflow
 deployIncludeWorkflow.files = \
