@@ -20,6 +20,7 @@
 #ifndef GRAPHICSPROPERTY_H
 #define GRAPHICSPROPERTY_H
 
+#include "Main/CoreGlobal.hpp"
 #include "Main/CoreDefine.hpp"
 #include <QJsonObject>
 
@@ -28,7 +29,7 @@
 //----------------------------//
 //- CGraphicsEllipseProperty -//
 //----------------------------//
-class CGraphicsEllipseProperty
+class CORESHARED_EXPORT CGraphicsEllipseProperty
 {
     public:
 
@@ -51,7 +52,7 @@ class CGraphicsEllipseProperty
 //--------------------------//
 //- CGraphicsPointProperty -//
 //--------------------------//
-class CGraphicsPointProperty
+class CORESHARED_EXPORT CGraphicsPointProperty
 {
     public:
 
@@ -74,7 +75,7 @@ class CGraphicsPointProperty
 //----------------------------//
 //- CGraphicsPolygonProperty -//
 //----------------------------//
-class CGraphicsPolygonProperty
+class CORESHARED_EXPORT CGraphicsPolygonProperty
 {
     public:
 
@@ -97,7 +98,7 @@ class CGraphicsPolygonProperty
 //-----------------------------//
 //- CGraphicsPolylineProperty -//
 //-----------------------------//
-class CGraphicsPolylineProperty
+class CORESHARED_EXPORT CGraphicsPolylineProperty
 {
     public:
 
@@ -115,7 +116,7 @@ class CGraphicsPolylineProperty
 //-------------------------//
 //- CGraphicsRectProperty -//
 //-------------------------//
-class CGraphicsRectProperty
+class CORESHARED_EXPORT CGraphicsRectProperty
 {
     public:
 
@@ -138,7 +139,7 @@ class CGraphicsRectProperty
 //-------------------------//
 //- CGraphicsTextProperty -//
 //-------------------------//
-class CGraphicsTextProperty
+class CORESHARED_EXPORT CGraphicsTextProperty
 {
     public:
 
