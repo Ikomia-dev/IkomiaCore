@@ -562,6 +562,12 @@ constexpr auto _setImageIndexDocString =
         "Args:\n"
         "   index (int): index of image-based output\n";
 
+constexpr auto _getImageIndexDocString =
+        "Get the output index on which graphics items should be associated. "
+        "Index must refer to an existing output managing image data such as :py:class:`CImageIO` or derived.\n\n"
+        "Return:\n\n"
+        "   int: index of image-based output\n";
+
 constexpr auto _addItemDocString =
         "Add graphics item to this output. Object class must be derived from :py:class:`~ikomia.core.pycore.CGraphicsItem`. "
         "Use this method only if you need to add user-defined graphics items. "
