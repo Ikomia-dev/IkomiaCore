@@ -582,13 +582,23 @@ namespace Ikomia
 
             inline QString getFTSKeywords(const QString& text)
             {
-                QRegExp rx("[, ]"); // match a comma or a space
-                QStringList list = text.split(rx, Qt::SkipEmptyParts);
-                QString txtKey;
+                QString txtKey = text;
+                //Ensure text conformity
+                txtKey.replace("-", " ");
+                txtKey.replace("*", "");
+                txtKey.replace("/", "");
+                txtKey.replace("+", " ");
+                txtKey.replace("?", "");
+                txtKey.replace("!", "");
 
-                if(list.size() == 1)
+                QRegExp rx("[, ]"); // match a comma or a space
+                QStringList list = txtKey.split(rx, Qt::SkipEmptyParts);
+
+                if (list.size() == 0)
+                    txtKey.clear();
+                else if (list.size() == 1)
                     txtKey = list.at(0)+"*";
-                else if(list.size()>1)
+                else if (list.size()>1)
                 {
                     for(int i=0; i<list.size()-1; ++i)
                         txtKey = txtKey + list.at(i) + "* AND ";
