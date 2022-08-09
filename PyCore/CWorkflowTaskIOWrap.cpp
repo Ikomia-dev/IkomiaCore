@@ -176,3 +176,61 @@ void CWorkflowTaskIOWrap::default_copyStaticData(const std::shared_ptr<CWorkflow
         throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
     }
 }
+
+std::string CWorkflowTaskIOWrap::toJson(const std::vector<std::string>& options) const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override toJsonOver = this->get_override("toJson"))
+            return toJsonOver(options);
+        else
+            return CWorkflowTaskIO::toJson(options);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+std::string CWorkflowTaskIOWrap::default_toJson(const std::vector<std::string>& options) const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        return this->CWorkflowTaskIO::toJson(options);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CWorkflowTaskIOWrap::fromJson(const std::string &jsonStr)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override fromJsonOver = this->get_override("fromJson"))
+            fromJsonOver(jsonStr);
+        else
+            CWorkflowTaskIO::fromJson(jsonStr);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CWorkflowTaskIOWrap::default_fromJson(const std::string &jsonStr)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->CWorkflowTaskIO::fromJson(jsonStr);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}

@@ -25,6 +25,7 @@
 #include "DataProcessGlobal.hpp"
 #include "Data/CMeasure.h"
 #include "Workflow/CWorkflowTaskIO.h"
+#include <QJsonDocument>
 
 class DATAPROCESSSHARED_EXPORT CObjectMeasure
 {
@@ -39,6 +40,9 @@ class DATAPROCESSSHARED_EXPORT CObjectMeasure
         std::vector<double> getValues() const;
 
         void                setValues(const std::vector<double>& values);
+
+        QJsonObject         toJson() const;
+        void                fromJson(const QJsonObject &obj);
 
     public:
 
@@ -83,6 +87,9 @@ class DATAPROCESSSHARED_EXPORT CBlobMeasureIO : public CWorkflowTaskIO
 
         void                    save() override;
         void                    save(const std::string &path) override;
+
+        std::string             toJson(const std::vector<std::string> &options) const override;
+        void                    fromJson(const std::string& jsonStr) override;
 
         std::shared_ptr<CBlobMeasureIO> clone() const;
 

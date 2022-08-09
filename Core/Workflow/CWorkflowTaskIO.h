@@ -251,6 +251,19 @@ class CORESHARED_EXPORT CWorkflowTaskIO
          */
         static std::string  getClassName(IODataType ioDataType);
 
+        /**
+        * @brief Return input/output data in JSON formatted string
+        * @param options: format-specific options encoded as pairs (option_name, option_value)
+        * @return JSON formatted string
+        */
+        virtual std::string toJson(const std::vector<std::string>& options) const;
+
+        /**
+         * @brief Set input/output data from JSON formatted string
+         * @param jsonStr: JSON formatted string
+         */
+        virtual void fromJson(const std::string& jsonStr);
+
     private:
 
         virtual std::shared_ptr<CWorkflowTaskIO> cloneImp() const;

@@ -50,6 +50,7 @@ HEADERS += \
         CWindowsDeviceEnumerator.h \
         Widgets/CBrowseFileWidget.h \
         Widgets/CColorPushButton.h \
+        base64.hpp \
         qaesencryption.h
 
 #Use of 'lupdate Utils.pro' to update translation files

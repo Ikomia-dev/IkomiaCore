@@ -284,3 +284,109 @@ void CNumericIO<int>::loadCSV(const std::string &path)
         for (size_t j=0; j<rowLabels[i].size(); ++j)
             m_valueLabels[j][i] = rowLabels[i][j];
 }
+
+template <>
+std::string CNumericIO<std::string>::toJson(const std::vector<std::string> &options) const
+{
+    Q_UNUSED(options);
+    QJsonObject root;
+    toJsonCommon(root);
+
+    QJsonArray values;
+    for (size_t i=0; i<m_values.size(); ++i)
+    {
+        QJsonArray colValues;
+        for (size_t j=0; j<m_values[i].size(); ++j)
+            colValues.append(QString::fromStdString(m_values[i][j]));
+
+        values.append(colValues);
+    }
+    root["values"] = values;
+
+    QJsonDocument doc(root);
+    return doc.toJson(QJsonDocument::Compact).toStdString();
+}
+
+template <>
+void CNumericIO<std::string>::fromJson(const std::string &jsonStr)
+{
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(QString::fromStdString(jsonStr).toUtf8());
+    if (jsonDoc.isNull() || jsonDoc.isEmpty())
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading blob measures: invalid JSON structure", __func__, __FILE__, __LINE__);
+
+    QJsonObject root = jsonDoc.object();
+    if (root.isEmpty())
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading blob measures: empty JSON structure", __func__, __FILE__, __LINE__);
+
+     fromJsonCommon(root);
+
+     m_values.clear();
+     QJsonArray valueArray = root["values"].toArray();
+
+     for (int i=0; i<valueArray.size(); ++i)
+     {
+         std::vector<std::string> values;
+         QJsonArray colValues = valueArray[i].toArray();
+
+         for (int j=0; j<colValues.size(); ++j)
+             values.push_back(colValues[i].toString().toStdString());
+
+         m_values.push_back(values);
+     }
+}
+
+template <>
+void CNumericIO<double>::fromJson(const std::string &jsonStr)
+{
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(QString::fromStdString(jsonStr).toUtf8());
+    if (jsonDoc.isNull() || jsonDoc.isEmpty())
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading blob measures: invalid JSON structure", __func__, __FILE__, __LINE__);
+
+    QJsonObject root = jsonDoc.object();
+    if (root.isEmpty())
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading blob measures: empty JSON structure", __func__, __FILE__, __LINE__);
+
+     fromJsonCommon(root);
+
+     m_values.clear();
+     QJsonArray valueArray = root["values"].toArray();
+
+     for (int i=0; i<valueArray.size(); ++i)
+     {
+         std::vector<double> values;
+         QJsonArray colValues = valueArray[i].toArray();
+
+         for (int j=0; j<colValues.size(); ++j)
+             values.push_back(colValues[i].toDouble());
+
+         m_values.push_back(values);
+     }
+}
+
+template <>
+void CNumericIO<int>::fromJson(const std::string &jsonStr)
+{
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(QString::fromStdString(jsonStr).toUtf8());
+    if (jsonDoc.isNull() || jsonDoc.isEmpty())
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading blob measures: invalid JSON structure", __func__, __FILE__, __LINE__);
+
+    QJsonObject root = jsonDoc.object();
+    if (root.isEmpty())
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading blob measures: empty JSON structure", __func__, __FILE__, __LINE__);
+
+     fromJsonCommon(root);
+
+     m_values.clear();
+     QJsonArray valueArray = root["values"].toArray();
+
+     for (int i=0; i<valueArray.size(); ++i)
+     {
+         std::vector<int> values;
+         QJsonArray colValues = valueArray[i].toArray();
+
+         for (int j=0; j<colValues.size(); ++j)
+             values.push_back(colValues[i].toInt());
+
+         m_values.push_back(values);
+     }
+}

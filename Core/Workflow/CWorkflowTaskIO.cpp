@@ -323,6 +323,17 @@ std::string CWorkflowTaskIO::getClassName(IODataType ioDataType)
     }
 }
 
+std::string CWorkflowTaskIO::toJson(const std::vector<std::string>& options) const
+{
+    Q_UNUSED(options);
+    return std::string();
+}
+
+void CWorkflowTaskIO::fromJson(const std::string &jsonStr)
+{
+    Q_UNUSED(jsonStr);
+}
+
 std::shared_ptr<CWorkflowTaskIO> CWorkflowTaskIO::cloneImp() const
 {
     return std::shared_ptr<CWorkflowTaskIO>(new CWorkflowTaskIO(*this));

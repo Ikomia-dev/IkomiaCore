@@ -34,20 +34,26 @@ class CWorkflowTaskIOWrap : public CWorkflowTaskIO, public wrapper<CWorkflowTask
         CWorkflowTaskIOWrap(IODataType dataType, const std::string& name);
         CWorkflowTaskIOWrap(const CWorkflowTaskIO& io);
 
-        size_t      getUnitElementCount() const;
+        size_t      getUnitElementCount() const override;
         size_t      default_getUnitElementCount() const;
 
-        bool        isDataAvailable() const;
+        bool        isDataAvailable() const override;
         bool        default_isDataAvailable() const;
 
-        bool        isAutoInput() const;
+        bool        isAutoInput() const override;
         bool        default_isAutoInput() const;
 
-        void        clearData();
+        void        clearData() override;
         void        default_clearData();
 
-        void        copyStaticData(const std::shared_ptr<CWorkflowTaskIO>& ioPtr);
+        void        copyStaticData(const std::shared_ptr<CWorkflowTaskIO>& ioPtr) override;
         void        default_copyStaticData(const std::shared_ptr<CWorkflowTaskIO>& ioPtr);
+
+        std::string toJson(const std::vector<std::string>& options) const override;
+        std::string default_toJson(const std::vector<std::string>& options) const;
+
+        void        fromJson(const std::string& jsonStr) override;
+        void        default_fromJson(const std::string& jsonStr);
 
 };
 

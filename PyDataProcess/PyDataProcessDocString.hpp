@@ -191,6 +191,13 @@ constexpr auto _blobMeasureIOSaveDocString =
         "Args:\n\n"
         "   path (str)\n";
 
+constexpr auto _blobIOToJsonDocString =
+        "Return input/output data in JSON formatted string. No option needed, pass enpty list as options argument.\n\n"
+        "Args:\n\n"
+        "   list of str: format-specific options encoded as pairs (option_name, option_value)\n\n"
+        "Returns:\n\n"
+        "   string: JSON formatted string\n";
+
 //----------------------//
 //----- CNumericIO -----//
 //----------------------//
@@ -492,6 +499,18 @@ constexpr auto _imageIOSaveDocString =
         "Save image IO data to file. As we use OpenCV as our image writer backend, the file must be a valid OpenCV format.\n\n"
         "Args:\n\n"
         "   path (str)\n";
+
+constexpr auto _imageIOToJsonDocString =
+        "Return input/output data in JSON formatted string. Available options: ('format', 'jpg') or ('format', 'png').\n\n"
+        "Args:\n\n"
+        "   list of str: format-specific options encoded as pairs (option_name, option_value)\n\n"
+        "Returns:\n\n"
+        "   string: JSON formatted string\n";
+
+constexpr auto _imageIOFromJsonIDocString =
+        "Set input/output data from JSON formatted string.\n\n"
+        "Args:\n\n"
+        "   str: data as JSON formatted string\n\n";
 
 //--------------------------//
 //----- CGraphicsInput -----//
@@ -1002,6 +1021,18 @@ constexpr auto _loadDocStr =
         "Virtual method to reimplement, load dataset structure from JSON.\n\n"
         "Args:\n"
         "   str: file path\n";
+
+constexpr auto _datasetIOToJsonDocStr =
+        "Return input/output data in JSON formatted string. Must be reimplemented.\n\n"
+        "Args:\n\n"
+        "   list of str: format-specific options encoded as pairs (option_name, option_value)\n\n"
+        "Returns:\n\n"
+        "   string: JSON formatted string\n";
+
+constexpr auto _datasetIOFromJsonDocStr =
+        "Set input/output data from JSON formatted string. Must be reimplemented\n\n"
+        "Args:\n\n"
+        "   str: data as JSON formatted string\n\n";
 
 //--------------------//
 //----- CArrayIO -----//

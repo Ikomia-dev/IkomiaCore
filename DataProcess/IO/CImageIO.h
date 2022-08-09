@@ -202,6 +202,9 @@ class DATAPROCESSSHARED_EXPORT CImageIO : public CWorkflowTaskIO
         void            save(const std::string &path) override;
         void            load(const std::string &path) override;
 
+        std::string     toJson(const std::vector<std::string>& options) const override;
+        void            fromJson(const std::string &jsonStr) override;
+
         /**
          * @brief Performs a deep copy the this instance
          * @return CImageIO smart pointer (std::shared_ptr).

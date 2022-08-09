@@ -100,3 +100,14 @@ void CDatasetIO::load(const std::string &path)
     m_json = QJsonDocument::fromJson(jsonFile.readAll());
     jsonFile.close();
 }
+
+std::string CDatasetIO::toJson(const std::vector<std::string> &options) const
+{
+    Q_UNUSED(options);
+    return std::string();
+}
+
+void CDatasetIO::fromJson(const std::string &jsonStr)
+{
+    Q_UNUSED(jsonStr);
+}

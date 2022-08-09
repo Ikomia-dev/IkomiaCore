@@ -291,4 +291,61 @@ void CDatasetIOWrap::default_load(const std::string &path)
     }
 }
 
+std::string CDatasetIOWrap::toJson(const std::vector<std::string> &options) const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override toJsonOver = this->get_override("toJson"))
+            return toJsonOver(options);
+        else
+            return CDatasetIO::toJson(options);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+std::string CDatasetIOWrap::default_toJson(const std::vector<std::string> &options) const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        return this->CDatasetIO::toJson(options);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CDatasetIOWrap::fromJson(const std::string &jsonStr)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override fromJsonOver = this->get_override("fromJson"))
+            fromJsonOver(jsonStr);
+        else
+            CDatasetIO::fromJson(jsonStr);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CDatasetIOWrap::default_fromJson(const std::string &jsonStr)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->CDatasetIO::fromJson(jsonStr);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
 

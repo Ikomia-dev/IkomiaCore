@@ -23,6 +23,8 @@
 #include "DataProcessGlobal.hpp"
 #include "Workflow/CWorkflowTaskIO.h"
 #include "Main/CoreTools.hpp"
+#include <QJsonDocument>
+#include <QJsonArray>
 
 /** @file CNumericIO.hpp */
 
@@ -385,11 +387,84 @@ class CNumericIO : public CNumericIOBase
             loadCSV(path);
         }
 
+        std::string                 toJson(const std::vector<std::string> &options) const override
+        {
+            Q_UNUSED(options);
+            QJsonObject root;
+            toJsonCommon(root);
+
+            QJsonArray values;
+            for (size_t i=0; i<m_values.size(); ++i)
+            {
+                QJsonArray colValues;
+                for (size_t j=0; j<m_values[i].size(); ++j)
+                    colValues.append(QString::fromStdString(Utils::to_string(m_values[i][j])));
+
+                values.append(colValues);
+            }
+            root["values"] = values;
+
+            QJsonDocument doc(root);
+            return doc.toJson(QJsonDocument::Compact).toStdString();
+        }
+        void                        fromJson(const std::string &jsonStr) override
+        {
+            Q_UNUSED(jsonStr);
+        }
+
     private:
 
         virtual WorkflowTaskIOPtr   cloneImp() const override
         {
             return std::shared_ptr<CNumericIO>(new CNumericIO(*this));
+        }
+
+        void                        toJsonCommon(QJsonObject& root) const
+        {
+            root["outputType"] = static_cast<int>(m_outputType);
+            root["plotType"] = static_cast<int>(m_plotType);
+
+            QJsonArray colLabels;
+            for (size_t i=0; i<m_headerLabels.size(); ++i)
+                colLabels.append(QString::fromStdString(m_headerLabels[i]));
+
+            root["headers"] = colLabels;
+
+            QJsonArray valueLabels;
+            for (size_t i=0; i<m_valueLabels.size(); ++i)
+            {
+                QJsonArray colValueLabels;
+                for (size_t j=0; j<m_valueLabels[i].size(); ++j)
+                    colValueLabels.append(QString::fromStdString(m_valueLabels[i][j]));
+
+                valueLabels.append(colValueLabels);
+            }
+            root["valueLabels"] = valueLabels;
+        }
+        void                        fromJsonCommon(const QJsonObject& root)
+        {
+            m_outputType = static_cast<NumericOutputType>(root["outputType"].toInt());
+            m_plotType = static_cast<PlotType>(root["plotType"].toInt());
+
+            m_headerLabels.clear();
+            QJsonArray colLabels = root["headers"].toArray();
+
+            for (int i=0; i<colLabels.size(); ++i)
+                m_headerLabels.push_back(colLabels[i].toString().toStdString());
+
+            m_valueLabels.clear();
+            QJsonArray valueLabels = root["valueLabels"].toArray();
+
+            for (int i=0; i<valueLabels.size(); ++i)
+            {
+                std::vector<std::string> labels;
+                QJsonArray colValueLabels = valueLabels[i].toArray();
+
+                for (int j=0; j<colValueLabels.size(); ++j)
+                    labels.push_back(colValueLabels[i].toString().toStdString());
+
+                m_valueLabels.push_back(labels);
+            }
         }
 
         void                        saveCSV(const std::string &path) const
@@ -483,6 +558,18 @@ DATAPROCESSSHARED_EXPORT void CNumericIO<double>::loadCSV(const std::string &pat
 
 template <>
 DATAPROCESSSHARED_EXPORT void CNumericIO<int>::loadCSV(const std::string &path);
+
+template <>
+DATAPROCESSSHARED_EXPORT std::string CNumericIO<std::string>::toJson(const std::vector<std::string> &options) const;
+
+template <>
+DATAPROCESSSHARED_EXPORT void CNumericIO<std::string>::fromJson(const std::string &jsonStr);
+
+template <>
+DATAPROCESSSHARED_EXPORT void CNumericIO<double>::fromJson(const std::string &jsonStr);
+
+template <>
+DATAPROCESSSHARED_EXPORT void CNumericIO<int>::fromJson(const std::string &jsonStr);
 
 
 class DATAPROCESSSHARED_EXPORT CNumericIOFactory: public CWorkflowTaskIOFactory

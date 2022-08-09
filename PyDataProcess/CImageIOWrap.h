@@ -52,6 +52,12 @@ class CImageIOWrap : public CImageIO, public wrapper<CImageIO>
         virtual void    copyStaticData(const std::shared_ptr<CWorkflowTaskIO>& ioPtr);
         void            default_copyStaticData(const std::shared_ptr<CWorkflowTaskIO>& ioPtr);
 
+        std::string     toJson(const std::vector<std::string>& options) const override;
+        std::string     default_toJson(const std::vector<std::string>& options) const;
+
+        void            fromJson(const std::string& jsonStr) override;
+        void            default_fromJson(const std::string& jsonStr);
+
 };
 
 #endif // CIMAGEIOWRAP_H

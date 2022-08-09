@@ -333,6 +333,8 @@ BOOST_PYTHON_MODULE(pycore)
         .def("setDisplayable", &CWorkflowTaskIO::setDisplayable, _setDisplayableDocString, args("self", "displayable"))
         .def("clearData", &CWorkflowTaskIO::clearData, &CWorkflowTaskIOWrap::default_clearData, _clearDataDocString, args("self"))
         .def("copyStaticData", &CWorkflowTaskIO::copyStaticData, &CWorkflowTaskIOWrap::default_copyStaticData, _copyStaticDataDocString, args("self", "io"))
+        .def("toJson", &CWorkflowTaskIO::toJson, &CWorkflowTaskIOWrap::default_toJson, _toJsonDocString, args("self", "options"))
+        .def("fromJson", &CWorkflowTaskIO::fromJson, &CWorkflowTaskIOWrap::default_fromJson, _fromJsonDocString, args("self", "jsonStr"))
     ;
 
     //----------------------------------//

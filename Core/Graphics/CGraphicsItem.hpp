@@ -152,7 +152,6 @@ class CProxyGraphicsAbstractFactory: public CAbstractFactory<size_t, ProxyGraphi
         ProxyGraphicsFactories m_factories;
 };
 
-
 //------------------------------------------------
 //- Class CGraphicsItem
 //- Base class of all Qt-based graphics item

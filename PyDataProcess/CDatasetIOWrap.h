@@ -56,6 +56,12 @@ class CDatasetIOWrap : public CDatasetIO, public wrapper<CDatasetIO>
 
         void                                load(const std::string& path) override;
         void                                default_load(const std::string& path);
+
+        std::string                         toJson(const std::vector<std::string>& options) const override;
+        std::string                         default_toJson(const std::vector<std::string>& options) const;
+
+        void                                fromJson(const std::string& jsonStr) override;
+        void                                default_fromJson(const std::string& jsonStr);
 };
 
 #endif // CDATASETIOWRAP_H

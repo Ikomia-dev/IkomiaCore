@@ -592,6 +592,18 @@ constexpr auto _copyStaticDataDocString =
         "Args:\n"
         "   :py:class:`~ikomia.core.pycore.CWorkflowTaskIO`: input or ouput instance from which data is copied\n";
 
+constexpr auto _toJsonDocString =
+        "Return input/output data in JSON formatted string.\n\n"
+        "Args:\n\n"
+        "   list of str: format-specific options encoded as pairs (option_name, option_value)\n\n"
+        "Returns:\n\n"
+        "   string: JSON formatted string\n";
+
+constexpr auto _fromJsonDocString =
+        "Set input/output data from JSON formatted string.\n\n"
+        "Args:\n\n"
+        "   str: data as JSON formatted string\n\n";
+
 //----------------------------------//
 //----- CWorkflowTaskIOFactory -----//
 //----------------------------------//

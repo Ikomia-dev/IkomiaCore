@@ -90,9 +90,14 @@ class DATAPROCESSSHARED_EXPORT CGraphicsOutput : public CWorkflowTaskIO
         void                        save(const std::string &path) override;
         void                        load(const std::string &path) override;
 
+        std::string                 toJson(const std::vector<std::string>& options) const override;
+        void                        fromJson(const std::string &jsonStr) override;
+
     private:
 
         virtual WorkflowTaskIOPtr   cloneImp() const override;
+        QJsonObject                 toJson() const;
+        void                        fromJson(const QJsonDocument& doc);
 
     private:
 

@@ -20,6 +20,7 @@
 #include "CBlobMeasureIO.h"
 #include "CException.h"
 #include "Main/CoreTools.hpp"
+#include <QJsonArray>
 
 //--------------------------------//
 //----- class CObjectMeasure -----//
@@ -65,6 +66,49 @@ std::vector<double> CObjectMeasure::getValues() const
 void CObjectMeasure::setValues(const std::vector<double> &values)
 {
     m_values = values;
+}
+
+QJsonObject CObjectMeasure::toJson() const
+{
+    QJsonObject measure;
+    measure["id"] = m_measure.m_id;
+    measure["name"] = QString::fromStdString(m_measure.m_name);
+    measure["formula"] = QString::fromStdString(m_measure.m_formula);
+
+    QJsonArray values;
+    for (size_t i=0; i<m_values.size(); ++i)
+    {
+        QJsonObject value;
+        value["value"] = m_values[i];
+        values.append(value);
+    }
+
+    QJsonObject root;
+    root["measure"] = measure;
+    root["values"] = values;
+    root["graphicsId"] = static_cast<qint64>(m_graphicsId);
+    root["label"] = QString::fromStdString(m_label);
+    return root;
+}
+
+void CObjectMeasure::fromJson(const QJsonObject &obj)
+{
+    QJsonObject measure = obj["measure"].toObject();
+    m_measure.m_id = measure["id"].toInt();
+    m_measure.m_name = measure["name"].toString().toStdString();
+    m_measure.m_formula = measure["formula"].toString().toStdString();
+
+    m_values.clear();
+    QJsonArray values = obj["values"].toArray();
+
+    for (int i=0; i<values.size(); ++i)
+    {
+        QJsonObject val = values[i].toObject();
+        values.push_back(val["value"].toDouble());
+    }
+
+    m_graphicsId = static_cast<size_t>(obj["graphicsId"].toDouble());
+    m_label = obj["label"].toString().toStdString();
 }
 
 //--------------------------------//
@@ -243,6 +287,55 @@ void CBlobMeasureIO::save(const std::string &path)
         saveCSV(path);
     else
         throw CException(CoreExCode::NOT_IMPLEMENTED, "Export format not available yet", __func__, __FILE__, __LINE__);
+}
+
+std::string CBlobMeasureIO::toJson(const std::vector<std::string> &options) const
+{
+    Q_UNUSED(options);
+    QJsonArray objects;
+    for (size_t i=0; i<m_measures.size(); ++i)
+    {
+        QJsonArray measures;
+        for (size_t j=0; j<m_measures[i].size(); ++j)
+        {
+            QJsonObject measure = m_measures[i][j].toJson();
+            measures.append(measure);
+        }
+        objects.append(measures);
+    }
+
+    QJsonObject root;
+    root["objects"] = objects;
+    QJsonDocument doc(root);
+    return doc.toJson(QJsonDocument::Compact).toStdString();
+}
+
+void CBlobMeasureIO::fromJson(const std::string &jsonStr)
+{
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(QString::fromStdString(jsonStr).toUtf8());
+    if (jsonDoc.isNull() || jsonDoc.isEmpty())
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading blob measures: invalid JSON structure", __func__, __FILE__, __LINE__);
+
+    QJsonObject root = jsonDoc.object();
+    if (root.isEmpty())
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading blob measures: empty JSON structure", __func__, __FILE__, __LINE__);
+
+    m_measures.clear();
+    QJsonArray objectArray = root["objects"].toArray();
+
+    for (int i=0; i<objectArray.size(); ++i)
+    {
+        ObjectMeasures measures;
+        QJsonArray measuresArray = objectArray[i].toArray();
+
+        for (int j=0; j<measuresArray.size(); ++j)
+        {
+            CObjectMeasure objMeasure;
+            objMeasure.fromJson(measuresArray[j].toObject());
+            measures.push_back(objMeasure);
+        }
+        m_measures.push_back(measures);
+    }
 }
 
 void CBlobMeasureIO::saveCSV(const std::string &path) const

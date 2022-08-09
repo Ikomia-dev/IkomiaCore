@@ -19,8 +19,10 @@
 
 #include "CImageIO.h"
 #include "Data/CDataImageInfo.h"
+#include "Data/CDataConversion.h"
 #include "CDataImageIO.h"
 #include "CDataIO.hpp"
+#include "base64.hpp"
 
 using CImageDataIO = CDataIO<CDataImageIO, CMat>;
 
@@ -340,6 +342,57 @@ void CImageIO::load(const std::string &path)
     m_channelCount = m_image.channels();
     m_dimCount = m_image.dims;
     m_bNewDataInfo = true;
+}
+
+std::string CImageIO::toJson(const std::vector<std::string> &options) const
+{
+    if (m_image.data == nullptr)
+        return std::string();
+
+    CMat img8bits;
+    if (m_image.depth() != CV_8U)
+        CDataConversion::to8Bits(m_image, img8bits);
+    else
+        img8bits = m_image;
+
+    std::string format = ".jpg";
+    auto it = std::find(options.begin(), options.end(), "format");
+
+    if (it != options.end())
+    {
+        size_t index = it - options.begin() + 1;
+        if (index < options.size())
+        {
+            if (options[index] == "png")
+                format = ".png";
+        }
+    }
+
+    std::vector<uchar> buffer;
+    cv::imencode(format, img8bits, buffer);
+    auto* pEncodedBuf = reinterpret_cast<unsigned char*>(buffer.data());
+    std::string b64ImgStr = base64_encode(pEncodedBuf, buffer.size());
+
+    QJsonObject root;
+    root["image"] = QString::fromStdString(b64ImgStr);
+    QJsonDocument doc(root);
+    return doc.toJson(QJsonDocument::Compact).toStdString();
+}
+
+void CImageIO::fromJson(const std::string &jsonStr)
+{
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(QString::fromStdString(jsonStr).toUtf8());
+    if (jsonDoc.isNull() || jsonDoc.isEmpty())
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading blob measures: invalid JSON structure", __func__, __FILE__, __LINE__);
+
+    QJsonObject root = jsonDoc.object();
+    if (root.isEmpty())
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading blob measures: empty JSON structure", __func__, __FILE__, __LINE__);
+
+    std::string b64ImgStr = root["image"].toString().toStdString();
+    std::string decoded = base64_decode_fast(b64ImgStr.c_str(), jsonStr.size());
+    std::vector<uchar> data(decoded.begin(), decoded.end());
+    m_image = cv::imdecode(CMat(data), cv::IMREAD_COLOR);
 }
 
 std::shared_ptr<CImageIO> CImageIO::clone() const

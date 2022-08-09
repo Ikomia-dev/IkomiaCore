@@ -186,20 +186,27 @@ std::shared_ptr<CWorkflowTaskIO> CGraphicsInput::cloneImp() const
     return std::shared_ptr<CGraphicsInput>(new CGraphicsInput(*this));
 }
 
-void CGraphicsInput::load(const std::string &path)
+QJsonObject CGraphicsInput::toJson() const
 {
-    auto extension = Utils::File::extension(path);
-    if (extension != ".json")
-        throw CException(CoreExCode::NOT_IMPLEMENTED, "File format not available yet, please use .json files.", __func__, __FILE__, __LINE__);
+    QJsonObject root;
+    if (m_pLayer)
+        root["layer"] = m_pLayer->getName();
+    else
+        root["layer"] = "InputLayer";
 
-    QFile jsonFile(QString::fromStdString(path));
-    if(!jsonFile.open(QFile::ReadOnly | QFile::Text))
-        throw CException(CoreExCode::INVALID_FILE, "Couldn't read file:" + path, __func__, __FILE__, __LINE__);
+    QJsonArray itemArray;
+    for(size_t i=0; i<m_items.size(); ++i)
+    {
+        QJsonObject itemObj;
+        m_items[i]->toJson(itemObj);
+        itemArray.append(itemObj);
+    }
+    root["items"] = itemArray;
+    return root;
+}
 
-    QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonFile.readAll()));
-    if(jsonDoc.isNull() || jsonDoc.isEmpty())
-        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading graphics: invalid JSON structure", __func__, __FILE__, __LINE__);
-
+void CGraphicsInput::fromJson(const QJsonDocument &jsonDoc)
+{
     QJsonObject root = jsonDoc.object();
     if(root.isEmpty())
         throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading graphics: empty JSON structure", __func__, __FILE__, __LINE__);
@@ -219,6 +226,23 @@ void CGraphicsInput::load(const std::string &path)
     }
 }
 
+void CGraphicsInput::load(const std::string &path)
+{
+    auto extension = Utils::File::extension(path);
+    if (extension != ".json")
+        throw CException(CoreExCode::NOT_IMPLEMENTED, "File format not available yet, please use .json files.", __func__, __FILE__, __LINE__);
+
+    QFile jsonFile(QString::fromStdString(path));
+    if(!jsonFile.open(QFile::ReadOnly | QFile::Text))
+        throw CException(CoreExCode::INVALID_FILE, "Couldn't read file:" + path, __func__, __FILE__, __LINE__);
+
+    QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonFile.readAll()));
+    if(jsonDoc.isNull() || jsonDoc.isEmpty())
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading graphics: invalid JSON structure", __func__, __FILE__, __LINE__);
+
+    fromJson(jsonDoc);
+}
+
 void CGraphicsInput::save(const std::string &path)
 {
     auto extension = Utils::File::extension(path);
@@ -229,21 +253,22 @@ void CGraphicsInput::save(const std::string &path)
     if(!jsonFile.open(QFile::WriteOnly | QFile::Text))
         throw CException(CoreExCode::INVALID_FILE, "Couldn't write file:" + path, __func__, __FILE__, __LINE__);
 
-    QJsonObject root;
-    if (m_pLayer)
-        root["layer"] = m_pLayer->getName();
-    else
-        root["layer"] = "InputLayer";
-
-    QJsonArray itemArray;
-    for(size_t i=0; i<m_items.size(); ++i)
-    {
-        QJsonObject itemObj;
-        m_items[i]->toJson(itemObj);
-        itemArray.append(itemObj);
-    }
-    root["items"] = itemArray;
-
-    QJsonDocument jsonDoc(root);
+    QJsonDocument jsonDoc(toJson());
     jsonFile.write(jsonDoc.toJson());
+}
+
+std::string CGraphicsInput::toJson(const std::vector<std::string> &options) const
+{
+    Q_UNUSED(options);
+    QJsonDocument doc(toJson());
+    return doc.toJson(QJsonDocument::Compact).toStdString();
+}
+
+void CGraphicsInput::fromJson(const std::string &jsonStr)
+{
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(QString::fromStdString(jsonStr).toUtf8());
+    if (jsonDoc.isNull() || jsonDoc.isEmpty())
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading blob measures: invalid JSON structure", __func__, __FILE__, __LINE__);
+
+    fromJson(jsonDoc);
 }
