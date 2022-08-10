@@ -18,18 +18,31 @@ class CIOTests: public QObject
 
         void    blobMeasureIOSave();
         void    blobMeasureIOLoad();
+        void    blobMeasureIOToJson();
+        void    blobMeasureIOFromJson();
 
         void    graphicsInputSave();
         void    graphicsInputLoad();
+        void    graphicsInputToJson();
+        void    graphicsInputFromJson();
 
         void    graphicsOutputSave();
         void    graphicsOutputLoad();
+        void    graphicsOutputToJson();
+        void    graphicsOutputFromJson();
 
         void    numericIODoubleSave();
         void    numericIODoubleLoad();
+        void    numericIODoubleToJson();
+        void    numericIODoubleFromJson();
 
         void    numericIOStringSave();
         void    numericIOStringLoad();
+        void    numericIOStringToJson();
+        void    numericIOStringFromJson();
+
+        void    imageIOToJson();
+        void    imageIOFromJson();
 
     private:
 

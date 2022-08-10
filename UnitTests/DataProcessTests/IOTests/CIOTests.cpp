@@ -15,7 +15,7 @@ void CIOTests::blobMeasureIOSave()
     CBlobMeasureIO blobIO;
     fillBlobMeasureIO(blobIO);
 
-    std::string path = UnitTest::getDataPath() + "/blobMeasureIO.csv";
+    std::string path = UnitTest::getDataPath() + "/IO/blobMeasureIOTmp.csv";
     blobIO.save(path);
     QVERIFY(boost::filesystem::exists(path));
     boost::filesystem::path boostPath(path);
@@ -26,14 +26,10 @@ void CIOTests::blobMeasureIOLoad()
 {
     const int objCount = 5;
     CBlobMeasureIO blobIO;
-    fillBlobMeasureIO(blobIO);
-    std::string path = UnitTest::getDataPath() + "/blobMeasureIO.csv";
-    blobIO.save(path);
+    std::string path = UnitTest::getDataPath() + "/IO/blobMeasureIO.csv";
+    blobIO.load(path);
 
-    CBlobMeasureIO blobIOLoad;
-    blobIOLoad.load(path);
-
-    auto measures = blobIOLoad.getMeasures();
+    auto measures = blobIO.getMeasures();
     QVERIFY(measures.size() == objCount);
     QVERIFY(measures[0].size() == 2);
     auto measure1 = measures[0][0].getMeasureInfo();
@@ -46,9 +42,42 @@ void CIOTests::blobMeasureIOLoad()
     values = measures[0][1].getValues();
     QVERIFY(values.size() == 1);
     QVERIFY(values[0] == 0.1);
+}
 
-    boost::filesystem::path boostPath(path);
-    boost::filesystem::remove(boostPath);
+void CIOTests::blobMeasureIOToJson()
+{
+    CBlobMeasureIO blobIO;
+    fillBlobMeasureIO(blobIO);
+    std::string jsonStr = blobIO.toJson(std::vector<std::string>());
+    QVERIFY(!jsonStr.empty());
+}
+
+void CIOTests::blobMeasureIOFromJson()
+{
+    const int objCount = 5;
+    std::string path = UnitTest::getDataPath() + "/IO/blobMeasureIO.json";
+    QFile jsonFile(QString::fromStdString(path));
+    jsonFile.open(QFile::ReadOnly | QFile::Text);
+    std::string jsonStr = QString(jsonFile.readAll()).toStdString();
+
+    CBlobMeasureIO blobIO;
+    blobIO.fromJson(jsonStr);
+
+    auto measures = blobIO.getMeasures();
+    QVERIFY(measures.size() == objCount);
+    QVERIFY(measures[0].size() == 2);
+
+    auto measure1 = measures[0][0].getMeasureInfo();
+    QVERIFY(measure1.m_id == CMeasure::CUSTOM);
+    QVERIFY(measure1.m_name == "Confidence");
+    auto values = measures[0][0].getValues();
+    QVERIFY(values.size() == 1);
+    QVERIFY(values[0] == 0.1);
+
+    auto measure2 = measures[0][1].getMeasureInfo();
+    QVERIFY(measure2.m_id == CMeasure::BBOX);
+    values = measures[0][1].getValues();
+    QVERIFY(values.size() == 4);
 }
 
 void CIOTests::fillBlobMeasureIO(CBlobMeasureIO &io)
@@ -71,7 +100,7 @@ void CIOTests::graphicsInputSave()
     CGraphicsInput graphicsIn;
     graphicsIn.setItems(createGraphics());
 
-    std::string path = UnitTest::getDataPath() + "/graphicsInput.json";
+    std::string path = UnitTest::getDataPath() + "/graphicsInputTmp.json";
     graphicsIn.save(path);
     QVERIFY(boost::filesystem::exists(path));
     boost::filesystem::path boostPath(path);
@@ -81,13 +110,38 @@ void CIOTests::graphicsInputSave()
 void CIOTests::graphicsInputLoad()
 {
     CGraphicsInput graphicsIn;
-    graphicsIn.setItems(createGraphics());
-    std::string path = UnitTest::getDataPath() + "/graphicsInput.json";
-    graphicsIn.save(path);
+    std::string path = UnitTest::getDataPath() + "/IO/graphicsInput.json";
+    graphicsIn.load(path);
+    auto items = graphicsIn.getItems();
+    QVERIFY(items.size() == 7);
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsEllipse>(items[0]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsRect>(items[1]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsPolyline>(items[2]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsPolygon>(items[3]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsComplexPoly>(items[4]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsPoint>(items[5]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsText>(items[6]));
+}
 
-    CGraphicsInput graphicsInLoad;
-    graphicsInLoad.load(path);
-    auto items = graphicsInLoad.getItems();
+void CIOTests::graphicsInputToJson()
+{
+    CGraphicsInput graphicsIn;
+    graphicsIn.setItems(createGraphics());
+    std::string jsonStr = graphicsIn.toJson(std::vector<std::string>());
+    QVERIFY(!jsonStr.empty());
+}
+
+void CIOTests::graphicsInputFromJson()
+{
+    std::string path = UnitTest::getDataPath() + "/IO/graphicsInput.json";
+    QFile jsonFile(QString::fromStdString(path));
+    jsonFile.open(QFile::ReadOnly | QFile::Text);
+    std::string jsonStr = QString(jsonFile.readAll()).toStdString();
+
+    CGraphicsInput graphicsIn;
+    graphicsIn.fromJson(jsonStr);
+
+    auto items = graphicsIn.getItems();
     QVERIFY(items.size() == 7);
     QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsEllipse>(items[0]));
     QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsRect>(items[1]));
@@ -103,7 +157,7 @@ void CIOTests::graphicsOutputSave()
     CGraphicsOutput graphicsOut;
     graphicsOut.setItems(createGraphics());
 
-    std::string path = UnitTest::getDataPath() + "/graphicsInput.json";
+    std::string path = UnitTest::getDataPath() + "/IO/graphicsOutputTmp.json";
     graphicsOut.save(path);
     QVERIFY(boost::filesystem::exists(path));
     boost::filesystem::path boostPath(path);
@@ -113,13 +167,39 @@ void CIOTests::graphicsOutputSave()
 void CIOTests::graphicsOutputLoad()
 {
     CGraphicsOutput graphicsOut;
-    graphicsOut.setItems(createGraphics());
-    std::string path = UnitTest::getDataPath() + "/graphicsInput.json";
-    graphicsOut.save(path);
+    std::string path = UnitTest::getDataPath() + "/IO/graphicsOutput.json";
+    graphicsOut.load(path);
 
-    CGraphicsOutput graphicsOutLoad;
-    graphicsOutLoad.load(path);
-    auto items = graphicsOutLoad.getItems();
+    auto items = graphicsOut.getItems();
+    QVERIFY(items.size() == 7);
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsEllipse>(items[0]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsRect>(items[1]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsPolyline>(items[2]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsPolygon>(items[3]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsComplexPoly>(items[4]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsPoint>(items[5]));
+    QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsText>(items[6]));
+}
+
+void CIOTests::graphicsOutputToJson()
+{
+    CGraphicsInput graphicsOut;
+    graphicsOut.setItems(createGraphics());
+    std::string jsonStr = graphicsOut.toJson(std::vector<std::string>());
+    QVERIFY(!jsonStr.empty());
+}
+
+void CIOTests::graphicsOutputFromJson()
+{
+    std::string path = UnitTest::getDataPath() + "/IO/graphicsInput.json";
+    QFile jsonFile(QString::fromStdString(path));
+    jsonFile.open(QFile::ReadOnly | QFile::Text);
+    std::string jsonStr = QString(jsonFile.readAll()).toStdString();
+
+    CGraphicsInput graphicsOut;
+    graphicsOut.fromJson(jsonStr);
+
+    auto items = graphicsOut.getItems();
     QVERIFY(items.size() == 7);
     QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsEllipse>(items[0]));
     QVERIFY(std::dynamic_pointer_cast<CProxyGraphicsRect>(items[1]));
@@ -173,7 +253,7 @@ void CIOTests::numericIODoubleSave()
 {
     CNumericIO<double> numericIO;
     fillNumericIO(numericIO);
-    std::string path = UnitTest::getDataPath() + "/numericIO.csv";
+    std::string path = UnitTest::getDataPath() + "/IO/numericIOTmp.csv";
     numericIO.save(path);
 
     QVERIFY(boost::filesystem::exists(path));
@@ -184,24 +264,47 @@ void CIOTests::numericIODoubleSave()
 void CIOTests::numericIODoubleLoad()
 {
     CNumericIO<double> numericIO;
-    fillNumericIO(numericIO);
-    std::string path = UnitTest::getDataPath() + "/numericIO.csv";
-    numericIO.save(path);
+    std::string path = UnitTest::getDataPath() + "/IO/numericIODouble.csv";
+    numericIO.load(path);
 
-    CNumericIO<double> numericIOLoad;
-    numericIOLoad.load(path);
-    QVERIFY(numericIOLoad.getOutputType() == NumericOutputType::TABLE);
-    QVERIFY(numericIOLoad.getPlotType() == PlotType::CURVE);
-    QVERIFY(numericIOLoad.getAllHeaderLabels().size() == 4);
-    QVERIFY(numericIOLoad.getAllValueLabels().size() == 0);
-    auto values = numericIOLoad.getAllValues();
+    QVERIFY(numericIO.getOutputType() == NumericOutputType::TABLE);
+    QVERIFY(numericIO.getPlotType() == PlotType::CURVE);
+    QVERIFY(numericIO.getAllHeaderLabels().size() == 4);
+    QVERIFY(numericIO.getAllValueLabels().size() == 0);
+    auto values = numericIO.getAllValues();
     QVERIFY(values.size() == 4);
 
     for (size_t i=0; i<values.size(); ++i)
         QVERIFY(values[i].size() == 6);
+}
 
-    boost::filesystem::path boostPath(path);
-    boost::filesystem::remove(boostPath);
+void CIOTests::numericIODoubleToJson()
+{
+    CNumericIO<double> numericIO;
+    fillNumericIO(numericIO);
+    std::string jsonStr = numericIO.toJson(std::vector<std::string>());
+    QVERIFY(!jsonStr.empty());
+}
+
+void CIOTests::numericIODoubleFromJson()
+{
+    std::string path = UnitTest::getDataPath() + "/IO/numericIODouble.json";
+    QFile jsonFile(QString::fromStdString(path));
+    jsonFile.open(QFile::ReadOnly | QFile::Text);
+    std::string jsonStr = QString(jsonFile.readAll()).toStdString();
+
+    CNumericIO<double> numericIO;
+    numericIO.fromJson(jsonStr);
+
+    QVERIFY(numericIO.getOutputType() == NumericOutputType::TABLE);
+    QVERIFY(numericIO.getPlotType() == PlotType::CURVE);
+    QVERIFY(numericIO.getAllHeaderLabels().size() == 4);
+    QVERIFY(numericIO.getAllValueLabels().size() == 0);
+    auto values = numericIO.getAllValues();
+    QVERIFY(values.size() == 4);
+
+    for (size_t i=0; i<values.size(); ++i)
+        QVERIFY(values[i].size() == 6);
 }
 
 void CIOTests::fillNumericIO(CNumericIO<double> &io)
@@ -222,7 +325,7 @@ void CIOTests::numericIOStringSave()
 {
     CNumericIO<std::string> numericIO;
     fillNumericIO(numericIO);
-    std::string path = UnitTest::getDataPath() + "/numericIO.csv";
+    std::string path = UnitTest::getDataPath() + "/IO/numericIOTmp.csv";
     numericIO.save(path);
 
     QVERIFY(boost::filesystem::exists(path));
@@ -233,24 +336,99 @@ void CIOTests::numericIOStringSave()
 void CIOTests::numericIOStringLoad()
 {
     CNumericIO<std::string> numericIO;
-    fillNumericIO(numericIO);
-    std::string path = UnitTest::getDataPath() + "/numericIO.csv";
-    numericIO.save(path);
+    std::string path = UnitTest::getDataPath() + "/IO/numericIOString.csv";
+    numericIO.load(path);
 
-    CNumericIO<std::string> numericIOLoad;
-    numericIOLoad.load(path);
-    QVERIFY(numericIOLoad.getOutputType() == NumericOutputType::TABLE);
-    QVERIFY(numericIOLoad.getPlotType() == PlotType::CURVE);
-    QVERIFY(numericIOLoad.getAllHeaderLabels().size() == 4);
-    QVERIFY(numericIOLoad.getAllValueLabels().size() == 0);
-    auto values = numericIOLoad.getAllValues();
+    QVERIFY(numericIO.getOutputType() == NumericOutputType::TABLE);
+    QVERIFY(numericIO.getPlotType() == PlotType::CURVE);
+    QVERIFY(numericIO.getAllHeaderLabels().size() == 4);
+    QVERIFY(numericIO.getAllValueLabels().size() == 0);
+    auto values = numericIO.getAllValues();
     QVERIFY(values.size() == 4);
 
     for (size_t i=0; i<values.size(); ++i)
         QVERIFY(values[i].size() == 6);
+}
 
-    boost::filesystem::path boostPath(path);
-    boost::filesystem::remove(boostPath);
+void CIOTests::numericIOStringToJson()
+{
+    CNumericIO<std::string> numericIO;
+    fillNumericIO(numericIO);
+    std::string jsonStr = numericIO.toJson(std::vector<std::string>());
+    QVERIFY(!jsonStr.empty());
+}
+
+void CIOTests::numericIOStringFromJson()
+{
+    std::string path = UnitTest::getDataPath() + "/IO/numericIOString.json";
+    QFile jsonFile(QString::fromStdString(path));
+    jsonFile.open(QFile::ReadOnly | QFile::Text);
+    std::string jsonStr = QString(jsonFile.readAll()).toStdString();
+
+    CNumericIO<std::string> numericIO;
+    numericIO.fromJson(jsonStr);
+
+    QVERIFY(numericIO.getOutputType() == NumericOutputType::TABLE);
+    QVERIFY(numericIO.getPlotType() == PlotType::CURVE);
+    QVERIFY(numericIO.getAllHeaderLabels().size() == 4);
+    QVERIFY(numericIO.getAllValueLabels().size() == 0);
+    auto values = numericIO.getAllValues();
+    QVERIFY(values.size() == 4);
+
+    for (size_t i=0; i<values.size(); ++i)
+        QVERIFY(values[i].size() == 6);
+}
+
+void CIOTests::imageIOToJson()
+{
+    std::string path = UnitTest::getDataPath() + "/Images/Lena.png";
+    CImageIO imgIO(IODataType::IMAGE, "ColorImage", path);
+    std::vector<std::string> options = {"format", "jpg"};
+    std::string jsonStr = imgIO.toJson(options);
+    QVERIFY(!jsonStr.empty());
+
+    options = {"format", "png"};
+    jsonStr = imgIO.toJson(options);
+    QVERIFY(!jsonStr.empty());
+
+//    QFile file(QString::fromStdString(UnitTest::getDataPath() + "/IO/imageIO.json"));
+//    file.open(QFile::WriteOnly);
+//    file.write(QString::fromStdString(jsonStr).toUtf8());
+//    file.close();
+}
+
+void CIOTests::imageIOFromJson()
+{
+    std::string path = UnitTest::getDataPath() + "/IO/imageIOjpg.json";
+    QFile jsonFileJpg(QString::fromStdString(path));
+    jsonFileJpg.open(QFile::ReadOnly | QFile::Text);
+    std::string jsonStr = QString(jsonFileJpg.readAll()).toStdString();
+
+    CImageIO imgIO;
+    imgIO.fromJson(jsonStr);
+
+    CMat img = imgIO.getImage();
+    QVERIFY(img.data != nullptr);
+    QVERIFY(img.getNbRows() == 512);
+    QVERIFY(img.getNbCols() == 512);
+    QVERIFY(img.channels() == 3);
+
+    //imgIO.save(UnitTest::getDataPath() + "/IO/imageJpg.png");
+
+    path = UnitTest::getDataPath() + "/IO/imageIOpng.json";
+    QFile jsonFilePng(QString::fromStdString(path));
+    jsonFilePng.open(QFile::ReadOnly | QFile::Text);
+    jsonStr = QString(jsonFilePng.readAll()).toStdString();
+
+    imgIO.fromJson(jsonStr);
+
+    img = imgIO.getImage();
+    QVERIFY(img.data != nullptr);
+    QVERIFY(img.getNbRows() == 512);
+    QVERIFY(img.getNbCols() == 512);
+    QVERIFY(img.channels() == 3);
+
+    //imgIO.save(UnitTest::getDataPath() + "/IO/imagePng.png");
 }
 
 void CIOTests::fillNumericIO(CNumericIO<std::string> &io)

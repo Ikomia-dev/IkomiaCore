@@ -77,11 +77,7 @@ QJsonObject CObjectMeasure::toJson() const
 
     QJsonArray values;
     for (size_t i=0; i<m_values.size(); ++i)
-    {
-        QJsonObject value;
-        value["value"] = m_values[i];
-        values.append(value);
-    }
+        values.append(m_values[i]);
 
     QJsonObject root;
     root["measure"] = measure;
@@ -102,10 +98,7 @@ void CObjectMeasure::fromJson(const QJsonObject &obj)
     QJsonArray values = obj["values"].toArray();
 
     for (int i=0; i<values.size(); ++i)
-    {
-        QJsonObject val = values[i].toObject();
-        values.push_back(val["value"].toDouble());
-    }
+        m_values.push_back(values[i].toDouble());
 
     m_graphicsId = static_cast<size_t>(obj["graphicsId"].toDouble());
     m_label = obj["label"].toString().toStdString();

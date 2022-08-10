@@ -31,6 +31,11 @@ LIBS += $$link_boost()
 #Dynamic link to gmic
 LIBS += -lgmic
 
+#Dynamic link to OpenCV
+win32:CONFIG(release, debug|release):LIBS += -lopencv_core$${OPENCV_VERSION}
+win32:CONFIG(debug, debug|release):LIBS += -lopencv_core$${OPENCV_VERSION}d
+unix: LIBS += -lopencv_core
+
 #Dynamic link to Utils
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../../Utils/release/ -likUtils
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../../Utils/debug/ -likUtils
