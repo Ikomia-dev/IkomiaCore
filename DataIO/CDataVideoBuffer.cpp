@@ -903,7 +903,15 @@ void CDataVideoBuffer::checkFourcc()
     if(m_type == CDataVideoBuffer::IMAGE_SEQUENCE)
         m_fourcc = 0;
     else if(m_fourcc == -1)
-        m_fourcc = cv::VideoWriter::fourcc('M','P','E','G');
+    {
+        std::string ext = Utils::File::extension(m_path);
+        if (ext == ".avi")
+            m_fourcc = cv::VideoWriter::fourcc('x','v','i','d');
+        else if (ext == ".mp4")
+            m_fourcc = cv::VideoWriter::fourcc('m','p','4','v');
+        else
+            m_fourcc = 0;
+    }
 }
 
 #include "moc_CDataVideoBuffer.cpp"
