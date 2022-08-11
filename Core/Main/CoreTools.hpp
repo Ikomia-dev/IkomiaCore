@@ -172,9 +172,41 @@ namespace Ikomia
                     case DataFileFormat::TIF: return ".tif";
                     case DataFileFormat::WEBP: return ".webp";
                     case DataFileFormat::AVI: return ".avi";
-                    case DataFileFormat::MPEG: return ".json";
+                    case DataFileFormat::MPEG: return ".mp4";
                 }
                 return "";
+            }
+
+            inline DataFileFormat       getFileFormatFromExtension(const std::string& extension)
+            {
+                if (extension == ".txt")
+                    return DataFileFormat::TXT;
+                else if (extension == ".json")
+                    return DataFileFormat::JSON;
+                else if (extension == ".xml")
+                    return DataFileFormat::XML;
+                else if (extension == ".yml")
+                    return DataFileFormat::YAML;
+                else if (extension == ".csv")
+                    return DataFileFormat::CSV;
+                else if (extension == ".bmp")
+                    return DataFileFormat::BMP;
+                else if (extension == ".jpg")
+                    return DataFileFormat::JPG;
+                else if (extension == ".jp2")
+                    return DataFileFormat::JP2;
+                else if (extension == ".png")
+                    return DataFileFormat::PNG;
+                else if (extension == ".tif")
+                    return DataFileFormat::TIF;
+                else if (extension == ".webp")
+                    return DataFileFormat::WEBP;
+                else if (extension == ".avi")
+                    return DataFileFormat::AVI;
+                else if (extension == ".mp4")
+                    return DataFileFormat::MPEG;
+                else
+                    return DataFileFormat::NONE;
             }
         }
 

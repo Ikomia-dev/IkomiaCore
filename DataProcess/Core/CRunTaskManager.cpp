@@ -198,11 +198,12 @@ void CRunTaskManager::saveVideoOutputs(const WorkflowTaskPtr &taskPtr, const std
         std::string outPath;
         auto outputPtr = std::static_pointer_cast<CVideoIO>(videoOutputs[i]);
         Utils::File::createDirectory(taskPtr->getOutputFolder());
+        std::string extension = Utils::Data::getFileFormatExtension(outputPtr->getSaveFormat());
 
         if(bImageSequence)
             outPath = taskPtr->getOutputFolder() + inputName + "_" + std::to_string(i+1) + "_%04d.png";
         else
-            outPath = taskPtr->getOutputFolder() + inputName + "_" + std::to_string(i+1) + ".avi";
+            outPath = taskPtr->getOutputFolder() + inputName + "_" + std::to_string(i+1) + extension;
 
         outputPtr->setVideoPath(outPath);
     }
@@ -216,26 +217,29 @@ void CRunTaskManager::saveVideoOutputs(const WorkflowTaskPtr &taskPtr, const std
     for(size_t i=0; i<videoOutputs.size(); ++i)
     {
         auto outputPtr = std::static_pointer_cast<CVideoIO>(videoOutputs[i]);
-        CMat img = outputPtr->getImage();
-
-        // Start video write if needed
-        if(outputPtr->isWriteStarted() == false)
-            outputPtr->startVideoWrite(img.getNbCols(), img.getNbRows(), infoPtr->m_frameCount, infoPtr->m_fps, infoPtr->m_fourcc, m_timeout);
-
-        if(bEmbedGraphics && graphicsOutputs.size() > 0)
+        if (outputPtr->isAutoSave())
         {
-            for(size_t j=0; j<graphicsOutputs.size(); ++j)
+            CMat img = outputPtr->getImage();
+
+            // Start video write if needed
+            if(outputPtr->isWriteStarted() == false)
+                outputPtr->startVideoWrite(img.getNbCols(), img.getNbRows(), infoPtr->m_frameCount, infoPtr->m_fps, infoPtr->m_fourcc, m_timeout);
+
+            if(bEmbedGraphics && graphicsOutputs.size() > 0)
             {
-                auto graphicsOutPtr = std::static_pointer_cast<CGraphicsOutput>(graphicsOutputs[j]);
-                if(graphicsOutPtr->getImageIndex() == (int)i)
+                for(size_t j=0; j<graphicsOutputs.size(); ++j)
                 {
-                    CGraphicsConversion graphicsConv((int)img.getNbCols(), (int)img.getNbRows());
-                    for(auto it : graphicsOutPtr->getItems())
-                        it->insertToImage(img, graphicsConv, false, false);
+                    auto graphicsOutPtr = std::static_pointer_cast<CGraphicsOutput>(graphicsOutputs[j]);
+                    if(graphicsOutPtr->getImageIndex() == (int)i)
+                    {
+                        CGraphicsConversion graphicsConv((int)img.getNbCols(), (int)img.getNbRows());
+                        for(auto it : graphicsOutPtr->getItems())
+                            it->insertToImage(img, graphicsConv, false, false);
+                    }
                 }
             }
+            outputPtr->writeImage(img);
         }
-        outputPtr->writeImage(img);
     }
 }
 
