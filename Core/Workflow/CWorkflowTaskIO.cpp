@@ -319,6 +319,9 @@ std::string CWorkflowTaskIO::getClassName(IODataType ioDataType)
         case IODataType::ARRAY:
             return "CArrayIO";
 
+        case IODataType::DATA_DICT:
+            return "CWorkflowTaskIO";
+
         default: return "";
     }
 }

@@ -77,6 +77,7 @@ namespace Ikomia
         LIVE_STREAM_BINARY,     /**< Binary video from stream (camera): 8bits single channel */
         LIVE_STREAM_LABEL,      /**< Label video from stream (camera): single channel, 1 graylevel per connected component */
         ARRAY,                  /**< Multi-dimensional array */
+        DATA_DICT,              /**< Python-based IO where data are stored as dict */
         NONE                    /**< Unknown data type */
     };
 
