@@ -397,6 +397,8 @@ namespace Ikomia
                         return QObject::tr("deep learning dataset");
                     case IODataType::ARRAY:
                         return QObject::tr("multi-dimensional array");
+                    case IODataType::DATA_DICT:
+                        return QObject::tr("Generic Python dict");
                 }
                 return QString();
             }
