@@ -315,6 +315,7 @@ BOOST_PYTHON_MODULE(pycore)
         .value("FILE_PATH", IODataType::FILE_PATH)
         .value("DNN_DATASET", IODataType::DNN_DATASET)
         .value("ARRAY", IODataType::ARRAY)
+        .value("DATA_DICT", IODataType::DATA_DICT)
     ;
 
     class_<CWorkflowTaskIOWrap, std::shared_ptr<CWorkflowTaskIOWrap>>("CWorkflowTaskIO", _WorkflowTaskIODocString)
