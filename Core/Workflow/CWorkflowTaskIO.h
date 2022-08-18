@@ -27,6 +27,7 @@
 #include "DesignPattern/CObjectLocker.hpp"
 #include "CWorkflowTaskParam.h"
 #include "Data/CDataInfo.h"
+#include <QJsonDocument>
 
 /**
  * @ingroup groupCore
@@ -262,7 +263,11 @@ class CORESHARED_EXPORT CWorkflowTaskIO
          * @brief Set input/output data from JSON formatted string
          * @param jsonStr: JSON formatted string
          */
-        virtual void fromJson(const std::string& jsonStr);
+        virtual void        fromJson(const std::string& jsonStr);
+
+    protected:
+
+        std::string         toFormattedJson(const QJsonDocument& doc, const std::vector<std::string>& options) const;
 
     private:
 

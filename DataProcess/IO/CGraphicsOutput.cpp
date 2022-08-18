@@ -320,9 +320,8 @@ void CGraphicsOutput::load(const std::string &path)
 
 std::string CGraphicsOutput::toJson(const std::vector<std::string> &options) const
 {
-    Q_UNUSED(options);
     QJsonDocument doc(toJson());
-    return doc.toJson(QJsonDocument::Compact).toStdString();
+    return toFormattedJson(doc, options);
 }
 
 void CGraphicsOutput::fromJson(const std::string &jsonStr)

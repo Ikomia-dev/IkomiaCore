@@ -356,7 +356,7 @@ std::string CImageIO::toJson(const std::vector<std::string> &options) const
         img8bits = m_image;
 
     std::string format = ".jpg";
-    auto it = std::find(options.begin(), options.end(), "format");
+    auto it = std::find(options.begin(), options.end(), "image_format");
 
     if (it != options.end())
     {
@@ -376,7 +376,7 @@ std::string CImageIO::toJson(const std::vector<std::string> &options) const
     QJsonObject root;
     root["image"] = QString::fromStdString(b64ImgStr);
     QJsonDocument doc(root);
-    return doc.toJson(QJsonDocument::Compact).toStdString();
+    return toFormattedJson(doc, options);
 }
 
 void CImageIO::fromJson(const std::string &jsonStr)

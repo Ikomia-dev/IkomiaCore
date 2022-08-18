@@ -383,7 +383,7 @@ void CIOTests::imageIOToJson()
 {
     std::string path = UnitTest::getDataPath() + "/Images/Lena.png";
     CImageIO imgIO(IODataType::IMAGE, "ColorImage", path);
-    std::vector<std::string> options = {"format", "jpg"};
+    std::vector<std::string> options = {"image_format", "jpg"};
     std::string jsonStr = imgIO.toJson(options);
     QVERIFY(!jsonStr.empty());
 

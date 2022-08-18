@@ -284,7 +284,6 @@ void CBlobMeasureIO::save(const std::string &path)
 
 std::string CBlobMeasureIO::toJson(const std::vector<std::string> &options) const
 {
-    Q_UNUSED(options);
     QJsonArray objects;
     for (size_t i=0; i<m_measures.size(); ++i)
     {
@@ -300,7 +299,7 @@ std::string CBlobMeasureIO::toJson(const std::vector<std::string> &options) cons
     QJsonObject root;
     root["objects"] = objects;
     QJsonDocument doc(root);
-    return doc.toJson(QJsonDocument::Compact).toStdString();
+    return toFormattedJson(doc, options);
 }
 
 void CBlobMeasureIO::fromJson(const std::string &jsonStr)
