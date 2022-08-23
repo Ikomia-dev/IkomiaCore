@@ -57,6 +57,7 @@
 
 #include "boost/python.hpp"
 #include "PythonThread.hpp"
+#include <fstream>
 
 #ifdef _WIN32
 #include <io.h>
