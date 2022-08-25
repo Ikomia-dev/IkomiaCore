@@ -1063,6 +1063,7 @@ void CWorkflow::deleteTask(const WorkflowVertex &id)
 
 void CWorkflow::deleteEdge(const WorkflowEdge &id)
 {
+    CPyEnsureGIL gil;
     std::lock_guard<std::mutex> lock(m_mutex);
 
     auto index = getEdge(id)->getTargetIndex();

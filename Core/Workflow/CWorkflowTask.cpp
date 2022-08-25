@@ -729,6 +729,7 @@ void CWorkflowTask::clearInputData(size_t index)
 
 void CWorkflowTask::clearOutputData()
 {
+    CPyEnsureGIL gil;
     for(size_t i=0; i<m_outputs.size(); ++i)
         if(m_outputs[i] != nullptr)
             m_outputs[i]->clearData();
