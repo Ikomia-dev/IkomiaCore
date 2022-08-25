@@ -389,7 +389,6 @@ class CNumericIO : public CNumericIOBase
 
         std::string                 toJson(const std::vector<std::string> &options) const override
         {
-            Q_UNUSED(options);
             QJsonObject root;
             toJsonCommon(root);
 
@@ -405,7 +404,7 @@ class CNumericIO : public CNumericIOBase
             root["values"] = values;
 
             QJsonDocument doc(root);
-            return doc.toJson(QJsonDocument::Compact).toStdString();
+            return toFormattedJson(doc, options);
         }
         void                        fromJson(const std::string &jsonStr) override
         {

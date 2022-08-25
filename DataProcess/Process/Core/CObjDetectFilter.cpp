@@ -108,7 +108,7 @@ void CObjDetectFilter::run()
 CObjDetectFilterFactory::CObjDetectFilterFactory()
 {
     m_info.m_name = "ik_obj_detection_filter";
-    m_info.m_description = QObject::tr("This process extract connected components from binary image and calculate selected measures for each.").toStdString();
+    m_info.m_description = QObject::tr("This process filters object detection results based on confidence and object category.").toStdString();
     m_info.m_path = QObject::tr("Core/Utils").toStdString();
     m_info.m_iconPath = QObject::tr(":/Images/default-process.png").toStdString();
     m_info.m_keywords = "object,detection,filtering,measures,graphics";

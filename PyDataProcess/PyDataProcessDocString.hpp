@@ -192,7 +192,9 @@ constexpr auto _blobMeasureIOSaveDocString =
         "   path (str)\n";
 
 constexpr auto _blobIOToJsonDocString =
-        "Return input/output data in JSON formatted string. No option needed, pass enpty list as options argument.\n\n"
+        "Return input/output data in JSON formatted string. JSON format option can be set, possible values are:\n"
+        "- ['json_format', 'compact'] (default)\n"
+        "- ['json_format', 'indented']\n\n"
         "Args:\n\n"
         "   list of str: format-specific options encoded as pairs (option_name, option_value)\n\n"
         "Returns:\n\n"
@@ -501,7 +503,9 @@ constexpr auto _imageIOSaveDocString =
         "   path (str)\n";
 
 constexpr auto _imageIOToJsonDocString =
-        "Return input/output data in JSON formatted string. Available options: ('format', 'jpg') or ('format', 'png').\n\n"
+        "Return input/output data in JSON formatted string. Available options:\n"
+        "- JSON format ['json_format', 'compact', ...] (default) or ['json_format', 'indented', ...]\n"
+        "- image format ['format', 'jpg') or ('format', 'png').\n\n"
         "Args:\n\n"
         "   list of str: format-specific options encoded as pairs (option_name, option_value)\n\n"
         "Returns:\n\n"
@@ -1023,7 +1027,8 @@ constexpr auto _loadDocStr =
         "   str: file path\n";
 
 constexpr auto _datasetIOToJsonDocStr =
-        "Return input/output data in JSON formatted string. Must be reimplemented.\n\n"
+        "Return input/output data in JSON formatted string. Must be reimplemented and should manage"
+        "the common option to set the JSON format. It can be ['json_format', 'compact'] or ['json_format', 'indented'].\n\n"
         "Args:\n\n"
         "   list of str: format-specific options encoded as pairs (option_name, option_value)\n\n"
         "Returns:\n\n"

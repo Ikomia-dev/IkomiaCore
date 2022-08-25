@@ -337,6 +337,23 @@ void CWorkflowTaskIO::fromJson(const std::string &jsonStr)
     Q_UNUSED(jsonStr);
 }
 
+std::string CWorkflowTaskIO::toFormattedJson(const QJsonDocument &doc, const std::vector<std::string> &options) const
+{
+    std::string format = "compact";
+    auto it = std::find(options.begin(), options.end(), "json_format");
+
+    if (it != options.end())
+    {
+        size_t index = it - options.begin() + 1;
+        format = options[index];
+    }
+
+    if (format == "compact")
+        return doc.toJson(QJsonDocument::Compact).toStdString();
+    else
+        return doc.toJson(QJsonDocument::Indented).toStdString();
+}
+
 std::shared_ptr<CWorkflowTaskIO> CWorkflowTaskIO::cloneImp() const
 {
     return std::shared_ptr<CWorkflowTaskIO>(new CWorkflowTaskIO(*this));

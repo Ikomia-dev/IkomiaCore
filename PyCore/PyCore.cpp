@@ -149,11 +149,11 @@ BOOST_PYTHON_MODULE(pycore)
         .def(init<const std::vector<CPoint<float>>, const std::vector<PolygonF>, const CGraphicsPolygonProperty&>(_ctor2GraphicsComplexPoly))
         .add_property("outer", &CProxyGraphicsComplexPoly::getOuter, &CProxyGraphicsComplexPoly::setOuter, "Outer polygon (list of vertices)")
         .add_property("inners", &CProxyGraphicsComplexPoly::getInners, &CProxyGraphicsComplexPoly::setInners, "Inner polygons (list of inner polygons corresponding to holes)")
-        .add_property("property", &CProxyGraphicsComplexPoly::getProperty, &CProxyGraphicsComplexPoly::setProperty, "Visual polygon properties. See :py:class:`~ikomia.core.PyCore.GraphicsPolygonProperty`.")
+        .add_property("property", &CProxyGraphicsComplexPoly::getProperty, &CProxyGraphicsComplexPoly::setProperty, "Visual properties :py:class:`~ikomia.core.pycore.GraphicsPolygonProperty`")
     ;
 
     //Ellipse
-    class_<CGraphicsEllipseProperty>("GraphicsEllipseProperty", "Visual properties for :py:class:`~ikomia.core.PyCore.CGraphicsEllipse` item.")
+    class_<CGraphicsEllipseProperty>("GraphicsEllipseProperty", "Visual properties for :py:class:`~ikomia.core.pycore.CGraphicsEllipse` item.")
         .add_property("pen_color", &CGraphicsEllipseProperty::getPenColor, &CGraphicsEllipseProperty::setPenColor, "Outline color (list - rgba)")
         .add_property("brush_color", &CGraphicsEllipseProperty::getBrushColor, &CGraphicsEllipseProperty::setBrushColor, "Fill color (list - rgba)")
         .def_readwrite("line_size", &CGraphicsEllipseProperty::m_lineSize, "Outline size")
@@ -168,11 +168,11 @@ BOOST_PYTHON_MODULE(pycore)
         .add_property("y", &CProxyGraphicsEllipse::getY, &CProxyGraphicsEllipse::setY, "y coordinate of top-left point")
         .add_property("width", &CProxyGraphicsEllipse::getWidth, &CProxyGraphicsEllipse::setWidth, "Ellipse width")
         .add_property("height", &CProxyGraphicsEllipse::getHeight, &CProxyGraphicsEllipse::setHeight, "Ellipse height")
-        .add_property("property", &CProxyGraphicsEllipse::getProperty, &CProxyGraphicsEllipse::setProperty, "Visual ellipse properties. See :py:class:`~ikomia.core.PyCore.GraphicsEllipseProperty`.")
+        .add_property("property", &CProxyGraphicsEllipse::getProperty, &CProxyGraphicsEllipse::setProperty, "Visual properties :py:class:`~ikomia.core.pycore.GraphicsEllipseProperty`")
     ;
 
     //Point
-    class_<CGraphicsPointProperty>("GraphicsPointProperty", "Visual properties for :py:class:`~ikomia.core.PyCore.CGraphicsPoint` item.")
+    class_<CGraphicsPointProperty>("GraphicsPointProperty", "Visual properties for :py:class:`~ikomia.core.pycore.CGraphicsPoint` item.")
         .add_property("pen_color", &CGraphicsPointProperty::getPenColor, &CGraphicsPointProperty::setPenColor, "Outline color (list - rgba)")
         .add_property("brush_color", &CGraphicsPointProperty::getBrushColor, &CGraphicsPointProperty::setBrushColor, "Fill color (list - rgba)")
         .def_readwrite("size", &CGraphicsPointProperty::m_size, "Size")
@@ -184,11 +184,11 @@ BOOST_PYTHON_MODULE(pycore)
         .def(init<const CPoint<float>&>(_ctor1GraphicsPoint))
         .def(init<const CPoint<float>&, const CGraphicsPointProperty&>(_ctor2GraphicsPoint))
         .add_property("point", &CProxyGraphicsPoint::getPoint, &CProxyGraphicsPoint::setPoint, "2D point coordinates (:py:class:`CPointF`)")
-        .add_property("property", &CProxyGraphicsPoint::getProperty, &CProxyGraphicsPoint::setProperty, "Visual point properties. See :py:class:`~ikomia.core.PyCore.GraphicsPointProperty`.")
+        .add_property("property", &CProxyGraphicsPoint::getProperty, &CProxyGraphicsPoint::setProperty, "Visual properties :py:class:`~ikomia.core.pycore.GraphicsPointProperty`")
     ;
 
     //Polygon
-    class_<CGraphicsPolygonProperty>("GraphicsPolygonProperty", "Visual properties for :py:class:`~ikomia.core.PyCore.CGraphicsPolygon` item.")
+    class_<CGraphicsPolygonProperty>("GraphicsPolygonProperty", "Visual properties for :py:class:`~ikomia.core.pycore.CGraphicsPolygon` item.")
         .add_property("pen_color", &CGraphicsPolygonProperty::getPenColor, &CGraphicsPolygonProperty::setPenColor, "Outline color (list - rgba)")
         .add_property("brush_color", &CGraphicsPolygonProperty::getBrushColor, &CGraphicsPolygonProperty::setBrushColor, "Fill color (list - rgba)")
         .def_readwrite("line_size", &CGraphicsPolygonProperty::m_lineSize, "Outline size")
@@ -200,11 +200,11 @@ BOOST_PYTHON_MODULE(pycore)
         .def(init<const std::vector<CPoint<float>>>(_ctor1GraphicsPolygon))
         .def(init<const std::vector<CPoint<float>>, const CGraphicsPolygonProperty&>(_ctor2GraphicsPolygon))
         .add_property("points", &CProxyGraphicsPolygon::getPoints, &CProxyGraphicsPolygon::setPoints, "List of polygon vertices (:py:class:`CPointF`)")
-        .add_property("property", &CProxyGraphicsPolygon::getProperty, &CProxyGraphicsPolygon::setProperty, "Visual point properties. See :py:class:`~ikomia.core.PyCore.GraphicsPolygonProperty`.")
+        .add_property("property", &CProxyGraphicsPolygon::getProperty, &CProxyGraphicsPolygon::setProperty, "Visual properties :py:class:`~ikomia.core.pycore.GraphicsPolygonProperty`")
     ;
 
     //Polyline
-    class_<CGraphicsPolylineProperty>("GraphicsPolylineProperty", "Visual properties for :py:class:`~ikomia.core.PyCore.CGraphicsPolyline` item.")
+    class_<CGraphicsPolylineProperty>("GraphicsPolylineProperty", "Visual properties for :py:class:`~ikomia.core.pycore.CGraphicsPolyline` item.")
         .add_property("pen_color", &CGraphicsPolylineProperty::getColor, &CGraphicsPolylineProperty::setColor, "Outline color (list - rgba)")
         .def_readwrite("line_size", &CGraphicsPolylineProperty::m_lineSize, "Outline size")
         .def_readwrite("category", &CGraphicsPolylineProperty::m_category, "Graphics category")
@@ -214,12 +214,12 @@ BOOST_PYTHON_MODULE(pycore)
         .def(init<>("Default constructor"))
         .def(init<const std::vector<CPoint<float>>>(_ctor1GraphicsPolyline))
         .def(init<const std::vector<CPoint<float>>, const CGraphicsPolylineProperty&>(_ctor2GraphicsPolyline))
-        .add_property("points", &CProxyGraphicsPolyline::getPoints, &CProxyGraphicsPolyline::setPoints, "List of polyline vertices (:py:class:`CPointF`)")
-        .add_property("property", &CProxyGraphicsPolyline::getProperty, &CProxyGraphicsPolyline::setProperty, "Visual point properties. See :py:class:`~ikomia.core.PyCore.GraphicsPolylineProperty`.")
+        .add_property("points", &CProxyGraphicsPolyline::getPoints, &CProxyGraphicsPolyline::setPoints, "List of polyline vertices (:py:class:`~ikomia.core.pycore.CPointF`)")
+        .add_property("property", &CProxyGraphicsPolyline::getProperty, &CProxyGraphicsPolyline::setProperty, "Visual properties :py:class:`~ikomia.core.pycore.GraphicsPolylineProperty`")
     ;
 
     //Rectangle
-    class_<CGraphicsRectProperty>("GraphicsRectProperty", "Visual properties for :py:class:`~ikomia.core.PyCore.CGraphicsRectangle` item.")
+    class_<CGraphicsRectProperty>("GraphicsRectProperty", "Visual properties for :py:class:`~ikomia.core.pycore.CGraphicsRectangle` item.")
         .add_property("pen_color", &CGraphicsRectProperty::getPenColor, &CGraphicsRectProperty::setPenColor, "Outline color (list - rgba)")
         .add_property("brush_color", &CGraphicsRectProperty::getBrushColor, &CGraphicsRectProperty::setBrushColor, "Fill color (list - rgba)")
         .def_readwrite("line_size", &CGraphicsRectProperty::m_lineSize, "Outline size")
@@ -234,11 +234,11 @@ BOOST_PYTHON_MODULE(pycore)
         .add_property("y", &CProxyGraphicsRect::getY, &CProxyGraphicsRect::setY, "y coordinate of top-left point")
         .add_property("width", &CProxyGraphicsRect::getWidth, &CProxyGraphicsRect::setWidth, "Rectangle width")
         .add_property("height", &CProxyGraphicsRect::getHeight, &CProxyGraphicsRect::setHeight, "Rectangle height")
-        .add_property("property", &CProxyGraphicsRect::getProperty, &CProxyGraphicsRect::setProperty, "Visual point properties. See :py:class:`~ikomia.core.PyCore.GraphicsRectProperty`.")
+        .add_property("property", &CProxyGraphicsRect::getProperty, &CProxyGraphicsRect::setProperty, "Visual properties :py:class:`~ikomia.core.pycore.GraphicsRectProperty`")
     ;
 
     //Text
-    class_<CGraphicsTextProperty>("GraphicsTextProperty", "Visual properties for :py:class:`~ikomia.core.PyCore.CGraphicsText` item.")
+    class_<CGraphicsTextProperty>("GraphicsTextProperty", "Visual properties for :py:class:`~ikomia.core.pycore.CGraphicsText` item.")
         .add_property("color", &CGraphicsTextProperty::getColor, &CGraphicsTextProperty::setColor, "Text color (list - rgba)")
         .def_readwrite("font_name", &CGraphicsTextProperty::m_fontName, "Font family name")
         .def_readwrite("font_size", &CGraphicsTextProperty::m_fontSize, "Font size")
@@ -256,7 +256,7 @@ BOOST_PYTHON_MODULE(pycore)
         .add_property("x", &CProxyGraphicsText::getX, &CProxyGraphicsText::setX, "x coordinate of top-left point")
         .add_property("y", &CProxyGraphicsText::getY, &CProxyGraphicsText::setY, "y coordinate of top-left point")
         .add_property("text", &CProxyGraphicsText::getText, &CProxyGraphicsText::setText, "Text string")
-        .add_property("property", &CProxyGraphicsText::getProperty, &CProxyGraphicsText::setProperty, "Visual point properties. See :py:class:`~ikomia.core.PyCore.GraphicsTextProperty`.")
+        .add_property("property", &CProxyGraphicsText::getProperty, &CProxyGraphicsText::setProperty, "Visual properties :py:class:`~ikomia.core.pycore.GraphicsTextProperty`")
     ;
 
     //-------------------------------//

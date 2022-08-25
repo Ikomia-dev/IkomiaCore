@@ -259,9 +259,8 @@ void CGraphicsInput::save(const std::string &path)
 
 std::string CGraphicsInput::toJson(const std::vector<std::string> &options) const
 {
-    Q_UNUSED(options);
     QJsonDocument doc(toJson());
-    return doc.toJson(QJsonDocument::Compact).toStdString();
+    return toFormattedJson(doc, options);
 }
 
 void CGraphicsInput::fromJson(const std::string &jsonStr)

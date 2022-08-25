@@ -288,7 +288,6 @@ void CNumericIO<int>::loadCSV(const std::string &path)
 template <>
 std::string CNumericIO<std::string>::toJson(const std::vector<std::string> &options) const
 {
-    Q_UNUSED(options);
     QJsonObject root;
     toJsonCommon(root);
 
@@ -304,7 +303,7 @@ std::string CNumericIO<std::string>::toJson(const std::vector<std::string> &opti
     root["values"] = values;
 
     QJsonDocument doc(root);
-    return doc.toJson(QJsonDocument::Compact).toStdString();
+    return toFormattedJson(doc, options);
 }
 
 template <>
