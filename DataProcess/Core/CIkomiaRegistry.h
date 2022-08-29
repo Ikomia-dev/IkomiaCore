@@ -30,6 +30,8 @@ class DATAPROCESSSHARED_EXPORT CIkomiaRegistry
         void                        loadCppPlugins();
         void                        loadCppPlugin(const std::string &directory);
 
+        static std::vector<std::string> getBlackListedPackages();
+
     private:
 
         void                        _loadCppPlugin(const QString &fileName);

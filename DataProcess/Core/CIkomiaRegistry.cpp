@@ -117,6 +117,24 @@ void CIkomiaRegistry::loadCppPlugin(const std::string& directory)
         _loadCppPlugin(pluginDir.absoluteFilePath(fileName));
 }
 
+std::vector<std::string> CIkomiaRegistry::getBlackListedPackages()
+{
+    std::vector<std::string> packages;
+
+    QString blackListPath = Utils::IkomiaApp::getQIkomiaFolder() + "/Python/packageBlacklist.txt";
+    if (QFile::exists(blackListPath))
+    {
+        QFile blackListFile(blackListPath);
+        if (blackListFile.open(QIODevice::ReadOnly))
+        {
+            QTextStream in(&blackListFile);
+            while (!in.atEnd())
+                packages.push_back(in.readLine().toStdString());
+        }
+    }
+    return packages;
+}
+
 void CIkomiaRegistry::_loadCppPlugin(const QString &fileName)
 {
     try

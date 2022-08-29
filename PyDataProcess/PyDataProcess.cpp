@@ -613,6 +613,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("registerTask", &CIkomiaRegistryWrap::registerTask, _registerTaskDocString, args("self", "factory"))
         .def("registerIO", &CIkomiaRegistryWrap::registerIO, _registerIODocString, args("self", "factory"))
         .def("loadCppPlugin", &CIkomiaRegistryWrap::loadCppPlugin, _loadCppPluginDocString, args("self", "path"))
+        .def("getBlackListedPackages", &CIkomiaRegistry::getBlackListedPackages)
+        .staticmethod("getBlackListedPackages")
     ;
 
     //---------------------//
