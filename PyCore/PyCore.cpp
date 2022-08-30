@@ -58,7 +58,7 @@ template<typename T>
 void exposeCPoint(const std::string& className)
 {
     class_<CPoint<T>>(className.c_str(), "Generic 2D point class.", init<>("Default constructor"))
-        .def(init<T, T>(_ctorCPointDocString))
+        .def(init<T, T>(_ctorCPointDocString, args("self", "x", "y")))
         .add_property("x", &CPoint<T>::getX, &CPoint<T>::setX, "x-coordinate")
         .add_property("y", &CPoint<T>::getY, &CPoint<T>::setY, "y-coordinate")
     ;
@@ -131,8 +131,8 @@ BOOST_PYTHON_MODULE(pycore)
     exposeCPoint<float>("CPointF");    
 
     //Base class of all graphics items
-    class_<CGraphicsItemWrap, std::shared_ptr<CGraphicsItemWrap>, boost::noncopyable>("CGraphicsItem", _graphicsItemDocString, init<>("Default constructor"))
-        .def(init<GraphicsItem>("Constructor with item type definition"))
+    class_<CGraphicsItemWrap, std::shared_ptr<CGraphicsItemWrap>, boost::noncopyable>("CGraphicsItem", _graphicsItemDocString, init<>("Default constructor", args("self")))
+        .def(init<GraphicsItem>("Constructor with item type definition", args("self", "type")))
         .def("getBoundingRect", pure_virtual(&CProxyGraphicsItem::getBoundingRect), _getGraphicsBoundRectDocString, args("self"))
         .def("getCategory", pure_virtual(&CProxyGraphicsItem::getCategory), _getGraphicsCategoryDocString, args("self"))
         .def("getId", &CProxyGraphicsItem::getId, _getGraphicsIdDocString, args("self"))
@@ -144,9 +144,9 @@ BOOST_PYTHON_MODULE(pycore)
 
     //Complex polygon
     class_<CProxyGraphicsComplexPoly, bases<CProxyGraphicsItem>, std::shared_ptr<CProxyGraphicsComplexPoly>>("CGraphicsComplexPolygon", _graphicsComplexPolyDocString)
-        .def(init<>("Default constructor"))
-        .def(init<const std::vector<CPoint<float>>, const std::vector<PolygonF>>(_ctor1GraphicsComplexPoly))
-        .def(init<const std::vector<CPoint<float>>, const std::vector<PolygonF>, const CGraphicsPolygonProperty&>(_ctor2GraphicsComplexPoly))
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const std::vector<CPoint<float>>, const std::vector<PolygonF>>(_ctor1GraphicsComplexPoly, args("self", "outer", "inners")))
+        .def(init<const std::vector<CPoint<float>>, const std::vector<PolygonF>, const CGraphicsPolygonProperty&>(_ctor2GraphicsComplexPoly, args("self", "outer", "inners", "property")))
         .add_property("outer", &CProxyGraphicsComplexPoly::getOuter, &CProxyGraphicsComplexPoly::setOuter, "Outer polygon (list of vertices)")
         .add_property("inners", &CProxyGraphicsComplexPoly::getInners, &CProxyGraphicsComplexPoly::setInners, "Inner polygons (list of inner polygons corresponding to holes)")
         .add_property("property", &CProxyGraphicsComplexPoly::getProperty, &CProxyGraphicsComplexPoly::setProperty, "Visual properties :py:class:`~ikomia.core.pycore.GraphicsPolygonProperty`")
@@ -161,9 +161,9 @@ BOOST_PYTHON_MODULE(pycore)
     ;
 
     class_<CProxyGraphicsEllipse, bases<CProxyGraphicsItem>, std::shared_ptr<CProxyGraphicsEllipse>>("CGraphicsEllipse", _graphicsEllipseDocString)
-        .def(init<>("Default constructor"))
-        .def(init<float, float, float, float>(_ctor1GraphicsEllipse))
-        .def(init<float, float, float, float, const CGraphicsEllipseProperty&>(_ctor2GraphicsEllipse))
+        .def(init<>("Default constructor", args("self")))
+        .def(init<float, float, float, float>(_ctor1GraphicsEllipse, args("self", "left", "top", "width", "height")))
+        .def(init<float, float, float, float, const CGraphicsEllipseProperty&>(_ctor2GraphicsEllipse, args("self", "left", "top", "width", "height", "property")))
         .add_property("x", &CProxyGraphicsEllipse::getX, &CProxyGraphicsEllipse::setX, "x coordinate of top-left point")
         .add_property("y", &CProxyGraphicsEllipse::getY, &CProxyGraphicsEllipse::setY, "y coordinate of top-left point")
         .add_property("width", &CProxyGraphicsEllipse::getWidth, &CProxyGraphicsEllipse::setWidth, "Ellipse width")
@@ -180,9 +180,9 @@ BOOST_PYTHON_MODULE(pycore)
     ;
 
     class_<CProxyGraphicsPoint, bases<CProxyGraphicsItem>, std::shared_ptr<CProxyGraphicsPoint>>("CGraphicsPoint", _graphicsPointDocString)
-        .def(init<>("Default constructor"))
-        .def(init<const CPoint<float>&>(_ctor1GraphicsPoint))
-        .def(init<const CPoint<float>&, const CGraphicsPointProperty&>(_ctor2GraphicsPoint))
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const CPoint<float>&>(_ctor1GraphicsPoint, args("self", "point")))
+        .def(init<const CPoint<float>&, const CGraphicsPointProperty&>(_ctor2GraphicsPoint, args("self", "point", "property")))
         .add_property("point", &CProxyGraphicsPoint::getPoint, &CProxyGraphicsPoint::setPoint, "2D point coordinates (:py:class:`CPointF`)")
         .add_property("property", &CProxyGraphicsPoint::getProperty, &CProxyGraphicsPoint::setProperty, "Visual properties :py:class:`~ikomia.core.pycore.GraphicsPointProperty`")
     ;
@@ -196,9 +196,9 @@ BOOST_PYTHON_MODULE(pycore)
     ;
 
     class_<CProxyGraphicsPolygon, bases<CProxyGraphicsItem>, std::shared_ptr<CProxyGraphicsPolygon>>("CGraphicsPolygon", _graphicsPolygonDocString)
-        .def(init<>("Default constructor"))
-        .def(init<const std::vector<CPoint<float>>>(_ctor1GraphicsPolygon))
-        .def(init<const std::vector<CPoint<float>>, const CGraphicsPolygonProperty&>(_ctor2GraphicsPolygon))
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const std::vector<CPoint<float>>>(_ctor1GraphicsPolygon, args("self", "points")))
+        .def(init<const std::vector<CPoint<float>>, const CGraphicsPolygonProperty&>(_ctor2GraphicsPolygon, args("self", "points", "property")))
         .add_property("points", &CProxyGraphicsPolygon::getPoints, &CProxyGraphicsPolygon::setPoints, "List of polygon vertices (:py:class:`CPointF`)")
         .add_property("property", &CProxyGraphicsPolygon::getProperty, &CProxyGraphicsPolygon::setProperty, "Visual properties :py:class:`~ikomia.core.pycore.GraphicsPolygonProperty`")
     ;
@@ -211,9 +211,9 @@ BOOST_PYTHON_MODULE(pycore)
     ;
 
     class_<CProxyGraphicsPolyline, bases<CProxyGraphicsItem>, std::shared_ptr<CProxyGraphicsPolyline>>("CGraphicsPolyline", _graphicsPolylineDocString)
-        .def(init<>("Default constructor"))
-        .def(init<const std::vector<CPoint<float>>>(_ctor1GraphicsPolyline))
-        .def(init<const std::vector<CPoint<float>>, const CGraphicsPolylineProperty&>(_ctor2GraphicsPolyline))
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const std::vector<CPoint<float>>>(_ctor1GraphicsPolyline, args("self", "points")))
+        .def(init<const std::vector<CPoint<float>>, const CGraphicsPolylineProperty&>(_ctor2GraphicsPolyline, args("self", "points", "property")))
         .add_property("points", &CProxyGraphicsPolyline::getPoints, &CProxyGraphicsPolyline::setPoints, "List of polyline vertices (:py:class:`~ikomia.core.pycore.CPointF`)")
         .add_property("property", &CProxyGraphicsPolyline::getProperty, &CProxyGraphicsPolyline::setProperty, "Visual properties :py:class:`~ikomia.core.pycore.GraphicsPolylineProperty`")
     ;
@@ -227,9 +227,9 @@ BOOST_PYTHON_MODULE(pycore)
     ;
 
     class_<CProxyGraphicsRect, bases<CProxyGraphicsItem>, std::shared_ptr<CProxyGraphicsRect>>("CGraphicsRectangle", _graphicsRectangleDocString)
-        .def(init<>("Default constructor"))
-        .def(init<float, float, float, float>(_ctor1GraphicsRectangle))
-        .def(init<float, float, float, float, const CGraphicsRectProperty&>(_ctor2GraphicsRectangle))
+        .def(init<>("Default constructor", args("self")))
+        .def(init<float, float, float, float>(_ctor1GraphicsRectangle, args("self", "left", "top", "width", "height")))
+        .def(init<float, float, float, float, const CGraphicsRectProperty&>(_ctor2GraphicsRectangle, args("self", "left", "top", "width", "height", "property")))
         .add_property("x", &CProxyGraphicsRect::getX, &CProxyGraphicsRect::setX, "x coordinate of top-left point")
         .add_property("y", &CProxyGraphicsRect::getY, &CProxyGraphicsRect::setY, "y coordinate of top-left point")
         .add_property("width", &CProxyGraphicsRect::getWidth, &CProxyGraphicsRect::setWidth, "Rectangle width")
@@ -249,10 +249,10 @@ BOOST_PYTHON_MODULE(pycore)
     ;
 
     class_<CProxyGraphicsText, bases<CProxyGraphicsItem>, std::shared_ptr<CProxyGraphicsText>>("CGraphicsText", _graphicsTextDocString)
-        .def(init<>("Default constructor"))
-        .def(init<const std::string&>(_ctor1GraphicsText))
-        .def(init<const std::string&, float, float>(_ctor2GraphicsText))
-        .def(init<const std::string&, float, float, const CGraphicsTextProperty&>(_ctor3GraphicsText))
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const std::string&>(_ctor1GraphicsText, args("self", "text")))
+        .def(init<const std::string&, float, float>(_ctor2GraphicsText, args("self", "text", "x", "y")))
+        .def(init<const std::string&, float, float, const CGraphicsTextProperty&>(_ctor3GraphicsText, args("self", "text", "x", "y", "property")))
         .add_property("x", &CProxyGraphicsText::getX, &CProxyGraphicsText::setX, "x coordinate of top-left point")
         .add_property("y", &CProxyGraphicsText::getY, &CProxyGraphicsText::setY, "y coordinate of top-left point")
         .add_property("text", &CProxyGraphicsText::getText, &CProxyGraphicsText::setText, "Text string")
@@ -265,8 +265,8 @@ BOOST_PYTHON_MODULE(pycore)
     CMat (CGraphicsConversion::*proxyGraphicsToBinaryMask)(const std::vector<std::shared_ptr<CProxyGraphicsItem>>&) = &CGraphicsConversion::graphicsToBinaryMask;
 
     class_<CGraphicsConversion>("CGraphicsConversion", _graphicsConvDocString)
-        .def(init<>("Default constructor"))
-        .def(init<int, int>(_ctorGraphicsConv))
+        .def(init<>("Default constructor", args("self")))
+        .def(init<int, int>(_ctorGraphicsConv, args("self", "width", "height")))
         .def("graphicsToBinaryMask", proxyGraphicsToBinaryMask, _graphicsToBinaryMaskDocString, args("self", "graphics"))
     ;
 
@@ -279,7 +279,7 @@ BOOST_PYTHON_MODULE(pycore)
 
     class_<CWorkflowTaskParamWrap, std::shared_ptr<CWorkflowTaskParamWrap>>("CWorkflowTaskParam", _WorkflowTaskParamDocString)
         .enable_pickling()
-        .def(init<>("Default constructor"))
+        .def(init<>("Default constructor", args("self")))
         .def(self_ns::str(self_ns::self))
         .def("__copy__", &generic_copy<CWorkflowTaskParamWrap>)
         .def("__deepcopy__", &generic_deepcopy<CWorkflowTaskParamWrap>)
@@ -319,9 +319,9 @@ BOOST_PYTHON_MODULE(pycore)
     ;
 
     class_<CWorkflowTaskIOWrap, std::shared_ptr<CWorkflowTaskIOWrap>>("CWorkflowTaskIO", _WorkflowTaskIODocString)
-        .def(init<>("Default constructor"))
-        .def(init<IODataType>(_ctor1WorkflowTaskIODocString))
-        .def(init<IODataType, const std::string&>(_ctor2WorkflowTaskIODocString))
+        .def(init<>("Default constructor", args("self")))
+        .def(init<IODataType>(_ctor1WorkflowTaskIODocString, args("self", "dataType")))
+        .def(init<IODataType, const std::string&>(_ctor2WorkflowTaskIODocString, args("self", "dataType", "name")))
         .def(init<const CWorkflowTaskIO&>("Copy constructor"))
         .add_property("dataType", &CWorkflowTaskIO::getDataType, &CWorkflowTaskIO::setDataType, "I/O data type")
         .add_property("dimCount", &CWorkflowTaskIO::getDimensionCount, &CWorkflowTaskIO::setDimensionCount, "Number of dimensions")
@@ -367,8 +367,8 @@ BOOST_PYTHON_MODULE(pycore)
     void (CWorkflowTask::*addOutputRef)(const WorkflowTaskIOPtr&) = &CWorkflowTask::addOutput;
 
     class_<CWorkflowTaskWrap, std::shared_ptr<CWorkflowTaskWrap>>("CWorkflowTask", _WorkflowTaskDocString)
-        .def(init<>("Default constructor"))
-        .def(init<const std::string&>(_ctorWorkflowTaskDocString))
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const std::string&>(_ctorWorkflowTaskDocString, args("self", "name")))
         .def(init<const CWorkflowTask&>("Copy constructor"))
         .add_property("type", &CWorkflowTask::getType, "Main purpose or data type on which the task is dedicated to.")
         .add_property("name", &CWorkflowTask::getName, &CWorkflowTask::setName, "Task name (must be unique)")
@@ -422,8 +422,8 @@ BOOST_PYTHON_MODULE(pycore)
     //----- CWorkflowTaskWidget -----//
     //-------------------------------//
     class_<CWorkflowTaskWidgetWrap, std::shared_ptr<CWorkflowTaskWidgetWrap>, boost::noncopyable>("CWorkflowTaskWidget", _WorkflowTaskWidget)
-        .def(init<>("Default constructor"))
-        .def(init<QWidget*>("Construct CWorkflowTaskWidget with parent."))
+        .def(init<>("Default constructor", args("self")))
+        .def(init<QWidget*>("Construct with parent window.", args("self", "parent")))
         .def("setLayout", &CWorkflowTaskWidgetWrap::setLayout, _setLayoutDocString, args("self", "layout"))
         .def("setApplyBtnHidden", &CWorkflowTaskWidgetWrap::setApplyBtnHidden, _setApplyBtnHiddenDocString, args("self", "is_hidden"))
         .def("onApply", pure_virtual(&CWorkflowTaskWidget::onApply), _applyDocString, args("self"))
@@ -450,9 +450,9 @@ BOOST_PYTHON_MODULE(pycore)
     ;
 
     class_<CMeasure>("CMeasure", _measureDocString)
-        .def(init<>("Default constructor"))
-        .def(init<int>(_ctor1MeasureDocString))
-        .def(init<int, std::string>(_ctor2MeasureDocString))
+        .def(init<>("Default constructor", args("self")))
+        .def(init<int>(_ctor1MeasureDocString, args("self", "id")))
+        .def(init<int, std::string>(_ctor2MeasureDocString, args("self", "id", "name")))
         .def("getAvailableMeasures", &CMeasure::getAvailableMeasures, _getAvailableMeasuresDocString)
         .staticmethod("getAvailableMeasures")
         .def("getName", &CMeasure::getName, _getNameDocString, args("id"))

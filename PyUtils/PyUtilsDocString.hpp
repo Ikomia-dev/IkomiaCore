@@ -29,7 +29,7 @@ constexpr auto _getCurrentVersionDocString =
         "   str: API version\n";
 
 constexpr auto _pythonStateDocString =
-        "Get the plugin compatibility state. See :py:class:`utils.pyutils.PluginState` for possible values.\n\n"
+        "Get the plugin compatibility state, see :py:class:`~ikomia.utils.pyutils.PluginState` for possible values.\n\n"
         "Args:\n"
         "   version (str): base version of the plugin\n"
         "   language (:py:class:`utils.pyutils.ApiLanguage`)\n\n"
@@ -44,11 +44,12 @@ constexpr auto _exceptionDocString =
 
 constexpr auto _ctorExcDocString =
         "Constructor with parameters\n\n"
-        "arg1 (int): Exception code\n\n"
-        "arg2 (str): Exception message\n\n"
-        "arg3 (str): Function from where exception is thrown\n\n"
-        "arg4 (str): File from where exception is thrown\n\n"
-        "arg5 (int): Line in source file from where exception is thrown\n";
+        "Args:\n\n"
+        "   code (int): exception code\n\n"
+        "   error (str): exception message\n\n"
+        "   func (str): function from where exception is thrown\n\n"
+        "   file (str): file from where exception is thrown\n\n"
+        "   line (int): Line in source file from where exception is thrown\n";
 
 constexpr auto _messageDocString =
         "Get formatted exception message.\n\n"
