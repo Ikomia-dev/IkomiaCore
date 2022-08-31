@@ -70,7 +70,7 @@ BOOST_PYTHON_MODULE(pyutils)
 
     //----- Binding CException -----
     class_<CException>("CException", _exceptionDocString, init<>("Default constructor"))
-        .def(init<int, const std::string&, const std::string&, const std::string&, int>(_ctorExcDocString))
+        .def(init<int, const std::string&, const std::string&, const std::string&, int>(_ctorExcDocString, args("code", "error", "func", "file", "line")))
         .def("message", &CException::getMessage, _messageDocString, args("self"))
     ;
 
