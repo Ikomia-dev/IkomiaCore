@@ -161,6 +161,26 @@ void COcvDnnProcess::readClassNames()
     file.close();
 }
 
+void COcvDnnProcess::forward(const CMat& imgSrc, std::vector<cv::Mat> &outputs)
+{
+    int size = getNetworkInputSize();
+    double scaleFactor = getNetworkInputScaleFactor();
+    cv::Scalar mean = getNetworkInputMean();
+    auto inputBlob = cv::dnn::blobFromImage(imgSrc, scaleFactor, cv::Size(size,size), mean, false, false);
+    m_net.setInput(inputBlob);
+    auto netOutNames = getOutputsNames();
+    m_net.forward(outputs, netOutNames);
+
+    // Trick to overcome OpenCV issue around CUDA context and multithreading
+    // https://github.com/opencv/opencv/issues/20566
+    auto paramPtr = std::dynamic_pointer_cast<COcvDnnProcessParam>(m_pParam);
+    if(paramPtr->m_backend == cv::dnn::DNN_BACKEND_CUDA && m_bNewInput)
+    {
+        m_sign *= -1;
+        m_bNewInput = false;
+    }
+}
+
 void COcvDnnProcess::displayLayers(const cv::dnn::Net& net)
 {
     auto layerNames = net.getLayerNames();

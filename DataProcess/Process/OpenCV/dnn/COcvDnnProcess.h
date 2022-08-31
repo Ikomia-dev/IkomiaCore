@@ -87,6 +87,7 @@ class DATAPROCESSSHARED_EXPORT COcvDnnProcess : public C2dImageTask
 
         cv::dnn::Net                    readDnn();
         void                            readClassNames();
+        void                            forward(const CMat &imgSrc, std::vector<cv::Mat>& outputs);
 
     protected:
 
