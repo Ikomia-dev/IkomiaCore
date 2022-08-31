@@ -399,6 +399,8 @@ namespace Ikomia
                         return QObject::tr("multi-dimensional array");
                     case IODataType::DATA_DICT:
                         return QObject::tr("Generic Python dict");
+                    case IODataType::OBJECT_DETECTION:
+                        return QObject::tr("Object detections");
                 }
                 return QString();
             }
@@ -434,6 +436,8 @@ namespace Ikomia
                     return targetData == IODataType::OUTPUT_GRAPHICS;
                 else if(srcData == IODataType::OUTPUT_GRAPHICS)
                     return targetData == IODataType::INPUT_GRAPHICS;
+                else if (srcData == IODataType::OBJECT_DETECTION)
+                    return targetData == IODataType::INPUT_GRAPHICS || targetData == IODataType::BLOB_VALUES;
                 else if(srcData == IODataType::IMAGE_BINARY)
                 {
                     return (targetData == IODataType::IMAGE ||

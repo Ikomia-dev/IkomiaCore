@@ -21,6 +21,7 @@
 #include "Graphics/CGraphicsLayer.h"
 #include "Graphics/CGraphicsRegistration.h"
 #include "CGraphicsOutput.h"
+#include "CObjectDetectionIO.h"
 #include "UtilsTools.hpp"
 #include <QJsonDocument>
 #include <QJsonArray>
@@ -101,6 +102,16 @@ CGraphicsInput &CGraphicsInput::operator=(const CGraphicsOutput &out)
     return *this;
 }
 
+CGraphicsInput &CGraphicsInput::operator=(const CObjectDetectionIO &out)
+{
+    CWorkflowTaskIO::operator=(out);
+    auto graphicsOutPtr = out.getGraphicsIO();
+    auto pGraphicsOut = dynamic_cast<const CGraphicsOutput*>(graphicsOutPtr.get());
+
+    if (pGraphicsOut)
+        *this = *pGraphicsOut;
+}
+
 void CGraphicsInput::setLayer(CGraphicsLayer *pLayer)
 {
     m_pLayer = pLayer;
@@ -173,6 +184,12 @@ void CGraphicsInput::copy(const std::shared_ptr<CWorkflowTaskIO> &ioPtr)
         auto pGraphicsOutput = dynamic_cast<const CGraphicsOutput*>(ioPtr.get());
         if(pGraphicsOutput)
             *this = *pGraphicsOutput;
+        else
+        {
+            auto pObjectDetectionIO = dynamic_cast<const CObjectDetectionIO*>(ioPtr.get());
+            if (pObjectDetectionIO)
+                *this = *pObjectDetectionIO;
+        }
     }
 }
 

@@ -322,6 +322,9 @@ std::string CWorkflowTaskIO::getClassName(IODataType ioDataType)
         case IODataType::DATA_DICT:
             return "CWorkflowTaskIO";
 
+        case IODataType::OBJECT_DETECTION:
+            return "CObjectDetectionIO";
+
         default: return "";
     }
 }

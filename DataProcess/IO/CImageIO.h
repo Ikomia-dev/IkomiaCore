@@ -141,7 +141,7 @@ class DATAPROCESSSHARED_EXPORT CImageIO : public CWorkflowTaskIO
          * @details Information like width,height,bit depth, channel count and basic statistics can be retrieved.
          * @return CDataInfoPtr object or derived.
          */
-        virtual CDataInfoPtr    getDataInfo() override;
+        CDataInfoPtr    getDataInfo() override;
         /**
          * @brief Gets the 2D image data.
          * @details Returned image is 2D only. In case of 3D volume, the current image index is used to get the desired 2D plane (see setCurrentImage()).
