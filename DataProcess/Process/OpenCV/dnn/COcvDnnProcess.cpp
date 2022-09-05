@@ -169,7 +169,13 @@ void COcvDnnProcess::forward(const CMat& imgSrc, std::vector<cv::Mat> &outputs)
     auto inputBlob = cv::dnn::blobFromImage(imgSrc, scaleFactor, cv::Size(size,size), mean, false, false);
     m_net.setInput(inputBlob);
     auto netOutNames = getOutputsNames();
+
+    Utils::CTimer inferenceTime;
+    inferenceTime.start();
     m_net.forward(outputs, netOutNames);
+    auto t = inferenceTime.get_elapsed_ms();
+    m_customInfo.clear();
+    m_customInfo.push_back(std::make_pair("Inference time (ms)", std::to_string(t)));
 
     // Trick to overcome OpenCV issue around CUDA context and multithreading
     // https://github.com/opencv/opencv/issues/20566
