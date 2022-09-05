@@ -78,7 +78,8 @@ namespace Ikomia
         LIVE_STREAM_LABEL,      /**< Label video from stream (camera): single channel, 1 graylevel per connected component */
         ARRAY,                  /**< Multi-dimensional array */
         DATA_DICT,              /**< Python-based IO where data are stored as dict */
-        OBJECT_DETECTION,       /**< I/O for object detection management*/
+        OBJECT_DETECTION,       /**< I/O for object detection management */
+        INSTANCE_SEGMENTATION,  /**< I/O for instance segmentation management */
         NONE                    /**< Unknown data type */
     };
 

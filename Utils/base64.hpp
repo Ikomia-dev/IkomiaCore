@@ -1,3 +1,6 @@
+#ifndef BASE64_HPP
+#define BASE64_HPP
+
 /*
 * Base64 encoding/decoding (RFC1341)
 * Copyright (c) 2005-2011, Jouni Malinen <j@w1.fi>
@@ -10,6 +13,9 @@
 // instead of a buffer allocated with malloc.
 
 #include <string>
+
+namespace Ikomia
+{
 
 static const unsigned int base64_table[64] ={
 	'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
@@ -25,7 +31,7 @@ static const unsigned int base64_table[64] ={
 * Returns: Allocated buffer of out_len bytes of encoded data,
 * or empty string on failure
 */
-std::string base64_encode(const unsigned char *src, size_t len)
+inline std::string base64_encode(const unsigned char *src, size_t len)
 {
 	unsigned char *out, *pos;
 	const unsigned char *end, *in;
@@ -99,7 +105,7 @@ static constexpr const int dtable[256] = {
 *
 * Caller is responsible for freeing the returned buffer.
 */
-std::string base64_decode(const unsigned char *src, size_t len)
+inline std::string base64_decode(const unsigned char *src, size_t len)
 {
 	unsigned char *out, *pos, block[4], tmp;
 	size_t i, count, olen;
@@ -168,7 +174,7 @@ static constexpr const unsigned char B64index[256] = { 0,  0,  0,  0,  0,  0,  0
 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51 };
 
 
-std::string base64_decode_fast(const void* data, const size_t len)
+inline std::string base64_decode_fast(const void* data, const size_t len)
 {
     unsigned char* p = (unsigned char*)data;
     int pad = len > 0 && (len % 4 || p[len - 1] == '=');
@@ -195,3 +201,7 @@ std::string base64_decode_fast(const void* data, const size_t len)
     }
     return str;
 }
+
+} //End namespace
+
+#endif // DATAPROCESSTOOLS_HPP

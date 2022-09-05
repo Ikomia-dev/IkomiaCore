@@ -73,7 +73,7 @@ std::shared_ptr<CGraphicsOutput> CObjectDetectionIO::getGraphicsIO() const
     return m_graphicsIOPtr;
 }
 
-std::shared_ptr<CBlobMeasureIO> CObjectDetectionIO::getBlobMeasureIO()
+std::shared_ptr<CBlobMeasureIO> CObjectDetectionIO::getBlobMeasureIO() const
 {
     return m_blobMeasureIOPtr;
 }
@@ -106,7 +106,7 @@ void CObjectDetectionIO::addObject(const std::string &label, double confidence, 
     rectProp.m_penColor = color;
     auto graphicsObj = m_graphicsIOPtr->addRectangle(boxX, boxY, boxWidth, boxHeight, rectProp);
 
-    //Retrieve class label
+    //Class label
     std::string graphicsLabel = label + " : " + std::to_string(confidence);
     CGraphicsTextProperty textProperty;
     textProperty.m_color = color;
@@ -125,6 +125,7 @@ void CObjectDetectionIO::clearData()
     m_objects.clear();
     m_graphicsIOPtr->clearData();
     m_blobMeasureIOPtr->clearData();
+    m_infoPtr = nullptr;
 }
 
 void CObjectDetectionIO::load(const std::string &path)
@@ -210,10 +211,6 @@ void CObjectDetectionIO::fromJson(const QJsonDocument &jsonDoc)
         objDetection.m_color = Utils::Graphics::colorFromJson(obj["color"].toObject());
         m_objects.push_back(objDetection);
     }
-}
-
-void CObjectDetectionIO::copy(const std::shared_ptr<CWorkflowTaskIO> &ioPtr)
-{
 }
 
 std::shared_ptr<CObjectDetectionIO> CObjectDetectionIO::clone() const

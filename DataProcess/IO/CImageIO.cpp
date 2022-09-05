@@ -22,7 +22,7 @@
 #include "Data/CDataConversion.h"
 #include "CDataImageIO.h"
 #include "CDataIO.hpp"
-#include "base64.hpp"
+#include "DataProcessTools.hpp"
 
 using CImageDataIO = CDataIO<CDataImageIO, CMat>;
 
@@ -346,35 +346,8 @@ void CImageIO::load(const std::string &path)
 
 std::string CImageIO::toJson(const std::vector<std::string> &options) const
 {
-    if (m_image.data == nullptr)
-        return std::string();
-
-    CMat img8bits;
-    if (m_image.depth() != CV_8U)
-        CDataConversion::to8Bits(m_image, img8bits);
-    else
-        img8bits = m_image;
-
-    std::string format = ".jpg";
-    auto it = std::find(options.begin(), options.end(), "image_format");
-
-    if (it != options.end())
-    {
-        size_t index = it - options.begin() + 1;
-        if (index < options.size())
-        {
-            if (options[index] == "png")
-                format = ".png";
-        }
-    }
-
-    std::vector<uchar> buffer;
-    cv::imencode(format, img8bits, buffer);
-    auto* pEncodedBuf = reinterpret_cast<unsigned char*>(buffer.data());
-    std::string b64ImgStr = base64_encode(pEncodedBuf, buffer.size());
-
     QJsonObject root;
-    root["image"] = QString::fromStdString(b64ImgStr);
+    root["image"] = QString::fromStdString(Utils::Image::toJson(m_image, options));
     QJsonDocument doc(root);
     return toFormattedJson(doc, options);
 }
@@ -390,9 +363,7 @@ void CImageIO::fromJson(const std::string &jsonStr)
         throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading blob measures: empty JSON structure", __func__, __FILE__, __LINE__);
 
     std::string b64ImgStr = root["image"].toString().toStdString();
-    std::string decoded = base64_decode_fast(b64ImgStr.c_str(), jsonStr.size());
-    std::vector<uchar> data(decoded.begin(), decoded.end());
-    m_image = cv::imdecode(CMat(data), cv::IMREAD_COLOR);
+    m_image = Utils::Image::fromJson(b64ImgStr);
 }
 
 std::shared_ptr<CImageIO> CImageIO::clone() const

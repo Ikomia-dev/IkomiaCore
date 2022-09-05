@@ -400,7 +400,9 @@ namespace Ikomia
                     case IODataType::DATA_DICT:
                         return QObject::tr("Generic Python dict");
                     case IODataType::OBJECT_DETECTION:
-                        return QObject::tr("Object detections");
+                        return QObject::tr("Object detection");
+                    case IODataType::INSTANCE_SEGMENTATION:
+                        return QObject::tr("Instance segmentation");
                 }
                 return QString();
             }
@@ -437,6 +439,8 @@ namespace Ikomia
                 else if(srcData == IODataType::OUTPUT_GRAPHICS)
                     return targetData == IODataType::INPUT_GRAPHICS;
                 else if (srcData == IODataType::OBJECT_DETECTION)
+                    return targetData == IODataType::INPUT_GRAPHICS || targetData == IODataType::BLOB_VALUES;
+                else if (srcData == IODataType::INSTANCE_SEGMENTATION)
                     return targetData == IODataType::INPUT_GRAPHICS || targetData == IODataType::BLOB_VALUES;
                 else if(srcData == IODataType::IMAGE_BINARY)
                 {

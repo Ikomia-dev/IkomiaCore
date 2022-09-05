@@ -325,6 +325,9 @@ std::string CWorkflowTaskIO::getClassName(IODataType ioDataType)
         case IODataType::OBJECT_DETECTION:
             return "CObjectDetectionIO";
 
+        case IODataType::INSTANCE_SEGMENTATION:
+            return "CInstanceSegIO";
+
         default: return "";
     }
 }

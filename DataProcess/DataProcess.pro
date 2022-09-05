@@ -44,6 +44,7 @@ SOURCES += \
         IO/CGraphicsInput.cpp \
         IO/CGraphicsOutput.cpp \
         IO/CImageIO.cpp \
+        IO/CInstanceSegIO.cpp \
         IO/CNumericIO.cpp \
         IO/CObjectDetectionIO.cpp \
         IO/CPathIO.cpp \
@@ -87,6 +88,7 @@ HEADERS += \
         IO/CGraphicsInput.h \
         IO/CGraphicsOutput.h \
         IO/CImageIO.h \
+        IO/CInstanceSegIO.h \
         IO/CNumericIO.h \
         IO/CObjectDetectionIO.h \
         IO/CPathIO.h \
@@ -488,7 +490,8 @@ deployIncludeIO.files = \
         IO/CVideoIO.h \
         IO/CViewPropertyIO.h \
         IO/CDatasetIO.h \
-        IO/CObjectDetectionIO.h
+        IO/CObjectDetectionIO.h \
+        IO/CInstanceSegIO.h
 
 deployIncludeProcessCore.path = ../Build/Include/DataProcess/Process/Core
 deployIncludeProcessCore.files = \

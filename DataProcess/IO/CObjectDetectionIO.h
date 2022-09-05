@@ -7,12 +7,14 @@
 #include "IO/CBlobMeasureIO.h"
 #include "Main/CoreDefine.hpp"
 
-struct DATAPROCESSSHARED_EXPORT CObjectDetection
+class DATAPROCESSSHARED_EXPORT CObjectDetection
 {
-    std::string         m_label = "";
-    double              m_confidence = 0;
-    std::vector<double> m_box;
-    CColor              m_color = {255,0,0};
+    public:
+
+        std::string         m_label = "";
+        double              m_confidence = 0;
+        std::vector<double> m_box;
+        CColor              m_color = {255,0,0};
 };
 
 
@@ -34,7 +36,7 @@ class DATAPROCESSSHARED_EXPORT CObjectDetectionIO: public CWorkflowTaskIO
         std::vector<CObjectDetection>       getObjects() const;
         CDataInfoPtr                        getDataInfo() override;
         std::shared_ptr<CGraphicsOutput>    getGraphicsIO() const;
-        std::shared_ptr<CBlobMeasureIO>     getBlobMeasureIO();
+        std::shared_ptr<CBlobMeasureIO>     getBlobMeasureIO() const;
 
         bool                                isDataAvailable() const override;
 
@@ -52,8 +54,6 @@ class DATAPROCESSSHARED_EXPORT CObjectDetectionIO: public CWorkflowTaskIO
         std::string                         toJson(const std::vector<std::string>& options) const override;
         void                                fromJson(const std::string &jsonStr) override;
 
-        void                                copy(const std::shared_ptr<CWorkflowTaskIO>& ioPtr) override;
-
         std::shared_ptr<CObjectDetectionIO> clone() const;
 
     private:
@@ -64,7 +64,7 @@ class DATAPROCESSSHARED_EXPORT CObjectDetectionIO: public CWorkflowTaskIO
 
     private:
 
-        std::vector<CObjectDetection>        m_objects;
+        std::vector<CObjectDetection>       m_objects;
         std::shared_ptr<CGraphicsOutput>    m_graphicsIOPtr = nullptr;
         std::shared_ptr<CBlobMeasureIO>     m_blobMeasureIOPtr = nullptr;
 };

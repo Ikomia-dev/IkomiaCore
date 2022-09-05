@@ -19,11 +19,12 @@
 
 #include "C2dImageTask.h"
 #include "DataProcessTools.hpp"
-#include "IO/CVideoIO.h"
 #include "Graphics/CGraphicsConversion.h"
 #include "Graphics/CGraphicsLayer.h"
-#include "IO/CConvertIO.h"
 #include "Data/CDataImageInfo.h"
+#include "IO/CVideoIO.h"
+#include "IO/CConvertIO.h"
+#include "IO/CInstanceSegIO.h"
 
 C2dImageTask::C2dImageTask() : CWorkflowTask()
 {
@@ -380,12 +381,24 @@ void C2dImageTask::createOverlayMasks()
     {
         if(i < m_colorMaps.size() && m_colorMaps[i].empty() == false)
         {
+            CMat maskImage;
             auto pOutput = std::dynamic_pointer_cast<CImageIO>(getOutput(i));
-            auto pOutputMask = std::dynamic_pointer_cast<CImageIO>(getOutput(m_colorMapMaskIndices[i]));
+            auto pOutputMask = getOutput(m_colorMapMaskIndices[i]);
 
-            if(pOutput && pOutputMask)
+            if (pOutputMask->getDataType() == IODataType::INSTANCE_SEGMENTATION)
             {
-                auto mask = Utils::Image::createOverlayMask(pOutputMask->getImage(), m_colorMaps[i]);
+                auto outMaskPtr = std::dynamic_pointer_cast<CInstanceSegIO>(pOutputMask);
+                maskImage = outMaskPtr->getMergeMask();
+            }
+            else
+            {
+                auto outMaskPtr = std::dynamic_pointer_cast<CImageIO>(pOutputMask);
+                maskImage = outMaskPtr->getImage();
+            }
+
+            if(pOutput && maskImage.empty() == false)
+            {
+                auto mask = Utils::Image::createOverlayMask(maskImage, m_colorMaps[i]);
                 pOutput->setOverlayMask(mask);
             }
         }

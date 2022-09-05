@@ -22,6 +22,8 @@
 
 #include "opencv2/opencv.hpp"
 #include "Data/CMat.hpp"
+#include "base64.hpp"
+#include "Data/CDataConversion.h"
 
 namespace Ikomia
 {
@@ -29,7 +31,7 @@ namespace Ikomia
     {
         namespace Image
         {
-            inline double   getMaxValueFromDepth(int depth)
+            inline double       getMaxValueFromDepth(int depth)
             {
                 double maxValue = 1;
                 switch(depth)
@@ -44,7 +46,7 @@ namespace Ikomia
                 }
                 return maxValue;
             }
-            inline CMat     createOverlayMask(const CMat& image, const CMat& colorMap)
+            inline CMat         createOverlayMask(const CMat& image, const CMat& colorMap)
             {
                 CMat srcOvrImg, ovrImg;
 
@@ -67,7 +69,7 @@ namespace Ikomia
                     }
                 return ovrImg;
             }
-            inline CMat     mergeColorMask(const CMat& image, const CMat& mask, const CMat& colormap, double opacity)
+            inline CMat         mergeColorMask(const CMat& image, const CMat& mask, const CMat& colormap, double opacity)
             {
                 CMat result, colorMask;
 
@@ -82,6 +84,41 @@ namespace Ikomia
                 cv::bitwise_not(maskNot, maskNot);
                 image.copyTo(result, maskNot);
                 return result;
+            }
+            inline std::string  toJson(const CMat& image, const std::vector<std::string> &options)
+            {
+                if (image.data == nullptr)
+                    return std::string();
+
+                CMat img8bits;
+                if (image.depth() != CV_8U)
+                    CDataConversion::to8Bits(image, img8bits);
+                else
+                    img8bits = image;
+
+                std::string format = ".jpg";
+                auto it = std::find(options.begin(), options.end(), "image_format");
+
+                if (it != options.end())
+                {
+                    size_t index = it - options.begin() + 1;
+                    if (index < options.size())
+                    {
+                        if (options[index] == "png")
+                            format = ".png";
+                    }
+                }
+
+                std::vector<uchar> buffer;
+                cv::imencode(format, img8bits, buffer);
+                auto* pEncodedBuf = reinterpret_cast<unsigned char*>(buffer.data());
+                return base64_encode(pEncodedBuf, buffer.size());
+            }
+            inline CMat         fromJson(const std::string& b64ImgStr)
+            {
+                std::string decoded = base64_decode_fast(b64ImgStr.c_str(), b64ImgStr.size());
+                std::vector<uchar> data(decoded.begin(), decoded.end());
+                return cv::imdecode(CMat(data), cv::IMREAD_COLOR);
             }
         }
     }
