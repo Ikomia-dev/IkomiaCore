@@ -222,6 +222,7 @@ void CWorkflowTask::setInput(const WorkflowTaskIOPtr &pInput, size_t index, bool
         //we should use this copy mecanism to give the possibility of derived
         //CWorkflowTaskIO classes to define the right behavior to convert input
         //and output (ex: CGraphicsInput and CGraphicsOutput)
+        CPyEnsureGIL gil;
         m_inputs[index]->copy(pInput);
     }
     updateStaticOutputs();
