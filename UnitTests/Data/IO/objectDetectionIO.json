@@ -1,0 +1,84 @@
+{
+    "detections": [
+        {
+            "box": {
+                "height": 150,
+                "width": 125,
+                "x": 5,
+                "y": 10
+            },
+            "color": {
+                "a": 0,
+                "b": 0,
+                "g": 0,
+                "r": 255
+            },
+            "confidence": 0.75,
+            "label": "Object1"
+        },
+        {
+            "box": {
+                "height": 50,
+                "width": 75,
+                "x": 30,
+                "y": 100
+            },
+            "color": {
+                "a": 32767,
+                "b": 0,
+                "g": 255,
+                "r": 0
+            },
+            "confidence": 0.25,
+            "label": "Object2"
+        },
+        {
+            "box": {
+                "height": 50,
+                "width": 50,
+                "x": 120,
+                "y": 10
+            },
+            "color": {
+                "a": 21845,
+                "b": 255,
+                "g": 0,
+                "r": 0
+            },
+            "confidence": 0.99,
+            "label": "Object3"
+        },
+        {
+            "box": {
+                "height": 150,
+                "width": 125,
+                "x": 5,
+                "y": 100
+            },
+            "color": {
+                "a": 21845,
+                "b": 0,
+                "g": 255,
+                "r": 255
+            },
+            "confidence": 0.8,
+            "label": "Object4"
+        },
+        {
+            "box": {
+                "height": 100,
+                "width": 80,
+                "x": 250,
+                "y": 100
+            },
+            "color": {
+                "a": 21845,
+                "b": 255,
+                "g": 0,
+                "r": 255
+            },
+            "confidence": 0.6,
+            "label": "Object5"
+        }
+    ]
+}
