@@ -114,8 +114,8 @@ void CInstanceSegIO::init(const std::string &taskName, int refImageIndex, int im
     m_imgIOPtr->setImage(mergeMask);
 }
 
-void CInstanceSegIO::addObject(int classIndex, const std::string &label,
-                               double confidence, double boxX, double boxY, double boxWidth, double boxHeight,
+void CInstanceSegIO::addObject(int classIndex, const std::string &label, double confidence,
+                               double boxX, double boxY, double boxWidth, double boxHeight,
                                const CMat &mask, const CColor &color)
 {
     CInstanceSegmentation obj;
@@ -231,6 +231,7 @@ QJsonObject CInstanceSegIO::toJsonInternal(const std::vector<std::string> &optio
     for (size_t i=0; i<m_instances.size(); ++i)
     {
         QJsonObject obj;
+        obj["classIndex"] = m_instances[i].m_classIndex;
         obj["label"] = QString::fromStdString(m_instances[i].m_label);
         obj["confidence"] = m_instances[i].m_confidence;
 
@@ -252,20 +253,30 @@ QJsonObject CInstanceSegIO::toJsonInternal(const std::vector<std::string> &optio
 
 void CInstanceSegIO::fromJson(const QJsonDocument &doc)
 {
+    bool bInit = false;
     QJsonObject root = doc.object();
     QJsonArray instances = root["detections"].toArray();
-    m_instances.clear();
 
     for (int i=0; i<instances.size(); ++i)
     {
-        CInstanceSegmentation instance;
         QJsonObject obj = instances[i].toObject();
-        instance.m_label = obj["label"].toString().toStdString();
-        instance.m_confidence = obj["confidence"].toDouble();
+        int classIndex = obj["classIndex"].toInt();
+        std::string label = obj["label"].toString().toStdString();
+        double confidence = obj["confidence"].toDouble();
         QJsonObject box = obj["box"].toObject();
-        instance.m_box = {box["x"].toDouble(), box["y"].toDouble(), box["width"].toDouble(), box["height"].toDouble()};
-        instance.m_mask = Utils::Image::fromJson(obj["mask"].toString().toStdString());
-        instance.m_color = Utils::Graphics::colorFromJson(obj["color"].toObject());
-        m_instances.push_back(instance);
+        double x = box["x"].toDouble();
+        double y = box["y"].toDouble();
+        double w = box["width"].toDouble();
+        double h = box["height"].toDouble();
+        auto mask = Utils::Image::fromJson(obj["mask"].toString().toStdString());
+        cv::cvtColor(mask, mask, cv::COLOR_RGB2GRAY);
+        CColor color = Utils::Graphics::colorFromJson(obj["color"].toObject());
+
+        if (!bInit)
+        {
+            init("", 0, mask.cols, mask.rows);
+            bInit = true;
+        }
+        addObject(classIndex, label, confidence, x, y, w, h, mask, color);
     }
 }

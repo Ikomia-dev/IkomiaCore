@@ -1,6 +1,8 @@
 #include <QtTest>
 #include "CIOTests.h"
 #include "UnitTestUtils.hpp"
+#include "IO/CObjectDetectionIO.h"
+#include "IO/CInstanceSegIO.h"
 
 CIOTests::CIOTests(QObject *parent) : QObject(parent)
 {
@@ -431,6 +433,92 @@ void CIOTests::imageIOFromJson()
     //imgIO.save(UnitTest::getDataPath() + "/IO/imagePng.png");
 }
 
+void CIOTests::objDetectIOToJson()
+{
+    CObjectDetectionIO io;
+    fillObjectDetectionIO(io);
+    std::string jsonStr = io.toJson(std::vector<std::string>());
+    QVERIFY(!jsonStr.empty());
+
+//    QFile file(QString::fromStdString(UnitTest::getDataPath() + "/IO/objectDetectionIO.json"));
+//    file.open(QFile::WriteOnly);
+//    file.write(QString::fromStdString(jsonStr).toUtf8());
+//    file.close();
+}
+
+void CIOTests::objDetectIOfromJson()
+{
+    std::string path = UnitTest::getDataPath() + "/IO/objectDetectionIO.json";
+    QFile jsonFile(QString::fromStdString(path));
+    jsonFile.open(QFile::ReadOnly | QFile::Text);
+    std::string jsonStr = QString(jsonFile.readAll()).toStdString();
+
+    CObjectDetectionIO io;
+    io.fromJson(jsonStr);
+
+    QVERIFY(io.isDataAvailable());
+    QVERIFY(io.getObjectCount() == 5);
+    QVERIFY(io.getGraphicsIO() != nullptr);
+    QVERIFY(io.getBlobMeasureIO() != nullptr);
+
+    auto objects = io.getObjects();
+    QVERIFY(objects.size() == io.getObjectCount());
+
+    for (size_t i=0; i<objects.size(); ++i)
+    {
+        auto obj = io.getObject(i);
+        QVERIFY(obj.m_box.size() == 4);
+        QVERIFY(obj.m_label.empty() == false);
+        QVERIFY(obj.m_confidence > 0);
+        QVERIFY(obj.m_color.size() == 4);
+    }
+}
+
+void CIOTests::instanceSegIOToJson()
+{
+    CInstanceSegIO io;
+    fillInstanceSegIO(io);
+    std::string jsonStr = io.toJson(std::vector<std::string>());
+    QVERIFY(!jsonStr.empty());
+
+    QFile file(QString::fromStdString(UnitTest::getDataPath() + "/IO/instanceSegIO.json"));
+    file.open(QFile::WriteOnly);
+    file.write(QString::fromStdString(jsonStr).toUtf8());
+    file.close();
+}
+
+void CIOTests::instanceSegIOFromJson()
+{
+    std::string path = UnitTest::getDataPath() + "/IO/instanceSegIO.json";
+    QFile jsonFile(QString::fromStdString(path));
+    jsonFile.open(QFile::ReadOnly | QFile::Text);
+    std::string jsonStr = QString(jsonFile.readAll()).toStdString();
+
+    CInstanceSegIO io;
+    io.fromJson(jsonStr);
+
+    QVERIFY(io.isDataAvailable());
+    QVERIFY(io.getInstanceCount() == 3);
+    QVERIFY(io.getMaskImageIO() != nullptr);
+    QVERIFY(io.getGraphicsIO() != nullptr);
+    QVERIFY(io.getBlobMeasureIO() != nullptr);
+    QVERIFY(io.getMergeMask().empty() == false);
+
+    auto instances = io.getInstances();
+    QVERIFY(instances.size() == io.getInstanceCount());
+
+    for (size_t i=0; i<instances.size(); ++i)
+    {
+        auto inst = io.getInstance(i);
+        QVERIFY(inst.m_box.size() == 4);
+        QVERIFY(inst.m_label.empty() == false);
+        QVERIFY(inst.m_confidence > 0);
+        QVERIFY(inst.m_color.size() == 4);
+        QVERIFY(inst.m_classIndex >= 0);
+        QVERIFY(inst.m_mask.empty() == false);
+    }
+}
+
 void CIOTests::fillNumericIO(CNumericIO<std::string> &io)
 {
     std::vector<std::string> headerLabels = {"name", "category", "description", "date"};
@@ -443,6 +531,48 @@ void CIOTests::fillNumericIO(CNumericIO<std::string> &io)
     io.addValueList(categories, headerLabels[1]);
     io.addValueList(descriptions, headerLabels[2]);
     io.addValueList(dates, headerLabels[3]);
+}
+
+void CIOTests::fillObjectDetectionIO(CObjectDetectionIO &io)
+{
+    io.init("YOLO", 0);
+    io.addObject("Object1", 0.75, 5, 10, 125, 150, {255, 0, 0});
+    io.addObject("Object2", 0.25, 30, 100, 75, 50, {0, 255, 0});
+    io.addObject("Object3", 0.99, 120, 10, 50, 50, {0, 0, 255});
+    io.addObject("Object4", 0.80, 5, 100, 125, 150, {255, 255, 0});
+    io.addObject("Object5", 0.60, 250, 100, 80, 100, {255, 0, 255});
+}
+
+void CIOTests::fillInstanceSegIO(CInstanceSegIO &io)
+{
+    std::string path = UnitTest::getDataPath() + "/Images/Lena.png";
+    auto srcImg = cv::imread(path);
+    cv::cvtColor(srcImg, srcImg, cv::COLOR_RGB2GRAY);
+    io.init("MaskRCNN", 0, srcImg.cols, srcImg.rows);
+
+    cv::Rect rc1(150, 150, 100, 100);
+    cv::Mat mask1(srcImg.rows, srcImg.cols, CV_8UC1, cv::Scalar(0));
+    cv::Mat binImg1 = srcImg > 50;
+    cv::Mat roiBinImg1(binImg1, rc1);
+    cv::Mat roiMask1(mask1, rc1);
+    roiBinImg1.copyTo(roiMask1);
+    io.addObject(0, "Object1", 0.85, rc1.x, rc1.y, rc1.width, rc1.height, mask1, {255,0,0});
+
+    cv::Rect rc2(200, 100, 75, 150);
+    cv::Mat mask2(srcImg.rows, srcImg.cols, CV_8UC1, cv::Scalar(0));
+    cv::Mat binImg2 = srcImg > 100;
+    cv::Mat roiBinImg2(binImg2, rc2);
+    cv::Mat roiMask2(mask2, rc2);
+    roiBinImg2.copyTo(roiMask2);
+    io.addObject(1, "Object2", 0.60, rc2.x, rc2.y, rc2.width, rc2.height, mask2, {0,255,0});
+
+    cv::Rect rc3(150, 250, 150, 80);
+    cv::Mat mask3(srcImg.rows, srcImg.cols, CV_8UC1, cv::Scalar(0));
+    cv::Mat binImg3 = srcImg > 150;
+    cv::Mat roiBinImg3(binImg3, rc3);
+    cv::Mat roiMask3(mask3, rc3);
+    roiBinImg3.copyTo(roiMask3);
+    io.addObject(0, "Object3", 0.45, rc3.x, rc3.y, rc3.width, rc3.height, mask3, {255,0,0});
 }
 
 QTEST_GUILESS_MAIN(CIOTests)

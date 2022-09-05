@@ -198,7 +198,7 @@ void CObjectDetectionIO::fromJson(const QJsonDocument &jsonDoc)
 {
     QJsonObject root = jsonDoc.object();
     QJsonArray objects = root["detections"].toArray();
-    m_objects.clear();
+    clearData();
 
     for (int i=0; i<objects.size(); ++i)
     {

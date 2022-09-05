@@ -32,9 +32,9 @@ LIBS += $$link_boost()
 LIBS += -lgmic
 
 #Dynamic link to OpenCV
-win32:CONFIG(release, debug|release):LIBS += -lopencv_core$${OPENCV_VERSION}
-win32:CONFIG(debug, debug|release):LIBS += -lopencv_core$${OPENCV_VERSION}d
-unix: LIBS += -lopencv_core
+win32:CONFIG(release, debug|release):LIBS += -lopencv_core$${OPENCV_VERSION} -lopencv_imgcodecs$${OPENCV_VERSION} -lopencv_imgproc$${OPENCV_VERSION}
+win32:CONFIG(debug, debug|release):LIBS += -lopencv_core$${OPENCV_VERSION}d -lopencv_imgcodecs$${OPENCV_VERSION}d -lopencv_imgproc$${OPENCV_VERSION}d
+unix: LIBS += -lopencv_core -lopencv_imgcodecs -lopencv_imgproc
 
 #Dynamic link to Utils
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../../Utils/release/ -likUtils

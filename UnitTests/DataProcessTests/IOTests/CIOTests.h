@@ -4,6 +4,9 @@
 #include <QObject>
 #include "DataProcess.hpp"
 
+class CInstanceSegIO;
+
+
 class CIOTests: public QObject
 {
     Q_OBJECT
@@ -44,11 +47,19 @@ class CIOTests: public QObject
         void    imageIOToJson();
         void    imageIOFromJson();
 
+        void    objDetectIOToJson();
+        void    objDetectIOfromJson();
+
+        void    instanceSegIOToJson();
+        void    instanceSegIOFromJson();
+
     private:
 
         void    fillBlobMeasureIO(CBlobMeasureIO& io);
         void    fillNumericIO(CNumericIO<double>& io);
         void    fillNumericIO(CNumericIO<std::string>& io);
+        void    fillObjectDetectionIO(CObjectDetectionIO& io);
+        void    fillInstanceSegIO(CInstanceSegIO& io);
 
         std::vector<ProxyGraphicsItemPtr> createGraphics();
 };
