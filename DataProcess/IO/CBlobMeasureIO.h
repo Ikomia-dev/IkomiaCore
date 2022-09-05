@@ -83,6 +83,8 @@ class DATAPROCESSSHARED_EXPORT CBlobMeasureIO : public CWorkflowTaskIO
 
         void                    clearData() override;
 
+        void                    copy(const std::shared_ptr<CWorkflowTaskIO> &ioPtr) override;
+
         void                    load(const std::string& path) override;
 
         void                    save() override;

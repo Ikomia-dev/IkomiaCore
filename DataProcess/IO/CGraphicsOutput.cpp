@@ -223,10 +223,14 @@ void CGraphicsOutput::clearData()
 
 void CGraphicsOutput::copy(const WorkflowTaskIOPtr &ioPtr)
 {
-    auto pGraphicsOutput = dynamic_cast<const CGraphicsOutput*>(ioPtr.get());
-    if(pGraphicsOutput)
-        *this = *pGraphicsOutput;
-    else
+    auto type = ioPtr->getDataType();
+    if (type == IODataType::OUTPUT_GRAPHICS)
+    {
+        auto pGraphicsOutput = dynamic_cast<const CGraphicsOutput*>(ioPtr.get());
+        if(pGraphicsOutput)
+            *this = *pGraphicsOutput;
+    }
+    else if (type == IODataType::INPUT_GRAPHICS)
     {
         auto pGraphicsInput = dynamic_cast<const CGraphicsInput*>(ioPtr.get());
         if(pGraphicsInput)

@@ -22,6 +22,7 @@
 #include "Graphics/CGraphicsRegistration.h"
 #include "CGraphicsOutput.h"
 #include "CObjectDetectionIO.h"
+#include "CInstanceSegIO.h"
 #include "UtilsTools.hpp"
 #include <QJsonDocument>
 #include <QJsonArray>
@@ -102,16 +103,6 @@ CGraphicsInput &CGraphicsInput::operator=(const CGraphicsOutput &out)
     return *this;
 }
 
-CGraphicsInput &CGraphicsInput::operator=(const CObjectDetectionIO &out)
-{
-    CWorkflowTaskIO::operator=(out);
-    auto graphicsOutPtr = out.getGraphicsIO();
-    auto pGraphicsOut = dynamic_cast<const CGraphicsOutput*>(graphicsOutPtr.get());
-
-    if (pGraphicsOut)
-        *this = *pGraphicsOut;
-}
-
 void CGraphicsInput::setLayer(CGraphicsLayer *pLayer)
 {
     m_pLayer = pLayer;
@@ -176,19 +167,45 @@ void CGraphicsInput::clearData()
 
 void CGraphicsInput::copy(const std::shared_ptr<CWorkflowTaskIO> &ioPtr)
 {
-    auto pGraphicsInput = dynamic_cast<const CGraphicsInput*>(ioPtr.get());
-    if(pGraphicsInput)
-        *this = *pGraphicsInput;
-    else
+    auto type = ioPtr->getDataType();
+    if (type == IODataType::INPUT_GRAPHICS)
+    {
+        auto pGraphicsInput = dynamic_cast<const CGraphicsInput*>(ioPtr.get());
+        if(pGraphicsInput)
+            *this = *pGraphicsInput;
+    }
+    else if (type == IODataType::OUTPUT_GRAPHICS)
     {
         auto pGraphicsOutput = dynamic_cast<const CGraphicsOutput*>(ioPtr.get());
         if(pGraphicsOutput)
             *this = *pGraphicsOutput;
-        else
+    }
+    else if (type == IODataType::OBJECT_DETECTION)
+    {
+        auto pObjectDetectionIO = std::dynamic_pointer_cast<CObjectDetectionIO>(ioPtr);
+        if (pObjectDetectionIO)
         {
-            auto pObjectDetectionIO = dynamic_cast<const CObjectDetectionIO*>(ioPtr.get());
-            if (pObjectDetectionIO)
-                *this = *pObjectDetectionIO;
+            auto graphicsOutPtr = pObjectDetectionIO->getGraphicsIO();
+            if (graphicsOutPtr)
+            {
+                auto pGraphicsOut = dynamic_cast<const CGraphicsOutput*>(graphicsOutPtr.get());
+                if (pGraphicsOut)
+                    *this = *pGraphicsOut;
+            }
+        }
+    }
+    else if (type == IODataType::INSTANCE_SEGMENTATION)
+    {
+        auto pInstanceSegIO = std::dynamic_pointer_cast<CInstanceSegIO>(ioPtr);
+        if (pInstanceSegIO)
+        {
+            auto graphicsOutPtr = pInstanceSegIO->getGraphicsIO();
+            if (graphicsOutPtr)
+            {
+                auto pGraphicsOut = dynamic_cast<const CGraphicsOutput*>(graphicsOutPtr.get());
+                if (pGraphicsOut)
+                    *this = *pGraphicsOut;
+            }
         }
     }
 }

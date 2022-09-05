@@ -18,6 +18,8 @@
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "CBlobMeasureIO.h"
+#include "CObjectDetectionIO.h"
+#include "CInstanceSegIO.h"
 #include "CException.h"
 #include "Main/CoreTools.hpp"
 #include <QJsonArray>
@@ -221,6 +223,39 @@ void CBlobMeasureIO::addObjectMeasures(const std::vector<CObjectMeasure> &measur
 void CBlobMeasureIO::clearData()
 {
     m_measures.clear();
+}
+
+void CBlobMeasureIO::copy(const std::shared_ptr<CWorkflowTaskIO> &ioPtr)
+{
+    auto type = ioPtr->getDataType();
+    if (type == IODataType::OBJECT_DETECTION)
+    {
+        auto pObjectDetectionIO = std::dynamic_pointer_cast<CObjectDetectionIO>(ioPtr);
+        if (pObjectDetectionIO)
+        {
+            auto blobMeasureOutPtr = pObjectDetectionIO->getBlobMeasureIO();
+            if (blobMeasureOutPtr)
+            {
+                auto pBlobOut = dynamic_cast<const CBlobMeasureIO*>(blobMeasureOutPtr.get());
+                if (pBlobOut)
+                    *this = *pBlobOut;
+            }
+        }
+    }
+    else if (type == IODataType::INSTANCE_SEGMENTATION)
+    {
+        auto pInstanceSegIO = std::dynamic_pointer_cast<CInstanceSegIO>(ioPtr);
+        if (pInstanceSegIO)
+        {
+            auto blobMeasureOutPtr = pInstanceSegIO->getBlobMeasureIO();
+            if (blobMeasureOutPtr)
+            {
+                auto pBlobOut = dynamic_cast<const CBlobMeasureIO*>(blobMeasureOutPtr.get());
+                if (pBlobOut)
+                    *this = *pBlobOut;
+            }
+        }
+    }
 }
 
 void CBlobMeasureIO::load(const std::string &path)
