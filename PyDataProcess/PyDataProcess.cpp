@@ -40,6 +40,8 @@
 #include "CArrayIOWrap.h"
 #include "CIkomiaRegistryWrap.h"
 #include "CWorkflowWrap.h"
+#include "CObjectDetectionIOWrap.h"
+#include "CInstanceSegIOWrap.h"
 
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #define PY_ARRAY_UNIQUE_SYMBOL IKOMIA_ARRAY_API
@@ -449,6 +451,63 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("getUnitElementCount", &CArrayIO::getUnitElementCount, &CArrayIOWrap::default_getUnitElementCount, _getArrayUnitElementCountDocString, args("self"))
         .def("isDataAvailable", &CArrayIO::isDataAvailable, &CArrayIOWrap::default_isDataAvailable, _isArrayDataAvailableDocString, args("self"))
         .def("clearData", &CArrayIO::clearData, &CArrayIOWrap::default_clearData, _clearArrayDataDocString, args("self"))
+    ;
+
+    //------------------------------//
+    //----- CObjectDetectionIO -----//
+    //------------------------------//
+    class_<CObjectDetection>("CObjectDetection", _objDetectionDocString)
+        .def(init<>("Default constructor", args("self")))
+        .add_property("label", &CObjectDetection::getLabel, &CObjectDetection::setLabel, "Object label (str)")
+        .add_property("confidence", &CObjectDetection::getConfidence, &CObjectDetection::setConfidence, "Prediction confidence (double)")
+        .add_property("box", &CObjectDetection::getBox, &CObjectDetection::setBox, "Object bounding box [x, y, width, height]")
+        .add_property("color", &CObjectDetection::getColor, &CObjectDetection::setColor, "Object display color [r, g, b, a]")
+    ;
+
+    class_<CObjectDetectionIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CObjectDetectionIOWrap>>("CObjectDetectionIO", _objDetectionIODocString)
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const CObjectDetectionIO&>("Copy constructor"))
+        .def("getObjectCount", &CObjectDetectionIO::getObjectCount, _getObjectCountDocString, args("self"))
+        .def("getObject", &CObjectDetectionIO::getObject, _getObjectDocString, args("self", "index"))
+        .def("getObjects", &CObjectDetectionIO::getObjects, _getObjectsDocString, args("self"))
+        .def("isDataAvailable", &CObjectDetectionIOWrap::isDataAvailable, &CObjectDetectionIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
+        .def("init", &CObjectDetectionIO::init, _initObjDetectIODocString, args("self", "taskName", "refImageIndex"))
+        .def("addObject", &CObjectDetectionIO::addObject, _addObjectDocString, args("self", "label", "confidence", "boxX", "boxY", "boxWidth", "boxHeight", "color"))
+        .def("clearData", &CObjectDetectionIOWrap::clearData, &CObjectDetectionIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
+        .def("load", &CObjectDetectionIOWrap::load, &CObjectDetectionIOWrap::default_load, _objDetectLoadDocString, args("self", "path"))
+        .def("save", &CObjectDetectionIOWrap::save, &CObjectDetectionIOWrap::default_save, _objDetectSaveDocString, args("self", "path"))
+        .def("toJson", &CObjectDetectionIOWrap::toJson, &CObjectDetectionIOWrap::default_toJson, _objDetectToJsonDocString, args("self", "options"))
+        .def("fromJson", &CObjectDetectionIOWrap::fromJson, &CObjectDetectionIOWrap::default_fromJson, _objDetectFromJsonDocString, args("self", "jsonStr"))
+    ;
+
+    //--------------------------//
+    //----- CInstanceSegIO -----//
+    //--------------------------//
+    class_<CInstanceSegmentation>("CInstanceSegmentation", _instanceSegDocString)
+        .def(init<>("Default constructor", args("self")))
+        .add_property("class_index", &CInstanceSegmentation::getClassIndex, &CInstanceSegmentation::setClassIndex, "Object class index (int)")
+        .add_property("label", &CInstanceSegmentation::getLabel, &CInstanceSegmentation::setLabel, "Object label (str)")
+        .add_property("confidence", &CInstanceSegmentation::getConfidence, &CInstanceSegmentation::setConfidence, "Prediction confidence (double)")
+        .add_property("box", &CInstanceSegmentation::getBox, &CInstanceSegmentation::setBox, "Object bounding box [x, y, width, height]")
+        .add_property("mask", &CInstanceSegmentation::getMask, &CInstanceSegmentation::setMask, "Object mask (numpy array)")
+        .add_property("color", &CInstanceSegmentation::getColor, &CInstanceSegmentation::setColor, "Object display color [r, g, b, a]")
+    ;
+
+    class_<CInstanceSegIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CInstanceSegIOWrap>>("CInstanceSegIO", _instanceSegIODocString)
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const CInstanceSegIO&>("Copy constructor"))
+        .def("getInstanceCount", &CInstanceSegIO::getInstanceCount, _getInstanceCountDocString, args("self"))
+        .def("getInstance", &CInstanceSegIO::getInstance, _getInstanceDocString, args("self", "index"))
+        .def("getInstances", &CInstanceSegIO::getInstances, _getInstancesDocString, args("self"))
+        .def("getMergeMask", &CInstanceSegIO::getMergeMask, _getMergeMaskDocString, args("self"))
+        .def("isDataAvailable", &CInstanceSegIOWrap::isDataAvailable, &CInstanceSegIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
+        .def("init", &CInstanceSegIO::init, _initInstanceSegIODocString, args("self", "taskName", "refImageIndex", "width", "heigh"))
+        .def("addInstance", &CInstanceSegIO::addInstance, _addInstanceDocString, args("self", "classIndex", "label", "confidence", "boxX", "boxY", "boxWidth", "boxHeight", "mask", "color"))
+        .def("clearData", &CInstanceSegIOWrap::clearData, &CInstanceSegIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
+        .def("load", &CInstanceSegIOWrap::load, &CInstanceSegIOWrap::default_load, _instanceSegLoadDocString, args("self", "path"))
+        .def("save", &CInstanceSegIOWrap::save, &CInstanceSegIOWrap::default_save, _instanceSegSaveDocString, args("self", "path"))
+        .def("toJson", &CInstanceSegIOWrap::toJson, &CInstanceSegIOWrap::default_toJson, _instanceSegToJsonDocString, args("self", "options"))
+        .def("fromJson", &CInstanceSegIOWrap::fromJson, &CInstanceSegIOWrap::default_fromJson, _instanceSegFromJsonDocString, args("self", "jsonStr"))
     ;
 
     //------------------------//

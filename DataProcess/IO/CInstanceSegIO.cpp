@@ -4,6 +4,32 @@
 #include "DataProcessTools.hpp"
 #include <QJsonArray>
 
+//---------------------------------//
+//----- CInstanceSegmentation -----//
+//---------------------------------//
+int CInstanceSegmentation::getClassIndex() const
+{
+    return m_classIndex;
+}
+
+CMat CInstanceSegmentation::getMask() const
+{
+    return m_mask;
+}
+
+void CInstanceSegmentation::setClassIndex(int index)
+{
+    m_classIndex = index;
+}
+
+void CInstanceSegmentation::setMask(const CMat &mask)
+{
+    m_mask = mask;
+}
+
+//--------------------------//
+//----- CInstanceSegIO -----//
+//--------------------------//
 CInstanceSegIO::CInstanceSegIO() : CWorkflowTaskIO(IODataType::INSTANCE_SEGMENTATION, "CInstanceSegIO")
 {
     m_description = QObject::tr("Instance segmentation data: label, confidence, box, mask and color.\n").toStdString();
@@ -114,7 +140,7 @@ void CInstanceSegIO::init(const std::string &taskName, int refImageIndex, int im
     m_imgIOPtr->setImage(mergeMask);
 }
 
-void CInstanceSegIO::addObject(int classIndex, const std::string &label, double confidence,
+void CInstanceSegIO::addInstance(int classIndex, const std::string &label, double confidence,
                                double boxX, double boxY, double boxWidth, double boxHeight,
                                const CMat &mask, const CColor &color)
 {
@@ -277,6 +303,6 @@ void CInstanceSegIO::fromJson(const QJsonDocument &doc)
             init("", 0, mask.cols, mask.rows);
             bInit = true;
         }
-        addObject(classIndex, label, confidence, x, y, w, h, mask, color);
+        addInstance(classIndex, label, confidence, x, y, w, h, mask, color);
     }
 }

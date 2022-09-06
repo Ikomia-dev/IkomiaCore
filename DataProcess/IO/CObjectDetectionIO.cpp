@@ -2,6 +2,52 @@
 #include "Main/CoreTools.hpp"
 #include <QJsonArray>
 
+//----------------------------//
+//----- CObjectDetection -----//
+//----------------------------//
+std::string CObjectDetection::getLabel() const
+{
+    return m_label;
+}
+
+double CObjectDetection::getConfidence() const
+{
+    return m_confidence;
+}
+
+std::vector<double> CObjectDetection::getBox() const
+{
+    return m_box;
+}
+
+CColor CObjectDetection::getColor() const
+{
+    return m_color;
+}
+
+void CObjectDetection::setLabel(const std::string &label)
+{
+    m_label = label;
+}
+
+void CObjectDetection::setConfidence(double confidence)
+{
+    m_confidence = confidence;
+}
+
+void CObjectDetection::setBox(const std::vector<double> &box)
+{
+    m_box = box;
+}
+
+void CObjectDetection::setColor(const CColor &color)
+{
+    m_color = color;
+}
+
+//------------------------------//
+//----- CObjectDetectionIO -----//
+//------------------------------//
 CObjectDetectionIO::CObjectDetectionIO() : CWorkflowTaskIO(IODataType::OBJECT_DETECTION, "CObjectDetectionIO")
 {
     m_description = QObject::tr("Object detection data: label, confidence, box and color.\n").toStdString();
@@ -202,14 +248,16 @@ void CObjectDetectionIO::fromJson(const QJsonDocument &jsonDoc)
 
     for (int i=0; i<objects.size(); ++i)
     {
-        CObjectDetection objDetection;
         QJsonObject obj = objects[i].toObject();
-        objDetection.m_label = obj["label"].toString().toStdString();
-        objDetection.m_confidence = obj["confidence"].toDouble();
+        std::string label = obj["label"].toString().toStdString();
+        double confidence = obj["confidence"].toDouble();
         QJsonObject box = obj["box"].toObject();
-        objDetection.m_box = {box["x"].toDouble(), box["y"].toDouble(), box["width"].toDouble(), box["height"].toDouble()};
-        objDetection.m_color = Utils::Graphics::colorFromJson(obj["color"].toObject());
-        m_objects.push_back(objDetection);
+        double x = box["x"].toDouble();
+        double y = box["y"].toDouble();
+        double width = box["width"].toDouble();
+        double height = box["height"].toDouble();
+        CColor color = Utils::Graphics::colorFromJson(obj["color"].toObject());
+        addObject(label, confidence, x, y, width, height, color);
     }
 }
 

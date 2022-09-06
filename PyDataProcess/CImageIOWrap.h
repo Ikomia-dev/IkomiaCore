@@ -37,19 +37,19 @@ class CImageIOWrap : public CImageIO, public wrapper<CImageIO>
         CImageIOWrap(IODataType datatype, const std::string& name, const std::string& path);
         CImageIOWrap(const CImageIO &io);
 
-        virtual size_t  getUnitElementCount() const;
+        size_t          getUnitElementCount() const override;
         size_t          default_getUnitElementCount() const;
 
-        virtual CMat    getImage();
+        CMat            getImage() override;
         CMat            default_getImage();
 
-        virtual bool    isDataAvailable() const;
+        bool            isDataAvailable() const override;
         bool            default_isDataAvailable() const;
 
-        virtual void    clearData();
+        void            clearData() override;
         void            default_clearData();
 
-        virtual void    copyStaticData(const std::shared_ptr<CWorkflowTaskIO>& ioPtr);
+        void            copyStaticData(const std::shared_ptr<CWorkflowTaskIO>& ioPtr) override;
         void            default_copyStaticData(const std::shared_ptr<CWorkflowTaskIO>& ioPtr);
 
         std::string     toJson(const std::vector<std::string>& options) const override;

@@ -1075,6 +1075,165 @@ constexpr auto _setArrayDocString =
         "Args:\n\n"
         "   array (Numpy array): nd array\n\n";
 
+//------------------------------//
+//----- CObjectDetectionIO -----//
+//------------------------------//
+constexpr auto _objDetectionDocString =
+        "Store single object detection information (class properties): label, confidence, box and color. "
+        "It is used within workflow input/output of type :py:class:`~ikomia.dataprocess.pydataprocess.CObjectDetectionIO`.\n\n";
+
+constexpr auto _objDetectionIODocString =
+        "Define input or output managing common information extracted by object detection task. "
+        "Such task are able to automatically detect objects in image and get class label, confidence and "
+        "bounding box for each one. For each object, information is stored in a "
+        ":py:class:`~ikomia.dataprocess.pydataprocess.CObjectDetection` instance. Among others, algorithms "
+        "like FasterRCNN, RetinaNet and YOLO series are object detection tasks.\n\n";
+
+constexpr auto _getObjectCountDocString =
+        "Get the number of detected objects.\n\n"
+        "Returns:\n\n"
+        "   int: object count\n\n";
+
+constexpr auto _getObjectDocString =
+        "Get object information at a given index.\n\n"
+        "Args:\n\n"
+        "   index (int): object index\n\n"
+        "Returns:\n\n"
+        "   :py:class:`~ikomia.dataprocess.pydataprocess.CObjectDetection`: object information instance\n\n";
+
+constexpr auto _getObjectsDocString =
+        "Get all detected objects.\n\n"
+        "Returns:\n\n"
+        "   :py:class:`~ikomia.dataprocess.pydataprocess.CObjectDetection` list: detected objets\n\n";
+
+constexpr auto _initObjDetectIODocString =
+        "Initialisation step to set associated task (name) and reference image. The reference image is the task output index "
+        "where the graphics information (label, box) will be displayed as an overlay layer.\n\n"
+        "Args:\n\n"
+        "   taskName (str): task that contains the output\n\n"
+        "   refImageIndex (int): zero-based index of the output containing the reference image\n\n";
+
+constexpr auto _addObjectDocString =
+        "Add detected object to the input/output.\n\n"
+        "Args:\n\n"
+        "   label (str): class label\n\n"
+        "   confidence (double): prediction confidence\n\n"
+        "   boxX (double): left coordinate of object bounding box\n\n"
+        "   boxY (double): top coordinate of object bounding box\n\n"
+        "   boxWidth (double): width of object bounding box\n\n"
+        "   boxHeight (double): height of object bounding box\n\n"
+        "   color (int list - rgba): display color\n\n";
+
+constexpr auto _objDetectLoadDocString =
+        "Load object detection input/output for JSON file.\n\n"
+        "Args:\n\n"
+        "   path (str): path to JSON file\n\n";
+
+constexpr auto _objDetectSaveDocString =
+        "Save object detection input/output to JSON file.\n\n"
+        "Args:\n\n"
+        "   path (str): path to JSON file\n\n";
+
+constexpr auto _objDetectToJsonDocString =
+        "Return input/output data in JSON formatted string. JSON format options can be set, possible values are:\n\n"
+        "- ['json_format', 'compact'] (**default**)\n"
+        "- ['json_format', 'indented']\n\n"
+        "Args:\n\n"
+        "   list of str: format-specific options encoded as pairs [option_name, option_value]\n\n"
+        "Returns:\n\n"
+        "   string: JSON formatted string\n\n";
+
+constexpr auto _objDetectFromJsonDocString =
+        "Set input/output data from JSON formatted string.\n\n"
+        "Args:\n\n"
+        "   str: data as JSON formatted string\n\n";
+
+//--------------------------//
+//----- CInstanceSegIO -----//
+//--------------------------//
+constexpr auto _instanceSegDocString =
+        "Store single instance segmentation information (class properties): class index, label, confidence, box, mask and color. "
+        "It is used within workflow input/output of type :py:class:`~ikomia.dataprocess.pydataprocess.CInstanceSegIO`.\n\n";
+
+constexpr auto _instanceSegIODocString =
+        "Define input or output managing common information extracted by instance segmentation task. "
+        "Such task are able to automatically detect objects and their shapes in image. "
+        "It gets class label, confidence, bounding box and mask for each one. "
+        "For each object, information is stored in a :py:class:`~ikomia.dataprocess.pydataprocess.CInstanceSegmentation` instance. "
+        "Among others, algorithms like MaskRCNN, Yolact, SparseInst are instance segmentation tasks.\n\n";
+
+constexpr auto _getInstanceCountDocString =
+        "Get the number of segmented instances.\n\n"
+        "Returns:\n\n"
+        "   int: object count\n\n";
+
+constexpr auto _getInstanceDocString =
+        "Get segmented instance information at a given index.\n\n"
+        "Args:\n\n"
+        "   index (int): object index\n\n"
+        "Returns:\n\n"
+        "   :py:class:`~ikomia.dataprocess.pydataprocess.CInstanceSegmentation`: segmented instance information\n\n";
+
+constexpr auto _getInstancesDocString =
+        "Get all segmented instances.\n\n"
+        "Returns:\n\n"
+        "   :py:class:`~ikomia.dataprocess.pydataprocess.CInstanceSegmentation` list: segmented instances\n\n";
+
+constexpr auto _getMergeMaskDocString =
+        "Get an image array where all segmented masks are merged into a single grayscale mask: "
+        "one graylevel value for each class. This image output is typically used for display, Ikomia Studio "
+        "uses it to create an overlay color mask on top of the reference image.\n\n"
+        "Returns:\n\n"
+        "   2D numpy array (uint8): grayscale mask\n\n";
+
+constexpr auto _initInstanceSegIODocString =
+        "Initialisation step to set associated task (name), reference image and mask size. "
+        "The reference image is the task output index where the graphics information (label, box) will be displayed "
+        "as an overlay layer.\n\n"
+        "Args:\n\n"
+        "   taskName (str): task that contains the output\n\n"
+        "   refImageIndex (int): zero-based index of the output containing the reference image\n\n"
+        "   width (int): mask width\n\n"
+        "   height (int): mask height\n\n";
+
+constexpr auto _addInstanceDocString =
+        "Add segmented instance to the input/output.\n\n"
+        "Args:\n\n"
+        "   label (str): class label\n\n"
+        "   confidence (double): prediction confidence\n\n"
+        "   boxX (double): left coordinate of object bounding box\n\n"
+        "   boxY (double): top coordinate of object bounding box\n\n"
+        "   boxWidth (double): width of object bounding box\n\n"
+        "   boxHeight (double): height of object bounding box\n\n"
+        "   mask (numpy array): binary mask\n\n"
+        "   color (int list - rgba): display color\n\n";
+
+constexpr auto _instanceSegLoadDocString =
+        "Load instance segmentation input/output for JSON file.\n\n"
+        "Args:\n\n"
+        "   path (str): path to JSON file\n\n";
+
+constexpr auto _instanceSegSaveDocString =
+        "Save instance segmentation input/output to JSON file.\n\n"
+        "Args:\n\n"
+        "   path (str): path to JSON file\n\n";
+
+constexpr auto _instanceSegToJsonDocString =
+        "Return input/output data in JSON formatted string. JSON format options can be set, possible values are:\n\n"
+        "- ['json_format', 'compact'] (**default**)\n"
+        "- ['json_format', 'indented']\n\n"
+        "- ['image_format', 'jpg'](for the mask - **default**)\n\n"
+        "- ['image_format', 'png']\n\n"
+        "Args:\n\n"
+        "   list of str: format-specific options encoded as pairs [option_name, option_value]\n\n"
+        "Returns:\n\n"
+        "   string: JSON formatted string\n\n";
+
+constexpr auto _instanceSegFromJsonDocString =
+        "Set input/output data from JSON formatted string.\n\n"
+        "Args:\n\n"
+        "   str: data as JSON formatted string\n\n";
+
 //------------------------//
 //----- C2dImageTask -----//
 //------------------------//

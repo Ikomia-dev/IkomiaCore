@@ -25,6 +25,8 @@ SOURCES += \
         CGraphicsInputWrap.cpp \
         CIkomiaRegistryWrap.cpp \
         CImageIOWrap.cpp \
+        CInstanceSegIOWrap.cpp \
+        CObjectDetectionIOWrap.cpp \
         CPathIOWrap.cpp \
         CVideoIOWrap.cpp \
         CWidgetOutputWrap.cpp \
@@ -47,7 +49,9 @@ HEADERS += \
         CGraphicsInputWrap.h \
         CIkomiaRegistryWrap.h \
         CImageIOWrap.h \
+        CInstanceSegIOWrap.h \
         CNumericIOWrap.hpp \
+        CObjectDetectionIOWrap.h \
         CPathIOWrap.h \
         CVideoIOWrap.h \
         CWidgetOutputWrap.h \

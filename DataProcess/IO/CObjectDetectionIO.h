@@ -7,8 +7,23 @@
 #include "IO/CBlobMeasureIO.h"
 #include "Main/CoreDefine.hpp"
 
+//----------------------------//
+//----- CObjectDetection -----//
+//----------------------------//
 class DATAPROCESSSHARED_EXPORT CObjectDetection
 {
+    public:
+
+        std::string         getLabel() const;
+        double              getConfidence() const;
+        std::vector<double> getBox() const;
+        CColor              getColor() const;
+
+        void                setLabel(const std::string& label);
+        void                setConfidence(double confidence);
+        void                setBox(const std::vector<double>& box);
+        void                setColor(const CColor& color);
+
     public:
 
         std::string         m_label = "";
@@ -18,6 +33,9 @@ class DATAPROCESSSHARED_EXPORT CObjectDetection
 };
 
 
+//------------------------------//
+//----- CObjectDetectionIO -----//
+//------------------------------//
 class DATAPROCESSSHARED_EXPORT CObjectDetectionIO: public CWorkflowTaskIO
 {
     public:

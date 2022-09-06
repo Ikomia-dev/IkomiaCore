@@ -8,8 +8,19 @@
 #include "IO/CGraphicsOutput.h"
 #include "IO/CBlobMeasureIO.h"
 
+//---------------------------------//
+//----- CInstanceSegmentation -----//
+//---------------------------------//
 class DATAPROCESSSHARED_EXPORT CInstanceSegmentation : public CObjectDetection
 {
+    public:
+
+        int     getClassIndex() const;
+        CMat    getMask() const;
+
+        void    setClassIndex(int index);
+        void    setMask(const CMat& mask);
+
     public:
 
         int     m_classIndex = 0;
@@ -17,6 +28,9 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegmentation : public CObjectDetection
 };
 
 
+//--------------------------//
+//----- CInstanceSegIO -----//
+//--------------------------//
 class DATAPROCESSSHARED_EXPORT CInstanceSegIO: public CWorkflowTaskIO
 {
     public:
@@ -43,7 +57,7 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegIO: public CWorkflowTaskIO
 
         void                                init(const std::string& taskName, int refImageIndex, int imageWidth, int imageHeight);
 
-        void                                addObject(int classIndex, const std::string& label, double confidence,
+        void                                addInstance(int classIndex, const std::string& label, double confidence,
                                                       double boxX, double boxY, double boxWidth, double boxHeight,
                                                       const CMat& mask, const CColor& color);
 
