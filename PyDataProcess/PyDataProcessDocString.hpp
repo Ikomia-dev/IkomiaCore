@@ -1199,6 +1199,7 @@ constexpr auto _initInstanceSegIODocString =
 constexpr auto _addInstanceDocString =
         "Add segmented instance to the input/output.\n\n"
         "Args:\n\n"
+        "   type (int): segmentation object type (0:THING - 1:STUFF)\n\n"
         "   label (str): class label\n\n"
         "   confidence (double): prediction confidence\n\n"
         "   boxX (double): left coordinate of object bounding box\n\n"

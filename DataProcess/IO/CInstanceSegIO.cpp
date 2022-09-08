@@ -7,6 +7,11 @@
 //---------------------------------//
 //----- CInstanceSegmentation -----//
 //---------------------------------//
+int CInstanceSegmentation::getType() const
+{
+    return m_type;
+}
+
 int CInstanceSegmentation::getClassIndex() const
 {
     return m_classIndex;
@@ -15,6 +20,11 @@ int CInstanceSegmentation::getClassIndex() const
 CMat CInstanceSegmentation::getMask() const
 {
     return m_mask;
+}
+
+void CInstanceSegmentation::setType(int type)
+{
+    m_type = type;
 }
 
 void CInstanceSegmentation::setClassIndex(int index)
@@ -142,11 +152,12 @@ void CInstanceSegIO::init(const std::string &taskName, int refImageIndex, int im
     m_imgIOPtr->setImage(mergeMask);
 }
 
-void CInstanceSegIO::addInstance(int classIndex, const std::string &label, double confidence,
-                               double boxX, double boxY, double boxWidth, double boxHeight,
-                               const CMat &mask, const CColor &color)
+void CInstanceSegIO::addInstance(int type, int classIndex, const std::string &label, double confidence,
+                                 double boxX, double boxY, double boxWidth, double boxHeight,
+                                 const CMat &mask, const CColor &color)
 {
     CInstanceSegmentation obj;
+    obj.m_type = type;
     obj.m_classIndex = classIndex;
     obj.m_label = label;
     obj.m_confidence = confidence;
@@ -162,33 +173,50 @@ void CInstanceSegIO::addInstance(int classIndex, const std::string &label, doubl
 
     //Set integrated I/O
     //Create rectangle graphics of bbox
-    CGraphicsRectProperty rectProp;
-    rectProp.m_category = label;
-    rectProp.m_penColor = color;
-    auto graphicsObj = m_graphicsIOPtr->addRectangle(boxX, boxY, boxWidth, boxHeight, rectProp);
+    int graphicsId = -1;
+    if (boxWidth > 0 && boxHeight > 0)
+    {
+        CGraphicsRectProperty rectProp;
+        rectProp.m_category = label;
+        rectProp.m_penColor = color;
+        auto graphicsObj = m_graphicsIOPtr->addRectangle(boxX, boxY, boxWidth, boxHeight, rectProp);
+        graphicsId = graphicsObj->getId();
+    }
 
     //Class label
     std::string graphicsLabel = label + " : " + std::to_string(confidence);
     CGraphicsTextProperty textProperty;
     textProperty.m_color = color;
     textProperty.m_fontSize = 8;
-    m_graphicsIOPtr->addText(graphicsLabel, boxX + 5, boxY + 5, textProperty);
+    auto graphicsObj = m_graphicsIOPtr->addText(graphicsLabel, boxX + 5, boxY + 5, textProperty);
+
+    if (graphicsId == -1)
+        graphicsId = graphicsObj->getId();
 
     //Store values to be shown in results table
     std::vector<CObjectMeasure> results;
-    results.emplace_back(CObjectMeasure(CMeasure(CMeasure::CUSTOM, QObject::tr("Confidence").toStdString()), confidence, graphicsObj->getId(), label));
-    results.emplace_back(CObjectMeasure(CMeasure::Id::BBOX, {boxX, boxY, boxWidth, boxHeight}, graphicsObj->getId(), label));
+    results.emplace_back(CObjectMeasure(CMeasure(CMeasure::CUSTOM, QObject::tr("Confidence").toStdString()), confidence, graphicsId, label));
+    results.emplace_back(CObjectMeasure(CMeasure::Id::BBOX, {boxX, boxY, boxWidth, boxHeight}, graphicsId, label));
     m_blobMeasureIOPtr->addObjectMeasures(results);
 
     //Merge mask
     auto mergeMask = m_imgIOPtr->getImage();
+
     //Create label mask according to the object index (we do index + 1 because 0 is the background label)
-    cv::Mat labelImg(boxHeight, boxWidth, CV_8UC1, cv::Scalar(obj.m_classIndex + 1));
-    cv::Mat labelMask(boxHeight, boxWidth, CV_8UC1, cv::Scalar(0));
-    cv::Mat roiMask(obj.m_mask, cv::Rect(boxX, boxY, boxWidth, boxHeight));
-    labelImg.copyTo(labelMask, roiMask);
-    cv::Mat roiMerge(mergeMask, cv::Rect(boxX, boxY, boxWidth, boxHeight));
-    cv::bitwise_or(labelMask, roiMerge, roiMerge);
+    if (boxWidth > 0 && boxHeight > 0)
+    {
+        cv::Mat labelImg(boxHeight, boxWidth, CV_8UC1, cv::Scalar(obj.m_classIndex + 1));
+        cv::Mat labelMask(boxHeight, boxWidth, CV_8UC1, cv::Scalar(0));
+        cv::Mat roiMask(obj.m_mask, cv::Rect(boxX, boxY, boxWidth, boxHeight));
+        labelImg.copyTo(labelMask, roiMask);
+        cv::Mat roiMerge(mergeMask, cv::Rect(boxX, boxY, boxWidth, boxHeight));
+        cv::bitwise_or(labelMask, roiMerge, roiMerge);
+    }
+    else
+    {
+        cv::Mat labelImg(mergeMask.rows, mergeMask.cols, CV_8UC1, cv::Scalar(obj.m_classIndex + 1));
+        labelImg.copyTo(mergeMask, obj.m_mask);
+    }
     m_imgIOPtr->setImage(mergeMask);
 }
 
@@ -259,6 +287,7 @@ QJsonObject CInstanceSegIO::toJsonInternal(const std::vector<std::string> &optio
     for (size_t i=0; i<m_instances.size(); ++i)
     {
         QJsonObject obj;
+        obj["type"] = m_instances[i].m_type;
         obj["classIndex"] = m_instances[i].m_classIndex;
         obj["label"] = QString::fromStdString(m_instances[i].m_label);
         obj["confidence"] = m_instances[i].m_confidence;
@@ -289,6 +318,7 @@ void CInstanceSegIO::fromJson(const QJsonDocument &doc)
     for (int i=0; i<instances.size(); ++i)
     {
         QJsonObject obj = instances[i].toObject();
+        int type = obj["type"].toInt();
         int classIndex = obj["classIndex"].toInt();
         std::string label = obj["label"].toString().toStdString();
         double confidence = obj["confidence"].toDouble();
@@ -306,6 +336,6 @@ void CInstanceSegIO::fromJson(const QJsonDocument &doc)
             init("", 0, mask.cols, mask.rows);
             bInit = true;
         }
-        addInstance(classIndex, label, confidence, x, y, w, h, mask, color);
+        addInstance(type, classIndex, label, confidence, x, y, w, h, mask, color);
     }
 }

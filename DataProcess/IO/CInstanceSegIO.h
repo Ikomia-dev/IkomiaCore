@@ -15,14 +15,23 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegmentation : public CObjectDetection
 {
     public:
 
+        enum ObjectType
+        {
+            THING = 0,
+            STUFF = 1
+        };
+
+        int     getType() const;
         int     getClassIndex() const;
         CMat    getMask() const;
 
+        void    setType(int type);
         void    setClassIndex(int index);
         void    setMask(const CMat& mask);
 
     public:
 
+        int     m_type = ObjectType::THING;
         int     m_classIndex = 0;
         CMat    m_mask;
 };
@@ -57,9 +66,9 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegIO: public CWorkflowTaskIO
 
         void                                init(const std::string& taskName, int refImageIndex, int imageWidth, int imageHeight);
 
-        void                                addInstance(int classIndex, const std::string& label, double confidence,
-                                                      double boxX, double boxY, double boxWidth, double boxHeight,
-                                                      const CMat& mask, const CColor& color);
+        void                                addInstance(int type, int classIndex, const std::string& label, double confidence,
+                                                        double boxX, double boxY, double boxWidth, double boxHeight,
+                                                        const CMat& mask, const CColor& color);
 
         void                                clearData() override;
 
