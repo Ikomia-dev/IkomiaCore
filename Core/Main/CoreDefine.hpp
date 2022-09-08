@@ -80,6 +80,7 @@ namespace Ikomia
         DATA_DICT,              /**< Python-based IO where data are stored as dict */
         OBJECT_DETECTION,       /**< I/O for object detection management */
         INSTANCE_SEGMENTATION,  /**< I/O for instance segmentation management */
+        SEMANTIC_SEGMENTATION,  /**< I/O for semantic segmentation management */
         NONE                    /**< Unknown data type */
     };
 

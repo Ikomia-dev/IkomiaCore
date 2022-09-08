@@ -328,6 +328,9 @@ std::string CWorkflowTaskIO::getClassName(IODataType ioDataType)
         case IODataType::INSTANCE_SEGMENTATION:
             return "CInstanceSegIO";
 
+        case IODataType::SEMANTIC_SEGMENTATION:
+            return "CSemanticSegIO";
+
         default: return "";
     }
 }

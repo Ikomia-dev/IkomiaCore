@@ -1234,6 +1234,38 @@ constexpr auto _instanceSegFromJsonDocString =
         "Args:\n\n"
         "   str: data as JSON formatted string\n\n";
 
+//--------------------------//
+//----- CSemanticSegIO -----//
+//--------------------------//
+constexpr auto _semanticSegIODocString =
+        "Define input or output managing common information extracted by semantic segmentation task. "
+        "Such task are able to automatically set a class for each pixel of an image. "
+        "Thus, this input/output stores labelled image, class names and class colors. "
+        "Among others, algorithms like DeepLabV3+, UNet or TransUNet are semantic segmentation tasks.\n\n";
+
+constexpr auto _getMaskDocString =
+        "Get labelled image (ie graylevel) where each pixel has a specific value corresponding to its class. "
+        "You can find the correspondence between pixel value and class name with :py:meth:`ikomia.dataprocess.pydataprocess.CSemanticIO.getClassNames`.\n\n"
+        "Returns:\n\n"
+        "   Numpy array: grayscale mask\n\n";
+
+constexpr auto _getClassNamesDocString =
+        "Get class names list associated with the semantic mask. "
+        "Class index in the list corresponds to the pixel value in the mask.\n\n"
+        "Returns:\n\n"
+        "   list of str: class names\n\n";
+
+constexpr auto _setMaskDocString =
+        "Set the mask of the semantic segmentation output.\n\n"
+        "Args:\n\n"
+        "   mask (numpy array): segmentation mask\n\n";
+
+constexpr auto _setClassNamesDocString =
+        "Set class names and colors associated with segmentation mask\n\n"
+        "Args:\n\n"
+        "   names (list of str): class names, index in the list must match the pixel value in the mask\n\n"
+        "   colors (list of list of int): colors as [r, g, b] list\n\n";
+
 //------------------------//
 //----- C2dImageTask -----//
 //------------------------//

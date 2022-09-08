@@ -21,27 +21,28 @@
 #include <boost/python/suite/indexing/map_indexing_suite.hpp>
 #include "Data/CvMatNumpyArrayConverter.h"
 #include "PyDataProcessDocString.hpp"
-#include "CTaskFactoryWrap.h"
+#include "Task/CTaskFactoryWrap.h"
+#include "Task/C2dImageTaskWrap.h"
+#include "Task/C2dImageInteractiveTaskWrap.h"
+#include "Task/CVideoTaskWrap.h"
+#include "Task/CVideoOFTaskWrap.h"
+#include "Task/CVideoTrackingTaskWrap.h"
+#include "Task/CDnnTrainTaskWrap.h"
 #include "CWidgetFactoryWrap.h"
 #include "CPluginProcessInterfaceWrap.h"
-#include "C2dImageTaskWrap.h"
-#include "C2dImageInteractiveTaskWrap.h"
-#include "CVideoTaskWrap.h"
-#include "CVideoOFTaskWrap.h"
-#include "CVideoTrackingTaskWrap.h"
-#include "CDnnTrainTaskWrap.h"
-#include "CNumericIOWrap.hpp"
-#include "CGraphicsInputWrap.h"
-#include "CImageIOWrap.h"
-#include "CVideoIOWrap.h"
-#include "CWidgetOutputWrap.h"
-#include "CDatasetIOWrap.h"
-#include "CPathIOWrap.h"
-#include "CArrayIOWrap.h"
+#include "IO/CNumericIOWrap.hpp"
+#include "IO/CGraphicsInputWrap.h"
+#include "IO/CImageIOWrap.h"
+#include "IO/CVideoIOWrap.h"
+#include "IO/CWidgetOutputWrap.h"
+#include "IO/CDatasetIOWrap.h"
+#include "IO/CPathIOWrap.h"
+#include "IO/CArrayIOWrap.h"
+#include "IO/CObjectDetectionIOWrap.h"
+#include "IO/CInstanceSegIOWrap.h"
+#include "IO/CSemanticSegIOWrap.h"
 #include "CIkomiaRegistryWrap.h"
 #include "CWorkflowWrap.h"
-#include "CObjectDetectionIOWrap.h"
-#include "CInstanceSegIOWrap.h"
 
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #define PY_ARRAY_UNIQUE_SYMBOL IKOMIA_ARRAY_API
@@ -508,6 +509,24 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("save", &CInstanceSegIOWrap::save, &CInstanceSegIOWrap::default_save, _instanceSegSaveDocString, args("self", "path"))
         .def("toJson", &CInstanceSegIOWrap::toJson, &CInstanceSegIOWrap::default_toJson, _instanceSegToJsonDocString, args("self", "options"))
         .def("fromJson", &CInstanceSegIOWrap::fromJson, &CInstanceSegIOWrap::default_fromJson, _instanceSegFromJsonDocString, args("self", "jsonStr"))
+    ;
+
+    //--------------------------//
+    //----- CSemanticSegIO -----//
+    //--------------------------//
+    class_<CSemanticSegIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CSemanticSegIOWrap>>("CSemanticSegIO", _semanticSegIODocString)
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const CSemanticSegIO&>("Copy constructor"))
+        .def("getMask", &CSemanticSegIO::getMask, _getMaskDocString, args("self"))
+        .def("getClassNames", &CSemanticSegIO::getClassNames, _getClassNamesDocString, args("self"))
+        .def("setMask", &CSemanticSegIO::setMask, _setMaskDocString, args("self", "mask"))
+        .def("setClassNames", &CSemanticSegIOWrap::setClassNames, _setClassNamesDocString, args("self", "names", "colors"))
+        .def("isDataAvailable", &CSemanticSegIOWrap::isDataAvailable, &CSemanticSegIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
+        .def("clearData", &CSemanticSegIOWrap::clearData, &CSemanticSegIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
+        .def("load", &CSemanticSegIOWrap::load, &CSemanticSegIOWrap::default_load, _instanceSegLoadDocString, args("self", "path"))
+        .def("save", &CSemanticSegIOWrap::save, &CSemanticSegIOWrap::default_save, _instanceSegSaveDocString, args("self", "path"))
+        .def("toJson", &CSemanticSegIOWrap::toJson, &CSemanticSegIOWrap::default_toJson, _instanceSegToJsonDocString, args("self", "options"))
+        .def("fromJson", &CSemanticSegIOWrap::fromJson, &CSemanticSegIOWrap::default_fromJson, _instanceSegFromJsonDocString, args("self", "jsonStr"))
     ;
 
     //------------------------//

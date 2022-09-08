@@ -34,7 +34,7 @@ CInstanceSegIO::CInstanceSegIO() : CWorkflowTaskIO(IODataType::INSTANCE_SEGMENTA
 {
     m_description = QObject::tr("Instance segmentation data: label, confidence, box, mask and color.\n").toStdString();
     m_saveFormat = DataFileFormat::JSON;
-    m_imgIOPtr = std::make_shared<CImageIO>();
+    m_imgIOPtr = std::make_shared<CImageIO>(IODataType::IMAGE_LABEL);
     m_graphicsIOPtr = std::make_shared<CGraphicsOutput>();
     m_blobMeasureIOPtr = std::make_shared<CBlobMeasureIO>();
 }
@@ -59,6 +59,7 @@ CInstanceSegIO::CInstanceSegIO(const CInstanceSegIO &&io): CWorkflowTaskIO(io)
 
 CInstanceSegIO &CInstanceSegIO::operator=(const CInstanceSegIO &io)
 {
+    CWorkflowTaskIO::operator=(io);
     m_instances = io.m_instances;
     m_mergeMask = io.m_mergeMask;
     m_imgIOPtr = io.m_imgIOPtr->clone();
@@ -69,6 +70,7 @@ CInstanceSegIO &CInstanceSegIO::operator=(const CInstanceSegIO &io)
 
 CInstanceSegIO &CInstanceSegIO::operator=(const CInstanceSegIO &&io)
 {
+    CWorkflowTaskIO::operator=(io);
     m_instances = std::move(io.m_instances);
     m_mergeMask = std::move(io.m_mergeMask);
     m_imgIOPtr = io.m_imgIOPtr->clone();
@@ -280,6 +282,7 @@ QJsonObject CInstanceSegIO::toJsonInternal(const std::vector<std::string> &optio
 void CInstanceSegIO::fromJson(const QJsonDocument &doc)
 {
     bool bInit = false;
+    clearData();
     QJsonObject root = doc.object();
     QJsonArray instances = root["detections"].toArray();
 

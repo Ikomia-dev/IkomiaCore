@@ -19,55 +19,57 @@ DEFINES += PYDATAPROCESS_LIBRARY BOOST_ALL_NO_LIB
 
 SOURCES += \
         ../Core/Data/CvMatNumpyArrayConverter.cpp \
-        CArrayIOWrap.cpp \
-        CDatasetIOWrap.cpp \
-        CDnnTrainTaskWrap.cpp \
-        CGraphicsInputWrap.cpp \
         CIkomiaRegistryWrap.cpp \
-        CImageIOWrap.cpp \
-        CInstanceSegIOWrap.cpp \
-        CObjectDetectionIOWrap.cpp \
-        CPathIOWrap.cpp \
-        CVideoIOWrap.cpp \
-        CWidgetOutputWrap.cpp \
         CWorkflowWrap.cpp \
+        IO/CArrayIOWrap.cpp \
+        IO/CDatasetIOWrap.cpp \
+        IO/CGraphicsInputWrap.cpp \
+        IO/CImageIOWrap.cpp \
+        IO/CInstanceSegIOWrap.cpp \
+        IO/CObjectDetectionIOWrap.cpp \
+        IO/CPathIOWrap.cpp \
+        IO/CSemanticSegIOWrap.cpp \
+        IO/CVideoIOWrap.cpp \
+        IO/CWidgetOutputWrap.cpp \
         PyDataProcess.cpp \
-        CTaskFactoryWrap.cpp \
         CWidgetFactoryWrap.cpp \
         CPluginProcessInterfaceWrap.cpp \
-        C2dImageTaskWrap.cpp \
-        C2dImageInteractiveTaskWrap.cpp \
-        CVideoTaskWrap.cpp \
-        CVideoOFTaskWrap.cpp \
-        CVideoTrackingTaskWrap.cpp
+        Task/C2dImageInteractiveTaskWrap.cpp \
+        Task/C2dImageTaskWrap.cpp \
+        Task/CDnnTrainTaskWrap.cpp \
+        Task/CTaskFactoryWrap.cpp \
+        Task/CVideoOFTaskWrap.cpp \
+        Task/CVideoTaskWrap.cpp \
+        Task/CVideoTrackingTaskWrap.cpp
 
 HEADERS += \
         ../Core/Data/CvMatNumpyArrayConverter.h \
-        CArrayIOWrap.h \
-        CDatasetIOWrap.h \
-        CDnnTrainTaskWrap.h \
-        CGraphicsInputWrap.h \
         CIkomiaRegistryWrap.h \
-        CImageIOWrap.h \
-        CInstanceSegIOWrap.h \
-        CNumericIOWrap.hpp \
-        CObjectDetectionIOWrap.h \
-        CPathIOWrap.h \
-        CVideoIOWrap.h \
-        CWidgetOutputWrap.h \
         CWorkflowWrap.h \
+        IO/CArrayIOWrap.h \
+        IO/CDatasetIOWrap.h \
+        IO/CGraphicsInputWrap.h \
+        IO/CImageIOWrap.h \
+        IO/CInstanceSegIOWrap.h \
+        IO/CNumericIOWrap.hpp \
+        IO/CObjectDetectionIOWrap.h \
+        IO/CPathIOWrap.h \
+        IO/CSemanticSegIOWrap.h \
+        IO/CVideoIOWrap.h \
+        IO/CWidgetOutputWrap.h \
         PyDataProcess.h \
         PyDataProcessDocString.hpp \
         PyDataProcessGlobal.h \
         PyDataProcessTools.hpp \
-        CTaskFactoryWrap.h \
         CWidgetFactoryWrap.h \
         CPluginProcessInterfaceWrap.h \
-        C2dImageTaskWrap.h \
-        C2dImageInteractiveTaskWrap.h \
-        CVideoTaskWrap.h \
-        CVideoOFTaskWrap.h \
-        CVideoTrackingTaskWrap.h
+        Task/C2dImageInteractiveTaskWrap.h \
+        Task/C2dImageTaskWrap.h \
+        Task/CDnnTrainTaskWrap.h \
+        Task/CTaskFactoryWrap.h \
+        Task/CVideoOFTaskWrap.h \
+        Task/CVideoTaskWrap.h \
+        Task/CVideoTrackingTaskWrap.h
 
 #Make install directive
 target.path = ../../IkomiaApi/ikomia/dataprocess

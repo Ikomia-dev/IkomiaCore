@@ -48,6 +48,7 @@ SOURCES += \
         IO/CNumericIO.cpp \
         IO/CObjectDetectionIO.cpp \
         IO/CPathIO.cpp \
+        IO/CSemanticSegIO.cpp \
         IO/CTaskIORegistration.cpp \
         IO/CVideoIO.cpp \
         IO/CWidgetOutput.cpp \
@@ -92,6 +93,7 @@ HEADERS += \
         IO/CNumericIO.h \
         IO/CObjectDetectionIO.h \
         IO/CPathIO.h \
+        IO/CSemanticSegIO.h \
         IO/CTaskIORegistration.h \
         IO/CVideoIO.h \
         IO/CWidgetOutput.h \

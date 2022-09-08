@@ -72,6 +72,7 @@ CObjectDetectionIO::CObjectDetectionIO(const CObjectDetectionIO &&io): CWorkflow
 
 CObjectDetectionIO &CObjectDetectionIO::operator=(const CObjectDetectionIO &io)
 {
+    CWorkflowTaskIO::operator=(io);
     m_objects = io.m_objects;
     m_graphicsIOPtr = io.m_graphicsIOPtr->clone();
     m_blobMeasureIOPtr = io.m_blobMeasureIOPtr->clone();
@@ -80,6 +81,7 @@ CObjectDetectionIO &CObjectDetectionIO::operator=(const CObjectDetectionIO &io)
 
 CObjectDetectionIO &CObjectDetectionIO::operator=(const CObjectDetectionIO &&io)
 {
+    CWorkflowTaskIO::operator=(io);
     m_objects = std::move(io.m_objects);
     m_graphicsIOPtr = io.m_graphicsIOPtr->clone();
     m_blobMeasureIOPtr = io.m_blobMeasureIOPtr->clone();

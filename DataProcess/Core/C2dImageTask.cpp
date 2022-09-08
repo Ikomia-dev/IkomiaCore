@@ -25,6 +25,7 @@
 #include "IO/CVideoIO.h"
 #include "IO/CConvertIO.h"
 #include "IO/CInstanceSegIO.h"
+#include "IO/CSemanticSegIO.h"
 
 C2dImageTask::C2dImageTask() : CWorkflowTask()
 {
@@ -377,6 +378,7 @@ CMat C2dImageTask::createInputGraphicsMask(int index, int width, int height)
 
 void C2dImageTask::createOverlayMasks()
 {
+    // Bad design -> we have to move this output based logic elsewhere...
     for(size_t i=0; i<getOutputCount(); ++i)
     {
         if(i < m_colorMaps.size() && m_colorMaps[i].empty() == false)
@@ -389,6 +391,11 @@ void C2dImageTask::createOverlayMasks()
             {
                 auto outMaskPtr = std::dynamic_pointer_cast<CInstanceSegIO>(pOutputMask);
                 maskImage = outMaskPtr->getMergeMask();
+            }
+            else if (pOutputMask->getDataType() == IODataType::SEMANTIC_SEGMENTATION)
+            {
+                auto outMaskPtr = std::dynamic_pointer_cast<CSemanticSegIO>(pOutputMask);
+                maskImage = outMaskPtr->getMask();
             }
             else
             {

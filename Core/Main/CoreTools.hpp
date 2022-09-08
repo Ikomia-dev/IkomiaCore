@@ -403,6 +403,8 @@ namespace Ikomia
                         return QObject::tr("Object detection");
                     case IODataType::INSTANCE_SEGMENTATION:
                         return QObject::tr("Instance segmentation");
+                    case IODataType::SEMANTIC_SEGMENTATION:
+                        return QObject::tr("Semantic segmentation");
                 }
                 return QString();
             }
