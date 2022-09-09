@@ -66,7 +66,7 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegIO: public CWorkflowTaskIO
 
         void                                init(const std::string& taskName, int refImageIndex, int imageWidth, int imageHeight);
 
-        void                                addInstance(int type, int classIndex, const std::string& label, double confidence,
+        void                                addInstance(int id, int type, int classIndex, const std::string& label, double confidence,
                                                         double boxX, double boxY, double boxWidth, double boxHeight,
                                                         const CMat& mask, const CColor& color);
 

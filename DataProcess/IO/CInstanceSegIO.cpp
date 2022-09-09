@@ -152,11 +152,12 @@ void CInstanceSegIO::init(const std::string &taskName, int refImageIndex, int im
     m_imgIOPtr->setImage(mergeMask);
 }
 
-void CInstanceSegIO::addInstance(int type, int classIndex, const std::string &label, double confidence,
+void CInstanceSegIO::addInstance(int id, int type, int classIndex, const std::string &label, double confidence,
                                  double boxX, double boxY, double boxWidth, double boxHeight,
                                  const CMat &mask, const CColor &color)
 {
     CInstanceSegmentation obj;
+    obj.m_id = id;
     obj.m_type = type;
     obj.m_classIndex = classIndex;
     obj.m_label = label;
@@ -184,7 +185,7 @@ void CInstanceSegIO::addInstance(int type, int classIndex, const std::string &la
     }
 
     //Class label
-    std::string graphicsLabel = label + " : " + std::to_string(confidence);
+    std::string graphicsLabel = label + " #" + std::to_string(id) + ": " + std::to_string(confidence);
     CGraphicsTextProperty textProperty;
     textProperty.m_color = color;
     textProperty.m_fontSize = 8;
@@ -195,6 +196,7 @@ void CInstanceSegIO::addInstance(int type, int classIndex, const std::string &la
 
     //Store values to be shown in results table
     std::vector<CObjectMeasure> results;
+    results.emplace_back(CObjectMeasure(CMeasure(CMeasure::CUSTOM, QObject::tr("Identifier").toStdString()), id, graphicsId, label));
     results.emplace_back(CObjectMeasure(CMeasure(CMeasure::CUSTOM, QObject::tr("Confidence").toStdString()), confidence, graphicsId, label));
     results.emplace_back(CObjectMeasure(CMeasure::Id::BBOX, {boxX, boxY, boxWidth, boxHeight}, graphicsId, label));
     m_blobMeasureIOPtr->addObjectMeasures(results);
@@ -287,6 +289,7 @@ QJsonObject CInstanceSegIO::toJsonInternal(const std::vector<std::string> &optio
     for (size_t i=0; i<m_instances.size(); ++i)
     {
         QJsonObject obj;
+        obj["id"] = m_instances[i].m_id;
         obj["type"] = m_instances[i].m_type;
         obj["classIndex"] = m_instances[i].m_classIndex;
         obj["label"] = QString::fromStdString(m_instances[i].m_label);
@@ -318,6 +321,7 @@ void CInstanceSegIO::fromJson(const QJsonDocument &doc)
     for (int i=0; i<instances.size(); ++i)
     {
         QJsonObject obj = instances[i].toObject();
+        int id = obj["id"].toInt();
         int type = obj["type"].toInt();
         int classIndex = obj["classIndex"].toInt();
         std::string label = obj["label"].toString().toStdString();
@@ -336,6 +340,6 @@ void CInstanceSegIO::fromJson(const QJsonDocument &doc)
             init("", 0, mask.cols, mask.rows);
             bInit = true;
         }
-        addInstance(type, classIndex, label, confidence, x, y, w, h, mask, color);
+        addInstance(id, type, classIndex, label, confidence, x, y, w, h, mask, color);
     }
 }
