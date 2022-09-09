@@ -14,11 +14,13 @@ class DATAPROCESSSHARED_EXPORT CObjectDetection
 {
     public:
 
+        int                 getId() const;
         std::string         getLabel() const;
         double              getConfidence() const;
         std::vector<double> getBox() const;
         CColor              getColor() const;
 
+        void                setId(int id);
         void                setLabel(const std::string& label);
         void                setConfidence(double confidence);
         void                setBox(const std::vector<double>& box);
@@ -26,6 +28,7 @@ class DATAPROCESSSHARED_EXPORT CObjectDetection
 
     public:
 
+        int                 m_id;
         std::string         m_label = "";
         double              m_confidence = 0;
         std::vector<double> m_box;
@@ -60,7 +63,7 @@ class DATAPROCESSSHARED_EXPORT CObjectDetectionIO: public CWorkflowTaskIO
 
         void                                init(const std::string& taskName, int imageIndex);
 
-        void                                addObject(const std::string& label, double confidence,
+        void                                addObject(int id, const std::string& label, double confidence,
                                                       double boxX, double boxY, double boxWidth, double boxHeight,
                                                       const CColor& color);
 
@@ -73,6 +76,8 @@ class DATAPROCESSSHARED_EXPORT CObjectDetectionIO: public CWorkflowTaskIO
         void                                fromJson(const std::string &jsonStr) override;
 
         std::shared_ptr<CObjectDetectionIO> clone() const;
+
+        void                                copy(const std::shared_ptr<CWorkflowTaskIO> &ioPtr) override;
 
     private:
 

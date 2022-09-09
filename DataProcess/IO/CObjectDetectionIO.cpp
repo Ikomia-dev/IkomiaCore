@@ -1,10 +1,16 @@
 #include "CObjectDetectionIO.h"
 #include "Main/CoreTools.hpp"
 #include <QJsonArray>
+#include "CInstanceSegIO.h"
 
 //----------------------------//
 //----- CObjectDetection -----//
 //----------------------------//
+int CObjectDetection::getId() const
+{
+    return m_id;
+}
+
 std::string CObjectDetection::getLabel() const
 {
     return m_label;
@@ -23,6 +29,11 @@ std::vector<double> CObjectDetection::getBox() const
 CColor CObjectDetection::getColor() const
 {
     return m_color;
+}
+
+void CObjectDetection::setId(int id)
+{
+    m_id = id;
 }
 
 void CObjectDetection::setLabel(const std::string &label)
@@ -138,9 +149,10 @@ void CObjectDetectionIO::init(const std::string &taskName, int imageIndex)
     m_graphicsIOPtr->setImageIndex(imageIndex);
 }
 
-void CObjectDetectionIO::addObject(const std::string &label, double confidence, double boxX, double boxY, double boxWidth, double boxHeight, const CColor &color)
+void CObjectDetectionIO::addObject(int id, const std::string &label, double confidence, double boxX, double boxY, double boxWidth, double boxHeight, const CColor &color)
 {
     CObjectDetection obj;
+    obj.m_id = id;
     obj.m_label = label;
     obj.m_confidence = confidence;
     obj.m_box = {boxX, boxY, boxWidth, boxHeight};
@@ -155,7 +167,7 @@ void CObjectDetectionIO::addObject(const std::string &label, double confidence, 
     auto graphicsObj = m_graphicsIOPtr->addRectangle(boxX, boxY, boxWidth, boxHeight, rectProp);
 
     //Class label
-    std::string graphicsLabel = label + " : " + std::to_string(confidence);
+    std::string graphicsLabel = label + " #" + std::to_string(id) + ": " + std::to_string(confidence);
     CGraphicsTextProperty textProperty;
     textProperty.m_color = color;
     textProperty.m_fontSize = 8;
@@ -163,6 +175,7 @@ void CObjectDetectionIO::addObject(const std::string &label, double confidence, 
 
     //Store values to be shown in results table
     std::vector<CObjectMeasure> results;
+    results.emplace_back(CObjectMeasure(CMeasure(CMeasure::CUSTOM, QObject::tr("Identifier").toStdString()), id, graphicsObj->getId(), label));
     results.emplace_back(CObjectMeasure(CMeasure(CMeasure::CUSTOM, QObject::tr("Confidence").toStdString()), confidence, graphicsObj->getId(), label));
     results.emplace_back(CObjectMeasure(CMeasure::Id::BBOX, {boxX, boxY, boxWidth, boxHeight}, graphicsObj->getId(), label));
     m_blobMeasureIOPtr->addObjectMeasures(results);
@@ -215,6 +228,7 @@ QJsonObject CObjectDetectionIO::toJson() const
     for (size_t i=0; i<m_objects.size(); ++i)
     {
         QJsonObject obj;
+        obj["id"] = m_objects[i].m_id;
         obj["label"] = QString::fromStdString(m_objects[i].m_label);
         obj["confidence"] = m_objects[i].m_confidence;
 
@@ -251,6 +265,7 @@ void CObjectDetectionIO::fromJson(const QJsonDocument &jsonDoc)
     for (int i=0; i<objects.size(); ++i)
     {
         QJsonObject obj = objects[i].toObject();
+        int id = obj["id"].toInt();
         std::string label = obj["label"].toString().toStdString();
         double confidence = obj["confidence"].toDouble();
         QJsonObject box = obj["box"].toObject();
@@ -259,13 +274,41 @@ void CObjectDetectionIO::fromJson(const QJsonDocument &jsonDoc)
         double width = box["width"].toDouble();
         double height = box["height"].toDouble();
         CColor color = Utils::Graphics::colorFromJson(obj["color"].toObject());
-        addObject(label, confidence, x, y, width, height, color);
+        addObject(id, label, confidence, x, y, width, height, color);
     }
 }
 
 std::shared_ptr<CObjectDetectionIO> CObjectDetectionIO::clone() const
 {
     return std::static_pointer_cast<CObjectDetectionIO>(cloneImp());
+}
+
+void CObjectDetectionIO::copy(const std::shared_ptr<CWorkflowTaskIO> &ioPtr)
+{
+    auto type = ioPtr->getDataType();
+    if (type == IODataType::OBJECT_DETECTION)
+    {
+        //Should not be called in this case
+        auto pIO = dynamic_cast<const CObjectDetectionIO*>(ioPtr.get());
+        if(pIO)
+            *this = *pIO;
+    }
+    else if (type == IODataType::INSTANCE_SEGMENTATION)
+    {
+        auto instanceIOPtr = std::dynamic_pointer_cast<CInstanceSegIO>(ioPtr);
+        if (instanceIOPtr)
+        {
+            clearData();
+            std::vector<CInstanceSegmentation> instances = instanceIOPtr->getInstances();
+
+            for (size_t i=0; i<instances.size(); ++i)
+            {
+                addObject(instances[i].m_id, instances[i].m_label, instances[i].m_confidence,
+                          instances[i].m_box[0], instances[i].m_box[1], instances[i].m_box[2], instances[i].m_box[3],
+                          instances[i].m_color);
+            }
+        }
+    }
 }
 
 std::shared_ptr<CWorkflowTaskIO> CObjectDetectionIO::cloneImp() const

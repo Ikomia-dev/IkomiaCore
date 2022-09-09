@@ -443,7 +443,11 @@ namespace Ikomia
                 else if (srcData == IODataType::OBJECT_DETECTION)
                     return targetData == IODataType::INPUT_GRAPHICS || targetData == IODataType::BLOB_VALUES;
                 else if (srcData == IODataType::INSTANCE_SEGMENTATION)
-                    return targetData == IODataType::INPUT_GRAPHICS || targetData == IODataType::BLOB_VALUES;
+                {
+                    return targetData == IODataType::INPUT_GRAPHICS ||
+                            targetData == IODataType::BLOB_VALUES ||
+                            targetData == IODataType::OBJECT_DETECTION;
+                }
                 else if(srcData == IODataType::IMAGE_BINARY)
                 {
                     return (targetData == IODataType::IMAGE ||
