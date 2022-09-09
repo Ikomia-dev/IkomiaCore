@@ -132,6 +132,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
     registerStdVector<std::vector<double>>();
     registerStdVector<CObjectMeasure>();
     registerStdVector<std::vector<CObjectMeasure>>();
+    registerStdVector<CObjectDetection>();
+    registerStdVector<CInstanceSegmentation>();
 
     //---------------------//
     //----- CTaskInfo -----//
@@ -459,6 +461,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
     //------------------------------//
     class_<CObjectDetection>("CObjectDetection", _objDetectionDocString)
         .def(init<>("Default constructor", args("self")))
+        .add_property("id", &CObjectDetection::getId, &CObjectDetection::setId, "Object ID (int)")
         .add_property("label", &CObjectDetection::getLabel, &CObjectDetection::setLabel, "Object label (str)")
         .add_property("confidence", &CObjectDetection::getConfidence, &CObjectDetection::setConfidence, "Prediction confidence (double)")
         .add_property("box", &CObjectDetection::getBox, &CObjectDetection::setBox, "Object bounding box [x, y, width, height]")
@@ -473,7 +476,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("getObjects", &CObjectDetectionIO::getObjects, _getObjectsDocString, args("self"))
         .def("isDataAvailable", &CObjectDetectionIOWrap::isDataAvailable, &CObjectDetectionIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
         .def("init", &CObjectDetectionIO::init, _initObjDetectIODocString, args("self", "taskName", "refImageIndex"))
-        .def("addObject", &CObjectDetectionIO::addObject, _addObjectDocString, args("self", "label", "confidence", "boxX", "boxY", "boxWidth", "boxHeight", "color"))
+        .def("addObject", &CObjectDetectionIO::addObject, _addObjectDocString, args("self", "id", "label", "confidence", "boxX", "boxY", "boxWidth", "boxHeight", "color"))
         .def("clearData", &CObjectDetectionIOWrap::clearData, &CObjectDetectionIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
         .def("load", &CObjectDetectionIOWrap::load, &CObjectDetectionIOWrap::default_load, _objDetectLoadDocString, args("self", "path"))
         .def("save", &CObjectDetectionIOWrap::save, &CObjectDetectionIOWrap::default_save, _objDetectSaveDocString, args("self", "path"))
@@ -486,7 +489,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
     //--------------------------//
     class_<CInstanceSegmentation>("CInstanceSegmentation", _instanceSegDocString)
         .def(init<>("Default constructor", args("self")))
-        .add_property("type", &CInstanceSegmentation::getType, &CInstanceSegmentation::setType, "Object type 0:THING or 1:STUFF")
+        .add_property("id", &CInstanceSegmentation::getId, &CInstanceSegmentation::setId, "Object ID (int)")
+        .add_property("type", &CInstanceSegmentation::getType, &CInstanceSegmentation::setType, "Object type (int 0:THING or 1:STUFF)")
         .add_property("class_index", &CInstanceSegmentation::getClassIndex, &CInstanceSegmentation::setClassIndex, "Object class index (int)")
         .add_property("label", &CInstanceSegmentation::getLabel, &CInstanceSegmentation::setLabel, "Object label (str)")
         .add_property("confidence", &CInstanceSegmentation::getConfidence, &CInstanceSegmentation::setConfidence, "Prediction confidence (double)")
@@ -504,7 +508,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("getMergeMask", &CInstanceSegIO::getMergeMask, _getMergeMaskDocString, args("self"))
         .def("isDataAvailable", &CInstanceSegIOWrap::isDataAvailable, &CInstanceSegIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
         .def("init", &CInstanceSegIO::init, _initInstanceSegIODocString, args("self", "taskName", "refImageIndex", "width", "heigh"))
-        .def("addInstance", &CInstanceSegIO::addInstance, _addInstanceDocString, args("self", "type", "classIndex", "label", "confidence", "boxX", "boxY", "boxWidth", "boxHeight", "mask", "color"))
+        .def("addInstance", &CInstanceSegIO::addInstance, _addInstanceDocString, args("self", "id", "type", "classIndex", "label", "confidence", "boxX", "boxY", "boxWidth", "boxHeight", "mask", "color"))
         .def("clearData", &CInstanceSegIOWrap::clearData, &CInstanceSegIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
         .def("load", &CInstanceSegIOWrap::load, &CInstanceSegIOWrap::default_load, _instanceSegLoadDocString, args("self", "path"))
         .def("save", &CInstanceSegIOWrap::save, &CInstanceSegIOWrap::default_save, _instanceSegSaveDocString, args("self", "path"))

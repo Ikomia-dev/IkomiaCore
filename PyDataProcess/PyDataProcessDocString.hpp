@@ -1116,6 +1116,7 @@ constexpr auto _initObjDetectIODocString =
 constexpr auto _addObjectDocString =
         "Add detected object to the input/output.\n\n"
         "Args:\n\n"
+        "   id (int): object identifier\n\n"
         "   label (str): class label\n\n"
         "   confidence (double): prediction confidence\n\n"
         "   boxX (double): left coordinate of object bounding box\n\n"
@@ -1199,7 +1200,8 @@ constexpr auto _initInstanceSegIODocString =
 constexpr auto _addInstanceDocString =
         "Add segmented instance to the input/output.\n\n"
         "Args:\n\n"
-        "   type (int): segmentation object type (0:THING - 1:STUFF)\n\n"
+        "   id (int): instance identifier\n\n"
+        "   type (int): segmentation instance type (0:THING - 1:STUFF)\n\n"
         "   label (str): class label\n\n"
         "   confidence (double): prediction confidence\n\n"
         "   boxX (double): left coordinate of object bounding box\n\n"
