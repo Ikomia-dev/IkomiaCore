@@ -21,6 +21,7 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
 
         CMat                                getMask() const;
         std::vector<std::string>            getClassNames() const;
+        std::vector<cv::Vec3b>              getColors() const;
         std::shared_ptr<CImageIO>           getMaskImageIO() const;
         std::shared_ptr<CImageIO>           getLegendImageIO() const;
 

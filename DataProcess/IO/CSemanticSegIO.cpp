@@ -57,6 +57,11 @@ std::vector<std::string> CSemanticSegIO::getClassNames() const
     return m_classes;
 }
 
+std::vector<cv::Vec3b> CSemanticSegIO::getColors() const
+{
+    return m_colors;
+}
+
 std::shared_ptr<CImageIO> CSemanticSegIO::getMaskImageIO() const
 {
     return m_imgMaskIOPtr;
