@@ -128,6 +128,8 @@ void CProcessRegistration::registerCore()
     registerProcess(std::make_shared<CFillHolesFactory>(), std::make_shared<CWidgetFillHolesFactory>());
     registerProcess(std::make_shared<CGraphicsToBinaryFactory>(), std::make_shared<CWidgetGraphicsToBinaryFactory>());
     registerProcess(std::make_shared<CObjDetectFilterFactory>(), std::make_shared<CWidgetObjDetectFilterFactory>());
+    registerProcess(std::make_shared<CInstanceSegFilterFactory>(), std::make_shared<CWidgetInstanceSegFilterFactory>());
+    registerProcess(std::make_shared<CSemanticSegFilterFactory>(), std::make_shared<CWidgetSemanticSegFilterFactory>());
     registerProcess(std::make_shared<CPlotMergeFactory>(), std::make_shared<CWidgetPlotMergeFactory>());
     registerProcess(std::make_shared<CRgbHlsThresholdFactory>(), std::make_shared<CWidgetRgbHlsThresholdFactory>());
 }

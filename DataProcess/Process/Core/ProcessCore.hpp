@@ -29,5 +29,7 @@
 #include "CBinaryToGraphics.h"
 #include "CGraphicsToBinary.h"
 #include "CObjDetectFilter.h"
+#include "CInstanceSegFilter.h"
+#include "CSemanticSegFilter.h"
 
 #endif // PROCESSCORE_HPP
