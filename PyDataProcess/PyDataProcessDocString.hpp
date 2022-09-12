@@ -1202,6 +1202,7 @@ constexpr auto _addInstanceDocString =
         "Args:\n\n"
         "   id (int): instance identifier\n\n"
         "   type (int): segmentation instance type (0:THING - 1:STUFF)\n\n"
+        "   classIndex (int): index of the associated class\n\n"
         "   label (str): class label\n\n"
         "   confidence (double): prediction confidence\n\n"
         "   boxX (double): left coordinate of object bounding box\n\n"
@@ -1257,6 +1258,11 @@ constexpr auto _getClassNamesDocString =
         "Class index in the list corresponds to the pixel value in the mask.\n\n"
         "Returns:\n\n"
         "   list of str: class names\n\n";
+
+constexpr auto _getColorsDocString =
+        "Get colors associated with class names.\n\n"
+        "Returns:\n\n"
+        "   list of int list: colors as [r, g, b] list\n\n";
 
 constexpr auto _setMaskDocString =
         "Set the mask of the semantic segmentation output.\n\n"
@@ -1326,9 +1332,19 @@ constexpr auto _graphicsChangedDocString =
 constexpr auto _globalInputChangedDocString =
         "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.globalInputChanged`.\n\n";
 
+constexpr auto _createInputGraphicsMaskDocString =
+        "Generate a binary mask image from the task graphics input at the specified index. "
+        "The new mask is appended to the internal mask list. "
+        "Use :py:meth:`~ikomia.dataprocess.pydataprocess.C2dImageTask.getGraphicsMask` to retrieve the mask.\n\n"
+        "Args:\n\n"
+        "   index (int): task input index containing graphics information\n\n"
+        "   width (int): mask width (should be the width of the source image)\n\n"
+        "   height (int): mask height (should be the height of the source image)\n\n";
+
 constexpr auto _createGraphicsMaskDocString =
-        "Generate a binary mask image from the given graphics input. "
-        "The new mask is appended to the internal mask list.\n\n"
+        "Generate a binary mask image from the given graphics input object. "
+        "The new mask is appended to the internal mask list. "
+        "Use :py:meth:`~ikomia.dataprocess.pydataprocess.C2dImageTask.getGraphicsMask` to retrieve the mask.\n\n"
         "Args:\n\n"
         "   width (int): mask width (should be the width of the source image)\n\n"
         "   height (int): mask height (should be the height of the source image)\n\n"

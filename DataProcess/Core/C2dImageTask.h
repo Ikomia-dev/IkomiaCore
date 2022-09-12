@@ -119,6 +119,8 @@ class DATAPROCESSSHARED_EXPORT C2dImageTask : public CWorkflowTask
          */
         void            createGraphicsMask(size_t width, size_t height, const GraphicsInputPtr& pGraphicsInput);
 
+        CMat            createInputGraphicsMask(int index, int width, int height);
+
         /**
          * @brief Applies the mask generated from graphics input to the result image so that only masked areas seems to be processed.
          * @param src: source image of the process.
@@ -161,7 +163,6 @@ class DATAPROCESSSHARED_EXPORT C2dImageTask : public CWorkflowTask
 
         void            copyColorMapToOutput();
 
-        CMat            createInputGraphicsMask(int index, int width, int height);
         void            createOverlayMasks();
 
     /** @cond INTERNAL */
