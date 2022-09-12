@@ -1,7 +1,5 @@
 #include "CObjDetectFilter.h"
-#include "IO/CGraphicsInput.h"
-#include "IO/CGraphicsOutput.h"
-#include "IO/CBlobMeasureIO.h"
+#include "IO/CObjectDetectionIO.h"
 #include "UtilsTools.hpp"
 
 //---------------------------------//
@@ -30,20 +28,16 @@ UMapString CObjDetectFilterParam::getParamMap() const
 //----------------------------//
 CObjDetectFilter::CObjDetectFilter() : CWorkflowTask()
 {
-    addInput(std::make_shared<CGraphicsInput>());
-    addInput(std::make_shared<CBlobMeasureIO>());
-    addOutput(std::make_shared<CGraphicsOutput>());
-    addOutput(std::make_shared<CBlobMeasureIO>());
+    addInput(std::make_shared<CObjectDetectionIO>());
+    addOutput(std::make_shared<CObjectDetectionIO>());
 }
 
 CObjDetectFilter::CObjDetectFilter(const std::string name, const std::shared_ptr<CObjDetectFilterParam> &pParam)
     : CWorkflowTask(name)
 {
     m_pParam = std::make_shared<CObjDetectFilterParam>(*pParam);
-    addInput(std::make_shared<CGraphicsInput>());
-    addInput(std::make_shared<CBlobMeasureIO>());
-    addOutput(std::make_shared<CGraphicsOutput>());
-    addOutput(std::make_shared<CBlobMeasureIO>());
+    addInput(std::make_shared<CObjectDetectionIO>());
+    addOutput(std::make_shared<CObjectDetectionIO>());
 }
 
 size_t CObjDetectFilter::getProgressSteps()
@@ -53,21 +47,16 @@ size_t CObjDetectFilter::getProgressSteps()
 
 void CObjDetectFilter::run()
 {
-    auto graphicsInPtr = std::dynamic_pointer_cast<CGraphicsInput>(getInput(0));
-    auto measuresInPtr = std::dynamic_pointer_cast<CBlobMeasureIO>(getInput(1));
+    auto objDetectIn = std::dynamic_pointer_cast<CObjectDetectionIO>(getInput(0));
     auto paramPtr = std::dynamic_pointer_cast<CObjDetectFilterParam>(m_pParam);
 
-    if(graphicsInPtr == nullptr || measuresInPtr == nullptr || paramPtr == nullptr)
-        throw CException(CoreExCode::INVALID_PARAMETER, "Invalid inputs", __func__, __FILE__, __LINE__);
+    if(objDetectIn == nullptr || paramPtr == nullptr)
+        throw CException(CoreExCode::INVALID_PARAMETER, "Invalid input", __func__, __FILE__, __LINE__);
 
-    auto graphicsOutPtr = std::dynamic_pointer_cast<CGraphicsOutput>(getOutput(0));
-    auto measuresOutPtr = std::dynamic_pointer_cast<CBlobMeasureIO>(getOutput(1));
-    graphicsOutPtr->clearData();
-    measuresOutPtr->clearData();
+    auto objDetectOut = std::dynamic_pointer_cast<CObjectDetectionIO>(getOutput(0));
+    objDetectOut->clearData();
 
-    std::set<int> graphicsIds;
     std::set<std::string> categories;
-
     if(paramPtr->m_categories != "all")
     {
         std::vector<std::string> categs;
@@ -75,30 +64,20 @@ void CObjDetectFilter::run()
         categories.insert(categs.begin(), categs.end());
     }
 
-    ObjectsMeasures measures = measuresInPtr->getMeasures();
-    for(size_t i=0; i<measures.size(); ++i)
-    {
-        int confIndex = measuresInPtr->getBlobMeasureIndex(i, "Confidence");
-        if(confIndex != -1)
-        {
-            double confValue = measures[i][confIndex].m_values[0];
-            std::string category = measures[i][confIndex].m_label;
-
-            if(confValue >= paramPtr->m_confidence && (categories.empty() || categories.find(category) != categories.end()))
-            {
-                graphicsIds.insert(measures[i][confIndex].m_graphicsId);
-                measuresOutPtr->addObjectMeasures(measures[i]);
-            }
-        }
-    }
     emit m_signalHandler->doProgress();
 
-    auto items = graphicsInPtr->getItems();
-    for(size_t i=0; i<items.size(); ++i)
+    auto objects = objDetectIn->getObjects();
+    for(size_t i=0; i<objects.size(); ++i)
     {
-        if(graphicsIds.find(items[i]->getId()) != graphicsIds.end())
-            graphicsOutPtr->addItem(items[i]);
+        if (objects[i].m_confidence >= paramPtr->m_confidence &&
+                (categories.empty() || categories.find(objects[i].m_label) != categories.end()))
+        {
+            objDetectOut->addObject(objects[i].m_id, objects[i].m_label, objects[i].m_confidence,
+                                    objects[i].m_box[0], objects[i].m_box[1], objects[i].m_box[2], objects[i].m_box[3],
+                                    objects[i].m_color);
+        }
     }
+
     emit m_signalHandler->doProgress();
 }
 
