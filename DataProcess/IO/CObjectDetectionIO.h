@@ -92,4 +92,20 @@ class DATAPROCESSSHARED_EXPORT CObjectDetectionIO: public CWorkflowTaskIO
         std::shared_ptr<CBlobMeasureIO>     m_blobMeasureIOPtr = nullptr;
 };
 
+class DATAPROCESSSHARED_EXPORT CObjectDetectionIOFactory: public CWorkflowTaskIOFactory
+{
+    public:
+
+        CObjectDetectionIOFactory()
+        {
+            m_name = "CObjectDetectionIO";
+        }
+
+        virtual WorkflowTaskIOPtr   create(IODataType dataType)
+        {
+            Q_UNUSED(dataType);
+            return std::make_shared<CObjectDetectionIO>();
+        }
+};
+
 #endif // COBJECTDETECTIONIO_H

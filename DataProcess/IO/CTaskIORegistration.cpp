@@ -26,6 +26,9 @@
 #include "CVideoIO.h"
 #include "CWidgetOutput.h"
 #include "CPathIO.h"
+#include "CObjectDetectionIO.h"
+#include "CInstanceSegIO.h"
+#include "CSemanticSegIO.h"
 
 CTaskIORegistration::CTaskIORegistration()
 {
@@ -67,4 +70,7 @@ void CTaskIORegistration::registerCore()
     registerIO(std::make_shared<CVideoIOFactory>());
     registerIO(std::make_shared<CWidgetOutputFactory>());
     registerIO(std::make_shared<CPathIOFactory>());
+    registerIO(std::make_shared<CObjectDetectionIOFactory>());
+    registerIO(std::make_shared<CInstanceSegIOFactory>());
+    registerIO(std::make_shared<CSemanticSegIOFactory>());
 }

@@ -95,4 +95,20 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegIO: public CWorkflowTaskIO
         std::shared_ptr<CBlobMeasureIO>     m_blobMeasureIOPtr = nullptr;
 };
 
+class DATAPROCESSSHARED_EXPORT CInstanceSegIOFactory: public CWorkflowTaskIOFactory
+{
+    public:
+
+        CInstanceSegIOFactory()
+        {
+            m_name = "CInstanceSegIO";
+        }
+
+        virtual WorkflowTaskIOPtr   create(IODataType dataType)
+        {
+            Q_UNUSED(dataType);
+            return std::make_shared<CInstanceSegIO>();
+        }
+};
+
 #endif // CINSTANCESEGIO_H

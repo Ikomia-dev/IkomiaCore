@@ -57,4 +57,20 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
         std::shared_ptr<CImageIO>   m_imgLegendIOPtr = nullptr;
 };
 
+class DATAPROCESSSHARED_EXPORT CSemanticSegIOFactory: public CWorkflowTaskIOFactory
+{
+    public:
+
+        CSemanticSegIOFactory()
+        {
+            m_name = "CSemanticSegIO";
+        }
+
+        virtual WorkflowTaskIOPtr   create(IODataType dataType)
+        {
+            Q_UNUSED(dataType);
+            return std::make_shared<CSemanticSegIO>();
+        }
+};
+
 #endif // CSEMANTICSEGIO_H
