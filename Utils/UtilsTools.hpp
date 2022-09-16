@@ -1048,6 +1048,50 @@ namespace Ikomia
             {
                 return "0.8.0";
             }
+            inline std::string  getArchitectureKeywords()
+            {
+#ifdef PY37
+    #ifdef CUDA10
+                return "python37,cuda10";
+    #elif CUDA11
+                return "python37,cuda11";
+    #else
+                return "python37,cpu";
+    #endif
+#elif PY38
+    #ifdef CUDA10
+                return "python38,cuda10";
+    #elif CUDA11
+                return "python38,cuda11";
+    #else
+                return "python38,cpu";
+    #endif
+#elif PY39
+    #ifdef CUDA10
+                return "python39,cuda10";
+    #elif CUDA11
+                return "python39,cuda11";
+    #else
+                return "python39,cpu";
+    #endif
+#elif PY310
+    #ifdef CUDA10
+                return "python310,cuda10";
+    #elif CUDA11
+                return "python310,cuda11";
+    #else
+                return "python310,cpu";
+    #endif
+#else
+                return "";
+#endif
+            }
+            inline bool         checkArchitectureKeywords(const std::string& keywords)
+            {
+                std::string archiKeywords = getArchitectureKeywords();
+                std::size_t found = keywords.find(archiKeywords);
+                return (found != std::string::npos);
+            }
         }
 
         namespace MLflow

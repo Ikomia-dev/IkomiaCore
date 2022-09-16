@@ -36,6 +36,14 @@ constexpr auto _pythonStateDocString =
         "Returns:\n"
         "   :py:class:`utils.pyutils.PluginState`: state\n";
 
+constexpr auto _checkArchiKeywordsDocString =
+        "Check whether the current API compilation architecture matches the given plugin architecture keywords. "
+        "This function is only usefull for C++ plugins.\n\n"
+        "Args:\n\n"
+        "   keywords (str): plugin keywords\n\n"
+        "Returns:\n\n"
+        "   boolean: True if architectures match, False otherwise\n\n";
+
 //----------------------
 //----- CException -----
 //-----------------------
