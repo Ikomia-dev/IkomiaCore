@@ -53,6 +53,7 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
 
         std::vector<std::string>    m_classes;
         std::vector<cv::Vec3b>      m_colors;
+        cv::Mat                     m_histo;
         std::shared_ptr<CImageIO>   m_imgMaskIOPtr = nullptr;
         std::shared_ptr<CImageIO>   m_imgLegendIOPtr = nullptr;
 };

@@ -75,6 +75,9 @@ std::shared_ptr<CImageIO> CSemanticSegIO::getLegendImageIO() const
 void CSemanticSegIO::setMask(const CMat &mask)
 {
     m_imgMaskIOPtr->setImage(mask);
+    std::vector<cv::Mat> inputs;
+    inputs.push_back(mask);
+    cv::calcHist(inputs, {0}, cv::Mat(), m_histo, {256}, {0, 256}, false);
 }
 
 void CSemanticSegIO::setClassNames(const std::vector<std::string> &names, const std::vector<cv::Vec3b> &colors)
@@ -93,6 +96,7 @@ void CSemanticSegIO::clearData()
 {
     m_classes.clear();
     m_colors.clear();
+    m_histo.release();
     m_imgMaskIOPtr->clearData();
     m_imgLegendIOPtr->clearData();
 }
@@ -199,9 +203,16 @@ void CSemanticSegIO::fromJson(const QJsonDocument &doc)
 
 void CSemanticSegIO::generateLegend()
 {
+    std::vector<int> colorIndices;
+    for (size_t i=0; i<m_colors.size(); ++i)
+    {
+        if (m_histo.at<uchar>(i) > 0)
+            colorIndices.push_back(i);
+    }
+
     const int imgH = 1024;
     const int imgW = 1024;
-    size_t nbColors = m_colors.size();
+    size_t nbColors = colorIndices.size();
     const int offsetX = 10;
     const int offsetY = 10;
     const int interline = 5;
@@ -217,11 +228,10 @@ void CSemanticSegIO::generateLegend()
     {
         // Color frame
         cv::Rect colorFrameRect = cv::Rect(offsetX, offsetY + (i * (rectHeight + interline)), rectWidth, rectHeight);
-        cv::rectangle(legend, colorFrameRect, m_colors[i], -1);
+        cv::rectangle(legend, colorFrameRect, m_colors[colorIndices[i]], -1);
         // Class name
         cv::Point textOrigin(3 * offsetX + rectWidth, offsetY + (i * (rectHeight + interline)) + (rectHeight / 2));
         cv::putText(legend, m_classes[i], textOrigin, font, fontScale, {0, 0, 0}, thickness);
-
     }
     m_imgLegendIOPtr->setImage(legend);
 }
