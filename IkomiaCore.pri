@@ -138,7 +138,7 @@ unix:!macx: LIBS += -L/usr/lib64/nvidia/
 unix:!macx: LIBS += -L/usr/local/cuda/lib64/ # centos 7
 
 # OpenGL
-win32: LIBS += -L'C:\Program Files(x86)\Windows Kits\10\Lib\10.0.17134.0\um\x64'
+win32: LIBS += -L'C:\Program Files(x86)\Windows Kits\10\Lib\10.0.19041.0\um\x64'
 
 # GDCM
 win32: LIBS += -L$$(ProgramW6432)/GDCM/bin

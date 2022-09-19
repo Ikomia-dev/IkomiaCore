@@ -48,15 +48,15 @@ msvc {
 
 include(LocalSettings.pri)
 
-VERSION = 0.3.0.0
-
-
 #####################################################################################
 #                       INCLUDE                                                     #
 #####################################################################################
 
 # Global include directory for Mac OS X
 macx: INCLUDEPATH += /usr/local/include
+
+# Boost
+win32: INCLUDEPATH += $$(PROGRAMFILES)/Boost/include/boost-$${BOOST_VERSION}
 
 # Python3
 centos7 {
@@ -68,17 +68,15 @@ centos7 {
 }
 else {
     win32: INCLUDEPATH += $$(ProgramW6432)/Python$${PYTHON_VERSION_NO_DOT}/include
-    win32: INCLUDEPATH += $$PWD/../numpy/numpy/core/include                                             # NUMPY path for Windows
+    win32: INCLUDEPATH += $$PWD/../numpy/numpy/core/include                                                 # NUMPY path for Windows
     macx: pythonPath = /usr/local/python$${PYTHON_VERSION_DOT}                                              #/usr/local/opt/python/Frameworks/Python.framework/Versions/3.7
     macx: INCLUDEPATH += $$pythonPath/include/python$${PYTHON_VERSION_DOT}m
     macx: INCLUDEPATH += $$pythonPath/lib/python$${PYTHON_VERSION}/site-packages/numpy/core/include
     unix:!macx: INCLUDEPATH += /usr/include/python$${PYTHON_VERSION_DOT}
     unix:!macx: INCLUDEPATH += /usr/local/include/python$${PYTHON_VERSION_DOT}
-    unix:!macx: INCLUDEPATH += /usr/lib/python$${PYTHON_VERSION_DOT}/site-packages/numpy/core/include/      # NUMPY path for Arch
+    unix:!macx: INCLUDEPATH += /usr/lib/python$${PYTHON_VERSION_DOT}/site-packages/numpy/core/include/          # NUMPY path for Arch
+    unix:!macx: INCLUDEPATH += /usr/local/lib/python$${PYTHON_VERSION_DOT}/dist-packages/numpy/core/include/    # NUMPY path for Ubuntu
 }
-
-# Boost
-win32: INCLUDEPATH += $$(PROGRAMFILES)/Boost/include/boost-$${BOOST_VERSION}
 
 # OpenCV
 centos7 {
@@ -90,7 +88,6 @@ unix:!macx: INCLUDEPATH += /usr/local/include/opencv4
 macx: INCLUDEPATH += /usr/local/include/opencv4
 
 # OpenCL
-unix: INCLUDEPATH += $$PWD/../../..
 win32: INCLUDEPATH += '$$(PROGRAMFILES)/NVIDIA GPU Computing Toolkit/CUDA/v$${CUDA_VERSION}/include'
 
 # Ikomia
@@ -144,7 +141,7 @@ unix:!macx: LIBS += -L/usr/lib64/nvidia/
 unix:!macx: LIBS += -L/usr/local/cuda/lib64/ # centos 7
 
 # OpenGL
-win32: LIBS += -L'C:\Program Files(x86)\Windows Kits\10\Lib\10.0.17134.0\um\x64'
+win32: LIBS += -L'C:\Program Files(x86)\Windows Kits\10\Lib\10.0.19041.0\um\x64'
 
 # OMP
 unix: QMAKE_CXXFLAGS += -fopenmp
