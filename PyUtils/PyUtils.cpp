@@ -25,6 +25,7 @@
 #include "CTimer.hpp"
 #include "UtilsDefine.hpp"
 #include "UtilsTools.hpp"
+#include "PairToPythonTupleConverter.hpp"
 
 void translate_exception(const CException& e)
 {
@@ -41,6 +42,9 @@ BOOST_PYTHON_MODULE(pyutils)
 
     // Set the docstring of the current module scope
     scope().attr("__doc__") = _moduleDocString;
+
+    //Register std::pairs
+    py_pair<std::string, std::string>();
 
     // Register exception
     register_exception_translator<CException>(&translate_exception);

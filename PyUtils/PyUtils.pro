@@ -19,6 +19,7 @@ SOURCES += \
         PyUtils.cpp
 
 HEADERS += \
+        PairToPythonTupleConverter.hpp \
         PyUtils.h \
         PyUtilsDocString.hpp \
         PyUtilsGlobal.h

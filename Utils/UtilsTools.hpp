@@ -305,6 +305,30 @@ namespace Ikomia
                         break;
                 }
             }
+
+            inline std::vector<std::pair<std::string, std::string> getInstalledModules()
+            {
+                std::vector<std::pair<std::string, std::string> modules;
+
+                try
+                {
+                    boost::python::dict modulesDict = import("ikomia.utils.plugintools").attr("get_installed_modules")();
+                    auto moduleList = boost::python::list(modulesDict.items());
+
+                    for (int i=0; i<boost::python::len(moduleList); ++i)
+                    {
+                        boost::python::dict module = moduleList[i];
+                        std::string name = boost::python::extract<std::string>(module["name"]);
+                        std::string version = boost::python::extract<std::string>(module["version"]);
+                        modules.push_back(std::make_pair(name, version));
+                    }
+                }
+                catch (const boost::python::error_already_set &)
+                {
+                    print(handlePythonException(), QtMsgType::QtWarningMsg);
+                }
+                return modules;
+            }
         }
 
         namespace IkomiaApp
