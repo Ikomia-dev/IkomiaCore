@@ -120,8 +120,8 @@ void CIkomiaRegistry::loadCppPlugin(const std::string& directory)
 std::vector<std::string> CIkomiaRegistry::getBlackListedPackages()
 {
     std::vector<std::string> packages;
-
     QString blackListPath = Utils::IkomiaApp::getQIkomiaFolder() + "/Python/packageBlacklist.txt";
+
     if (QFile::exists(blackListPath))
     {
         QFile blackListFile(blackListPath);
