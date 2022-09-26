@@ -126,6 +126,36 @@ void C2dImageTaskWrap::setOutputColorMap(size_t index, size_t maskIndex, const s
     }
 }
 
+CMat C2dImageTaskWrap::applyGraphicsMask(const CMat &src, const CMat &dst, int maskIndex)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        CMat res = dst.clone();
+        this->C2dImageTask::applyGraphicsMask(src, res, (size_t)(maskIndex));
+        return res;
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+CMat C2dImageTaskWrap::applyGraphicsMaskToBinary(const CMat &src, CMat &dst, int maskIndex)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        CMat res = dst.clone();
+        this->C2dImageTask::applyGraphicsMaskToBinary(src, dst, (size_t)(maskIndex));
+        return res;
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 void C2dImageTaskWrap::updateStaticOutputs()
 {
     CPyEnsureGIL gil;
