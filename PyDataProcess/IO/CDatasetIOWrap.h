@@ -62,6 +62,8 @@ class CDatasetIOWrap : public CDatasetIO, public wrapper<CDatasetIO>
 
         void                                fromJson(const std::string& jsonStr) override;
         void                                default_fromJson(const std::string& jsonStr);
+
+        std::string                         toJson() const;
 };
 
 #endif // CDATASETIOWRAP_H

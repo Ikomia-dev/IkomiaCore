@@ -96,8 +96,8 @@ class DATAPROCESSSHARED_EXPORT CGraphicsOutput : public CWorkflowTaskIO
     private:
 
         virtual WorkflowTaskIOPtr   cloneImp() const override;
-        QJsonObject                 toJson() const;
-        void                        fromJson(const QJsonDocument& doc);
+        QJsonObject                 toJsonInternal() const;
+        void                        fromJsonInternal(const QJsonDocument& doc);
 
     private:
 

@@ -191,6 +191,11 @@ constexpr auto _blobMeasureIOSaveDocString =
         "Args:\n\n"
         "   path (str)\n\n";
 
+constexpr auto _blobIOToJsonNoOptDocString =
+        "Return input/output data in JSON formatted string (compact mode).\n\n"
+        "Returns:\n\n"
+        "   string: JSON formatted string\n\n";
+
 constexpr auto _blobIOToJsonDocString =
         "Return input/output data in JSON formatted string. JSON format option can be set, possible values are:\n\n"
         "- ['json_format', 'compact'] (**default**)\n"
@@ -497,11 +502,16 @@ constexpr auto _imageIOSaveDocString =
         "Args:\n\n"
         "   path (str)\n\n";
 
+constexpr auto _imageIOToJsonNoOptDocString =
+        "Return input/output data in JSON formatted string (compact mode and image encoded as JPEG).\n"
+        "Returns:\n\n"
+        "   string: JSON formatted string\n\n";
+
 constexpr auto _imageIOToJsonDocString =
         "Return input/output data in JSON formatted string.\n"
         "Available options:\n\n"
         "- JSON format ['json_format', 'compact', ...] (**default**) or ['json_format', 'indented', ...]\n"
-        "- image format ['format', 'jpg', ...] or ['format', 'png', ...]\n\n"
+        "- image format ['image_format', 'jpg', ...] or ['image_format', 'png', ...]\n\n"
         "Args:\n\n"
         "   jsonStr (list of str): format-specific options encoded as pairs [option_name, option_value]\n\n"
         "Returns:\n\n"

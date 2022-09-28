@@ -88,3 +88,16 @@ void CGraphicsInputWrap::default_clearData()
         throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
     }
 }
+
+std::string CGraphicsInputWrap::toJson() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        return this->CGraphicsInput::toJson(std::vector<std::string>());
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}

@@ -30,8 +30,10 @@
 #include "Task/CDnnTrainTaskWrap.h"
 #include "CWidgetFactoryWrap.h"
 #include "CPluginProcessInterfaceWrap.h"
+#include "IO/CBlobMeasureIOWrap.h"
 #include "IO/CNumericIOWrap.hpp"
 #include "IO/CGraphicsInputWrap.h"
+#include "IO/CGraphicsOutputWrap.h"
 #include "IO/CImageIOWrap.h"
 #include "IO/CVideoIOWrap.h"
 #include "IO/CWidgetOutputWrap.h"
@@ -91,6 +93,7 @@ void exposeNumericIO(const std::string& className)
         .def("copyStaticData", &CNumericIO<Type>::copyStaticData, &CNumericIOWrap<Type>::default_copyStaticData, _copyStaticDataDerivedDocString, args("self", "io"))
         .def("load", &CNumericIO<Type>::load, _numericIOLoadDocString, args("self", "path"))
         .def("save", saveNumeric, _numericIOSaveDocString, args("self", "path"))
+        .def("toJson", &CNumericIOWrap<Type>::toJson, _blobIOToJsonNoOptDocString, args("self"))
         .def("toJson", &CNumericIO<Type>::toJson, _blobIOToJsonDocString, args("self", "options"))
         .def("fromJson", &CNumericIO<Type>::fromJson, _imageIOFromJsonIDocString, args("self", "jsonStr"))
     ;
@@ -210,7 +213,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
     //--------------------------//
     void (CBlobMeasureIO::*saveBlob)(const std::string&) = &CBlobMeasureIO::save;
 
-    class_<CBlobMeasureIO, bases<CWorkflowTaskIO>, std::shared_ptr<CBlobMeasureIO>>("CBlobMeasureIO", _measureIODocString)
+    class_<CBlobMeasureIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CBlobMeasureIOWrap>>("CBlobMeasureIO", _measureIODocString)
         .def(init<>("Default constructor", args("self")))
         .def(init<const std::string&>(_ctorMeasureIODocString, args("self", "name")))
         .def(init<const CBlobMeasureIO&>("Copy constructor"))
@@ -222,6 +225,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("clearData", &CBlobMeasureIO::clearData, _clearDataDerivedDocString, args("self"))
         .def("load", &CBlobMeasureIO::load, _blobMeasureIOLoadDocString, args("self", "path"))
         .def("save", saveBlob, _blobMeasureIOSaveDocString, args("self", "path"))
+        .def("toJson", &CBlobMeasureIOWrap::toJson, _blobIOToJsonNoOptDocString, args("self"))
         .def("toJson", &CBlobMeasureIO::toJson, _blobIOToJsonDocString, args("self", "options"))
         .def("fromJson", &CBlobMeasureIO::fromJson, _imageIOFromJsonIDocString, args("self", "jsonStr"))
     ;
@@ -230,8 +234,6 @@ BOOST_PYTHON_MODULE(pydataprocess)
     //----- CGraphicsInput -----//
     //--------------------------//
     void (CGraphicsInput::*saveGraphicsIn)(const std::string&) = &CGraphicsInput::save;
-    std::string (CGraphicsInput::*toJsonIn)(const std::vector<std::string>&) const = &CGraphicsInput::toJson;
-    void (CGraphicsInput::*fromJsonIn)(const std::string&) = &CGraphicsInput::fromJson;
 
     class_<CGraphicsInputWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CGraphicsInputWrap>>("CGraphicsInput", _graphicsInputDocString)
         .def(init<>("Default constructor", args("self")))
@@ -243,8 +245,9 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("clearData", &CGraphicsInput::clearData, &CGraphicsInputWrap::default_clearData, _clearGraphicsDataDocString, args("self"))
         .def("load", &CGraphicsInput::load, _graphicsInputLoadDocString, args("self", "path"))
         .def("save", saveGraphicsIn, _graphicsInputSaveDocString, args("self", "path"))
-        .def("toJson", toJsonIn, _blobIOToJsonDocString, args("self", "options"))
-        .def("fromJson", fromJsonIn, _imageIOFromJsonIDocString, args("self", "jsonStr"))
+        .def("toJson", &CGraphicsInputWrap::toJson, _blobIOToJsonNoOptDocString, args("self"))
+        .def("toJson", &CGraphicsInput::toJson, _blobIOToJsonDocString, args("self", "options"))
+        .def("fromJson", &CGraphicsInput::fromJson, _imageIOFromJsonIDocString, args("self", "jsonStr"))
     ;
 
     //---------------------------//
@@ -265,12 +268,11 @@ BOOST_PYTHON_MODULE(pydataprocess)
     ProxyGraphicsItemPtr (CGraphicsOutput::*addText1)(const std::string&, float x, float y) = &CGraphicsOutput::addText;
     ProxyGraphicsItemPtr (CGraphicsOutput::*addText2)(const std::string&, float x, float y, const CGraphicsTextProperty&) = &CGraphicsOutput::addText;
     void (CGraphicsOutput::*saveGraphicsOut)(const std::string&) = &CGraphicsOutput::save;
-    std::string (CGraphicsOutput::*toJsonOut)(const std::vector<std::string>&) const = &CGraphicsOutput::toJson;
-    void (CGraphicsOutput::*fromJsonOut)(const std::string&) = &CGraphicsOutput::fromJson;
 
-    class_<CGraphicsOutput, bases<CWorkflowTaskIO>, std::shared_ptr<CGraphicsOutput>>("CGraphicsOutput", _graphicsOutputDocString)
+    class_<CGraphicsOutputWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CGraphicsOutputWrap>>("CGraphicsOutput", _graphicsOutputDocString)
         .def(init<>("Default constructor", args("self")))
         .def(init<const std::string&>(_ctorGraphicsOutDocString, args("self", "name")))
+        .def(init<const CGraphicsOutput&>("Copy constructor"))
         .def("setNewLayer", &CGraphicsOutput::setNewLayer, _setNewLayerDocString, args("self", "name"))
         .def("setImageIndex", &CGraphicsOutput::setImageIndex, _setImageIndexDocString, args("self", "index"))
         .def("setItems", &CGraphicsOutput::setItems, _setItemsDocString, args("self", "items"))
@@ -293,8 +295,9 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("addText", addText2, _addText2DocString, args("self", "text", "x", "y", "properties"))
         .def("load", &CGraphicsOutput::load, _graphicsOutputLoadDocString, args("self", "path"))
         .def("save", saveGraphicsOut, _graphicsOutputSaveDocString, args("self", "path"))
-        .def("toJson", toJsonOut, _blobIOToJsonDocString, args("self", "options"))
-        .def("fromJson", fromJsonOut, _imageIOFromJsonIDocString, args("self", "jsonStr"))
+        .def("toJson", &CGraphicsOutputWrap::toJson, _blobIOToJsonNoOptDocString, args("self"))
+        .def("toJson", &CGraphicsOutput::toJson, _blobIOToJsonDocString, args("self", "options"))
+        .def("fromJson", &CGraphicsOutput::fromJson, _imageIOFromJsonIDocString, args("self", "jsonStr"))
     ;
 
     //--------------------//
@@ -305,6 +308,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
     CMat (CImageIO::*getImageWithGraphicsIn)(const GraphicsInputPtr&) = &CImageIO::getImageWithGraphics;
     CMat (CImageIO::*getImageWithGraphicsOut)(const GraphicsOutputPtr&) = &CImageIO::getImageWithGraphics;
     void (CImageIO::*saveImageIO)(const std::string&) = &CImageIO::save;
+    std::string (CImageIOWrap::*toJsonNoOpt)() const = &CImageIOWrap::toJson;
+    std::string (CImageIOWrap::*toJson)(const std::vector<std::string>&) const = &CImageIOWrap::toJson;
 
     class_<CImageIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CImageIOWrap>>("CImageIO", _imageProcessIODocString)
         .def(init<>("Default constructor", args("self")))
@@ -333,7 +338,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("drawGraphics", drawGraphicsOut, _drawGraphicsOutDocString, args("self", "graphics"))
         .def("load", &CImageIO::load, _imageIOLoadDocString, args("self", "path"))
         .def("save", saveImageIO, _imageIOSaveDocString, args("self", "path"))
-        .def("toJson", &CImageIO::toJson, &CImageIOWrap::default_toJson, _imageIOToJsonDocString, args("self", "options"))
+        .def("toJson", toJsonNoOpt, _imageIOToJsonNoOptDocString, args("self"))
+        .def("toJson", toJson, &CImageIOWrap::default_toJson, _imageIOToJsonDocString, args("self", "options"))
         .def("fromJson", &CImageIO::fromJson, &CImageIOWrap::default_fromJson, _imageIOFromJsonIDocString, args("self", "jsonStr"))
     ;
 
@@ -423,6 +429,9 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def(map_indexing_suite<std::map<int, std::string>>())
     ;
 
+    std::string (CDatasetIOWrap::*datasetToJsonNoOpt)() const = &CDatasetIOWrap::toJson;
+    std::string (CDatasetIOWrap::*datasetToJson)(const std::vector<std::string>&) const = &CDatasetIOWrap::toJson;
+
     class_<CDatasetIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CDatasetIOWrap>, boost::noncopyable>("CDatasetIO", _datasetIODocString)
         .def(init<>("Default constructor"))
         .def(init<const std::string&>(_ctor1DatasetIODocString, args("self", "name")))
@@ -437,7 +446,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("clearData", &CDatasetIOWrap::clearData, &CDatasetIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
         .def("save", &CDatasetIOWrap::save, &CDatasetIOWrap::default_save, _saveDocStr)
         .def("load", &CDatasetIOWrap::load, &CDatasetIOWrap::default_load, _loadDocStr)
-        .def("toJson", &CDatasetIOWrap::toJson, &CDatasetIOWrap::default_toJson, _datasetIOToJsonDocStr, args("self", "options"))
+        .def("toJson", datasetToJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
+        .def("toJson", datasetToJson, &CDatasetIOWrap::default_toJson, _datasetIOToJsonDocStr, args("self", "options"))
         .def("fromJson", &CDatasetIOWrap::fromJson, &CDatasetIOWrap::default_fromJson, _datasetIOFromJsonDocStr, args("self", "jsonStr"))
     ;
 
@@ -468,6 +478,9 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .add_property("color", &CObjectDetection::getColor, &CObjectDetection::setColor, "Object display color [r, g, b, a]")
     ;
 
+    std::string (CObjectDetectionIOWrap::*objDetectToJsonNoOpt)() const = &CObjectDetectionIOWrap::toJson;
+    std::string (CObjectDetectionIOWrap::*objDetectToJson)(const std::vector<std::string>&) const = &CObjectDetectionIOWrap::toJson;
+
     class_<CObjectDetectionIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CObjectDetectionIOWrap>>("CObjectDetectionIO", _objDetectionIODocString)
         .def(init<>("Default constructor", args("self")))
         .def(init<const CObjectDetectionIO&>("Copy constructor"))
@@ -481,7 +494,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("clearData", &CObjectDetectionIOWrap::clearData, &CObjectDetectionIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
         .def("load", &CObjectDetectionIOWrap::load, &CObjectDetectionIOWrap::default_load, _objDetectLoadDocString, args("self", "path"))
         .def("save", &CObjectDetectionIOWrap::save, &CObjectDetectionIOWrap::default_save, _objDetectSaveDocString, args("self", "path"))
-        .def("toJson", &CObjectDetectionIOWrap::toJson, &CObjectDetectionIOWrap::default_toJson, _objDetectToJsonDocString, args("self", "options"))
+        .def("toJson", objDetectToJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
+        .def("toJson", objDetectToJson, &CObjectDetectionIOWrap::default_toJson, _objDetectToJsonDocString, args("self", "options"))
         .def("fromJson", &CObjectDetectionIOWrap::fromJson, &CObjectDetectionIOWrap::default_fromJson, _objDetectFromJsonDocString, args("self", "jsonStr"))
     ;
 
@@ -500,6 +514,9 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .add_property("color", &CInstanceSegmentation::getColor, &CInstanceSegmentation::setColor, "Object display color [r, g, b, a]")
     ;
 
+    std::string (CInstanceSegIOWrap::*instSegToJsonNoOpt)() const = &CInstanceSegIOWrap::toJson;
+    std::string (CInstanceSegIOWrap::*instSegToJson)(const std::vector<std::string>&) const = &CInstanceSegIOWrap::toJson;
+
     class_<CInstanceSegIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CInstanceSegIOWrap>>("CInstanceSegIO", _instanceSegIODocString)
         .def(init<>("Default constructor", args("self")))
         .def(init<const CInstanceSegIO&>("Copy constructor"))
@@ -514,13 +531,17 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("clearData", &CInstanceSegIOWrap::clearData, &CInstanceSegIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
         .def("load", &CInstanceSegIOWrap::load, &CInstanceSegIOWrap::default_load, _instanceSegLoadDocString, args("self", "path"))
         .def("save", &CInstanceSegIOWrap::save, &CInstanceSegIOWrap::default_save, _instanceSegSaveDocString, args("self", "path"))
-        .def("toJson", &CInstanceSegIOWrap::toJson, &CInstanceSegIOWrap::default_toJson, _instanceSegToJsonDocString, args("self", "options"))
+        .def("toJson", instSegToJsonNoOpt, _imageIOToJsonNoOptDocString, args("self"))
+        .def("toJson", instSegToJson, &CInstanceSegIOWrap::default_toJson, _instanceSegToJsonDocString, args("self", "options"))
         .def("fromJson", &CInstanceSegIOWrap::fromJson, &CInstanceSegIOWrap::default_fromJson, _instanceSegFromJsonDocString, args("self", "jsonStr"))
     ;
 
     //--------------------------//
     //----- CSemanticSegIO -----//
     //--------------------------//
+    std::string (CSemanticSegIOWrap::*semSegToJsonNoOpt)() const = &CSemanticSegIOWrap::toJson;
+    std::string (CSemanticSegIOWrap::*semSegToJson)(const std::vector<std::string>&) const = &CSemanticSegIOWrap::toJson;
+
     class_<CSemanticSegIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CSemanticSegIOWrap>>("CSemanticSegIO", _semanticSegIODocString)
         .def(init<>("Default constructor", args("self")))
         .def(init<const CSemanticSegIO&>("Copy constructor"))
@@ -533,7 +554,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("clearData", &CSemanticSegIOWrap::clearData, &CSemanticSegIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
         .def("load", &CSemanticSegIOWrap::load, &CSemanticSegIOWrap::default_load, _instanceSegLoadDocString, args("self", "path"))
         .def("save", &CSemanticSegIOWrap::save, &CSemanticSegIOWrap::default_save, _instanceSegSaveDocString, args("self", "path"))
-        .def("toJson", &CSemanticSegIOWrap::toJson, &CSemanticSegIOWrap::default_toJson, _instanceSegToJsonDocString, args("self", "options"))
+        .def("toJson", semSegToJsonNoOpt, _imageIOToJsonNoOptDocString, args("self"))
+        .def("toJson", semSegToJson, &CSemanticSegIOWrap::default_toJson, _instanceSegToJsonDocString, args("self", "options"))
         .def("fromJson", &CSemanticSegIOWrap::fromJson, &CSemanticSegIOWrap::default_fromJson, _instanceSegFromJsonDocString, args("self", "jsonStr"))
     ;
 

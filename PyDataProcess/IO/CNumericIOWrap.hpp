@@ -144,6 +144,20 @@ class CNumericIOWrap : public CNumericIO<Type>, public wrapper<CNumericIO<Type>>
                 throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
             }
         }
+
+        std::string     toJson() const
+        {
+            CPyEnsureGIL gil;
+            try
+            {
+                return this->CNumericIO<Type>::toJson(std::vector<std::string>());
+            }
+            catch(boost::python::error_already_set&)
+            {
+                throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+            }
+        }
+
 };
 
 #endif // CNUMERICIOWRAP_H

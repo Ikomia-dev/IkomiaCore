@@ -246,3 +246,16 @@ void CImageIOWrap::default_fromJson(const std::string &jsonStr)
         throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
     }
 }
+
+std::string CImageIOWrap::toJson() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        return this->CImageIO::toJson(std::vector<std::string>());
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}

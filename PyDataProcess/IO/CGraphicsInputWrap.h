@@ -38,6 +38,8 @@ class CGraphicsInputWrap : public CGraphicsInput, public wrapper<CGraphicsInput>
 
         virtual void    clearData();
         void            default_clearData();
+
+        std::string     toJson() const;
 };
 
 #endif // CGRAPHICSINPUTWRAP_H

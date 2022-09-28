@@ -220,7 +220,7 @@ std::shared_ptr<CWorkflowTaskIO> CGraphicsInput::cloneImp() const
     return std::shared_ptr<CGraphicsInput>(new CGraphicsInput(*this));
 }
 
-QJsonObject CGraphicsInput::toJson() const
+QJsonObject CGraphicsInput::toJsonInternal() const
 {
     QJsonObject root;
     if (m_pLayer)
@@ -239,7 +239,7 @@ QJsonObject CGraphicsInput::toJson() const
     return root;
 }
 
-void CGraphicsInput::fromJson(const QJsonDocument &jsonDoc)
+void CGraphicsInput::fromJsonInternal(const QJsonDocument &jsonDoc)
 {
     QJsonObject root = jsonDoc.object();
     if(root.isEmpty())
@@ -274,7 +274,7 @@ void CGraphicsInput::load(const std::string &path)
     if(jsonDoc.isNull() || jsonDoc.isEmpty())
         throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading graphics: invalid JSON structure", __func__, __FILE__, __LINE__);
 
-    fromJson(jsonDoc);
+    fromJsonInternal(jsonDoc);
 }
 
 void CGraphicsInput::save(const std::string &path)
@@ -287,13 +287,13 @@ void CGraphicsInput::save(const std::string &path)
     if(!jsonFile.open(QFile::WriteOnly | QFile::Text))
         throw CException(CoreExCode::INVALID_FILE, "Couldn't write file:" + path, __func__, __FILE__, __LINE__);
 
-    QJsonDocument jsonDoc(toJson());
+    QJsonDocument jsonDoc(toJsonInternal());
     jsonFile.write(jsonDoc.toJson());
 }
 
 std::string CGraphicsInput::toJson(const std::vector<std::string> &options) const
 {
-    QJsonDocument doc(toJson());
+    QJsonDocument doc(toJsonInternal());
     return toFormattedJson(doc, options);
 }
 
@@ -303,5 +303,5 @@ void CGraphicsInput::fromJson(const std::string &jsonStr)
     if (jsonDoc.isNull() || jsonDoc.isEmpty())
         throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading blob measures: invalid JSON structure", __func__, __FILE__, __LINE__);
 
-    fromJson(jsonDoc);
+    fromJsonInternal(jsonDoc);
 }

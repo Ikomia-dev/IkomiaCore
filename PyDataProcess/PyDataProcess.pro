@@ -22,8 +22,10 @@ SOURCES += \
         CIkomiaRegistryWrap.cpp \
         CWorkflowWrap.cpp \
         IO/CArrayIOWrap.cpp \
+        IO/CBlobMeasureIOWrap.cpp \
         IO/CDatasetIOWrap.cpp \
         IO/CGraphicsInputWrap.cpp \
+        IO/CGraphicsOutputWrap.cpp \
         IO/CImageIOWrap.cpp \
         IO/CInstanceSegIOWrap.cpp \
         IO/CObjectDetectionIOWrap.cpp \
@@ -47,8 +49,10 @@ HEADERS += \
         CIkomiaRegistryWrap.h \
         CWorkflowWrap.h \
         IO/CArrayIOWrap.h \
+        IO/CBlobMeasureIOWrap.h \
         IO/CDatasetIOWrap.h \
         IO/CGraphicsInputWrap.h \
+        IO/CGraphicsOutputWrap.h \
         IO/CImageIOWrap.h \
         IO/CInstanceSegIOWrap.h \
         IO/CNumericIOWrap.hpp \

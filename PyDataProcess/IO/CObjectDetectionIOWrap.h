@@ -24,6 +24,7 @@ class CObjectDetectionIOWrap: public CObjectDetectionIO, public wrapper<CObjectD
         void        save(const std::string &path) override;
         void        default_save(const std::string &path);
 
+        std::string toJson() const;
         std::string toJson(const std::vector<std::string>& options) const override;
         std::string default_toJson(const std::vector<std::string>& options) const;
 
