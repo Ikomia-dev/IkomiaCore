@@ -1106,6 +1106,12 @@ constexpr auto _getObjectsDocString =
         "Returns:\n\n"
         "   :py:class:`~ikomia.dataprocess.pydataprocess.CObjectDetection` list: detected objets\n\n";
 
+constexpr auto _getGraphicsIODocString =
+        "Get internal graphics output instance. It stores graphics items representing boxes and labels of "
+        "detected objects in image.\n\n"
+        "Returns:\n\n"
+        "   :py:class:`~ikomia.dataprocess.pydataprocess.CGraphicsOutput`: graphics output instance\n\n";
+
 constexpr auto _initObjDetectIODocString =
         "Initialisation step to set associated task (name) and reference image. The reference image is the task output index "
         "where the graphics information (label, box) will be displayed as an overlay layer.\n\n"
