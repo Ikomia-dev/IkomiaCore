@@ -316,6 +316,9 @@ BOOST_PYTHON_MODULE(pycore)
         .value("DNN_DATASET", IODataType::DNN_DATASET)
         .value("ARRAY", IODataType::ARRAY)
         .value("DATA_DICT", IODataType::DATA_DICT)
+        .value("OBJECT_DETECTION", IODataType::OBJECT_DETECTION)
+        .value("INSTANCE_SEGMENTATION", IODataType::INSTANCE_SEGMENTATION)
+        .value("SEMANTIC_SEGMENTATION", IODataType::SEMANTIC_SEGMENTATION)
     ;
 
     class_<CWorkflowTaskIOWrap, std::shared_ptr<CWorkflowTaskIOWrap>>("CWorkflowTaskIO", _WorkflowTaskIODocString)
