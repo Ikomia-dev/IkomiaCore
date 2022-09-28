@@ -155,8 +155,11 @@ CMat CGraphicsConversion::graphicsToBinaryMask(const QList<QGraphicsItem*>& grap
 
     //Double dispatch design pattern
     for(auto it : graphics)
-        dynamic_cast<CGraphicsItem*>(it)->insertToImage(mask, *this, true, true);
-
+    {
+        auto pItem = dynamic_cast<CGraphicsItem*>(it);
+        if (pItem && pItem->getItemType() != GraphicsItem::TEXT)
+            pItem->insertToImage(mask, *this, true, true);
+    }
     return mask;
 }
 
@@ -168,8 +171,10 @@ CMat CGraphicsConversion::graphicsToBinaryMask(const std::vector<std::shared_ptr
 
     //Double dispatch design pattern
     for(auto it : graphics)
-        std::dynamic_pointer_cast<CProxyGraphicsItem>(it)->insertToImage(mask, *this, true, true);
-
+    {
+        if (!it->isTextItem())
+            std::dynamic_pointer_cast<CProxyGraphicsItem>(it)->insertToImage(mask, *this, true, true);
+    }
     return mask;
 }
 
