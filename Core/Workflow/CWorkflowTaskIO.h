@@ -237,7 +237,7 @@ class CORESHARED_EXPORT CWorkflowTaskIO
          */
         virtual void        save();
 
-        /**
+        /*
          * @brief Save the input or output data to disk.
          * Should be overriden for custom input or output.
          * @param path: full path.
@@ -252,6 +252,11 @@ class CORESHARED_EXPORT CWorkflowTaskIO
          */
         static std::string  getClassName(IODataType ioDataType);
 
+        /**
+        * @brief Return input/output data in JSON formatted string with default options
+        * @return JSON formatted string
+        */
+        virtual std::string toJson() const;
         /**
         * @brief Return input/output data in JSON formatted string
         * @param options: format-specific options encoded as pairs (option_name, option_value)

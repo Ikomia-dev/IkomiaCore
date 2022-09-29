@@ -55,6 +55,7 @@ class DATAPROCESSSHARED_EXPORT CDatasetIO: public CWorkflowTaskIO
 
         void                                        load(const std::string& path) override;
 
+        std::string                                 toJson() const override;
         std::string                                 toJson(const std::vector<std::string> &options) const override;
         void                                        fromJson(const std::string& jsonStr) override;
 

@@ -547,20 +547,20 @@ constexpr auto _getItemsDocString =
         "   list of :py:class:`~ikomia.core.pycore.CGraphicsItem` based objects\n\n";
 
 constexpr auto _isGraphicsDataAvailableDocString =
-        "Check whether the input contains data.\n\n"
+        "Check whether the input/output contains data.\n\n"
         "Returns:\n\n"
         "   bool: True if input contains data, False otherwise\n\n";
 
 constexpr auto _clearGraphicsDataDocString =
-        "Clear input data.\n\n";
+        "Clear input/output data.\n\n";
 
 constexpr auto _graphicsInputLoadDocString =
-        "Load graphics input from previsouly exported file. The file must be in JSON format.\n\n"
+        "Load graphics input/output from previsouly exported file. The file must be in JSON format.\n\n"
         "Args:\n\n"
         "   path (str)\n\n";
 
 constexpr auto _graphicsInputSaveDocString =
-        "Save graphics input data to file. The file must be in JSON format.\n\n"
+        "Save graphics input/output data to file. The file must be in JSON format.\n\n"
         "Args:\n\n"
         "   path (str)\n";
 

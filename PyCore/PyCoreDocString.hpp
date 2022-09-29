@@ -576,6 +576,21 @@ constexpr auto _copyStaticDataDocString =
         "Args:\n\n"
         "   :py:class:`~ikomia.core.pycore.CWorkflowTaskIO`: input or ouput instance from which data is copied\n\n";
 
+constexpr auto _loadDocString =
+        "Load the input or output data from disk. This method must be overriden.\n\n"
+        "Args:\n\n"
+        "   path (str): file path\n\n";
+
+constexpr auto _saveDocString =
+        "Save the input or output data to disk. This method must be overriden.\n\n"
+        "Args:\n\n"
+        "   path (str): file path\n\n";
+
+constexpr auto _toJsonNoOptDocString =
+        "Return input/output data in JSON formatted string with default options. This method must be overriden.\n\n"
+        "Returns:\n\n"
+        "   str: JSON formatted string\n\n";
+
 constexpr auto _toJsonDocString =
         "Return input/output data in JSON formatted string. This method must be overriden. Options available depend on input/output type, "
         "a single option is available for all to set the JSON format: \n\n"

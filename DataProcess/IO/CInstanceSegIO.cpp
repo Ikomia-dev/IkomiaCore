@@ -245,7 +245,7 @@ void CInstanceSegIO::load(const std::string &path)
     if(jsonDoc.isNull() || jsonDoc.isEmpty())
         throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading instance segmentation: invalid JSON structure", __func__, __FILE__, __LINE__);
 
-    fromJson(jsonDoc);
+    fromJsonInternal(jsonDoc);
 }
 
 void CInstanceSegIO::save(const std::string &path)
@@ -256,6 +256,12 @@ void CInstanceSegIO::save(const std::string &path)
 
     QJsonDocument jsonDoc(toJsonInternal({"image_format", "jpg"}));
     jsonFile.write(jsonDoc.toJson());
+}
+
+std::string CInstanceSegIO::toJson() const
+{
+    std::vector<std::string> options = {"json_format", "compact", "image_format", "jpg"};
+    toJson(options);
 }
 
 std::string CInstanceSegIO::toJson(const std::vector<std::string> &options) const
@@ -270,7 +276,7 @@ void CInstanceSegIO::fromJson(const std::string &jsonStr)
     if (jsonDoc.isNull() || jsonDoc.isEmpty())
         throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading object detections: invalid JSON structure", __func__, __FILE__, __LINE__);
 
-    fromJson(jsonDoc);
+    fromJsonInternal(jsonDoc);
 }
 
 std::shared_ptr<CInstanceSegIO> CInstanceSegIO::clone() const
@@ -311,7 +317,7 @@ QJsonObject CInstanceSegIO::toJsonInternal(const std::vector<std::string> &optio
     return root;
 }
 
-void CInstanceSegIO::fromJson(const QJsonDocument &doc)
+void CInstanceSegIO::fromJsonInternal(const QJsonDocument &doc)
 {
     bool bInit = false;
     clearData();

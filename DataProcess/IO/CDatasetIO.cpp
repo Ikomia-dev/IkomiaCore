@@ -101,6 +101,11 @@ void CDatasetIO::load(const std::string &path)
     jsonFile.close();
 }
 
+std::string CDatasetIO::toJson() const
+{
+    return std::string();
+}
+
 std::string CDatasetIO::toJson(const std::vector<std::string> &options) const
 {
     Q_UNUSED(options);

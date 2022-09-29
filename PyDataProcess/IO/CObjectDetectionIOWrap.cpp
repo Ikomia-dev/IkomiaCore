@@ -128,7 +128,20 @@ std::string CObjectDetectionIOWrap::toJson() const
     CPyEnsureGIL gil;
     try
     {
-        return this->CObjectDetectionIO::toJson(std::vector<std::string>());
+        return CObjectDetectionIO::toJson(std::vector<std::string>());
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+std::string CObjectDetectionIOWrap::default_toJsonNoOpt() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        return this->CObjectDetectionIO::toJson();
     }
     catch(boost::python::error_already_set&)
     {

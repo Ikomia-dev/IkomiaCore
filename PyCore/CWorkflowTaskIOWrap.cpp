@@ -177,6 +177,93 @@ void CWorkflowTaskIOWrap::default_copyStaticData(const std::shared_ptr<CWorkflow
     }
 }
 
+void CWorkflowTaskIOWrap::load(const std::string &path)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override loadOver = this->get_override("load"))
+            loadOver(path);
+        else
+            CWorkflowTaskIO::load(path);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CWorkflowTaskIOWrap::default_load(const std::string &path)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->CWorkflowTaskIO::load(path);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CWorkflowTaskIOWrap::save(const std::string &path)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override saveOver = this->get_override("save"))
+            saveOver(path);
+        else
+            CWorkflowTaskIO::save(path);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CWorkflowTaskIOWrap::default_save(const std::string &path)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->CWorkflowTaskIO::save(path);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+std::string CWorkflowTaskIOWrap::toJson() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override toJsonOver = this->get_override("toJson"))
+            return toJsonOver();
+        else
+            return CWorkflowTaskIO::toJson();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+std::string CWorkflowTaskIOWrap::default_toJsonNoOpt() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        return this->CWorkflowTaskIO::toJson();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 std::string CWorkflowTaskIOWrap::toJson(const std::vector<std::string>& options) const
 {
     CPyEnsureGIL gil;

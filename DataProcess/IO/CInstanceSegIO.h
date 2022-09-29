@@ -75,6 +75,7 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegIO: public CWorkflowTaskIO
         void                                load(const std::string &path) override;
         void                                save(const std::string &path) override;
 
+        std::string                         toJson() const override;
         std::string                         toJson(const std::vector<std::string>& options) const override;
         void                                fromJson(const std::string &jsonStr) override;
 
@@ -84,7 +85,7 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegIO: public CWorkflowTaskIO
 
         std::shared_ptr<CWorkflowTaskIO>    cloneImp() const override;
         QJsonObject                         toJsonInternal(const std::vector<std::string> &options) const;
-        void                                fromJson(const QJsonDocument& doc);
+        void                                fromJsonInternal(const QJsonDocument& doc);
 
     private:
 

@@ -115,7 +115,7 @@ void CSemanticSegIO::load(const std::string &path)
     if(jsonDoc.isNull() || jsonDoc.isEmpty())
         throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading object detections: invalid JSON structure", __func__, __FILE__, __LINE__);
 
-    fromJson(jsonDoc);
+    fromJsonInternal(jsonDoc);
 }
 
 void CSemanticSegIO::save(const std::string &path)
@@ -126,6 +126,12 @@ void CSemanticSegIO::save(const std::string &path)
 
     QJsonDocument jsonDoc(toJsonInternal({"image_format", "jpg"}));
     jsonFile.write(jsonDoc.toJson());
+}
+
+std::string CSemanticSegIO::toJson() const
+{
+    std::vector<std::string> options = {"json_format", "compact", "image_format", "jpg"};
+    return toJson(options);
 }
 
 std::string CSemanticSegIO::toJson(const std::vector<std::string> &options) const
@@ -140,7 +146,7 @@ void CSemanticSegIO::fromJson(const std::string &jsonStr)
     if (jsonDoc.isNull() || jsonDoc.isEmpty())
         throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading object detections: invalid JSON structure", __func__, __FILE__, __LINE__);
 
-    fromJson(jsonDoc);
+    fromJsonInternal(jsonDoc);
 }
 
 std::shared_ptr<CSemanticSegIO> CSemanticSegIO::clone() const
@@ -177,7 +183,7 @@ QJsonObject CSemanticSegIO::toJsonInternal(const std::vector<std::string> &optio
     return root;
 }
 
-void CSemanticSegIO::fromJson(const QJsonDocument &doc)
+void CSemanticSegIO::fromJsonInternal(const QJsonDocument &doc)
 {
     clearData();
     QJsonObject root = doc.object();

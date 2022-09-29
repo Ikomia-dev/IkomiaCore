@@ -322,6 +322,12 @@ void CGraphicsOutput::load(const std::string &path)
     fromJsonInternal(jsonDoc);
 }
 
+std::string CGraphicsOutput::toJson() const
+{
+    std::vector<std::string> options = {"json_format", "compact"};
+    toJson(options);
+}
+
 std::string CGraphicsOutput::toJson(const std::vector<std::string> &options) const
 {
     QJsonDocument doc(toJsonInternal());

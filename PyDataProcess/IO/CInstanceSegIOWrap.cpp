@@ -136,6 +136,19 @@ std::string CInstanceSegIOWrap::toJson() const
     }
 }
 
+std::string CInstanceSegIOWrap::default_toJsonNoOpt() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        return this->CInstanceSegIO::toJson();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 std::string CInstanceSegIOWrap::toJson(const std::vector<std::string> &options) const
 {
     CPyEnsureGIL gil;

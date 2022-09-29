@@ -387,6 +387,12 @@ class CNumericIO : public CNumericIOBase
             loadCSV(path);
         }
 
+        std::string                 toJson() const override
+        {
+            std::vector<std::string> options = {"json_format", "compact"};
+            return toJson(options);
+        }
+
         std::string                 toJson(const std::vector<std::string> &options) const override
         {
             QJsonObject root;
@@ -557,6 +563,9 @@ DATAPROCESSSHARED_EXPORT void CNumericIO<double>::loadCSV(const std::string &pat
 
 template <>
 DATAPROCESSSHARED_EXPORT void CNumericIO<int>::loadCSV(const std::string &path);
+
+template <>
+DATAPROCESSSHARED_EXPORT std::string CNumericIO<std::string>::toJson() const;
 
 template <>
 DATAPROCESSSHARED_EXPORT std::string CNumericIO<std::string>::toJson(const std::vector<std::string> &options) const;

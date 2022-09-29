@@ -30,7 +30,6 @@
 #include "Task/CDnnTrainTaskWrap.h"
 #include "CWidgetFactoryWrap.h"
 #include "CPluginProcessInterfaceWrap.h"
-#include "IO/CBlobMeasureIOWrap.h"
 #include "IO/CNumericIOWrap.hpp"
 #include "IO/CGraphicsInputWrap.h"
 #include "IO/CGraphicsOutputWrap.h"
@@ -70,6 +69,8 @@ void exposeNumericIO(const std::string& className)
     void (CNumericIO<Type>::*addValueList3)(const std::vector<Type>&, const std::vector<std::string>&) = &CNumericIO<Type>::addValueList;
     void (CNumericIO<Type>::*addValueList4)(const std::vector<Type>&, const std::string&, const std::vector<std::string>&) = &CNumericIO<Type>::addValueList;
     void (CNumericIO<Type>::*saveNumeric)(const std::string&) = &CNumericIO<Type>::save;
+    std::string (CNumericIO<Type>::*numIOToJsonNoOpt)() const = &CNumericIO<Type>::toJson;
+    std::string (CNumericIO<Type>::*numIOToJson)(const std::vector<std::string>&) const = &CNumericIO<Type>::toJson;
 
     class_<CNumericIOWrap<Type>, bases<CWorkflowTaskIO>, std::shared_ptr<CNumericIOWrap<Type>>>(className.c_str(), _featureProcessIODocString)
         .def(init<>("Default constructor", args("self")))
@@ -91,11 +92,11 @@ void exposeNumericIO(const std::string& className)
         .def("isDataAvailable", &CNumericIO<Type>::isDataAvailable, &CNumericIOWrap<Type>::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
         .def("clearData", &CNumericIO<Type>::clearData, &CNumericIOWrap<Type>::default_clearData, _clearDataDerivedDocString, args("self"))
         .def("copyStaticData", &CNumericIO<Type>::copyStaticData, &CNumericIOWrap<Type>::default_copyStaticData, _copyStaticDataDerivedDocString, args("self", "io"))
-        .def("load", &CNumericIO<Type>::load, _numericIOLoadDocString, args("self", "path"))
-        .def("save", saveNumeric, _numericIOSaveDocString, args("self", "path"))
-        .def("toJson", &CNumericIOWrap<Type>::toJson, _blobIOToJsonNoOptDocString, args("self"))
-        .def("toJson", &CNumericIO<Type>::toJson, _blobIOToJsonDocString, args("self", "options"))
-        .def("fromJson", &CNumericIO<Type>::fromJson, _imageIOFromJsonIDocString, args("self", "jsonStr"))
+        .def("load", &CNumericIO<Type>::load, &CNumericIOWrap<Type>::default_load, _numericIOLoadDocString, args("self", "path"))
+        .def("save", saveNumeric, &CNumericIOWrap<Type>::default_save, _numericIOSaveDocString, args("self", "path"))
+        .def("toJson", numIOToJsonNoOpt, &CNumericIOWrap<Type>::default_toJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
+        .def("toJson", numIOToJson, &CNumericIOWrap<Type>::default_toJson, _blobIOToJsonDocString, args("self", "options"))
+        .def("fromJson", &CNumericIO<Type>::fromJson, &CNumericIOWrap<Type>::default_fromJson, _imageIOFromJsonIDocString, args("self", "jsonStr"))
     ;
 }
 
@@ -212,8 +213,10 @@ BOOST_PYTHON_MODULE(pydataprocess)
     //----- CBlobMeasureIO -----//
     //--------------------------//
     void (CBlobMeasureIO::*saveBlob)(const std::string&) = &CBlobMeasureIO::save;
+    std::string (CBlobMeasureIO::*blobIOToJsonNoOpt)() const = &CBlobMeasureIO::toJson;
+    std::string (CBlobMeasureIO::*blobIOToJson)(const std::vector<std::string>&) const = &CBlobMeasureIO::toJson;
 
-    class_<CBlobMeasureIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CBlobMeasureIOWrap>>("CBlobMeasureIO", _measureIODocString)
+    class_<CBlobMeasureIO, bases<CWorkflowTaskIO>, std::shared_ptr<CBlobMeasureIO>>("CBlobMeasureIO", _measureIODocString)
         .def(init<>("Default constructor", args("self")))
         .def(init<const std::string&>(_ctorMeasureIODocString, args("self", "name")))
         .def(init<const CBlobMeasureIO&>("Copy constructor"))
@@ -225,8 +228,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("clearData", &CBlobMeasureIO::clearData, _clearDataDerivedDocString, args("self"))
         .def("load", &CBlobMeasureIO::load, _blobMeasureIOLoadDocString, args("self", "path"))
         .def("save", saveBlob, _blobMeasureIOSaveDocString, args("self", "path"))
-        .def("toJson", &CBlobMeasureIOWrap::toJson, _blobIOToJsonNoOptDocString, args("self"))
-        .def("toJson", &CBlobMeasureIO::toJson, _blobIOToJsonDocString, args("self", "options"))
+        .def("toJson", blobIOToJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
+        .def("toJson", blobIOToJson, _blobIOToJsonDocString, args("self", "options"))
         .def("fromJson", &CBlobMeasureIO::fromJson, _imageIOFromJsonIDocString, args("self", "jsonStr"))
     ;
 
@@ -234,6 +237,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
     //----- CGraphicsInput -----//
     //--------------------------//
     void (CGraphicsInput::*saveGraphicsIn)(const std::string&) = &CGraphicsInput::save;
+    std::string (CGraphicsInput::*graphicsInToJsonNoOpt)() const = &CGraphicsInput::toJson;
+    std::string (CGraphicsInput::*graphicsInToJson)(const std::vector<std::string>&) const = &CGraphicsInput::toJson;
 
     class_<CGraphicsInputWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CGraphicsInputWrap>>("CGraphicsInput", _graphicsInputDocString)
         .def(init<>("Default constructor", args("self")))
@@ -243,11 +248,11 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("getItems", &CGraphicsInput::getItems, _getItemsDocString, args("self"))
         .def("isDataAvailable", &CGraphicsInput::isDataAvailable, &CGraphicsInputWrap::default_isDataAvailable, _isGraphicsDataAvailableDocString, args("self"))
         .def("clearData", &CGraphicsInput::clearData, &CGraphicsInputWrap::default_clearData, _clearGraphicsDataDocString, args("self"))
-        .def("load", &CGraphicsInput::load, _graphicsInputLoadDocString, args("self", "path"))
-        .def("save", saveGraphicsIn, _graphicsInputSaveDocString, args("self", "path"))
-        .def("toJson", &CGraphicsInputWrap::toJson, _blobIOToJsonNoOptDocString, args("self"))
-        .def("toJson", &CGraphicsInput::toJson, _blobIOToJsonDocString, args("self", "options"))
-        .def("fromJson", &CGraphicsInput::fromJson, _imageIOFromJsonIDocString, args("self", "jsonStr"))
+        .def("load", &CGraphicsInput::load, &CGraphicsInputWrap::default_load, _graphicsInputLoadDocString, args("self", "path"))
+        .def("save", saveGraphicsIn, &CGraphicsInputWrap::default_save, _graphicsInputSaveDocString, args("self", "path"))
+        .def("toJson", graphicsInToJsonNoOpt, &CGraphicsInputWrap::default_toJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
+        .def("toJson", graphicsInToJson, &CGraphicsInputWrap::default_toJson, _blobIOToJsonDocString, args("self", "options"))
+        .def("fromJson", &CGraphicsInput::fromJson, &CGraphicsInputWrap::default_fromJson, _imageIOFromJsonIDocString, args("self", "jsonStr"))
     ;
 
     //---------------------------//
@@ -268,6 +273,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
     ProxyGraphicsItemPtr (CGraphicsOutput::*addText1)(const std::string&, float x, float y) = &CGraphicsOutput::addText;
     ProxyGraphicsItemPtr (CGraphicsOutput::*addText2)(const std::string&, float x, float y, const CGraphicsTextProperty&) = &CGraphicsOutput::addText;
     void (CGraphicsOutput::*saveGraphicsOut)(const std::string&) = &CGraphicsOutput::save;
+    std::string (CGraphicsOutput::*graphicsOutToJsonNoOpt)() const = &CGraphicsOutput::toJson;
+    std::string (CGraphicsOutput::*graphicsOutToJson)(const std::vector<std::string>&) const = &CGraphicsOutput::toJson;
 
     class_<CGraphicsOutputWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CGraphicsOutputWrap>>("CGraphicsOutput", _graphicsOutputDocString)
         .def(init<>("Default constructor", args("self")))
@@ -293,11 +300,13 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("addComplexPolygon", addComplexPolygon2, _addComplexPolygon2DocString, args("self", "outer", "inners", "properties"))
         .def("addText", addText1, _addText1DocString, args("self", "text", "x", "y"))
         .def("addText", addText2, _addText2DocString, args("self", "text", "x", "y", "properties"))
-        .def("load", &CGraphicsOutput::load, _graphicsOutputLoadDocString, args("self", "path"))
-        .def("save", saveGraphicsOut, _graphicsOutputSaveDocString, args("self", "path"))
-        .def("toJson", &CGraphicsOutputWrap::toJson, _blobIOToJsonNoOptDocString, args("self"))
-        .def("toJson", &CGraphicsOutput::toJson, _blobIOToJsonDocString, args("self", "options"))
-        .def("fromJson", &CGraphicsOutput::fromJson, _imageIOFromJsonIDocString, args("self", "jsonStr"))
+        .def("isDataAvailable", &CGraphicsOutput::isDataAvailable, &CGraphicsOutputWrap::default_isDataAvailable, _isGraphicsDataAvailableDocString, args("self"))
+        .def("clearData", &CGraphicsOutput::clearData, &CGraphicsOutputWrap::default_clearData, _clearGraphicsDataDocString, args("self"))
+        .def("load", &CGraphicsOutput::load, &CGraphicsOutputWrap::default_load, _graphicsOutputLoadDocString, args("self", "path"))
+        .def("save", saveGraphicsOut, &CGraphicsOutputWrap::default_save, _graphicsOutputSaveDocString, args("self", "path"))
+        .def("toJson", graphicsOutToJsonNoOpt, &CGraphicsOutputWrap::default_toJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
+        .def("toJson", graphicsOutToJson, &CGraphicsOutputWrap::default_toJson, _blobIOToJsonDocString, args("self", "options"))
+        .def("fromJson", &CGraphicsOutput::fromJson, &CGraphicsOutputWrap::default_fromJson, _imageIOFromJsonIDocString, args("self", "jsonStr"))
     ;
 
     //--------------------//
@@ -308,8 +317,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
     CMat (CImageIO::*getImageWithGraphicsIn)(const GraphicsInputPtr&) = &CImageIO::getImageWithGraphics;
     CMat (CImageIO::*getImageWithGraphicsOut)(const GraphicsOutputPtr&) = &CImageIO::getImageWithGraphics;
     void (CImageIO::*saveImageIO)(const std::string&) = &CImageIO::save;
-    std::string (CImageIOWrap::*toJsonNoOpt)() const = &CImageIOWrap::toJson;
-    std::string (CImageIOWrap::*toJson)(const std::vector<std::string>&) const = &CImageIOWrap::toJson;
+    std::string (CImageIO::*imgIOToJsonNoOpt)() const = &CImageIO::toJson;
+    std::string (CImageIO::*imgIOToJson)(const std::vector<std::string>&) const = &CImageIO::toJson;
 
     class_<CImageIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CImageIOWrap>>("CImageIO", _imageProcessIODocString)
         .def(init<>("Default constructor", args("self")))
@@ -336,10 +345,10 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("copyStaticData", &CImageIO::copyStaticData, &CImageIOWrap::default_copyStaticData, _copyImageStaticDataDocString, args("self", "io"))
         .def("drawGraphics", drawGraphicsIn, _drawGraphicsInDocString, args("self", "graphics"))
         .def("drawGraphics", drawGraphicsOut, _drawGraphicsOutDocString, args("self", "graphics"))
-        .def("load", &CImageIO::load, _imageIOLoadDocString, args("self", "path"))
-        .def("save", saveImageIO, _imageIOSaveDocString, args("self", "path"))
-        .def("toJson", toJsonNoOpt, _imageIOToJsonNoOptDocString, args("self"))
-        .def("toJson", toJson, &CImageIOWrap::default_toJson, _imageIOToJsonDocString, args("self", "options"))
+        .def("load", &CImageIO::load, &CImageIOWrap::default_load, _imageIOLoadDocString, args("self", "path"))
+        .def("save", saveImageIO, &CImageIOWrap::default_save, _imageIOSaveDocString, args("self", "path"))
+        .def("toJson", imgIOToJsonNoOpt, &CImageIOWrap::default_toJsonNoOpt, _imageIOToJsonNoOptDocString, args("self"))
+        .def("toJson", imgIOToJson, &CImageIOWrap::default_toJson, _imageIOToJsonDocString, args("self", "options"))
         .def("fromJson", &CImageIO::fromJson, &CImageIOWrap::default_fromJson, _imageIOFromJsonIDocString, args("self", "jsonStr"))
     ;
 
@@ -429,26 +438,26 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def(map_indexing_suite<std::map<int, std::string>>())
     ;
 
-    std::string (CDatasetIOWrap::*datasetToJsonNoOpt)() const = &CDatasetIOWrap::toJson;
-    std::string (CDatasetIOWrap::*datasetToJson)(const std::vector<std::string>&) const = &CDatasetIOWrap::toJson;
+    std::string (CDatasetIO::*datasetToJsonNoOpt)() const = &CDatasetIO::toJson;
+    std::string (CDatasetIO::*datasetToJson)(const std::vector<std::string>&) const = &CDatasetIO::toJson;
 
     class_<CDatasetIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CDatasetIOWrap>, boost::noncopyable>("CDatasetIO", _datasetIODocString)
         .def(init<>("Default constructor"))
         .def(init<const std::string&>(_ctor1DatasetIODocString, args("self", "name")))
         .def(init<const std::string&, const std::string&>(_ctor2DatasetIODocString, args("self", "name", "sourceFormat")))
-        .def("getImagePaths", &CDatasetIOWrap::getImagePaths, &CDatasetIOWrap::default_getImagePaths, _getImagePathsDocStr)
-        .def("getCategories", &CDatasetIOWrap::getCategories, &CDatasetIOWrap::default_getCategories, _getCategoriesDocStr)
-        .def("getCategoryCount", &CDatasetIOWrap::getCategoryCount, &CDatasetIOWrap::default_getCategoryCount, _getCategoryCountDocStr)
-        .def("getMaskPath", &CDatasetIOWrap::getMaskPath, &CDatasetIOWrap::default_getMaskPath, _getMaskPathDocStr)
-        .def("getGraphicsAnnotations", &CDatasetIOWrap::getGraphicsAnnotations, &CDatasetIOWrap::default_getGraphicsAnnotations, _getGraphicsAnnotationsDocStr)
-        .def("getSourceFormat", &CDatasetIOWrap::getSourceFormat, _getSourceFormatDocStr)
-        .def("isDataAvailable", &CDatasetIOWrap::isDataAvailable, &CDatasetIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
-        .def("clearData", &CDatasetIOWrap::clearData, &CDatasetIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
-        .def("save", &CDatasetIOWrap::save, &CDatasetIOWrap::default_save, _saveDocStr)
-        .def("load", &CDatasetIOWrap::load, &CDatasetIOWrap::default_load, _loadDocStr)
-        .def("toJson", datasetToJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
+        .def("getImagePaths", &CDatasetIO::getImagePaths, &CDatasetIOWrap::default_getImagePaths, _getImagePathsDocStr)
+        .def("getCategories", &CDatasetIO::getCategories, &CDatasetIOWrap::default_getCategories, _getCategoriesDocStr)
+        .def("getCategoryCount", &CDatasetIO::getCategoryCount, &CDatasetIOWrap::default_getCategoryCount, _getCategoryCountDocStr)
+        .def("getMaskPath", &CDatasetIO::getMaskPath, &CDatasetIOWrap::default_getMaskPath, _getMaskPathDocStr)
+        .def("getGraphicsAnnotations", &CDatasetIO::getGraphicsAnnotations, &CDatasetIOWrap::default_getGraphicsAnnotations, _getGraphicsAnnotationsDocStr)
+        .def("getSourceFormat", &CDatasetIO::getSourceFormat, _getSourceFormatDocStr)
+        .def("isDataAvailable", &CDatasetIO::isDataAvailable, &CDatasetIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
+        .def("clearData", &CDatasetIO::clearData, &CDatasetIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
+        .def("save", &CDatasetIO::save, &CDatasetIOWrap::default_save, _saveDocStr)
+        .def("load", &CDatasetIO::load, &CDatasetIOWrap::default_load, _loadDocStr)
+        .def("toJson", datasetToJsonNoOpt, &CDatasetIOWrap::default_toJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
         .def("toJson", datasetToJson, &CDatasetIOWrap::default_toJson, _datasetIOToJsonDocStr, args("self", "options"))
-        .def("fromJson", &CDatasetIOWrap::fromJson, &CDatasetIOWrap::default_fromJson, _datasetIOFromJsonDocStr, args("self", "jsonStr"))
+        .def("fromJson", &CDatasetIO::fromJson, &CDatasetIOWrap::default_fromJson, _datasetIOFromJsonDocStr, args("self", "jsonStr"))
     ;
 
     //--------------------//
@@ -478,8 +487,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .add_property("color", &CObjectDetection::getColor, &CObjectDetection::setColor, "Object display color [r, g, b, a]")
     ;
 
-    std::string (CObjectDetectionIOWrap::*objDetectToJsonNoOpt)() const = &CObjectDetectionIOWrap::toJson;
-    std::string (CObjectDetectionIOWrap::*objDetectToJson)(const std::vector<std::string>&) const = &CObjectDetectionIOWrap::toJson;
+    std::string (CObjectDetectionIO::*objDetectToJsonNoOpt)() const = &CObjectDetectionIO::toJson;
+    std::string (CObjectDetectionIO::*objDetectToJson)(const std::vector<std::string>&) const = &CObjectDetectionIO::toJson;
 
     class_<CObjectDetectionIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CObjectDetectionIOWrap>>("CObjectDetectionIO", _objDetectionIODocString)
         .def(init<>("Default constructor", args("self")))
@@ -488,15 +497,15 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("getObject", &CObjectDetectionIO::getObject, _getObjectDocString, args("self", "index"))
         .def("getObjects", &CObjectDetectionIO::getObjects, _getObjectsDocString, args("self"))
         .def("getGraphicsIO", &CObjectDetectionIO::getGraphicsIO, _getGraphicsIODocString, args("self"))
-        .def("isDataAvailable", &CObjectDetectionIOWrap::isDataAvailable, &CObjectDetectionIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
+        .def("isDataAvailable", &CObjectDetectionIO::isDataAvailable, &CObjectDetectionIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
         .def("init", &CObjectDetectionIO::init, _initObjDetectIODocString, args("self", "taskName", "refImageIndex"))
         .def("addObject", &CObjectDetectionIO::addObject, _addObjectDocString, args("self", "id", "label", "confidence", "boxX", "boxY", "boxWidth", "boxHeight", "color"))
-        .def("clearData", &CObjectDetectionIOWrap::clearData, &CObjectDetectionIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
-        .def("load", &CObjectDetectionIOWrap::load, &CObjectDetectionIOWrap::default_load, _objDetectLoadDocString, args("self", "path"))
-        .def("save", &CObjectDetectionIOWrap::save, &CObjectDetectionIOWrap::default_save, _objDetectSaveDocString, args("self", "path"))
-        .def("toJson", objDetectToJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
+        .def("clearData", &CObjectDetectionIO::clearData, &CObjectDetectionIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
+        .def("load", &CObjectDetectionIO::load, &CObjectDetectionIOWrap::default_load, _objDetectLoadDocString, args("self", "path"))
+        .def("save", &CObjectDetectionIO::save, &CObjectDetectionIOWrap::default_save, _objDetectSaveDocString, args("self", "path"))
+        .def("toJson", objDetectToJsonNoOpt, &CObjectDetectionIOWrap::default_toJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
         .def("toJson", objDetectToJson, &CObjectDetectionIOWrap::default_toJson, _objDetectToJsonDocString, args("self", "options"))
-        .def("fromJson", &CObjectDetectionIOWrap::fromJson, &CObjectDetectionIOWrap::default_fromJson, _objDetectFromJsonDocString, args("self", "jsonStr"))
+        .def("fromJson", &CObjectDetectionIO::fromJson, &CObjectDetectionIOWrap::default_fromJson, _objDetectFromJsonDocString, args("self", "jsonStr"))
     ;
 
     //--------------------------//
@@ -514,8 +523,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .add_property("color", &CInstanceSegmentation::getColor, &CInstanceSegmentation::setColor, "Object display color [r, g, b, a]")
     ;
 
-    std::string (CInstanceSegIOWrap::*instSegToJsonNoOpt)() const = &CInstanceSegIOWrap::toJson;
-    std::string (CInstanceSegIOWrap::*instSegToJson)(const std::vector<std::string>&) const = &CInstanceSegIOWrap::toJson;
+    std::string (CInstanceSegIO::*instSegToJsonNoOpt)() const = &CInstanceSegIO::toJson;
+    std::string (CInstanceSegIO::*instSegToJson)(const std::vector<std::string>&) const = &CInstanceSegIO::toJson;
 
     class_<CInstanceSegIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CInstanceSegIOWrap>>("CInstanceSegIO", _instanceSegIODocString)
         .def(init<>("Default constructor", args("self")))
@@ -525,22 +534,22 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("getInstances", &CInstanceSegIO::getInstances, _getInstancesDocString, args("self"))
         .def("getGraphicsIO", &CInstanceSegIO::getGraphicsIO, _getGraphicsIODocString, args("self"))
         .def("getMergeMask", &CInstanceSegIO::getMergeMask, _getMergeMaskDocString, args("self"))
-        .def("isDataAvailable", &CInstanceSegIOWrap::isDataAvailable, &CInstanceSegIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
+        .def("isDataAvailable", &CInstanceSegIO::isDataAvailable, &CInstanceSegIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
         .def("init", &CInstanceSegIO::init, _initInstanceSegIODocString, args("self", "taskName", "refImageIndex", "width", "heigh"))
         .def("addInstance", &CInstanceSegIO::addInstance, _addInstanceDocString, args("self", "id", "type", "classIndex", "label", "confidence", "boxX", "boxY", "boxWidth", "boxHeight", "mask", "color"))
-        .def("clearData", &CInstanceSegIOWrap::clearData, &CInstanceSegIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
-        .def("load", &CInstanceSegIOWrap::load, &CInstanceSegIOWrap::default_load, _instanceSegLoadDocString, args("self", "path"))
-        .def("save", &CInstanceSegIOWrap::save, &CInstanceSegIOWrap::default_save, _instanceSegSaveDocString, args("self", "path"))
-        .def("toJson", instSegToJsonNoOpt, _imageIOToJsonNoOptDocString, args("self"))
+        .def("clearData", &CInstanceSegIO::clearData, &CInstanceSegIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
+        .def("load", &CInstanceSegIO::load, &CInstanceSegIOWrap::default_load, _instanceSegLoadDocString, args("self", "path"))
+        .def("save", &CInstanceSegIO::save, &CInstanceSegIOWrap::default_save, _instanceSegSaveDocString, args("self", "path"))
+        .def("toJson", instSegToJsonNoOpt, &CInstanceSegIOWrap::default_toJsonNoOpt, _imageIOToJsonNoOptDocString, args("self"))
         .def("toJson", instSegToJson, &CInstanceSegIOWrap::default_toJson, _instanceSegToJsonDocString, args("self", "options"))
-        .def("fromJson", &CInstanceSegIOWrap::fromJson, &CInstanceSegIOWrap::default_fromJson, _instanceSegFromJsonDocString, args("self", "jsonStr"))
+        .def("fromJson", &CInstanceSegIO::fromJson, &CInstanceSegIOWrap::default_fromJson, _instanceSegFromJsonDocString, args("self", "jsonStr"))
     ;
 
     //--------------------------//
     //----- CSemanticSegIO -----//
     //--------------------------//
-    std::string (CSemanticSegIOWrap::*semSegToJsonNoOpt)() const = &CSemanticSegIOWrap::toJson;
-    std::string (CSemanticSegIOWrap::*semSegToJson)(const std::vector<std::string>&) const = &CSemanticSegIOWrap::toJson;
+    std::string (CSemanticSegIO::*semSegToJsonNoOpt)() const = &CSemanticSegIO::toJson;
+    std::string (CSemanticSegIO::*semSegToJson)(const std::vector<std::string>&) const = &CSemanticSegIO::toJson;
 
     class_<CSemanticSegIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CSemanticSegIOWrap>>("CSemanticSegIO", _semanticSegIODocString)
         .def(init<>("Default constructor", args("self")))
@@ -550,13 +559,13 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("getColors", &CSemanticSegIO::getColors, _getColorsDocString, args("self"))
         .def("setMask", &CSemanticSegIO::setMask, _setMaskDocString, args("self", "mask"))
         .def("setClassNames", &CSemanticSegIOWrap::setClassNames, _setClassNamesDocString, args("self", "names", "colors"))
-        .def("isDataAvailable", &CSemanticSegIOWrap::isDataAvailable, &CSemanticSegIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
-        .def("clearData", &CSemanticSegIOWrap::clearData, &CSemanticSegIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
-        .def("load", &CSemanticSegIOWrap::load, &CSemanticSegIOWrap::default_load, _instanceSegLoadDocString, args("self", "path"))
-        .def("save", &CSemanticSegIOWrap::save, &CSemanticSegIOWrap::default_save, _instanceSegSaveDocString, args("self", "path"))
-        .def("toJson", semSegToJsonNoOpt, _imageIOToJsonNoOptDocString, args("self"))
+        .def("isDataAvailable", &CSemanticSegIO::isDataAvailable, &CSemanticSegIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
+        .def("clearData", &CSemanticSegIO::clearData, &CSemanticSegIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
+        .def("load", &CSemanticSegIO::load, &CSemanticSegIOWrap::default_load, _instanceSegLoadDocString, args("self", "path"))
+        .def("save", &CSemanticSegIO::save, &CSemanticSegIOWrap::default_save, _instanceSegSaveDocString, args("self", "path"))
+        .def("toJson", semSegToJsonNoOpt, &CSemanticSegIOWrap::default_toJsonNoOpt, _imageIOToJsonNoOptDocString, args("self"))
         .def("toJson", semSegToJson, &CSemanticSegIOWrap::default_toJson, _instanceSegToJsonDocString, args("self", "options"))
-        .def("fromJson", &CSemanticSegIOWrap::fromJson, &CSemanticSegIOWrap::default_fromJson, _instanceSegFromJsonDocString, args("self", "jsonStr"))
+        .def("fromJson", &CSemanticSegIO::fromJson, &CSemanticSegIOWrap::default_fromJson, _instanceSegFromJsonDocString, args("self", "jsonStr"))
     ;
 
     //------------------------//

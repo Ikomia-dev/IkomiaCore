@@ -90,6 +90,7 @@ class DATAPROCESSSHARED_EXPORT CBlobMeasureIO : public CWorkflowTaskIO
         void                    save() override;
         void                    save(const std::string &path) override;
 
+        std::string             toJson() const override;
         std::string             toJson(const std::vector<std::string> &options) const override;
         void                    fromJson(const std::string& jsonStr) override;
 

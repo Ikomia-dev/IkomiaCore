@@ -317,6 +317,12 @@ void CBlobMeasureIO::save(const std::string &path)
         throw CException(CoreExCode::NOT_IMPLEMENTED, "Export format not available yet", __func__, __FILE__, __LINE__);
 }
 
+std::string CBlobMeasureIO::toJson() const
+{
+    std::vector<std::string> options = {"json_format", "compact"};
+    return toJson(options);
+}
+
 std::string CBlobMeasureIO::toJson(const std::vector<std::string> &options) const
 {
     QJsonArray objects;

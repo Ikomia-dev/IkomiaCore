@@ -89,15 +89,148 @@ void CGraphicsInputWrap::default_clearData()
     }
 }
 
-std::string CGraphicsInputWrap::toJson() const
+void CGraphicsInputWrap::load(const std::string &path)
 {
     CPyEnsureGIL gil;
     try
     {
-        return this->CGraphicsInput::toJson(std::vector<std::string>());
+        if(override loadOver = this->get_override("load"))
+            loadOver(path);
+        else
+            CGraphicsInput::load(path);
     }
     catch(boost::python::error_already_set&)
     {
         throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
     }
 }
+
+void CGraphicsInputWrap::default_load(const std::string &path)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->CGraphicsInput::load(path);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CGraphicsInputWrap::save(const std::string &path)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override saveOver = this->get_override("save"))
+            saveOver(path);
+        else
+            CGraphicsInput::save(path);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CGraphicsInputWrap::default_save(const std::string &path)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->CGraphicsInput::save(path);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+std::string CGraphicsInputWrap::toJson() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override toJsonOver = this->get_override("toJson"))
+            return toJsonOver();
+        else
+            return CGraphicsInput::toJson();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+std::string CGraphicsInputWrap::default_toJsonNoOpt() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        return this->CGraphicsInput::toJson();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+std::string CGraphicsInputWrap::toJson(const std::vector<std::string>& options) const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override toJsonOver = this->get_override("toJson"))
+            return toJsonOver(options);
+        else
+            return CGraphicsInput::toJson(options);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+std::string CGraphicsInputWrap::default_toJson(const std::vector<std::string>& options) const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        return this->CGraphicsInput::toJson(options);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CGraphicsInputWrap::fromJson(const std::string &jsonStr)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override fromJsonOver = this->get_override("fromJson"))
+            fromJsonOver(jsonStr);
+        else
+            CGraphicsInput::fromJson(jsonStr);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CGraphicsInputWrap::default_fromJson(const std::string &jsonStr)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->CGraphicsInput::fromJson(jsonStr);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+

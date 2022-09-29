@@ -189,6 +189,93 @@ void CImageIOWrap::default_copyStaticData(const std::shared_ptr<CWorkflowTaskIO>
     }
 }
 
+void CImageIOWrap::load(const std::string &path)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override loadOver = this->get_override("load"))
+            loadOver(path);
+        else
+            CImageIO::load(path);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CImageIOWrap::default_load(const std::string &path)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->CImageIO::load(path);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CImageIOWrap::save(const std::string &path)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override saveOver = this->get_override("save"))
+            saveOver(path);
+        else
+            CImageIO::save(path);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CImageIOWrap::default_save(const std::string &path)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->CImageIO::save(path);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+std::string CImageIOWrap::toJson() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override toJsonOver = this->get_override("toJson"))
+            return toJsonOver();
+        else
+            return CImageIO::toJson();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+std::string CImageIOWrap::default_toJsonNoOpt() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        return this->CImageIO::toJson();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 std::string CImageIOWrap::toJson(const std::vector<std::string> &options) const
 {
     CPyEnsureGIL gil;
@@ -240,19 +327,6 @@ void CImageIOWrap::default_fromJson(const std::string &jsonStr)
     try
     {
         this->CImageIO::fromJson(jsonStr);
-    }
-    catch(boost::python::error_already_set&)
-    {
-        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
-    }
-}
-
-std::string CImageIOWrap::toJson() const
-{
-    CPyEnsureGIL gil;
-    try
-    {
-        return this->CImageIO::toJson(std::vector<std::string>());
     }
     catch(boost::python::error_already_set&)
     {

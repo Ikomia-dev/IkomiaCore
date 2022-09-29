@@ -203,7 +203,7 @@ void CObjectDetectionIO::load(const std::string &path)
     if(jsonDoc.isNull() || jsonDoc.isEmpty())
         throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading object detections: invalid JSON structure", __func__, __FILE__, __LINE__);
 
-    fromJson(jsonDoc);
+    fromJsonInternal(jsonDoc);
 }
 
 void CObjectDetectionIO::save(const std::string &path)
@@ -212,17 +212,23 @@ void CObjectDetectionIO::save(const std::string &path)
     if(!jsonFile.open(QFile::WriteOnly | QFile::Text))
         throw CException(CoreExCode::INVALID_FILE, "Couldn't write file:" + path, __func__, __FILE__, __LINE__);
 
-    QJsonDocument jsonDoc(toJson());
+    QJsonDocument jsonDoc(toJsonInternal());
     jsonFile.write(jsonDoc.toJson());
+}
+
+std::string CObjectDetectionIO::toJson() const
+{
+    std::vector<std::string> options = {"json_format", "compact"};
+    return toJson(options);
 }
 
 std::string CObjectDetectionIO::toJson(const std::vector<std::string> &options) const
 {
-    QJsonDocument doc(toJson());
+    QJsonDocument doc(toJsonInternal());
     return toFormattedJson(doc, options);
 }
 
-QJsonObject CObjectDetectionIO::toJson() const
+QJsonObject CObjectDetectionIO::toJsonInternal() const
 {
     QJsonArray objects;
     for (size_t i=0; i<m_objects.size(); ++i)
@@ -253,10 +259,10 @@ void CObjectDetectionIO::fromJson(const std::string &jsonStr)
     if (jsonDoc.isNull() || jsonDoc.isEmpty())
         throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading object detections: invalid JSON structure", __func__, __FILE__, __LINE__);
 
-    fromJson(jsonDoc);
+    fromJsonInternal(jsonDoc);
 }
 
-void CObjectDetectionIO::fromJson(const QJsonDocument &jsonDoc)
+void CObjectDetectionIO::fromJsonInternal(const QJsonDocument &jsonDoc)
 {
     QJsonObject root = jsonDoc.object();
     QJsonArray objects = root["detections"].toArray();

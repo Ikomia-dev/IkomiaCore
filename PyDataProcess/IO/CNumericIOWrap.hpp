@@ -35,7 +35,7 @@ class CNumericIOWrap : public CNumericIO<Type>, public wrapper<CNumericIO<Type>>
         {
         }
 
-        virtual size_t  getUnitElementCount() const
+        virtual size_t  getUnitElementCount() const override
         {
             CPyEnsureGIL gil;
             try
@@ -62,7 +62,7 @@ class CNumericIOWrap : public CNumericIO<Type>, public wrapper<CNumericIO<Type>>
             }
         }
 
-        virtual bool    isDataAvailable() const
+        virtual bool    isDataAvailable() const override
         {
             CPyEnsureGIL gil;
             try
@@ -89,7 +89,7 @@ class CNumericIOWrap : public CNumericIO<Type>, public wrapper<CNumericIO<Type>>
             }
         }
 
-        virtual void    clearData()
+        virtual void    clearData() override
         {
             CPyEnsureGIL gil;
             try
@@ -117,7 +117,7 @@ class CNumericIOWrap : public CNumericIO<Type>, public wrapper<CNumericIO<Type>>
             }
         }
 
-        virtual void    copyStaticData(const std::shared_ptr<CWorkflowTaskIO>& ioPtr)
+        virtual void    copyStaticData(const std::shared_ptr<CWorkflowTaskIO>& ioPtr) override
         {
             CPyEnsureGIL gil;
             try
@@ -145,12 +145,27 @@ class CNumericIOWrap : public CNumericIO<Type>, public wrapper<CNumericIO<Type>>
             }
         }
 
-        std::string     toJson() const
+        void            load(const std::string &path) override
         {
             CPyEnsureGIL gil;
             try
             {
-                return this->CNumericIO<Type>::toJson(std::vector<std::string>());
+                if(override loadOver = this->get_override("load"))
+                    loadOver(path);
+                else
+                    CNumericIO<Type>::load(path);
+            }
+            catch(boost::python::error_already_set&)
+            {
+                throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+            }
+        }
+        void            default_load(const std::string &path)
+        {
+            CPyEnsureGIL gil;
+            try
+            {
+                this->CNumericIO<Type>::load(path);
             }
             catch(boost::python::error_already_set&)
             {
@@ -158,6 +173,117 @@ class CNumericIOWrap : public CNumericIO<Type>, public wrapper<CNumericIO<Type>>
             }
         }
 
+        void            save(const std::string &path) override
+        {
+            CPyEnsureGIL gil;
+            try
+            {
+                if(override saveOver = this->get_override("save"))
+                    saveOver(path);
+                else
+                    CNumericIO<Type>::save(path);
+            }
+            catch(boost::python::error_already_set&)
+            {
+                throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+            }
+        }
+        void            default_save(const std::string &path)
+        {
+            CPyEnsureGIL gil;
+            try
+            {
+                this->CNumericIO<Type>::save(path);
+            }
+            catch(boost::python::error_already_set&)
+            {
+                throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+            }
+        }
+
+        std::string     toJson() const override
+        {
+            CPyEnsureGIL gil;
+            try
+            {
+                if(override toJsonOver = this->get_override("toJson"))
+                    return toJsonOver();
+                else
+                    return CNumericIO<Type>::toJson();
+            }
+            catch(boost::python::error_already_set&)
+            {
+                throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+            }
+        }
+        std::string     default_toJsonNoOpt() const
+        {
+            CPyEnsureGIL gil;
+            try
+            {
+                return this->CNumericIO<Type>::toJson();
+            }
+            catch(boost::python::error_already_set&)
+            {
+                throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+            }
+        }
+
+        std::string     toJson(const std::vector<std::string>& options) const override
+        {
+            CPyEnsureGIL gil;
+            try
+            {
+                if(override toJsonOver = this->get_override("toJson"))
+                    return toJsonOver(options);
+                else
+                    return CNumericIO<Type>::toJson(options);
+            }
+            catch(boost::python::error_already_set&)
+            {
+                throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+            }
+        }
+        std::string     default_toJson(const std::vector<std::string>& options) const
+        {
+            CPyEnsureGIL gil;
+            try
+            {
+                return this->CNumericIO<Type>::toJson(options);
+            }
+            catch(boost::python::error_already_set&)
+            {
+                throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+            }
+        }
+
+        void            fromJson(const std::string &jsonStr) override
+        {
+            CPyEnsureGIL gil;
+            try
+            {
+                if(override fromJsonOver = this->get_override("fromJson"))
+                    fromJsonOver(jsonStr);
+                else
+                    CNumericIO<Type>::fromJson(jsonStr);
+            }
+            catch(boost::python::error_already_set&)
+            {
+                throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+            }
+        }
+        void            default_fromJson(const std::string &jsonStr)
+        {
+            CPyEnsureGIL gil;
+            try
+            {
+                this->CNumericIO<Type>::fromJson(jsonStr);
+            }
+            catch(boost::python::error_already_set&)
+            {
+                throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+            }
+        }
 };
 
 #endif // CNUMERICIOWRAP_H

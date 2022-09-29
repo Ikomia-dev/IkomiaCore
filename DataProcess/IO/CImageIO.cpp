@@ -344,6 +344,12 @@ void CImageIO::load(const std::string &path)
     m_bNewDataInfo = true;
 }
 
+std::string CImageIO::toJson() const
+{
+    std::vector<std::string> options = {"json_format", "compact", "image_format", "jpg"};
+    return toJson(options);
+}
+
 std::string CImageIO::toJson(const std::vector<std::string> &options) const
 {
     QJsonObject root;

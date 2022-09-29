@@ -335,6 +335,11 @@ std::string CWorkflowTaskIO::getClassName(IODataType ioDataType)
     }
 }
 
+std::string CWorkflowTaskIO::toJson() const
+{
+    return std::string();
+}
+
 std::string CWorkflowTaskIO::toJson(const std::vector<std::string>& options) const
 {
     Q_UNUSED(options);

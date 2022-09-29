@@ -321,6 +321,10 @@ BOOST_PYTHON_MODULE(pycore)
         .value("SEMANTIC_SEGMENTATION", IODataType::SEMANTIC_SEGMENTATION)
     ;
 
+    void (CWorkflowTaskIO::*ioSave)(const std::string&) = &CWorkflowTaskIO::save;
+    std::string (CWorkflowTaskIO::*toJsonNoOpt)() const = &CWorkflowTaskIO::toJson;
+    std::string (CWorkflowTaskIO::*toJson)(const std::vector<std::string>&) const = &CWorkflowTaskIO::toJson;
+
     class_<CWorkflowTaskIOWrap, std::shared_ptr<CWorkflowTaskIOWrap>>("CWorkflowTaskIO", _WorkflowTaskIODocString)
         .def(init<>("Default constructor", args("self")))
         .def(init<IODataType>(_ctor1WorkflowTaskIODocString, args("self", "dataType")))
@@ -337,7 +341,10 @@ BOOST_PYTHON_MODULE(pycore)
         .def("setDisplayable", &CWorkflowTaskIO::setDisplayable, _setDisplayableDocString, args("self", "displayable"))
         .def("clearData", &CWorkflowTaskIO::clearData, &CWorkflowTaskIOWrap::default_clearData, _clearDataDocString, args("self"))
         .def("copyStaticData", &CWorkflowTaskIO::copyStaticData, &CWorkflowTaskIOWrap::default_copyStaticData, _copyStaticDataDocString, args("self", "io"))
-        .def("toJson", &CWorkflowTaskIO::toJson, &CWorkflowTaskIOWrap::default_toJson, _toJsonDocString, args("self", "options"))
+        .def("load", &CWorkflowTaskIO::load, &CWorkflowTaskIOWrap::default_load, _loadDocString, args("self", "path"))
+        .def("save", ioSave, &CWorkflowTaskIOWrap::default_save, _saveDocString, args("self", "path"))
+        .def("toJson", toJsonNoOpt, &CWorkflowTaskIOWrap::default_toJsonNoOpt, _toJsonNoOptDocString, args("self"))
+        .def("toJson", toJson, &CWorkflowTaskIOWrap::default_toJson, _toJsonDocString, args("self", "options"))
         .def("fromJson", &CWorkflowTaskIO::fromJson, &CWorkflowTaskIOWrap::default_fromJson, _fromJsonDocString, args("self", "jsonStr"))
     ;
 
