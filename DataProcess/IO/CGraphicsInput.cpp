@@ -294,7 +294,7 @@ void CGraphicsInput::save(const std::string &path)
 std::string CGraphicsInput::toJson() const
 {
     std::vector<std::string> options = {"json_format", "compact"};
-    toJson(options);
+    return toJson(options);
 }
 
 std::string CGraphicsInput::toJson(const std::vector<std::string> &options) const

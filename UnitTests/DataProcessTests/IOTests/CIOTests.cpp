@@ -52,6 +52,8 @@ void CIOTests::blobMeasureIOToJson()
     fillBlobMeasureIO(blobIO);
     std::string jsonStr = blobIO.toJson(std::vector<std::string>());
     QVERIFY(!jsonStr.empty());
+    jsonStr = blobIO.toJson();
+    QVERIFY(!jsonStr.empty());
 }
 
 void CIOTests::blobMeasureIOFromJson()
@@ -131,6 +133,8 @@ void CIOTests::graphicsInputToJson()
     graphicsIn.setItems(createGraphics());
     std::string jsonStr = graphicsIn.toJson(std::vector<std::string>());
     QVERIFY(!jsonStr.empty());
+    jsonStr = graphicsIn.toJson();
+    QVERIFY(!jsonStr.empty());
 }
 
 void CIOTests::graphicsInputFromJson()
@@ -188,6 +192,8 @@ void CIOTests::graphicsOutputToJson()
     CGraphicsInput graphicsOut;
     graphicsOut.setItems(createGraphics());
     std::string jsonStr = graphicsOut.toJson(std::vector<std::string>());
+    QVERIFY(!jsonStr.empty());
+    jsonStr = graphicsOut.toJson();
     QVERIFY(!jsonStr.empty());
 }
 
@@ -286,6 +292,8 @@ void CIOTests::numericIODoubleToJson()
     fillNumericIO(numericIO);
     std::string jsonStr = numericIO.toJson(std::vector<std::string>());
     QVERIFY(!jsonStr.empty());
+    jsonStr = numericIO.toJson();
+    QVERIFY(!jsonStr.empty());
 }
 
 void CIOTests::numericIODoubleFromJson()
@@ -358,6 +366,8 @@ void CIOTests::numericIOStringToJson()
     fillNumericIO(numericIO);
     std::string jsonStr = numericIO.toJson(std::vector<std::string>());
     QVERIFY(!jsonStr.empty());
+    numericIO.toJson();
+    QVERIFY(!jsonStr.empty());
 }
 
 void CIOTests::numericIOStringFromJson()
@@ -391,6 +401,8 @@ void CIOTests::imageIOToJson()
 
     options = {"format", "png"};
     jsonStr = imgIO.toJson(options);
+    QVERIFY(!jsonStr.empty());
+    jsonStr = imgIO.toJson();
     QVERIFY(!jsonStr.empty());
 
 //    QFile file(QString::fromStdString(UnitTest::getDataPath() + "/IO/imageIO.json"));
@@ -439,6 +451,8 @@ void CIOTests::objDetectIOToJson()
     fillObjectDetectionIO(io);
     std::string jsonStr = io.toJson(std::vector<std::string>());
     QVERIFY(!jsonStr.empty());
+    jsonStr = io.toJson();
+    QVERIFY(!jsonStr.empty());
 
 //    QFile file(QString::fromStdString(UnitTest::getDataPath() + "/IO/objectDetectionIO.json"));
 //    file.open(QFile::WriteOnly);
@@ -480,11 +494,13 @@ void CIOTests::instanceSegIOToJson()
     fillInstanceSegIO(io);
     std::string jsonStr = io.toJson(std::vector<std::string>());
     QVERIFY(!jsonStr.empty());
+    jsonStr = io.toJson();
+    QVERIFY(!jsonStr.empty());
 
-    QFile file(QString::fromStdString(UnitTest::getDataPath() + "/IO/instanceSegIO.json"));
-    file.open(QFile::WriteOnly);
-    file.write(QString::fromStdString(jsonStr).toUtf8());
-    file.close();
+//    QFile file(QString::fromStdString(UnitTest::getDataPath() + "/IO/instanceSegIO.json"));
+//    file.open(QFile::WriteOnly);
+//    file.write(QString::fromStdString(jsonStr).toUtf8());
+//    file.close();
 }
 
 void CIOTests::instanceSegIOFromJson()

@@ -325,7 +325,7 @@ void CGraphicsOutput::load(const std::string &path)
 std::string CGraphicsOutput::toJson() const
 {
     std::vector<std::string> options = {"json_format", "compact"};
-    toJson(options);
+    return toJson(options);
 }
 
 std::string CGraphicsOutput::toJson(const std::vector<std::string> &options) const

@@ -663,8 +663,8 @@ void CCoreGraphicsTests::conversionTest()
     QVERIFY(binary.getNbRows() == (size_t)m_height);
 
     auto items2 = conv.binaryMaskToGraphics(binary, nullptr, {255,0,0}, {255,0,0}, 1);
-    //Each letter of text count as object
-    QVERIFY(items2.size() == items.size());
+    //Text graphics are not in binary mask
+    QVERIFY(items2.size() == items.size() - 1);
 
     //All objects are CGraphicsPolygon or CComplexGraphicsPolygon
     int nbComplexPoly = 0;

@@ -261,7 +261,7 @@ void CInstanceSegIO::save(const std::string &path)
 std::string CInstanceSegIO::toJson() const
 {
     std::vector<std::string> options = {"json_format", "compact", "image_format", "jpg"};
-    toJson(options);
+    return toJson(options);
 }
 
 std::string CInstanceSegIO::toJson(const std::vector<std::string> &options) const
