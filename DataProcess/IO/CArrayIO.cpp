@@ -23,17 +23,17 @@
 
 CArrayIO::CArrayIO() : CWorkflowTaskIO(IODataType::ARRAY, "CArrayIO")
 {
-    m_description = QObject::tr("Generic multi-dimensional array.\n").toStdString();
+    m_description = QObject::tr("Generic multi-dimensional array.").toStdString();
 }
 
 CArrayIO::CArrayIO(const std::string &name) : CWorkflowTaskIO(IODataType::ARRAY, name)
 {
-    m_description = QObject::tr("Generic multi-dimensional array.\n").toStdString();
+    m_description = QObject::tr("Generic multi-dimensional array.").toStdString();
 }
 
 CArrayIO::CArrayIO(const CMat &array, const std::string& name) : CWorkflowTaskIO(IODataType::ARRAY, name)
 {
-    m_description = QObject::tr("Generic multi-dimensional array.\n").toStdString();
+    m_description = QObject::tr("Generic multi-dimensional array.").toStdString();
     m_array = array;
     m_bNewDataInfo = true;
 }

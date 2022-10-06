@@ -145,28 +145,39 @@ CWorkflowTask &CWorkflowTask::operator=(const CWorkflowTask&& task)
 
 std::ostream& operator<<(std::ostream& os, const CWorkflowTask& task)
 {
-    os << "Name: " << task.m_name << std::endl;
+    os << "###################################" << std::endl;
+    os << "#\t" << task.m_name << std::endl;
+    os << "###################################\n" << std::endl;
 
     if(task.m_pParam)
     {
-        os << "----- Parameters -----" << std::endl;
+        os << "***********************************" << std::endl;
+        os << "*\t PARAMETERS" << std::endl;
+        os << "***********************************\n" << std::endl;
         os << *(task.m_pParam);
     }
 
     if(!task.m_inputs.empty())
     {
-        os << "----- Inputs -----" << std::endl;
+        os << "\n***********************************" << std::endl;
+        os << "*\t INPUTS" << std::endl;
+        os << "***********************************\n" << std::endl;
         for(size_t i=0; i<task.m_inputs.size(); ++i)
             os << *(task.m_inputs[i]);
     }
 
     if(!task.m_outputs.empty())
     {
-        os << "----- Outputs -----" << std::endl;
+        os << "\n***********************************" << std::endl;
+        os << "*\t OUTPUTS" << std::endl;
+        os << "***********************************\n" << std::endl;
         for(size_t i=0; i<task.m_outputs.size(); ++i)
             os << *(task.m_outputs[i]);
     }
 
+    os << "\n***********************************" << std::endl;
+    os << "*\t INFORMATION" << std::endl;
+    os << "***********************************\n" << std::endl;
     os << "Running time: " << task.m_elapsedTime << std::endl;
     os << "Output folder: " << task.m_outputFolder << std::endl;
 
@@ -176,6 +187,8 @@ std::ostream& operator<<(std::ostream& os, const CWorkflowTask& task)
         for(size_t i=0; i<task.m_customInfo.size(); ++i)
             os << task.m_customInfo[i].first << task.m_customInfo[i].second << std::endl;
     }
+
+    os << "\n###################################" << std::endl;
     return os;
 }
 

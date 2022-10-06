@@ -5,7 +5,7 @@
 
 CSemanticSegIO::CSemanticSegIO() : CWorkflowTaskIO(IODataType::SEMANTIC_SEGMENTATION, "CSemanticSegIO")
 {
-    m_description = QObject::tr("Semantic segmentation data: mask and class names.\n").toStdString();
+    m_description = QObject::tr("Semantic segmentation data: mask and class names.").toStdString();
     m_saveFormat = DataFileFormat::JSON;
     m_imgMaskIOPtr = std::make_shared<CImageIO>(IODataType::IMAGE_LABEL);
     m_imgLegendIOPtr = std::make_shared<CImageIO>(IODataType::IMAGE);

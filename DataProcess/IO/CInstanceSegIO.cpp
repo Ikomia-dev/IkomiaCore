@@ -42,7 +42,7 @@ void CInstanceSegmentation::setMask(const CMat &mask)
 //--------------------------//
 CInstanceSegIO::CInstanceSegIO() : CWorkflowTaskIO(IODataType::INSTANCE_SEGMENTATION, "CInstanceSegIO")
 {
-    m_description = QObject::tr("Instance segmentation data: label, confidence, box, mask and color.\n").toStdString();
+    m_description = QObject::tr("Instance segmentation data: label, confidence, box, mask and color.").toStdString();
     m_saveFormat = DataFileFormat::JSON;
     m_imgIOPtr = std::make_shared<CImageIO>(IODataType::IMAGE_LABEL);
     m_graphicsIOPtr = std::make_shared<CGraphicsOutput>();

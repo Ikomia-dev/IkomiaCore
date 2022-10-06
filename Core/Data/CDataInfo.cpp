@@ -69,7 +69,6 @@ CDataInfo &CDataInfo::operator=(CDataInfo &&data)
 
 std::ostream& operator<<(std::ostream& os, const CDataInfo& info)
 {
-    os << "Data type: " << Utils::Workflow::getIODataName(info.m_type).toStdString() << std::endl;
     os << "File name: " << info.m_fileName << std::endl;
 
     if(!info.m_metadata.empty())

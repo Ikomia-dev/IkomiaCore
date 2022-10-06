@@ -61,7 +61,7 @@ void CObjectDetection::setColor(const CColor &color)
 //------------------------------//
 CObjectDetectionIO::CObjectDetectionIO() : CWorkflowTaskIO(IODataType::OBJECT_DETECTION, "CObjectDetectionIO")
 {
-    m_description = QObject::tr("Object detection data: label, confidence, box and color.\n").toStdString();
+    m_description = QObject::tr("Object detection data: label, confidence, box and color.").toStdString();
     m_saveFormat = DataFileFormat::JSON;
     m_graphicsIOPtr = std::make_shared<CGraphicsOutput>();
     m_blobMeasureIOPtr = std::make_shared<CBlobMeasureIO>();

@@ -92,7 +92,9 @@ CWorkflowTaskIO &CWorkflowTaskIO::operator=(const CWorkflowTaskIO&& io)
 
 std::ostream& operator<<(std::ostream& os, const CWorkflowTaskIO& io)
 {
+    os << "-----------------------------------" << std::endl;
     os << "Name: " << io.m_name << std::endl;
+    os << "-----------------------------------" << std::endl;
     os << "Description: " << io.m_description << std::endl;
     os << "Save folder: " << io.m_saveFolder << std::endl;
     os << "Auto-save: " << io.m_bAutoSave << std::endl;
@@ -101,10 +103,8 @@ std::ostream& operator<<(std::ostream& os, const CWorkflowTaskIO& io)
     os << "Dimension count: " << io.m_dimCount << std::endl;
 
     if(io.m_infoPtr)
-    {
-        os << "----- I/O data info -----" << std::endl;
         os << *(io.m_infoPtr);
-    }
+
     return os;
 }
 
