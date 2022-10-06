@@ -446,7 +446,16 @@ namespace Ikomia
                 {
                     return targetData == IODataType::INPUT_GRAPHICS ||
                             targetData == IODataType::BLOB_VALUES ||
-                            targetData == IODataType::OBJECT_DETECTION;
+                            targetData == IODataType::OBJECT_DETECTION ||
+                            targetData == IODataType::IMAGE ||
+                            targetData == IODataType::IMAGE_LABEL ||
+                            targetData == IODataType::IMAGE_BINARY;
+                }
+                else if (srcData == IODataType::SEMANTIC_SEGMENTATION)
+                {
+                    return  targetData == IODataType::IMAGE ||
+                            targetData == IODataType::IMAGE_LABEL ||
+                            targetData == IODataType::IMAGE_BINARY;
                 }
                 else if(srcData == IODataType::IMAGE_BINARY)
                 {

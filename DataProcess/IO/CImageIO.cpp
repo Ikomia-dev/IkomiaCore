@@ -23,6 +23,8 @@
 #include "CDataImageIO.h"
 #include "CDataIO.hpp"
 #include "DataProcessTools.hpp"
+#include "IO/CInstanceSegIO.h"
+#include "IO/CSemanticSegIO.h"
 
 using CImageDataIO = CDataIO<CDataImageIO, CMat>;
 
@@ -293,6 +295,45 @@ void CImageIO::copyStaticData(const WorkflowTaskIOPtr &ioPtr)
     auto imgIoPtr = std::dynamic_pointer_cast<CImageIO>(ioPtr);
     if(imgIoPtr)
         m_channelCount = imgIoPtr->getChannelCount();
+}
+
+void CImageIO::copy(const std::shared_ptr<CWorkflowTaskIO> &ioPtr)
+{
+    auto type = ioPtr->getDataType();
+    if (type == IODataType::IMAGE || type == IODataType::IMAGE_BINARY || type == IODataType::IMAGE_LABEL)
+    {
+        auto pImageIO = dynamic_cast<const CImageIO*>(ioPtr.get());
+        if(pImageIO)
+            *this = *pImageIO;
+    }
+    else if (type == IODataType::INSTANCE_SEGMENTATION)
+    {
+        auto instanceSegIOPtr = std::dynamic_pointer_cast<CInstanceSegIO>(ioPtr);
+        if (instanceSegIOPtr)
+        {
+            auto maskIOPtr = instanceSegIOPtr->getMaskImageIO();
+            if (maskIOPtr)
+            {
+                auto pImageIO = dynamic_cast<const CImageIO*>(maskIOPtr.get());
+                if(pImageIO)
+                    *this = *pImageIO;
+            }
+        }
+    }
+    else if (type == IODataType::SEMANTIC_SEGMENTATION)
+    {
+        auto semSegIOPtr = std::dynamic_pointer_cast<CSemanticSegIO>(ioPtr);
+        if (semSegIOPtr)
+        {
+            auto maskIOPtr = semSegIOPtr->getMaskImageIO();
+            if (maskIOPtr)
+            {
+                auto pImageIO = dynamic_cast<const CImageIO*>(maskIOPtr.get());
+                if(pImageIO)
+                    *this = *pImageIO;
+            }
+        }
+    }
 }
 
 void CImageIO::drawGraphics(const GraphicsInputPtr &graphics)

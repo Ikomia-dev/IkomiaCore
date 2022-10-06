@@ -195,6 +195,8 @@ class DATAPROCESSSHARED_EXPORT CImageIO : public CWorkflowTaskIO
          */
         void            copyStaticData(const WorkflowTaskIOPtr& ioPtr) override;
 
+        void            copy(const std::shared_ptr<CWorkflowTaskIO> &ioPtr) override;
+
         void            drawGraphics(const GraphicsInputPtr& graphics);
         void            drawGraphics(const GraphicsOutputPtr& graphics);
 
