@@ -18,7 +18,7 @@
 <context>
     <name>CGraphicsText</name>
     <message>
-        <location filename="../Graphics/CGraphicsText.cpp" line="181"/>
+        <location filename="../Graphics/CGraphicsText.cpp" line="190"/>
         <source>Text Area</source>
         <translation>Zone de texte</translation>
     </message>
@@ -49,16 +49,19 @@
     </message>
     <message>
         <location filename="../Data/CMeasure.cpp" line="88"/>
+        <location filename="../Data/CMeasure.cpp" line="104"/>
         <source>Surface</source>
         <translation>Surface</translation>
     </message>
     <message>
         <location filename="../Data/CMeasure.cpp" line="89"/>
+        <location filename="../Data/CMeasure.cpp" line="106"/>
         <source>Perimeter</source>
         <translation>Périmètre</translation>
     </message>
     <message>
         <location filename="../Data/CMeasure.cpp" line="90"/>
+        <location filename="../Data/CMeasure.cpp" line="108"/>
         <source>Centroid</source>
         <translation>Centre de gravité</translation>
     </message>
@@ -72,31 +75,37 @@
     </message>
     <message>
         <location filename="../Data/CMeasure.cpp" line="91"/>
+        <location filename="../Data/CMeasure.cpp" line="110"/>
         <source>Box</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../Data/CMeasure.cpp" line="92"/>
+        <location filename="../Data/CMeasure.cpp" line="112"/>
         <source>Oriented box</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../Data/CMeasure.cpp" line="93"/>
+        <location filename="../Data/CMeasure.cpp" line="114"/>
         <source>Equivalent diameter</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../Data/CMeasure.cpp" line="94"/>
+        <location filename="../Data/CMeasure.cpp" line="116"/>
         <source>Elongation</source>
         <translation>Elongation</translation>
     </message>
     <message>
         <location filename="../Data/CMeasure.cpp" line="95"/>
+        <location filename="../Data/CMeasure.cpp" line="118"/>
         <source>Circularity</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../Data/CMeasure.cpp" line="96"/>
+        <location filename="../Data/CMeasure.cpp" line="120"/>
         <source>Solidity</source>
         <translation></translation>
     </message>
@@ -141,119 +150,139 @@
         <translation>Dimension</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="313"/>
+        <location filename="../Main/CoreTools.hpp" line="354"/>
         <source>none</source>
         <translation>aucun</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="315"/>
+        <location filename="../Main/CoreTools.hpp" line="356"/>
         <source>image</source>
         <translation>image</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="317"/>
+        <location filename="../Main/CoreTools.hpp" line="358"/>
         <source>binary image</source>
         <translation>image binaire</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="319"/>
+        <location filename="../Main/CoreTools.hpp" line="360"/>
         <source>label image</source>
         <translation>image labellisée</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="321"/>
+        <location filename="../Main/CoreTools.hpp" line="362"/>
         <source>volume</source>
         <translation>volume</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="323"/>
+        <location filename="../Main/CoreTools.hpp" line="364"/>
         <source>binary volume</source>
         <translation>volume binaire</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="325"/>
+        <location filename="../Main/CoreTools.hpp" line="366"/>
         <source>label volume</source>
         <translation>volume labellisé</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="328"/>
+        <location filename="../Main/CoreTools.hpp" line="369"/>
         <source>graphics</source>
         <translation>graphiques</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="330"/>
+        <location filename="../Main/CoreTools.hpp" line="371"/>
         <source>blob values</source>
         <translation>mesures d&apos;objet</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="332"/>
+        <location filename="../Main/CoreTools.hpp" line="373"/>
         <source>numeric values</source>
         <translation>valeurs numériques</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="334"/>
+        <location filename="../Main/CoreTools.hpp" line="375"/>
         <source>video</source>
         <translation>vidéo</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="336"/>
+        <location filename="../Main/CoreTools.hpp" line="377"/>
         <source>binary video</source>
         <translation>vidéo binaire</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="338"/>
+        <location filename="../Main/CoreTools.hpp" line="379"/>
         <source>label Video</source>
         <translation>vidéo labellisée</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="340"/>
+        <location filename="../Main/CoreTools.hpp" line="381"/>
         <source>live stream</source>
         <translation>flux vidéo</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="342"/>
+        <location filename="../Main/CoreTools.hpp" line="383"/>
         <source>binary live stream</source>
         <translation>flux vidéo binaire</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="344"/>
+        <location filename="../Main/CoreTools.hpp" line="385"/>
         <source>label live stream</source>
         <translation>flux vidéo labellisé</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="346"/>
+        <location filename="../Main/CoreTools.hpp" line="387"/>
         <source>custom result view</source>
         <translation>Vue personnalisée</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="348"/>
+        <location filename="../Main/CoreTools.hpp" line="389"/>
         <source>descriptors</source>
         <translation>descripteurs</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="350"/>
+        <location filename="../Main/CoreTools.hpp" line="391"/>
         <source>folder</source>
         <translation>répertoire (projet)</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="352"/>
+        <location filename="../Main/CoreTools.hpp" line="393"/>
         <source>folder path</source>
         <translation>répertoire (disque)</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="354"/>
+        <location filename="../Main/CoreTools.hpp" line="395"/>
         <source>file path</source>
         <translation>fichier (disque)</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="356"/>
+        <location filename="../Main/CoreTools.hpp" line="397"/>
         <source>deep learning dataset</source>
         <translation>dataset deep learning</translation>
     </message>
     <message>
-        <location filename="../Main/CoreTools.hpp" line="358"/>
+        <location filename="../Main/CoreTools.hpp" line="399"/>
         <source>multi-dimensional array</source>
         <translation>tableau multi-dimensionnel</translation>
+    </message>
+    <message>
+        <location filename="../Main/CoreTools.hpp" line="401"/>
+        <source>Generic Python dict</source>
+        <translation>Dict Python générique</translation>
+    </message>
+    <message>
+        <location filename="../Main/CoreTools.hpp" line="403"/>
+        <source>Object detection</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../Main/CoreTools.hpp" line="405"/>
+        <source>Instance segmentation</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../Main/CoreTools.hpp" line="407"/>
+        <source>Semantic segmentation</source>
+        <translation></translation>
     </message>
     <message>
         <source>Not available</source>
@@ -425,12 +454,12 @@
         <translation>Valeur maximum</translation>
     </message>
     <message>
-        <location filename="../Data/CDataInfo.cpp" line="125"/>
+        <location filename="../Data/CDataInfo.cpp" line="124"/>
         <source>General metadata</source>
         <translation>Données générales</translation>
     </message>
     <message>
-        <location filename="../Data/CDataInfo.cpp" line="122"/>
+        <location filename="../Data/CDataInfo.cpp" line="121"/>
         <source>File path</source>
         <translation>Chemin du fichier</translation>
     </message>

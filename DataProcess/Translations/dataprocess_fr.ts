@@ -881,9 +881,13 @@
     <name>COcvWidgetBckgndSubCnt</name>
     <message>
         <location filename="../Widget/OpenCV/bgsegm/COcvWidgetBckgndSubCnt.hpp" line="48"/>
-        <location filename="../Widget/OpenCV/bgsegm/COcvWidgetBckgndSubCnt.hpp" line="54"/>
         <source>Minimum pixel stability</source>
         <translation>Stabilité minimum (en nombre de frame)</translation>
+    </message>
+    <message>
+        <location filename="../Widget/OpenCV/bgsegm/COcvWidgetBckgndSubCnt.hpp" line="54"/>
+        <source>Maximum pixel stability</source>
+        <translation>Stabilité maximum (en nombre de frame)</translation>
     </message>
     <message>
         <location filename="../Widget/OpenCV/bgsegm/COcvWidgetBckgndSubCnt.hpp" line="60"/>
@@ -3486,9 +3490,11 @@
         <location filename="../Process/Core/CCut.hpp" line="155"/>
         <location filename="../Process/Core/CFillHoles.hpp" line="99"/>
         <location filename="../Process/Core/CGraphicsToBinary.h" line="72"/>
-        <location filename="../Process/Core/CObjDetectFilter.cpp" line="113"/>
+        <location filename="../Process/Core/CInstanceSegFilter.cpp" line="95"/>
+        <location filename="../Process/Core/CObjDetectFilter.cpp" line="92"/>
         <location filename="../Process/Core/CPlotMerge.hpp" line="171"/>
         <location filename="../Process/Core/CRgbHlsThreshold.cpp" line="229"/>
+        <location filename="../Process/Core/CSemanticSegFilter.cpp" line="101"/>
         <source>:/Images/default-process.png</source>
         <translation></translation>
     </message>
@@ -3498,7 +3504,6 @@
     </message>
     <message>
         <location filename="../Process/Core/CBlobMeasure.h" line="86"/>
-        <location filename="../Process/Core/CObjDetectFilter.cpp" line="111"/>
         <source>This process extract connected components from binary image and calculate selected measures for each.</source>
         <translation>Ce traitement extrait les composantes connexes à partir d&apos;une image binaire puis calcule les mesures choisies pour chaque objet identifié.</translation>
     </message>
@@ -3521,7 +3526,9 @@
         <location filename="../Process/Core/CCut.hpp" line="154"/>
         <location filename="../Process/Core/CFillHoles.hpp" line="98"/>
         <location filename="../Process/Core/CGraphicsToBinary.h" line="71"/>
-        <location filename="../Process/Core/CObjDetectFilter.cpp" line="112"/>
+        <location filename="../Process/Core/CInstanceSegFilter.cpp" line="94"/>
+        <location filename="../Process/Core/CObjDetectFilter.cpp" line="91"/>
+        <location filename="../Process/Core/CSemanticSegFilter.cpp" line="100"/>
         <source>Core/Utils</source>
         <translation></translation>
     </message>
@@ -3720,7 +3727,7 @@
         <location filename="../Process/OpenCV/ximgproc/COcvRollingGuidanceFilter.hpp" line="133"/>
         <location filename="../Process/OpenCV/ximgproc/COcvSelectiveSearchSegmentation.hpp" line="219"/>
         <location filename="../Process/OpenCV/ximgproc/COcvStructuredEdgeDetection.hpp" line="129"/>
-        <location filename="../Process/OpenCV/ximgproc/COcvSuperpixelLSC.hpp" line="145"/>
+        <location filename="../Process/OpenCV/ximgproc/COcvSuperpixelLSC.hpp" line="147"/>
         <location filename="../Process/OpenCV/ximgproc/COcvSuperpixelSEEDS.hpp" line="154"/>
         <location filename="../Process/OpenCV/ximgproc/COcvSuperpixelSLIC.hpp" line="148"/>
         <location filename="../Process/OpenCV/ximgproc/COcvThinning.hpp" line="123"/>
@@ -4112,6 +4119,19 @@
         <translation>Cette fonction calcul la différence élément par élément de 2 images selon la formule suivante:&lt;br&gt; &lt;center&gt;&lt;i&gt;dst = saturate( src1 - src2 )&lt;/i&gt;&lt;/center&gt;</translation>
     </message>
     <message>
+        <location filename="../IO/CInstanceSegIO.cpp" line="45"/>
+        <source>Instance segmentation data: label, confidence, box, mask and color.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../IO/CInstanceSegIO.cpp" line="199"/>
+        <location filename="../IO/CObjectDetectionIO.cpp" line="178"/>
+        <source>Identifier</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../IO/CInstanceSegIO.cpp" line="200"/>
+        <location filename="../IO/CObjectDetectionIO.cpp" line="179"/>
         <location filename="../Process/OpenCV/dnn/COcvDnnClassifier.hpp" line="184"/>
         <location filename="../Process/OpenCV/dnn/COcvDnnDetector.hpp" line="281"/>
         <location filename="../Process/OpenCV/dnn/COcvDnnDetector.hpp" line="339"/>
@@ -4989,13 +5009,13 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../Process/OpenCV/ximgproc/COcvSuperpixelLSC.hpp" line="143"/>
+        <location filename="../Process/OpenCV/ximgproc/COcvSuperpixelLSC.hpp" line="145"/>
         <location filename="../Process/OpenCV/ximgproc/COcvSuperpixelSLIC.hpp" line="146"/>
         <source>LSC (Linear Spectral Clustering) produces compact and uniform superpixels with low computational costs. Basically, a normalized cuts formulation of the superpixel segmentation is adopted based on a similarity metric that measures the color similarity and space proximity between image pixels. LSC is of linear computational complexity and high memory efficiency and is able to preserve global properties of images </source>
         <translation>L&apos;algorithme LSC (Linear Spectral Clustering) produit des superpixels compacts et uniformes pour un faible temps de traitement. Fondamentalement, une formulation de coupes normalisées pour la segmentation est adoptée sur la base d&apos;une métrique de similarité qui mesure la similarité de couleur et la distance spaciale entre pixels. La complexité algorithmique est linéaire, l&apos;utilisation mémoire efficace et l&apos;algorithme préserve les propriétés globales de l&apos;image.</translation>
     </message>
     <message>
-        <location filename="../Process/OpenCV/ximgproc/COcvSuperpixelLSC.hpp" line="144"/>
+        <location filename="../Process/OpenCV/ximgproc/COcvSuperpixelLSC.hpp" line="146"/>
         <location filename="../Process/OpenCV/ximgproc/COcvSuperpixelSEEDS.hpp" line="153"/>
         <location filename="../Process/OpenCV/ximgproc/COcvSuperpixelSLIC.hpp" line="147"/>
         <source>OpenCV/Extra modules/Extended Image Processing/Superpixels</source>
@@ -5412,47 +5432,47 @@
         <translation>Ce traitement réalise une opération de défloutage de l&apos;image basée sur l&apos;algorithme de Lucy-Richardson.</translation>
     </message>
     <message>
-        <location filename="../Core/CWorkflow.cpp" line="942"/>
+        <location filename="../Core/CWorkflow.cpp" line="981"/>
         <source>No valid connection available, please check input/output data types.</source>
         <translation>Aucune connexion possible, merci de vérifier les types de données d&apos;entrée/sortie.</translation>
     </message>
     <message>
-        <location filename="../Core/CWorkflow.cpp" line="975"/>
+        <location filename="../Core/CWorkflow.cpp" line="1014"/>
         <source>Invalid connection between output #%1 of %2 (%3) and input #%4 of %5 (%6)</source>
         <translation>Connexion invalide entre la sortie #%1 de %2 (%3) et l&apos;entrée #%4 de %5 (%6)</translation>
     </message>
     <message>
-        <location filename="../Core/CWorkflow.cpp" line="1044"/>
+        <location filename="../Core/CWorkflow.cpp" line="1084"/>
         <source>One connection has been removed</source>
         <translation>Une connexion a été supprimée</translation>
     </message>
     <message>
-        <location filename="../Core/CWorkflow.cpp" line="1263"/>
+        <location filename="../Core/CWorkflow.cpp" line="1361"/>
         <source>Workflow stop requested by user</source>
         <translation>Arrêt du workflow demandé par l&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../Core/CWorkflow.cpp" line="1309"/>
+        <location filename="../Core/CWorkflow.cpp" line="1405"/>
         <source>Stopping workflow...</source>
         <translation>Workflow en cours d&apos;arrêt...</translation>
     </message>
     <message>
-        <location filename="../Core/CWorkflow.cpp" line="1339"/>
+        <location filename="../Core/CWorkflow.cpp" line="1435"/>
         <source>No possible connection to input #%1</source>
         <translation>Aucune connexion possible à l&apos;entrée #%1</translation>
     </message>
     <message>
-        <location filename="../Core/CWorkflow.cpp" line="1361"/>
+        <location filename="../Core/CWorkflow.cpp" line="1457"/>
         <source>Data type mismatch on input #%1 between type %2 and type %3</source>
         <translation>Incompatibilité de type de données sur l&apos;entrée #%1 entre %2 et %3</translation>
     </message>
     <message>
-        <location filename="../Core/CRunTaskManager.cpp" line="45"/>
+        <location filename="../Core/CRunTaskManager.cpp" line="40"/>
         <source>Invalid task</source>
         <translation>Tâche invalide</translation>
     </message>
     <message>
-        <location filename="../Core/CRunTaskManager.cpp" line="97"/>
+        <location filename="../Core/CRunTaskManager.cpp" line="93"/>
         <source>Different volume dimensions</source>
         <translation>Dimensions de volume différentes</translation>
     </message>
@@ -5464,8 +5484,8 @@
         <translation>Dataset d&apos;images annotées au format Ikomia (Deep Learning).</translation>
     </message>
     <message>
-        <location filename="../IO/CNumericIO.h" line="206"/>
-        <location filename="../IO/CNumericIO.h" line="213"/>
+        <location filename="../IO/CNumericIO.h" line="203"/>
+        <location filename="../IO/CNumericIO.h" line="210"/>
         <source>Numerical values structured as table data (headers, labels and values).
 Can be displayed as table or plot.</source>
         <translation>Valeurs numériques structurées en tableau (entêtes, intitulés et valeurs).
@@ -5478,9 +5498,9 @@ Used as input only.</source>
 Utilisé en entrée seulement.</translation>
     </message>
     <message>
-        <location filename="../IO/CGraphicsInput.cpp" line="26"/>
-        <location filename="../IO/CGraphicsInput.cpp" line="34"/>
-        <location filename="../IO/CGraphicsInput.cpp" line="42"/>
+        <location filename="../IO/CGraphicsInput.cpp" line="32"/>
+        <location filename="../IO/CGraphicsInput.cpp" line="40"/>
+        <location filename="../IO/CGraphicsInput.cpp" line="48"/>
         <source>Graphics items organized in layer.
 Represent shapes and types of objects in image.
 Graphics can be created interactively by user.</source>
@@ -5489,28 +5509,28 @@ Permet de representer les objets d&apos;une image.
 Possibilité d&apos;être dessinés par l&apos;utilisateur.</translation>
     </message>
     <message>
-        <location filename="../IO/CGraphicsOutput.cpp" line="35"/>
-        <location filename="../IO/CGraphicsOutput.cpp" line="42"/>
+        <location filename="../IO/CGraphicsOutput.cpp" line="36"/>
+        <location filename="../IO/CGraphicsOutput.cpp" line="43"/>
         <source>Graphics items organized in layer.
 Represent shapes and types of objects extracted from image.</source>
         <translation>Eléments graphiques organisés en couche.
 Permet de représenter les objets détectés dans une image.</translation>
     </message>
     <message>
-        <location filename="../IO/CImageIO.cpp" line="29"/>
-        <location filename="../IO/CImageIO.cpp" line="36"/>
-        <location filename="../IO/CImageIO.cpp" line="43"/>
-        <location filename="../IO/CImageIO.cpp" line="54"/>
-        <location filename="../IO/CImageIO.cpp" line="65"/>
-        <location filename="../IO/CImageIO.cpp" line="72"/>
+        <location filename="../IO/CImageIO.cpp" line="33"/>
+        <location filename="../IO/CImageIO.cpp" line="40"/>
+        <location filename="../IO/CImageIO.cpp" line="47"/>
+        <location filename="../IO/CImageIO.cpp" line="58"/>
+        <location filename="../IO/CImageIO.cpp" line="69"/>
+        <location filename="../IO/CImageIO.cpp" line="76"/>
         <source>2D or 3D images.
 Can be single frame from video or camera stream.</source>
         <translation>Image 2D ou 3D.
 Peut aussi réprésenter une frame de vidéo.</translation>
     </message>
     <message>
-        <location filename="../IO/CBlobMeasureIO.cpp" line="75"/>
-        <location filename="../IO/CBlobMeasureIO.cpp" line="81"/>
+        <location filename="../IO/CBlobMeasureIO.cpp" line="114"/>
+        <location filename="../IO/CBlobMeasureIO.cpp" line="120"/>
         <source>Predefined measures computed from connected components (Surface, perimeter...).</source>
         <translation>Mesures prédéfinies calculées sur composantes connexes (surface, périmètre...).</translation>
     </message>
@@ -5523,19 +5543,21 @@ Peut aussi réprésenter une frame de vidéo.</translation>
         <translation>Chemin de fichier ou répertoire.</translation>
     </message>
     <message>
-        <location filename="../IO/CVideoIO.cpp" line="27"/>
-        <location filename="../IO/CVideoIO.cpp" line="33"/>
-        <location filename="../IO/CVideoIO.cpp" line="39"/>
-        <location filename="../IO/CVideoIO.cpp" line="45"/>
+        <location filename="../IO/CVideoIO.cpp" line="28"/>
+        <location filename="../IO/CVideoIO.cpp" line="34"/>
+        <location filename="../IO/CVideoIO.cpp" line="40"/>
+        <location filename="../IO/CVideoIO.cpp" line="46"/>
+        <location filename="../IO/CVideoIO.cpp" line="52"/>
+        <location filename="../IO/CVideoIO.cpp" line="58"/>
         <source>Video with read/write capabilities.</source>
         <translation>Vidéo en lecture/écriture.</translation>
     </message>
     <message>
-        <location filename="../IO/CVideoIO.cpp" line="90"/>
-        <location filename="../IO/CVideoIO.cpp" line="106"/>
-        <location filename="../IO/CVideoIO.cpp" line="114"/>
-        <location filename="../IO/CVideoIO.cpp" line="122"/>
-        <location filename="../IO/CVideoIO.cpp" line="130"/>
+        <location filename="../IO/CVideoIO.cpp" line="115"/>
+        <location filename="../IO/CVideoIO.cpp" line="136"/>
+        <location filename="../IO/CVideoIO.cpp" line="144"/>
+        <location filename="../IO/CVideoIO.cpp" line="152"/>
+        <location filename="../IO/CVideoIO.cpp" line="160"/>
         <source>Video buffer pointer is null.</source>
         <translation>Video buffer pointer is null.</translation>
     </message>
@@ -5567,13 +5589,42 @@ Tout type de fenêtre du framework Qt (ex: Matplotlib canvas).</translation>
         <translation>Ce traitement implémente le détecteur de points d&apos;intérêts et générateur de descripteurs SIFT.</translation>
     </message>
     <message>
+        <source>Generic multi-dimensional array.
+</source>
+        <translation type="vanished">Tableau multi-dimensionnel.
+</translation>
+    </message>
+    <message>
         <location filename="../IO/CArrayIO.cpp" line="26"/>
         <location filename="../IO/CArrayIO.cpp" line="31"/>
         <location filename="../IO/CArrayIO.cpp" line="36"/>
-        <source>Generic multi-dimensional array.
-</source>
-        <translation>Tableau multi-dimensionnel.
-</translation>
+        <source>Generic multi-dimensional array.</source>
+        <translation>Tableau multi-dimensionnel.</translation>
+    </message>
+    <message>
+        <location filename="../IO/CObjectDetectionIO.cpp" line="64"/>
+        <source>Object detection data: label, confidence, box and color.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../IO/CSemanticSegIO.cpp" line="8"/>
+        <source>Semantic segmentation data: mask and class names.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../Process/Core/CInstanceSegFilter.cpp" line="92"/>
+        <source>This process filters instance segmentation results based on confidence and object category.It can also be used for panoptic segmentation task results.</source>
+        <translation>Ce traitement permet de filtrer les résultats de segmentation d&apos;instance segmentation sur la confiance et la catégorie. Il est également utilisable sur la segmentation panoptique.</translation>
+    </message>
+    <message>
+        <location filename="../Process/Core/CObjDetectFilter.cpp" line="90"/>
+        <source>This process filters object detection results based on confidence and object category.</source>
+        <translation>Ce traitement permet de filtrer les résultats de detection d&apos;objets sur la confiance et la catégorie.</translation>
+    </message>
+    <message>
+        <location filename="../Process/Core/CSemanticSegFilter.cpp" line="99"/>
+        <source>This process filters semantic segmentation results based class category.</source>
+        <translation>Ce traitement permet de filtrer les résultats de segmentation sémantique sur la catégorie.</translation>
     </message>
 </context>
 </TS>
