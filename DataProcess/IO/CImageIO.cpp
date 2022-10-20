@@ -403,11 +403,11 @@ void CImageIO::fromJson(const std::string &jsonStr)
 {
     QJsonDocument jsonDoc = QJsonDocument::fromJson(QString::fromStdString(jsonStr).toUtf8());
     if (jsonDoc.isNull() || jsonDoc.isEmpty())
-        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading blob measures: invalid JSON structure", __func__, __FILE__, __LINE__);
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading image: invalid JSON structure", __func__, __FILE__, __LINE__);
 
     QJsonObject root = jsonDoc.object();
     if (root.isEmpty())
-        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading blob measures: empty JSON structure", __func__, __FILE__, __LINE__);
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading image: empty JSON structure", __func__, __FILE__, __LINE__);
 
     std::string b64ImgStr = root["image"].toString().toStdString();
     m_image = Utils::Image::fromJson(b64ImgStr);

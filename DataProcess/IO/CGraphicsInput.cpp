@@ -307,7 +307,7 @@ void CGraphicsInput::fromJson(const std::string &jsonStr)
 {
     QJsonDocument jsonDoc = QJsonDocument::fromJson(QString::fromStdString(jsonStr).toUtf8());
     if (jsonDoc.isNull() || jsonDoc.isEmpty())
-        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading blob measures: invalid JSON structure", __func__, __FILE__, __LINE__);
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading graphics input: invalid JSON structure", __func__, __FILE__, __LINE__);
 
     fromJsonInternal(jsonDoc);
 }
