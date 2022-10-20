@@ -22,6 +22,7 @@ class CWorkflowTests : public QObject
         void            workflowInputs();
         void            workflowTaskConnection();
         void            workflowStructure();
+        void            wfGetTask();
 
         void            buildSimpleWorkflow();
         void            buildSingleLineWorkflow();

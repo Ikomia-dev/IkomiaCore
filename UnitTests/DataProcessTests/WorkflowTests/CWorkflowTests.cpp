@@ -237,46 +237,59 @@ void CWorkflowTests::workflowTaskConnection()
 
 void CWorkflowTests::workflowStructure()
 {
-    CWorkflow Workflow("MyWorkflow");
-    QVERIFY(Workflow.isRoot(Workflow.getRootId()) == true);
+    CWorkflow wf("MyWorkflow");
+    QVERIFY(wf.isRoot(wf.getRootId()) == true);
 
     auto pTask1 = std::make_shared<CWorkflowTask>("Task1");
     pTask1->addInput(std::make_shared<CWorkflowTaskIO>(IODataType::IMAGE));
     pTask1->addOutput(std::make_shared<CWorkflowTaskIO>(IODataType::IMAGE));
-    auto taskId1 = Workflow.addTask(pTask1);
-    QVERIFY(Workflow.isRoot(taskId1) == false);
-    QVERIFY(Workflow.getLastTaskId() == taskId1);
+    auto taskId1 = wf.addTask(pTask1);
+    QVERIFY(wf.isRoot(taskId1) == false);
+    QVERIFY(wf.getLastTaskId() == taskId1);
 
     auto pTask2 = std::make_shared<CWorkflowTask>("Task2");
     pTask2->addInput(std::make_shared<CWorkflowTaskIO>(IODataType::IMAGE));
     pTask2->addOutput(std::make_shared<CWorkflowTaskIO>(IODataType::IMAGE));
-    auto taskId2 = Workflow.addTask(pTask1);
-    QVERIFY(Workflow.getLastTaskId() == taskId2);
+    auto taskId2 = wf.addTask(pTask1);
+    QVERIFY(wf.getLastTaskId() == taskId2);
 
-    auto edge1 = Workflow.connect(Workflow.getRootId(), 0, taskId1, 0);
+    auto edge1 = wf.connect(wf.getRootId(), 0, taskId1, 0);
     Q_UNUSED(edge1);
-    auto edge2 = Workflow.connect(taskId1, 0, taskId2, 0);
+    auto edge2 = wf.connect(taskId1, 0, taskId2, 0);
 
     auto pTask3 = std::make_shared<CWorkflowTask>("Task3");
     pTask3->addInput(std::make_shared<CWorkflowTaskIO>(IODataType::IMAGE));
     pTask3->addOutput(std::make_shared<CWorkflowTaskIO>(IODataType::IMAGE));
 
-    Workflow.replaceTask(pTask3, taskId1);
-    auto pTaskTmp = Workflow.getTask(taskId1);
-    QVERIFY(Workflow.getTaskCount() == 3);
+    wf.replaceTask(pTask3, taskId1);
+    auto pTaskTmp = wf.getTask(taskId1);
+    QVERIFY(wf.getTaskCount() == 3);
     QVERIFY(pTaskTmp->getName() == "Task3");
-    QVERIFY(Workflow.getParents(taskId1).size() == 1);
-    QVERIFY(Workflow.getChilds(taskId1).size() == 1);
+    QVERIFY(wf.getParents(taskId1).size() == 1);
+    QVERIFY(wf.getChilds(taskId1).size() == 1);
 
-    Workflow.deleteEdge(edge2);
-    QVERIFY(Workflow.getParents(taskId1).size() == 1);
-    QVERIFY(Workflow.getChilds(taskId1).size() == 0);
+    wf.deleteEdge(edge2);
+    QVERIFY(wf.getParents(taskId1).size() == 1);
+    QVERIFY(wf.getChilds(taskId1).size() == 0);
 
-    Workflow.deleteTask(taskId2);
-    QVERIFY(Workflow.getTaskCount() == 2);
+    wf.deleteTask(taskId2);
+    QVERIFY(wf.getTaskCount() == 2);
 
-    Workflow.clear();
-    QVERIFY(Workflow.getTaskCount() == 0);
+    wf.clear();
+    QVERIFY(wf.getTaskCount() == 0);
+}
+
+void CWorkflowTests::wfGetTask()
+{
+    CWorkflow wf("MyWorkflow");
+    auto taskPtr = createTask(IODataType::IMAGE, IODataType::IMAGE);
+    auto taskId = wf.addTask(taskPtr);
+
+    auto wfTaskPtr = wf.getTask(taskId);
+    QVERIFY(wfTaskPtr);
+    WorkflowVertex invalidId = reinterpret_cast<WorkflowVertex>(99);
+    wfTaskPtr = wf.getTask(invalidId);
+    QVERIFY(wfTaskPtr == nullptr);
 }
 
 void CWorkflowTests::buildSimpleWorkflow()

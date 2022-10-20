@@ -360,8 +360,10 @@ WorkflowTaskPtr CWorkflow::getTask(const WorkflowVertex &id)
 {
     if(id == boost::graph_traits<WorkflowGraph>::null_vertex())
         return m_graph[m_root];
-    else
+    else if (isVertexExists(id))
         return m_graph[id];
+
+    return nullptr;
 }
 
 std::vector<WorkflowVertex> CWorkflow::getParents(const WorkflowVertex &id) const
@@ -706,6 +708,17 @@ std::vector<WorkflowVertex> CWorkflow::getSelfInputTasks() const
         }
     }
     return tasks;
+}
+
+bool CWorkflow::isVertexExists(const WorkflowVertex &id) const
+{
+    auto vertexRangeIt = boost::vertices(m_graph);
+    for (auto it=vertexRangeIt.first; it!=vertexRangeIt.second; ++it)
+    {
+        if (*it == id)
+            return true;
+    }
+    return false;
 }
 
 double CWorkflow::getTotalElapsedTime() const

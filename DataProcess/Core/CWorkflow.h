@@ -227,6 +227,8 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         std::vector<WorkflowVertex>     getForwardPassTasks(const WorkflowVertex& startVertex);
         std::vector<WorkflowVertex>     getSelfInputTasks() const;
 
+        bool                            isVertexExists(const WorkflowVertex& id) const;
+
         void                            createRoot();
         BfsPropertyMap                  createBfsPropertyMap(VertexIndexMap &mapIndex) const;
 
