@@ -82,6 +82,9 @@ void CSemanticSegIO::setMask(const CMat &mask)
 
 void CSemanticSegIO::setClassNames(const std::vector<std::string> &names, const std::vector<cv::Vec3b> &colors)
 {
+    if (names.size() != colors.size())
+        throw CException(CoreExCode::INVALID_SIZE, "Semantic segmentation output error: there must be the same number of classes and colors.", __func__, __FILE__, __LINE__);
+
     m_classes = names;
     m_colors = colors;
     generateLegend();
@@ -212,7 +215,7 @@ void CSemanticSegIO::generateLegend()
     std::vector<int> colorIndices;
     for (size_t i=0; i<m_colors.size(); ++i)
     {
-        if (m_histo.at<uchar>(i) > 0)
+        if (m_histo.at<float>(i) > 0)
             colorIndices.push_back(i);
     }
 
@@ -237,7 +240,7 @@ void CSemanticSegIO::generateLegend()
         cv::rectangle(legend, colorFrameRect, m_colors[colorIndices[i]], -1);
         // Class name
         cv::Point textOrigin(3 * offsetX + rectWidth, offsetY + (i * (rectHeight + interline)) + (rectHeight / 2));
-        cv::putText(legend, m_classes[i], textOrigin, font, fontScale, {0, 0, 0}, thickness);
+        cv::putText(legend, m_classes[colorIndices[i]], textOrigin, font, fontScale, {0, 0, 0}, thickness);
     }
     m_imgLegendIOPtr->setImage(legend);
 }
