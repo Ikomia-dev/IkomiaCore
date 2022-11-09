@@ -189,7 +189,7 @@ class DATAPROCESSSHARED_EXPORT CVideoIO : public CImageIO
         /**
          * @brief Stops writting to disk.
          */
-        void                stopVideoWrite();
+        void                stopVideoWrite(int timeout);
         /**
          * @brief Appends image to the video.
          * @param image: CMat for C++ and Numpy array for Python.

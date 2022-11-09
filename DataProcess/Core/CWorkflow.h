@@ -247,7 +247,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         void                            runTasksVideo(const std::vector<WorkflowVertex>& taskToExecute);
 
         void                            stopVideoRead(const InputOutputVect& ioVect);
-        void                            stopVideoWrite(const InputOutputVect& ioVect);
+        void                            stopVideoWrite(const InputOutputVect& ioVect, int timeout);
 
         void                            onTaskInputRemoved(size_t index);
         void                            onTaskOutputRemoved(size_t index);

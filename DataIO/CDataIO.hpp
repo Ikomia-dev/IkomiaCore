@@ -208,10 +208,10 @@ class CDataIO : public _CDataIO
                 throw CException(CoreExCode::NULL_POINTER, "Write error: invalid DataIO object", __func__, __FILE__, __LINE__);
         }
 
-        void                            stopWrite()
+        void                            stopWrite(int timeout)
         {
             if(m_pDataIO)
-                m_pDataIO->stopWrite();
+                m_pDataIO->stopWrite(timeout);
             else
                 throw CException(CoreExCode::NULL_POINTER, "Stop write error: invalid DataIO object", __func__, __FILE__, __LINE__);
         }

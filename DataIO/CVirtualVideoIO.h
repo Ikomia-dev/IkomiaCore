@@ -88,7 +88,7 @@ class DATAIOSHARED_EXPORT CVirtualVideoIO
         virtual void            write(const CMat& /*image*/) = 0;
         virtual void            write(const CMat& /*image*/, const std::string& /*path*/) = 0;
 
-        virtual void            stopWrite() = 0;
+        virtual void            stopWrite(int timeout) = 0;
         virtual void            stopRead() = 0;
 
         virtual void            waitWriteFinished(int timeout) = 0;

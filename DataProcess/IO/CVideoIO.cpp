@@ -152,10 +152,10 @@ void CVideoIO::startVideoWrite(int width, int height, int frames, int fps, int f
         throw CException(CoreExCode::NULL_POINTER, QObject::tr("Video buffer pointer is null.").toStdString(), __func__, __FILE__, __LINE__);
 }
 
-void CVideoIO::stopVideoWrite()
+void CVideoIO::stopVideoWrite(int timeout)
 {
     if(m_pVideoBuffer)
-        m_pVideoBuffer->stopWrite();
+        m_pVideoBuffer->stopWrite(timeout);
     else
         throw CException(CoreExCode::NULL_POINTER, QObject::tr("Video buffer pointer is null.").toStdString(), __func__, __FILE__, __LINE__);
 }

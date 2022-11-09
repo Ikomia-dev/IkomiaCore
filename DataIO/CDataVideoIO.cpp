@@ -123,10 +123,10 @@ void CDataVideoIO::write(const CMat &image, const std::string &path)
         throw CException(CoreExCode::NULL_POINTER, "Write error: invalid DataImageIO object", __func__, __FILE__, __LINE__);
 }
 
-void CDataVideoIO::stopWrite()
+void CDataVideoIO::stopWrite(int timeout)
 {
     if(m_pVideoIO)
-        m_pVideoIO->stopWrite();
+        m_pVideoIO->stopWrite(timeout);
     else
         throw CException(CoreExCode::NULL_POINTER, "Stop write error: invalid DataImageIO object", __func__, __FILE__, __LINE__);
 }

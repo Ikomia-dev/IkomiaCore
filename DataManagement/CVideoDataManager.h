@@ -55,7 +55,7 @@ class DATAMANAGEMENTSHARED_EXPORT CVideoDataManager : public CDataManager<CMat>
 
         void                writeVideo(const CMat& image, const std::string& path);
 
-        void                stopWriteVideo();
+        void                stopWriteVideo(int timeout);
         void                stopReadVideo();
 
         void                waitWriteFinished(int timeout);

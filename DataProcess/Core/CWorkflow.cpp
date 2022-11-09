@@ -1333,13 +1333,13 @@ void CWorkflow::runTasksVideo(const std::vector<WorkflowVertex> &taskToExecute)
     catch(std::exception& e)
     {
         stopVideoRead(videoInputs);
-        stopVideoWrite(videoOutputs);
+        stopVideoWrite(videoOutputs, 0);
         throw;
     }
 
     //Wait for read/write video threads to finish
     stopVideoRead(videoInputs);
-    stopVideoWrite(videoOutputs);
+    stopVideoWrite(videoOutputs, std::stoi(m_cfg["VideoWriteTimeout"]));
 }
 
 void CWorkflow::stopVideoRead(const InputOutputVect& ioVect)
@@ -1351,12 +1351,12 @@ void CWorkflow::stopVideoRead(const InputOutputVect& ioVect)
     }
 }
 
-void CWorkflow::stopVideoWrite(const InputOutputVect &ioVect)
+void CWorkflow::stopVideoWrite(const InputOutputVect &ioVect, int timeout)
 {
     for (size_t i=0; i<ioVect.size(); ++i)
     {
         auto ioPtr = std::static_pointer_cast<CVideoIO>(ioVect[i]);
-        ioPtr->stopVideoWrite();
+        ioPtr->stopVideoWrite(timeout);
         ioPtr->setVideoPos(0);
     }
 }

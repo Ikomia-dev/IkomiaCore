@@ -56,7 +56,7 @@ class DATAIOSHARED_EXPORT CDataVideoIO
         void                            write(const CMat &image);
         void                            write(const CMat &image, const std::string& path);
 
-        void                            stopWrite();
+        void                            stopWrite(int timeout);
         void                            stopRead();
 
         void                            waitWriteFinished(int timeout);

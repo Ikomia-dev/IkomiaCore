@@ -222,10 +222,10 @@ void COpencvVideoIO::write(const CMat &image, const std::string &path)
     m_pVideoBuffer->write(frame);
 }
 
-void COpencvVideoIO::stopWrite()
+void COpencvVideoIO::stopWrite(int timeout)
 {
     assert(m_pVideoBuffer);
-    m_pVideoBuffer->stopWrite();
+    m_pVideoBuffer->stopWrite(timeout);
 }
 
 void COpencvVideoIO::stopRead()

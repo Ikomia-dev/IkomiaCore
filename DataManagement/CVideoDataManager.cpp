@@ -285,11 +285,11 @@ void CVideoDataManager::writeVideo(const CMat& image, const std::string& path)
         m_pCurrentVideoOut->write(image);
 }
 
-void CVideoDataManager::stopWriteVideo()
+void CVideoDataManager::stopWriteVideo(int timeout)
 {
     if(m_pCurrentVideoOut)
     {
-        m_pCurrentVideoOut->stopWrite();
+        m_pCurrentVideoOut->stopWrite(timeout);
         auto filenames = m_pCurrentVideoOut->getFileNames(SubsetBounds());
 
         if(filenames.size() > 0)

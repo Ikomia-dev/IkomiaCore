@@ -45,8 +45,10 @@ CDataVideoBuffer::~CDataVideoBuffer()
 
 void CDataVideoBuffer::close()
 {
+    m_bStopRead = true;
+    m_bStopWrite = true;
     stopRead();
-    stopWrite();
+    stopWrite(1000);
     m_reader.release();
 }
 
@@ -196,9 +198,9 @@ void CDataVideoBuffer::startStreamWrite(int width, int height, size_t fps, int f
     m_writeFuture = Utils::async([this]{ updateStreamWrite(); });
 }
 
-void CDataVideoBuffer::stopWrite()
+void CDataVideoBuffer::stopWrite(int timeout)
 {
-    waitWriteFinished(m_timeout);
+    waitWriteFinished(timeout);
 }
 
 CMat CDataVideoBuffer::read()
@@ -906,7 +908,7 @@ void CDataVideoBuffer::checkFourcc()
     {
         std::string ext = Utils::File::extension(m_path);
         if (ext == ".avi")
-            m_fourcc = cv::VideoWriter::fourcc('x','v','i','d');
+            m_fourcc = cv::VideoWriter::fourcc('F','M','P','4');
         else if (ext == ".mp4")
             m_fourcc = cv::VideoWriter::fourcc('m','p','4','v');
         else

@@ -51,7 +51,7 @@ class DATAIOSHARED_EXPORT COpencvVideoIO : public CVirtualVideoIO
         void            write(const CMat& image) override;
         void            write(const CMat& image, const std::string& path) override;
 
-        void            stopWrite() override;
+        void            stopWrite(int timeout) override;
         void            stopRead() override;
 
         void            waitWriteFinished(int timeout) override;
