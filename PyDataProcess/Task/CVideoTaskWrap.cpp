@@ -295,6 +295,35 @@ void CVideoTaskWrap::default_globalInputChanged(bool bNewSequence)
     }
 }
 
+void CVideoTaskWrap::executeActions(int flags)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override executeActionsOver = this->get_override("executeActions"))
+            executeActionsOver(flags);
+        else
+            CVideoTask::executeActions(flags);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CVideoTaskWrap::default_executeActions(int flags)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->CVideoTask::executeActions(flags);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 void CVideoTaskWrap::notifyVideoStart(int frameCount)
 {
     CPyEnsureGIL gil;

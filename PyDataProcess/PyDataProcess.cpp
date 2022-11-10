@@ -598,6 +598,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("emitStepProgress", &C2dImageTaskWrap::emitStepProgress, _emitStepProgressDocString, args("self"))
         .def("emitGraphicsContextChanged", &C2dImageTaskWrap::emitGraphicsContextChanged, _emitGraphicsContextChangedDocString, args("self"))
         .def("emitOutputChanged", &C2dImageTaskWrap::emitOutputChanged, _emitOutputChangedDocString, args("self"))
+        .def("executeActions", &C2dImageTask::executeActions, &C2dImageTaskWrap::default_executeActions, _executeActionsDocString, args("self", "action"))
     ;
 
     //-----------------------------------//
@@ -624,6 +625,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("emitStepProgress", &C2dImageInteractiveTaskWrap::emitStepProgress, _emitStepProgressDocString, args("self"))
         .def("emitGraphicsContextChanged", &C2dImageInteractiveTaskWrap::emitGraphicsContextChanged, _emitGraphicsContextChangedDocString, args("self"))
         .def("emitOutputChanged", &C2dImageInteractiveTaskWrap::emitOutputChanged, _emitOutputChangedDocString, args("self"))
+        .def("executeActions", &C2dImageInteractiveTask::executeActions, &C2dImageInteractiveTaskWrap::default_executeActions, _executeActionsDocString, args("self", "action"))
     ;
 
     //----------------------//
@@ -647,6 +649,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("emitStepProgress", &CVideoTaskWrap::emitStepProgress, _emitStepProgressDocString, args("self"))
         .def("emitGraphicsContextChanged", &CVideoTaskWrap::emitGraphicsContextChanged, _emitGraphicsContextChangedDocString, args("self"))
         .def("emitOutputChanged", &CVideoTaskWrap::emitOutputChanged, _emitOutputChangedDocString, args("self"))
+        .def("executeActions", &CVideoTask::executeActions, &CVideoTaskWrap::default_executeActions, _executeActionsDocString, args("self", "action"))
     ;
 
     //------------------------//
@@ -670,6 +673,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("emitOutputChanged", &CVideoOFTaskWrap::emitOutputChanged, _emitOutputChangedDocString, args("self"))
         .def("drawOptFlowMap", &CVideoOFTask::drawOptFlowMap, _drawOptFlowMapDocString, args("self", "flow", "vectors", "step"))
         .def("flowToDisplay", &CVideoOFTask::flowToDisplay, _flowToDisplayDocString, args("self", "flow"))
+        .def("executeActions", &CVideoOFTask::executeActions, &CVideoOFTaskWrap::default_executeActions, _executeActionsDocString, args("self", "action"))
     ;
 
     //------------------------------//
@@ -693,6 +697,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("emitOutputChanged", &CVideoTrackingTaskWrap::emitOutputChanged, _emitOutputChangedDocString, args("self"))
         .def("setRoiToTrack", &CVideoTrackingTask::setRoiToTrack, _setRoiToTrackDocString, args("self"))
         .def("manageOutputs", &CVideoTrackingTask::manageOutputs, _manageOutputsDocString, args("self"))
+        .def("executeActions", &CVideoTrackingTask::executeActions, &CVideoTrackingTaskWrap::default_executeActions, _executeActionsDocString, args("self", "action"))
     ;
 
     //-------------------------//
@@ -709,6 +714,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("enableMlflow", &CDnnTrainTask::enableMlflow, _enableMlflowDocString, args("self", "enable"))
         .def("enableTensorboard", &CDnnTrainTask::enableTensorboard, _enableTensorboardDocString, args("self", "enable"))
         .def("endTaskRun", &CDnnTrainTask::endTaskRun, &CDnnTrainTaskWrap::default_endTaskRun, _endTaskRunDocString, args("self"))
+        .def("executeActions", &CDnnTrainTask::executeActions, &CDnnTrainTaskWrap::default_executeActions, _executeActionsDocString, args("self", "action"))
         .def("getProgressSteps", &CDnnTrainTaskWrap::getProgressSteps, &CDnnTrainTaskWrap::default_getProgressSteps, _getProgressStepsDocString, args("self"))
         .def("run", &CDnnTrainTask::run, &CDnnTrainTaskWrap::default_run, _runDocString, args("self"))
         .def("setActive", &CDnnTrainTask::setActive, &CDnnTrainTaskWrap::default_setActive, _setActiveDocString, args("self", "is_active"))

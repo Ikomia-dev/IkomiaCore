@@ -36,27 +36,30 @@ class CDnnTrainTaskWrap : public CDnnTrainTask, public wrapper<CDnnTrainTask>
 
         ~CDnnTrainTaskWrap() = default;
 
-        virtual size_t  getProgressSteps() override;
-        size_t          default_getProgressSteps();
+        size_t  getProgressSteps() override;
+        size_t  default_getProgressSteps();
 
-        virtual void    setActive(bool bActive) override;
-        void            default_setActive(bool bActive);
+        void    setActive(bool bActive) override;
+        void    default_setActive(bool bActive);
 
-        virtual void    beginTaskRun() override;
-        void            default_beginTaskRun();
+        void    beginTaskRun() override;
+        void    default_beginTaskRun();
 
-        virtual void    endTaskRun() override;
-        void            default_endTaskRun();
+        void    endTaskRun() override;
+        void    default_endTaskRun();
 
-        virtual void    run() override;
-        void            default_run();
+        void    run() override;
+        void    default_run();
 
-        virtual void    stop() override;
-        void            default_stop();
+        void    stop() override;
+        void    default_stop();
 
-        void            emitAddSubProgressSteps(int count);
-        void            emitStepProgress();
-        void            emitOutputChanged();
+        void    executeActions(int flags) override;
+        void    default_executeActions(int flags);
+
+        void    emitAddSubProgressSteps(int count);
+        void    emitStepProgress();
+        void    emitOutputChanged();
 };
 
 #endif // CDnnTrainTaskWrap_H

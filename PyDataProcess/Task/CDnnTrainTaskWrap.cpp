@@ -206,6 +206,35 @@ void CDnnTrainTaskWrap::default_stop()
     }
 }
 
+void CDnnTrainTaskWrap::executeActions(int flags)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override executeActionsOver = this->get_override("executeActions"))
+            executeActionsOver(flags);
+        else
+            CDnnTrainTask::executeActions(flags);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CDnnTrainTaskWrap::default_executeActions(int flags)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->CDnnTrainTask::executeActions(flags);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 void CDnnTrainTaskWrap::emitAddSubProgressSteps(int count)
 {
     emit m_signalHandler->doAddSubTotalSteps(count);

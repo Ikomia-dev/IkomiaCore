@@ -179,6 +179,35 @@ void C2dImageInteractiveTaskWrap::default_endTaskRun()
     }
 }
 
+void C2dImageInteractiveTaskWrap::executeActions(int flags)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override executeActionsOver = this->get_override("executeActions"))
+            executeActionsOver(flags);
+        else
+            C2dImageInteractiveTask::executeActions(flags);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void C2dImageInteractiveTaskWrap::default_executeActions(int flags)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->C2dImageInteractiveTask::executeActions(flags);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 void C2dImageInteractiveTaskWrap::run()
 {
     CPyEnsureGIL gil;

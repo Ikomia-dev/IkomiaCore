@@ -41,10 +41,10 @@ class C2dImageTaskWrap : public C2dImageTask, public wrapper<C2dImageTask>
 
         ~C2dImageTaskWrap() = default;
 
-        virtual size_t  getProgressSteps() override;
+        size_t          getProgressSteps() override;
         size_t          default_getProgressSteps();
 
-        virtual void    setActive(bool bActive) override;
+        void            setActive(bool bActive) override;
         void            default_setActive(bool bActive);
 
         void            setOutputColorMap(size_t index, size_t maskIndex, const std::vector<std::vector<uchar>>& colors={});
@@ -52,25 +52,28 @@ class C2dImageTaskWrap : public C2dImageTask, public wrapper<C2dImageTask>
         CMat            applyGraphicsMask(const CMat &src, const CMat &dst, int maskIndex);
         CMat            applyGraphicsMaskToBinary(const CMat &src, CMat &dst, int maskIndex);
 
-        virtual void    updateStaticOutputs() override;
+        void            updateStaticOutputs() override;
         void            default_updateStaticOutputs();
 
-        virtual void    beginTaskRun() override;
+        void            beginTaskRun() override;
         void            default_beginTaskRun();
 
-        virtual void    endTaskRun() override;
+        void            endTaskRun() override;
         void            default_endTaskRun();
 
-        virtual void    run() override;
+        void            executeActions(int flags) override;
+        void            default_executeActions(int flags);
+
+        void            run() override;
         void            default_run();
 
-        virtual void    stop() override;
+        void            stop() override;
         void            default_stop();
 
-        virtual void    graphicsChanged() override;
+        void            graphicsChanged() override;
         void            default_graphicsChanged();
 
-        virtual void    globalInputChanged(bool bNewSequence) override;
+        void            globalInputChanged(bool bNewSequence) override;
         void            default_globalInputChanged(bool bNewSequence);
 
         void            emitAddSubProgressSteps(int count);

@@ -295,6 +295,35 @@ void CVideoTrackingTaskWrap::default_globalInputChanged(bool bNewSequence)
     }
 }
 
+void CVideoTrackingTaskWrap::executeActions(int flags)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override executeActionsOver = this->get_override("executeActions"))
+            executeActionsOver(flags);
+        else
+            CVideoTrackingTask::executeActions(flags);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CVideoTrackingTaskWrap::default_executeActions(int flags)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->CVideoTrackingTask::executeActions(flags);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 void CVideoTrackingTaskWrap::emitAddSubProgressSteps(int count)
 {
     m_signalHandler->doAddSubTotalSteps(count);

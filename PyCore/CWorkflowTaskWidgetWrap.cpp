@@ -59,6 +59,7 @@ void CWorkflowTaskWidgetWrap::setLayout(long long layoutPtr)
 
 void CWorkflowTaskWidgetWrap::emitApply(const WorkflowTaskParamPtr& paramPtr)
 {
+    CPyEnsureGIL gil;
     try
     {
         emit doApplyProcess(paramPtr);
@@ -71,6 +72,7 @@ void CWorkflowTaskWidgetWrap::emitApply(const WorkflowTaskParamPtr& paramPtr)
 
 void CWorkflowTaskWidgetWrap::emitSendProcessAction(int flags)
 {
+    CPyEnsureGIL gil;
     try
     {
         emit doSendProcessAction(flags);
@@ -83,6 +85,7 @@ void CWorkflowTaskWidgetWrap::emitSendProcessAction(int flags)
 
 void CWorkflowTaskWidgetWrap::emitSetGraphicsTool(GraphicsShape tool)
 {
+    CPyEnsureGIL gil;
     try
     {
         emit doSetGraphicsTool(tool);
@@ -95,6 +98,7 @@ void CWorkflowTaskWidgetWrap::emitSetGraphicsTool(GraphicsShape tool)
 
 void CWorkflowTaskWidgetWrap::emitSetGraphicsCategory(const std::string &category)
 {
+    CPyEnsureGIL gil;
     try
     {
         emit doSetGraphicsCategory(QString::fromStdString(category));

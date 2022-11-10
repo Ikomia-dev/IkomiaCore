@@ -37,37 +37,40 @@ class C2dImageInteractiveTaskWrap: public C2dImageInteractiveTask, public wrappe
         C2dImageInteractiveTaskWrap(const std::string& name);
         C2dImageInteractiveTaskWrap(const C2dImageInteractiveTask& process);
 
-        virtual size_t  getProgressSteps();
-        size_t          default_getProgressSteps();
+        size_t  getProgressSteps() override;
+        size_t  default_getProgressSteps();
 
-        virtual void    setActive(bool bActive);
-        void            default_setActive(bool bActive);
+        void    setActive(bool bActive) override;
+        void    default_setActive(bool bActive);
 
-        virtual void    updateStaticOutputs();
-        void            default_updateStaticOutputs();
+        void    updateStaticOutputs() override;
+        void    default_updateStaticOutputs();
 
-        virtual void    beginTaskRun();
-        void            default_beginTaskRun();
+        void    beginTaskRun() override;
+        void    default_beginTaskRun();
 
-        virtual void    endTaskRun();
-        void            default_endTaskRun();
+        void    endTaskRun() override;
+        void    default_endTaskRun();
 
-        virtual void    run();
-        void            default_run();
+        void    executeActions(int flags) override;
+        void    default_executeActions(int flags);
 
-        virtual void    stop();
-        void            default_stop();
+        void    run() override;
+        void    default_run();
 
-        virtual void    graphicsChanged();
-        void            default_graphicsChanged();
+        void    stop() override;
+        void    default_stop();
 
-        virtual void    globalInputChanged(bool bNewSequence);
-        void            default_globalInputChanged(bool bNewSequence);
+        void    graphicsChanged() override;
+        void    default_graphicsChanged();
 
-        void            emitAddSubProgressSteps(int count);
-        void            emitStepProgress();
-        void            emitGraphicsContextChanged();
-        void            emitOutputChanged();
+        void    globalInputChanged(bool bNewSequence) override;
+        void    default_globalInputChanged(bool bNewSequence);
+
+        void    emitAddSubProgressSteps(int count);
+        void    emitStepProgress();
+        void    emitGraphicsContextChanged();
+        void    emitOutputChanged();
 };
 
 #endif // C2DIMAGEINTERACTIVETASKWRAP_H

@@ -317,9 +317,9 @@ constexpr auto _endTaskRunDocString =
         ":py:meth:`~ikomia.core.pycore.CWorkflowTask.run` method.\n\n";
 
 constexpr auto _executeActionsDocString =
-        "Execute actions according to the specific defined behavior. In this base class, the method does nothing.\n\n"
+        "Method called when a specific action is requested from the associated widget (see :py:meth:`~ikomia.core.pycore.CWorkflowTaskWidget.emitSendProcessAction`).\n\n"
         "Args:\n\n"
-        "   action (:py:class:`~ikomia.core.pycore.ActionFlag`)\n\n";
+        "   action (int): action code\n\n";
 
 constexpr auto _getElapsedTimeDocString =
         "Get the time of the last execution in milliseconds.\n\n"
@@ -683,7 +683,7 @@ constexpr auto _emitSendProcessActionDocString =
         "Send event to request specific action of the process task. "
         "Use this mechanism to manage user interaction with the process task for example.\n\n"
         "Args:\n\n"
-        "   action (:py:class:`~ikomia.core.pycore.ActionFlag`): action code (can be user defined)\n\n";
+        "   action (int): action code (can be user defined)\n\n";
 
 constexpr auto _emitSetGraphicsToolDocString =
         "Send event to change the current graphic tool.\n\n"
