@@ -47,6 +47,7 @@ CWorkflowTaskIO::CWorkflowTaskIO(const CWorkflowTaskIO& io)
     m_dimCount = io.m_dimCount;
     m_bAutoSave = io.m_bAutoSave;
     m_bDisplayable = io.m_bDisplayable;
+    m_bComposite = io.m_bComposite;
 }
 
 CWorkflowTaskIO::CWorkflowTaskIO(const CWorkflowTaskIO&& io)
@@ -60,6 +61,7 @@ CWorkflowTaskIO::CWorkflowTaskIO(const CWorkflowTaskIO&& io)
     m_dimCount = std::move(io.m_dimCount);
     m_bAutoSave = std::move(io.m_bAutoSave);
     m_bDisplayable = std::move(io.m_bDisplayable);
+    m_bComposite = std::move(io.m_bComposite);
 }
 
 CWorkflowTaskIO &CWorkflowTaskIO::operator=(const CWorkflowTaskIO &io)
@@ -73,6 +75,7 @@ CWorkflowTaskIO &CWorkflowTaskIO::operator=(const CWorkflowTaskIO &io)
     m_dimCount = io.m_dimCount;
     m_bAutoSave = io.m_bAutoSave;
     m_bDisplayable = io.m_bDisplayable;
+    m_bComposite = io.m_bComposite;
     return *this;
 }
 
@@ -87,6 +90,7 @@ CWorkflowTaskIO &CWorkflowTaskIO::operator=(const CWorkflowTaskIO&& io)
     m_dimCount = std::move(io.m_dimCount);
     m_bAutoSave = std::move(io.m_bAutoSave);
     m_bDisplayable = std::move(io.m_bDisplayable);
+    m_bComposite = std::move(io.m_bComposite);
     return *this;
 }
 
@@ -190,6 +194,11 @@ bool CWorkflowTaskIO::isAutoSave() const
 bool CWorkflowTaskIO::isDisplayable() const
 {
     return m_bDisplayable;
+}
+
+bool CWorkflowTaskIO::isComposite() const
+{
+    return m_bComposite;
 }
 
 void CWorkflowTaskIO::setDataType(IODataType type)

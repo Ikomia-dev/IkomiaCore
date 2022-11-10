@@ -152,6 +152,11 @@ class CORESHARED_EXPORT CWorkflowTaskIO
           * @return True or False.
           */
         bool                isDisplayable() const;
+        /**
+          * @brief Check whether input/output is a combination of atomic I/O
+          * @return True or False.
+          */
+        bool                isComposite() const;
 
         //Setters
         /**
@@ -293,6 +298,7 @@ class CORESHARED_EXPORT CWorkflowTaskIO
         bool                    m_bNewDataInfo = false;
         bool                    m_bAutoSave = false;
         bool                    m_bDisplayable = true;
+        bool                    m_bComposite = false;
         mutable std::mutex      m_mutex;
         std::set<std::string>   m_tempFiles;
         friend class CObjectLocker<CWorkflowTaskIO>;
