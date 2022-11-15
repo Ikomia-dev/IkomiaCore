@@ -296,7 +296,7 @@ void CWorkflowTests::buildSimpleWorkflow()
 {
     CWorkflow Workflow("Simple Workflow");
     auto nullVertex = boost::graph_traits<WorkflowGraph>::null_vertex();
-    auto factory = m_processRegister.getProcessFactory();
+    auto factory = m_registry.getTaskRegistrator()->getProcessFactory();
 
     //Add bilateral filter
     std::string name = "ocv_bilateral_filter";
@@ -331,14 +331,14 @@ void CWorkflowTests::buildSimpleWorkflow()
     auto pOutput = std::dynamic_pointer_cast<CImageIO>(Workflow.getOutput(0));
     QVERIFY(pOutput != nullptr);
     QVERIFY(pOutput->isDataAvailable());
-        //showImage("Workflow output", pOutput->m_image, true);
+    //showImage("Workflow output", pOutput->m_image, true);
 }
 
 void CWorkflowTests::buildSingleLineWorkflow()
 {
     CWorkflow wf("Single line Workflow");
     auto nullVertex = boost::graph_traits<WorkflowGraph>::null_vertex();
-    auto factory = m_processRegister.getProcessFactory();
+    auto factory = m_registry.getTaskRegistrator()->getProcessFactory();
 
     //Add bilateral filter
     std::string name = "ocv_bilateral_filter";
@@ -410,7 +410,7 @@ void CWorkflowTests::buildTwoLinesWorkflow()
 {
     CWorkflow wf("Two lines Workflow");
     auto nullVertex = boost::graph_traits<WorkflowGraph>::null_vertex();
-    auto factory = m_processRegister.getProcessFactory();
+    auto factory = m_registry.getTaskRegistrator()->getProcessFactory();
 
     //---------- First line ----------//
     //Add bilateral filter
@@ -480,7 +480,7 @@ void CWorkflowTests::buildTwoLinesWorkflow()
 void CWorkflowTests::buildNestedWorkflows()
 {
     auto nullVertex = boost::graph_traits<WorkflowGraph>::null_vertex();
-    auto factory = m_processRegister.getProcessFactory();
+    auto factory = m_registry.getTaskRegistrator()->getProcessFactory();
 
     try
     {
@@ -549,7 +549,7 @@ void CWorkflowTests::buildNestedWorkflows()
 
 void CWorkflowTests::runOnVideo()
 {
-    CWorkflow wf("Test", &m_processRegister, &m_ioRegistrator, nullptr);
+    CWorkflow wf("Test", &m_registry, nullptr);
     std::string wfOutputFolder = Utils::IkomiaApp::getIkomiaFolder() + "/Workflows/" + wf.getName() + "/";
     wf.setOutputFolder(wfOutputFolder);
     std::string wfPath = UnitTest::getDataPath() + "/Workflows/WorkflowTest1.json";

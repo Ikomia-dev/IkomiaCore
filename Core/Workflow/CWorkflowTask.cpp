@@ -910,7 +910,7 @@ void CWorkflowTask::saveOutputs(const std::string& baseName) const
 QJsonObject CWorkflowTask::toJson() const
 {
     QJsonObject obj;
-    obj["name"] = QString::fromStdString(m_name);    
+    obj["name"] = QString::fromStdString(m_name);
 
     // Associated parameters
     QJsonArray jsonParams;

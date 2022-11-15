@@ -3,8 +3,8 @@
 
 #include <QObject>
 #include "DataProcess.hpp"
+#include "Core/CIkomiaRegistry.h"
 #include "Core/CWorkflow.h"
-#include "CProcessRegistration.h"
 
 
 class CWorkflowTests : public QObject
@@ -45,8 +45,7 @@ class CWorkflowTests : public QObject
 
     private:
 
-        CProcessRegistration    m_processRegister;
-        CTaskIORegistration     m_ioRegistrator;
+        CIkomiaRegistry m_registry;
 };
 
 #endif // CPROCESSWorkflowTESTS_H

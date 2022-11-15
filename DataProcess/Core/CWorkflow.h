@@ -33,8 +33,6 @@
 #include "Workflow/CWorkflowTask.h"
 #include "Workflow/CWorkflowEdge.hpp"
 #include "Workflow/CWorkflowTaskWidget.h"
-#include "CProcessRegistration.h"
-#include "IO/CTaskIORegistration.h"
 #include "IO/CGraphicsInput.h"
 #include "CRunTaskManager.h"
 
@@ -64,6 +62,8 @@ using WorkflowInEdgeRangeIt = std::pair<boost::graph_traits<WorkflowGraph>::in_e
 using WorkflowOutEdgeRangeIt = std::pair<boost::graph_traits<WorkflowGraph>::out_edge_iterator,
                                          boost::graph_traits<WorkflowGraph>::out_edge_iterator>;
 
+class CIkomiaRegistry;
+
 class DATAPROCESSSHARED_EXPORT CWorkflowSignalHandler : public CSignalHandler
 {
     Q_OBJECT
@@ -85,7 +85,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         //Constructors
         CWorkflow();
         CWorkflow(const std::string& name);
-        CWorkflow(const std::string& name, CProcessRegistration* pTaskRegistration, CTaskIORegistration* pIORegistration, const GraphicsContextPtr &contextPtr);
+        CWorkflow(const std::string& name, CIkomiaRegistry* pRegistry, const GraphicsContextPtr &contextPtr);
         CWorkflow(const CWorkflow& workflow);
         CWorkflow(const CWorkflow&& workflow);
 
@@ -276,8 +276,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         WorkflowVertex          m_runningTask;
         std::vector<bool>       m_inputBatchState;
         std::atomic<bool>       m_bStopped{false};
-        CProcessRegistration*   m_pTaskRegistration = nullptr;
-        CTaskIORegistration*    m_pTaskIORegistration = nullptr;
+        CIkomiaRegistry*        m_pRegistry = nullptr;
         GraphicsContextPtr      m_graphicsContextPtr = nullptr;
         CRunTaskManager         m_runMgr;
         MapString               m_cfg;

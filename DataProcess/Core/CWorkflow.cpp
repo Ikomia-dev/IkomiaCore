@@ -26,6 +26,7 @@
 #include <boost/graph/graphviz.hpp>
 #include "Main/CoreTools.hpp"
 #include "Graphics/CGraphicsLayer.h"
+#include "Core/CIkomiaRegistry.h"
 #include "IO/CGraphicsInput.h"
 #include "IO/CVideoIO.h"
 
@@ -54,7 +55,7 @@ CWorkflow::CWorkflow(const std::string &name) : CWorkflowTask(name)
     initDefaultConfig();
 }
 
-CWorkflow::CWorkflow(const std::string &name, CProcessRegistration *pTaskRegistration, CTaskIORegistration *pIORegistration, const GraphicsContextPtr &contextPtr)
+CWorkflow::CWorkflow(const std::string &name, CIkomiaRegistry *pRegistry, const GraphicsContextPtr &contextPtr)
     : CWorkflowTask(name)
 {
     createRoot();
@@ -63,8 +64,7 @@ CWorkflow::CWorkflow(const std::string &name, CProcessRegistration *pTaskRegistr
     m_runningTask = boost::graph_traits<WorkflowGraph>::null_vertex();
     m_signalHandler = std::make_unique<CWorkflowSignalHandler>();
     m_runMgr.setCfg(&m_cfg);
-    m_pTaskRegistration = pTaskRegistration;
-    m_pTaskIORegistration = pIORegistration;
+    m_pRegistry = pRegistry;
     m_graphicsContextPtr = contextPtr;
     initDefaultConfig();
 }
@@ -1707,10 +1707,10 @@ std::vector<std::pair<size_t, size_t>> CWorkflow::findConnectionPorts(const Work
 
 void CWorkflow::resetTaskInput(WorkflowTaskPtr &taskPtr, size_t index)
 {
-    if(m_pTaskIORegistration)
+    if (m_pRegistry)
     {
         auto dataType = taskPtr->getOriginalInputDataType(index);
-        auto factory = m_pTaskIORegistration->getFactory();
+        auto factory = m_pRegistry->getIORegistrator()->getFactory();
         auto taskIOPtr = factory.createObject(CWorkflowTaskIO::getClassName(dataType), std::move(dataType));
 
         if(taskIOPtr)
@@ -1804,6 +1804,11 @@ void CWorkflow::saveJSON(const std::string& path)
     QJsonObject jsonWorkflow;
     QJsonArray jsonTasks, jsonEdges;
 
+    // API
+    QJsonObject apiInfo;
+    apiInfo["version"] = Utils::IkomiaApp::getCurrentVersionName();
+    jsonWorkflow["api"] = apiInfo;
+
     // Metadata
     QJsonObject jsonMetadata;
     jsonMetadata["name"] = QString::fromStdString(m_name);
@@ -1820,7 +1825,17 @@ void CWorkflow::saveJSON(const std::string& path)
             QJsonObject jsonTask;
             jsonTask["task_id"] = id;
             WorkflowTaskPtr taskPtr = m_graph[*it];
-            jsonTask["task_data"] = taskPtr->toJson();
+            QJsonObject jsonTaskData = taskPtr->toJson();
+
+            if (m_pRegistry)
+            {
+                auto taskInfo = m_pRegistry->getAlgorithmInfo(taskPtr->getName());
+                jsonTaskData["language"] = taskInfo.m_language;
+
+                if (!taskInfo.isInternal())
+                    jsonTaskData["url"] = QString::fromStdString("file://" + m_pRegistry->getPluginDirectory(taskPtr->getName()));
+            }
+            jsonTask["task_data"] = jsonTaskData;
             jsonTasks.append(jsonTask);
             mapVertexToId.insert(std::make_pair(*it, id++));
         }
@@ -1861,7 +1876,7 @@ void CWorkflow::saveJSON(const std::string& path)
 
 void CWorkflow::loadJSON(const std::string &path)
 {
-    assert(m_pTaskRegistration);
+    assert(m_pRegistry);
     std::unordered_map<int, WorkflowVertex> mapIdToVertexId;
 
     QFile jsonFile(QString::fromStdString(path));
@@ -1892,7 +1907,7 @@ void CWorkflow::loadJSON(const std::string &path)
         CPyEnsureGIL gil;
         QJsonObject jsonTask = jsonTasks[i].toObject();
         QJsonObject jsonTaskData = jsonTask["task_data"].toObject();
-        auto taskPtr = m_pTaskRegistration->createProcessObject(jsonTaskData["name"].toString().toStdString(), nullptr);
+        auto taskPtr = m_pRegistry->createInstance(jsonTaskData["name"].toString().toStdString());
 
         if(taskPtr == nullptr)
         {

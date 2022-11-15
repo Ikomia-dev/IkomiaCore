@@ -9,7 +9,7 @@ CWorkflowWrap::CWorkflowWrap(const std::string &name) : CWorkflow(name)
 }
 
 CWorkflowWrap::CWorkflowWrap(const std::string& name, const std::shared_ptr<CIkomiaRegistry> &registryPtr)
-    : CWorkflow(name, registryPtr->getTaskRegistrator(), registryPtr->getIORegistrator(), nullptr)
+    : CWorkflow(name, registryPtr.get(), nullptr)
 {
 }
 
