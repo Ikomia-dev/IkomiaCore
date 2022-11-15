@@ -40,6 +40,15 @@ std::string CIkomiaRegistry::getPluginsDirectory() const
     return m_pluginsDir;
 }
 
+std::string CIkomiaRegistry::getPluginDirectory(const std::string &name) const
+{
+    auto info = getAlgorithmInfo(name);
+    if (info.m_language == ApiLanguage::PYTHON)
+        return m_pluginsDir + "/Python/" + name;
+    else
+        return m_pluginsDir + "/C++/" + name;
+}
+
 CTaskInfo CIkomiaRegistry::getAlgorithmInfo(const std::string &name) const
 {
     return m_processRegistrator.getProcessInfo(name);
@@ -65,9 +74,19 @@ WorkflowTaskPtr CIkomiaRegistry::createInstance(const std::string &processName, 
     return m_processRegistrator.createProcessObject(processName, paramPtr);
 }
 
+WorkflowTaskWidgetPtr CIkomiaRegistry::createWidgetInstance(const std::string &processName, const WorkflowTaskParamPtr &paramPtr)
+{
+    return m_processRegistrator.createWidgetObject(processName, paramPtr);
+}
+
 void CIkomiaRegistry::registerTask(const TaskFactoryPtr &factoryPtr)
 {
     m_processRegistrator.registerProcess(factoryPtr, nullptr);
+}
+
+void CIkomiaRegistry::registerTaskAndWidget(const TaskFactoryPtr &factoryPtr, WidgetFactoryPtr &widgetFactoryPtr)
+{
+    m_processRegistrator.registerProcess(factoryPtr, widgetFactoryPtr);
 }
 
 void CIkomiaRegistry::registerIO(const TaskIOFactoryPtr &factoryPtr)
@@ -133,6 +152,12 @@ std::vector<std::string> CIkomiaRegistry::getBlackListedPackages()
         }
     }
     return packages;
+}
+
+void CIkomiaRegistry::clear()
+{
+    m_processRegistrator.reset();
+    m_ioRegistrator.reset();
 }
 
 void CIkomiaRegistry::_loadCppPlugin(const QString &fileName)
