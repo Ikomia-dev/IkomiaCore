@@ -25,6 +25,7 @@
 #include "DataProcessGlobal.hpp"
 #include "CImageIO.h"
 #include "CDataVideoBuffer.h"
+#include "Data/CDataVideoInfo.h"
 
 /**
  * @ingroup groupCore

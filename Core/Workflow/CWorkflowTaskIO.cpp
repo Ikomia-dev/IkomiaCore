@@ -48,6 +48,7 @@ CWorkflowTaskIO::CWorkflowTaskIO(const CWorkflowTaskIO& io)
     m_bAutoSave = io.m_bAutoSave;
     m_bDisplayable = io.m_bDisplayable;
     m_bComposite = io.m_bComposite;
+    m_infoPtr = io.m_infoPtr;
 }
 
 CWorkflowTaskIO::CWorkflowTaskIO(const CWorkflowTaskIO&& io)
@@ -62,6 +63,7 @@ CWorkflowTaskIO::CWorkflowTaskIO(const CWorkflowTaskIO&& io)
     m_bAutoSave = std::move(io.m_bAutoSave);
     m_bDisplayable = std::move(io.m_bDisplayable);
     m_bComposite = std::move(io.m_bComposite);
+    m_infoPtr = std::move(io.m_infoPtr);
 }
 
 CWorkflowTaskIO &CWorkflowTaskIO::operator=(const CWorkflowTaskIO &io)
@@ -76,6 +78,7 @@ CWorkflowTaskIO &CWorkflowTaskIO::operator=(const CWorkflowTaskIO &io)
     m_bAutoSave = io.m_bAutoSave;
     m_bDisplayable = io.m_bDisplayable;
     m_bComposite = io.m_bComposite;
+    m_infoPtr = io.m_infoPtr;
     return *this;
 }
 
@@ -91,6 +94,7 @@ CWorkflowTaskIO &CWorkflowTaskIO::operator=(const CWorkflowTaskIO&& io)
     m_bAutoSave = std::move(io.m_bAutoSave);
     m_bDisplayable = std::move(io.m_bDisplayable);
     m_bComposite = std::move(io.m_bComposite);
+    m_infoPtr = std::move(io.m_infoPtr);
     return *this;
 }
 

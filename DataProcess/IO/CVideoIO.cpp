@@ -167,7 +167,9 @@ void CVideoIO::addVideoImage(const CMat& image)
 
 void CVideoIO::writeImage(CMat image)
 {
-    assert(m_pVideoBuffer);
+    if(m_pVideoBuffer == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, QObject::tr("Video buffer pointer is null.").toStdString(), __func__, __FILE__, __LINE__);
+
     CMat tmp;
 
     // 8 bits unsigned only for OpenCV video writter
@@ -206,10 +208,15 @@ CMat CVideoIO::getImage()
 
 size_t CVideoIO::getVideoFrameCount() const
 {
-    if(m_pVideoBuffer)
+    if (m_pVideoBuffer)
         return m_pVideoBuffer->getFrameCount();
-    else
-        return 0;
+    else if (m_infoPtr)
+    {
+        auto videoInfoPtr = std::dynamic_pointer_cast<CDataVideoInfo>(m_infoPtr);
+        if (videoInfoPtr)
+            return videoInfoPtr->m_frameCount;
+    }
+    return 0;
 }
 
 std::vector<CMat> CVideoIO::getVideoImages() const
@@ -227,14 +234,23 @@ std::string CVideoIO::getVideoPath() const
 
 CMat CVideoIO::getSnapshot(size_t pos)
 {
-    assert(m_pVideoBuffer);
+    if(m_pVideoBuffer == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, QObject::tr("Video buffer pointer is null.").toStdString(), __func__, __FILE__, __LINE__);
+
     return m_pVideoBuffer->grab(pos);
 }
 
 size_t CVideoIO::getCurrentPos() const
 {
-    assert(m_pVideoBuffer);
-    return m_pVideoBuffer->getCurrentPos();
+    if (m_pVideoBuffer)
+        return m_pVideoBuffer->getCurrentPos();
+    else if (m_infoPtr)
+    {
+        auto videoInfoPtr = std::dynamic_pointer_cast<CDataVideoInfo>(m_infoPtr);
+        if (videoInfoPtr)
+            return videoInfoPtr->m_currentPos;
+    }
+    return 0;
 }
 
 CMat CVideoIO::getStaticImage() const
