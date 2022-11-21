@@ -215,6 +215,9 @@ void CSemanticSegIO::fromJsonInternal(const QJsonDocument &doc)
 
 void CSemanticSegIO::generateLegend()
 {
+    if (m_histo.data == nullptr)
+        return;
+
     std::vector<int> colorIndices;
     for (size_t i=0; i<m_colors.size(); ++i)
     {
