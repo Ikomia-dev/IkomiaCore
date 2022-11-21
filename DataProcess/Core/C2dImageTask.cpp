@@ -221,6 +221,18 @@ void C2dImageTask::beginTaskRun()
 {
     CWorkflowTask::beginTaskRun();
     m_graphicsMasks.clear();
+
+    // Clear color overlay from mask
+    m_colorMaps.clear();
+    m_colorMapMaskIndices.clear();
+
+    auto imageOutputs = getOutputs({IODataType::IMAGE, IODataType::IMAGE_LABEL, IODataType::IMAGE_BINARY});
+    for (size_t i=0; i<imageOutputs.size(); i++)
+    {
+        auto pOutput = std::dynamic_pointer_cast<CImageIO>(imageOutputs[i]);
+        if (pOutput)
+            pOutput->setOverlayMask(CMat());
+    }
 }
 
 void C2dImageTask::endTaskRun()
@@ -384,7 +396,6 @@ void C2dImageTask::createOverlayMasks()
         if(i < m_colorMaps.size() && m_colorMaps[i].empty() == false)
         {
             CMat maskImage;
-            auto pOutput = std::dynamic_pointer_cast<CImageIO>(getOutput(i));
             auto pOutputMask = getOutput(m_colorMapMaskIndices[i]);
 
             if (pOutputMask->getDataType() == IODataType::INSTANCE_SEGMENTATION)
@@ -403,7 +414,8 @@ void C2dImageTask::createOverlayMasks()
                 maskImage = outMaskPtr->getImage();
             }
 
-            if(pOutput && maskImage.empty() == false)
+            auto pOutput = std::dynamic_pointer_cast<CImageIO>(getOutput(i));
+            if (pOutput && maskImage.empty() == false)
             {
                 auto mask = Utils::Image::createOverlayMask(maskImage, m_colorMaps[i]);
                 pOutput->setOverlayMask(mask);
