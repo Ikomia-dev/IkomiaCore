@@ -8,7 +8,7 @@ include($$PWD/Widgets/QtPropertyBrowser/qtpropertybrowser.pri)
 include($$PWD/Widgets/FancyTabBar/FancyTabBar.pri)
 
 # Qt modules
-QT  += core sql widgets
+QT  += core sql widgets network
 
 # Target name
 TARGET = ikUtils
@@ -23,6 +23,7 @@ SOURCES += \
         CException.cpp \
         CLogManager.cpp \
         CMemoryInfo.cpp \
+        CNetworkManager.cpp \
         CProgressSignalHandler.cpp \
         CWindowsDeviceEnumerator.cpp \
         Widgets/CBrowseFileWidget.cpp \
@@ -32,6 +33,7 @@ SOURCES += \
 HEADERS += \
         CException.h \
         CLogManager.h \
+        CNetworkManager.h \
         Containers/CQueue.hpp \
         DesignPattern/CObjectLocker.hpp \
         ExceptionCode.hpp \

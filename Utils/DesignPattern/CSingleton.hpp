@@ -36,6 +36,20 @@ class CSingleton
         }
 };
 
+template<class Type>
+class CSingletonPtr
+{
+    public:
+
+        static Type* getInstance()
+        {
+            // Use static function scope variable to
+            // correctly define lifespan of object.
+            static Type* pInstance = new Type;
+            return pInstance;
+        }
+};
+
 /// @endcond
 
 #endif // CSINGLETON_HPP
