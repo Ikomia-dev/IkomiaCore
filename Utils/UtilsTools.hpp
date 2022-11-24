@@ -1047,6 +1047,10 @@ namespace Ikomia
             {
                 return "0.8.0";
             }
+            inline std::string  getModelHubUrl()
+            {
+                return "https://s3.eu-west-3.amazonaws.com/models.ikomia.com";
+            }
             inline std::string  getArchitectureKeywords()
             {
 #ifdef PY37

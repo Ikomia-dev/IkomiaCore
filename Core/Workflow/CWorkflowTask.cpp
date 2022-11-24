@@ -20,6 +20,7 @@
 #include <QJsonArray>
 #include "CWorkflowTask.h"
 #include "CException.h"
+#include "CNetworkManager.h"
 #include "Graphics/CGraphicsLayer.h"
 #include "UtilsTools.hpp"
 #include "Main/CoreTools.hpp"
@@ -925,6 +926,12 @@ QJsonObject CWorkflowTask::toJson() const
     }
     obj["parameters"] = jsonParams;
     return obj;
+}
+
+void CWorkflowTask::download(const std::string &url, const std::string &to)
+{
+    CNetworkManager net;
+    net.download(url, to);
 }
 
 #include "moc_CWorkflowTask.cpp"

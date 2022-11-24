@@ -646,6 +646,8 @@ class CORESHARED_EXPORT CWorkflowTask
 
         QJsonObject                 toJson() const;
 
+        void                        download(const std::string& url, const std::string& to);
+
     /** @cond INTERNAL */
     protected:
 
