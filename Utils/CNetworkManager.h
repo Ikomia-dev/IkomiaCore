@@ -7,7 +7,7 @@
 #include <QtNetwork/QNetworkReply>
 #include "UtilsGlobal.hpp"
 
-class CNetworkManager: public QObject
+class UTILSSHARED_EXPORT CNetworkManager: public QObject
 {
     Q_OBJECT
 
