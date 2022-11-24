@@ -522,6 +522,12 @@ constexpr auto _workflowFinishedDocString =
         "The function is called at the end of the workflow after the last run() call for each task. "
         "The function can be overriden in child classes to manage custom actions.\n\n";
 
+constexpr auto _downloadDocString =
+        "Download file from the given URL and save it to the given path. The method returns only when download is complete.\n\n"
+        "Args:\n\n"
+        "   url (string): url of the file to download\n\n"
+        "   to (string): destination path\n\n";
+
 //---------------------------//
 //----- CWorkflowTaskIO -----//
 //---------------------------//

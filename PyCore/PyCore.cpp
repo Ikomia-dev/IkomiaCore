@@ -426,6 +426,7 @@ BOOST_PYTHON_MODULE(pycore)
         .def("emitOutputChanged", &CWorkflowTaskWrap::emitOutputChanged, _emitOutputChangedDocString, args("self"))
         .def("workflowStarted", &CWorkflowTaskWrap::workflowStarted, &CWorkflowTaskWrap::default_workflowStarted, _workflowStartedDocString, args("self"))
         .def("workflowFinished", &CWorkflowTaskWrap::workflowFinished, &CWorkflowTaskWrap::default_workflowFinished, _workflowStartedDocString, args("self"))
+        .def("download", &CWorkflowTask::download, _downloadDocString, args("self", "url", "to"))
     ;
 
     //-------------------------------//

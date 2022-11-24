@@ -44,6 +44,11 @@ constexpr auto _checkArchiKeywordsDocString =
         "Returns:\n\n"
         "   boolean: True if architectures match, False otherwise\n\n";
 
+constexpr auto _getModelHubUrlDocString =
+        "Return root URL of Ikomia model hub.\n\n"
+        "Returns:\n\n"
+        "   str: Ikomia model hub URL\n\n";
+
 //----------------------
 //----- CException -----
 //-----------------------

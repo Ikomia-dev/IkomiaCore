@@ -72,6 +72,7 @@ BOOST_PYTHON_MODULE(pyutils)
     def("getCompatibilityState", &Utils::Plugin::getCompatibilityState, _pythonStateDocString, args("version", "language"));
     def("checkArchitectureKeywords", &Utils::Plugin::checkArchitectureKeywords, _checkArchiKeywordsDocString, args("keywords"));
     def("isAppStarted", &Utils::IkomiaApp::isAppStarted, "Internal use only");
+    def("getModelHubUrl", &Utils::Plugin::getModelHubUrl, _getModelHubUrlDocString);
 
     //----- Binding CException -----
     class_<CException>("CException", _exceptionDocString, init<>("Default constructor"))
