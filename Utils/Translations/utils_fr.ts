@@ -12,17 +12,15 @@
 <context>
     <name>CLogManager</name>
     <message>
-        <location filename="../CLogManager.cpp" line="123"/>
         <source>Default</source>
-        <translation>Défaut</translation>
+        <translation type="vanished">Défaut</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../UtilsTools.hpp" line="701"/>
         <source>No CUDA device found</source>
-        <translation>Aucun dispositif CUDA trouvé</translation>
+        <translation type="vanished">Aucun dispositif CUDA trouvé</translation>
     </message>
 </context>
 <context>

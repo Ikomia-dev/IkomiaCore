@@ -4119,18 +4119,18 @@
         <translation>Cette fonction calcul la différence élément par élément de 2 images selon la formule suivante:&lt;br&gt; &lt;center&gt;&lt;i&gt;dst = saturate( src1 - src2 )&lt;/i&gt;&lt;/center&gt;</translation>
     </message>
     <message>
-        <location filename="../IO/CInstanceSegIO.cpp" line="45"/>
+        <location filename="../IO/CInstanceSegIO.cpp" line="46"/>
         <source>Instance segmentation data: label, confidence, box, mask and color.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../IO/CInstanceSegIO.cpp" line="199"/>
+        <location filename="../IO/CInstanceSegIO.cpp" line="202"/>
         <location filename="../IO/CObjectDetectionIO.cpp" line="178"/>
         <source>Identifier</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../IO/CInstanceSegIO.cpp" line="200"/>
+        <location filename="../IO/CInstanceSegIO.cpp" line="203"/>
         <location filename="../IO/CObjectDetectionIO.cpp" line="179"/>
         <location filename="../Process/OpenCV/dnn/COcvDnnClassifier.hpp" line="184"/>
         <location filename="../Process/OpenCV/dnn/COcvDnnDetector.hpp" line="281"/>
@@ -5432,37 +5432,37 @@
         <translation>Ce traitement réalise une opération de défloutage de l&apos;image basée sur l&apos;algorithme de Lucy-Richardson.</translation>
     </message>
     <message>
-        <location filename="../Core/CWorkflow.cpp" line="981"/>
+        <location filename="../Core/CWorkflow.cpp" line="994"/>
         <source>No valid connection available, please check input/output data types.</source>
         <translation>Aucune connexion possible, merci de vérifier les types de données d&apos;entrée/sortie.</translation>
     </message>
     <message>
-        <location filename="../Core/CWorkflow.cpp" line="1014"/>
+        <location filename="../Core/CWorkflow.cpp" line="1027"/>
         <source>Invalid connection between output #%1 of %2 (%3) and input #%4 of %5 (%6)</source>
         <translation>Connexion invalide entre la sortie #%1 de %2 (%3) et l&apos;entrée #%4 de %5 (%6)</translation>
     </message>
     <message>
-        <location filename="../Core/CWorkflow.cpp" line="1084"/>
+        <location filename="../Core/CWorkflow.cpp" line="1097"/>
         <source>One connection has been removed</source>
         <translation>Une connexion a été supprimée</translation>
     </message>
     <message>
-        <location filename="../Core/CWorkflow.cpp" line="1361"/>
+        <location filename="../Core/CWorkflow.cpp" line="1374"/>
         <source>Workflow stop requested by user</source>
         <translation>Arrêt du workflow demandé par l&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../Core/CWorkflow.cpp" line="1405"/>
+        <location filename="../Core/CWorkflow.cpp" line="1418"/>
         <source>Stopping workflow...</source>
         <translation>Workflow en cours d&apos;arrêt...</translation>
     </message>
     <message>
-        <location filename="../Core/CWorkflow.cpp" line="1435"/>
+        <location filename="../Core/CWorkflow.cpp" line="1448"/>
         <source>No possible connection to input #%1</source>
         <translation>Aucune connexion possible à l&apos;entrée #%1</translation>
     </message>
     <message>
-        <location filename="../Core/CWorkflow.cpp" line="1457"/>
+        <location filename="../Core/CWorkflow.cpp" line="1470"/>
         <source>Data type mismatch on input #%1 between type %2 and type %3</source>
         <translation>Incompatibilité de type de données sur l&apos;entrée #%1 entre %2 et %3</translation>
     </message>
@@ -5558,6 +5558,8 @@ Peut aussi réprésenter une frame de vidéo.</translation>
         <location filename="../IO/CVideoIO.cpp" line="144"/>
         <location filename="../IO/CVideoIO.cpp" line="152"/>
         <location filename="../IO/CVideoIO.cpp" line="160"/>
+        <location filename="../IO/CVideoIO.cpp" line="171"/>
+        <location filename="../IO/CVideoIO.cpp" line="238"/>
         <source>Video buffer pointer is null.</source>
         <translation>Video buffer pointer is null.</translation>
     </message>

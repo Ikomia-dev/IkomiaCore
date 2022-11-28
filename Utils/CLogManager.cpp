@@ -120,7 +120,7 @@ void CLogManager::onFileChanged(const QString &filePath)
             if(!str.isEmpty())
             {
                 QMessageLogContext context;
-                context.category = tr("Default").toStdString().c_str();
+                context.category = QString("Default").toStdString().c_str();
                 handleMessage(QtInfoMsg, context, str);
             }
         }
