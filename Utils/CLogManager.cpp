@@ -68,17 +68,25 @@ void CLogManager::handleMessage(QtMsgType type, const QMessageLogContext &contex
         case QtFatalMsg:            
             fullMsg = "Fatal:";
             break;
-
-        default:            
-            fullMsg = "Default:";
-            break;
     }
-    fullMsg += QString(context.category) + ": " + msg;
+
+    QString category;
+    if (context.category && strcmp(context.category, "default") != 0)
+    {
+        category = QString(context.category);
+        fullMsg += category + ": " + msg;
+    }
+    else
+    {
+        category = QString("Default");
+        fullMsg += msg;
+    }
+
     if(m_outputFunctions.size() > 0)
     {
         for(size_t i=0; i<m_outputFunctions.size(); ++i)
             if(m_outputFunctions[i] != nullptr)
-                m_outputFunctions[i](type, fullMsg, context.category);
+                m_outputFunctions[i](type, fullMsg, category);
     }
     else
         std::cout << fullMsg.toStdString() << std::endl;
@@ -118,11 +126,7 @@ void CLogManager::onFileChanged(const QString &filePath)
                 str += m_stdStream.readLine() + "\n";
 
             if(!str.isEmpty())
-            {
-                QMessageLogContext context;
-                context.category = QString("Default").toStdString().c_str();
-                handleMessage(QtInfoMsg, context, str);
-            }
+                handleMessage(QtInfoMsg, QMessageLogContext(), str);
         }
     }
 }
