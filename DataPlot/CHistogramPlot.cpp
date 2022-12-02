@@ -24,6 +24,7 @@
 #include <qwt_plot_layout.h>
 #include <qwt_plot_grid.h>
 #include <qwt_legend_label.h>
+#include <qwt_column_symbol.h>
 
 class CHistogram: public QwtPlotHistogram
 {

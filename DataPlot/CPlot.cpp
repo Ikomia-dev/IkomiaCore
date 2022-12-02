@@ -235,7 +235,7 @@ bool CPlot::isMovable()
 void CPlot::updateInternalLegend()
 {
     m_pLegendItem->setMaxColumns( m_pLegendItemParam->m_maxCols );
-    m_pLegendItem->setAlignment( Qt::Alignment( m_pLegendItemParam->m_align ) );
+    m_pLegendItem->setAlignmentInCanvas( Qt::Alignment( m_pLegendItemParam->m_align ) );
     m_pLegendItem->setBackgroundMode( QwtPlotLegendItem::BackgroundMode( m_pLegendItemParam->m_bgMode ) );
     if ( m_pLegendItemParam->m_bgMode == QwtPlotLegendItem::ItemBackground )
     {
