@@ -6,6 +6,7 @@
 #include <qwt_symbol.h>
 #include <qwt_plot_legenditem.h>
 #include <qwt_plot_intervalcurve.h>
+#include <qwt_text.h>
 
 CDataPlotTests::CDataPlotTests()
 {
