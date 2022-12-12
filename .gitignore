@@ -1,5 +1,6 @@
 IkomiaCore.pro.user
 LocalSettings.pri
+LocalSettings.cmake
 Build
 Doc/API/html
 Doc/API/latex
