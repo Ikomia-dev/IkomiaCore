@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
-project(IkomiaCore VERSION 0.9.0 LANGUAGES CXX)
+set(IKOMIA_VERSION 0.9.0)
+project(IkomiaCore VERSION ${IKOMIA_VERSION} LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_LIST_DIR}/Build)
+set(CMAKE_INSTALL_IKOMIA_LIB ${CMAKE_INSTALL_PREFIX}/lib)
+set(CMAKE_INSTALL_IKOMIA_INCLUDE ${CMAKE_INSTALL_PREFIX}/include)
 
 # Set up AUTOMOC and some sensible defaults for runtime execution
 # When using Qt 6.3, you can replace the code block below with

@@ -1,51 +1,88 @@
 add_library(ikDataProcess SHARED
     CPluginProcessInterface.hpp
-    CProcessRegistration.cpp CProcessRegistration.h
-    Core/C2dFeatureImageTask.cpp Core/C2dFeatureImageTask.h
-    Core/C2dFeatureMatcherTask.cpp Core/C2dFeatureMatcherTask.h
-    Core/C2dImageInteractiveTask.cpp Core/C2dImageInteractiveTask.h
-    Core/C2dImageTask.cpp Core/C2dImageTask.h
-    Core/CDnnTrainTask.cpp Core/CDnnTrainTask.h
-    Core/CIkomiaRegistry.cpp Core/CIkomiaRegistry.h
-    Core/CMlflowTrainTask.cpp Core/CMlflowTrainTask.h
-    Core/CRunTaskManager.cpp Core/CRunTaskManager.h
+    CProcessRegistration.cpp
+    CProcessRegistration.h
+    Core/C2dFeatureImageTask.cpp
+    Core/C2dFeatureImageTask.h
+    Core/C2dFeatureMatcherTask.cpp
+    Core/C2dFeatureMatcherTask.h
+    Core/C2dImageInteractiveTask.cpp
+    Core/C2dImageInteractiveTask.h
+    Core/C2dImageTask.cpp
+    Core/C2dImageTask.h
+    Core/CDnnTrainTask.cpp
+    Core/CDnnTrainTask.h
+    Core/CIkomiaRegistry.cpp
+    Core/CIkomiaRegistry.h
+    Core/CMlflowTrainTask.cpp
+    Core/CMlflowTrainTask.h
+    Core/CRunTaskManager.cpp
+    Core/CRunTaskManager.h
     Core/CTaskFactory.hpp
-    Core/CTaskInfo.cpp Core/CTaskInfo.h
-    Core/CVideoOFTask.cpp Core/CVideoOFTask.h
-    Core/CVideoTask.cpp Core/CVideoTask.h
-    Core/CVideoTrackingTask.cpp Core/CVideoTrackingTask.h
+    Core/CTaskInfo.cpp
+    Core/CTaskInfo.h
+    Core/CVideoOFTask.cpp
+    Core/CVideoOFTask.h
+    Core/CVideoTask.cpp
+    Core/CVideoTask.h
+    Core/CVideoTrackingTask.cpp
+    Core/CVideoTrackingTask.h
     Core/CWidgetFactory.hpp
-    Core/CWorkflow.cpp Core/CWorkflow.h
+    Core/CWorkflow.cpp
+    Core/CWorkflow.h
     DataProcess.hpp
     DataProcessGlobal.hpp
     DataProcessTools.hpp
-    IO/CArrayIO.cpp IO/CArrayIO.h
-    IO/CBlobMeasureIO.cpp IO/CBlobMeasureIO.h
-    IO/CConvertIO.cpp IO/CConvertIO.h
-    IO/CDatasetIO.cpp IO/CDatasetIO.h
-    IO/CGraphicsInput.cpp IO/CGraphicsInput.h
-    IO/CGraphicsOutput.cpp IO/CGraphicsOutput.h
-    IO/CImageIO.cpp IO/CImageIO.h
-    IO/CInstanceSegIO.cpp IO/CInstanceSegIO.h
-    IO/CNumericIO.cpp IO/CNumericIO.h
-    IO/CObjectDetectionIO.cpp IO/CObjectDetectionIO.h
-    IO/CPathIO.cpp IO/CPathIO.h
-    IO/CSemanticSegIO.cpp IO/CSemanticSegIO.h
-    IO/CTaskIORegistration.cpp IO/CTaskIORegistration.h
-    IO/CVideoIO.cpp IO/CVideoIO.h
-    IO/CWidgetOutput.cpp IO/CWidgetOutput.h
-    Process/Core/CBinaryToGraphics.cpp Process/Core/CBinaryToGraphics.h
-    Process/Core/CBlobMeasure.cpp Process/Core/CBlobMeasure.h
+    IO/CArrayIO.cpp
+    IO/CArrayIO.h
+    IO/CBlobMeasureIO.cpp
+    IO/CBlobMeasureIO.h
+    IO/CConvertIO.cpp
+    IO/CConvertIO.h
+    IO/CDatasetIO.cpp
+    IO/CDatasetIO.h
+    IO/CGraphicsInput.cpp
+    IO/CGraphicsInput.h
+    IO/CGraphicsOutput.cpp
+    IO/CGraphicsOutput.h
+    IO/CImageIO.cpp
+    IO/CImageIO.h
+    IO/CInstanceSegIO.cpp
+    IO/CInstanceSegIO.h
+    IO/CNumericIO.cpp
+    IO/CNumericIO.h
+    IO/CObjectDetectionIO.cpp
+    IO/CObjectDetectionIO.h
+    IO/CPathIO.cpp
+    IO/CPathIO.h
+    IO/CSemanticSegIO.cpp
+    IO/CSemanticSegIO.h
+    IO/CTaskIORegistration.cpp
+    IO/CTaskIORegistration.h
+    IO/CVideoIO.cpp
+    IO/CVideoIO.h
+    IO/CWidgetOutput.cpp
+    IO/CWidgetOutput.h
+    Process/Core/CBinaryToGraphics.cpp
+    Process/Core/CBinaryToGraphics.h
+    Process/Core/CBlobMeasure.cpp
+    Process/Core/CBlobMeasure.h
     Process/Core/CCut.hpp
     Process/Core/CFillHoles.hpp
-    Process/Core/CGraphicsToBinary.cpp Process/Core/CGraphicsToBinary.h
-    Process/Core/CInstanceSegFilter.cpp Process/Core/CInstanceSegFilter.h
-    Process/Core/CObjDetectFilter.cpp Process/Core/CObjDetectFilter.h
+    Process/Core/CGraphicsToBinary.cpp
+    Process/Core/CGraphicsToBinary.h
+    Process/Core/CInstanceSegFilter.cpp
+    Process/Core/CInstanceSegFilter.h
+    Process/Core/CObjDetectFilter.cpp
+    Process/Core/CObjDetectFilter.h
     Process/Core/CPlotMerge.hpp
-    Process/Core/CRgbHlsThreshold.cpp Process/Core/CRgbHlsThreshold.h
-    Process/Core/CSemanticSegFilter.cpp Process/Core/CSemanticSegFilter.h
+    Process/Core/CRgbHlsThreshold.cpp
+    Process/Core/CRgbHlsThreshold.h
+    Process/Core/CSemanticSegFilter.cpp
+    Process/Core/CSemanticSegFilter.h
     Process/Core/ProcessCore.hpp
-    Process/Gmic/CGmicImageConverter.cpp Process/Gmic/CGmicImageConverter.h
+    Process/Gmic/CGmicImageConverter.cpp
+    Process/Gmic/CGmicImageConverter.h
     Process/Gmic/CGmicTaskParam.hpp
     Process/Gmic/Colors/CGmicAutoBalance.hpp
     Process/Gmic/Colors/CGmicBoostChroma.hpp
@@ -110,8 +147,10 @@ add_library(ikDataProcess SHARED
     Process/OpenCV/dnn/COcvDnnClassifier.hpp
     Process/OpenCV/dnn/COcvDnnColorization.hpp
     Process/OpenCV/dnn/COcvDnnDetector.hpp
-    Process/OpenCV/dnn/COcvDnnProcess.cpp Process/OpenCV/dnn/COcvDnnProcess.h
-    Process/OpenCV/dnn/COcvDnnSegmentation.cpp Process/OpenCV/dnn/COcvDnnSegmentation.h
+    Process/OpenCV/dnn/COcvDnnProcess.cpp
+    Process/OpenCV/dnn/COcvDnnProcess.h
+    Process/OpenCV/dnn/COcvDnnSegmentation.cpp
+    Process/OpenCV/dnn/COcvDnnSegmentation.h
     Process/OpenCV/features2d/COcvAGAST.hpp
     Process/OpenCV/features2d/COcvAKAZE.hpp
     Process/OpenCV/features2d/COcvBFMatcher.hpp
@@ -169,8 +208,10 @@ add_library(ikDataProcess SHARED
     Process/OpenCV/saliency/COcvObjectnessBING.hpp
     Process/OpenCV/saliency/COcvSaliencyFineGrained.hpp
     Process/OpenCV/saliency/COcvSaliencySpectralResidual.hpp
-    Process/OpenCV/superres/COcvSuperResBTVL1.cpp Process/OpenCV/superres/COcvSuperResBTVL1.h
-    Process/OpenCV/superres/CSuperResFrameSrc.cpp Process/OpenCV/superres/CSuperResFrameSrc.h
+    Process/OpenCV/superres/COcvSuperResBTVL1.cpp
+    Process/OpenCV/superres/COcvSuperResBTVL1.h
+    Process/OpenCV/superres/CSuperResFrameSrc.cpp
+    Process/OpenCV/superres/CSuperResFrameSrc.h
     Process/OpenCV/text/COcvOCRTesseract.hpp
     Process/OpenCV/tracking/COcvTrackerGOTURN.hpp
     Process/OpenCV/tracking/COcvTrackerKCF.hpp
@@ -211,12 +252,14 @@ add_library(ikDataProcess SHARED
     Process/OpenCV/xphoto/COcvTonemapDurand.hpp
     Widget/Core/CWidgetApplyOnly.hpp
     Widget/Core/CWidgetBinaryToGraphics.hpp
-    Widget/Core/CWidgetBlobMeasure.cpp Widget/Core/CWidgetBlobMeasure.h
+    Widget/Core/CWidgetBlobMeasure.cpp
+    Widget/Core/CWidgetBlobMeasure.h
     Widget/Core/CWidgetCut.hpp
     Widget/Core/CWidgetFillHoles.hpp
     Widget/Core/CWidgetGraphicsToBinary.hpp
     Widget/Core/CWidgetPlotMerge.hpp
-    Widget/Core/CWidgetRgbHlsThreshold.cpp Widget/Core/CWidgetRgbHlsThreshold.h
+    Widget/Core/CWidgetRgbHlsThreshold.cpp
+    Widget/Core/CWidgetRgbHlsThreshold.h
     Widget/Core/WidgetCore.hpp
     Widget/Gmic/Colors/CGmicWidgetAutoBalance.hpp
     Widget/Gmic/Colors/CGmicWidgetBoostChroma.hpp
@@ -280,9 +323,11 @@ add_library(ikDataProcess SHARED
     Widget/OpenCV/core/COcvWidgetSubtract.hpp
     Widget/OpenCV/dnn/COcvWidgetDnnClassifier.hpp
     Widget/OpenCV/dnn/COcvWidgetDnnColorization.hpp
-    Widget/OpenCV/dnn/COcvWidgetDnnCore.cpp Widget/OpenCV/dnn/COcvWidgetDnnCore.h
+    Widget/OpenCV/dnn/COcvWidgetDnnCore.cpp
+    Widget/OpenCV/dnn/COcvWidgetDnnCore.h
     Widget/OpenCV/dnn/COcvWidgetDnnDetector.hpp
-    Widget/OpenCV/dnn/COcvWidgetDnnProcess.cpp Widget/OpenCV/dnn/COcvWidgetDnnProcess.h
+    Widget/OpenCV/dnn/COcvWidgetDnnProcess.cpp
+    Widget/OpenCV/dnn/COcvWidgetDnnProcess.h
     Widget/OpenCV/dnn/COcvWidgetDnnSegmentation.hpp
     Widget/OpenCV/features2d/COcvWidgetAGAST.hpp
     Widget/OpenCV/features2d/COcvWidgetAKAZE.hpp
@@ -383,6 +428,55 @@ add_library(ikDataProcess SHARED
     pch.hpp
 )
 
+set_target_properties(ikDataProcess PROPERTIES VERSION ${IKOMIA_VERSION} SOVERSION ${IKOMIA_VERSION})
+
+set(PUBLIC_HEADERS
+    CPluginProcessInterface.hpp
+    DataProcessGlobal.hpp
+)
+
+set(PUBLIC_HEADERS_CORE
+    Core/CWorkflow.h
+    Core/CTaskFactory.hpp
+    Core/C2dImageInteractiveTask.h
+    Core/C2dImageTask.h
+    Core/CVideoTask.h
+    Core/CVideoOFTask.h
+    Core/CVideoTrackingTask.h
+    Core/C2dFeatureImageTask.h
+    Core/C2dFeatureMatcherTask.h
+    Core/CTaskInfo.h
+    Core/CWidgetFactory.hpp
+    Core/CDnnTrainTask.h
+    Core/CMlflowTrainTask.h
+    Core/CRunTaskManager.h
+)
+
+set(PUBLIC_HEADERS_IO
+    IO/CImageIO.h
+    IO/CBlobMeasureIO.h
+    IO/CGraphicsInput.h
+    IO/CGraphicsOutput.h
+    IO/CTaskIORegistration.h
+    IO/CNumericIO.h
+    IO/CVideoIO.h
+    IO/CDatasetIO.h
+    IO/CObjectDetectionIO.h
+    IO/CInstanceSegIO.h
+)
+
+set(PUBLIC_HEADERS_PROCESS
+    Process/Core/CBlobMeasure.h
+)
+
+set(PUBLIC_HEADERS_PROCESS_DNN
+    Process/OpenCV/dnn/COcvDnnProcess.h
+)
+
+set(PUBLIC_HEADERS_WIDGET_DNN
+    Widget/OpenCV/dnn/COcvWidgetDnnCore.h
+)
+
 target_compile_definitions(ikDataProcess PUBLIC
     DATAPROCESS_LIBRARY
 )
@@ -414,7 +508,7 @@ if(WIN32)
         $ENV{ProgramW6432}/gmic/lib
     )
 
-    target_link_libraries(ikUtils PUBLIC
+    target_link_libraries(ikDataProcess PUBLIC
         $<$<CONFIG:RELEASE>:opencv_bgsegm${OPENCV_VERSION}>
         $<$<CONFIG:DEBUG>:opencv_bgsegm${OPENCV_VERSION}d>
         $<$<CONFIG:RELEASE>:opencv_bioinspired${OPENCV_VERSION}>
@@ -464,7 +558,7 @@ if(UNIX)
         ${CMAKE_CURRENT_LIST_DIR}/../../gmic/build
     )
 
-    target_link_libraries(ikUtils PUBLIC
+    target_link_libraries(ikDataProcess PUBLIC
         opencv_bgsegm
         opencv_bioinspired
         opencv_core
@@ -503,74 +597,37 @@ if(UNIX AND NOT IK_CPU)
 endif()
 
 if(WIN32)
-    target_link_libraries(ikDataProcess PUBLIC
-        # Remove: L$ENV{ProgramW6432}/Boost/lib
-        # Remove: L$ENV{ProgramW6432}/GDCM/bin
-        # Remove: L$ENV{ProgramW6432}/OpenSSL-Win64/bin
-        # Remove: L$ENV{ProgramW6432}/Python38/
-        # Remove: L$ENV{ProgramW6432}/Python38/libs
-        # Remove: L$ENV{ProgramW6432}/VTK/bin
-        # Remove: L$ENV{ProgramW6432}/VTK/lib
-        # Remove: L$ENV{ProgramW6432}/gmic/bin/
-        # Remove: L$ENV{ProgramW6432}/gmic/lib/
-        # Remove: L$ENV{ProgramW6432}/intel_tbb/bin/intel64/vc14
-        # Remove: L$ENV{ProgramW6432}/leptonica/bin
-        # Remove: L$ENV{ProgramW6432}/tesseract/bin
-        # Remove: L$ENV{ProgramW6432}/zlib/bin
-        # Remove: L${CMAKE_CURRENT_SOURCE_DIR}/../quazip/build/lib
-        # Remove: L${CMAKE_CURRENT_SOURCE_DIR}/../qwt/build/lib
-        # Remove: L'C:\Program
-#        (
-#        )
-#        Files
-#        Kits\10\Lib\10.0.19041.0\um\x64'
-#        \Windows
-#        shell32
-#        x86
-    )
-
     target_compile_options(ikDataProcess
         -bigobj
     )
 endif()
 
-if(UNIX AND NOT MACOS)
-    target_link_libraries(ikDataProcess PUBLIC
-        # Remove: L/usr/lib64/nvidia/
-        # Remove: L/usr/local/cuda/lib64/
-        # Remove: L/usr/local/lib/
-        # Remove: L/usr/local/lib64/
-    )
-endif()
-
-if(UNIX AND centos7 AND NOT MACOS)
-    target_link_libraries(ikDataProcess PUBLIC
-        # Remove: L/work/shared/local/lib/
-        # Remove: L/work/shared/local/lib64/
-    )
-endif()
-
-if(WIN32 AND ik_cpu)
-    target_link_libraries(ikDataProcess PUBLIC
-        # Remove: L$ENV{ProgramW6432}/OpenCV/cpu/x64/vc/bin
-        # Remove: L$ENV{ProgramW6432}/OpenCV/cpu/x64/vc/lib
-    )
-endif()
-
-if(WIN32 AND NOT ik_cpu)
-    target_link_libraries(ikDataProcess PUBLIC
-        # Remove: L$ENV{ProgramW6432}/OpenCV/cuda/x64/vc/bin
-        # Remove: L$ENV{ProgramW6432}/OpenCV/cuda/x64/vc/lib
-        # Remove: L'$ENV{ProgramW6432}/NVIDIA
-#        Computing
-#        GPU
-#        Toolkit/CUDA/v/bin'
-#        Toolkit/CUDA/v/lib/x64'
-    )
-endif()
-
 install(TARGETS ikDataProcess
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    FRAMEWORK DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_IKOMIA_LIB}
+    FRAMEWORK DESTINATION ${CMAKE_INSTALL_IKOMIA_LIB}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_IKOMIA_LIB}
+)
+
+install(FILES ${PUBLIC_HEADERS}
+    DESTINATION ${CMAKE_INSTALL_IKOMIA_INCLUDE}/DataProcess
+)
+
+install(FILES ${PUBLIC_HEADERS_CORE}
+    DESTINATION ${CMAKE_INSTALL_IKOMIA_INCLUDE}/DataProcess/Core
+)
+
+install(FILES ${PUBLIC_HEADERS_IO}
+    DESTINATION ${CMAKE_INSTALL_IKOMIA_INCLUDE}/DataProcess/IO
+)
+
+install(FILES ${PUBLIC_HEADERS_PROCESS}
+    DESTINATION ${CMAKE_INSTALL_IKOMIA_INCLUDE}/DataProcess/Process/Core
+)
+
+install(FILES ${PUBLIC_HEADERS_PROCESS_DNN}
+    DESTINATION ${CMAKE_INSTALL_IKOMIA_INCLUDE}/DataProcess/Process/OpenCV/dnn
+)
+
+install(FILES ${PUBLIC_HEADERS_WIDGET_DNN}
+    DESTINATION ${CMAKE_INSTALL_IKOMIA_INCLUDE}/DataProcess/Process/Widget/dnn
 )

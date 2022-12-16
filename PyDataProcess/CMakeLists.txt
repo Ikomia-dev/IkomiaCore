@@ -29,6 +29,8 @@ add_library(pydataprocess SHARED
     Task/CVideoTrackingTaskWrap.cpp Task/CVideoTrackingTaskWrap.h
 )
 
+set_target_properties(pydataprocess PROPERTIES VERSION ${IKOMIA_VERSION} SOVERSION ${IKOMIA_VERSION})
+
 target_include_directories(pydataprocess PRIVATE
     ../Core
     ../DataIO
@@ -59,7 +61,7 @@ if(WIN32)
         $ENV{ProgramW6432}/gmic/lib
     )
 
-    target_link_libraries(ikUtils PUBLIC
+    target_link_libraries(pydataprocess PUBLIC
         $<$<CONFIG:RELEASE>:opencv_bgsegm${OPENCV_VERSION}>
         $<$<CONFIG:DEBUG>:opencv_bgsegm${OPENCV_VERSION}d>
         $<$<CONFIG:RELEASE>:opencv_bioinspired${OPENCV_VERSION}>
@@ -109,7 +111,7 @@ if(UNIX)
         ${CMAKE_CURRENT_LIST_DIR}/../../gmic/build
     )
 
-    target_link_libraries(ikUtils PUBLIC
+    target_link_libraries(pydataprocess PUBLIC
         opencv_bgsegm
         opencv_bioinspired
         opencv_core
@@ -148,68 +150,8 @@ if(UNIX AND NOT IK_CPU)
 endif()
 
 if(WIN32)
-    target_link_libraries(pydataprocess PRIVATE
-        # Remove: L$ENV{ProgramW6432}/Boost/lib
-        # Remove: L$ENV{ProgramW6432}/GDCM/bin
-        # Remove: L$ENV{ProgramW6432}/OpenSSL-Win64/bin
-        # Remove: L$ENV{ProgramW6432}/Python38/
-        # Remove: L$ENV{ProgramW6432}/Python38/libs
-        # Remove: L$ENV{ProgramW6432}/VTK/bin
-        # Remove: L$ENV{ProgramW6432}/VTK/lib
-        # Remove: L$ENV{ProgramW6432}/gmic/bin/
-        # Remove: L$ENV{ProgramW6432}/gmic/lib/
-        # Remove: L$ENV{ProgramW6432}/intel_tbb/bin/intel64/vc14
-        # Remove: L$ENV{ProgramW6432}/leptonica/bin
-        # Remove: L$ENV{ProgramW6432}/tesseract/bin
-        # Remove: L$ENV{ProgramW6432}/zlib/bin
-        # Remove: L${CMAKE_CURRENT_SOURCE_DIR}/../quazip/build/lib
-        # Remove: L${CMAKE_CURRENT_SOURCE_DIR}/../qwt/build/lib
-        # Remove: L'C:\Program
-#        (
-#        )
-#        Files
-#        Kits\10\Lib\10.0.19041.0\um\x64'
-#        \Windows
-#        x86
-    )
-
     target_compile_options(pydataprocess
         -bigobj
-    )
-endif()
-
-if(UNIX AND centos7 AND NOT MACOS)
-    target_link_libraries(pydataprocess PRIVATE
-        # Remove: L/work/shared/local/lib/
-        # Remove: L/work/shared/local/lib64/
-    )
-endif()
-
-if(UNIX AND NOT MACOS)
-    target_link_libraries(pydataprocess PRIVATE
-        # Remove: L/usr/lib64/nvidia/
-        # Remove: L/usr/local/cuda/lib64/
-        # Remove: L/usr/local/lib/
-        # Remove: L/usr/local/lib64/
-    )
-endif()
-
-if(WIN32 AND ik_cpu)
-    target_link_libraries(pydataprocess PRIVATE
-        # Remove: L$ENV{ProgramW6432}/OpenCV/cpu/x64/vc/bin
-        # Remove: L$ENV{ProgramW6432}/OpenCV/cpu/x64/vc/lib
-    )
-endif()
-
-if(WIN32 AND NOT ik_cpu)
-    target_link_libraries(pydataprocess PRIVATE
-        # Remove: L$ENV{ProgramW6432}/OpenCV/cuda/x64/vc/bin
-        # Remove: L$ENV{ProgramW6432}/OpenCV/cuda/x64/vc/lib
-        # Remove: L'$ENV{ProgramW6432}/NVIDIA
-#        Computing
-#        GPU
-#        Toolkit/CUDA/v/bin'
-#        Toolkit/CUDA/v/lib/x64'
     )
 endif()
 

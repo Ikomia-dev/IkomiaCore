@@ -1,12 +1,18 @@
 add_library(ikUtils SHARED
-    CException.cpp CException.h
-    CLogManager.cpp CLogManager.h
-    CMemoryInfo.cpp CMemoryInfo.h
-    CNetworkManager.cpp CNetworkManager.h
-    CProgressSignalHandler.cpp CProgressSignalHandler.h
+    CException.cpp
+    CException.h
+    CLogManager.cpp
+    CLogManager.h
+    CMemoryInfo.cpp
+    CMemoryInfo.h
+    CNetworkManager.cpp
+    CNetworkManager.h
+    CProgressSignalHandler.cpp
+    CProgressSignalHandler.h
     CTimer.hpp
     CTreeDbManager.hpp
-    CWindowsDeviceEnumerator.cpp CWindowsDeviceEnumerator.h
+    CWindowsDeviceEnumerator.cpp
+    CWindowsDeviceEnumerator.h
     Containers/CQueue.hpp
     DesignPattern/CAbstractFactory.hpp
     DesignPattern/CFactoryRegister.hpp
@@ -18,13 +24,50 @@ add_library(ikUtils SHARED
     UtilsDefine.hpp
     UtilsGlobal.hpp
     UtilsTools.hpp
-    Widgets/CBrowseFileWidget.cpp Widgets/CBrowseFileWidget.h
-    Widgets/CColorPushButton.cpp Widgets/CColorPushButton.h
-    Widgets/FancyTabBar/fancytab.cpp Widgets/FancyTabBar/fancytab.h
-    Widgets/FancyTabBar/fancytabbar.cpp Widgets/FancyTabBar/fancytabbar.h
-    Widgets/FancyTabBar/stylehelper.cpp Widgets/FancyTabBar/stylehelper.h
+    Widgets/CBrowseFileWidget.cpp
+    Widgets/CBrowseFileWidget.h
+    Widgets/CColorPushButton.cpp
+    Widgets/CColorPushButton.h
+    Widgets/FancyTabBar/fancytab.cpp
+    Widgets/FancyTabBar/fancytab.h
+    Widgets/FancyTabBar/fancytabbar.cpp
+    Widgets/FancyTabBar/fancytabbar.h
+    Widgets/FancyTabBar/stylehelper.cpp
+    Widgets/FancyTabBar/stylehelper.h
     base64.hpp
     qaesencryption.cpp qaesencryption.h
+)
+
+set_target_properties(ikUtils PROPERTIES VERSION ${IKOMIA_VERSION} SOVERSION ${IKOMIA_VERSION})
+
+set(PUBLIC_HEADERS_UTILS
+    CException.h
+    CLogManager.h
+    UtilsTools.hpp
+    ExceptionCode.hpp
+    CMemoryInfo.h
+    CTimer.hpp
+    UtilsGlobal.hpp
+    UtilsDefine.hpp
+    CProgressSignalHandler.h
+    CWindowsDeviceEnumerator.h
+    PythonThread.hpp
+)
+
+set(PUBLIC_HEADERS_DESIGN_PATTERN
+    DesignPattern/CFactoryRegister.hpp
+    DesignPattern/CAbstractFactory.hpp
+    DesignPattern/CSingleton.hpp
+    DesignPattern/CObjectLocker.hpp
+)
+
+set(PUBLIC_HEADERS_CONTAINERS
+    Containers/CQueue.hpp
+)
+
+set(PUBLIC_HEADERS_WIDGETS
+    Widgets/CColorPushButton.h
+    Widgets/CBrowseFileWidget.h
 )
 
 target_include_directories(ikUtils PUBLIC
@@ -119,12 +162,6 @@ if(WIN32 AND NOT ik_cpu)
     )
 endif()
 
-if(qtpropertybrowser-uselib AND NOT qtpropertybrowser-buildlib)
-    target_link_libraries(ikUtils PUBLIC
-        # Remove: L
-    )
-endif()
-
 if(qtpropertybrowser-buildlib OR NOT qtpropertybrowser-uselib)
     list(APPEND QTPROP_SOURCES
         Widgets/QtPropertyBrowser/qtbuttonpropertybrowser.cpp Widgets/QtPropertyBrowser/qtbuttonpropertybrowser.h
@@ -173,7 +210,23 @@ if(qtpropertybrowser-buildlib OR NOT qtpropertybrowser-uselib)
 endif()
 
 install(TARGETS ikUtils
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    FRAMEWORK DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_IKOMIA_LIB}
+    FRAMEWORK DESTINATION ${CMAKE_INSTALL_IKOMIA_LIB}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_IKOMIA_LIB}
+)
+
+install(FILES ${PUBLIC_HEADERS_UTILS}
+    DESTINATION ${CMAKE_INSTALL_IKOMIA_INCLUDE}/Utils
+)
+
+install(FILES ${PUBLIC_HEADERS_DESIGN_PATTERN}
+    DESTINATION ${CMAKE_INSTALL_IKOMIA_INCLUDE}/Utils/DesignPattern
+)
+
+install(FILES ${PUBLIC_HEADERS_CONTAINERS}
+    DESTINATION ${CMAKE_INSTALL_IKOMIA_INCLUDE}/Utils/Containers
+)
+
+install(FILES ${PUBLIC_HEADERS_WIDGETS}
+    DESTINATION ${CMAKE_INSTALL_IKOMIA_INCLUDE}/Utils/Widgets
 )
