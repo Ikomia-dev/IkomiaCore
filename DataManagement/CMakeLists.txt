@@ -9,29 +9,32 @@ add_library(ikDataManagement SHARED
 
 set_target_properties(ikDataManagement PROPERTIES VERSION ${IKOMIA_VERSION} SOVERSION ${IKOMIA_VERSION})
 
-target_include_directories(ikDataManagement PUBLIC
+target_compile_definitions(ikDataManagement PRIVATE
+    DATAMANAGEMENT_LIBRARY
+)
+
+target_compile_features(ikDataManagement PRIVATE cxx_std_14)
+
+target_include_directories(ikDataManagement PRIVATE
     ../Core
     ../DataIO
     ../Utils
 )
 
-target_compile_definitions(ikDataManagement PUBLIC
-    DATAMANAGEMENT_LIBRARY
-)
-
-target_link_libraries(ikDataManagement PUBLIC
+target_link_libraries(ikDataManagement PRIVATE
     Qt::Concurrent
     Qt::Core
     Qt::Gui
     Qt::Sql
     Qt::Widgets
-    Boost::system
-    Boost::filesystem
-    Boost::python${PYTHON_VERSION_NO_DOT}
+    OpenMP::OpenMP_CXX
+    ikUtils
+    ikCore
+    ikDataIO
 )
 
 if(WIN32)
-    target_link_libraries(ikDataManagement PUBLIC
+    target_link_libraries(ikDataManagement PRIVATE
         $<$<CONFIG:RELEASE>:opencv_core${OPENCV_VERSION}>
         $<$<CONFIG:DEBUG>:opencv_core${OPENCV_VERSION}d>
         $<$<CONFIG:RELEASE>:opencv_highgui${OPENCV_VERSION}>
@@ -40,7 +43,7 @@ if(WIN32)
 endif()
 
 if(UNIX)
-    target_link_libraries(ikDataManagement PUBLIC
+    target_link_libraries(ikDataManagement PRIVATE
         opencv_core
         opencv_highgui
     )

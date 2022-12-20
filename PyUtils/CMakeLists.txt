@@ -1,18 +1,21 @@
 add_library(pyutils SHARED
     PairToPythonTupleConverter.hpp
-    PyUtils.cpp PyUtils.h
+    PyUtils.cpp
+    PyUtils.h
     PyUtilsDocString.hpp
     PyUtilsGlobal.h
 )
 
 set_target_properties(pyutils PROPERTIES VERSION ${IKOMIA_VERSION} SOVERSION ${IKOMIA_VERSION})
 
-target_include_directories(pyutils PRIVATE
-    ../Utils
-)
-
 target_compile_definitions(pyutils PRIVATE
     PYUTILS_LIBRARY
+)
+
+target_compile_features(pyutils PRIVATE cxx_std_14)
+
+target_include_directories(pyutils PRIVATE
+    ../Utils
 )
 
 target_link_libraries(pyutils PRIVATE
@@ -23,17 +26,18 @@ target_link_libraries(pyutils PRIVATE
     Boost::system
     Boost::filesystem
     Boost::python${PYTHON_VERSION_NO_DOT}
+    ikUtils
 )
 
 if(WIN32)
-    target_link_libraries(pyutils PUBLIC
+    target_link_libraries(pyutils PRIVATE
         $<$<CONFIG:RELEASE>:opencv_core${OPENCV_VERSION}>
         $<$<CONFIG:DEBUG>:opencv_core${OPENCV_VERSION}d>
     )
 endif()
 
 if(UNIX)
-    target_link_libraries(pyutils PUBLIC
+    target_link_libraries(pyutils PRIVATE
         opencv_core
     )
 endif()

@@ -1,45 +1,71 @@
 add_library(pydataprocess SHARED
-    ../Core/Data/CvMatNumpyArrayConverter.cpp ../Core/Data/CvMatNumpyArrayConverter.h
-    CIkomiaRegistryWrap.cpp CIkomiaRegistryWrap.h
-    CPluginProcessInterfaceWrap.cpp CPluginProcessInterfaceWrap.h
-    CWidgetFactoryWrap.cpp CWidgetFactoryWrap.h
-    CWorkflowWrap.cpp CWorkflowWrap.h
-    IO/CArrayIOWrap.cpp IO/CArrayIOWrap.h
-    IO/CDatasetIOWrap.cpp IO/CDatasetIOWrap.h
-    IO/CGraphicsInputWrap.cpp IO/CGraphicsInputWrap.h
-    IO/CGraphicsOutputWrap.cpp IO/CGraphicsOutputWrap.h
-    IO/CImageIOWrap.cpp IO/CImageIOWrap.h
-    IO/CInstanceSegIOWrap.cpp IO/CInstanceSegIOWrap.h
+    ../Core/Data/CvMatNumpyArrayConverter.cpp
+    ../Core/Data/CvMatNumpyArrayConverter.h
+    CIkomiaRegistryWrap.cpp
+    CIkomiaRegistryWrap.h
+    CPluginProcessInterfaceWrap.cpp
+    CPluginProcessInterfaceWrap.h
+    CWidgetFactoryWrap.cpp
+    CWidgetFactoryWrap.h
+    CWorkflowWrap.cpp
+    CWorkflowWrap.h
+    IO/CArrayIOWrap.cpp
+    IO/CArrayIOWrap.h
+    IO/CDatasetIOWrap.cpp
+    IO/CDatasetIOWrap.h
+    IO/CGraphicsInputWrap.cpp
+    IO/CGraphicsInputWrap.h
+    IO/CGraphicsOutputWrap.cpp
+    IO/CGraphicsOutputWrap.h
+    IO/CImageIOWrap.cpp
+    IO/CImageIOWrap.h
+    IO/CInstanceSegIOWrap.cpp
+    IO/CInstanceSegIOWrap.h
     IO/CNumericIOWrap.hpp
-    IO/CObjectDetectionIOWrap.cpp IO/CObjectDetectionIOWrap.h
-    IO/CPathIOWrap.cpp IO/CPathIOWrap.h
-    IO/CSemanticSegIOWrap.cpp IO/CSemanticSegIOWrap.h
-    IO/CVideoIOWrap.cpp IO/CVideoIOWrap.h
-    IO/CWidgetOutputWrap.cpp IO/CWidgetOutputWrap.h
-    PyDataProcess.cpp PyDataProcess.h
+    IO/CObjectDetectionIOWrap.cpp
+    IO/CObjectDetectionIOWrap.h
+    IO/CPathIOWrap.cpp
+    IO/CPathIOWrap.h
+    IO/CSemanticSegIOWrap.cpp
+    IO/CSemanticSegIOWrap.h
+    IO/CVideoIOWrap.cpp
+    IO/CVideoIOWrap.h
+    IO/CWidgetOutputWrap.cpp
+    IO/CWidgetOutputWrap.h
+    PyDataProcess.cpp
+    PyDataProcess.h
     PyDataProcessDocString.hpp
     PyDataProcessGlobal.h
     PyDataProcessTools.hpp
-    Task/C2dImageInteractiveTaskWrap.cpp Task/C2dImageInteractiveTaskWrap.h
-    Task/C2dImageTaskWrap.cpp Task/C2dImageTaskWrap.h
-    Task/CDnnTrainTaskWrap.cpp Task/CDnnTrainTaskWrap.h
-    Task/CTaskFactoryWrap.cpp Task/CTaskFactoryWrap.h
-    Task/CVideoOFTaskWrap.cpp Task/CVideoOFTaskWrap.h
-    Task/CVideoTaskWrap.cpp Task/CVideoTaskWrap.h
-    Task/CVideoTrackingTaskWrap.cpp Task/CVideoTrackingTaskWrap.h
+    Task/C2dImageInteractiveTaskWrap.cpp
+    Task/C2dImageInteractiveTaskWrap.h
+    Task/C2dImageTaskWrap.cpp
+    Task/C2dImageTaskWrap.h
+    Task/CDnnTrainTaskWrap.cpp
+    Task/CDnnTrainTaskWrap.h
+    Task/CTaskFactoryWrap.cpp
+    Task/CTaskFactoryWrap.h
+    Task/CVideoOFTaskWrap.cpp
+    Task/CVideoOFTaskWrap.h
+    Task/CVideoTaskWrap.cpp
+    Task/CVideoTaskWrap.h
+    Task/CVideoTrackingTaskWrap.cpp
+    Task/CVideoTrackingTaskWrap.h
 )
 
 set_target_properties(pydataprocess PROPERTIES VERSION ${IKOMIA_VERSION} SOVERSION ${IKOMIA_VERSION})
+
+target_compile_definitions(pydataprocess PRIVATE
+    PYDATAPROCESS_LIBRARY
+)
+
+target_compile_features(pydataprocess PRIVATE cxx_std_14)
 
 target_include_directories(pydataprocess PRIVATE
     ../Core
     ../DataIO
     ../DataProcess
     ../Utils
-)
-
-target_compile_definitions(pydataprocess PRIVATE
-    PYDATAPROCESS_LIBRARY
 )
 
 target_link_libraries(pydataprocess PRIVATE
@@ -52,16 +78,20 @@ target_link_libraries(pydataprocess PRIVATE
     Boost::filesystem
     Boost::python${PYTHON_VERSION_NO_DOT}
     gmic
+    ikUtils
+    ikCore
+    ikDataIO
+    ikDataProcess
 )
 
 if(WIN32)
-    target_link_directories(pydataprocess PUBLIC
+    target_link_directories(pydataprocess PRIVATE
         # GMIC
         $ENV{ProgramW6432}/gmic/bin
         $ENV{ProgramW6432}/gmic/lib
     )
 
-    target_link_libraries(pydataprocess PUBLIC
+    target_link_libraries(pydataprocess PRIVATE
         $<$<CONFIG:RELEASE>:opencv_bgsegm${OPENCV_VERSION}>
         $<$<CONFIG:DEBUG>:opencv_bgsegm${OPENCV_VERSION}d>
         $<$<CONFIG:RELEASE>:opencv_bioinspired${OPENCV_VERSION}>
@@ -106,12 +136,12 @@ if(WIN32)
 endif()
 
 if(UNIX)
-    target_link_directories(pydataprocess PUBLIC
+    target_link_directories(pydataprocess PRIVATE
         # GMIC
         ${CMAKE_CURRENT_LIST_DIR}/../../gmic/build
     )
 
-    target_link_libraries(pydataprocess PUBLIC
+    target_link_libraries(pydataprocess PRIVATE
         opencv_bgsegm
         opencv_bioinspired
         opencv_core
@@ -137,14 +167,14 @@ if(UNIX)
 endif()
 
 if(WIN32 AND NOT IK_CPU)
-    target_link_libraries(pydataprocess PUBLIC
+    target_link_libraries(pydataprocess PRIVATE
         $<$<CONFIG:RELEASE>:opencv_cudawarping${OPENCV_VERSION}>
         $<$<CONFIG:DEBUG>:opencv_cudawarping${OPENCV_VERSION}d>
     )
 endif()
 
 if(UNIX AND NOT IK_CPU)
-    target_link_libraries(pydataprocess PUBLIC
+    target_link_libraries(pydataprocess PRIVATE
         opencv_cudawarping
     )
 endif()

@@ -1,8 +1,12 @@
 add_library(ikVolumeRender SHARED
-    CAxisRender.cpp CAxisRender.h
-    CCylinderRender.cpp CCylinderRender.h
-    CSphereRender.cpp CSphereRender.h
-    CTextureRender.cpp CTextureRender.h
+    CAxisRender.cpp
+    CAxisRender.h
+    CCylinderRender.cpp
+    CCylinderRender.h
+    CSphereRender.cpp
+    CSphereRender.h
+    CTextureRender.cpp
+    CTextureRender.h
     Kernels/raycastColor.h
     Kernels/raycastColorF2B.h
     Kernels/raycastColorIso.h
@@ -15,7 +19,8 @@ add_library(ikVolumeRender SHARED
     Kernels/raycastGrayMIP.h
     Kernels/raycastGrayMinIP.h
     Kernels/raycastGrayTools.h
-    VolumeRender.cpp VolumeRender.h
+    VolumeRender.cpp
+    VolumeRender.h
     VolumeRenderDefine.h
     VolumeRenderGlobal.h
     ocl.hpp
@@ -24,47 +29,54 @@ add_library(ikVolumeRender SHARED
 
 set_target_properties(ikVolumeRender PROPERTIES VERSION ${IKOMIA_VERSION} SOVERSION ${IKOMIA_VERSION})
 
-target_include_directories(ikVolumeRender PUBLIC
+target_compile_definitions(ikVolumeRender PRIVATE
+    VOLUMERENDER_LIBRARY
+)
+
+target_compile_features(ikVolumeRender PRIVATE cxx_std_14)
+
+target_include_directories(ikVolumeRender PRIVATE
     ../Core
     ../Utils
 )
 
-target_compile_definitions(ikVolumeRender PUBLIC
-    VOLUMERENDER_LIBRARY
-)
-
-target_link_libraries(ikVolumeRender PUBLIC
+target_link_libraries(ikVolumeRender PRIVATE
     Qt::Concurrent
     Qt::Core
     Qt::Gui
     Qt::OpenGL
     Qt::Sql
     Qt::Widgets
+    OpenMP::OpenMP_CXX
+    OpenCL
+    ikUtils
+    ikCore
 )
 
 if(WIN32)
-    target_link_libraries(ikVolumeRender PUBLIC
+    target_link_libraries(ikVolumeRender PRIVATE
         $<$<CONFIG:RELEASE>:opencv_core${OPENCV_VERSION}>
         $<$<CONFIG:DEBUG>:opencv_core${OPENCV_VERSION}d>
         $<$<CONFIG:RELEASE>:opencv_highgui${OPENCV_VERSION}>
         $<$<CONFIG:DEBUG>:opencv_highgui${OPENCV_VERSION}d>
         $<$<CONFIG:RELEASE>:opencv_imgproc${OPENCV_VERSION}>
         $<$<CONFIG:DEBUG>:opencv_imgproc${OPENCV_VERSION}d>
+        OpenGL32
     )
 endif()
 
 if(UNIX)
-    target_link_libraries(ikVolumeRender PUBLIC
+    target_link_libraries(ikVolumeRender PRIVATE
         opencv_core
         opencv_highgui
         opencv_imgproc
     )
 endif()
 
-# Resources:
+# Resources
 set(RESOURCES "")
 qt5_add_resources(RESOURCES VolumeRender.qrc)
-target_sources(ikVolumeRender PUBLIC ${RESOURCES})
+target_sources(ikVolumeRender PRIVATE ${RESOURCES})
 
 #set(VolumeRender_resource_files
 #    "Shaders/cylinderfshader.frag"

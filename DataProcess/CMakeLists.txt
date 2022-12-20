@@ -477,11 +477,17 @@ set(PUBLIC_HEADERS_WIDGET_DNN
     Widget/OpenCV/dnn/COcvWidgetDnnCore.h
 )
 
-target_compile_definitions(ikDataProcess PUBLIC
+target_precompile_headers(ikDataProcess PRIVATE
+    pch.hpp
+)
+
+target_compile_definitions(ikDataProcess PRIVATE
     DATAPROCESS_LIBRARY
 )
 
-target_include_directories(ikDataProcess PUBLIC
+target_compile_features(ikDataProcess PRIVATE cxx_std_14)
+
+target_include_directories(ikDataProcess PRIVATE
     ../Core
     ../DataIO
     ../Utils
@@ -489,7 +495,7 @@ target_include_directories(ikDataProcess PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/../../gmic/src
 )
 
-target_link_libraries(ikDataProcess PUBLIC
+target_link_libraries(ikDataProcess PRIVATE
     Qt::Concurrent
     Qt::Core
     Qt::Gui
@@ -498,17 +504,21 @@ target_link_libraries(ikDataProcess PUBLIC
     Boost::system
     Boost::filesystem
     Boost::python${PYTHON_VERSION_NO_DOT}
+    OpenMP::OpenMP_CXX
     gmic
+    ikUtils
+    ikCore
+    ikDataIO
 )
 
 if(WIN32)
-    target_link_directories(ikDataProcess PUBLIC
+    target_link_directories(ikDataProcess PRIVATE
         # GMIC
         $ENV{ProgramW6432}/gmic/bin
         $ENV{ProgramW6432}/gmic/lib
     )
 
-    target_link_libraries(ikDataProcess PUBLIC
+    target_link_libraries(ikDataProcess PRIVATE
         $<$<CONFIG:RELEASE>:opencv_bgsegm${OPENCV_VERSION}>
         $<$<CONFIG:DEBUG>:opencv_bgsegm${OPENCV_VERSION}d>
         $<$<CONFIG:RELEASE>:opencv_bioinspired${OPENCV_VERSION}>
@@ -549,16 +559,17 @@ if(WIN32)
         $<$<CONFIG:DEBUG>:opencv_ximgproc${OPENCV_VERSION}d>
         $<$<CONFIG:RELEASE>:opencv_xphoto${OPENCV_VERSION}>
         $<$<CONFIG:DEBUG>:opencv_xphoto${OPENCV_VERSION}d>
+        shell32
     )
 endif()
 
 if(UNIX)
-    target_link_directories(ikDataProcess PUBLIC
+    target_link_directories(ikDataProcess PRIVATE
         # GMIC
         ${CMAKE_CURRENT_LIST_DIR}/../../gmic/build
     )
 
-    target_link_libraries(ikDataProcess PUBLIC
+    target_link_libraries(ikDataProcess PRIVATE
         opencv_bgsegm
         opencv_bioinspired
         opencv_core
@@ -584,14 +595,14 @@ if(UNIX)
 endif()
 
 if(WIN32 AND NOT IK_CPU)
-    target_link_libraries(ikDataProcess PUBLIC
+    target_link_libraries(ikDataProcess PRIVATE
         $<$<CONFIG:RELEASE>:opencv_cudawarping${OPENCV_VERSION}>
         $<$<CONFIG:DEBUG>:opencv_cudawarping${OPENCV_VERSION}d>
     )
 endif()
 
 if(UNIX AND NOT IK_CPU)
-    target_link_libraries(ikDataProcess PUBLIC
+    target_link_libraries(ikDataProcess PRIVATE
         opencv_cudawarping
     )
 endif()

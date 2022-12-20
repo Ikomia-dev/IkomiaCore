@@ -26,16 +26,18 @@ add_library(ikDataIO SHARED
 
 set_target_properties(ikDataIO PROPERTIES VERSION ${IKOMIA_VERSION} SOVERSION ${IKOMIA_VERSION})
 
-target_include_directories(ikDataIO PUBLIC
+target_compile_definitions(ikDataIO PRIVATE
+    DATAIO_LIBRARY
+)
+
+target_compile_features(ikDataIO PRIVATE cxx_std_14)
+
+target_include_directories(ikDataIO PRIVATE
     ../Core
     ../Utils
 )
 
-target_compile_definitions(ikDataIO PUBLIC
-    DATAIO_LIBRARY
-)
-
-target_link_libraries(ikDataIO PUBLIC
+target_link_libraries(ikDataIO PRIVATE
     Qt::Concurrent
     Qt::Core
     Qt::Gui
@@ -44,6 +46,7 @@ target_link_libraries(ikDataIO PUBLIC
     Boost::system
     Boost::filesystem
     Boost::python${PYTHON_VERSION_NO_DOT}
+    OpenMP::OpenMP_CXX
     vtkCommonCore-${VTK_MAJOR_MINOR_VERSION}
     vtkCommonDataModel-${VTK_MAJOR_MINOR_VERSION}
     vtkCommonExecutionModel-${VTK_MAJOR_MINOR_VERSION}
@@ -69,10 +72,12 @@ target_link_libraries(ikDataIO PUBLIC
     vtksys-${VTK_MAJOR_MINOR_VERSION}
     vtkViewsCore-${VTK_MAJOR_MINOR_VERSION}
     vtkDICOM-${VTK_MAJOR_MINOR_VERSION}
+    ikUtils
+    ikCore
 )
 
 if(WIN32)
-    target_link_libraries(ikDataIO PUBLIC
+    target_link_libraries(ikDataIO PRIVATE
         $<$<CONFIG:RELEASE>:opencv_core${OPENCV_VERSION}>
         $<$<CONFIG:DEBUG>:opencv_core${OPENCV_VERSION}d>
         $<$<CONFIG:RELEASE>:opencv_imgcodecs${OPENCV_VERSION}>
@@ -85,7 +90,7 @@ if(WIN32)
 endif()
 
 if(UNIX)
-    target_link_libraries(ikDataIO PUBLIC
+    target_link_libraries(ikDataIO PRIVATE
         opencv_core
         opencv_imgcodecs
         opencv_imgproc

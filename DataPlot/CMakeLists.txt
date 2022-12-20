@@ -20,32 +20,41 @@ add_library(ikDataPlot SHARED
 
 set_target_properties(ikDataPlot PROPERTIES VERSION ${IKOMIA_VERSION} SOVERSION ${IKOMIA_VERSION})
 
-target_include_directories(ikDataPlot PUBLIC
-    ${CMAKE_CURRENT_LIST_DIR}/../Utils
-    ${CMAKE_CURRENT_LIST_DIR}/../../qwt/src
-)
-
-target_compile_definitions(ikDataPlot PUBLIC
+target_compile_definitions(ikDataPlot PRIVATE
     DATAPLOT_LIBRARY
     QWT_DLL
 )
 
-target_link_libraries(ikDataPlot PUBLIC
+target_compile_features(ikDataPlot PRIVATE cxx_std_14)
+
+target_include_directories(ikDataPlot PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/../Utils
+    ${CMAKE_CURRENT_LIST_DIR}/../../qwt/src
+)
+
+target_link_directories(ikDataPlot PRIVATE
+    # Qwt
+    ${CMAKE_CURRENT_LIST_DIR}/../../qwt/build/lib
+)
+
+target_link_libraries(ikDataPlot PRIVATE
     Qt::Core
     Qt::Gui
     Qt::Sql
     Qt::Widgets
+    qwt
+    ikUtils
 )
 
 if(WIN32)
-    target_link_libraries(ikDataPlot PUBLIC
+    target_link_libraries(ikDataPlot PRIVATE
         $<$<CONFIG:RELEASE>:opencv_core${OPENCV_VERSION}>
         $<$<CONFIG:DEBUG>:opencv_core${OPENCV_VERSION}d>
     )
 endif()
 
 if(UNIX)
-    target_link_libraries(ikDataPlot PUBLIC
+    target_link_libraries(ikDataPlot PRIVATE
         opencv_core
     )
 endif()
