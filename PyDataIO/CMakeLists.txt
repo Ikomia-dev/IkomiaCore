@@ -1,3 +1,5 @@
+set(CMAKE_INSTALL_IKOMIA_PYDATAIO ${CMAKE_INSTALL_IKOMIA_PYTHON_LIB}/dataio)
+
 add_library(pydataio SHARED
     ../Core/Data/CvMatNumpyArrayConverter.cpp
     ../Core/Data/CvMatNumpyArrayConverter.h
@@ -7,7 +9,11 @@ add_library(pydataio SHARED
     PyDataIOGlobal.hpp
 )
 
-set_target_properties(pydataio PROPERTIES VERSION ${IKOMIA_VERSION} SOVERSION ${IKOMIA_VERSION})
+set_target_properties(pydataio PROPERTIES
+    VERSION ${IKOMIA_VERSION}
+    SOVERSION ${IKOMIA_VERSION}
+    PREFIX ""
+)
 
 target_compile_definitions(pydataio PRIVATE
     PYDATAIO_LIBRARY
@@ -52,7 +58,7 @@ if(UNIX)
 endif()
 
 install(TARGETS pydataio
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    FRAMEWORK DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_IKOMIA_PYDATAIO}
+    FRAMEWORK DESTINATION ${CMAKE_INSTALL_IKOMIA_PYDATAIO}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_IKOMIA_PYDATAIO}
 )

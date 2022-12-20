@@ -6,6 +6,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_LIST_DIR}/Build)
 set(CMAKE_INSTALL_IKOMIA_LIB ${CMAKE_INSTALL_PREFIX}/lib)
 set(CMAKE_INSTALL_IKOMIA_INCLUDE ${CMAKE_INSTALL_PREFIX}/include)
+set(CMAKE_INSTALL_IKOMIA_PYTHON_LIB ${CMAKE_CURRENT_LIST_DIR}/../IkomiaApi/ikomia)
 
 # Set up AUTOMOC and some sensible defaults for runtime execution
 # When using Qt 6.3, you can replace the code block below with

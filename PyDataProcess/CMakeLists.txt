@@ -1,3 +1,5 @@
+set(CMAKE_INSTALL_IKOMIA_PYDATAPROCESS ${CMAKE_INSTALL_IKOMIA_PYTHON_LIB}/dataprocess)
+
 add_library(pydataprocess SHARED
     ../Core/Data/CvMatNumpyArrayConverter.cpp
     ../Core/Data/CvMatNumpyArrayConverter.h
@@ -53,7 +55,11 @@ add_library(pydataprocess SHARED
     Task/CVideoTrackingTaskWrap.h
 )
 
-set_target_properties(pydataprocess PROPERTIES VERSION ${IKOMIA_VERSION} SOVERSION ${IKOMIA_VERSION})
+set_target_properties(pydataprocess PROPERTIES
+    VERSION ${IKOMIA_VERSION}
+    SOVERSION ${IKOMIA_VERSION}
+    PREFIX ""
+)
 
 target_compile_definitions(pydataprocess PRIVATE
     PYDATAPROCESS_LIBRARY
@@ -186,7 +192,7 @@ if(WIN32)
 endif()
 
 install(TARGETS pydataprocess
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    FRAMEWORK DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_IKOMIA_PYDATAPROCESS}
+    FRAMEWORK DESTINATION ${CMAKE_INSTALL_IKOMIA_PYDATAPROCESS}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_IKOMIA_PYDATAPROCESS}
 )
