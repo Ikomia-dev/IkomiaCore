@@ -66,5 +66,5 @@ endif()
 # ----- LIB ----- #
 # --------------- #
 link_directories(
-    ${CMAKE_CURRENT_LIST_DIR}/Build/Lib
+    ${CMAKE_CURRENT_LIST_DIR}/Build/lib
 )
