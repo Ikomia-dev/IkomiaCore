@@ -60,6 +60,11 @@ static bool init_numpy()
         return true;
 }
 
+void translateCException(const CException& e)
+{
+    PyErr_SetString(PyExc_RuntimeError, e.what());
+}
+
 template<typename Type>
 void exposeNumericIO(const std::string& className)
 {
@@ -139,6 +144,9 @@ BOOST_PYTHON_MODULE(pydataprocess)
     registerStdVector<std::vector<CObjectMeasure>>();
     registerStdVector<CObjectDetection>();
     registerStdVector<CInstanceSegmentation>();
+
+    //Register exceptions
+    register_exception_translator<CException>(&translateCException);
 
     //---------------------//
     //----- CTaskInfo -----//

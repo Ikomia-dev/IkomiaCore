@@ -64,6 +64,10 @@ void exposeCPoint(const std::string& className)
     ;
 }
 
+void translateCException(const CException& e)
+{
+    PyErr_SetString(PyExc_RuntimeError, e.what());
+}
 
 BOOST_PYTHON_MODULE(pycore)
 {
@@ -100,6 +104,9 @@ BOOST_PYTHON_MODULE(pycore)
     registerStdVector<std::shared_ptr<CWorkflowTask>>();
     registerStdVector<CMeasure>();
     registerStdVector<IODataType>();
+
+    //Register exceptions
+    register_exception_translator<CException>(&translateCException);
 
     //--------------------//
     //----- Graphics -----//
