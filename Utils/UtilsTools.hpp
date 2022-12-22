@@ -253,6 +253,7 @@ namespace Ikomia
 
             inline void         print(const std::string& msg, const QtMsgType type=QtMsgType::QtInfoMsg)
             {
+                CPyEnsureGIL gil;
                 auto strMsg = str(msg);
                 object file;
 
