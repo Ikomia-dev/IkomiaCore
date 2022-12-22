@@ -17,7 +17,7 @@ include(Versions.cmake)
 include(LocalSettings.cmake)
 
 # Qt
-find_package(Qt5 REQUIRED COMPONENTS Core Concurrent Gui Network OpenGL Sql Test Widgets)
+find_package(Qt5 REQUIRED COMPONENTS Core Concurrent Gui Network OpenGL Sql Test Widgets LinguistTools)
 
 # Python
 find_package(Python3 ${PYTHON_VERSION_DOT} REQUIRED COMPONENTS Interpreter Development NumPy)
