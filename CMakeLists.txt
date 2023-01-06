@@ -39,7 +39,7 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost REQUIRED COMPONENTS system filesystem python${PYTHON_VERSION_NO_DOT})
 
 # VTK
-find_package(VTK REQUIRED)
+find_package(VTK ${VTK_MAJOR_MINOR_VERSION} REQUIRED)
 
 include(Common.cmake)
 

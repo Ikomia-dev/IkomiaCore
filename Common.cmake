@@ -24,10 +24,6 @@ if(WIN32)
     include_directories(
         # Boost
         ${Boost_INCLUDE_DIRS}/Boost/include/boost-${BOOST_VERSION}
-#        # Python
-#        #$ENV{ProgramW6432}/Python${PYTHON_VERSION_NO_DOT}/include
-#        # Numpy
-#        #../../numpy/numpy/core/include
         # VTK
         ${VTK_INCLUDE_DIRS}
         # OpenCL
