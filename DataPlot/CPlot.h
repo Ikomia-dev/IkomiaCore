@@ -27,6 +27,7 @@
 #include <qwt_plot_legenditem.h>
 #include <qwt_plot_legenditem.h>
 #include <qwt_legend_data.h>
+#include <qwt_text.h>
 #include <QPen>
 
 class QwtPlotGrid;

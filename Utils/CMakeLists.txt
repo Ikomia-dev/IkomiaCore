@@ -106,20 +106,8 @@ target_link_libraries(ikUtils PRIVATE
     Qt::Sql
     Qt::Widgets
     OpenMP::OpenMP_CXX
+    opencv_core
 )
-
-if(WIN32)
-    target_link_libraries(ikUtils PRIVATE
-        $<$<CONFIG:RELEASE>:opencv_core${OPENCV_VERSION}>
-        $<$<CONFIG:DEBUG>:opencv_core${OPENCV_VERSION}d>
-    )
-endif()
-
-if(UNIX)
-    target_link_libraries(ikUtils PRIVATE
-        opencv_core
-    )
-endif()
 
 # Translations
 qt5_create_translation(QM_FILE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}/Translations/utils_fr.ts)

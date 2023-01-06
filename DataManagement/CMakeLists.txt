@@ -28,26 +28,15 @@ target_link_libraries(ikDataManagement PRIVATE
     Qt::Sql
     Qt::Widgets
     OpenMP::OpenMP_CXX
+    Boost::filesystem
+    Boost::python${PYTHON_VERSION_NO_DOT}
+    Python3::Python
+    opencv_core
+    opencv_highgui
     ikUtils
     ikCore
     ikDataIO
 )
-
-if(WIN32)
-    target_link_libraries(ikDataManagement PRIVATE
-        $<$<CONFIG:RELEASE>:opencv_core${OPENCV_VERSION}>
-        $<$<CONFIG:DEBUG>:opencv_core${OPENCV_VERSION}d>
-        $<$<CONFIG:RELEASE>:opencv_highgui${OPENCV_VERSION}>
-        $<$<CONFIG:DEBUG>:opencv_highgui${OPENCV_VERSION}d>
-    )
-endif()
-
-if(UNIX)
-    target_link_libraries(ikDataManagement PRIVATE
-        opencv_core
-        opencv_highgui
-    )
-endif()
 
 # Translations
 qt5_create_translation(QM_FILE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}/Translations/datamanagement_fr.ts)

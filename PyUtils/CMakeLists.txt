@@ -14,6 +14,10 @@ set_target_properties(pyutils PROPERTIES
     PREFIX ""
 )
 
+if (WIN32)
+    set_target_properties(pyutils PROPERTIES SUFFIX ".pyd")
+endif()
+
 target_compile_definitions(pyutils PRIVATE
     PYUTILS_LIBRARY
 )
@@ -29,24 +33,13 @@ target_link_libraries(pyutils PRIVATE
     Qt::Gui
     Qt::Sql
     Qt::Widgets
+    Python3::Python
     Boost::system
     Boost::filesystem
     Boost::python${PYTHON_VERSION_NO_DOT}
+    opencv_core
     ikUtils
 )
-
-if(WIN32)
-    target_link_libraries(pyutils PRIVATE
-        $<$<CONFIG:RELEASE>:opencv_core${OPENCV_VERSION}>
-        $<$<CONFIG:DEBUG>:opencv_core${OPENCV_VERSION}d>
-    )
-endif()
-
-if(UNIX)
-    target_link_libraries(pyutils PRIVATE
-        opencv_core
-    )
-endif()
 
 install(TARGETS pyutils
     LIBRARY DESTINATION ${CMAKE_INSTALL_IKOMIA_PYUTILS}

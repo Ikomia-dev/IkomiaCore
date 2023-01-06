@@ -48,6 +48,11 @@ target_link_libraries(ikVolumeRender PRIVATE
     Qt::Sql
     Qt::Widgets
     OpenMP::OpenMP_CXX
+    Python3::Python
+    Boost::python${PYTHON_VERSION_NO_DOT}
+    opencv_core
+    opencv_highgui
+    opencv_imgproc
     OpenCL
     ikUtils
     ikCore
@@ -55,21 +60,7 @@ target_link_libraries(ikVolumeRender PRIVATE
 
 if(WIN32)
     target_link_libraries(ikVolumeRender PRIVATE
-        $<$<CONFIG:RELEASE>:opencv_core${OPENCV_VERSION}>
-        $<$<CONFIG:DEBUG>:opencv_core${OPENCV_VERSION}d>
-        $<$<CONFIG:RELEASE>:opencv_highgui${OPENCV_VERSION}>
-        $<$<CONFIG:DEBUG>:opencv_highgui${OPENCV_VERSION}d>
-        $<$<CONFIG:RELEASE>:opencv_imgproc${OPENCV_VERSION}>
-        $<$<CONFIG:DEBUG>:opencv_imgproc${OPENCV_VERSION}d>
         OpenGL32
-    )
-endif()
-
-if(UNIX)
-    target_link_libraries(ikVolumeRender PRIVATE
-        opencv_core
-        opencv_highgui
-        opencv_imgproc
     )
 endif()
 
@@ -81,24 +72,8 @@ set(RESOURCES "")
 qt5_add_resources(RESOURCES VolumeRender.qrc)
 target_sources(ikVolumeRender PRIVATE ${RESOURCES})
 
-#set(VolumeRender_resource_files
-#    "Shaders/cylinderfshader.frag"
-#    "Shaders/cylindervshader.vert"
-#    "Shaders/spherefshader.frag"
-#    "Shaders/spherevshader.vert"
-#    "Shaders/texturefshader.frag"
-#    "Shaders/texturevshader.vert"
-#)
-
-#qt_add_resources(ikVolumeRender "VolumeRender"
-#    PREFIX
-#        "/"
-#    FILES
-#        ${VolumeRender_resource_files}
-#)
-
 install(TARGETS ikVolumeRender
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    FRAMEWORK DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_IKOMIA_LIB}
+    FRAMEWORK DESTINATION ${CMAKE_INSTALL_IKOMIA_LIB}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_IKOMIA_LIB}
 )

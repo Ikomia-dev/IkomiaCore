@@ -42,22 +42,12 @@ target_link_libraries(ikDataPlot PRIVATE
     Qt::Gui
     Qt::Sql
     Qt::Widgets
+    Python3::Python
+    Boost::python${PYTHON_VERSION_NO_DOT}
+    opencv_core
     qwt
     ikUtils
 )
-
-if(WIN32)
-    target_link_libraries(ikDataPlot PRIVATE
-        $<$<CONFIG:RELEASE>:opencv_core${OPENCV_VERSION}>
-        $<$<CONFIG:DEBUG>:opencv_core${OPENCV_VERSION}d>
-    )
-endif()
-
-if(UNIX)
-    target_link_libraries(ikDataPlot PRIVATE
-        opencv_core
-    )
-endif()
 
 # Translations
 qt5_create_translation(QM_FILE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}/Translations/dataplot_fr.ts)

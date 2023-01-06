@@ -20,12 +20,16 @@ include(LocalSettings.cmake)
 find_package(Qt5 REQUIRED COMPONENTS Core Concurrent Gui Network OpenGL Sql Test Widgets LinguistTools)
 
 # Python
-find_package(Python3 ${PYTHON_VERSION_DOT} REQUIRED COMPONENTS Interpreter Development NumPy)
+find_package(Python3 ${PYTHON_VERSION_DOT} EXACT REQUIRED COMPONENTS Interpreter Development NumPy)
 
 # OpenMP
 find_package(OpenMP)
 
 # OpenCV
+if(WIN32)
+    set(OpenCV_DIR "C:/Program Files/OpenCV/cuda/x64/vc16/lib")
+endif()
+
 find_package(OpenCV ${OPENCV_VERSION} REQUIRED)
 
 # Boost
@@ -35,7 +39,7 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost REQUIRED COMPONENTS system filesystem python${PYTHON_VERSION_NO_DOT})
 
 # VTK
-find_package(VTK)
+find_package(VTK REQUIRED)
 
 include(Common.cmake)
 

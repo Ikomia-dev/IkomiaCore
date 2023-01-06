@@ -5,8 +5,8 @@ add_compile_definitions(
 
 if(MSVC)
     add_compile_options(
-        -arch:AVX2
-        _CRT_SECURE_NO_WARNINGS
+        /arch:AVX2
+        -D_CRT_SECURE_NO_WARNINGS
     )
 endif()
 
@@ -23,18 +23,17 @@ include_directories(
 if(WIN32)
     include_directories(
         # Boost
-        $ENV{ProgramW6432}/Boost/include/boost-${BOOST_VERSION}
-        # Python
-        #$ENV{ProgramW6432}/Python${PYTHON_VERSION_NO_DOT}/include
-        # Numpy
-        #../../numpy/numpy/core/include
+        ${Boost_INCLUDE_DIRS}/Boost/include/boost-${BOOST_VERSION}
+#        # Python
+#        #$ENV{ProgramW6432}/Python${PYTHON_VERSION_NO_DOT}/include
+#        # Numpy
+#        #../../numpy/numpy/core/include
         # VTK
-        $ENV{ProgramW6432}/VTK/include/vtk-${VTK_VERSION}
+        ${VTK_INCLUDE_DIRS}
         # OpenCL
-        $ENV{ProgramW6432}/NVIDIA GPU Computing Toolkit/CUDA/v${CUDA_VERSION}/include
+        "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v${CUDA_VERSION}/include"
         #OpenCV
-        $<$<IK_CPU:1>:$ENV{ProgramW6432}/OpenCV/cpu/include>
-        $<$<IK_CPU:0>:$ENV{ProgramW6432}/OpenCV/cuda/include>
+        ${OpenCV_INCLUDE_DIRS}
     )
 endif()
 

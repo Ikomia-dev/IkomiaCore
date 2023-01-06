@@ -28,6 +28,10 @@ set_target_properties(pycore PROPERTIES
     PREFIX ""
 )
 
+if (WIN32)
+    set_target_properties(pycore PROPERTIES SUFFIX ".pyd")
+endif()
+
 target_compile_definitions(pycore PRIVATE
     PYCORE_LIBRARY
 )
@@ -45,38 +49,21 @@ target_link_libraries(pycore PRIVATE
     Qt::Gui
     Qt::Sql
     Qt::Widgets
+    Python3::Python
     Boost::system
     Boost::filesystem
     Boost::python${PYTHON_VERSION_NO_DOT}
+    opencv_core
+    opencv_imgcodecs
+    opencv_imgproc
+    opencv_highgui
     ikUtils
     ikCore
 )
 
 if(WIN32)
-    target_link_libraries(pycore PRIVATE
-        $<$<CONFIG:RELEASE>:opencv_core${OPENCV_VERSION}>
-        $<$<CONFIG:DEBUG>:opencv_core${OPENCV_VERSION}d>
-        $<$<CONFIG:RELEASE>:opencv_imgcodecs${OPENCV_VERSION}>
-        $<$<CONFIG:DEBUG>:opencv_imgcodecs${OPENCV_VERSION}d>
-        $<$<CONFIG:RELEASE>:opencv_imgproc${OPENCV_VERSION}>
-        $<$<CONFIG:DEBUG>:opencv_imgproc${OPENCV_VERSION}d>
-        $<$<CONFIG:RELEASE>:opencv_highgui${OPENCV_VERSION}>
-        $<$<CONFIG:DEBUG>:opencv_highgui${OPENCV_VERSION}d>
-    )
-endif()
-
-if(UNIX)
-    target_link_libraries(pycore PRIVATE
-        opencv_core
-        opencv_imgcodecs
-        opencv_imgproc
-        opencv_highgui
-    )
-endif()
-
-if(WIN32)
-    target_compile_options(pycore
-        -bigobj
+    target_compile_options(pycore PRIVATE
+        /bigobj
     )
 endif()
 

@@ -15,6 +15,10 @@ set_target_properties(pydataio PROPERTIES
     PREFIX ""
 )
 
+if (WIN32)
+    set_target_properties(pydataio PROPERTIES SUFFIX ".pyd")
+endif()
+
 target_compile_definitions(pydataio PRIVATE
     PYDATAIO_LIBRARY
 )
@@ -33,29 +37,16 @@ target_link_libraries(pydataio PRIVATE
     Qt::Gui
     Qt::Sql
     Qt::Widgets
+    Python3::Python
     Boost::system
     Boost::filesystem
     Boost::python${PYTHON_VERSION_NO_DOT}
+    opencv_core
+    opencv_imgcodecs
     ikUtils
     ikCore
     ikDataIO
 )
-
-if(WIN32)
-    target_link_libraries(pydataio PRIVATE
-        $<$<CONFIG:RELEASE>:opencv_core${OPENCV_VERSION}>
-        $<$<CONFIG:DEBUG>:opencv_core${OPENCV_VERSION}d>
-        $<$<CONFIG:RELEASE>:opencv_imgcodecs${OPENCV_VERSION}>
-        $<$<CONFIG:DEBUG>:opencv_imgcodecs${OPENCV_VERSION}d>
-    )
-endif()
-
-if(UNIX)
-    target_link_libraries(pydataio PRIVATE
-        opencv_core
-        opencv_imgcodecs
-    )
-endif()
 
 install(TARGETS pydataio
     LIBRARY DESTINATION ${CMAKE_INSTALL_IKOMIA_PYDATAIO}

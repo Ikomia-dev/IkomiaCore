@@ -127,33 +127,21 @@ target_link_libraries(ikCore PRIVATE
     Qt::Gui
     Qt::Sql
     Qt::Widgets
+    Python3::Python
     Boost::system
     Boost::filesystem
     Boost::python${PYTHON_VERSION_NO_DOT}
     OpenMP::OpenMP_CXX
-    avcodec
     ikUtils
+    opencv_core
+    opencv_imgcodecs
+    opencv_imgproc
+    opencv_videoio
 )
-
-if(WIN32)
-    target_link_libraries(ikCore PRIVATE
-        $<$<CONFIG:RELEASE>:opencv_core${OPENCV_VERSION}>
-        $<$<CONFIG:DEBUG>:opencv_core${OPENCV_VERSION}d>
-        $<$<CONFIG:RELEASE>:opencv_imgcodecs${OPENCV_VERSION}>
-        $<$<CONFIG:DEBUG>:opencv_imgcodecs${OPENCV_VERSION}d>
-        $<$<CONFIG:RELEASE>:opencv_imgproc${OPENCV_VERSION}>
-        $<$<CONFIG:DEBUG>:opencv_imgproc${OPENCV_VERSION}d>
-        $<$<CONFIG:RELEASE>:opencv_videoio${OPENCV_VERSION}>
-        $<$<CONFIG:DEBUG>:opencv_videoio${OPENCV_VERSION}d>
-    )
-endif()
 
 if(UNIX)
     target_link_libraries(ikCore PRIVATE
-        opencv_core
-        opencv_imgcodecs
-        opencv_imgproc
-        opencv_videoio
+        avcodec
     )
 endif()
 
