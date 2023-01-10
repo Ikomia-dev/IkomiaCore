@@ -26,6 +26,9 @@
 #include <qwt_plot.h>
 #include <qwt_plot_legenditem.h>
 #include <qwt_plot_legenditem.h>
+#include <qwt_legend_data.h>
+#include <qwt_text.h>
+#include <QPen>
 
 class QwtPlotGrid;
 class QwtLegend;
@@ -47,15 +50,15 @@ class CLegendItem : public QwtPlotLegendItem
     public:
         CLegendItem()
         {
-            setRenderHint( QwtPlotItem::RenderAntialiased );
+            setRenderHint(QwtPlotItem::RenderAntialiased);
 
-            QColor color( Qt::white );
+            QColor color(Qt::white);
 
-            setTextPen( color );
-            setBorderPen( color );
+            setTextPen(QPen(color));
+            setBorderPen(QPen(color));
 
-            QColor c( Qt::gray );
-            c.setAlpha( 200 );
+            QColor c(Qt::gray);
+            c.setAlpha(200);
 
             setBackgroundBrush( c );
         }

@@ -374,9 +374,12 @@ InputOutputVect CWorkflowTask::getInputs(const std::set<IODataType> &types) cons
 
     for(size_t i=0; i<m_inputs.size(); ++i)
     {
-        auto it = types.find(m_inputs[i]->getDataType());
-        if(it != types.end())
-            inputs.push_back(m_inputs[i]);
+        if(m_inputs[i])
+        {
+            auto it = types.find(m_inputs[i]->getDataType());
+            if(it != types.end())
+                inputs.push_back(m_inputs[i]);
+        }
     }
     return inputs;
 }

@@ -39,6 +39,11 @@ static bool init_numpy()
         return true;
 }
 
+void translateCException(const CException& e)
+{
+    PyErr_SetString(PyExc_RuntimeError, e.what());
+}
+
 BOOST_PYTHON_MODULE(pydataio)
 {
     // Enable user-defined docstrings and python signatures, while disabling the C++ signatures
@@ -49,6 +54,9 @@ BOOST_PYTHON_MODULE(pydataio)
 
     //Numpy initialization
     init_numpy();
+
+    //Register exceptions
+    register_exception_translator<CException>(&translateCException);
 
     //------------------------//
     //----- CDataImageIO -----//
