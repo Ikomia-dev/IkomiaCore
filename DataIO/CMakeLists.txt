@@ -52,34 +52,69 @@ target_link_libraries(ikDataIO PRIVATE
     opencv_imgcodecs
     opencv_imgproc
     opencv_videoio
-    vtkCommonCore
-    vtkCommonDataModel
-    vtkCommonExecutionModel
-    vtkCommonMath
-    vtkCommonSystem
-    vtkCommonTransforms
-    vtkFiltersCore
-    vtkFiltersGeneral
-    vtkFiltersImaging
-    vtkImagingColor
-    vtkImagingCore
-    vtkImagingGeneral
-    vtkImagingMath
-    vtkImagingSources
-    vtkInteractionImage
-    vtkInteractionStyle
-    vtkIOCore
-    vtkIOImage
-    vtkRenderingContext2D
-    vtkRenderingCore
-    vtkRenderingImage
-    vtkRenderingOpenGL2
-    vtksys
-    vtkViewsCore
-    vtkDICOM
     ikUtils
     ikCore
 )
+
+if(UNIX)
+    target_link_libraries(ikDataIO PRIVATE
+        vtkCommonCore-${VTK_MAJOR_MINOR_VERSION}
+        vtkCommonDataModel-${VTK_MAJOR_MINOR_VERSION}
+        vtkCommonExecutionModel-${VTK_MAJOR_MINOR_VERSION}
+        vtkCommonMath-${VTK_MAJOR_MINOR_VERSION}
+        vtkCommonSystem-${VTK_MAJOR_MINOR_VERSION}
+        vtkCommonTransforms-${VTK_MAJOR_MINOR_VERSION}
+        vtkFiltersCore-${VTK_MAJOR_MINOR_VERSION}
+        vtkFiltersGeneral-${VTK_MAJOR_MINOR_VERSION}
+        vtkFiltersImaging-${VTK_MAJOR_MINOR_VERSION}
+        vtkImagingColor-${VTK_MAJOR_MINOR_VERSION}
+        vtkImagingCore-${VTK_MAJOR_MINOR_VERSION}
+        vtkImagingGeneral-${VTK_MAJOR_MINOR_VERSION}
+        vtkImagingMath-${VTK_MAJOR_MINOR_VERSION}
+        vtkImagingSources-${VTK_MAJOR_MINOR_VERSION}
+        vtkInteractionImage-${VTK_MAJOR_MINOR_VERSION}
+        vtkInteractionStyle-${VTK_MAJOR_MINOR_VERSION}
+        vtkIOCore-${VTK_MAJOR_MINOR_VERSION}
+        vtkIOImage-${VTK_MAJOR_MINOR_VERSION}
+        vtkRenderingContext2D-${VTK_MAJOR_MINOR_VERSION}
+        vtkRenderingCore-${VTK_MAJOR_MINOR_VERSION}
+        vtkRenderingImage-${VTK_MAJOR_MINOR_VERSION}
+        vtkRenderingOpenGL2-${VTK_MAJOR_MINOR_VERSION}
+        vtksys-${VTK_MAJOR_MINOR_VERSION}
+        vtkViewsCore-${VTK_MAJOR_MINOR_VERSION}
+        vtkDICOM-${VTK_MAJOR_MINOR_VERSION}
+    )
+endif()
+
+if(WIN32)
+    target_link_libraries(ikDataIO PRIVATE
+        vtkCommonCore
+        vtkCommonDataModel
+        vtkCommonExecutionModel
+        vtkCommonMath
+        vtkCommonSystem
+        vtkCommonTransforms
+        vtkFiltersCore
+        vtkFiltersGeneral
+        vtkFiltersImaging
+        vtkImagingColor
+        vtkImagingCore
+        vtkImagingGeneral
+        vtkImagingMath
+        vtkImagingSources
+        vtkInteractionImage
+        vtkInteractionStyle
+        vtkIOCore
+        vtkIOImage
+        vtkRenderingContext2D
+        vtkRenderingCore
+        vtkRenderingImage
+        vtkRenderingOpenGL2
+        vtksys
+        vtkViewsCore
+        vtkDICOM
+    )
+endif()
 
 # Translations
 qt5_create_translation(QM_FILE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}/Translations/utils_fr.ts)

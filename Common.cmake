@@ -18,18 +18,18 @@ include_directories(
     ${Python3_INCLUDE_DIRS}
     # Numpy
     ${Python3_NumPy_INCLUDE_DIRS}
+    # VTK
+    ${VTK_INCLUDE_DIRS}
+    # OpenCV
+    ${OpenCV_INCLUDE_DIRS}
 )
 
 if(WIN32)
     include_directories(
         # Boost
         ${Boost_INCLUDE_DIRS}/Boost/include/boost-${BOOST_VERSION}
-        # VTK
-        ${VTK_INCLUDE_DIRS}
         # OpenCL
         "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v${CUDA_VERSION}/include"
-        #OpenCV
-        ${OpenCV_INCLUDE_DIRS}
     )
 endif()
 
