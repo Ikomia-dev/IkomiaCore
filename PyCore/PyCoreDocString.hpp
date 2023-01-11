@@ -501,7 +501,7 @@ constexpr auto _setParamDocString =
 constexpr auto _setParamValuesDocString =
         "Set values of task parameters.\n\n"
         "Args:\n\n"
-        "   values (:py:class:`~ikomia.core.pycore.ParamMap`): dict-like structure of string pairs (parameter name, value)\n\n";
+        "   values (dict): string pairs (parameter name, value)\n\n";
 
 constexpr auto _stopDocString =
         "Notify that the task is requested to stop. "
@@ -638,15 +638,14 @@ constexpr auto _WorkflowTaskParamDocString =
         "This structure is used internally by the system to save and load parameters values of task used in a workflow.\n\n";
 
 constexpr auto _setParamMapDocString =
-        "Set task parameter names and values from the given :py:class:`ParamMap` object (same use as Python dict). "
-        "Numeric values must be converted from str to the desired numeric type before use.\n\n"
+        "Set task parameter names and values from the given Python dict. Names and values must be strings.\n\n"
         "Args:\n\n"
-        "   params (:py:class:`~ikomia.core.pycore.ParamMap`): pairs of strings (parameter name, parameter value)\n\n";
+        "   params (dict): pairs of strings (parameter name, parameter value)\n\n";
 
 constexpr auto _getParamMapDocString =
         "Get task parameter names and values.\n\n"
         "Returns:\n\n"
-        "   :py:class:`~ikomia.core.pycore.ParamMap`: dict-like structure storing pairs of strings (parameter name, parameter value)\n\n";
+        "   dict: pairs of strings (parameter name, parameter value)\n\n";
 
 constexpr auto _getHashValueDocString =
         "Get hash value from parameters values. "

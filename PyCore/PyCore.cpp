@@ -38,6 +38,8 @@
 #include "Graphics/CGraphicsRectangle.h"
 #include "Graphics/CGraphicsText.h"
 #include "Graphics/CGraphicsConversion.h"
+#include "VectorConverter.hpp"
+#include "MapConverter.hpp"
 
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #define PY_ARRAY_UNIQUE_SYMBOL IKOMIA_ARRAY_API
@@ -104,6 +106,9 @@ BOOST_PYTHON_MODULE(pycore)
     registerStdVector<std::shared_ptr<CWorkflowTask>>();
     registerStdVector<CMeasure>();
     registerStdVector<IODataType>();
+
+    // Register std::unordered_map<T>
+    registerStdUMap<std::string, std::string>();
 
     //Register exceptions
     register_exception_translator<CException>(&translateCException);
@@ -280,10 +285,6 @@ BOOST_PYTHON_MODULE(pycore)
     //------------------------------//
     //----- CWorkflowTaskParam -----//
     //------------------------------//
-    class_<std::unordered_map<std::string, std::string>>("ParamMap", "Data structure (same as Python dict) to store task parameters names and values")
-        .def(map_indexing_suite<std::unordered_map<std::string, std::string>>())
-    ;
-
     class_<CWorkflowTaskParamWrap, std::shared_ptr<CWorkflowTaskParamWrap>>("CWorkflowTaskParam", _WorkflowTaskParamDocString)
         .enable_pickling()
         .def(init<>("Default constructor", args("self")))
