@@ -15,11 +15,14 @@ add_library(pycore SHARED
     CWorkflowTaskWidgetWrap.h
     CWorkflowTaskWrap.cpp
     CWorkflowTaskWrap.h
+    IterableConverter.hpp
+    MapConverter.hpp
     PyCore.cpp
     PyCore.h
     PyCoreDocString.hpp
     PyCoreGlobal.h
     PyCoreTools.hpp
+    VectorConverter.hpp
 )
 
 set_target_properties(pycore PROPERTIES
