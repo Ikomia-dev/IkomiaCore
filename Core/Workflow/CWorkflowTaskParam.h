@@ -65,7 +65,7 @@ class CORESHARED_EXPORT CWorkflowTaskParam
 
     public:
 
-        std::map<std::string,std::string>   m_cfg;
+        UMapString   m_cfg;
 };
 
 using WorkflowTaskParamPtr = std::shared_ptr<CWorkflowTaskParam>;

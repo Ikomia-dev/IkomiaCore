@@ -143,7 +143,7 @@ void CMlflowTrainTask::logParam(const std::string &key, const std::string &value
     }
 }
 
-void CMlflowTrainTask::logParams(const std::map<std::string, std::string> &params)
+void CMlflowTrainTask::logParams(const UMapString &params)
 {
     if(m_experimentId == -1)
         return;

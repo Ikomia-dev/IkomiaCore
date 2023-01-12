@@ -291,9 +291,9 @@ BOOST_PYTHON_MODULE(pycore)
         .def(self_ns::str(self_ns::self))
         .def("__copy__", &generic_copy<CWorkflowTaskParamWrap>)
         .def("__deepcopy__", &generic_deepcopy<CWorkflowTaskParamWrap>)
-        .def("setParamMap", &CWorkflowTaskParam::setParamMap, &CWorkflowTaskParamWrap::default_setParamMap, _setParamMapDocString, args("self", "params"))
-        .def("getParamMap", &CWorkflowTaskParam::getParamMap, &CWorkflowTaskParamWrap::default_getParamMap, _getParamMapDocString, args("self"))
-        .def("getHashValue", &CWorkflowTaskParam::getHashValue, &CWorkflowTaskParamWrap::default_getHashValue, _getHashValueDocString, args("self"))
+        .def("setParamMap", &CWorkflowTaskParamWrap::setParamMap, &CWorkflowTaskParamWrap::default_setParamMap, _setParamMapDocString, args("self", "params"))
+        .def("getParamMap", &CWorkflowTaskParamWrap::getParamMap, &CWorkflowTaskParamWrap::default_getParamMap, _getParamMapDocString, args("self"))
+        .def("getHashValue", &CWorkflowTaskParamWrap::getHashValue, &CWorkflowTaskParamWrap::default_getHashValue, _getHashValueDocString, args("self"))
     ;
 
     //---------------------------//

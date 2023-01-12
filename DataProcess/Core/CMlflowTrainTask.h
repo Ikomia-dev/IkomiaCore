@@ -39,7 +39,7 @@ class DATAPROCESSSHARED_EXPORT CMlflowTrainTask: public CDnnTrainTask
         void    logParam(const std::string& key, int value);
         void    logParam(const std::string& key, float value);
         void    logParam(const std::string& key, const std::string& value);
-        void    logParams(const std::map<std::string, std::string> &params);
+        void    logParams(const UMapString &params);
         void    logMetric(const std::string& key, float value, int step=0);
         void    logMetrics(const std::map<std::string, float>& metrics, int step=0);
         void    logArtifact(const std::string& path);
