@@ -68,11 +68,11 @@ BOOST_PYTHON_MODULE(pyutils)
         .value("PYTHON", ApiLanguage::PYTHON)
     ;
 
-    def("getApiVersion", &Utils::Plugin::getCurrentApiVersion, _getCurrentVersionDocString);
-    def("getCompatibilityState", &Utils::Plugin::getCompatibilityState, _pythonStateDocString, args("version", "language"));
-    def("checkArchitectureKeywords", &Utils::Plugin::checkArchitectureKeywords, _checkArchiKeywordsDocString, args("keywords"));
-    def("isAppStarted", &Utils::IkomiaApp::isAppStarted, "Internal use only");
-    def("getModelHubUrl", &Utils::Plugin::getModelHubUrl, _getModelHubUrlDocString);
+    def("get_api_version", &Utils::Plugin::getCurrentApiVersion, _getCurrentVersionDocString);
+    def("get_compatibility_state", &Utils::Plugin::getCompatibilityState, _pythonStateDocString, args("version", "language"));
+    def("check_architecture_keywords", &Utils::Plugin::checkArchitectureKeywords, _checkArchiKeywordsDocString, args("keywords"));
+    def("is_app_started", &Utils::IkomiaApp::isAppStarted, "Internal use only");
+    def("get_model_hub_url", &Utils::Plugin::getModelHubUrl, _getModelHubUrlDocString);
 
     //----- Binding CException -----
     class_<CException>("CException", _exceptionDocString, init<>("Default constructor"))
@@ -82,16 +82,16 @@ BOOST_PYTHON_MODULE(pyutils)
 
     //----- Binding CMemoryInfo -----
     class_<CMemoryInfo>("CMemoryInfo", _memoryInfoDocString, init<>("Default constructor"))
-        .def("totalMemory", &CMemoryInfo::totalMemory, _totalMemoryDocString, args("self"))
-        .def("availableMemory", &CMemoryInfo::availableMemory, _availableMemoryDocString, args("self"))
-        .def("memoryLoad", &CMemoryInfo::memoryLoad, _memoryLoadDocString, args("self"))
+        .def("get_total_memory", &CMemoryInfo::totalMemory, _totalMemoryDocString, args("self"))
+        .def("get_available_memory", &CMemoryInfo::availableMemory, _availableMemoryDocString, args("self"))
+        .def("get_memory_load", &CMemoryInfo::memoryLoad, _memoryLoadDocString, args("self"))
     ;
 
     //----- Binding CTimer -----
     class_<CTimer>("CTimer", _timerDocString, init<>("Default constructor"))
         .def("start", &CTimer::start, _startDocString, args("self"))
-        .def("printElapsedTime_ms", &CTimer::printElapsedTime_ms, _printElapsedTimeDocString, args("self", "name"))
-        .def("printTotalElapsedTime_ms", &CTimer::printTotalElapsedTime_ms, _printTotalElapsedTimeDocString, args("self", "name"))
+        .def("print_elapsed_time_ms", &CTimer::printElapsedTime_ms, _printElapsedTimeDocString, args("self", "name"))
+        .def("print_total_elapsed_time_ms", &CTimer::printTotalElapsedTime_ms, _printTotalElapsedTimeDocString, args("self", "name"))
         .def("get_elapsed_ms", &CTimer::get_elapsed_ms, _getElapsedMsDocString, args("self"))
         .def("get_total_elapsed_ms", &CTimer::get_total_elapsed_ms, _getTotalElapsedMsDocString, args("self"))
         .def("get_elapsed_us", &CTimer::get_elapsed_us, _getElapsedUsDocString, args("self"))
