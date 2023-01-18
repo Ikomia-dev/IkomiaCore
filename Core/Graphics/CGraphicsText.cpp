@@ -99,22 +99,27 @@ std::string CProxyGraphicsText::getText() const
 
 QRectF CProxyGraphicsText::getBoundingQRect() const
 {
-    CGraphicsTextProperty prop;
-    if(m_bUseGlobalContext == false)
-        prop = m_property;
+    if (Utils::IkomiaApp::isAppStarted())
+    {
+        CGraphicsTextProperty prop;
+        if(m_bUseGlobalContext == false)
+            prop = m_property;
 
-    QFont font;
-    font.setFamily(QString::fromStdString(prop.m_fontName));
-    font.setPointSize(prop.m_fontSize);
-    font.setBold(prop.m_bBold);
-    font.setItalic(prop.m_bItalic);
-    font.setUnderline(prop.m_bUnderline);
-    font.setStrikeOut(prop.m_bStrikeOut);
+        QFont font;
+        font.setFamily(QString::fromStdString(prop.m_fontName));
+        font.setPointSize(prop.m_fontSize);
+        font.setBold(prop.m_bBold);
+        font.setItalic(prop.m_bItalic);
+        font.setUnderline(prop.m_bUnderline);
+        font.setStrikeOut(prop.m_bStrikeOut);
 
-    QFontMetrics fontMetrics(font);
-    int width = fontMetrics.horizontalAdvance(QString::fromStdString(m_text));
-    int height = fontMetrics.height();
-    return QRect(m_x, m_y, width, height);
+        QFontMetrics fontMetrics(font);
+        int width = fontMetrics.horizontalAdvance(QString::fromStdString(m_text));
+        int height = fontMetrics.height();
+        return QRect(m_x, m_y, width, height);
+    }
+    else
+        return QRect(m_x, m_y, 0, 0);
 }
 
 std::vector<float> CProxyGraphicsText::getBoundingRect() const
