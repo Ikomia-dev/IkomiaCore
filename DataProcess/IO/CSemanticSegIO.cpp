@@ -9,7 +9,6 @@ CSemanticSegIO::CSemanticSegIO() : CWorkflowTaskIO(IODataType::SEMANTIC_SEGMENTA
     m_saveFormat = DataFileFormat::JSON;
     m_imgMaskIOPtr = std::make_shared<CImageIO>(IODataType::IMAGE_LABEL);
     m_imgLegendIOPtr = std::make_shared<CImageIO>(IODataType::IMAGE);
-    m_bComposite = true;
 }
 
 CSemanticSegIO::CSemanticSegIO(const CSemanticSegIO &io): CWorkflowTaskIO(io)
@@ -18,7 +17,6 @@ CSemanticSegIO::CSemanticSegIO(const CSemanticSegIO &io): CWorkflowTaskIO(io)
     m_colors = io.m_colors;
     m_imgMaskIOPtr = io.m_imgMaskIOPtr->clone();
     m_imgLegendIOPtr = io.m_imgLegendIOPtr->clone();
-    m_bComposite = true;
 }
 
 CSemanticSegIO::CSemanticSegIO(const CSemanticSegIO &&io): CWorkflowTaskIO(io)
@@ -27,7 +25,6 @@ CSemanticSegIO::CSemanticSegIO(const CSemanticSegIO &&io): CWorkflowTaskIO(io)
     m_colors = std::move(io.m_colors);
     m_imgMaskIOPtr = io.m_imgMaskIOPtr->clone();
     m_imgLegendIOPtr = io.m_imgLegendIOPtr->clone();
-    m_bComposite = true;
 }
 
 CSemanticSegIO &CSemanticSegIO::operator=(const CSemanticSegIO &io)
@@ -96,6 +93,11 @@ void CSemanticSegIO::setClassNames(const std::vector<std::string> &names, const 
 bool CSemanticSegIO::isDataAvailable() const
 {
     return m_imgMaskIOPtr->isDataAvailable();
+}
+
+bool CSemanticSegIO::isComposite() const
+{
+    return true;
 }
 
 void CSemanticSegIO::clearData()

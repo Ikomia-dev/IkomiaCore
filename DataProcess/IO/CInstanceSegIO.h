@@ -63,6 +63,7 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegIO: public CWorkflowTaskIO
         CMat                                getMergeMask() const;
 
         bool                                isDataAvailable() const override;
+        bool                                isComposite() const override;
 
         void                                init(const std::string& taskName, int refImageIndex, int imageWidth, int imageHeight);
 

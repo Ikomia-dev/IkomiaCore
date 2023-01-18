@@ -61,7 +61,6 @@ void CObjectDetection::setColor(const CColor &color)
 //------------------------------//
 CObjectDetectionIO::CObjectDetectionIO() : CWorkflowTaskIO(IODataType::OBJECT_DETECTION, "CObjectDetectionIO")
 {
-    m_bComposite = true;
     m_description = QObject::tr("Object detection data: label, confidence, box and color.").toStdString();
     m_saveFormat = DataFileFormat::JSON;
     m_graphicsIOPtr = std::make_shared<CGraphicsOutput>();
@@ -70,7 +69,6 @@ CObjectDetectionIO::CObjectDetectionIO() : CWorkflowTaskIO(IODataType::OBJECT_DE
 
 CObjectDetectionIO::CObjectDetectionIO(const CObjectDetectionIO &io): CWorkflowTaskIO(io)
 {
-    m_bComposite = true;
     m_objects = io.m_objects;
     m_graphicsIOPtr = io.m_graphicsIOPtr->clone();
     m_blobMeasureIOPtr = io.m_blobMeasureIOPtr->clone();
@@ -78,7 +76,6 @@ CObjectDetectionIO::CObjectDetectionIO(const CObjectDetectionIO &io): CWorkflowT
 
 CObjectDetectionIO::CObjectDetectionIO(const CObjectDetectionIO &&io): CWorkflowTaskIO(io)
 {
-    m_bComposite = true;
     m_objects = std::move(io.m_objects);
     m_graphicsIOPtr = io.m_graphicsIOPtr->clone();
     m_blobMeasureIOPtr = io.m_blobMeasureIOPtr->clone();
@@ -143,6 +140,11 @@ std::shared_ptr<CBlobMeasureIO> CObjectDetectionIO::getBlobMeasureIO() const
 bool CObjectDetectionIO::isDataAvailable() const
 {
     return m_objects.size() > 0;
+}
+
+bool CObjectDetectionIO::isComposite() const
+{
+    return true;
 }
 
 void CObjectDetectionIO::init(const std::string &taskName, int imageIndex)

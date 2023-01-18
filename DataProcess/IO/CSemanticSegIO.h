@@ -29,6 +29,7 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
         void                                setClassNames(const std::vector<std::string>& names, const std::vector<cv::Vec3b>& colors);
 
         bool                                isDataAvailable() const override;
+        bool                                isComposite() const override;
 
         void                                clearData() override;
 

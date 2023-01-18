@@ -42,7 +42,6 @@ void CInstanceSegmentation::setMask(const CMat &mask)
 //--------------------------//
 CInstanceSegIO::CInstanceSegIO() : CWorkflowTaskIO(IODataType::INSTANCE_SEGMENTATION, "CInstanceSegIO")
 {
-    m_bComposite = true;
     m_description = QObject::tr("Instance segmentation data: label, confidence, box, mask and color.").toStdString();
     m_saveFormat = DataFileFormat::JSON;
     m_imgIOPtr = std::make_shared<CImageIO>(IODataType::IMAGE_LABEL);
@@ -52,7 +51,6 @@ CInstanceSegIO::CInstanceSegIO() : CWorkflowTaskIO(IODataType::INSTANCE_SEGMENTA
 
 CInstanceSegIO::CInstanceSegIO(const CInstanceSegIO &io): CWorkflowTaskIO(io)
 {
-    m_bComposite = true;
     m_instances = io.m_instances;
     m_mergeMask = io.m_mergeMask;
     m_imgIOPtr = io.m_imgIOPtr->clone();
@@ -62,7 +60,6 @@ CInstanceSegIO::CInstanceSegIO(const CInstanceSegIO &io): CWorkflowTaskIO(io)
 
 CInstanceSegIO::CInstanceSegIO(const CInstanceSegIO &&io): CWorkflowTaskIO(io)
 {
-    m_bComposite = true;
     m_instances = std::move(io.m_instances);
     m_mergeMask = std::move(io.m_mergeMask);
     m_imgIOPtr = io.m_imgIOPtr->clone();
@@ -143,6 +140,11 @@ CMat CInstanceSegIO::getMergeMask() const
 bool CInstanceSegIO::isDataAvailable() const
 {
     return m_instances.size() > 0;
+}
+
+bool CInstanceSegIO::isComposite() const
+{
+    return true;
 }
 
 void CInstanceSegIO::init(const std::string &taskName, int refImageIndex, int imageWidth, int imageHeight)
