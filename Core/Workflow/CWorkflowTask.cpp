@@ -199,8 +199,8 @@ void CWorkflowTask::setInputDataType(const IODataType &dataType, size_t index)
         m_inputs[index]->setDataType(dataType);
     else
     {
-        m_inputs.resize(index + 1);
-        m_inputs[index]->setDataType(dataType);
+        std::string msg = "No valid input at index " + std::to_string(index);
+        throw CException(CoreExCode::STRUCTURE_OVERFLOW, msg, __func__, __FILE__, __LINE__);
     }
 }
 
@@ -256,8 +256,8 @@ void CWorkflowTask::setOutputDataType(const IODataType &dataType, size_t index)
         m_outputs[index]->setDataType(dataType);
     else
     {
-        m_outputs.resize(index + 1);
-        m_outputs[index]->setDataType(dataType);
+        std::string msg = "No valid output at index " + std::to_string(index);
+        throw CException(CoreExCode::STRUCTURE_OVERFLOW, msg, __func__, __FILE__, __LINE__);
     }
 }
 
