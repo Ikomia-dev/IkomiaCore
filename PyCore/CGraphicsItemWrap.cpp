@@ -32,7 +32,7 @@ void CGraphicsItemWrap::setCategory(const std::string &categ)
     CPyEnsureGIL gil;
     try
     {
-        this->get_override("setCategory")(categ);
+        this->get_override("set_category")(categ);
     }
     catch(boost::python::error_already_set&)
     {
@@ -46,7 +46,7 @@ std::string CGraphicsItemWrap::getCategory() const
     CPyEnsureGIL gil;
     try
     {
-        return this->get_override("getCategory")();
+        return this->get_override("get_category")();
     }
     catch(boost::python::error_already_set&)
     {
@@ -61,7 +61,7 @@ QRectF CGraphicsItemWrap::getBoundingQRect() const
     CPyEnsureGIL gil;
     try
     {
-        return this->get_override("getBoundingQRect")();
+        return this->get_override("get_bounding_rect")();
     }
     catch(boost::python::error_already_set&)
     {
@@ -76,7 +76,7 @@ std::vector<float> CGraphicsItemWrap::getBoundingRect() const
     CPyEnsureGIL gil;
     try
     {
-        return this->get_override("getBoundingRect")();
+        return this->get_override("get_bounding_rect")();
     }
     catch(boost::python::error_already_set&)
     {
@@ -91,7 +91,7 @@ bool CGraphicsItemWrap::isTextItem() const
     CPyEnsureGIL gil;
     try
     {
-        if(override isTextItemOver = this->get_override("isTextItem"))
+        if(override isTextItemOver = this->get_override("is_text_item"))
             return isTextItemOver();
         else
             return CProxyGraphicsItem::isTextItem();

@@ -47,7 +47,6 @@ CWorkflowTaskIO::CWorkflowTaskIO(const CWorkflowTaskIO& io)
     m_dimCount = io.m_dimCount;
     m_bAutoSave = io.m_bAutoSave;
     m_bDisplayable = io.m_bDisplayable;
-    m_bComposite = io.m_bComposite;
     m_infoPtr = io.m_infoPtr;
 }
 
@@ -62,7 +61,6 @@ CWorkflowTaskIO::CWorkflowTaskIO(const CWorkflowTaskIO&& io)
     m_dimCount = std::move(io.m_dimCount);
     m_bAutoSave = std::move(io.m_bAutoSave);
     m_bDisplayable = std::move(io.m_bDisplayable);
-    m_bComposite = std::move(io.m_bComposite);
     m_infoPtr = std::move(io.m_infoPtr);
 }
 
@@ -77,7 +75,6 @@ CWorkflowTaskIO &CWorkflowTaskIO::operator=(const CWorkflowTaskIO &io)
     m_dimCount = io.m_dimCount;
     m_bAutoSave = io.m_bAutoSave;
     m_bDisplayable = io.m_bDisplayable;
-    m_bComposite = io.m_bComposite;
     m_infoPtr = io.m_infoPtr;
     return *this;
 }
@@ -93,7 +90,6 @@ CWorkflowTaskIO &CWorkflowTaskIO::operator=(const CWorkflowTaskIO&& io)
     m_dimCount = std::move(io.m_dimCount);
     m_bAutoSave = std::move(io.m_bAutoSave);
     m_bDisplayable = std::move(io.m_bDisplayable);
-    m_bComposite = std::move(io.m_bComposite);
     m_infoPtr = std::move(io.m_infoPtr);
     return *this;
 }
@@ -109,6 +105,9 @@ std::ostream& operator<<(std::ostream& os, const CWorkflowTaskIO& io)
     os << "Data type: " << Utils::Workflow::getIODataName(io.m_dataType).toStdString() << std::endl;
     os << "Save format: " << Utils::Data::getFileFormatExtension(io.m_saveFormat) << std::endl;
     os << "Dimension count: " << io.m_dimCount << std::endl;
+    os << "Displayable: " << io.m_bDisplayable << std::endl;
+    os << "Composite: " << io.isComposite() << std::endl;
+    os << "Data available: " << io.isDataAvailable() << std::endl;
 
     if(io.m_infoPtr)
         os << *(io.m_infoPtr);
@@ -202,7 +201,7 @@ bool CWorkflowTaskIO::isDisplayable() const
 
 bool CWorkflowTaskIO::isComposite() const
 {
-    return m_bComposite;
+    return false;
 }
 
 void CWorkflowTaskIO::setDataType(IODataType type)

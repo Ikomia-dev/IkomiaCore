@@ -317,7 +317,7 @@ constexpr auto _endTaskRunDocString =
         ":py:meth:`~ikomia.core.pycore.CWorkflowTask.run` method.\n\n";
 
 constexpr auto _executeActionsDocString =
-        "Method called when a specific action is requested from the associated widget (see :py:meth:`~ikomia.core.pycore.CWorkflowTaskWidget.emitSendProcessAction`).\n\n"
+        "Method called when a specific action is requested from the associated widget (see :py:meth:`~ikomia.core.pycore.CWorkflowTaskWidget.emit_send_process_action`).\n\n"
         "Args:\n\n"
         "   action (int): action code\n\n";
 
@@ -384,7 +384,7 @@ constexpr auto _getParamDocString =
 constexpr auto _getParamValuesDocString =
         "Get values of task parameters.\n\n"
         "Returns:\n\n"
-        "   :py:class:`~ikomia.core.pycore.ParamMap`: dict-like structure of string pairs (parameter name, value)\n\n";
+        "   dict: string pairs (parameter name, value)\n\n";
 
 constexpr auto _getProgressStepsDocString =
         "Get the number of progress steps when the system runs the task.\n\n"
@@ -418,6 +418,11 @@ constexpr auto _removeInputDocString =
         "Args:\n\n"
         "   index (int): zero-based input index\n\n";
 
+constexpr auto _removeOutputDocString =
+        "Remove output at the given position.\n\n"
+        "Args:\n\n"
+        "   index (int): zero-based output index\n\n";
+
 constexpr auto _runDocString =
         "Run the task. It's where the main process of the task has to be implemented. "
         "In this base class, the method just forwards the inputs to outputs. It has to be overriden in derived class.\n\n";
@@ -439,7 +444,7 @@ constexpr auto _setAutoSaveDocString =
         "Enable/disable auto-save mode. When this mode is enabled, task outputs are automatically save to disk when the run() function "
         "is executed. Save formats are already defined for all builtin I/O objects. For custom I/O object, one must implement"
         ":py:meth:`~ikomia.core.pycore.CWorkflowTaskIO.load` and :py:meth:`~ikomia.core.pycore.CWorkflowTaskIO.save` methods. "
-        "Output folder can be set with :py:meth:`~ikomia.core.pycore.CWorkflowTask.setOutputFolder`.\n\n"
+        "Output folder can be set with :py:attribute:`~ikomia.core.pycore.CWorkflowTask.output_folder`.\n\n"
         "Args:\n\n"
         "   enable (bool): True to enable, False to disable\n\n";
 
@@ -487,12 +492,6 @@ constexpr auto _setOutputsDocString =
         "Args:\n\n"
         "   outputs (list of :py:class:`~ikomia.core.pycore.CWorkflowTaskIO` based objects)\n\n";
 
-constexpr auto _setOutputFolderDocString =
-        "Set the output folder of the task when auto-save mode is enabled (see :py:meth:`~ikomia.core.pycore.CWorkflowTask.setAutoSave`). "
-        "Default is the current user home folder.\n\n"
-        "Args:\n\n"
-        "   str: path to folder\n\n";
-
 constexpr auto _setParamDocString =
         "Set the task parameters object. Task can have only one parameters object.\n\n"
         "Args:\n\n"
@@ -538,12 +537,12 @@ constexpr auto _WorkflowTaskIODocString =
 constexpr auto _ctor1WorkflowTaskIODocString =
         "Constructor with parameters\n\n"
         "Args:\n\n"
-        "   dataType (:py:class:`~ikomia.core.pycore.IODataType`): data type identifier\n\n";
+        "   data_type (:py:class:`~ikomia.core.pycore.IODataType`): data type identifier\n\n";
 
 constexpr auto _ctor2WorkflowTaskIODocString =
         "Constructor with parameters\n\n"
         "Args:\n\n"
-        "   dataType(:py:class:`~ikomia.core.pycore.IODataType`): data type identifier\n\n"
+        "   data_type(:py:class:`~ikomia.core.pycore.IODataType`): data type identifier\n\n"
         "   name (str): custom name associated to input/output to give more insights to end user\n\n";
 
 constexpr auto _getUnitElementCountDocString =
@@ -567,10 +566,9 @@ constexpr auto _isAutoInputDocString =
         "Returns:\n\n"
         "   bool: True or False\n\n";
 
-constexpr auto _setDisplayableDocString =
-        "Make the output displayable or not in Ikomia Studio. The output still appear in the workflow editor "
-        "and can be connected to compatible input.\n\n"
-        "Args:\n\n"
+constexpr auto _isCompositeDocString =
+        "Check whether I/O object is a composite one. This method should be overriden for custom input or output.\n\n"
+        "Returns:\n\n"
         "   bool: True or False\n\n";
 
 constexpr auto _clearDataDocString =
