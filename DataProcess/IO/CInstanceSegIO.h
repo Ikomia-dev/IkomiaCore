@@ -90,7 +90,6 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegIO: public CWorkflowTaskIO
 
     private:
 
-        CMat                                m_mergeMask;
         std::vector<CInstanceSegmentation>  m_instances;
         std::shared_ptr<CImageIO>           m_imgIOPtr = nullptr;
         std::shared_ptr<CGraphicsOutput>    m_graphicsIOPtr = nullptr;
