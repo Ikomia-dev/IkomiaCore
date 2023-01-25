@@ -45,6 +45,8 @@ class DATAPROCESSSHARED_EXPORT C2dImageTask : public CWorkflowTask
 {
     public:
 
+        // TODO: improve graphics mask API
+
         enum MaskMode { MERGE_SOURCE, MASK_ONLY };
 
         /**

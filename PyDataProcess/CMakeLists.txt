@@ -3,6 +3,8 @@ set(CMAKE_INSTALL_IKOMIA_PYDATAPROCESS ${CMAKE_INSTALL_IKOMIA_PYTHON_LIB}/datapr
 add_library(pydataprocess SHARED
     ../Core/Data/CvMatNumpyArrayConverter.cpp
     ../Core/Data/CvMatNumpyArrayConverter.h
+    ../PyCore/VectorConverter.hpp
+    ../PyCore/MapConverter.hpp
     CIkomiaRegistryWrap.cpp
     CIkomiaRegistryWrap.h
     CPluginProcessInterfaceWrap.cpp
@@ -76,6 +78,7 @@ target_include_directories(pydataprocess PRIVATE
     ../DataIO
     ../DataProcess
     ../Utils
+    ../PyCore
 )
 
 target_link_libraries(pydataprocess PRIVATE

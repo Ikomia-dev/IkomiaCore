@@ -23,6 +23,10 @@ CDnnTrainTaskWrap::CDnnTrainTaskWrap() : CDnnTrainTask()
 {
 }
 
+CDnnTrainTaskWrap::CDnnTrainTaskWrap(const std::string &name) :  CDnnTrainTask(name)
+{
+}
+
 CDnnTrainTaskWrap::CDnnTrainTaskWrap(const std::string &name, const std::shared_ptr<CWorkflowTaskParam> &pParam) :  CDnnTrainTask(name, pParam)
 {
 }
@@ -36,7 +40,7 @@ size_t CDnnTrainTaskWrap::getProgressSteps()
     CPyEnsureGIL gil;
     try
     {
-        if(override getProgressStepsOver = this->get_override("getProgressSteps"))
+        if(override getProgressStepsOver = this->get_override("get_progress_steps"))
             return getProgressStepsOver();
 
         return CDnnTrainTask::getProgressSteps();
@@ -66,7 +70,7 @@ void CDnnTrainTaskWrap::setActive(bool bActive)
     CPyEnsureGIL gil;
     try
     {
-        if(override setActiveOver = this->get_override("setActive"))
+        if(override setActiveOver = this->get_override("set_active"))
             setActiveOver(bActive);
         else
             CDnnTrainTask::setActive(bActive);
@@ -95,7 +99,7 @@ void CDnnTrainTaskWrap::beginTaskRun()
     CPyEnsureGIL gil;
     try
     {
-        if(override beginTaskRunOver = this->get_override("beginTaskRun"))
+        if(override beginTaskRunOver = this->get_override("begin_task_run"))
             beginTaskRunOver();
         else
             CDnnTrainTask::beginTaskRun();
@@ -124,7 +128,7 @@ void CDnnTrainTaskWrap::endTaskRun()
     CPyEnsureGIL gil;
     try
     {
-        if(override endTaskRunOver = this->get_override("endTaskRun"))
+        if(override endTaskRunOver = this->get_override("end_task_run"))
             endTaskRunOver();
         else
             CDnnTrainTask::endTaskRun();
@@ -211,7 +215,7 @@ void CDnnTrainTaskWrap::executeActions(int flags)
     CPyEnsureGIL gil;
     try
     {
-        if(override executeActionsOver = this->get_override("executeActions"))
+        if(override executeActionsOver = this->get_override("execute_actions"))
             executeActionsOver(flags);
         else
             CDnnTrainTask::executeActions(flags);

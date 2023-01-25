@@ -17,7 +17,7 @@ void CSemanticSegIOWrap::setClassNames(const std::vector<std::string> &names, co
         for(size_t i=0; i<colors.size(); ++i)
         {
             cv::Vec3b cvcolor;
-            for(size_t j=0; j<3; j++)
+            for(size_t j=0; j<3; ++j)
             {
                 if(j < colors[i].size())
                     cvcolor[j] = colors[i][j];
@@ -34,12 +34,28 @@ void CSemanticSegIOWrap::setClassNames(const std::vector<std::string> &names, co
     }
 }
 
+std::vector<std::vector<uchar> > CSemanticSegIOWrap::getColorsWrap() const
+{
+    std::vector<std::vector<uchar>> colors;
+    auto cvcolors = this->CSemanticSegIO::getColors();
+
+    for(size_t i=0; i<cvcolors.size(); ++i)
+    {
+        std::vector<uchar> color;
+        for(size_t j=0; j<3; ++j)
+            color.push_back(cvcolors[i][j]);
+
+        colors.push_back(color);
+    }
+    return colors;
+}
+
 bool CSemanticSegIOWrap::isDataAvailable() const
 {
     CPyEnsureGIL gil;
     try
     {
-        if(override isDataOver = this->get_override("isDataAvailable"))
+        if(override isDataOver = this->get_override("is_data_available"))
             return isDataOver();
         return CSemanticSegIO::isDataAvailable();
     }
@@ -67,7 +83,7 @@ void CSemanticSegIOWrap::clearData()
     CPyEnsureGIL gil;
     try
     {
-        if(override clearDataOver = this->get_override("clearData"))
+        if(override clearDataOver = this->get_override("clear_data"))
             clearDataOver();
         else
             CSemanticSegIO::clearData();
@@ -180,7 +196,7 @@ std::string CSemanticSegIOWrap::toJson(const std::vector<std::string> &options) 
     CPyEnsureGIL gil;
     try
     {
-        if(override toJsonOver = this->get_override("toJson"))
+        if(override toJsonOver = this->get_override("to_json"))
             return toJsonOver(options);
         else
             return CSemanticSegIO::toJson(options);
@@ -209,7 +225,7 @@ void CSemanticSegIOWrap::fromJson(const std::string &jsonStr)
     CPyEnsureGIL gil;
     try
     {
-        if(override fromJsonOver = this->get_override("fromJson"))
+        if(override fromJsonOver = this->get_override("from_json"))
             fromJsonOver(jsonStr);
         else
             CSemanticSegIO::fromJson(jsonStr);

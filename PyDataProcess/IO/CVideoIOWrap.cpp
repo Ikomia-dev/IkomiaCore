@@ -52,7 +52,7 @@ size_t CVideoIOWrap::getUnitElementCount() const
     CPyEnsureGIL gil;
     try
     {
-        if(override getOver = this->get_override("getUnitElementCount"))
+        if(override getOver = this->get_override("get_unit_element_count"))
             return getOver();
         return CVideoIO::getUnitElementCount();
     }
@@ -80,7 +80,7 @@ CMat CVideoIOWrap::getImage()
     CPyEnsureGIL gil;
     try
     {
-        if(override getImageOver = this->get_override("getImage"))
+        if(override getImageOver = this->get_override("get_image"))
             return getImageOver();
         return CVideoIO::getImage();
     }
@@ -108,7 +108,7 @@ bool CVideoIOWrap::isDataAvailable() const
     CPyEnsureGIL gil;
     try
     {
-        if(override isDataOver = this->get_override("isDataAvailable"))
+        if(override isDataOver = this->get_override("is_data_available"))
             return isDataOver();
         return CVideoIO::isDataAvailable();
     }
@@ -136,7 +136,7 @@ void CVideoIOWrap::clearData()
     CPyEnsureGIL gil;
     try
     {
-        if(override clearDataOver = this->get_override("clearData"))
+        if(override clearDataOver = this->get_override("clear_data"))
             clearDataOver();
         else
             CVideoIO::clearData();
@@ -165,7 +165,7 @@ void CVideoIOWrap::copyStaticData(const std::shared_ptr<CWorkflowTaskIO> &ioPtr)
     CPyEnsureGIL gil;
     try
     {
-        if(override copyOver = this->get_override("copyStaticData"))
+        if(override copyOver = this->get_override("copy_static_data"))
             copyOver(ioPtr);
         else
             CVideoIO::copyStaticData(ioPtr);

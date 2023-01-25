@@ -444,7 +444,7 @@ constexpr auto _setAutoSaveDocString =
         "Enable/disable auto-save mode. When this mode is enabled, task outputs are automatically save to disk when the run() function "
         "is executed. Save formats are already defined for all builtin I/O objects. For custom I/O object, one must implement"
         ":py:meth:`~ikomia.core.pycore.CWorkflowTaskIO.load` and :py:meth:`~ikomia.core.pycore.CWorkflowTaskIO.save` methods. "
-        "Output folder can be set with :py:attribute:`~ikomia.core.pycore.CWorkflowTask.output_folder`.\n\n"
+        "Output folder can be set with :py:attr:`~ikomia.core.pycore.CWorkflowTask.output_folder`.\n\n"
         "Args:\n\n"
         "   enable (bool): True to enable, False to disable\n\n";
 

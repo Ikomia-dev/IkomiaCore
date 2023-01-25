@@ -40,7 +40,7 @@ size_t CArrayIOWrap::getUnitElementCount() const
     CPyEnsureGIL gil;
     try
     {
-        if(override getOver = this->get_override("getUnitElementCount"))
+        if(override getOver = this->get_override("get_unit_element_count"))
             return getOver();
         return CArrayIO::getUnitElementCount();
     }
@@ -68,7 +68,7 @@ bool CArrayIOWrap::isDataAvailable() const
     CPyEnsureGIL gil;
     try
     {
-        if(override isDataOver = this->get_override("isDataAvailable"))
+        if(override isDataOver = this->get_override("is_data_available"))
             return isDataOver();
         return CArrayIO::isDataAvailable();
     }
@@ -96,7 +96,7 @@ void CArrayIOWrap::clearData()
     CPyEnsureGIL gil;
     try
     {
-        if(override clearDataOver = this->get_override("clearData"))
+        if(override clearDataOver = this->get_override("clear_data"))
             clearDataOver();
         else
             CArrayIO::clearData();

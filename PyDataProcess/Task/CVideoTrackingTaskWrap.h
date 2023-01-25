@@ -67,6 +67,12 @@ class CVideoTrackingTaskWrap : public CVideoTrackingTask, public wrapper<CVideoT
         void    executeActions(int flags) override;
         void    default_executeActions(int flags);
 
+        void    notifyVideoStart(int frameCount) override;
+        void    default_notifyVideoStart(int frameCount);
+
+        void    notifyVideoEnd() override;
+        void    default_notifyVideoEnd();
+
         void    emitAddSubProgressSteps(int count);
         void    emitStepProgress();
         void    emitGraphicsContextChanged();

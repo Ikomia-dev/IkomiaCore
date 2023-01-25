@@ -39,7 +39,7 @@ size_t C2dImageInteractiveTaskWrap::getProgressSteps()
     CPyEnsureGIL gil;
     try
     {
-        if(override getProgressStepsOver = this->get_override("getProgressSteps"))
+        if(override getProgressStepsOver = this->get_override("get_progress_steps"))
             return getProgressStepsOver();
 
         return C2dImageInteractiveTask::getProgressSteps();
@@ -68,7 +68,7 @@ void C2dImageInteractiveTaskWrap::setActive(bool bActive)
     CPyEnsureGIL gil;
     try
     {
-        if(override setActiveOver = this->get_override("setActive"))
+        if(override setActiveOver = this->get_override("set_active"))
             setActiveOver(bActive);
         else
             C2dImageInteractiveTask::setActive(bActive);
@@ -97,7 +97,7 @@ void C2dImageInteractiveTaskWrap::updateStaticOutputs()
     CPyEnsureGIL gil;
     try
     {
-        if(override updateStaticOutputsOver = this->get_override("updateStaticOutputs"))
+        if(override updateStaticOutputsOver = this->get_override("update_static_outputs"))
             updateStaticOutputsOver();
         else
             C2dImageInteractiveTask::updateStaticOutputs();
@@ -126,7 +126,7 @@ void C2dImageInteractiveTaskWrap::beginTaskRun()
     CPyEnsureGIL gil;
     try
     {
-        if(override beginTaskRunOver = this->get_override("beginTaskRun"))
+        if(override beginTaskRunOver = this->get_override("begin_task_run"))
             beginTaskRunOver();
         else
             C2dImageInteractiveTask::beginTaskRun();
@@ -155,7 +155,7 @@ void C2dImageInteractiveTaskWrap::endTaskRun()
     CPyEnsureGIL gil;
     try
     {
-        if(override endTaskRunOver = this->get_override("endTaskRun"))
+        if(override endTaskRunOver = this->get_override("end_task_run"))
             endTaskRunOver();
         else
             C2dImageInteractiveTask::endTaskRun();
@@ -184,7 +184,7 @@ void C2dImageInteractiveTaskWrap::executeActions(int flags)
     CPyEnsureGIL gil;
     try
     {
-        if(override executeActionsOver = this->get_override("executeActions"))
+        if(override executeActionsOver = this->get_override("execute_actions"))
             executeActionsOver(flags);
         else
             C2dImageInteractiveTask::executeActions(flags);
@@ -271,7 +271,7 @@ void C2dImageInteractiveTaskWrap::graphicsChanged()
     CPyEnsureGIL gil;
     try
     {
-        if(override graphicsChangedOver = this->get_override("graphicsChanged"))
+        if(override graphicsChangedOver = this->get_override("graphics_changed"))
             graphicsChangedOver();
         else
             C2dImageInteractiveTask::graphicsChanged();
@@ -300,7 +300,7 @@ void C2dImageInteractiveTaskWrap::globalInputChanged(bool bNewSequence)
     CPyEnsureGIL gil;
     try
     {
-        if(override globalInputChangedOver = this->get_override("globalInputChanged"))
+        if(override globalInputChangedOver = this->get_override("global_input_changed"))
             globalInputChangedOver(bNewSequence);
         else
             C2dImageInteractiveTask::globalInputChanged(bNewSequence);

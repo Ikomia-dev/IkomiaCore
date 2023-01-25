@@ -54,7 +54,7 @@ bool CWidgetOutputWrap::isDataAvailable() const
     CPyEnsureGIL gil;
     try
     {
-        if(override isDataOver = this->get_override("isDataAvailable"))
+        if(override isDataOver = this->get_override("is_data_available"))
             return isDataOver();
         return CWidgetOutput::isDataAvailable();
     }
@@ -82,7 +82,7 @@ void CWidgetOutputWrap::clearData()
     CPyEnsureGIL gil;
     try
     {
-        if(override clearDataOver = this->get_override("clearData"))
+        if(override clearDataOver = this->get_override("clear_data"))
             clearDataOver();
         else
             CWidgetOutput::clearData();
