@@ -72,7 +72,7 @@ CGraphicsInput::CGraphicsInput(const CGraphicsOutput &out) : CWorkflowTaskIO(out
     m_dataType = IODataType::INPUT_GRAPHICS;
     m_pLayer = nullptr;
     m_items = out.getItems();
-    m_source = GraphicsSource::GRAPHICS_OUTPUT;
+    m_source = GraphicsSource::EXTERNAL_DATA;
 }
 
 CGraphicsInput &CGraphicsInput::operator=(const CGraphicsInput &in)
@@ -99,7 +99,7 @@ CGraphicsInput &CGraphicsInput::operator=(const CGraphicsOutput &out)
     m_dataType = IODataType::INPUT_GRAPHICS;
     m_pLayer = nullptr;
     m_items = out.getItems();
-    m_source = GraphicsSource::GRAPHICS_OUTPUT;
+    m_source = GraphicsSource::EXTERNAL_DATA;
     return *this;
 }
 
@@ -114,7 +114,7 @@ void CGraphicsInput::setItems(const std::vector<ProxyGraphicsItemPtr> &items)
 {
     m_pLayer = nullptr;
     m_items = items;
-    m_source = GraphicsSource::GRAPHICS_OUTPUT;
+    m_source = GraphicsSource::EXTERNAL_DATA;
 }
 
 const CGraphicsLayer *CGraphicsInput::getLayer() const
@@ -163,6 +163,7 @@ bool CGraphicsInput::isDataAvailable() const
 void CGraphicsInput::clearData()
 {
     m_pLayer = nullptr;
+    m_items.clear();
 }
 
 void CGraphicsInput::copy(const std::shared_ptr<CWorkflowTaskIO> &ioPtr)
@@ -247,6 +248,7 @@ void CGraphicsInput::fromJsonInternal(const QJsonDocument &jsonDoc)
 
     // Load items
     m_items.clear();
+    m_source = GraphicsSource::EXTERNAL_DATA;
     CGraphicsRegistration registry;
     auto factory = registry.getProxyFactory();
     QJsonArray items = root["items"].toArray();
