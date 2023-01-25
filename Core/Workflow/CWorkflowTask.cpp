@@ -820,7 +820,12 @@ std::vector<TaskIOLockerUPtr> CWorkflowTask::createOutputScopedLocks() const
 
 void CWorkflowTask::run()
 {
-    m_outputs = m_inputs;
+    // Simply forward input to output if possible -> must be reimplemented in child classes
+    for (size_t i=0; i<m_inputs.size(); ++i)
+    {
+        if (i < m_outputs.size() && Utils::Workflow::isIODataCompatible(m_inputs[i]->getDataType(), m_outputs[i]->getDataType()))
+            m_outputs[i] = m_inputs[i];
+    }
 }
 
 void CWorkflowTask::executeActions(int flags)
