@@ -76,7 +76,9 @@ CImageIO::CImageIO(IODataType data, const std::string& name, const std::string &
     m_description = QObject::tr("2D or 3D images.\n"
                                 "Can be single frame from video or camera stream.").toStdString();
     m_saveFormat = DataFileFormat::PNG;
-    m_name = Utils::File::getFileNameWithoutExtension(path);
+
+    if (m_name.empty())
+        m_name = Utils::File::getFileNameWithoutExtension(path);
 
     CImageDataIO io(path);
     m_image = io.read();
