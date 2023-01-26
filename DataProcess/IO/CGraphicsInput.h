@@ -37,7 +37,7 @@ class DATAPROCESSSHARED_EXPORT CGraphicsInput : public CWorkflowTaskIO
 {
     public:
 
-        enum GraphicsSource { GRAPHICS_LAYER, GRAPHICS_OUTPUT };
+        enum GraphicsSource { GRAPHICS_LAYER, EXTERNAL_DATA };
 
         using GraphicsInputPtr = std::shared_ptr<CGraphicsInput>;
 

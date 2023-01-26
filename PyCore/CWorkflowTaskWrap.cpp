@@ -40,7 +40,7 @@ void CWorkflowTaskWrap::setInputDataType(const IODataType &dataType, size_t inde
     CPyEnsureGIL gil;
     try
     {
-        if(override setOver = this->get_override("setInputDataType"))
+        if(override setOver = this->get_override("set_input_data_type"))
             setOver(dataType, index);
         else
             CWorkflowTask::setInputDataType(dataType, index);
@@ -69,7 +69,7 @@ void CWorkflowTaskWrap::setInput(const WorkflowTaskIOPtr &pInput, size_t index, 
     CPyEnsureGIL gil;
     try
     {
-        if(override setInputOver = this->get_override("setInput"))
+        if(override setInputOver = this->get_override("set_input"))
             setInputOver(pInput, index);
         else
             CWorkflowTask::setInput(pInput, index, bNewSequence);
@@ -98,7 +98,7 @@ void CWorkflowTaskWrap::setInputs(const InputOutputVect &inputs, bool bNewSequen
     CPyEnsureGIL gil;
     try
     {
-        if(override setInputsOver = this->get_override("setInputs"))
+        if(override setInputsOver = this->get_override("set_inputs"))
             setInputsOver(inputs, bNewSequence);
         else
             CWorkflowTask::setInputs(inputs, bNewSequence);
@@ -127,7 +127,7 @@ void CWorkflowTaskWrap::setOutputDataType(const IODataType &dataType, size_t ind
     CPyEnsureGIL gil;
     try
     {
-        if(override setOutputDataOver = this->get_override("setOutputDataType"))
+        if(override setOutputDataOver = this->get_override("set_output_data_type"))
             setOutputDataOver(dataType, index);
         else
             CWorkflowTask::setOutputDataType(dataType, index);
@@ -156,7 +156,7 @@ void CWorkflowTaskWrap::setOutput(const WorkflowTaskIOPtr &pOutput, size_t index
     CPyEnsureGIL gil;
     try
     {
-        if(override setOutputOver = this->get_override("setOutput"))
+        if(override setOutputOver = this->get_override("set_output"))
             setOutputOver(pOutput, index);
         else
             CWorkflowTask::setOutput(pOutput, index);
@@ -185,7 +185,7 @@ void CWorkflowTaskWrap::setOutputs(const InputOutputVect &outputs)
     CPyEnsureGIL gil;
     try
     {
-        if(override setOutputsOver = this->get_override("setOutputs"))
+        if(override setOutputsOver = this->get_override("set_outputs"))
             setOutputsOver(outputs);
         else
             CWorkflowTask::setOutputs(outputs);
@@ -214,7 +214,7 @@ void CWorkflowTaskWrap::setActive(bool bActive)
     CPyEnsureGIL gil;
     try
     {
-        if(override setActiveOver = this->get_override("setActive"))
+        if(override setActiveOver = this->get_override("set_active"))
             setActiveOver(bActive);
         else
             CWorkflowTask::setActive(bActive);
@@ -243,7 +243,7 @@ size_t CWorkflowTaskWrap::getProgressSteps()
     CPyEnsureGIL gil;
     try
     {
-        if(override getProgressStepsOver = this->get_override("getProgressSteps"))
+        if(override getProgressStepsOver = this->get_override("get_progress_steps"))
             return getProgressStepsOver();
 
         return CWorkflowTask::getProgressSteps();
@@ -272,7 +272,7 @@ bool CWorkflowTaskWrap::isGraphicsChangedListening() const
     CPyEnsureGIL gil;
     try
     {
-        if(override isGraphicsChangedOver = this->get_override("isGraphicsChangedListening"))
+        if(override isGraphicsChangedOver = this->get_override("is_graphics_changed_listening"))
             return isGraphicsChangedOver();
 
         return CWorkflowTask::isGraphicsChangedListening();
@@ -301,7 +301,7 @@ void CWorkflowTaskWrap::addInput(const WorkflowTaskIOPtr &pInput)
     CPyEnsureGIL gil;
     try
     {
-        if(override addInputOver = this->get_override("addInput"))
+        if(override addInputOver = this->get_override("add_input"))
             addInputOver(pInput);
         else
             CWorkflowTask::addInput(pInput);
@@ -330,7 +330,7 @@ void CWorkflowTaskWrap::addOutput(const WorkflowTaskIOPtr &pOutput)
     CPyEnsureGIL gil;
     try
     {
-        if(override addOutputOver = this->get_override("addOutput"))
+        if(override addOutputOver = this->get_override("add_output"))
             addOutputOver(pOutput);
         else
             CWorkflowTask::addOutput(pOutput);
@@ -417,7 +417,7 @@ void CWorkflowTaskWrap::executeActions(int flags)
     CPyEnsureGIL gil;
     try
     {
-        if(override executeActionsOver = this->get_override("executeActions"))
+        if(override executeActionsOver = this->get_override("execute_actions"))
             executeActionsOver(flags);
         else
             CWorkflowTask::executeActions(flags);
@@ -446,7 +446,7 @@ void CWorkflowTaskWrap::updateStaticOutputs()
     CPyEnsureGIL gil;
     try
     {
-        if(override updateStaticOutputsOver = this->get_override("updateStaticOutputs"))
+        if(override updateStaticOutputsOver = this->get_override("update_static_outputs"))
             updateStaticOutputsOver();
         else
             CWorkflowTask::updateStaticOutputs();
@@ -475,7 +475,7 @@ void CWorkflowTaskWrap::beginTaskRun()
     CPyEnsureGIL gil;
     try
     {
-        if(override beginTaskRunOver = this->get_override("beginTaskRun"))
+        if(override beginTaskRunOver = this->get_override("begin_task_run"))
             beginTaskRunOver();
         else
             CWorkflowTask::beginTaskRun();
@@ -504,7 +504,7 @@ void CWorkflowTaskWrap::endTaskRun()
     CPyEnsureGIL gil;
     try
     {
-        if(override endTaskRunOver = this->get_override("endTaskRun"))
+        if(override endTaskRunOver = this->get_override("end_task_run"))
             endTaskRunOver();
         else
             CWorkflowTask::endTaskRun();
@@ -533,7 +533,7 @@ void CWorkflowTaskWrap::parametersModified()
     CPyEnsureGIL gil;
     try
     {
-        if(override parametersModifiedOver = this->get_override("parametersModified"))
+        if(override parametersModifiedOver = this->get_override("parameters_modified"))
             parametersModifiedOver();
         else
             CWorkflowTask::parametersModified();
@@ -562,7 +562,7 @@ void CWorkflowTaskWrap::graphicsChanged()
     CPyEnsureGIL gil;
     try
     {
-        if(override graphicsChangedOver = this->get_override("graphicsChanged"))
+        if(override graphicsChangedOver = this->get_override("graphics_changed"))
             graphicsChangedOver();
         else
             CWorkflowTask::graphicsChanged();
@@ -591,7 +591,7 @@ void CWorkflowTaskWrap::globalInputChanged(bool bNewSequence)
     CPyEnsureGIL gil;
     try
     {
-        if(override globalInputChangedOver = this->get_override("globalInputChanged"))
+        if(override globalInputChangedOver = this->get_override("global_input_changed"))
             globalInputChangedOver(bNewSequence);
         else
             CWorkflowTask::globalInputChanged(bNewSequence);
@@ -620,7 +620,7 @@ void CWorkflowTaskWrap::workflowStarted()
     CPyEnsureGIL gil;
     try
     {
-        if(override workflowStartedOver = this->get_override("workflowStarted"))
+        if(override workflowStartedOver = this->get_override("workflow_started"))
             workflowStartedOver();
         else
             CWorkflowTask::workflowStarted();
@@ -649,7 +649,7 @@ void CWorkflowTaskWrap::workflowFinished()
     CPyEnsureGIL gil;
     try
     {
-        if(override workflowFinishedOver = this->get_override("workflowFinished"))
+        if(override workflowFinishedOver = this->get_override("workflow_finished"))
             workflowFinishedOver();
         else
             CWorkflowTask::workflowFinished();

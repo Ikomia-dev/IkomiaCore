@@ -42,7 +42,6 @@ void CInstanceSegmentation::setMask(const CMat &mask)
 //--------------------------//
 CInstanceSegIO::CInstanceSegIO() : CWorkflowTaskIO(IODataType::INSTANCE_SEGMENTATION, "CInstanceSegIO")
 {
-    m_bComposite = true;
     m_description = QObject::tr("Instance segmentation data: label, confidence, box, mask and color.").toStdString();
     m_saveFormat = DataFileFormat::JSON;
     m_imgIOPtr = std::make_shared<CImageIO>(IODataType::IMAGE_LABEL);
@@ -52,9 +51,7 @@ CInstanceSegIO::CInstanceSegIO() : CWorkflowTaskIO(IODataType::INSTANCE_SEGMENTA
 
 CInstanceSegIO::CInstanceSegIO(const CInstanceSegIO &io): CWorkflowTaskIO(io)
 {
-    m_bComposite = true;
     m_instances = io.m_instances;
-    m_mergeMask = io.m_mergeMask;
     m_imgIOPtr = io.m_imgIOPtr->clone();
     m_graphicsIOPtr = io.m_graphicsIOPtr->clone();
     m_blobMeasureIOPtr = io.m_blobMeasureIOPtr->clone();
@@ -62,9 +59,7 @@ CInstanceSegIO::CInstanceSegIO(const CInstanceSegIO &io): CWorkflowTaskIO(io)
 
 CInstanceSegIO::CInstanceSegIO(const CInstanceSegIO &&io): CWorkflowTaskIO(io)
 {
-    m_bComposite = true;
     m_instances = std::move(io.m_instances);
-    m_mergeMask = std::move(io.m_mergeMask);
     m_imgIOPtr = io.m_imgIOPtr->clone();
     m_graphicsIOPtr = io.m_graphicsIOPtr->clone();
     m_blobMeasureIOPtr = io.m_blobMeasureIOPtr->clone();
@@ -74,7 +69,6 @@ CInstanceSegIO &CInstanceSegIO::operator=(const CInstanceSegIO &io)
 {
     CWorkflowTaskIO::operator=(io);
     m_instances = io.m_instances;
-    m_mergeMask = io.m_mergeMask;
     m_imgIOPtr = io.m_imgIOPtr->clone();
     m_graphicsIOPtr = io.m_graphicsIOPtr->clone();
     m_blobMeasureIOPtr = io.m_blobMeasureIOPtr->clone();
@@ -85,7 +79,6 @@ CInstanceSegIO &CInstanceSegIO::operator=(const CInstanceSegIO &&io)
 {
     CWorkflowTaskIO::operator=(io);
     m_instances = std::move(io.m_instances);
-    m_mergeMask = std::move(io.m_mergeMask);
     m_imgIOPtr = io.m_imgIOPtr->clone();
     m_graphicsIOPtr = io.m_graphicsIOPtr->clone();
     m_blobMeasureIOPtr = io.m_blobMeasureIOPtr->clone();
@@ -145,6 +138,11 @@ bool CInstanceSegIO::isDataAvailable() const
     return m_instances.size() > 0;
 }
 
+bool CInstanceSegIO::isComposite() const
+{
+    return true;
+}
+
 void CInstanceSegIO::init(const std::string &taskName, int refImageIndex, int imageWidth, int imageHeight)
 {
     clearData();
@@ -159,6 +157,11 @@ void CInstanceSegIO::addInstance(int id, int type, int classIndex, const std::st
                                  double boxX, double boxY, double boxWidth, double boxHeight,
                                  const CMat &mask, const CColor &color)
 {
+    //Check mandatory initialization
+    auto mergeMask = m_imgIOPtr->getImage();
+    if (mergeMask.empty())
+        throw CException(CoreExCode::INVALID_USAGE, "A first call to init(...) method is mandatory to initialize segmentation mask dimension.");
+
     CInstanceSegmentation obj;
     obj.m_id = id;
     obj.m_type = type;
@@ -203,9 +206,6 @@ void CInstanceSegIO::addInstance(int id, int type, int classIndex, const std::st
     results.emplace_back(CObjectMeasure(CMeasure(CMeasure::CUSTOM, QObject::tr("Confidence").toStdString()), confidence, graphicsId, label));
     results.emplace_back(CObjectMeasure(CMeasure::Id::BBOX, {boxX, boxY, boxWidth, boxHeight}, graphicsId, label));
     m_blobMeasureIOPtr->addObjectMeasures(results);
-
-    //Merge mask
-    auto mergeMask = m_imgIOPtr->getImage();
 
     //Create label mask according to the object index (we do index + 1 because 0 is the background label)
     if (boxWidth > 0 && boxHeight > 0)

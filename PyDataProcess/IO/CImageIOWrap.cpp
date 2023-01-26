@@ -52,7 +52,7 @@ size_t CImageIOWrap::getUnitElementCount() const
     CPyEnsureGIL gil;
     try
     {
-        if(override getOver = this->get_override("getUnitElementCount"))
+        if(override getOver = this->get_override("get_unit_element_count"))
             return getOver();
         return CImageIO::getUnitElementCount();
     }
@@ -80,7 +80,7 @@ CMat CImageIOWrap::getImage()
     CPyEnsureGIL gil;
     try
     {
-        if(override getImageOver = this->get_override("getImage"))
+        if(override getImageOver = this->get_override("get_image"))
             return getImageOver();
         return CImageIO::getImage();
     }
@@ -108,7 +108,7 @@ bool CImageIOWrap::isDataAvailable() const
     CPyEnsureGIL gil;
     try
     {
-        if(override isDataOver = this->get_override("isDataAvailable"))
+        if(override isDataOver = this->get_override("is_data_available"))
             return isDataOver();
         return CImageIO::isDataAvailable();
     }
@@ -136,7 +136,7 @@ void CImageIOWrap::clearData()
     CPyEnsureGIL gil;
     try
     {
-        if(override clearDataOver = this->get_override("clearData"))
+        if(override clearDataOver = this->get_override("clear_data"))
             clearDataOver();
         else
             CImageIO::clearData();
@@ -165,7 +165,7 @@ void CImageIOWrap::copyStaticData(const std::shared_ptr<CWorkflowTaskIO> &ioPtr)
     CPyEnsureGIL gil;
     try
     {
-        if(override copyOver = this->get_override("copyStaticData"))
+        if(override copyOver = this->get_override("copy_static_data"))
             copyOver(ioPtr);
         else
             CImageIO::copyStaticData(ioPtr);
@@ -252,7 +252,7 @@ std::string CImageIOWrap::toJson() const
     CPyEnsureGIL gil;
     try
     {
-        if(override toJsonOver = this->get_override("toJson"))
+        if(override toJsonOver = this->get_override("to_json"))
             return toJsonOver();
         else
             return CImageIO::toJson();
@@ -281,7 +281,7 @@ std::string CImageIOWrap::toJson(const std::vector<std::string> &options) const
     CPyEnsureGIL gil;
     try
     {
-        if(override toJsonOver = this->get_override("toJson"))
+        if(override toJsonOver = this->get_override("to_json"))
             return toJsonOver(options);
         else
             return CImageIO::toJson(options);
@@ -310,7 +310,7 @@ void CImageIOWrap::fromJson(const std::string &jsonStr)
     CPyEnsureGIL gil;
     try
     {
-        if(override fromJsonOver = this->get_override("fromJson"))
+        if(override fromJsonOver = this->get_override("from_json"))
             fromJsonOver(jsonStr);
         else
             CImageIO::fromJson(jsonStr);

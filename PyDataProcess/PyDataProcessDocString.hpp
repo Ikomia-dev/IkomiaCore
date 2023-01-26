@@ -336,7 +336,7 @@ constexpr auto _ctor1imageProcessIODocString =
         "- IODataType.VOLUME_LABEL\n\n"
         "Please note that internal image structure is empty.\n\n"
         "Args:\n\n"
-        "   dataType (:py:class:`~ikomia.core.pycore.IODataType`): image data type\n\n";
+        "   data_type (:py:class:`~ikomia.core.pycore.IODataType`): image data type\n\n";
 
 constexpr auto _ctor2imageProcessIODocString =
         "Construct a CImageIO instance with the given data type and the given image. The data type must be one of these values:\n\n"
@@ -348,7 +348,7 @@ constexpr auto _ctor2imageProcessIODocString =
         "- IODataType.VOLUME_LABEL\n\n"
         "Please note that internal image structure is empty.\n\n"
         "Args:\n\n"
-        "   dataType (:py:class:`~ikomia.core.pycore.IODataType`): image data type\n\n"
+        "   data_type (:py:class:`~ikomia.core.pycore.IODataType`): image data type\n\n"
         "   image (Numpy array): 2D/3D image\n\n";
 
 constexpr auto _ctor3imageProcessIODocString =
@@ -361,7 +361,7 @@ constexpr auto _ctor3imageProcessIODocString =
         "- IODataType.VOLUME_BINARY\n"
         "- IODataType.VOLUME_LABEL\n\n"
         "Args:\n\n"
-        "   dataType (:py:class:`~ikomia.core.pycore.IODataType`): image data type\n\n"
+        "   data_type (:py:class:`~ikomia.core.pycore.IODataType`): image data type\n\n"
         "   image (Numpy array): 2D/3D image\n\n"
         "   name (str): input or output custom name (give insights to end user)\n\n";
 
@@ -375,7 +375,7 @@ constexpr auto _ctor4imageProcessIODocString =
         "- IODataType.VOLUME_BINARY\n"
         "- IODataType.VOLUME_LABEL\n\n"
         "Args:\n\n"
-        "   dataType (:py:class:`~ikomia.core.pycore.IODataType`): image data type\n\n"
+        "   data_type (:py:class:`~ikomia.core.pycore.IODataType`): image data type\n\n"
         "   name (str): input or output custom name (give insights to end user)\n\n";
 
 constexpr auto _ctor5imageProcessIODocString =
@@ -388,7 +388,7 @@ constexpr auto _ctor5imageProcessIODocString =
         "- IODataType.VOLUME_BINARY\n"
         "- IODataType.VOLUME_LABEL\n\n"
         "Args:\n\n"
-        "   dataType (:py:class:`~ikomia.core.pycore.IODataType`): image data type\n\n"
+        "   data_type (:py:class:`~ikomia.core.pycore.IODataType`): image data type\n\n"
         "   name (str): input or output custom name (give insights to end user)\n\n"
         "   path (str): image path to be loaded. Image is loaded to memory automatically.\n\n";
 
@@ -513,7 +513,7 @@ constexpr auto _imageIOToJsonDocString =
         "- JSON format ['json_format', 'compact', ...] (**default**) or ['json_format', 'indented', ...]\n"
         "- image format ['image_format', 'jpg', ...] or ['image_format', 'png', ...]\n\n"
         "Args:\n\n"
-        "   jsonStr (list of str): format-specific options encoded as pairs [option_name, option_value]\n\n"
+        "   json_str (list of str): format-specific options encoded as pairs [option_name, option_value]\n\n"
         "Returns:\n\n"
         "   string: JSON formatted string\n\n";
 
@@ -747,7 +747,7 @@ constexpr auto _ctor1VideoProcessIODocString =
         "- IODataType.LIVE_STREAM_LABEL\n\n"
         "Please note that internal image structure is empty.\n\n"
         "Args:\n\n"
-        "   dataType (:py:class:`~ikomia.core.pycore.IODataType`): video data type\n\n";
+        "   data_type (:py:class:`~ikomia.core.pycore.IODataType`): video data type\n\n";
 
 constexpr auto _ctor2VideoProcessIODocString =
         "Construct a CVideoIO instance with the given data type. The data type must be one of these values:\n\n"
@@ -759,7 +759,7 @@ constexpr auto _ctor2VideoProcessIODocString =
         "- IODataType.LIVE_STREAM_LABEL\n\n"
         "Please note that internal image structure is empty.\n\n"
         "Args:\n\n"
-        "   dataType (:py:class:`~ikomia.core.pycore.IODataType`): video data type\n\n"
+        "   data_type (:py:class:`~ikomia.core.pycore.IODataType`): video data type\n\n"
         "   frame (Numpy array): 2D image (first frame of the video)\n\n";
 
 constexpr auto _ctor3VideoProcessIODocString =
@@ -772,7 +772,7 @@ constexpr auto _ctor3VideoProcessIODocString =
         "- IODataType.LIVE_STREAM_BINARY\n"
         "- IODataType.LIVE_STREAM_LABEL\n\n"
         "Args:\n\n"
-        "   dataType (:py:class:`~ikomia.core.pycore.IODataType`): video data type\n\n"
+        "   data_type (:py:class:`~ikomia.core.pycore.IODataType`): video data type\n\n"
         "   frame (Numpy array): 2D image\n\n"
         "   name (str): input or output custom name (to give insights to end user)\n\n";
 
@@ -786,7 +786,7 @@ constexpr auto _ctor4VideoProcessIODocString =
         "- IODataType.VOLUME_BINARY\n"
         "- IODataType.VOLUME_LABEL\n\n"
         "Args:\n\n"
-        "   dataType (:py:class:`~ikomia.core.pycore.IODataType`): video data type\n\n"
+        "   data_type (:py:class:`~ikomia.core.pycore.IODataType`): video data type\n\n"
         "   name (str): input or output custom name (to give insights to end user)\n\n";
 
 constexpr auto _ctor5VideoProcessIODocString =
@@ -799,7 +799,7 @@ constexpr auto _ctor5VideoProcessIODocString =
         "- IODataType.VOLUME_BINARY\n"
         "- IODataType.VOLUME_LABEL\n\n"
         "Args:\n\n"
-        "   dataType (:py:class:`~ikomia.core.pycore.IODataType`): video data type\n\n"
+        "   data_type (:py:class:`~ikomia.core.pycore.IODataType`): video data type\n\n"
         "   name (str): input or output name\n\n"
         "   path (str): video path\n\n";
 
@@ -841,16 +841,27 @@ constexpr auto _getCurrentPosDocString =
         "   int: current frame index\n\n";
 
 constexpr auto _startVideoDocString =
-        "Start playing the video.\n\n";
+        "Start playing the video.\n\n"
+        "Args:\n\n"
+        "   timeout (int): maximum time between 2 read operations (in ms)\n\n";
 
 constexpr auto _stopVideoDocString =
         "Stop playing the video.\n\n";
 
 constexpr auto _startVideoWriteDocString =
-        "Write the video to disk.\n\n";
+        "Write the video to disk.\n\n"
+        "Args:\n\n"
+        "   width (int): video width\n\n"
+        "   height (int): video height\n\n"
+        "   frames (int): number of frames\n\n"
+        "   fps (int): frames per second\n\n"
+        "   fourcc (int): codec code (-1 for default)\n\n"
+        "   timeout (int): maximum time between 2 write opertions (in ms)\n\n";
 
 constexpr auto _stopVideoWriteDocString =
-        "Stop writting to disk.\n\n";
+        "Stop writting to disk.\n\n"
+        "Args:\n\n"
+        "   timeout (int): time for reading to end (in ms)\n\n";
 
 constexpr auto _addVideoImageDocString =
         "Append image frame to the video.\n\n"
@@ -985,7 +996,7 @@ constexpr auto _ctor2DatasetIODocString =
         "Construct a CDatasetIO object specifying the name and the source format.\n\n"
         "Args:\n\n"
         "   name (str): custom name\n\n"
-        "   sourceFormat (str): unique string identifier\n\n";
+        "   source_format (str): unique string identifier\n\n";
 
 constexpr auto _getImagePathsDocStr =
         "Virtual method to reimplement, return the file path list of all images contained in the dataset.\n\n"
@@ -1003,12 +1014,16 @@ constexpr auto _getCategoryCountDocStr =
         "   int: number of categories\n\n";
 
 constexpr auto _getMaskPathDocStr =
-        "Virtual method to reimplement, return the file path list of segmentation masks contained in the dataset.\n\n"
+        "Virtual method to reimplement, return the path of the segmentation mask associated with the given image contained in the dataset.\n\n"
+        "Args:\n\n"
+        "   image_path (str): path of the associated image in the dataset\n\n"
         "Returns:\n\n"
-        "   str[]: path list\n\n";
+        "   str: mask path or empty string if image does not exist\n\n";
 
 constexpr auto _getGraphicsAnnotationsDocStr =
-        "Virtual method to reimplement, return the list of graphics items corresponding to dataset annotations.\n\n"
+        "Virtual method to reimplement, return the list of graphics items corresponding to dataset annotations for the given image.\n\n"
+        "Args:\n\n"
+        "   image_path (str): path of the associated image in the dataset\n\n"
         "Returns:\n\n"
         "   list of :py:class:`~ikomia.core.pycore.CGraphicsItem` or derived: graphics items\n\n";
 
@@ -1126,8 +1141,8 @@ constexpr auto _initObjDetectIODocString =
         "Initialisation step to set associated task (name) and reference image. The reference image is the task output index "
         "where the graphics information (label, box) will be displayed as an overlay layer.\n\n"
         "Args:\n\n"
-        "   taskName (str): task that contains the output\n\n"
-        "   refImageIndex (int): zero-based index of the output containing the reference image\n\n";
+        "   task_name (str): task that contains the output\n\n"
+        "   ref_image_index (int): zero-based index of the output containing the reference image\n\n";
 
 constexpr auto _addObjectDocString =
         "Add detected object to the input/output.\n\n"
@@ -1135,10 +1150,10 @@ constexpr auto _addObjectDocString =
         "   id (int): object identifier\n\n"
         "   label (str): class label\n\n"
         "   confidence (double): prediction confidence\n\n"
-        "   boxX (double): left coordinate of object bounding box\n\n"
-        "   boxY (double): top coordinate of object bounding box\n\n"
-        "   boxWidth (double): width of object bounding box\n\n"
-        "   boxHeight (double): height of object bounding box\n\n"
+        "   box_x (double): left coordinate of object bounding box\n\n"
+        "   box_y (double): top coordinate of object bounding box\n\n"
+        "   box_width (double): width of object bounding box\n\n"
+        "   box_height (double): height of object bounding box\n\n"
         "   color (int list - rgba): display color\n\n";
 
 constexpr auto _objDetectLoadDocString =
@@ -1308,7 +1323,7 @@ constexpr auto _imageProcess2dDocString =
 constexpr auto _ctor1ImageProcess2dDocString =
         "Construct C2dImageTask task with or without graphics input.\n\n"
         "Args:\n\n"
-        "   hasGraphicsInput (bool): True, the task manage graphics input. False, the task does not have any graphics input\n";
+        "   has_graphics_input (bool): True, the task manage graphics input. False, the task does not have any graphics input\n";
 
 constexpr auto _ctor2ImageProcess2dDocString =
         "Construct C2dImageTask task with the given name. Default inputs and outputs.\n\n"
@@ -1319,7 +1334,7 @@ constexpr auto _ctor3ImageProcess2dDocString =
         "Construct C2dImageTask task with the given name, with or without graphics input.\n\n"
         "Args:\n\n"
         "   name (str): task name, must be unique\n\n"
-        "   hasGraphicsInput (bool): True, the task manage graphics input. False, the task does not have any graphics input\n\n";
+        "   has_graphics_input (bool): True, the task manage graphics input. False, the task does not have any graphics input\n\n";
 
 constexpr auto _setActiveDocString =
         "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.setActive`.\n\n";
@@ -1370,16 +1385,18 @@ constexpr auto _applyGraphicsMaskDocString =
         "Apply the mask generated from graphics input to the result image so that only masked areas seems to be processed.\n\n"
         "Args:\n\n"
         "   src (Numpy array): source image of the task\n\n"
-        "   dst (Numpy array): result image\n\n"
-        "   index (int): zero-based index of the mask\n\n";
+        "   index (int): zero-based index of the mask\n\n"
+        "Returns:\n\n"
+        "   Numpy array: result image\n\n";
 
 constexpr auto _applyGraphicsMaskToBinaryDocString =
         "Apply the mask generated from graphics input to the binary source image. "
         "Only white areas on both image and mask are kept in the result image.\n\n"
         "Args:\n\n"
         "   src (Numpy array): source image of the task\n\n"
-        "   dst (Numpy array): result image\n\n"
-        "   index (int): zero-based index of the mask\n\n";
+        "   index (int): zero-based index of the mask\n\n"
+        "Returns:\n\n"
+        "   Numpy array: result image\n\n";
 
 constexpr auto _getProgressStepsDocString =
         "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.getProgressSteps`.\n\n";
@@ -1531,11 +1548,13 @@ constexpr auto _beginTaskRunVideoOFDocString =
         "See :py:meth:`CVideoTask.beginTaskRun`.\n";
 
 constexpr auto _drawOptFlowMapDocString =
-        "Add optical flow vectors to optical flow map (image).\n\n"
+        "Draw optical flow vectors in the optical flow map (image).\n\n"
         "Args:\n\n"
-        "   flow (Numpy array): source optical flow color map\n\n"
-        "   vectors (Numpy array): optical flow vectors. Each pixel store vector coordinates of the optical flow.\n\n"
-        "   step (int): sampling step\n\n";
+        "   flow (Numpy array): source optical flow (store vector coordinates of the optical flow)\n\n"
+        "   flow map (Numpy array): color map of the optical flow\n\n"
+        "   step (int): sampling step\n\n"
+        "Returns:\n\n"
+        "   Numpy array: full visualization image (color map + vectors)\n\n";
 
 constexpr auto _flowToDisplayDocString =
         "Generate a displayable image of the optical flow color map.\n\n"
@@ -1853,6 +1872,12 @@ constexpr auto _wfGetRequiredTasks =
         "   path (str): path to the workflow file (JSON)\n\n"
         "Returns:\n\n"
         "   list of str: task names\n\n";
+
+constexpr auto _wfGetLastRunFolder =
+        "Get the output folder for the last run. Output folder can be set with :py:meth:`~ikomia.dataprocess.pydataprocess.CWorkflow.set_output_folder`. "
+        "It will be used only if auto-save mode is enabled and a timestamp is automatically added. The complete name is returned by this method.\n\n"
+        "Returns:\n\n"
+        "   str: output folder path (with timestamp added)\n\n";
 
 constexpr auto _wfAddInputDocString =
         "Add global input to the workflow.\n\n"

@@ -47,7 +47,7 @@ size_t C2dImageTaskWrap::getProgressSteps()
     CPyEnsureGIL gil;
     try
     {
-        if(override getProgressStepsOver = this->get_override("getProgressSteps"))
+        if(override getProgressStepsOver = this->get_override("get_progress_steps"))
             return getProgressStepsOver();
 
         return C2dImageTask::getProgressSteps();
@@ -76,7 +76,7 @@ void C2dImageTaskWrap::setActive(bool bActive)
     CPyEnsureGIL gil;
     try
     {
-        if(override setActiveOver = this->get_override("setActive"))
+        if(override setActiveOver = this->get_override("set_active"))
             setActiveOver(bActive);
         else
             C2dImageTask::setActive(bActive);
@@ -126,12 +126,12 @@ void C2dImageTaskWrap::setOutputColorMap(size_t index, size_t maskIndex, const s
     }
 }
 
-CMat C2dImageTaskWrap::applyGraphicsMask(const CMat &src, const CMat &dst, int maskIndex)
+CMat C2dImageTaskWrap::applyGraphicsMask(const CMat &src, int maskIndex)
 {
     CPyEnsureGIL gil;
     try
     {
-        CMat res = dst.clone();
+        CMat res = src.clone();
         this->C2dImageTask::applyGraphicsMask(src, res, (size_t)(maskIndex));
         return res;
     }
@@ -141,13 +141,13 @@ CMat C2dImageTaskWrap::applyGraphicsMask(const CMat &src, const CMat &dst, int m
     }
 }
 
-CMat C2dImageTaskWrap::applyGraphicsMaskToBinary(const CMat &src, CMat &dst, int maskIndex)
+CMat C2dImageTaskWrap::applyGraphicsMaskToBinary(const CMat &src, int maskIndex)
 {
     CPyEnsureGIL gil;
     try
     {
-        CMat res = dst.clone();
-        this->C2dImageTask::applyGraphicsMaskToBinary(src, dst, (size_t)(maskIndex));
+        CMat res = src.clone();
+        this->C2dImageTask::applyGraphicsMaskToBinary(src, res, (size_t)(maskIndex));
         return res;
     }
     catch(boost::python::error_already_set&)
@@ -161,7 +161,7 @@ void C2dImageTaskWrap::updateStaticOutputs()
     CPyEnsureGIL gil;
     try
     {
-        if(override updateStaticOutputsOver = this->get_override("updateStaticOutputs"))
+        if(override updateStaticOutputsOver = this->get_override("update_static_outputs"))
             updateStaticOutputsOver();
         else
             C2dImageTask::updateStaticOutputs();
@@ -190,7 +190,7 @@ void C2dImageTaskWrap::beginTaskRun()
     CPyEnsureGIL gil;
     try
     {
-        if(override beginTaskRunOver = this->get_override("beginTaskRun"))
+        if(override beginTaskRunOver = this->get_override("begin_task_run"))
             beginTaskRunOver();
         else
             C2dImageTask::beginTaskRun();
@@ -219,7 +219,7 @@ void C2dImageTaskWrap::endTaskRun()
     CPyEnsureGIL gil;
     try
     {
-        if(override endTaskRunOver = this->get_override("endTaskRun"))
+        if(override endTaskRunOver = this->get_override("end_task_run"))
             endTaskRunOver();
         else
             C2dImageTask::endTaskRun();
@@ -248,7 +248,7 @@ void C2dImageTaskWrap::executeActions(int flags)
     CPyEnsureGIL gil;
     try
     {
-        if(override executeActionsOver = this->get_override("executeActions"))
+        if(override executeActionsOver = this->get_override("execute_actions"))
             executeActionsOver(flags);
         else
             C2dImageTask::executeActions(flags);
@@ -335,7 +335,7 @@ void C2dImageTaskWrap::graphicsChanged()
     CPyEnsureGIL gil;
     try
     {
-        if(override graphicsChangedOver = this->get_override("graphicsChanged"))
+        if(override graphicsChangedOver = this->get_override("graphics_changed"))
             graphicsChangedOver();
         else
             C2dImageTask::graphicsChanged();
@@ -364,7 +364,7 @@ void C2dImageTaskWrap::globalInputChanged(bool bNewSequence)
     CPyEnsureGIL gil;
     try
     {
-        if(override globalInputChangedOver = this->get_override("globalInputChanged"))
+        if(override globalInputChangedOver = this->get_override("global_input_changed"))
             globalInputChangedOver(bNewSequence);
         else
             C2dImageTask::globalInputChanged(bNewSequence);

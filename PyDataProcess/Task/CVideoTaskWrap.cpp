@@ -39,7 +39,7 @@ size_t CVideoTaskWrap::getProgressSteps()
     CPyEnsureGIL gil;
     try
     {
-        if(override getProgressStepsOver = this->get_override("getProgressSteps"))
+        if(override getProgressStepsOver = this->get_override("get_progress_steps"))
             return getProgressStepsOver();
 
         return CVideoTask::getProgressSteps();
@@ -68,7 +68,7 @@ void CVideoTaskWrap::setActive(bool bActive)
     CPyEnsureGIL gil;
     try
     {
-        if(override setActiveOver = this->get_override("setActive"))
+        if(override setActiveOver = this->get_override("set_active"))
             setActiveOver(bActive);
         else
             CVideoTask::setActive(bActive);
@@ -97,7 +97,7 @@ void CVideoTaskWrap::updateStaticOutputs()
     CPyEnsureGIL gil;
     try
     {
-        if(override updateStaticOutputsOver = this->get_override("updateStaticOutputs"))
+        if(override updateStaticOutputsOver = this->get_override("update_static_outputs"))
             updateStaticOutputsOver();
         else
             CVideoTask::updateStaticOutputs();
@@ -126,7 +126,7 @@ void CVideoTaskWrap::beginTaskRun()
     CPyEnsureGIL gil;
     try
     {
-        if(override beginTaskRunOver = this->get_override("beginTaskRun"))
+        if(override beginTaskRunOver = this->get_override("begin_task_run"))
             beginTaskRunOver();
         else
             CVideoTask::beginTaskRun();
@@ -155,7 +155,7 @@ void CVideoTaskWrap::endTaskRun()
     CPyEnsureGIL gil;
     try
     {
-        if(override endTaskRunOver = this->get_override("endTaskRun"))
+        if(override endTaskRunOver = this->get_override("end_task_run"))
             endTaskRunOver();
         else
             CVideoTask::endTaskRun();
@@ -242,7 +242,7 @@ void CVideoTaskWrap::graphicsChanged()
     CPyEnsureGIL gil;
     try
     {
-        if(override graphicsChangedOver = this->get_override("graphicsChanged"))
+        if(override graphicsChangedOver = this->get_override("graphics_changed"))
             graphicsChangedOver();
         else
             CVideoTask::graphicsChanged();
@@ -271,7 +271,7 @@ void CVideoTaskWrap::globalInputChanged(bool bNewSequence)
     CPyEnsureGIL gil;
     try
     {
-        if(override globalInputChangedOver = this->get_override("globalInputChanged"))
+        if(override globalInputChangedOver = this->get_override("global_input_changed"))
             globalInputChangedOver(bNewSequence);
         else
             CVideoTask::globalInputChanged(bNewSequence);
@@ -300,7 +300,7 @@ void CVideoTaskWrap::executeActions(int flags)
     CPyEnsureGIL gil;
     try
     {
-        if(override executeActionsOver = this->get_override("executeActions"))
+        if(override executeActionsOver = this->get_override("execute_actions"))
             executeActionsOver(flags);
         else
             CVideoTask::executeActions(flags);
@@ -329,7 +329,7 @@ void CVideoTaskWrap::notifyVideoStart(int frameCount)
     CPyEnsureGIL gil;
     try
     {
-        if(override notifyVideoStartOver = this->get_override("notifyVideoStart"))
+        if(override notifyVideoStartOver = this->get_override("notify_video_start"))
             notifyVideoStartOver(frameCount);
         else
             CVideoTask::notifyVideoStart(frameCount);
@@ -358,7 +358,7 @@ void CVideoTaskWrap::notifyVideoEnd()
     CPyEnsureGIL gil;
     try
     {
-        if(override notifyVideoEndOver = this->get_override("notifyVideoEnd"))
+        if(override notifyVideoEndOver = this->get_override("notify_video_end"))
             notifyVideoEndOver();
         else
             CVideoTask::notifyVideoEnd();

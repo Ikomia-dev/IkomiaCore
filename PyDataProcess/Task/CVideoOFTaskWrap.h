@@ -52,6 +52,8 @@ class CVideoOFTaskWrap: public CVideoOFTask, public wrapper<CVideoOFTask>
         void    endTaskRun() override;
         void    default_endTaskRun();
 
+        CMat    drawOptFlowMapWrap(const CMat &flow, const CMat &cflowmap, int step);
+
         void    run() override;
         void    default_run();
 
@@ -66,6 +68,12 @@ class CVideoOFTaskWrap: public CVideoOFTask, public wrapper<CVideoOFTask>
 
         void    executeActions(int flags) override;
         void    default_executeActions(int flags);
+
+        void    notifyVideoStart(int frameCount) override;
+        void    default_notifyVideoStart(int frameCount);
+
+        void    notifyVideoEnd() override;
+        void    default_notifyVideoEnd();
 
         void    emitAddSubProgressSteps(int count);
         void    emitStepProgress();

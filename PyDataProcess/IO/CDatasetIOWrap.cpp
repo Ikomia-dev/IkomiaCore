@@ -36,7 +36,7 @@ std::vector<std::string> CDatasetIOWrap::getImagePaths() const
     CPyEnsureGIL gil;
     try
     {
-        if(override overMeth = this->get_override("getImagePaths"))
+        if(override overMeth = this->get_override("get_image_paths"))
             return overMeth();
         else
             return CDatasetIO::getImagePaths();
@@ -65,7 +65,7 @@ MapIntStr CDatasetIOWrap::getCategories() const
     CPyEnsureGIL gil;
     try
     {
-        if(override overMeth = this->get_override("getCategories"))
+        if(override overMeth = this->get_override("get_categories"))
             return overMeth();
         else
             return CDatasetIO::getCategories();
@@ -94,7 +94,7 @@ int CDatasetIOWrap::getCategoryCount() const
     CPyEnsureGIL gil;
     try
     {
-        if(override overMeth = this->get_override("getCategoryCount"))
+        if(override overMeth = this->get_override("get_category_count"))
             return overMeth();
         else
             return CDatasetIO::getCategoryCount();
@@ -123,7 +123,7 @@ std::vector<ProxyGraphicsItemPtr> CDatasetIOWrap::getGraphicsAnnotations(const s
     CPyEnsureGIL gil;
     try
     {
-        if(override overMeth = this->get_override("getGraphicsAnnotations"))
+        if(override overMeth = this->get_override("get_graphics_annotations"))
             return overMeth(imgPath);
         else
             return CDatasetIO::getGraphicsAnnotations(imgPath);
@@ -152,7 +152,7 @@ std::string CDatasetIOWrap::getMaskPath(const std::string &imgPath) const
     CPyEnsureGIL gil;
     try
     {
-        if(override overMeth = this->get_override("getMaskPath"))
+        if(override overMeth = this->get_override("get_mask_path"))
             return overMeth(imgPath);
         else
             return CDatasetIO::getMaskPath(imgPath);
@@ -181,7 +181,7 @@ bool CDatasetIOWrap::isDataAvailable() const
     CPyEnsureGIL gil;
     try
     {
-        if(override isDataOver = this->get_override("isDataAvailable"))
+        if(override isDataOver = this->get_override("is_data_available"))
             return isDataOver();
         return CDatasetIO::isDataAvailable();
     }
@@ -209,7 +209,7 @@ void CDatasetIOWrap::clearData()
     CPyEnsureGIL gil;
     try
     {
-        if(override clearDataOver = this->get_override("clearData"))
+        if(override clearDataOver = this->get_override("clear_data"))
             clearDataOver();
         else
             CDatasetIO::clearData();
@@ -296,7 +296,7 @@ std::string CDatasetIOWrap::toJson() const
     CPyEnsureGIL gil;
     try
     {
-        if(override toJsonOver = this->get_override("toJson"))
+        if(override toJsonOver = this->get_override("to_json"))
             return toJsonOver();
         else
             return CDatasetIO::toJson();
@@ -325,7 +325,7 @@ std::string CDatasetIOWrap::toJson(const std::vector<std::string> &options) cons
     CPyEnsureGIL gil;
     try
     {
-        if(override toJsonOver = this->get_override("toJson"))
+        if(override toJsonOver = this->get_override("to_json"))
             return toJsonOver(options);
         else
             return CDatasetIO::toJson(options);
@@ -354,7 +354,7 @@ void CDatasetIOWrap::fromJson(const std::string &jsonStr)
     CPyEnsureGIL gil;
     try
     {
-        if(override fromJsonOver = this->get_override("fromJson"))
+        if(override fromJsonOver = this->get_override("from_json"))
             fromJsonOver(jsonStr);
         else
             CDatasetIO::fromJson(jsonStr);

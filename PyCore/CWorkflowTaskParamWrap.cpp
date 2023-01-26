@@ -33,7 +33,7 @@ void CWorkflowTaskParamWrap::setParamMap(const UMapString &paramMap)
     CPyEnsureGIL gil;
     try
     {
-        if(override setParamOver = this->get_override("setParamMap"))
+        if(override setParamOver = this->get_override("set_values"))
             setParamOver(paramMap);
         else
             CWorkflowTaskParam::setParamMap(paramMap);
@@ -62,7 +62,7 @@ UMapString CWorkflowTaskParamWrap::getParamMap() const
     CPyEnsureGIL gil;
     try
     {
-        if(override getParamOver = this->get_override("getParamMap"))
+        if(override getParamOver = this->get_override("get_values"))
             return getParamOver();
         return CWorkflowTaskParam::getParamMap();
     }
@@ -90,7 +90,7 @@ uint CWorkflowTaskParamWrap::getHashValue() const
     CPyEnsureGIL gil;
     try
     {
-        if(override getHashValueOver = this->get_override("getHashValue"))
+        if(override getHashValueOver = this->get_override("get_hash_value"))
             return getHashValueOver();
         return CWorkflowTaskParam::getHashValue();
     }

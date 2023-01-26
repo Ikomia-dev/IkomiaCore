@@ -60,6 +60,7 @@ class DATAPROCESSSHARED_EXPORT CObjectDetectionIO: public CWorkflowTaskIO
         std::shared_ptr<CBlobMeasureIO>     getBlobMeasureIO() const;
 
         bool                                isDataAvailable() const override;
+        bool                                isComposite() const override;
 
         void                                init(const std::string& taskName, int imageIndex);
 

@@ -430,7 +430,7 @@ namespace Ikomia
              * @param targetData: target data type ::IODataType.
              * @return True if connection is possible, False otherwise.
              */
-            inline bool isIODataCompatible(const IODataType &srcData, const IODataType &targetData)
+            inline bool     isIODataCompatible(const IODataType &srcData, const IODataType &targetData)
             {
                 if(srcData == IODataType::NONE || targetData == IODataType::NONE)
                     return false;

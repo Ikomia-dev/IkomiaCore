@@ -39,7 +39,7 @@ size_t CVideoOFTaskWrap::getProgressSteps()
     CPyEnsureGIL gil;
     try
     {
-        if(override getProgressStepsOver = this->get_override("getProgressSteps"))
+        if(override getProgressStepsOver = this->get_override("get_progress_steps"))
             return getProgressStepsOver();
 
         return CVideoOFTask::getProgressSteps();
@@ -68,7 +68,7 @@ void CVideoOFTaskWrap::setActive(bool bActive)
     CPyEnsureGIL gil;
     try
     {
-        if(override setActiveOver = this->get_override("setActive"))
+        if(override setActiveOver = this->get_override("set_active"))
             setActiveOver(bActive);
         else
             CVideoOFTask::setActive(bActive);
@@ -97,7 +97,7 @@ void CVideoOFTaskWrap::updateStaticOutputs()
     CPyEnsureGIL gil;
     try
     {
-        if(override updateStaticOutputsOver = this->get_override("updateStaticOutputs"))
+        if(override updateStaticOutputsOver = this->get_override("update_static_outputs"))
             updateStaticOutputsOver();
         else
             CVideoOFTask::updateStaticOutputs();
@@ -126,7 +126,7 @@ void CVideoOFTaskWrap::beginTaskRun()
     CPyEnsureGIL gil;
     try
     {
-        if(override beginTaskRunOver = this->get_override("beginTaskRun"))
+        if(override beginTaskRunOver = this->get_override("begin_task_run"))
             beginTaskRunOver();
         else
             CVideoOFTask::beginTaskRun();
@@ -155,7 +155,7 @@ void CVideoOFTaskWrap::endTaskRun()
     CPyEnsureGIL gil;
     try
     {
-        if(override endTaskRunOver = this->get_override("endTaskRun"))
+        if(override endTaskRunOver = this->get_override("end_task_run"))
             endTaskRunOver();
         else
             CVideoOFTask::endTaskRun();
@@ -177,6 +177,13 @@ void CVideoOFTaskWrap::default_endTaskRun()
     {
         throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
     }
+}
+
+CMat CVideoOFTaskWrap::drawOptFlowMapWrap(const CMat& flow, const CMat& cflowmap, int step)
+{
+    CMat res = cflowmap.clone();
+    this->CVideoOFTask::drawOptFlowMap(flow, res, step);
+    return res;
 }
 
 void CVideoOFTaskWrap::run()
@@ -242,7 +249,7 @@ void CVideoOFTaskWrap::graphicsChanged()
     CPyEnsureGIL gil;
     try
     {
-        if(override graphicsChangedOver = this->get_override("graphicsChanged"))
+        if(override graphicsChangedOver = this->get_override("graphics_changed"))
             graphicsChangedOver();
         else
             CVideoOFTask::graphicsChanged();
@@ -271,7 +278,7 @@ void CVideoOFTaskWrap::globalInputChanged(bool bNewSequence)
     CPyEnsureGIL gil;
     try
     {
-        if(override globalInputChangedOver = this->get_override("globalInputChanged"))
+        if(override globalInputChangedOver = this->get_override("global_input_changed"))
             globalInputChangedOver(bNewSequence);
         else
             CVideoOFTask::globalInputChanged(bNewSequence);
@@ -300,7 +307,7 @@ void CVideoOFTaskWrap::executeActions(int flags)
     CPyEnsureGIL gil;
     try
     {
-        if(override executeActionsOver = this->get_override("executeActions"))
+        if(override executeActionsOver = this->get_override("execute_actions"))
             executeActionsOver(flags);
         else
             CVideoOFTask::executeActions(flags);
@@ -317,6 +324,64 @@ void CVideoOFTaskWrap::default_executeActions(int flags)
     try
     {
         this->CVideoOFTask::executeActions(flags);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CVideoOFTaskWrap::notifyVideoStart(int frameCount)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override notifyVideoStartOver = this->get_override("notify_video_start"))
+            notifyVideoStartOver(frameCount);
+        else
+            CVideoOFTask::notifyVideoStart(frameCount);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CVideoOFTaskWrap::default_notifyVideoStart(int frameCount)
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->CVideoOFTask::notifyVideoStart(frameCount);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CVideoOFTaskWrap::notifyVideoEnd()
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override notifyVideoEndOver = this->get_override("notify_video_end"))
+            notifyVideoEndOver();
+        else
+            CVideoOFTask::notifyVideoEnd();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CVideoOFTaskWrap::default_notifyVideoEnd()
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->CVideoOFTask::notifyVideoEnd();
     }
     catch(boost::python::error_already_set&)
     {

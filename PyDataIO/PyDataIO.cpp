@@ -65,9 +65,9 @@ BOOST_PYTHON_MODULE(pydataio)
     CMat (CDataImageIO::*read_img)() = &CDataImageIO::read;
 
     class_<CDataImageIO, boost::noncopyable>("CDataImageIO", _dataImageIODocString, init<const std::string&>(_ctorDataImageIO))
-        .def("read", read_img, _readDataImageDocString)
-        .def("write", &CDataImageIO::write, _writeDataImageDocString)
-        .def("isImageFormat", &CDataImageIO::isImageFormat, _isImageFormatDocString).staticmethod("isImageFormat")
+        .def("read", read_img, _readDataImageDocString, args("self"))
+        .def("write", &CDataImageIO::write, _writeDataImageDocString, args("self"))
+        .def("is_image_format", &CDataImageIO::isImageFormat, _isImageFormatDocString, args("extension")).staticmethod("is_image_format")
     ;
 
     //------------------------//
@@ -79,12 +79,12 @@ BOOST_PYTHON_MODULE(pydataio)
     void (CDataVideoIO::*write_video2)(const CMat&, const std::string&) = &CDataVideoIO::write;
 
     class_<CDataVideoIO, boost::noncopyable>("CDataVideoIO", _dataVideoIODocString, init<const std::string&>(_ctorDataVideoIO))
-        .def("read", read_video, _readDataVideoDocString)
-        .def("write", write_video1, _writeDataVideo1DocString)
-        .def("write", write_video2, _writeDataVideo2DocString)
-        .def("stopRead", &CDataVideoIO::stopRead, _stopReadDocString)
-        .def("stopWrite", &CDataVideoIO::stopWrite, _stopWriteDocString)
-        .def("waitWriteFinished", &CDataVideoIO::waitWriteFinished, _waitWriteFinishedDocString)
-        .def("isVideoFormat", &CDataVideoIO::isVideoFormat, _isVideoFormatDocString).staticmethod("isVideoFormat")
+        .def("read", read_video, _readDataVideoDocString, args("self"))
+        .def("write", write_video1, _writeDataVideo1DocString, args("self", "frame_data"))
+        .def("write", write_video2, _writeDataVideo2DocString, args("self", "frame_data", "path"))
+        .def("stop_read", &CDataVideoIO::stopRead, _stopReadDocString, args("self"))
+        .def("stop_write", &CDataVideoIO::stopWrite, _stopWriteDocString, args("self", "timeout"))
+        .def("wait_write_finished", &CDataVideoIO::waitWriteFinished, _waitWriteFinishedDocString, args("self", "timeout"))
+        .def("is_video_format", &CDataVideoIO::isVideoFormat, _isVideoFormatDocString, args("extension", "video_only")).staticmethod("is_video_format")
     ;
 }

@@ -40,7 +40,7 @@ size_t CWorkflowTaskIOWrap::getUnitElementCount() const
     CPyEnsureGIL gil;
     try
     {
-        if(override getOver = this->get_override("getUnitElementCount"))
+        if(override getOver = this->get_override("get_unit_element_count"))
             return getOver();
         return CWorkflowTaskIO::getUnitElementCount();
     }
@@ -68,7 +68,7 @@ bool CWorkflowTaskIOWrap::isDataAvailable() const
     CPyEnsureGIL gil;
     try
     {
-        if(override isDataOver = this->get_override("isDataAvailable"))
+        if(override isDataOver = this->get_override("is_data_available"))
             return isDataOver();
         return CWorkflowTaskIO::isDataAvailable();
     }
@@ -96,7 +96,7 @@ bool CWorkflowTaskIOWrap::isAutoInput() const
     CPyEnsureGIL gil;
     try
     {
-        if(override isAutoInputOver = this->get_override("isAutoInput"))
+        if(override isAutoInputOver = this->get_override("is_auto_input"))
             return isAutoInputOver();
         return CWorkflowTaskIO::isAutoInput();
     }
@@ -119,12 +119,41 @@ bool CWorkflowTaskIOWrap::default_isAutoInput() const
     }
 }
 
+bool CWorkflowTaskIOWrap::isComposite() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override isCompositeOver = this->get_override("is_composite"))
+            return isCompositeOver();
+
+        return CWorkflowTaskIO::isComposite();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+bool CWorkflowTaskIOWrap::default_isComposite() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        return this->CWorkflowTaskIO::isComposite();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 void CWorkflowTaskIOWrap::clearData()
 {
     CPyEnsureGIL gil;
     try
     {
-        if(override clearDataOver = this->get_override("clearData"))
+        if(override clearDataOver = this->get_override("clear_data"))
             clearDataOver();
         else
             CWorkflowTaskIO::clearData();
@@ -153,7 +182,7 @@ void CWorkflowTaskIOWrap::copyStaticData(const std::shared_ptr<CWorkflowTaskIO> 
     CPyEnsureGIL gil;
     try
     {
-        if(override copyOver = this->get_override("copyStaticData"))
+        if(override copyOver = this->get_override("copy_static_data"))
             copyOver(ioPtr);
         else
             CWorkflowTaskIO::copyStaticData(ioPtr);
@@ -240,7 +269,7 @@ std::string CWorkflowTaskIOWrap::toJson() const
     CPyEnsureGIL gil;
     try
     {
-        if(override toJsonOver = this->get_override("toJson"))
+        if(override toJsonOver = this->get_override("to_json"))
             return toJsonOver();
         else
             return CWorkflowTaskIO::toJson();
@@ -269,7 +298,7 @@ std::string CWorkflowTaskIOWrap::toJson(const std::vector<std::string>& options)
     CPyEnsureGIL gil;
     try
     {
-        if(override toJsonOver = this->get_override("toJson"))
+        if(override toJsonOver = this->get_override("to_json"))
             return toJsonOver(options);
         else
             return CWorkflowTaskIO::toJson(options);
@@ -298,7 +327,7 @@ void CWorkflowTaskIOWrap::fromJson(const std::string &jsonStr)
     CPyEnsureGIL gil;
     try
     {
-        if(override fromJsonOver = this->get_override("fromJson"))
+        if(override fromJsonOver = this->get_override("from_json"))
             fromJsonOver(jsonStr);
         else
             CWorkflowTaskIO::fromJson(jsonStr);

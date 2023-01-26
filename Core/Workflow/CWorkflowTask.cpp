@@ -199,8 +199,8 @@ void CWorkflowTask::setInputDataType(const IODataType &dataType, size_t index)
         m_inputs[index]->setDataType(dataType);
     else
     {
-        m_inputs.resize(index + 1);
-        m_inputs[index]->setDataType(dataType);
+        std::string msg = "No valid input at index " + std::to_string(index);
+        throw CException(CoreExCode::STRUCTURE_OVERFLOW, msg, __func__, __FILE__, __LINE__);
     }
 }
 
@@ -256,8 +256,8 @@ void CWorkflowTask::setOutputDataType(const IODataType &dataType, size_t index)
         m_outputs[index]->setDataType(dataType);
     else
     {
-        m_outputs.resize(index + 1);
-        m_outputs[index]->setDataType(dataType);
+        std::string msg = "No valid output at index " + std::to_string(index);
+        throw CException(CoreExCode::STRUCTURE_OVERFLOW, msg, __func__, __FILE__, __LINE__);
     }
 }
 
@@ -820,7 +820,12 @@ std::vector<TaskIOLockerUPtr> CWorkflowTask::createOutputScopedLocks() const
 
 void CWorkflowTask::run()
 {
-    m_outputs = m_inputs;
+    // Simply forward input to output if possible -> must be reimplemented in child classes
+    for (size_t i=0; i<m_inputs.size(); ++i)
+    {
+        if (i < m_outputs.size() && Utils::Workflow::isIODataCompatible(m_inputs[i]->getDataType(), m_outputs[i]->getDataType()))
+            m_outputs[i] = m_inputs[i];
+    }
 }
 
 void CWorkflowTask::executeActions(int flags)

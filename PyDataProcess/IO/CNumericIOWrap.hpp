@@ -40,7 +40,7 @@ class CNumericIOWrap : public CNumericIO<Type>, public wrapper<CNumericIO<Type>>
             CPyEnsureGIL gil;
             try
             {
-                if(override getOver = this->get_override("getUnitElementCount"))
+                if(override getOver = this->get_override("get_unit_element_count"))
                     return getOver();
                 return CNumericIO<Type>::getUnitElementCount();
             }
@@ -67,7 +67,7 @@ class CNumericIOWrap : public CNumericIO<Type>, public wrapper<CNumericIO<Type>>
             CPyEnsureGIL gil;
             try
             {
-                if(override isDataOver = this->get_override("isDataAvailable"))
+                if(override isDataOver = this->get_override("is_data_available"))
                     return isDataOver();
                 return CNumericIO<Type>::isDataAvailable();
             }
@@ -94,7 +94,7 @@ class CNumericIOWrap : public CNumericIO<Type>, public wrapper<CNumericIO<Type>>
             CPyEnsureGIL gil;
             try
             {
-                if(override clearDataOver = this->get_override("clearData"))
+                if(override clearDataOver = this->get_override("clear_data"))
                     clearDataOver();
                 else
                     CNumericIO<Type>::clearData();
@@ -122,7 +122,7 @@ class CNumericIOWrap : public CNumericIO<Type>, public wrapper<CNumericIO<Type>>
             CPyEnsureGIL gil;
             try
             {
-                if(override copyOver = this->get_override("copyStaticData"))
+                if(override copyOver = this->get_override("copy_static_data"))
                     copyOver(ioPtr);
                 else
                     CNumericIO<Type>::copyStaticData(ioPtr);
@@ -206,7 +206,7 @@ class CNumericIOWrap : public CNumericIO<Type>, public wrapper<CNumericIO<Type>>
             CPyEnsureGIL gil;
             try
             {
-                if(override toJsonOver = this->get_override("toJson"))
+                if(override toJsonOver = this->get_override("to_json"))
                     return toJsonOver();
                 else
                     return CNumericIO<Type>::toJson();
@@ -234,7 +234,7 @@ class CNumericIOWrap : public CNumericIO<Type>, public wrapper<CNumericIO<Type>>
             CPyEnsureGIL gil;
             try
             {
-                if(override toJsonOver = this->get_override("toJson"))
+                if(override toJsonOver = this->get_override("to_json"))
                     return toJsonOver(options);
                 else
                     return CNumericIO<Type>::toJson(options);
@@ -262,7 +262,7 @@ class CNumericIOWrap : public CNumericIO<Type>, public wrapper<CNumericIO<Type>>
             CPyEnsureGIL gil;
             try
             {
-                if(override fromJsonOver = this->get_override("fromJson"))
+                if(override fromJsonOver = this->get_override("from_json"))
                     fromJsonOver(jsonStr);
                 else
                     CNumericIO<Type>::fromJson(jsonStr);
