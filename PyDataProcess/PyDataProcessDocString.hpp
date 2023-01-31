@@ -1659,6 +1659,11 @@ constexpr auto _getAlgorithmInfoDocString =
         "Returns:\n\n"
         "   :py:class:`~ikomia.dataprocess.pydataprocess.CTaskInfo`: algorithm information\n\n";
 
+constexpr auto _isAllLoadedDocString =
+        "Return true if all locally installed algorithms have been loaded at least once.\n\n"
+        "Returns:\n\n"
+        "   bool: True or False\n\n";
+
 constexpr auto _createInstance1DocString =
         "Instanciate algorithm of the Ikomia registry from its name with default parameters.\n"
         "The full list of available algorithms can be retrieved using "
@@ -1690,10 +1695,24 @@ constexpr auto _registerIODocString =
         "Args:\n\n"
         "   factory (:py:class:`~ikomia.core.pycore.CTaskIOFactory` based object): I/O factory\n\n";
 
+constexpr auto _loadPluginsDocString =
+        "Load locally installed algorithms in the registry. After that, algorithms can be instanciated from their unique names.\n\n";
+
+constexpr auto _loadCppPluginsDocString =
+        "Load locally installed C++ algorithms in the registry. After that, C++ algorithms can be instanciated from their unique names.\n\n";
+
+constexpr auto _loadPythonPluginsDocString =
+        "Load locally installed Python algorithms in the registry. After that, Python algorithms can be instanciated from their unique names.\n\n";
+
 constexpr auto _loadCppPluginDocString =
         "Load C++ algorithm to Ikomia registry.\n\n"
         "Args:\n\n"
-        "   path (str): path to shared library of the plugin\n";
+        "   path (str): path to shared library of the plugin\n\n";
+
+constexpr auto _loadPythonPluginDocString =
+        "Load Python algorithm to Ikomia registry.\n\n"
+        "Args:\n\n"
+        "   path (str): path module directory of the algorithm\n\n";
 
 //---------------------//
 //----- CWorkflow -----//
