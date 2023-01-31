@@ -11,7 +11,11 @@
 CIkomiaRegistry::CIkomiaRegistry()
 {
     m_pluginsDir = Utils::IkomiaApp::getIkomiaFolder() + "/Plugins";
-    Utils::Python::addToPythonPath(m_pluginsDir + "/Python");
+
+    // Python plugins directory is already added to Python path while Ikomia Studio is starting.
+    // Moreover, Python is not initialized when single registry object is created which causes crash at startup.
+    if (Utils::IkomiaApp::isAppStarted() == false)
+        Utils::Python::addToPythonPath(m_pluginsDir + "/Python");
 }
 
 CIkomiaRegistry::~CIkomiaRegistry()

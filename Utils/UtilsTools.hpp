@@ -219,6 +219,7 @@ namespace Ikomia
             }
             inline std::string  getIkomiaApiLibFolder()
             {
+                CPyEnsureGIL gil;
                 try
                 {
                     auto pyIkPath = import("ikomia").attr("__file__");
@@ -238,6 +239,7 @@ namespace Ikomia
             }
             inline std::string  getIkomiaApiFolder()
             {
+                CPyEnsureGIL gil;
                 try
                 {
                     auto pyIkPath = import("ikomia.core").attr("get_ikomia_root_folder")();
@@ -294,6 +296,7 @@ namespace Ikomia
 
             inline void         addToPythonPath(const std::string &path)
             {
+                CPyEnsureGIL gil;
                 boost::python::object main_module = boost::python::import("__main__");
                 boost::python::object main_namespace = main_module.attr("__dict__");
                 boost::python::str currentDir(path);
