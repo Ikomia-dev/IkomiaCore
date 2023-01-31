@@ -191,6 +191,168 @@ namespace Ikomia
                 }
                 return ret;
             }
+            inline std::set<std::string> getImportedModules()
+            {
+                CPyEnsureGIL gil;
+                object main_module = import("__main__");
+                object main_namespace = main_module.attr("__dict__");
+
+                str code
+                (
+                    "import types\n\n"
+                    "def imported_modules():\n"
+                    "   modules = list()\n"
+                    "   for name, val in globals().items():\n"
+                    "       if isinstance(val, types.ModuleType):\n"
+                    "           modules.append(val.__name__)\n"
+                    "   return modules"
+                );
+                exec(code, main_namespace, main_namespace);
+                object imported_modules = main_namespace["imported_modules"];
+                object modules = imported_modules();
+
+                std::set<std::string> importedModules;
+                for(int i=0; i<len(modules); ++i)
+                    importedModules.insert(extract<std::string>(modules[i]));
+
+                return importedModules;
+            }
+            inline std::string  getIkomiaApiLibFolder()
+            {
+                try
+                {
+                    auto pyIkPath = import("ikomia").attr("__file__");
+                    extract<std::string> ikPath(pyIkPath);
+
+                    if(ikPath.check())
+                    {
+                        QFileInfo info(QString::fromStdString(ikPath));
+                        return info.absolutePath().toStdString() + "/lib";
+                    }
+                }
+                catch (const boost::python::error_already_set &)
+                {
+                    return "";
+                }
+                return "";
+            }
+            inline std::string  getIkomiaApiFolder()
+            {
+                try
+                {
+                    auto pyIkPath = import("ikomia.core").attr("get_ikomia_root_folder")();
+                    extract<std::string> ikPath(pyIkPath);
+
+                    if(ikPath.check())
+                        return ikPath();
+                }
+                catch (const boost::python::error_already_set &)
+                {
+                    return "";
+                }
+                return "";
+            }
+
+            inline bool         isModuleImported(const std::string& name)
+            {
+                CPyEnsureGIL gil;
+                object main_module = import("__main__");
+                object main_namespace = main_module.attr("__dict__");
+
+                str code
+                (
+                    "import types\n\n"
+                    "def imported_modules():\n"
+                    "   modules = list()\n"
+                    "   for name, val in globals().items():\n"
+                    "       if isinstance(val, types.ModuleType):\n"
+                    "           modules.append(val.__name__)\n"
+                    "   return modules"
+                );
+                exec(code, main_namespace, main_namespace);
+                object imported_modules = main_namespace["imported_modules"];
+                object modules = imported_modules();
+
+                for(int i=0; i<len(modules); ++i)
+                {
+                    std::string moduleName = extract<std::string>(modules[i]);
+                    if(moduleName == name)
+                        return true;
+                }
+                return false;
+            }
+            inline bool         isFolderModule(const std::string& folder)
+            {
+                boost::filesystem::directory_iterator iter(folder), end;
+                for(; iter != end; ++iter)
+                {
+                    if(iter->path().filename() == "__init__.py")
+                        return true;
+                }
+                return false;
+            }
+
+            inline void         addToPythonPath(const std::string &path)
+            {
+                boost::python::object main_module = boost::python::import("__main__");
+                boost::python::object main_namespace = main_module.attr("__dict__");
+                boost::python::str currentDir(path);
+                boost::python::object sys = boost::python::import("sys");
+                boost::python::object pathObj = sys.attr("path");
+
+                bool bExist = false;
+                for(int i=0; i<len(pathObj) && bExist == false; ++i)
+                {
+                    if(pathObj[i] == currentDir)
+                        bExist = true;
+                }
+
+                if(bExist == false)
+                {
+                    sys.attr("path").attr("insert")(0, currentDir);
+                    main_namespace["sys"] = sys;
+                }
+            }
+
+            inline object       reloadModule(const std::string& name)
+            {
+                CPyEnsureGIL gil;
+                object main_module = boost::python::import("__main__");
+                object main_namespace = main_module.attr("__dict__");
+                QString script = QString("import importlib\nimportlib.reload(%1)").arg(QString::fromStdString(name));
+                str pyScript(script.toStdString());
+                exec(pyScript, main_namespace, main_namespace);
+                return main_namespace[name];
+            }
+
+            inline void         unloadModule(const std::string& name, bool bStrictCompare)
+            {
+                CPyEnsureGIL gil;
+                object main_module = boost::python::import("__main__");
+                object main_namespace = main_module.attr("__dict__");
+
+                QString script;
+
+                if(bStrictCompare)
+                {
+                    script = QString(
+                            "import sys\n"
+                            "modules_to_delete = [m for m in sys.modules.keys() if '%1' == m]\n"
+                            "for m in modules_to_delete: del(sys.modules[m])\n"
+                            ).arg(QString::fromStdString(name));
+                }
+                else
+                {
+                    script = QString(
+                            "import sys\n"
+                            "modules_to_delete = [m for m in sys.modules.keys() if '%1' in m]\n"
+                            "for m in modules_to_delete: del(sys.modules[m])\n"
+                            ).arg(QString::fromStdString(name));
+
+                }
+                str pyScript(script.toStdString());
+                exec(pyScript, main_namespace, main_namespace);
+            }
 
             inline std::string  handlePythonException()
             {
@@ -212,43 +374,6 @@ namespace Ikomia
                 // Parse lines from the traceback using the Python traceback module
                 ret += getExceptionTraceback(pTraceback);
                 return ret;
-            }
-
-            inline std::string  getIkomiaApiLibFolder()
-            {
-                try
-                {
-                    auto pyIkPath = import("ikomia").attr("__file__");
-                    extract<std::string> ikPath(pyIkPath);
-
-                    if(ikPath.check())
-                    {
-                        QFileInfo info(QString::fromStdString(ikPath));
-                        return info.absolutePath().toStdString() + "/lib";
-                    }
-                }
-                catch (const boost::python::error_already_set &)
-                {
-                    return "";
-                }
-                return "";
-            }
-
-            inline std::string  getIkomiaApiFolder()
-            {
-                try
-                {
-                    auto pyIkPath = import("ikomia.core").attr("get_ikomia_root_folder")();
-                    extract<std::string> ikPath(pyIkPath);
-
-                    if(ikPath.check())
-                        return ikPath();
-                }
-                catch (const boost::python::error_already_set &)
-                {
-                    return "";
-                }
-                return "";
             }
 
             inline void         print(const std::string& msg, const QtMsgType type=QtMsgType::QtInfoMsg)
