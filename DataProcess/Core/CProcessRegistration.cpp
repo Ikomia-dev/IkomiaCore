@@ -410,6 +410,12 @@ const CTaskAbstractFactory& CProcessRegistration::getProcessFactory() const
     return m_processFactory;
 }
 
+TaskFactoryPtr CProcessRegistration::getTaskFactory(const std::string &name) const
+{
+    CPyEnsureGIL gil;
+    return m_processFactory.getFactory(name);
+}
+
 const CWidgetAbstractFactory& CProcessRegistration::getWidgetFactory() const
 {
     CPyEnsureGIL gil;
