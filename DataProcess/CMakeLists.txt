@@ -1,7 +1,7 @@
 add_library(ikDataProcess SHARED
-    CPluginProcessInterface.hpp
-    CProcessRegistration.cpp
-    CProcessRegistration.h
+    Core/CPluginProcessInterface.hpp
+    Core/CProcessRegistration.cpp
+    Core/CProcessRegistration.h
     Core/C2dFeatureImageTask.cpp
     Core/C2dFeatureImageTask.h
     Core/C2dFeatureMatcherTask.cpp
@@ -16,6 +16,8 @@ add_library(ikDataProcess SHARED
     Core/CIkomiaRegistry.h
     Core/CMlflowTrainTask.cpp
     Core/CMlflowTrainTask.h
+    Core/CPluginTools.cpp
+    Core/CPluginTools.h
     Core/CRunTaskManager.cpp
     Core/CRunTaskManager.h
     Core/CTaskFactory.hpp
@@ -431,11 +433,11 @@ add_library(ikDataProcess SHARED
 set_target_properties(ikDataProcess PROPERTIES VERSION ${IKOMIA_VERSION} SOVERSION ${IKOMIA_VERSION})
 
 set(PUBLIC_HEADERS
-    CPluginProcessInterface.hpp
     DataProcessGlobal.hpp
 )
 
 set(PUBLIC_HEADERS_CORE
+    Core/CPluginProcessInterface.hpp
     Core/CWorkflow.h
     Core/CTaskFactory.hpp
     Core/C2dImageInteractiveTask.h

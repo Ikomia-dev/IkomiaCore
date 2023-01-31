@@ -34,7 +34,7 @@ void CWorkflowTaskWidgetWrap::onApply()
     CPyEnsureGIL gil;
     try
     {
-        this->get_override("onApply")();
+        this->get_override("on_apply")();
     }
     catch(boost::python::error_already_set&)
     {

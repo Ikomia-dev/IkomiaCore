@@ -5,6 +5,34 @@
 #include "CProcessRegistration.h"
 #include "IO/CTaskIORegistration.h"
 
+
+class CDllSearchPathAdder
+{
+    public:
+
+        CDllSearchPathAdder(const std::string& directory)
+        {
+#ifdef Q_OS_WIN64
+            //Add directory to the search path of the DLL loader
+            SetDllDirectoryA(directory.c_str());
+#endif
+        }
+        ~CDllSearchPathAdder()
+        {
+#ifdef Q_OS_WIN64
+            //Restore standard DLL search path
+            SetDllDirectoryA(NULL);
+#endif
+        }
+        void addDirectory(const std::string& directory)
+        {
+#ifdef Q_OS_WIN64
+            //Add directory to the search path of the DLL loader
+            SetDllDirectoryA(directory.c_str());
+#endif
+        }
+};
+
 class DATAPROCESSSHARED_EXPORT CIkomiaRegistry
 {
     public:
@@ -21,6 +49,9 @@ class DATAPROCESSSHARED_EXPORT CIkomiaRegistry
         CTaskInfo                   getAlgorithmInfo(const std::string& name) const;
         CProcessRegistration*       getTaskRegistrator();
         CTaskIORegistration*        getIORegistrator();
+        TaskFactoryPtr              getTaskFactory(const std::string& name) const;
+
+        bool                        isAllLoaded() const;
 
         WorkflowTaskPtr             createInstance(const std::string& processName);
         WorkflowTaskPtr             createInstance(const std::string& processName, const WorkflowTaskParamPtr& paramPtr);
@@ -30,8 +61,12 @@ class DATAPROCESSSHARED_EXPORT CIkomiaRegistry
         void                        registerTaskAndWidget(const TaskFactoryPtr& factoryPtr, WidgetFactoryPtr& widgetFactoryPtr);
         void                        registerIO(const TaskIOFactoryPtr& factoryPtr);
 
+        void                        loadPlugins();
         void                        loadCppPlugins();
         void                        loadCppPlugin(const std::string &directory);
+        void                        loadPythonPlugins();
+        void                        loadPythonPlugin(const std::string &directory);
+        boost::python::object       loadPythonMainModule(const std::string& folder, const std::string& name);
 
         static std::vector<std::string> getBlackListedPackages();
 
@@ -47,6 +82,7 @@ class DATAPROCESSSHARED_EXPORT CIkomiaRegistry
         CTaskIORegistration             m_ioRegistrator;
         std::string                     m_pluginsDir;
         QMap<QString, QPluginLoader*>   m_loaders;
+        bool                            m_bAllLoaded = false;
 };
 
 #endif // CIKOMIAREGISTRY_H
