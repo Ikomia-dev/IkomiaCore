@@ -52,6 +52,7 @@ namespace Ikomia
         INVALID_FILE,           /**< Invalid file (format, extension, size...) */
         INVALID_USAGE,          /**< Invalid function usage (insatisfied prerequisites) */
         INVALID_VIDEO_WRITER,   /**< Invalid parameters for video writer */
+        INVALID_VERSION,        /**< Invalid version */
         OUT_OF_MEMORY,          /**< Maximum memory load reached */
         CREATE_FAILED,          /**< Allocation failed */
         NULL_POINTER,           /**< Null pointer exceptio */

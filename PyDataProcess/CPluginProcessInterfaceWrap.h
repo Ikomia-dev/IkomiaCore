@@ -23,7 +23,7 @@
 #define CPLUGININTERFACEWRAP_H
 
 #include "PyDataProcessGlobal.h"
-#include "CPluginProcessInterface.hpp"
+#include "Core/CPluginProcessInterface.hpp"
 
 class CPluginProcessInterfaceWrap : public CPluginProcessInterface, public wrapper<CPluginProcessInterface>
 {
