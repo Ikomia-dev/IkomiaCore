@@ -11,13 +11,5 @@ CIkomiaRegistryWrap::CIkomiaRegistryWrap(const CIkomiaRegistry &reg): CIkomiaReg
 CTaskInfo CIkomiaRegistryWrap::getAlgorithmInfo(const std::string &name) const
 {
     CPyEnsureGIL gil;
-    try
-    {
-        return CIkomiaRegistry::getAlgorithmInfo(name);
-    }
-    catch(std::exception &e)
-    {
-        Utils::print(e.what());
-        return CTaskInfo();
-    }
+    return CIkomiaRegistry::getAlgorithmInfo(name);
 }
