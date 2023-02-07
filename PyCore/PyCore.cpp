@@ -40,6 +40,7 @@
 #include "Graphics/CGraphicsConversion.h"
 #include "VectorConverter.hpp"
 #include "MapConverter.hpp"
+#include "PairConverter.hpp"
 
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #define PY_ARRAY_UNIQUE_SYMBOL IKOMIA_ARRAY_API
@@ -109,6 +110,10 @@ BOOST_PYTHON_MODULE(pycore)
 
     // Register std::unordered_map<T>
     registerStdUMap<std::string, std::string>();
+
+    // Register std::pair<T1,T2>
+    registerStdPair<int, int>();
+    registerStdPair<std::string, std::string>();
 
     //Register exceptions
     register_exception_translator<CException>(&translateCException);

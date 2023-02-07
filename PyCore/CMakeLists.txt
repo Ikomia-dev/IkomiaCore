@@ -17,6 +17,7 @@ add_library(pycore SHARED
     CWorkflowTaskWrap.h
     IterableConverter.hpp
     MapConverter.hpp
+    PairConverter.hpp
     PyCore.cpp
     PyCore.h
     PyCoreDocString.hpp
