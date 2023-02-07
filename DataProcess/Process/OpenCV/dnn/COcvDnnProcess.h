@@ -76,18 +76,16 @@ class DATAPROCESSSHARED_EXPORT COcvDnnProcessParam: public COcvDnnCoreParam
 //--------------------------//
 //----- COcvDnnProcess -----//
 //--------------------------//
-class DATAPROCESSSHARED_EXPORT COcvDnnProcess : public C2dImageTask
+class DATAPROCESSSHARED_EXPORT COcvDnnProcess
 {
     public:
 
         COcvDnnProcess();
-        COcvDnnProcess(const std::string& name);
 
         virtual ~COcvDnnProcess() = default;
 
-        cv::dnn::Net                    readDnn();
-        void                            readClassNames();
-        void                            forward(const CMat &imgSrc, std::vector<cv::Mat>& outputs);
+        cv::dnn::Net                    readDnn(const std::shared_ptr<COcvDnnProcessParam>& paramPtr);
+        double                          forward(const CMat &imgSrc, std::vector<cv::Mat>& outputs, const std::shared_ptr<COcvDnnProcessParam> &paramPtr);
 
     protected:
 
@@ -96,14 +94,13 @@ class DATAPROCESSSHARED_EXPORT COcvDnnProcess : public C2dImageTask
         virtual cv::Scalar              getNetworkInputMean() const;
         virtual std::vector<cv::String> getOutputsNames() const;
 
-        void                            displayLayers(const cv::dnn::Net& net);
+        void                            setNewInputState(bool bNewSequence);
 
-        void                            globalInputChanged(bool bNewSequence) override;
+        void                            displayLayers(const cv::dnn::Net& net);
 
     protected:
 
         std::string                 m_outputLayerName = "";
-        std::vector<std::string>    m_classNames;
         cv::dnn::Net                m_net;
 
         // Trick to overcome OpenCV issue around CUDA context and multithreading

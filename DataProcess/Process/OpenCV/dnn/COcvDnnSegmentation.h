@@ -49,7 +49,7 @@ class COcvDnnSegmentationParam: public COcvDnnProcessParam
 //-------------------------------//
 //----- COcvDnnSegmentation -----//
 //-------------------------------//
-class COcvDnnSegmentation: public COcvDnnProcess
+class COcvDnnSegmentation: public COcvDnnProcess, public C2dImageTask
 {
     public:
 
@@ -77,6 +77,9 @@ class COcvDnnSegmentation: public COcvDnnProcess
         std::vector<cv::Vec3b>  generateColorMap(const cv::Mat &netOutput, bool bWithBackgroundClass);
 
         void                    createLegendImage(const cv::Mat &netOutput, const std::vector<cv::Vec3b>& colors, bool bWithBackgroundClass);
+
+        //TODO temporary declaration: to remove
+        std::vector<std::string>    m_classNames;
 };
 
 //----------------------------------//

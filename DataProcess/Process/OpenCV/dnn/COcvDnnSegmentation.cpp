@@ -47,7 +47,7 @@ UMapString COcvDnnSegmentationParam::getParamMap() const
 //-------------------------------//
 //----- COcvDnnSegmentation -----//
 //-------------------------------//
-COcvDnnSegmentation::COcvDnnSegmentation() : COcvDnnProcess()
+COcvDnnSegmentation::COcvDnnSegmentation() : COcvDnnProcess(), C2dImageTask()
 {
     setOutputDataType(IODataType::IMAGE_LABEL, 0);
     addOutput(std::make_shared<CImageIO>());
@@ -55,7 +55,8 @@ COcvDnnSegmentation::COcvDnnSegmentation() : COcvDnnProcess()
     addOutput(std::make_shared<CGraphicsOutput>());
 }
 
-COcvDnnSegmentation::COcvDnnSegmentation(const std::string name, const std::shared_ptr<COcvDnnSegmentationParam> &pParam): COcvDnnProcess(name)
+COcvDnnSegmentation::COcvDnnSegmentation(const std::string name, const std::shared_ptr<COcvDnnSegmentationParam> &pParam)
+    : COcvDnnProcess(), C2dImageTask(name)
 {
     m_pParam = std::make_shared<COcvDnnSegmentationParam>(*pParam);
     setOutputDataType(IODataType::IMAGE_LABEL, 0);
@@ -162,7 +163,7 @@ void COcvDnnSegmentation::run()
     {
         if(m_net.empty() || pParam->m_bUpdate)
         {
-            m_net = readDnn();
+            m_net = readDnn(pParam);
             if(m_net.empty())
                 throw CException(CoreExCode::INVALID_PARAMETER, "Failed to load network", __func__, __FILE__, __LINE__);
 
@@ -183,7 +184,7 @@ void COcvDnnSegmentation::run()
         throw CException(CoreExCode::INVALID_PARAMETER, e, __func__, __FILE__, __LINE__);
     }
 
-    readClassNames();
+    //readClassNames();
     manageOutput(netOutputs);
     emit m_signalHandler->doProgress();
     endTaskRun();

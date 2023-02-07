@@ -62,16 +62,17 @@ class COcvDnnDetectorParam: public COcvDnnProcessParam
 //---------------------------//
 //----- COcvDnnDetector -----//
 //---------------------------//
-class COcvDnnDetector: public COcvDnnProcess
+class COcvDnnDetector: public COcvDnnProcess, public C2dImageTask
 {
     public:
 
-        COcvDnnDetector() : COcvDnnProcess()
+        COcvDnnDetector() : COcvDnnProcess(), C2dImageTask()
         {
             addOutput(std::make_shared<CGraphicsOutput>());
             addOutput(std::make_shared<CBlobMeasureIO>());
         }
-        COcvDnnDetector(const std::string name, const std::shared_ptr<COcvDnnDetectorParam> &pParam): COcvDnnProcess(name)
+        COcvDnnDetector(const std::string name, const std::shared_ptr<COcvDnnDetectorParam> &pParam)
+            : COcvDnnProcess(), C2dImageTask(name)
         {
             m_pParam = std::make_shared<COcvDnnDetectorParam>(*pParam);
             addOutput(std::make_shared<CGraphicsOutput>());
@@ -163,7 +164,7 @@ class COcvDnnDetector: public COcvDnnProcess
             {
                 if(m_net.empty() || pParam->m_bUpdate)
                 {
-                    m_net = readDnn();
+                    m_net = readDnn(pParam);
                     if(m_net.empty())
                         throw CException(CoreExCode::INVALID_PARAMETER, "Failed to load network", __func__, __FILE__, __LINE__);
 
@@ -185,7 +186,7 @@ class COcvDnnDetector: public COcvDnnProcess
                 throw CException(CoreExCode::INVALID_PARAMETER, e, __func__, __FILE__, __LINE__);
             }
 
-            readClassNames();
+            //readClassNames();
             endTaskRun();
             emit m_signalHandler->doProgress();
             manageOutput(netOutputs);
@@ -500,6 +501,9 @@ class COcvDnnDetector: public COcvDnnProcess
                 pMeasureOutput->addObjectMeasures(results);
             }
         }
+
+        //TODO temporary declaration: to remove
+        std::vector<std::string>    m_classNames;
 };
 
 //----------------------------------//

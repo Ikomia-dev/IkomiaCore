@@ -22,6 +22,7 @@
 
 #include "COcvDnnProcess.h"
 #include "Graphics/CGraphicsLayer.h"
+#include "Core/CClassificationTask.h"
 
 //----------------------------------//
 //----- COcvDnnClassifierParam -----//
@@ -57,20 +58,17 @@ class COcvDnnClassifierParam: public COcvDnnProcessParam
 //-----------------------------//
 //----- COcvDnnClassifier -----//
 //-----------------------------//
-class COcvDnnClassifier: public COcvDnnProcess
+class COcvDnnClassifier: public COcvDnnProcess, public CClassificationTask
 {
     public:
 
-        COcvDnnClassifier() : COcvDnnProcess()
+        COcvDnnClassifier() : COcvDnnProcess(), CClassificationTask()
         {
-            addOutput(std::make_shared<CGraphicsOutput>());
-            addOutput(std::make_shared<CBlobMeasureIO>());
         }
-        COcvDnnClassifier(const std::string& name, const std::shared_ptr<COcvDnnClassifierParam>& pParam) : COcvDnnProcess(name)
+        COcvDnnClassifier(const std::string& name, const std::shared_ptr<COcvDnnClassifierParam>& pParam)
+            : COcvDnnProcess(), CClassificationTask(name)
         {
             m_pParam = std::make_shared<COcvDnnClassifierParam>(*pParam);
-            addOutput(std::make_shared<CGraphicsOutput>());
-            addOutput(std::make_shared<CBlobMeasureIO>());
         }
 
         size_t      getProgressSteps() override
@@ -92,22 +90,34 @@ class COcvDnnClassifier: public COcvDnnProcess
             }
             return size;
         }
+        std::vector<std::string> getOutputsNames() const override
+        {
+            // Return empty list as we only want the last layer
+            return std::vector<std::string>();
+        }
+
+        void        globalInputChanged(bool bNewSequence) override
+        {
+            setNewInputState(bNewSequence);
+        }
 
         void        run() override
         {
             beginTaskRun();
-            auto pInput = std::dynamic_pointer_cast<CImageIO>(getInput(0));
-            //auto pGraphicsInput = std::dynamic_pointer_cast<CGraphicsInput>(getInput(1));
-            auto pParam = std::dynamic_pointer_cast<COcvDnnClassifierParam>(m_pParam);
 
-            if(pInput == nullptr || pParam == nullptr)
+            auto imgInputPtr = std::dynamic_pointer_cast<CImageIO>(getInput(0));
+            if(imgInputPtr == nullptr)
+                throw CException(CoreExCode::INVALID_PARAMETER, "Invalid input image", __func__, __FILE__, __LINE__);
+
+            auto paramPtr = std::dynamic_pointer_cast<COcvDnnClassifierParam>(m_pParam);
+            if (paramPtr == nullptr)
                 throw CException(CoreExCode::INVALID_PARAMETER, "Invalid parameters", __func__, __FILE__, __LINE__);
 
-            if(pInput->isDataAvailable() == false)
-                throw CException(CoreExCode::INVALID_PARAMETER, "Empty image", __func__, __FILE__, __LINE__);
+            if (imgInputPtr->isDataAvailable() == false)
+                throw CException(CoreExCode::INVALID_PARAMETER, "Source image is empty", __func__, __FILE__, __LINE__);
 
-            CMat imgOrigin = pInput->getImage();
-            cv::Mat dnnOutput;
+            CMat imgOrigin = imgInputPtr->getImage();
+            std::vector<cv::Mat> dnnOutputs;
             CMat imgSrc;
 
             //Need color image as input
@@ -116,73 +126,75 @@ class COcvDnnClassifier: public COcvDnnProcess
             else
                 imgSrc = imgOrigin;
 
-            //createGraphicsMask(imgSrc.getNbCols(), imgSrc.getNbRows(), pGraphicsInput);
             emit m_signalHandler->doProgress();
 
             try
             {
-                if(m_net.empty() || pParam->m_bUpdate)
+                if(m_net.empty() || paramPtr->m_bUpdate)
                 {
-                    m_net = readDnn();
+                    m_net = readDnn(paramPtr);
                     if(m_net.empty())
                         throw CException(CoreExCode::INVALID_PARAMETER, "Failed to load network", __func__, __FILE__, __LINE__);
 
-                    pParam->m_bUpdate = false;
+                    paramPtr->m_bUpdate = false;
+                    readClassNames(paramPtr->m_labelsFile);
                 }
-                int size = getNetworkInputSize();
-                double scaleFactor = getNetworkInputScaleFactor();
-                cv::Scalar mean = getNetworkInputMean();
-                auto inputBlob = cv::dnn::blobFromImage(imgSrc, scaleFactor, cv::Size(size,size), mean, false, false);
-                m_net.setInput(inputBlob);
-                dnnOutput = m_net.forward(m_outputLayerName);
-            }
-            catch(cv::Exception& e)
-            {
-                throw CException(CoreExCode::INVALID_PARAMETER, e, __func__, __FILE__, __LINE__);
-            }
 
-            readClassNames();
-            endTaskRun();
-            emit m_signalHandler->doProgress();
-            manageOutput(dnnOutput);
-            emit m_signalHandler->doProgress();
+                double inferTime = 0.0;
+                if (isWholeImageClassification())
+                {
+                    inferTime = forward(imgSrc, dnnOutputs, paramPtr);
+                    manageWholeImageOutput(dnnOutputs[0]);
+                }
+                else
+                {
+                    auto objects = getInputObjects();
+                    for (size_t i=0; i<objects.size(); ++i)
+                    {
+                        auto subImage = getObjectSubImage(objects[i]);
+                        inferTime += forward(subImage, dnnOutputs, paramPtr);
+                        manageObjectOutput(dnnOutputs[0], objects[i]);
+                    }
+                }
+                emit m_signalHandler->doProgress();
+
+                m_customInfo.clear();
+                m_customInfo.push_back(std::make_pair("Inference time (ms)", std::to_string(inferTime)));
+                endTaskRun();
+                emit m_signalHandler->doProgress();
+            }
+            catch(std::exception& e)
+            {
+                throw CException(CoreExCode::INVALID_PARAMETER, e.what(), __func__, __FILE__, __LINE__);
+            }
         }
 
-        void        manageOutput(cv::Mat &dnnOutput)
+        void        manageWholeImageOutput(cv::Mat &dnnOutput)
         {
-            forwardInputImage();
-
             //Sort the 1 x n matrix of probabilities
             cv::Mat sortedIdx;
             cv::sortIdx(dnnOutput, sortedIdx, cv::SORT_EVERY_ROW | cv::SORT_DESCENDING);
+            std::vector<std::string> classes;
+            std::vector<std::string> confidences;
 
-            auto classId = sortedIdx.at<int>(0, 0);
-            double confidence = dnnOutput.at<float>(classId);
-
-            //Graphics output
-            auto pGraphicsOutput = std::dynamic_pointer_cast<CGraphicsOutput>(getOutput(1));
-            assert(pGraphicsOutput);
-            pGraphicsOutput->setNewLayer("DnnLayer");
-            pGraphicsOutput->setImageIndex(0);
-
-            //Measures output
-            auto pMeasureOutput = std::dynamic_pointer_cast<CBlobMeasureIO>(getOutput(2));
-            pMeasureOutput->clearData();
-
-            //We don't create the final CGraphicsText instance here for thread-safety reason
-            //So we saved necessary information into the output and the final object is
-            //created when the output is managed by the App
-            std::string className = classId < (int)m_classNames.size() ? m_classNames[classId] : "unknown " + std::to_string(classId);
-            std::string label = className + " : " + std::to_string(confidence);
-            pGraphicsOutput->addText(label, 30, 30);
-
-            //Store values to be shown in results table
             for(int i=0; i<sortedIdx.cols; ++i)
             {
-                classId = sortedIdx.at<int>(i);
-                className = classId < (int)m_classNames.size() ? m_classNames[classId] : "unknown " + std::to_string(classId);
-                pMeasureOutput->addObjectMeasure(CObjectMeasure(CMeasure(CMeasure::CUSTOM, QObject::tr("Confidence").toStdString()), dnnOutput.at<float>(classId), i, className));
+                int classId = sortedIdx.at<int>(i);
+                std::string className = classId < (int)m_classNames.size() ? m_classNames[classId] : "unknown " + std::to_string(classId);
+                classes.push_back(className);
+                confidences.push_back(std::to_string(dnnOutput.at<float>(classId)));
             }
+            setWholeImageResults(classes, confidences);
+        }
+
+        void        manageObjectOutput(cv::Mat &dnnOutput, const ProxyGraphicsItemPtr &objectPtr)
+        {
+            //Sort the 1 x n matrix of probabilities
+            cv::Mat sortedIdx;
+            cv::sortIdx(dnnOutput, sortedIdx, cv::SORT_EVERY_ROW | cv::SORT_DESCENDING);
+            int classId = sortedIdx.at<int>(0, 0);
+            double confidence = dnnOutput.at<float>(classId);
+            addObject(objectPtr, classId, confidence);
         }
 };
 

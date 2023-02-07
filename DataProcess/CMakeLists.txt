@@ -10,6 +10,8 @@ add_library(ikDataProcess SHARED
     Core/C2dImageInteractiveTask.h
     Core/C2dImageTask.cpp
     Core/C2dImageTask.h
+    Core/CClassificationTask.cpp
+    Core/CClassificationTask.h
     Core/CDnnTrainTask.cpp
     Core/CDnnTrainTask.h
     Core/CIkomiaRegistry.cpp
@@ -452,6 +454,7 @@ set(PUBLIC_HEADERS_CORE
     Core/CDnnTrainTask.h
     Core/CMlflowTrainTask.h
     Core/CRunTaskManager.h
+    Core/CClassificationTask.h
 )
 
 set(PUBLIC_HEADERS_IO

@@ -75,11 +75,7 @@ UMapString COcvDnnProcessParam::getParamMap() const
 //--------------------------//
 //----- COcvDnnProcess -----//
 //--------------------------//
-COcvDnnProcess::COcvDnnProcess() : C2dImageTask()
-{
-}
-
-COcvDnnProcess::COcvDnnProcess(const std::string &name) : C2dImageTask(name)
+COcvDnnProcess::COcvDnnProcess()
 {
 }
 
@@ -111,57 +107,37 @@ std::vector<cv::String> COcvDnnProcess::getOutputsNames() const
     return names;
 }
 
-cv::dnn::Net COcvDnnProcess::readDnn()
+cv::dnn::Net COcvDnnProcess::readDnn(const std::shared_ptr<COcvDnnProcessParam>& paramPtr)
 {
     cv::dnn::Net net;
-    auto pParam = std::dynamic_pointer_cast<COcvDnnProcessParam>(m_pParam);
 
-    switch(pParam->m_framework)
+    if (paramPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Invalid DNN parameter object", __func__, __FILE__, __LINE__);
+
+    switch(paramPtr->m_framework)
     {
         case COcvDnnProcessParam::TENSORFLOW:
-            net = cv::dnn::readNetFromTensorflow(pParam->m_modelFile, pParam->m_structureFile);
+            net = cv::dnn::readNetFromTensorflow(paramPtr->m_modelFile, paramPtr->m_structureFile);
             break;
         case COcvDnnProcessParam::CAFFE:
-            net = cv::dnn::readNetFromCaffe(pParam->m_structureFile, pParam->m_modelFile);
+            net = cv::dnn::readNetFromCaffe(paramPtr->m_structureFile, paramPtr->m_modelFile);
             break;
         case COcvDnnProcessParam::DARKNET:
-            net = cv::dnn::readNetFromDarknet(pParam->m_structureFile, pParam->m_modelFile);
+            net = cv::dnn::readNetFromDarknet(paramPtr->m_structureFile, paramPtr->m_modelFile);
             break;
         case COcvDnnProcessParam::TORCH:
-            net = cv::dnn::readNetFromTorch(pParam->m_modelFile, true);
+            net = cv::dnn::readNetFromTorch(paramPtr->m_modelFile, true);
             break;
         case COcvDnnProcessParam::ONNX:
-            net = cv::dnn::readNetFromONNX(pParam->m_modelFile);
+            net = cv::dnn::readNetFromONNX(paramPtr->m_modelFile);
     }
-    net.setPreferableBackend(pParam->m_backend);
-    net.setPreferableTarget(pParam->m_target);
+    net.setPreferableBackend(paramPtr->m_backend);
+    net.setPreferableTarget(paramPtr->m_target);
     //displayLayers(net);
     return net;
 }
 
-void COcvDnnProcess::readClassNames()
-{
-    auto pParam = std::dynamic_pointer_cast<COcvDnnProcessParam>(m_pParam);
-    if(pParam->m_labelsFile.empty() == true)
-        return;
-
-    std::ifstream file(pParam->m_labelsFile);
-    if(file.is_open() == false)
-        throw CException(CoreExCode::INVALID_FILE, "Failed to open labels file", __func__, __FILE__, __LINE__);
-
-    std::string name;
-    m_classNames.clear();
-
-    while(!file.eof())
-    {
-        std::getline(file, name);
-        if(name.empty() == false)
-            m_classNames.push_back(name);
-    }
-    file.close();
-}
-
-void COcvDnnProcess::forward(const CMat& imgSrc, std::vector<cv::Mat> &outputs)
+double COcvDnnProcess::forward(const CMat& imgSrc, std::vector<cv::Mat> &outputs, const std::shared_ptr<COcvDnnProcessParam> &paramPtr)
 {
     int size = getNetworkInputSize();
     double scaleFactor = getNetworkInputScaleFactor();
@@ -172,19 +148,22 @@ void COcvDnnProcess::forward(const CMat& imgSrc, std::vector<cv::Mat> &outputs)
 
     Utils::CTimer inferenceTime;
     inferenceTime.start();
-    m_net.forward(outputs, netOutNames);
+
+    if (netOutNames.size() == 0)
+        outputs.push_back(m_net.forward());
+    else
+        m_net.forward(outputs, netOutNames);
+
     auto t = inferenceTime.get_elapsed_ms();
-    m_customInfo.clear();
-    m_customInfo.push_back(std::make_pair("Inference time (ms)", std::to_string(t)));
 
     // Trick to overcome OpenCV issue around CUDA context and multithreading
-    // https://github.com/opencv/opencv/issues/20566
-    auto paramPtr = std::dynamic_pointer_cast<COcvDnnProcessParam>(m_pParam);
+    // https://github.com/opencv/opencv/issues/20566    
     if(paramPtr->m_backend == cv::dnn::DNN_BACKEND_CUDA && m_bNewInput)
     {
         m_sign *= -1;
         m_bNewInput = false;
     }
+    return t;
 }
 
 void COcvDnnProcess::displayLayers(const cv::dnn::Net& net)
@@ -194,8 +173,7 @@ void COcvDnnProcess::displayLayers(const cv::dnn::Net& net)
         Utils::print(layerNames[i], QtDebugMsg);
 }
 
-void COcvDnnProcess::globalInputChanged(bool bNewSequence)
+void COcvDnnProcess::setNewInputState(bool bNewSequence)
 {
-    if(bNewSequence)
-        m_bNewInput = true;
+    m_bNewInput = bNewSequence;
 }
