@@ -11,6 +11,7 @@ class CClassificationTask: public C2dImageTask
         CClassificationTask();
         CClassificationTask(const std::string& name);
 
+        std::vector<std::string>            getNames() const;
         std::vector<ProxyGraphicsItemPtr>   getInputObjects() const;
         CMat                                getObjectSubImage(const ProxyGraphicsItemPtr& objectPtr) const;
         std::shared_ptr<CObjectDetectionIO> getObjectsResults() const;

@@ -13,6 +13,11 @@ CClassificationTask::CClassificationTask(const std::string &name): C2dImageTask(
     initIO();
 }
 
+std::vector<std::string> CClassificationTask::getNames() const
+{
+    return m_classNames;
+}
+
 void CClassificationTask::initIO()
 {
     addOutput(std::make_shared<CObjectDetectionIO>());
@@ -48,6 +53,19 @@ CMat CClassificationTask::getObjectSubImage(const ProxyGraphicsItemPtr &objectPt
 
     cv::Mat srcImg = imageInPtr->getImage();
     std::vector<float> rc = objectPtr->getBoundingRect();
+
+    if (rc[0] < 0)
+        rc[0] = 0;
+    if (rc[0] + rc[2] >= srcImg.cols)
+        rc[2] = srcImg.cols - rc[0] - 1;
+    if (rc[1] < 0)
+        rc[1] = 0;
+    if (rc[1] + rc[3] >= srcImg.rows)
+        rc[3] = srcImg.rows - rc[1] - 1;
+
+    if (rc[2] < 2 || rc[3] < 2)
+        return CMat();
+
     CMat subImg = srcImg(cv::Range(rc[1], rc[1] + rc[3]), cv::Range(rc[0], rc[0] + rc[2]));
     return subImg;
 }
