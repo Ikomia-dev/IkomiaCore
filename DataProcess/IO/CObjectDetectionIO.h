@@ -68,6 +68,10 @@ class DATAPROCESSSHARED_EXPORT CObjectDetectionIO: public CWorkflowTaskIO
                                                       double boxX, double boxY, double boxWidth, double boxHeight,
                                                       const CColor& color);
 
+        void                                addObject(int id, const std::string& label, double confidence,
+                                                      double cx, double cy, double width, double height,
+                                                      double angle, const CColor& color);
+
         void                                clearData() override;
 
         void                                load(const std::string &path) override;

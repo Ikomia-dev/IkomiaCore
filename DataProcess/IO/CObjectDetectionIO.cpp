@@ -186,6 +186,47 @@ void CObjectDetectionIO::addObject(int id, const std::string &label, double conf
     m_blobMeasureIOPtr->addObjectMeasures(results);
 }
 
+void CObjectDetectionIO::addObject(int id, const std::string &label, double confidence,
+                                   double cx, double cy, double width, double height, double angle, const CColor &color)
+{
+    CObjectDetection obj;
+    obj.m_id = id;
+    obj.m_label = label;
+    obj.m_confidence = confidence;
+    obj.m_box = {cx, cy, width, height, angle};
+    obj.m_color = color;
+    m_objects.push_back(obj);
+
+    //Set integrated I/O
+    //Create polygon graphics of rotated bbox
+    CGraphicsPolygonProperty polyProp;
+    polyProp.m_category = label;
+    polyProp.m_penColor = color;
+    cv::RotatedRect box(cv::Point2f(cx, cy), cv::Size2f(width, height), angle);
+    cv::Point2f vertices[4];
+    box.points(vertices);
+
+    PolygonF poly;
+    for(int j=0; j<4; ++j)
+        poly.push_back(CPointF(vertices[j].x, vertices[j].y));
+
+    auto graphicsObj = m_graphicsIOPtr->addPolygon(poly);
+
+    //Class label
+    std::string graphicsLabel = label + " #" + std::to_string(id) + ": " + std::to_string(confidence);
+    CGraphicsTextProperty textProperty;
+    textProperty.m_color = color;
+    textProperty.m_fontSize = 8;
+    m_graphicsIOPtr->addText(graphicsLabel, cx + 5, cy + 5, textProperty);
+
+    //Store values to be shown in results table
+    std::vector<CObjectMeasure> results;
+    results.emplace_back(CObjectMeasure(CMeasure(CMeasure::CUSTOM, QObject::tr("Identifier").toStdString()), id, graphicsObj->getId(), label));
+    results.emplace_back(CObjectMeasure(CMeasure(CMeasure::CUSTOM, QObject::tr("Confidence").toStdString()), confidence, graphicsObj->getId(), label));
+    results.emplace_back(CObjectMeasure(CMeasure::Id::ORIENTED_BBOX, {cx, cy, width, height, angle}, graphicsObj->getId(), label));
+    m_blobMeasureIOPtr->addObjectMeasures(results);
+}
+
 void CObjectDetectionIO::clearData()
 {
     m_objects.clear();

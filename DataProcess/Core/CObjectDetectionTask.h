@@ -13,6 +13,8 @@ class CObjectDetectionTask: public C2dImageTask
 
         void                                addObject(int id, int classIndex, double confidence,
                                                       double boxX, double boxY, double boxWidth, double boxHeight);
+        void                                addObject(int id, int classIndex, double confidence,
+                                                      double cx, double cy, double width, double height, double angle);
 
         void                                endTaskRun() override;
 

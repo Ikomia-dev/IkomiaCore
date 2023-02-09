@@ -501,6 +501,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .add_property("color", &CObjectDetection::getColor, &CObjectDetection::setColor, "Object display color [r, g, b, a]")
     ;
 
+    void (CObjectDetectionIO::*addObjectBox)(int, const std::string&, double, double, double, double, double, const CColor&) = &CObjectDetectionIO::addObject;
+    void (CObjectDetectionIO::*addObjectRotateBox)(int, const std::string&, double, double, double, double, double, double, const CColor&) = &CObjectDetectionIO::addObject;
     std::string (CObjectDetectionIO::*objDetectToJsonNoOpt)() const = &CObjectDetectionIO::toJson;
     std::string (CObjectDetectionIO::*objDetectToJson)(const std::vector<std::string>&) const = &CObjectDetectionIO::toJson;
 
@@ -513,7 +515,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("get_graphics_io", &CObjectDetectionIO::getGraphicsIO, _getGraphicsIODocString, args("self"))
         .def("is_data_available", &CObjectDetectionIOWrap::isDataAvailable, &CObjectDetectionIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
         .def("init", &CObjectDetectionIO::init, _initObjDetectIODocString, args("self", "task_name", "ref_image_index"))
-        .def("add_object", &CObjectDetectionIO::addObject, _addObjectDocString, args("self", "id", "label", "confidence", "box_x", "box_y", "box_width", "box_height", "color"))
+        .def("add_object", addObjectBox, _addObjectDocString, args("self", "id", "label", "confidence", "box_x", "box_y", "box_width", "box_height", "color"))
         .def("clear_data", &CObjectDetectionIO::clearData, &CObjectDetectionIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
         .def("load", &CObjectDetectionIO::load, &CObjectDetectionIOWrap::default_load, _objDetectLoadDocString, args("self", "path"))
         .def("save", &CObjectDetectionIO::save, &CObjectDetectionIOWrap::default_save, _objDetectSaveDocString, args("self", "path"))

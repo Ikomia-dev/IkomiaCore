@@ -26,6 +26,21 @@ void CObjectDetectionTask::addObject(int id, int classIndex, double confidence, 
     objDetIOPtr->addObject(id, m_classNames[classIndex], confidence, boxX, boxY, boxWidth, boxHeight, m_classColors[classIndex]);
 }
 
+void CObjectDetectionTask::addObject(int id, int classIndex, double confidence, double cx, double cy, double width, double height, double angle)
+{
+    auto objDetIOPtr = std::dynamic_pointer_cast<CObjectDetectionIO>(getOutput(1));
+    if (objDetIOPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Invalid object detection output", __func__, __FILE__, __LINE__);
+
+    if (classIndex >= m_classNames.size())
+        throw CException(CoreExCode::INVALID_SIZE, "Invalid class index, index overflows class names list", __func__, __FILE__, __LINE__);
+
+    if (objDetIOPtr->getObjectCount() == 0)
+        objDetIOPtr->init(getName(), 0);
+
+    objDetIOPtr->addObject(id, m_classNames[classIndex], confidence, cx, cy, width, height, angle, m_classColors[classIndex]);
+}
+
 void CObjectDetectionTask::endTaskRun()
 {
     forwardInputImage(0, 0);
