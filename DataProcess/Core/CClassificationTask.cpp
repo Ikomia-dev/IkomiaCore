@@ -25,6 +25,22 @@ void CClassificationTask::initIO()
     addOutput(std::make_shared<CNumericIO<std::string>>());
 }
 
+void CClassificationTask::generateRandomColors()
+{
+    std::srand(9);
+    double factor = 255 / (double)RAND_MAX;
+
+    for (size_t i=0; i<m_classNames.size(); ++i)
+    {
+        CColor color = {
+            (int)((double)std::rand() * factor),
+            (int)((double)std::rand() * factor),
+            (int)((double)std::rand() * factor)
+        };
+        m_classColors.push_back(color);
+    }
+}
+
 std::vector<ProxyGraphicsItemPtr> CClassificationTask::getInputObjects() const
 {
     auto graphicsInPtr = std::dynamic_pointer_cast<CGraphicsInput>(getInput(1));
@@ -104,6 +120,13 @@ bool CClassificationTask::isWholeImageClassification() const
     return graphicsIn->isDataAvailable() == false;
 }
 
+void CClassificationTask::setNames(const std::vector<std::string> &names)
+{
+    m_classNames = names;
+    if (m_classColors.empty())
+        generateRandomColors();
+}
+
 void CClassificationTask::setColors(const std::vector<CColor> &colors)
 {
     if (colors.size() < m_classNames.size())
@@ -133,21 +156,7 @@ void CClassificationTask::readClassNames(const std::string& path)
     file.close();
 
     if (m_classColors.empty())
-    {
-        // Generate random colors
-        std::srand(9);
-        double factor = 255 / (double)RAND_MAX;
-
-        for (size_t i=0; i<m_classNames.size(); ++i)
-        {
-            CColor color = {
-                (int)((double)std::rand() * factor),
-                (int)((double)std::rand() * factor),
-                (int)((double)std::rand() * factor)
-            };
-            m_classColors.push_back(color);
-        }
-    }
+        generateRandomColors();
 }
 
 void CClassificationTask::setWholeImageResults(const std::vector<std::string> &sortedNames, const std::vector<std::string> &sortedConfidences)
