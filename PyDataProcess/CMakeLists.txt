@@ -57,6 +57,8 @@ add_library(pydataprocess SHARED
     Task/CVideoTrackingTaskWrap.h
     Task/CClassifTaskWrap.cpp
     Task/CClassifTaskWrap.h
+    Task/CObjDetectTaskWrap.cpp
+    Task/CObjDetectTaskWrap.h
 )
 
 set_target_properties(pydataprocess PROPERTIES

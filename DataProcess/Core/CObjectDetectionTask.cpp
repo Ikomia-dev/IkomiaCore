@@ -66,6 +66,22 @@ void CObjectDetectionTask::initIO()
     addOutput(std::make_shared<CObjectDetectionIO>());
 }
 
+void CObjectDetectionTask::generateRandomColors()
+{
+    std::srand(9);
+    double factor = 255 / (double)RAND_MAX;
+
+    for (size_t i=0; i<m_classNames.size(); ++i)
+    {
+        CColor color = {
+            (int)((double)std::rand() * factor),
+            (int)((double)std::rand() * factor),
+            (int)((double)std::rand() * factor)
+        };
+        m_classColors.push_back(color);
+    }
+}
+
 void CObjectDetectionTask::readClassNames(const std::string &path)
 {
     if(path.empty())
@@ -87,21 +103,14 @@ void CObjectDetectionTask::readClassNames(const std::string &path)
     file.close();
 
     if (m_classColors.empty())
-    {
-        // Generate random colors
-        std::srand(9);
-        double factor = 255 / (double)RAND_MAX;
+        generateRandomColors();
+}
 
-        for (size_t i=0; i<m_classNames.size(); ++i)
-        {
-            CColor color = {
-                (int)((double)std::rand() * factor),
-                (int)((double)std::rand() * factor),
-                (int)((double)std::rand() * factor)
-            };
-            m_classColors.push_back(color);
-        }
-    }
+void CObjectDetectionTask::setNames(const std::vector<std::string> &names)
+{
+    m_classNames = names;
+    if (m_classColors.empty())
+        generateRandomColors();
 }
 
 void CObjectDetectionTask::setColors(const std::vector<CColor> &colors)

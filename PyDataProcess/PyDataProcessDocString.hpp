@@ -1145,7 +1145,7 @@ constexpr auto _initObjDetectIODocString =
         "   ref_image_index (int): zero-based index of the output containing the reference image\n\n";
 
 constexpr auto _addObjectDocString =
-        "Add detected object to the input/output.\n\n"
+        "Add detected object with bounding box.\n\n"
         "Args:\n\n"
         "   id (int): object identifier\n\n"
         "   label (str): class label\n\n"
@@ -1154,6 +1154,19 @@ constexpr auto _addObjectDocString =
         "   box_y (double): top coordinate of object bounding box\n\n"
         "   box_width (double): width of object bounding box\n\n"
         "   box_height (double): height of object bounding box\n\n"
+        "   color (int list - rgba): display color\n\n";
+
+constexpr auto _addObject2DocString =
+        "Add detected object with oriented bounding box.\n\n"
+        "Args:\n\n"
+        "   id (int): object identifier\n\n"
+        "   label (str): class label\n\n"
+        "   confidence (double): prediction confidence\n\n"
+        "   cx (double): x-coordinate of object bounding box center\n\n"
+        "   cy (double): y-coordinate of object bounding box center\n\n"
+        "   width (double): width of object bounding box\n\n"
+        "   height (double): height of object bounding box\n\n"
+        "   angle (double): angle w.r.t horizontal axis of object bounding box\n\n"
         "   color (int list - rgba): display color\n\n";
 
 constexpr auto _objDetectLoadDocString =
@@ -1633,25 +1646,34 @@ constexpr auto _classifTaskDocString =
         "- image (:py:class:`CImageIO`)\n"
         "- graphics (:py:class:`CGraphicsInput`)\n\n"
         "Outputs:\n\n"
+        "- image IO (:py:class:`CImageIO`): by default source image is forwarded.\n"
         "- object detection IO (:py:class:`CObjectDetectionIO`): filled if input graphics items are passed. "
         "In this case, classification is computed for each individual object.\n"
         "- graphics output (:py:class:`CGraphicsOutput`): text item with top-1 class if classification is computed on whole image.\n"
         "- data output (:py:class:`CDataStringIO`): sorted list of class scores if classification is computed on whole image.\n\n"
         "Derived from :py:class:`~ikomia.dataprocess.pydataprocess.C2dImageTask`.\n\n";
 
-constexpr auto _classifGetNames =
+constexpr auto _classifAddObjectDocString =
+        "Add classification result for individual object. See :py:meth:`get_input_objects` and "
+        ":py:meth:`get_object_sub_image` for more information.\n\n"
+        "Args:\n\n"
+        "   graphics_item (:py:class:`~ikomia.core.pycore.CGraphicsItem` based object)\n\n"
+        "   class_index (int): index is used to retrieve class name\n\n"
+        "   confidence (float): confidence score of top-1 class\n\n";
+
+constexpr auto _classifGetNamesDocString =
         "Get class names. Call :py:meth:`read_class_names` to populate names from text file.\n\n"
         "Returns:\n\n"
         "   str list: class names\n\n";
 
-constexpr auto _classifGetInputObjects =
+constexpr auto _classifGetInputObjectsDocString =
         "Get input graphics items on which classification can be computed individually. One can iterate over this list "
         "to compute classification for each object. Use :py:meth:`get_object_sub_image` to retieve object ROI image and "
         ":py:meth:`add_object` to store classification result.\n\n"
         "Returns:\n\n"
         "   :py:class:`~ikomia.core.pycore.CGraphicsItem` based objects: graphics items\n\n";
 
-constexpr auto _classifGetObjectSubImage =
+constexpr auto _classifGetObjectSubImageDocString =
         "Get ROI image for the given graphics item. We use the bounding rect property of "
         ":py:class:`~ikomia.core.pycore.CGraphicsItem` to compute ROI. Input graphics items can be retrieved "
         "with :py:meth:`get_input_objects`. Classification can then be computed on the ROI to get individual object class."
@@ -1660,48 +1682,112 @@ constexpr auto _classifGetObjectSubImage =
         "Returns:\n\n"
         "   2D Numpy array: ROI image\n\n";
 
-constexpr auto _classifGetObjectsResults =
+constexpr auto _classifGetObjectsResultsDocString =
         "Get classification results when applied on individual objects (input graphics items). Results are "
         "given as a :py:class:`CObjectDetectionIO` instance.\n\n"
         "Returns:\n\n"
         "   :py:class:`CObjectDetectionIO`: classification results\n\n";
 
-constexpr auto _classifGetWholeImageResults =
+constexpr auto _classifGetWholeImageResultsDocString =
         "Get classification results when applied on whole image (no input graphics items given). It gives "
         "a sorted list of tuple storing class name and confidence.\n\n"
         "Returns:\n\n"
         "   list of tuples (name, confidence): classification results\n\n";
 
-constexpr auto _classifIsWholeImage =
+constexpr auto _classifIsWholeImageDocString =
         "Check whether input graphics items are given for individual classification.\n\n"
         "Returns:\n\n"
         "   bool: True if no input graphics items are given (whole image classification), False otherwise\n\n";
 
-constexpr auto _classifSetColors =
+constexpr auto _classifReadClassNamesDocString =
+        "Populate class names from the given text file (one line per class).\n\n"
+        "Args:\n\n"
+        "   path (str): path to class names definition file\n\n";
+
+constexpr auto _classifSetColorsDocString =
         "Set colors associated with class names. The given list must have the same size as names list. "
         "If not provided, random colors are generated while populating the name list "
         "(:py:meth:`read_class_names`).\n\n"
         "Args:\n\n"
         "   colors (list of list: r, g, b integer values in range [0, 255])\n\n";
 
-constexpr auto _classifSetWholeImageResults =
+constexpr auto _classifSetNamesDocString =
+        "Set class names used for classification. The function generate associated random colors if "
+        "none is defined.\n\n"
+        "Args:\n\n"
+        "   names (list of str)\n\n";
+
+constexpr auto _classifSetWholeImageResultsDocString =
         "Set whole image classification results.\n\n"
         "Args:\n\n"
         "   names (str list): sorted list with respect to confidence score\n\n"
         "   confidences (str list): sorted list (descending)\n\n";
 
-constexpr auto _classifReadClassNames =
+//--------------------------------//
+//----- CObjectDetectionTask -----//
+//--------------------------------//
+constexpr auto _objDetTaskDocString =
+        "Base class for object detection task in Computer Vision. "
+        "It defines a task with the following properties:\n\n"
+        "Inputs:\n\n"
+        "- image (:py:class:`CImageIO`)\n"
+        "- graphics (:py:class:`CGraphicsInput`)\n\n"
+        "Outputs:\n\n"
+        "- image IO (:py:class:`CImageIO`): by default source image is forwarded.\n"
+        "- object detection IO (:py:class:`CObjectDetectionIO`)\n\n"
+        "Derived from :py:class:`~ikomia.dataprocess.pydataprocess.C2dImageTask`.\n\n";
+
+constexpr auto _objDetAddObject1DocString =
+        "Add detected object result localized in image through regular bounding box.\n\n"
+        "Args:\n\n"
+        "   id (int): object identifier\n\n"
+        "   class_index (int): index of the associated class\n\n"
+        "   confidence (float): confidence of the prediction \n\n"
+        "   x (float): left coordinate of object bounding box\n\n"
+        "   y (float): top coordinate of object bounding box\n\n"
+        "   width (float): width of object bounding box\n\n"
+        "   height (float): height of object bounding box\n\n";
+
+constexpr auto _objDetAddObject2DocString =
+        "Add detected object result localized in image through oriented bounding box.\n\n"
+        "Args:\n\n"
+        "   id (int): object identifier\n\n"
+        "   label (str): class label\n\n"
+        "   confidence (double): prediction confidence\n\n"
+        "   cx (double): x-coordinate of object bounding box center\n\n"
+        "   cy (double): y-coordinate of object bounding box center\n\n"
+        "   width (double): width of object bounding box\n\n"
+        "   height (double): height of object bounding box\n\n"
+        "   angle (double): angle w.r.t horizontal axis of object bounding box\n\n"
+        "   color (int list - rgba): display color\n\n";
+
+constexpr auto _objDetectGetResultsDocString =
+        "Get object detection results as a :py:class:`CObjectDetectionIO` instance.\n\n"
+        "Returns:\n\n"
+        "   :py:class:`CObjectDetectionIO`: object detection results\n\n";
+
+constexpr auto _objDetectGetNamesDocString =
+        "Get class names. Call :py:meth:`read_class_names` to populate names from text file.\n\n"
+        "Returns:\n\n"
+        "   str list: class names\n\n";
+
+constexpr auto _objDetectReadClassNamesDocString =
         "Populate class names from the given text file (one line per class).\n\n"
         "Args:\n\n"
         "   path (str): path to class names definition file\n\n";
 
-constexpr auto _classifAddObject =
-        "Add classification result for individual object. See :py:meth:`get_input_objects` and "
-        ":py:meth:`get_object_sub_image` for more information.\n\n"
+constexpr auto _objDetectSetColorsDocString =
+        "Set colors associated with class names. The given list must have the same size as names list. "
+        "If not provided, random colors are generated while populating the name list "
+        "(:py:meth:`read_class_names`).\n\n"
         "Args:\n\n"
-        "   graphics_item (:py:class:`~ikomia.core.pycore.CGraphicsItem` based object)\n\n"
-        "   class_index (int): index is used to retrieve class name\n\n"
-        "   confidence (float): confidence score of top-1 class\n\n";
+        "   colors (list of list: r, g, b integer values in range [0, 255])\n\n";
+
+constexpr auto _objDetectSetNamesDocString =
+        "Set class names used for classification. The function generate associated random colors if "
+        "none is defined.\n\n"
+        "Args:\n\n"
+        "   names (list of str)\n\n";
 
 //---------------------------//
 //----- CIkomiaRegistry -----//

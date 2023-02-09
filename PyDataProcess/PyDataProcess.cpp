@@ -31,6 +31,7 @@
 #include "Task/CVideoTrackingTaskWrap.h"
 #include "Task/CDnnTrainTaskWrap.h"
 #include "Task/CClassifTaskWrap.h"
+#include "Task/CObjDetectTaskWrap.h"
 #include "CWidgetFactoryWrap.h"
 #include "CPluginProcessInterfaceWrap.h"
 #include "IO/CNumericIOWrap.hpp"
@@ -501,8 +502,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .add_property("color", &CObjectDetection::getColor, &CObjectDetection::setColor, "Object display color [r, g, b, a]")
     ;
 
-    void (CObjectDetectionIO::*addObjectBox)(int, const std::string&, double, double, double, double, double, const CColor&) = &CObjectDetectionIO::addObject;
-    void (CObjectDetectionIO::*addObjectRotateBox)(int, const std::string&, double, double, double, double, double, double, const CColor&) = &CObjectDetectionIO::addObject;
+    void (CObjectDetectionIO::*addObjectBox1)(int, const std::string&, double, double, double, double, double, const CColor&) = &CObjectDetectionIO::addObject;
+    void (CObjectDetectionIO::*addObjectRotateBox1)(int, const std::string&, double, double, double, double, double, double, const CColor&) = &CObjectDetectionIO::addObject;
     std::string (CObjectDetectionIO::*objDetectToJsonNoOpt)() const = &CObjectDetectionIO::toJson;
     std::string (CObjectDetectionIO::*objDetectToJson)(const std::vector<std::string>&) const = &CObjectDetectionIO::toJson;
 
@@ -515,7 +516,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("get_graphics_io", &CObjectDetectionIO::getGraphicsIO, _getGraphicsIODocString, args("self"))
         .def("is_data_available", &CObjectDetectionIOWrap::isDataAvailable, &CObjectDetectionIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
         .def("init", &CObjectDetectionIO::init, _initObjDetectIODocString, args("self", "task_name", "ref_image_index"))
-        .def("add_object", addObjectBox, _addObjectDocString, args("self", "id", "label", "confidence", "box_x", "box_y", "box_width", "box_height", "color"))
+        .def("add_object", addObjectBox1, _addObjectDocString, args("self", "id", "label", "confidence", "box_x", "box_y", "box_width", "box_height", "color"))
+        .def("add_object", addObjectRotateBox1, _addObject2DocString, args("self", "id", "label", "confidence", "cx", "cy", "width", "height", "angle", "color"))
         .def("clear_data", &CObjectDetectionIO::clearData, &CObjectDetectionIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
         .def("load", &CObjectDetectionIO::load, &CObjectDetectionIOWrap::default_load, _objDetectLoadDocString, args("self", "path"))
         .def("save", &CObjectDetectionIO::save, &CObjectDetectionIOWrap::default_save, _objDetectSaveDocString, args("self", "path"))
@@ -760,16 +762,49 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("emit_graphics_context_changed", &CClassifTaskWrap::emitGraphicsContextChanged, _emitGraphicsContextChangedDocString, args("self"))
         .def("emit_output_changed", &CClassifTaskWrap::emitOutputChanged, _emitOutputChangedDocString, args("self"))
         .def("execute_actions", &CClassificationTask::executeActions, &CClassifTaskWrap::default_executeActions, _executeActionsDocString, args("self", "action"))
-        .def("get_names", &CClassificationTask::getNames, _classifGetNames, args("self"))
-        .def("get_input_objects", &CClassificationTask::getInputObjects, _classifGetInputObjects, args("self"))
-        .def("get_object_sub_image", &CClassificationTask::getObjectSubImage, _classifGetObjectSubImage, args("self", "item"))
-        .def("get_objects_results", &CClassificationTask::getObjectsResults, _classifGetObjectsResults, args("self"))
-        .def("get_whole_image_results", &CClassificationTask::getWholeImageResults, _classifGetWholeImageResults, args("self"))
-        .def("is_whole_image_classification", &CClassificationTask::isWholeImageClassification, _classifIsWholeImage, args("self"))
-        .def("set_colors", &CClassificationTask::setColors, _classifSetColors, args("self", "colors"))
-        .def("set_whole_image_results", &CClassificationTask::setWholeImageResults, _classifSetWholeImageResults, args("self", "names", "confidences"))
-        .def("read_class_names", &CClassificationTask::readClassNames, _classifReadClassNames, args("self", "path"))
-        .def("add_object", &CClassificationTask::addObject, _classifAddObject, args("self", "graphics_item", "class_index", "confidence"))
+        .def("add_object", &CClassificationTask::addObject, _classifAddObjectDocString, args("self", "graphics_item", "class_index", "confidence"))
+        .def("get_names", &CClassificationTask::getNames, _classifGetNamesDocString, args("self"))
+        .def("get_input_objects", &CClassificationTask::getInputObjects, _classifGetInputObjectsDocString, args("self"))
+        .def("get_object_sub_image", &CClassificationTask::getObjectSubImage, _classifGetObjectSubImageDocString, args("self", "item"))
+        .def("get_objects_results", &CClassificationTask::getObjectsResults, _classifGetObjectsResultsDocString, args("self"))
+        .def("get_whole_image_results", &CClassificationTask::getWholeImageResults, _classifGetWholeImageResultsDocString, args("self"))
+        .def("is_whole_image_classification", &CClassificationTask::isWholeImageClassification, _classifIsWholeImageDocString, args("self"))
+        .def("read_class_names", &CClassificationTask::readClassNames, _classifReadClassNamesDocString, args("self", "path"))
+        .def("set_colors", &CClassificationTask::setColors, _classifSetColorsDocString, args("self", "colors"))
+        .def("set_names", &CClassificationTask::setNames, _classifSetNamesDocString, args("self", "names"))
+        .def("set_whole_image_results", &CClassificationTask::setWholeImageResults, _classifSetWholeImageResultsDocString, args("self", "names", "confidences"))
+    ;
+
+    //--------------------------------//
+    //----- CObjectDetectionTask -----//
+    //--------------------------------//
+    void (CObjectDetectionTask::*addObjectBox2)(int, int, double, double, double, double, double) = &CObjectDetectionTask::addObject;
+    void (CObjectDetectionTask::*addObjectRotateBox2)(int, int, double, double, double, double, double, double) = &CObjectDetectionTask::addObject;
+
+    class_<CObjDetectTaskWrap, bases<C2dImageTask>, std::shared_ptr<CObjDetectTaskWrap>>("CObjectDetectionTask", _objDetTaskDocString)
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const std::string&>(_ctor2ImageProcess2dDocString, args("self", "name")))
+        .def("set_active", &CObjectDetectionTask::setActive, &CObjDetectTaskWrap::default_setActive, _setActiveDocString, args("self", "is_active"))
+        .def("update_static_outputs", &CObjectDetectionTask::updateStaticOutputs, &CObjDetectTaskWrap::default_updateStaticOutputs, _updateStaticOutputsDocString, args("self"))
+        .def("begin_task_run", &CObjectDetectionTask::beginTaskRun, &CObjDetectTaskWrap::default_beginTaskRun, _beginTaskRunDocString, args("self"))
+        .def("end_task_run", &CObjectDetectionTask::endTaskRun, &CObjDetectTaskWrap::default_endTaskRun, _endTaskRunDocString, args("self"))
+        .def("graphics_changed", &CObjectDetectionTask::graphicsChanged, &CObjDetectTaskWrap::default_graphicsChanged, _graphicsChangedDocString, args("self"))
+        .def("global_input_changed", &CObjectDetectionTask::globalInputChanged, &CObjDetectTaskWrap::default_globalInputChanged, _globalInputChangedDocString, args("self", "is_new_sequence"))
+        .def("get_progress_steps", &CObjectDetectionTask::getProgressSteps, &CObjDetectTaskWrap::default_getProgressSteps, _getProgressStepsDocString, args("self"))
+        .def("run", &CObjectDetectionTask::run, &CObjDetectTaskWrap::default_run, _runDocString, args("self"))
+        .def("stop", &CObjectDetectionTask::stop, &CObjDetectTaskWrap::default_stop, _stopDocString, args("self"))
+        .def("emit_add_sub_progress_steps", &CObjDetectTaskWrap::emitAddSubProgressSteps, _emitAddSubProgressSteps, args("self", "count"))
+        .def("emit_step_progress", &CObjDetectTaskWrap::emitStepProgress, _emitStepProgressDocString, args("self"))
+        .def("emit_graphics_context_changed", &CObjDetectTaskWrap::emitGraphicsContextChanged, _emitGraphicsContextChangedDocString, args("self"))
+        .def("emit_output_changed", &CObjDetectTaskWrap::emitOutputChanged, _emitOutputChangedDocString, args("self"))
+        .def("execute_actions", &CObjectDetectionTask::executeActions, &CObjDetectTaskWrap::default_executeActions, _executeActionsDocString, args("self", "action"))
+        .def("add_object", addObjectBox2, _objDetAddObject1DocString, args("self", "id", "class_index", "confidence", "x", "y", "width", "height"))
+        .def("add_object", addObjectRotateBox2, _objDetAddObject2DocString, args("self", "id", "class_index", "confidence", "cx", "cy", "width", "height", "angle"))
+        .def("get_names", &CObjectDetectionTask::getNames, _objDetectGetNamesDocString, args("self"))
+        .def("get_results", &CObjectDetectionTask::getResults, _objDetectGetResultsDocString, args("self"))
+        .def("read_class_names", &CObjectDetectionTask::readClassNames, _objDetectReadClassNamesDocString, args("self", "path"))
+        .def("set_colors", &CObjectDetectionTask::setColors, _objDetectSetColorsDocString, args("self", "colors"))
+        .def("set_names", &CClassificationTask::setNames, _objDetectSetNamesDocString, args("self", "names"))
     ;
 
     //---------------------------//

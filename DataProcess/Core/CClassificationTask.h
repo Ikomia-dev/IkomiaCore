@@ -19,6 +19,7 @@ class CClassificationTask: public C2dImageTask
 
         bool                                isWholeImageClassification() const;
 
+        void                                setNames(const std::vector<std::string>& names);
         void                                setColors(const std::vector<CColor>& colors);
         void                                setWholeImageResults(const std::vector<std::string>& sortedNames, const std::vector<std::string> &sortedConfidences);
 
@@ -29,6 +30,7 @@ class CClassificationTask: public C2dImageTask
     private:
 
         void                                initIO();
+        void                                generateRandomColors();
 
     protected:
 
