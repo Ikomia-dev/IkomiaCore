@@ -78,39 +78,39 @@ class DATAPROCESSSHARED_EXPORT C2dImageTask : public CWorkflowTask
          * @brief see CWorkflowTask::setActive for more details.
          * @param bActive
          */
-        virtual void    setActive(bool bActive) override;
+        void    setActive(bool bActive) override;
         /**
          * @brief Binds a display color map to an image output. The color mask is generated from a given output mask (binary or labelled image).
          * @param index: zero-based index of the output that will be displayed with the color map. The output must be a CImageIO or derived.
          * @param maskIndex: zero-based index of the output representing the mask used to generate the color overlay.
          * @param colors: list of colors for the color map. If empty, the system generates random colors.
          */
-        void            setOutputColorMap(size_t index, size_t maskIndex, const std::vector<cv::Vec3b>& colors={});
+        void    setOutputColorMap(size_t index, size_t maskIndex, const std::vector<cv::Vec3b>& colors={});
 
         /**
          * @brief Determines output data type automatically from input data types.
          * Don't forget to call this method in overriden methods.
          * See CWorkflowTask::updateStaticOutputs.
          */
-        virtual void    updateStaticOutputs() override;
+        void    updateStaticOutputs() override;
 
         /**
          * @brief See CWorkflowTask::beginTaskRun.
          */
-        virtual void    beginTaskRun() override;
+        void    beginTaskRun() override;
         /**
          * @brief See CWorkflowTask::endTaskRun.
          */
-        virtual void    endTaskRun() override;
+        void    endTaskRun() override;
 
         /**
          * @brief See CWorkflowTask::graphicsChanged.
          */
-        virtual void    graphicsChanged() override;
+        void    graphicsChanged() override;
         /**
          * @brief See CWorkflowTask::globalInputChanged.
          */
-        virtual void    globalInputChanged(bool bNewSequence) override;
+        void    globalInputChanged(bool bNewSequence) override;
 
         /**
          * @brief Generates a mask image (binary) from the given graphics input.
@@ -119,9 +119,9 @@ class DATAPROCESSSHARED_EXPORT C2dImageTask : public CWorkflowTask
          * @param height: height of the mask (should be the height of the source image).
          * @param pGraphicsInput: graphics items becomes white blobs in the black background mask.
          */
-        void            createGraphicsMask(size_t width, size_t height, const GraphicsInputPtr& pGraphicsInput);
+        void    createGraphicsMask(size_t width, size_t height, const GraphicsInputPtr& pGraphicsInput);
 
-        CMat            createInputGraphicsMask(int index, int width, int height);
+        CMat    createInputGraphicsMask(int index, int width, int height);
 
         /**
          * @brief Applies the mask generated from graphics input to the result image so that only masked areas seems to be processed.
@@ -129,43 +129,43 @@ class DATAPROCESSSHARED_EXPORT C2dImageTask : public CWorkflowTask
          * @param dst: result image.
          * @param maskIndex: zero-based index of the mask.
          */
-        void            applyGraphicsMask(const CMat &src, CMat &dst, size_t maskIndex);
+        void    applyGraphicsMask(const CMat &src, CMat &dst, size_t maskIndex);
         /**
          * @brief Applies the mask generated from graphics input to the binary source image. Only white areas on both image and mask are kept in the result image.
          * @param src: source image, binary only.
          * @param dst: masked result image (binary).
          * @param maskIndex: zero-based index of the mask.
          */
-        void            applyGraphicsMaskToBinary(const CMat &src, CMat &dst, size_t maskIndex);
+        void    applyGraphicsMaskToBinary(const CMat &src, CMat &dst, size_t maskIndex);
 
-        void            applyInputGraphicsMask(int graphicsIndex, int inputImgIndex, int outputImgIndex, MaskMode mode);
+        void    applyInputGraphicsMask(int graphicsIndex, int inputImgIndex, int outputImgIndex, MaskMode mode);
 
         /**
          * @brief Gets the binary mask generated from graphics input at position index.
          * @param index: zero-based index.
          * @return CMat in C++, Numpy array in Python.
          */
-        CMat            getGraphicsMask(size_t index) const;
+        CMat    getGraphicsMask(size_t index) const;
 
         /**
          * @brief Checks if a binary mask from graphics input is available at position index.
          * @param index: zero-based index.
          * @return True if a mask is available, False otherwise.
          */
-        bool            isMaskAvailable(size_t index) const;
+        bool    isMaskAvailable(size_t index) const;
 
         /**
          * @brief Forwards input image at position inputIndex to output at position outputIndex.
          * @param inputIndex: zero-based index of the input.
          * @param outputIndex: zero-based index of the output.
          */
-        void            forwardInputImage(int inputIndex=0, int outputIndex=0);
+        void    forwardInputImage(int inputIndex=0, int outputIndex=0);
 
     private:
 
-        void            copyColorMapToOutput();
+        void    copyColorMapToOutput();
 
-        void            createOverlayMasks();
+        void    createOverlayMasks();
 
     /** @cond INTERNAL */
     protected:

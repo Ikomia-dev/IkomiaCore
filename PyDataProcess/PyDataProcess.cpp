@@ -30,6 +30,7 @@
 #include "Task/CVideoOFTaskWrap.h"
 #include "Task/CVideoTrackingTaskWrap.h"
 #include "Task/CDnnTrainTaskWrap.h"
+#include "Task/CClassifTaskWrap.h"
 #include "CWidgetFactoryWrap.h"
 #include "CPluginProcessInterfaceWrap.h"
 #include "IO/CNumericIOWrap.hpp"
@@ -130,6 +131,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
     register_ptr_to_python<std::shared_ptr<CPathIO>>();
     register_ptr_to_python<std::shared_ptr<CDatasetIO>>();
     register_ptr_to_python<std::shared_ptr<CArrayIO>>();
+    register_ptr_to_python<std::shared_ptr<CObjectDetectionIO>>();
     register_ptr_to_python<std::shared_ptr<C2dImageTask>>();
     register_ptr_to_python<std::shared_ptr<C2dImageInteractiveTask>>();
     register_ptr_to_python<std::shared_ptr<CVideoTask>>();
@@ -734,6 +736,38 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("run", &CDnnTrainTask::run, &CDnnTrainTaskWrap::default_run, _runDocString, args("self"))
         .def("set_active", &CDnnTrainTask::setActive, &CDnnTrainTaskWrap::default_setActive, _setActiveDocString, args("self", "is_active"))
         .def("stop", &CDnnTrainTask::stop, &CDnnTrainTaskWrap::default_stop, _stopDocString, args("self"))
+    ;
+
+    //-------------------------------//
+    //----- CClassificationTask -----//
+    //-------------------------------//
+    class_<CClassifTaskWrap, bases<C2dImageTask>, std::shared_ptr<CClassifTaskWrap>>("CClassificationTask", _classifTaskDocString)
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const std::string&>(_ctor2ImageProcess2dDocString, args("self", "name")))
+        .def("set_active", &CClassificationTask::setActive, &CClassifTaskWrap::default_setActive, _setActiveDocString, args("self", "is_active"))
+        .def("update_static_outputs", &CClassificationTask::updateStaticOutputs, &CClassifTaskWrap::default_updateStaticOutputs, _updateStaticOutputsDocString, args("self"))
+        .def("begin_task_run", &CClassificationTask::beginTaskRun, &CClassifTaskWrap::default_beginTaskRun, _beginTaskRunDocString, args("self"))
+        .def("end_task_run", &CClassificationTask::endTaskRun, &CClassifTaskWrap::default_endTaskRun, _endTaskRunDocString, args("self"))
+        .def("graphics_changed", &CClassificationTask::graphicsChanged, &CClassifTaskWrap::default_graphicsChanged, _graphicsChangedDocString, args("self"))
+        .def("global_input_changed", &CClassificationTask::globalInputChanged, &CClassifTaskWrap::default_globalInputChanged, _globalInputChangedDocString, args("self", "is_new_sequence"))
+        .def("get_progress_steps", &CClassificationTask::getProgressSteps, &CClassifTaskWrap::default_getProgressSteps, _getProgressStepsDocString, args("self"))
+        .def("run", &CClassificationTask::run, &CClassifTaskWrap::default_run, _runDocString, args("self"))
+        .def("stop", &CClassificationTask::stop, &CClassifTaskWrap::default_stop, _stopDocString, args("self"))
+        .def("emit_add_sub_progress_steps", &CClassifTaskWrap::emitAddSubProgressSteps, _emitAddSubProgressSteps, args("self", "count"))
+        .def("emit_step_progress", &CClassifTaskWrap::emitStepProgress, _emitStepProgressDocString, args("self"))
+        .def("emit_graphics_context_changed", &CClassifTaskWrap::emitGraphicsContextChanged, _emitGraphicsContextChangedDocString, args("self"))
+        .def("emit_output_changed", &CClassifTaskWrap::emitOutputChanged, _emitOutputChangedDocString, args("self"))
+        .def("execute_actions", &CClassificationTask::executeActions, &CClassifTaskWrap::default_executeActions, _executeActionsDocString, args("self", "action"))
+        .def("get_names", &CClassificationTask::getNames, _classifGetNames, args("self"))
+        .def("get_input_objects", &CClassificationTask::getInputObjects, _classifGetInputObjects, args("self"))
+        .def("get_object_sub_image", &CClassificationTask::getObjectSubImage, _classifGetObjectSubImage, args("self", "item"))
+        .def("get_objects_results", &CClassificationTask::getObjectsResults, _classifGetObjectsResults, args("self"))
+        .def("get_whole_image_results", &CClassificationTask::getWholeImageResults, _classifGetWholeImageResults, args("self"))
+        .def("is_whole_image_classification", &CClassificationTask::isWholeImageClassification, _classifIsWholeImage, args("self"))
+        .def("set_colors", &CClassificationTask::setColors, _classifSetColors, args("self", "colors"))
+        .def("set_whole_image_results", &CClassificationTask::setWholeImageResults, _classifSetWholeImageResults, args("self", "names", "confidences"))
+        .def("read_class_names", &CClassificationTask::readClassNames, _classifReadClassNames, args("self", "path"))
+        .def("add_object", &CClassificationTask::addObject, _classifAddObject, args("self", "graphics_item", "class_index", "confidence"))
     ;
 
     //---------------------------//

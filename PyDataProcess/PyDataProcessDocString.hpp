@@ -246,10 +246,10 @@ constexpr auto _addValueList4DocString =
         "   labels (list of str): store label for each numeric value\n\n";
 
 constexpr auto _clearDataDerivedDocString =
-        "See :py:meth:`~ikomia.core.pycore.CWorkflowTaskIO.clearData`.\n\n";
+        "See :py:meth:`~ikomia.core.pycore.CWorkflowTaskIO.clear_data`.\n\n";
 
 constexpr auto _copyStaticDataDerivedDocString =
-        "See :py:meth:`~ikomia.core.pycore.CWorkflowTaskIO.copyStaticData`.\n\n";
+        "See :py:meth:`~ikomia.core.pycore.CWorkflowTaskIO.copy_static_data`.\n\n";
 
 constexpr auto _getAllLabelListDocString =
         "Get all label lists associated with value lists.\n\n"
@@ -278,7 +278,7 @@ constexpr auto _getPlotTypeDocString =
         "   PlotType: plot type\n\n";
 
 constexpr auto _getUnitEltCountDerivedDocString =
-        "See :py:meth:`~ikomia.core.pycore.CWorkflowTaskIO.getUnitElementCount`.\n\n";
+        "See :py:meth:`~ikomia.core.pycore.CWorkflowTaskIO.get_unit_elementCount`.\n\n";
 
 constexpr auto _getValueListDocString =
         "Get value list at position index.\n\n"
@@ -288,7 +288,7 @@ constexpr auto _getValueListDocString =
         "   list (float or string): values\n\n";
 
 constexpr auto _isDataAvailableDerivedDocString =
-        "See :py:meth:`~ikomia.core.pycore.CWorkflowTaskIO.isDataAvailable`.\n\n";
+        "See :py:meth:`~ikomia.core.pycore.CWorkflowTaskIO.is_data_available`.\n\n";
 
 constexpr auto _setOutputTypeDocString =
         "Set output display type. See :py:class:`NumericOutputType` for possible values.\n\n"
@@ -297,7 +297,7 @@ constexpr auto _setOutputTypeDocString =
 
 constexpr auto _setPlotTypeDocString =
         "Set plot type. See :py:class:`PlotType` for possible values. "
-        "Only used if output display type is set to PLOT (see :py:meth:`setOutputType`).\n\n"
+        "Only used if output display type is set to PLOT (see :py:meth:`set_output_type`).\n\n"
         "Args:\n\n"
         "   type (PlotType): plot type\n\n";
 
@@ -414,7 +414,7 @@ constexpr auto _getDataDocString =
 
 constexpr auto _getImageDocString =
         "Get the 2D image data only. "
-        "In case of volume, the current image index is used to get the desired 2D plane (see :py:meth:`setCurrentImage`).\n\n"
+        "In case of volume, the current image index is used to get the desired 2D plane (see :py:meth:`set_current_image`).\n\n"
         "Returns:\n\n"
         "   Numpy array: 2D image buffer\n\n";
 
@@ -433,7 +433,7 @@ constexpr auto _getImageWithGraphicsOutDocString =
         "   Numpy array: 2D image buffer\n\n";
 
 constexpr auto _getOverlayMaskDocString =
-        "Get the overlay mask. See :py:meth:`setOverlayMask` for more information.\n\n"
+        "Get the overlay mask. See :py:meth:`set_overlay_mask` for more information.\n\n"
         "Returns:\n\n"
         "   Numpy array: 2D image buffer (8 bits - 1 channel)\n\n";
 
@@ -478,7 +478,7 @@ constexpr auto _setOverlayMaskDocString =
         "This method sets this mask, it will be displayed automatically according to a predefined color map. "
         "Zero-value pixels of the mask will be completely transparent, non-zero will be displayed according to the corresponding color in the color map. "
         "The color map must be defined in the task implementation. "
-        "See :py:meth:`~C2dImageTask.setOutputColorMap` for details.\n\n"
+        "See :py:meth:`~C2dImageTask.set_output_color_map` for details.\n\n"
         "Args:\n\n"
         "   image (Numpy array): image buffer (8 bits - 1 channel)\n\n";
 
@@ -869,7 +869,7 @@ constexpr auto _addVideoImageDocString =
         "   image (Numpy array): 2D image\n\n";
 
 constexpr auto _writeImageDocString =
-        "Append a new image to the list of images to write to disk. The write process is launched using :py:meth:`startVideoWrite`.\n\n"
+        "Append a new image to the list of images to write to disk. The write process is launched using :py:meth:`start_video_write`.\n\n"
         "Args:\n\n"
         "   image (Numpy array): 2D image\n\n";
 
@@ -1280,7 +1280,7 @@ constexpr auto _semanticSegIODocString =
 
 constexpr auto _getMaskDocString =
         "Get labelled image (ie graylevel) where each pixel has a specific value corresponding to its class. "
-        "You can find the correspondence between pixel value and class name with :py:meth:`ikomia.dataprocess.pydataprocess.CSemanticIO.getClassNames`.\n\n"
+        "You can find the correspondence between pixel value and class name with :py:meth:`ikomia.dataprocess.pydataprocess.CSemanticIO.get_class_names`.\n\n"
         "Returns:\n\n"
         "   Numpy array: grayscale mask\n\n";
 
@@ -1337,7 +1337,7 @@ constexpr auto _ctor3ImageProcess2dDocString =
         "   has_graphics_input (bool): True, the task manage graphics input. False, the task does not have any graphics input\n\n";
 
 constexpr auto _setActiveDocString =
-        "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.setActive`.\n\n";
+        "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.set_active`.\n\n";
 
 constexpr auto _setOutputColorMapDocString =
         "Bind a display color map to an image output. "
@@ -1349,24 +1349,24 @@ constexpr auto _setOutputColorMapDocString =
 
 constexpr auto _updateStaticOutputsDocString =
         "Determine output data type automatically from input data types. "
-        "Don't forget to call this method in overriden methods. See :py:meth:`~ikomia.core.pycore.CWorkflowTask.updateStaticOutputs`.\n\n";
+        "Don't forget to call this method in overriden methods. See :py:meth:`~ikomia.core.pycore.CWorkflowTask.update_static_outputs`.\n\n";
 
 constexpr auto _beginTaskRunDocString =
-        "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.beginTaskRun`.\n\n";
+        "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.begin_task_run`.\n\n";
 
 constexpr auto _endTaskRunDocString =
-        "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.endTaskRun`.\n\n";
+        "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.end_task_run`.\n\n";
 
 constexpr auto _graphicsChangedDocString =
-        "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.graphicsChanged`.\n\n";
+        "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.graphics_changed`.\n\n";
 
 constexpr auto _globalInputChangedDocString =
-        "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.globalInputChanged`.\n\n";
+        "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.global_input_changed`.\n\n";
 
 constexpr auto _createInputGraphicsMaskDocString =
         "Generate a binary mask image from the task graphics input at the specified index. "
         "The new mask is appended to the internal mask list. "
-        "Use :py:meth:`~ikomia.dataprocess.pydataprocess.C2dImageTask.getGraphicsMask` to retrieve the mask.\n\n"
+        "Use :py:meth:`~ikomia.dataprocess.pydataprocess.C2dImageTask.get_graphics_mask` to retrieve the mask.\n\n"
         "Args:\n\n"
         "   index (int): task input index containing graphics information\n\n"
         "   width (int): mask width (should be the width of the source image)\n\n"
@@ -1375,7 +1375,7 @@ constexpr auto _createInputGraphicsMaskDocString =
 constexpr auto _createGraphicsMaskDocString =
         "Generate a binary mask image from the given graphics input object. "
         "The new mask is appended to the internal mask list. "
-        "Use :py:meth:`~ikomia.dataprocess.pydataprocess.C2dImageTask.getGraphicsMask` to retrieve the mask.\n\n"
+        "Use :py:meth:`~ikomia.dataprocess.pydataprocess.C2dImageTask.get_graphics_mask` to retrieve the mask.\n\n"
         "Args:\n\n"
         "   width (int): mask width (should be the width of the source image)\n\n"
         "   height (int): mask height (should be the height of the source image)\n\n"
@@ -1399,7 +1399,7 @@ constexpr auto _applyGraphicsMaskToBinaryDocString =
         "   Numpy array: result image\n\n";
 
 constexpr auto _getProgressStepsDocString =
-        "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.getProgressSteps`.\n\n";
+        "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.get_progress_steps`.\n\n";
 
 constexpr auto _getGraphicsMaskDocString =
         "Get the binary mask generated from graphics input at position index.\n\n"
@@ -1428,19 +1428,19 @@ constexpr auto _forwardInputImageDocString =
         "   output_index (int): zero-based index of the output\n\n";
 
 constexpr auto _emitAddSubProgressSteps =
-        "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.emitAddSubProgressSteps`.\n\n";
+        "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.emit_add_sub_progress_steps`.\n\n";
 
 constexpr auto _emitStepProgressDocString =
-        "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.emitStepProgress`.\n\n";
+        "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.emit_step_progress`.\n\n";
 
 constexpr auto _emitGraphicsContextChangedDocString =
-        "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.emitGraphicsContextChanged`.\n\n";
+        "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.emit_graphics_context_changed`.\n\n";
 
 constexpr auto _emitOutputChangedDocString =
-        "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.emitOutputChanged`.\n\n";
+        "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.emit_output_changed`.\n\n";
 
 constexpr auto _executeActionsDocString =
-        "Method called when a specific action is requested from the associated widget (see :py:meth:`~ikomia.core.pycore.CWorkflowTaskWidget.emitSendProcessAction`).\n\n"
+        "Method called when a specific action is requested from the associated widget (see :py:meth:`~ikomia.core.pycore.CWorkflowTaskWidget.emit_send_process_action`).\n\n"
         "Args:\n\n"
         "   action (int): action code\n\n";
 
@@ -1494,7 +1494,7 @@ constexpr auto _createInteractionMaskDocString =
 
 constexpr auto _computeBlobsDocString =
         "Generate the list of connected components from the binary mask. "
-        "Use :py:meth:`getBlobs` to retrieve it.\n\n";
+        "Use :py:meth:`get_blobs` to retrieve it.\n\n";
 
 constexpr auto _clearInteractionLayerDocString =
         "Clear all graphics items in the interaction layer.\n\n";
@@ -1545,7 +1545,7 @@ constexpr auto _ctorVideoProcessOFDocString =
         "   name (str): task name, must be unique\n\n";
 
 constexpr auto _beginTaskRunVideoOFDocString =
-        "See :py:meth:`CVideoTask.beginTaskRun`.\n";
+        "See :py:meth:`CVideoTask.begin_task_run`.\n";
 
 constexpr auto _drawOptFlowMapDocString =
         "Draw optical flow vectors in the optical flow map (image).\n\n"
@@ -1623,6 +1623,86 @@ constexpr auto _enableTensorboardDocString =
         "Args:\n\n"
         "   enable (boolean): True or False\n\n";
 
+//-------------------------------//
+//----- CClassificationTask -----//
+//-------------------------------//
+constexpr auto _classifTaskDocString =
+        "Base class for classification task in Computer Vision. "
+        "It defines a task with the following properties:\n\n"
+        "Inputs:\n\n"
+        "- image (:py:class:`CImageIO`)\n"
+        "- graphics (:py:class:`CGraphicsInput`)\n\n"
+        "Outputs:\n\n"
+        "- object detection IO (:py:class:`CObjectDetectionIO`): filled if input graphics items are passed. "
+        "In this case, classification is computed for each individual object.\n"
+        "- graphics output (:py:class:`CGraphicsOutput`): text item with top-1 class if classification is computed on whole image.\n"
+        "- data output (:py:class:`CDataStringIO`): sorted list of class scores if classification is computed on whole image.\n\n"
+        "Derived from :py:class:`~ikomia.dataprocess.pydataprocess.C2dImageTask`.\n\n";
+
+constexpr auto _classifGetNames =
+        "Get class names. Call :py:meth:`read_class_names` to populate names from text file.\n\n"
+        "Returns:\n\n"
+        "   str list: class names\n\n";
+
+constexpr auto _classifGetInputObjects =
+        "Get input graphics items on which classification can be computed individually. One can iterate over this list "
+        "to compute classification for each object. Use :py:meth:`get_object_sub_image` to retieve object ROI image and "
+        ":py:meth:`add_object` to store classification result.\n\n"
+        "Returns:\n\n"
+        "   :py:class:`~ikomia.core.pycore.CGraphicsItem` based objects: graphics items\n\n";
+
+constexpr auto _classifGetObjectSubImage =
+        "Get ROI image for the given graphics item. We use the bounding rect property of "
+        ":py:class:`~ikomia.core.pycore.CGraphicsItem` to compute ROI. Input graphics items can be retrieved "
+        "with :py:meth:`get_input_objects`. Classification can then be computed on the ROI to get individual object class."
+        "Args:\n\n"
+        "   graphics item (:py:class:`~ikomia.core.pycore.CGraphicsItem` based object)\n\n"
+        "Returns:\n\n"
+        "   2D Numpy array: ROI image\n\n";
+
+constexpr auto _classifGetObjectsResults =
+        "Get classification results when applied on individual objects (input graphics items). Results are "
+        "given as a :py:class:`CObjectDetectionIO` instance.\n\n"
+        "Returns:\n\n"
+        "   :py:class:`CObjectDetectionIO`: classification results\n\n";
+
+constexpr auto _classifGetWholeImageResults =
+        "Get classification results when applied on whole image (no input graphics items given). It gives "
+        "a sorted list of tuple storing class name and confidence.\n\n"
+        "Returns:\n\n"
+        "   list of tuples (name, confidence): classification results\n\n";
+
+constexpr auto _classifIsWholeImage =
+        "Check whether input graphics items are given for individual classification.\n\n"
+        "Returns:\n\n"
+        "   bool: True if no input graphics items are given (whole image classification), False otherwise\n\n";
+
+constexpr auto _classifSetColors =
+        "Set colors associated with class names. The given list must have the same size as names list. "
+        "If not provided, random colors are generated while populating the name list "
+        "(:py:meth:`read_class_names`).\n\n"
+        "Args:\n\n"
+        "   colors (list of list: r, g, b integer values in range [0, 255])\n\n";
+
+constexpr auto _classifSetWholeImageResults =
+        "Set whole image classification results.\n\n"
+        "Args:\n\n"
+        "   names (str list): sorted list with respect to confidence score\n\n"
+        "   confidences (str list): sorted list (descending)\n\n";
+
+constexpr auto _classifReadClassNames =
+        "Populate class names from the given text file (one line per class).\n\n"
+        "Args:\n\n"
+        "   path (str): path to class names definition file\n\n";
+
+constexpr auto _classifAddObject =
+        "Add classification result for individual object. See :py:meth:`get_input_objects` and "
+        ":py:meth:`get_object_sub_image` for more information.\n\n"
+        "Args:\n\n"
+        "   graphics_item (:py:class:`~ikomia.core.pycore.CGraphicsItem` based object)\n\n"
+        "   class_index (int): index is used to retrieve class name\n\n"
+        "   confidence (float): confidence score of top-1 class\n\n";
+
 //---------------------------//
 //----- CIkomiaRegistry -----//
 //---------------------------//
@@ -1647,7 +1727,7 @@ constexpr auto _getPluginsDirDocString =
 constexpr auto _getAlgorithmsDocString =
         "Get all available algorithms from the Ikomia registry.\n"
         "Before using an algorithm, you must instanciate it from its name using "
-        ":py:meth:`~ikomia.dataprocess.pydataprocess.CIkomiaRegistry.createInstance`."
+        ":py:meth:`~ikomia.dataprocess.pydataprocess.CIkomiaRegistry.create_instance`."
         "You can only instanciate algorithms whose name is in the returned list.\n\n"
         "Returns:\n\n"
         "   string: list of algorithm names\n\n";
@@ -1667,7 +1747,7 @@ constexpr auto _isAllLoadedDocString =
 constexpr auto _createInstance1DocString =
         "Instanciate algorithm of the Ikomia registry from its name with default parameters.\n"
         "The full list of available algorithms can be retrieved using "
-        ":py:meth:`~ikomia.dataprocess.pydataprocess.CIkomiaRegistry.getAlgorithms`.\n\n"
+        ":py:meth:`~ikomia.dataprocess.pydataprocess.CIkomiaRegistry.get_algorithms`.\n\n"
         "Args:\n\n"
         "   algorithm name(str): unique name\n\n"
         "Returns:\n\n"
@@ -1676,7 +1756,7 @@ constexpr auto _createInstance1DocString =
 constexpr auto _createInstance2DocString =
         "Instanciate algorithm of the Ikomia registry from its name with the given parameters.\n"
         "The full list of available algorithms can be retrieved using "
-        ":py:meth:`~ikomia.dataprocess.pydataprocess.CIkomiaRegistry.getAlgorithms`.\n\n"
+        ":py:meth:`~ikomia.dataprocess.pydataprocess.CIkomiaRegistry.get_algorithms`.\n\n"
         "Args:\n\n"
         "   algorithm name(str): unique name\n\n"
         "   parameters object(:py:class:`~ikomia.core.pycore.CWorkflowTaskParam`): associated parameters\n\n"
@@ -1759,7 +1839,7 @@ constexpr auto _wfSetInputDocString =
 
 constexpr auto _wfSetOutputFolderDocString =
         "Set workflow output folder.\n"
-        "If auto-save mode is activated (see :py:meth:`~ikomia.dataprocess.pydataprocess.CWorkflow.setAutoSave`) "
+        "If auto-save mode is activated (see :py:meth:`~ikomia.dataprocess.pydataprocess.CWorkflow.set_auto_save`) "
         "outputs of each tasks of the workflow will be saved automatically in this folder. Behind the scene, each task "
         "implements a *save()* function that calls sequentially the *save()* function of all these outputs.\n\n"
         "Args:\n\n"
@@ -1767,7 +1847,7 @@ constexpr auto _wfSetOutputFolderDocString =
 
 constexpr auto _wfSetAutoSaveDocString =
         "Activate/deactivate auto-save mode. If activated, outputs of each tasks of the workflow will be saved in "
-        "the workflow output folder (see :py:meth:`~ikomia.dataprocess.pydataprocess.CWorkflow.setOutputFolder` "
+        "the workflow output folder (see :py:meth:`~ikomia.dataprocess.pydataprocess.CWorkflow.set_output_folder` "
         "to set your custom folder). By default, outputs are saved in *user_folder/Ikomia/Workflows*.\n\n"
         "Args:\n\n"
         "   enable (bool): True or False\n\n";
@@ -1798,12 +1878,12 @@ constexpr auto _wfGetRootIDDocString =
 constexpr auto _wfGetTaskIDsDocString =
         "Get the list of all task identifiers.\n"
         "You can then retrieve task object from ID with the function "
-        ":py:meth:`~ikomia.dataprocess.pydataprocess.CWorkflow.getTask`.\n\n";
+        ":py:meth:`~ikomia.dataprocess.pydataprocess.CWorkflow.get_task`.\n\n";
 
 constexpr auto _wfGetTaskDocString =
         "Get the task object from the given ID.\n"
         "Unique task identifiers can be retrieved with the functions "
-        ":py:meth:`~ikomia.dataprocess.pydataprocess.CWorkflow.getTaskIDs` or "
+        ":py:meth:`~ikomia.dataprocess.pydataprocess.CWorkflow.get_task_ids` or "
         ":py:meth:`~ikomia.dataprocess.workflow.Workflow.find_task`.\n\n"
         "Returns:\n\n"
         "   :py:class:`~ikomia.core.pycore.CWorkflowTask` object or derived\n\n";
@@ -1827,7 +1907,7 @@ constexpr auto _wfGetChildrenDocString =
 constexpr auto _wfGetInEdgesDocString =
         "Get input connections (in-edges) of the task specified by the given identifier.\n"
         "Edge information can then be retrieved by the function "
-        ":py:meth:`~ikomia.dataprocess.pydataprocess.CWorkflow.getEdgeInfo`.\n\n"
+        ":py:meth:`~ikomia.dataprocess.pydataprocess.CWorkflow.get_edge_info`.\n\n"
         "Args:\n\n"
         "   id (int): task identifier\n\n"
         "Returns:\n\n"
@@ -1836,7 +1916,7 @@ constexpr auto _wfGetInEdgesDocString =
 constexpr auto _wfGetOutEdgesDocString =
         "Get output connections (out-edges) of the task specified by the given identifier.\n"
         "Edge information can then be retrieved by the function "
-        ":py:meth:`~ikomia.dataprocess.pydataprocess.CWorkflow.getEdgeInfo`.\n\n"
+        ":py:meth:`~ikomia.dataprocess.pydataprocess.CWorkflow.get_edge_info`.\n\n"
         "Args:\n\n"
         "   id (int): task identifier\n\n"
         "Returns:\n\n"
