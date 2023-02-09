@@ -18,6 +18,8 @@ add_library(ikDataProcess SHARED
     Core/CIkomiaRegistry.h
     Core/CMlflowTrainTask.cpp
     Core/CMlflowTrainTask.h
+    Core/CObjectDetectionTask.cpp
+    Core/CObjectDetectionTask.h
     Core/CPluginTools.cpp
     Core/CPluginTools.h
     Core/CRunTaskManager.cpp
@@ -455,6 +457,7 @@ set(PUBLIC_HEADERS_CORE
     Core/CMlflowTrainTask.h
     Core/CRunTaskManager.h
     Core/CClassificationTask.h
+    Core/CObjectDetectionTask.h
 )
 
 set(PUBLIC_HEADERS_IO
