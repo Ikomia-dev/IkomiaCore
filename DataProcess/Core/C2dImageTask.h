@@ -140,6 +140,8 @@ class DATAPROCESSSHARED_EXPORT C2dImageTask : public CWorkflowTask
 
         void    applyInputGraphicsMask(int graphicsIndex, int inputImgIndex, int outputImgIndex, MaskMode mode);
 
+        CMat    getColorMap(size_t index) const;
+
         /**
          * @brief Gets the binary mask generated from graphics input at position index.
          * @param index: zero-based index.

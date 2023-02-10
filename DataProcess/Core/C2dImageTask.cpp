@@ -89,7 +89,7 @@ void C2dImageTask::setOutputColorMap(size_t index, size_t maskIndex, const std::
     if(colors.size() == 0)
     {
         //Random colors
-        std::srand(std::time(nullptr));
+        std::srand(RANDOM_COLOR_SEED);
         for(int i=(int)colors.size(); i<256; ++i)
         {
             for(int j=0; j<3; ++j)
@@ -345,6 +345,14 @@ void C2dImageTask::applyInputGraphicsMask(int graphicsIndex, int inputImgIndex, 
     }
 }
 
+CMat C2dImageTask::getColorMap(size_t index) const
+{
+   if (index >= m_colorMaps.size())
+       throw CException(CoreExCode::INDEX_OVERFLOW, "No color map at given index", __func__, __FILE__, __LINE__);
+
+   return m_colorMaps[index];
+}
+
 CMat C2dImageTask::getGraphicsMask(size_t index) const
 {
     if(index < m_graphicsMasks.size())
@@ -390,7 +398,7 @@ CMat C2dImageTask::createInputGraphicsMask(int index, int width, int height)
 
 void C2dImageTask::createOverlayMasks()
 {
-    // Bad design -> we have to move this output based logic elsewhere...
+    // TODO Bad design -> we have to move this output based logic elsewhere...
     for(size_t i=0; i<getOutputCount(); ++i)
     {
         if(i < m_colorMaps.size() && m_colorMaps[i].empty() == false)
