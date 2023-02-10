@@ -2,7 +2,7 @@
 #define CCLASSIFTASKWRAP_H
 
 #include "PyDataProcessGlobal.h"
-#include "Core/CClassificationTask.h"
+#include "Task/CClassificationTask.h"
 
 class CClassifTaskWrap: public CClassificationTask, public wrapper<CClassificationTask>
 {

@@ -20,7 +20,7 @@
 #ifndef COCVCOUNTNONZERO_HPP
 #define COCVCOUNTNONZERO_HPP
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 
 //---------------------------------//
 //----- COcvCountNonZeroParam -----//

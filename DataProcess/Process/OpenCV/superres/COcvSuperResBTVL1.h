@@ -22,7 +22,7 @@
 #ifndef COCVSUPERRESBTVL1_H
 #define COCVSUPERRESBTVL1_H
 
-#include "Core/CVideoTask.h"
+#include "Task/CVideoTask.h"
 #include "CSuperResFrameSrc.h"
 
 //----------------------------------//

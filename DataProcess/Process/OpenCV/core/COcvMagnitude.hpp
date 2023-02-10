@@ -20,7 +20,7 @@
 #ifndef COCVMAGNITUDE_HPP
 #define COCVMAGNITUDE_HPP
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 
 //--------------------------------//
 //----- COcvMagnitudeParam -----//

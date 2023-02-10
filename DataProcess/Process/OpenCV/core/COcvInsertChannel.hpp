@@ -20,7 +20,7 @@
 #ifndef COCVINSERTCHANNEL_HPP
 #define COCVINSERTCHANNEL_HPP
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 
 //----------------------------------//
 //----- COcvInsertChannelParam -----//

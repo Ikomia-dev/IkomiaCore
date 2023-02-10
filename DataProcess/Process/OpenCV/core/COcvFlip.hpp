@@ -21,7 +21,7 @@
 #define COCVFLIP_HPP
 
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 #include "IO/CImageIO.h"
 
 //-------------------------//

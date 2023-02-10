@@ -20,7 +20,7 @@
 #ifndef COCVPSNR_HPP
 #define COCVPSNR_HPP
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 #include "Main/CoreTools.hpp"
 
 //-------------------------//

@@ -2,7 +2,7 @@
 #define COBJDETECTFILTER_H
 
 #include "Workflow/CWorkflowTask.h"
-#include "Core/CTaskFactory.hpp"
+#include "Task/CTaskFactory.hpp"
 #include "Workflow/CWorkflowTaskWidget.h"
 #include "Core/CWidgetFactory.hpp"
 

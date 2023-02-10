@@ -20,7 +20,7 @@
 #ifndef COCVBRISK_HPP
 #define COCVBRISK_HPP
 
-#include "Core/C2dFeatureImageTask.h"
+#include "Task/C2dFeatureImageTask.h"
 #include "IO/CImageIO.h"
 
 //--------------------------------//

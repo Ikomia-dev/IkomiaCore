@@ -23,7 +23,7 @@
 #define CVIDEOOFTASKWRAP_H
 
 #include "PyDataProcessGlobal.h"
-#include "Core/CVideoOFTask.h"
+#include "Task/CVideoOFTask.h"
 
 //----------------------------------------------------------//
 //-----------      CVideoOFTaskWrap         -------------//

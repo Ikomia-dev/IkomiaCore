@@ -23,7 +23,7 @@
 #define CPROCESSREGISTRATION_H
 
 #include "DataProcessGlobal.hpp"
-#include "Core/CTaskFactory.hpp"
+#include "Task/CTaskFactory.hpp"
 #include "Core/CWidgetFactory.hpp"
 
 class DATAPROCESSSHARED_EXPORT CProcessRegistration

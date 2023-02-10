@@ -21,7 +21,7 @@
 #define COCVFASTLINEDETECTOR_HPP
 
 #include "opencv2/ximgproc.hpp"
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 
 //-------------------------------------//
 //----- COcvFastLineDetectorParam -----//

@@ -21,7 +21,7 @@
 #define COCVLOG_HPP
 
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 
 //-------------------//
 //----- COcvLog -----//

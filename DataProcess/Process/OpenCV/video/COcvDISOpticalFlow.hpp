@@ -20,7 +20,7 @@
 #ifndef COCVDISOPTICALFLOW_HPP
 #define COCVDISOPTICALFLOW_HPP
 
-#include "Core/CVideoOFTask.h"
+#include "Task/CVideoOFTask.h"
 #include "IO/CVideoIO.h"
 #include "opencv2/tracking.hpp"
 

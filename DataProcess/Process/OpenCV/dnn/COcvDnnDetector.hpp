@@ -21,7 +21,7 @@
 #define COCVDNNDETECTOR_HPP
 
 #include "COcvDnnProcess.h"
-#include "Core/CObjectDetectionTask.h"
+#include "Task/CObjectDetectionTask.h"
 
 //--------------------------------//
 //----- COcvDnnDetectorParam -----//

@@ -20,7 +20,7 @@
 #ifndef COCVORB_HPP
 #define COCVORB_HPP
 
-#include "Core/C2dFeatureImageTask.h"
+#include "Task/C2dFeatureImageTask.h"
 #include "IO/CImageIO.h"
 
 //--------------------------------//

@@ -19,7 +19,7 @@
 
 #ifndef COCVDTFILTERENHANCE_HPP
 #define COCVDTFILTERENHANCE_HPP
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 #include "IO/CImageIO.h"
 #include <opencv2/ximgproc.hpp>
 

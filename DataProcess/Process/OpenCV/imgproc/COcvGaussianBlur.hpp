@@ -20,7 +20,7 @@
 #ifndef COCVGAUSSIANBLUR_H
 #define COCVGAUSSIANBLUR_H
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 #include "IO/CImageIO.h"
 
 //------------------------------//

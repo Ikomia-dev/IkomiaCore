@@ -20,7 +20,7 @@
 #ifndef COCVEXTRACTCHANNEL_HPP
 #define COCVEXTRACTCHANNEL_HPP
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 
 //-----------------------------------//
 //----- COcvExtractChannelParam -----//

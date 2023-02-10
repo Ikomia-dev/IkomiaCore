@@ -20,7 +20,7 @@
 #ifndef COCVCVTCOLOR_H
 #define COCVCVTCOLOR_H
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 #include "IO/CImageIO.h"
 
 //-----------------------------//

@@ -20,7 +20,7 @@
 #ifndef COCVOBJECTNESSBING_HPP
 #define COCVOBJECTNESSBING_HPP
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 #include "IO/CImageIO.h"
 #include <opencv2/saliency.hpp>
 

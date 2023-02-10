@@ -21,7 +21,7 @@
 #define COCVBCKGNDSUBLSBP_HPP
 
 #include "opencv2/bgsegm.hpp"
-#include "Core/CVideoTask.h"
+#include "Task/CVideoTask.h"
 
 //----------------------------------//
 //----- COcvBckgndSubLsbpParam -----//

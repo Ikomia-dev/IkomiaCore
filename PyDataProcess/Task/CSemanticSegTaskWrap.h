@@ -2,7 +2,7 @@
 #define CSEMANTICSEGTASKWRAP_H
 
 #include "PyDataProcessGlobal.h"
-#include "Core/CSemanticSegTask.h"
+#include "Task/CSemanticSegTask.h"
 
 class CSemanticSegTaskWrap: public CSemanticSegTask, public wrapper<CSemanticSegTask>
 {

@@ -20,7 +20,7 @@
 #ifndef COCVBFMATCHER_HPP
 #define COCVBFMATCHER_HPP
 
-#include "Core/C2dFeatureMatcherTask.h"
+#include "Task/C2dFeatureMatcherTask.h"
 #include "IO/CImageIO.h"
 
 //--------------------------------//

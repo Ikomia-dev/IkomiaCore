@@ -20,7 +20,7 @@
 #ifndef COCVRESIZE_HPP
 #define COCVRESIZE_HPP
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 #include "IO/CImageIO.h"
 
 #ifdef HAVE_OPENCV_CUDAIMGPROC

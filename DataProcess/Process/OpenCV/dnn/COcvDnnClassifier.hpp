@@ -22,7 +22,7 @@
 
 #include "COcvDnnProcess.h"
 #include "Graphics/CGraphicsLayer.h"
-#include "Core/CClassificationTask.h"
+#include "Task/CClassificationTask.h"
 
 //----------------------------------//
 //----- COcvDnnClassifierParam -----//

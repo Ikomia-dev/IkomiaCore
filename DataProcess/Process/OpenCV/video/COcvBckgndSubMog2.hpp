@@ -21,7 +21,7 @@
 #define COCVBCKGNDSUBMOG2_HPP
 
 #include "opencv2/video/background_segm.hpp"
-#include "Core/CVideoTask.h"
+#include "Task/CVideoTask.h"
 
 //----------------------------------//
 //----- COcvBckgndSubMog2Param -----//

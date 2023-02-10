@@ -20,7 +20,7 @@
 #ifndef COCVINPAINT_HPP
 #define COCVINPAINT_HPP
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 
 //----------------------------//
 //----- COcvInpaintParam -----//

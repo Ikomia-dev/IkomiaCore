@@ -20,7 +20,7 @@
 #ifndef CPLOTPROCESS_H
 #define CPLOTPROCESS_H
 
-#include "Core/CTaskFactory.hpp"
+#include "Task/CTaskFactory.hpp"
 #include "IO/CImageIO.h"
 #include "IO/CBlobMeasureIO.h"
 #include "IO/CNumericIO.h"

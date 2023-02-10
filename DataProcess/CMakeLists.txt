@@ -1,46 +1,20 @@
 add_library(ikDataProcess SHARED
+    DataProcess.hpp
+    DataProcessGlobal.hpp
+    DataProcessTools.hpp
+    pch.hpp
     Core/CPluginProcessInterface.hpp
     Core/CProcessRegistration.cpp
     Core/CProcessRegistration.h
-    Core/C2dFeatureImageTask.cpp
-    Core/C2dFeatureImageTask.h
-    Core/C2dFeatureMatcherTask.cpp
-    Core/C2dFeatureMatcherTask.h
-    Core/C2dImageInteractiveTask.cpp
-    Core/C2dImageInteractiveTask.h
-    Core/C2dImageTask.cpp
-    Core/C2dImageTask.h
-    Core/CClassificationTask.cpp
-    Core/CClassificationTask.h
-    Core/CDnnTrainTask.cpp
-    Core/CDnnTrainTask.h
     Core/CIkomiaRegistry.cpp
     Core/CIkomiaRegistry.h
-    Core/CMlflowTrainTask.cpp
-    Core/CMlflowTrainTask.h
-    Core/CObjectDetectionTask.cpp
-    Core/CObjectDetectionTask.h
     Core/CPluginTools.cpp
     Core/CPluginTools.h
     Core/CRunTaskManager.cpp
     Core/CRunTaskManager.h
-    Core/CSemanticSegTask.cpp
-    Core/CSemanticSegTask.h
-    Core/CTaskFactory.hpp
-    Core/CTaskInfo.cpp
-    Core/CTaskInfo.h
-    Core/CVideoOFTask.cpp
-    Core/CVideoOFTask.h
-    Core/CVideoTask.cpp
-    Core/CVideoTask.h
-    Core/CVideoTrackingTask.cpp
-    Core/CVideoTrackingTask.h
     Core/CWidgetFactory.hpp
     Core/CWorkflow.cpp
     Core/CWorkflow.h
-    DataProcess.hpp
-    DataProcessGlobal.hpp
-    DataProcessTools.hpp
     IO/CArrayIO.cpp
     IO/CArrayIO.h
     IO/CBlobMeasureIO.cpp
@@ -258,6 +232,33 @@ add_library(ikDataProcess SHARED
     Process/OpenCV/xphoto/COcvLearningBasedWB.hpp
     Process/OpenCV/xphoto/COcvSimpleWB.hpp
     Process/OpenCV/xphoto/COcvTonemapDurand.hpp
+    Task/C2dFeatureImageTask.cpp
+    Task/C2dFeatureImageTask.h
+    Task/C2dFeatureMatcherTask.cpp
+    Task/C2dFeatureMatcherTask.h
+    Task/C2dImageInteractiveTask.cpp
+    Task/C2dImageInteractiveTask.h
+    Task/C2dImageTask.cpp
+    Task/C2dImageTask.h
+    Task/CClassificationTask.cpp
+    Task/CClassificationTask.h
+    Task/CDnnTrainTask.cpp
+    Task/CDnnTrainTask.h
+    Task/CMlflowTrainTask.cpp
+    Task/CMlflowTrainTask.h
+    Task/CObjectDetectionTask.cpp
+    Task/CObjectDetectionTask.h
+    Task/CSemanticSegTask.cpp
+    Task/CSemanticSegTask.h
+    Task/CTaskFactory.hpp
+    Task/CTaskInfo.cpp
+    Task/CTaskInfo.h
+    Task/CVideoOFTask.cpp
+    Task/CVideoOFTask.h
+    Task/CVideoTask.cpp
+    Task/CVideoTask.h
+    Task/CVideoTrackingTask.cpp
+    Task/CVideoTrackingTask.h
     Widget/Core/CWidgetApplyOnly.hpp
     Widget/Core/CWidgetBinaryToGraphics.hpp
     Widget/Core/CWidgetBlobMeasure.cpp
@@ -433,7 +434,6 @@ add_library(ikDataProcess SHARED
     Widget/OpenCV/xphoto/COcvWidgetLearningBasedWB.hpp
     Widget/OpenCV/xphoto/COcvWidgetSimpleWB.hpp
     Widget/OpenCV/xphoto/COcvWidgetTonemapDurand.hpp
-    pch.hpp
 )
 
 set_target_properties(ikDataProcess PROPERTIES VERSION ${IKOMIA_VERSION} SOVERSION ${IKOMIA_VERSION})
@@ -445,21 +445,8 @@ set(PUBLIC_HEADERS
 set(PUBLIC_HEADERS_CORE
     Core/CPluginProcessInterface.hpp
     Core/CWorkflow.h
-    Core/CTaskFactory.hpp
-    Core/C2dImageInteractiveTask.h
-    Core/C2dImageTask.h
-    Core/CVideoTask.h
-    Core/CVideoOFTask.h
-    Core/CVideoTrackingTask.h
-    Core/C2dFeatureImageTask.h
-    Core/C2dFeatureMatcherTask.h
-    Core/CTaskInfo.h
     Core/CWidgetFactory.hpp
-    Core/CDnnTrainTask.h
-    Core/CMlflowTrainTask.h
     Core/CRunTaskManager.h
-    Core/CClassificationTask.h
-    Core/CObjectDetectionTask.h
 )
 
 set(PUBLIC_HEADERS_IO
@@ -477,6 +464,23 @@ set(PUBLIC_HEADERS_IO
 
 set(PUBLIC_HEADERS_PROCESS
     Process/Core/CBlobMeasure.h
+)
+
+set(PUBLIC_HEADERS_TASK
+    Task/CTaskFactory.hpp
+    Task/C2dImageInteractiveTask.h
+    Task/C2dImageTask.h
+    Task/CVideoTask.h
+    Task/CVideoOFTask.h
+    Task/CVideoTrackingTask.h
+    Task/C2dFeatureImageTask.h
+    Task/C2dFeatureMatcherTask.h
+    Task/CTaskInfo.h
+    Task/CDnnTrainTask.h
+    Task/CMlflowTrainTask.h
+    Task/CClassificationTask.h
+    Task/CObjectDetectionTask.h
+    Task/CSemanticSegTask.h
 )
 
 set(PUBLIC_HEADERS_PROCESS_DNN
@@ -602,6 +606,10 @@ install(FILES ${PUBLIC_HEADERS_PROCESS}
 
 install(FILES ${PUBLIC_HEADERS_PROCESS_DNN}
     DESTINATION ${CMAKE_INSTALL_IKOMIA_INCLUDE}/DataProcess/Process/OpenCV/dnn
+)
+
+install(FILES ${PUBLIC_HEADERS_TASK}
+    DESTINATION ${CMAKE_INSTALL_IKOMIA_INCLUDE}/DataProcess/Task
 )
 
 install(FILES ${PUBLIC_HEADERS_WIDGET_DNN}

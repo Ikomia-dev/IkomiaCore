@@ -20,7 +20,7 @@
 #ifndef COCVBILATERAL_H
 #define COCVBILATERAL_H
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 #include "IO/CImageIO.h"
 
 //------------------------------//

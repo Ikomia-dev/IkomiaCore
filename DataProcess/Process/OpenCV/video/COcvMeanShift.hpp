@@ -20,7 +20,7 @@
 #ifndef COCVMEANSHIFT_HPP
 #define COCVMEANSHIFT_HPP
 
-#include "Core/CVideoTask.h"
+#include "Task/CVideoTask.h"
 #include "Graphics/CGraphicsLayer.h"
 
 //------------------------------//

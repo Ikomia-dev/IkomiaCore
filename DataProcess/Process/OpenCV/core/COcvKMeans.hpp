@@ -20,7 +20,7 @@
 #ifndef COCVKMEANS_HPP
 #define COCVKMEANS_HPP
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 #include "IO/CImageIO.h"
 #include "IO/CBlobMeasureIO.h"
 

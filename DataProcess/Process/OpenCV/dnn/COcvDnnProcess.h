@@ -22,7 +22,7 @@
 #ifndef CDNNPROCESS_H
 #define CDNNPROCESS_H
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 #include "opencv2/dnn.hpp"
 
 //----------------------------//

@@ -20,7 +20,7 @@
 #ifndef COCVSPLIT_HPP
 #define COCVSPLIT_HPP
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 #include "IO/CImageIO.h"
 
 //------------------------------//

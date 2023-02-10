@@ -20,7 +20,7 @@
 #ifndef COCVOCRTESSERACT_HPP
 #define COCVOCRTESSERACT_HPP
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 #include "IO/CImageIO.h"
 #include <opencv2/text.hpp>
 

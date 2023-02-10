@@ -26,7 +26,7 @@
 #include "opencv2/opencv.hpp"
 #include "Workflow/CWorkflowTask.h"
 #include "Data/CMat.hpp"
-#include "Core/CTaskFactory.hpp"
+#include "Task/CTaskFactory.hpp"
 #include "IO/CImageIO.h"
 #include "IO/CGraphicsInput.h"
 #include "IO/CGraphicsOutput.h"

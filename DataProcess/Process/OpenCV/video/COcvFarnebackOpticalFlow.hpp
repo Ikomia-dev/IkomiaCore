@@ -20,7 +20,7 @@
 #ifndef COCVFARNEBACKOPTICALFLOW_HPP
 #define COCVFARNEBACKOPTICALFLOW_HPP
 
-#include "Core/CVideoOFTask.h"
+#include "Task/CVideoOFTask.h"
 #include "IO/CVideoIO.h"
 #include "opencv2/tracking.hpp"
 

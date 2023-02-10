@@ -2,7 +2,7 @@
 #define COBJDETECTTASKWRAP_H
 
 #include "PyDataProcessGlobal.h"
-#include "Core/CObjectDetectionTask.h"
+#include "Task/CObjectDetectionTask.h"
 
 
 class CObjDetectTaskWrap: public CObjectDetectionTask, public wrapper<CObjectDetectionTask>

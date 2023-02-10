@@ -20,7 +20,7 @@
 #ifndef COCVHOUGHCIRCLES_HPP
 #define COCVHOUGHCIRCLES_HPP
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 
 //---------------------------------//
 //----- COcvHoughCirclesParam -----//

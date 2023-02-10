@@ -20,7 +20,7 @@
 #ifndef COCVCAMSHIFT_HPP
 #define COCVCAMSHIFT_HPP
 
-#include "Core/CVideoTask.h"
+#include "Task/CVideoTask.h"
 #include "Graphics/CGraphicsPolygon.h"
 
 //------------------------------//

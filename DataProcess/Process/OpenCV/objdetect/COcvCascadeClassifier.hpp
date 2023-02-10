@@ -20,7 +20,7 @@
 #ifndef COCVCASCADECLASSIFIER_H
 #define COCVCASCADECLASSIFIER_H
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 #include "IO/CImageIO.h"
 #include "IO/CGraphicsOutput.h"
 #include "Graphics/CGraphicsLayer.h"

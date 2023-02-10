@@ -20,7 +20,7 @@
 #ifndef COCVDUALTVL1OPTICALFLOW_HPP
 #define COCVDUALTVL1OPTICALFLOW_HPP
 
-#include "Core/CVideoOFTask.h"
+#include "Task/CVideoOFTask.h"
 #include "IO/CVideoIO.h"
 #include "opencv2/optflow.hpp"
 

@@ -20,7 +20,7 @@
 #ifndef COCVGRABCUT_HPP
 #define COCVGRABCUT_HPP
 
-#include "Core/C2dImageInteractiveTask.h"
+#include "Task/C2dImageInteractiveTask.h"
 
 //----------------------------//
 //----- COcvGrabCutParam -----//
