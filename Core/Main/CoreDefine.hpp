@@ -27,6 +27,8 @@
 #include <QString>
 #include "Graphics/CPoint.hpp"
 
+#define RANDOM_COLOR_SEED 5
+
 namespace Ikomia
 {
     /**

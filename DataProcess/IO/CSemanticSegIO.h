@@ -26,7 +26,8 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
         std::shared_ptr<CImageIO>           getLegendImageIO() const;
 
         void                                setMask(const CMat& mask);
-        void                                setClassNames(const std::vector<std::string>& names, const std::vector<cv::Vec3b>& colors);
+        void                                setClassNames(const std::vector<std::string>& names);
+        void                                setClassColors(const std::vector<cv::Vec3b>& colors);
 
         bool                                isDataAvailable() const override;
         bool                                isComposite() const override;
@@ -50,6 +51,7 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
         void                                fromJsonInternal(const QJsonDocument& doc);
 
         void                                generateLegend();
+        void                                generateRandomColors();
 
     private:
 

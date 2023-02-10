@@ -8,7 +8,7 @@ CSemanticSegIOWrap::CSemanticSegIOWrap(const CSemanticSegIO &io): CSemanticSegIO
 {
 }
 
-void CSemanticSegIOWrap::setClassNames(const std::vector<std::string> &names, const std::vector<std::vector<uchar>> &colors)
+void CSemanticSegIOWrap::setClassColors(const std::vector<std::vector<uchar>> &colors)
 {
     CPyEnsureGIL gil;
     try
@@ -26,7 +26,7 @@ void CSemanticSegIOWrap::setClassNames(const std::vector<std::string> &names, co
             }
             cvcolors.push_back(cvcolor);
         }
-        this->CSemanticSegIO::setClassNames(names, cvcolors);
+        this->CSemanticSegIO::setClassColors(cvcolors);
     }
     catch(boost::python::error_already_set&)
     {

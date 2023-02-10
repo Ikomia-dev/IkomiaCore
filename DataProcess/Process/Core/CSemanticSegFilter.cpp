@@ -53,7 +53,8 @@ void CSemanticSegFilter::run()
     auto semanticSegOut = std::dynamic_pointer_cast<CSemanticSegIO>(getOutput(0));
     semanticSegOut->clearData();
     auto classNames = semanticSegIn->getClassNames();
-    semanticSegOut->setClassNames(classNames, semanticSegIn->getColors());
+    semanticSegOut->setClassNames(classNames);
+    semanticSegOut->setClassColors(semanticSegIn->getColors());
 
     if(paramPtr->m_categories != "all")
     {

@@ -24,8 +24,8 @@ class CObjectDetectionTask: public C2dImageTask
 
         void                                readClassNames(const std::string& path);
 
-        void                                setNames(const std::vector<std::string>& names);
         void                                setColors(const std::vector<CColor>& colors);
+        void                                setNames(const std::vector<std::string>& names);
 
     private:
 

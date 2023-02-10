@@ -1314,9 +1314,14 @@ constexpr auto _setMaskDocString =
         "   mask (numpy array): segmentation mask\n\n";
 
 constexpr auto _setClassNamesDocString =
-        "Set class names and colors associated with segmentation mask\n\n"
+        "Set class names associated with segmentation mask. If colors are not defined, "
+        "random colors are automatically generated.\n\n"
         "Args:\n\n"
-        "   names (list of str): class names, index in the list must match the pixel value in the mask\n\n"
+        "   names (list of str): class names, index in the list must match the pixel value in the mask\n\n";
+
+constexpr auto _setClassColorsDocString =
+        "Set class colors associated with segmentation mask. Sizes of names and colors must be equal.\n\n"
+        "Args:\n\n"
         "   colors (list of list of int): colors as [r, g, b] list\n\n";
 
 //------------------------//
@@ -1653,6 +1658,11 @@ constexpr auto _classifTaskDocString =
         "- data output (:py:class:`CDataStringIO`): sorted list of class scores if classification is computed on whole image.\n\n"
         "Derived from :py:class:`~ikomia.dataprocess.pydataprocess.C2dImageTask`.\n\n";
 
+constexpr auto _ctorClassifDocString =
+        "Construct CClassificationTask object with the given name.\n\n"
+        "Args:\n\n"
+        "   name (str): task name, must be unique\n\n";
+
 constexpr auto _classifAddObjectDocString =
         "Add classification result for individual object. See :py:meth:`get_input_objects` and "
         ":py:meth:`get_object_sub_image` for more information.\n\n"
@@ -1712,7 +1722,7 @@ constexpr auto _classifSetColorsDocString =
         "   colors (list of list: r, g, b integer values in range [0, 255])\n\n";
 
 constexpr auto _classifSetNamesDocString =
-        "Set class names used for classification. The function generate associated random colors if "
+        "Set class names. The function generate associated random colors if "
         "none is defined.\n\n"
         "Args:\n\n"
         "   names (list of str)\n\n";
@@ -1736,6 +1746,11 @@ constexpr auto _objDetTaskDocString =
         "- image IO (:py:class:`CImageIO`): by default source image is forwarded.\n"
         "- object detection IO (:py:class:`CObjectDetectionIO`)\n\n"
         "Derived from :py:class:`~ikomia.dataprocess.pydataprocess.C2dImageTask`.\n\n";
+
+constexpr auto _ctorObjDetectDocString =
+        "Construct CObjectDetectionTask object with the given name.\n\n"
+        "Args:\n\n"
+        "   name (str): task name, must be unique\n\n";
 
 constexpr auto _objDetAddObject1DocString =
         "Add detected object result localized in image through regular bounding box.\n\n"
@@ -1766,28 +1781,42 @@ constexpr auto _objDetectGetResultsDocString =
         "Returns:\n\n"
         "   :py:class:`CObjectDetectionIO`: object detection results\n\n";
 
-constexpr auto _objDetectGetNamesDocString =
-        "Get class names. Call :py:meth:`read_class_names` to populate names from text file.\n\n"
+//-------------------------------------//
+//----- CSemanticSegmentationTask -----//
+//-------------------------------------//
+constexpr auto _semSegTaskDocString =
+        "Base class for semantic segmentatio task in Computer Vision. It consists in "
+        "labelling each pixel of input image with a class. Common outputs for such task are "
+        "graylevel mask and  color labelled image for visualization. "
+        "It defines a task with the following properties:\n\n"
+        "Inputs:\n\n"
+        "- image (:py:class:`CImageIO`)\n"
+        "- graphics (:py:class:`CGraphicsInput`)\n\n"
+        "Outputs:\n\n"
+        "- image IO (:py:class:`CImageIO`): by default source image is forwarded.\n"
+        "- semantic segmentation IO (:py:class:`CSemanticSegmentationIO`)\n\n"
+        "Derived from :py:class:`~ikomia.dataprocess.pydataprocess.C2dImageTask`.\n\n";
+
+constexpr auto _ctorSemSegDocString =
+        "Construct CObjectDetectionTask object with the given name.\n\n"
+        "Args:\n\n"
+        "   name (str): task name, must be unique\n\n";
+
+constexpr auto _semSegGetResultsDocString =
+        "Get semantic segmentation results as a :py:class:`CSemanticSegmentationIO` instance.\n\n"
         "Returns:\n\n"
-        "   str list: class names\n\n";
+        "   :py:class:`CSemanticSegmentationIO`: semantic segmentation data\n\n";
 
-constexpr auto _objDetectReadClassNamesDocString =
-        "Populate class names from the given text file (one line per class).\n\n"
-        "Args:\n\n"
-        "   path (str): path to class names definition file\n\n";
+constexpr auto _semSegGetColorMaskImgDocString =
+        "Get a visualization image composed by original input image and colored segmentation mask. "
+        "A transparency factor is applied to see both information.\n\n"
+        "Returns:\n\n"
+        "   2D numpy array (3 channels): color mask image\n\n";
 
-constexpr auto _objDetectSetColorsDocString =
-        "Set colors associated with class names. The given list must have the same size as names list. "
-        "If not provided, random colors are generated while populating the name list "
-        "(:py:meth:`read_class_names`).\n\n"
+constexpr auto _semSegGetMaskDocString =
+        "Set the segmentation mask computed from the input image.\n\n"
         "Args:\n\n"
-        "   colors (list of list: r, g, b integer values in range [0, 255])\n\n";
-
-constexpr auto _objDetectSetNamesDocString =
-        "Set class names used for classification. The function generate associated random colors if "
-        "none is defined.\n\n"
-        "Args:\n\n"
-        "   names (list of str)\n\n";
+        "   mask (2D - 1 channel numpy array): segmentation mask\n\n";
 
 //---------------------------//
 //----- CIkomiaRegistry -----//

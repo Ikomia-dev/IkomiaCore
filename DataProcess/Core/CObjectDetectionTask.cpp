@@ -68,8 +68,8 @@ void CObjectDetectionTask::initIO()
 
 void CObjectDetectionTask::generateRandomColors()
 {
-    std::srand(9);
-    double factor = 255 / (double)RAND_MAX;
+    std::srand(RANDOM_COLOR_SEED);
+    double factor = 255.0 / (double)RAND_MAX;
 
     for (size_t i=0; i<m_classNames.size(); ++i)
     {

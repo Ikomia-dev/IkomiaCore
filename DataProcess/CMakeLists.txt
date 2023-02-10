@@ -24,6 +24,8 @@ add_library(ikDataProcess SHARED
     Core/CPluginTools.h
     Core/CRunTaskManager.cpp
     Core/CRunTaskManager.h
+    Core/CSemanticSegTask.cpp
+    Core/CSemanticSegTask.h
     Core/CTaskFactory.hpp
     Core/CTaskInfo.cpp
     Core/CTaskInfo.h

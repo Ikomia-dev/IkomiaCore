@@ -32,6 +32,7 @@
 #include "Task/CDnnTrainTaskWrap.h"
 #include "Task/CClassifTaskWrap.h"
 #include "Task/CObjDetectTaskWrap.h"
+#include "Task/CSemanticSegTaskWrap.h"
 #include "CWidgetFactoryWrap.h"
 #include "CPluginProcessInterfaceWrap.h"
 #include "IO/CNumericIOWrap.hpp"
@@ -133,6 +134,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
     register_ptr_to_python<std::shared_ptr<CDatasetIO>>();
     register_ptr_to_python<std::shared_ptr<CArrayIO>>();
     register_ptr_to_python<std::shared_ptr<CObjectDetectionIO>>();
+    register_ptr_to_python<std::shared_ptr<CSemanticSegIO>>();
     register_ptr_to_python<std::shared_ptr<C2dImageTask>>();
     register_ptr_to_python<std::shared_ptr<C2dImageInteractiveTask>>();
     register_ptr_to_python<std::shared_ptr<CVideoTask>>();
@@ -576,7 +578,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("get_class_names", &CSemanticSegIO::getClassNames, _getClassNamesDocString, args("self"))
         .def("get_colors", &CSemanticSegIOWrap::getColorsWrap, _getColorsDocString, args("self"))
         .def("set_mask", &CSemanticSegIO::setMask, _setMaskDocString, args("self", "mask"))
-        .def("set_class_names", &CSemanticSegIOWrap::setClassNames, _setClassNamesDocString, args("self", "names", "colors"))
+        .def("set_class_names", &CSemanticSegIO::setClassNames, _setClassNamesDocString, args("self", "names"))
+        .def("set_class_colors", &CSemanticSegIOWrap::setClassColors, _setClassColorsDocString, args("self", "colors"))
         .def("is_data_available", &CSemanticSegIO::isDataAvailable, &CSemanticSegIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
         .def("clear_data", &CSemanticSegIO::clearData, &CSemanticSegIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
         .def("load", &CSemanticSegIO::load, &CSemanticSegIOWrap::default_load, _instanceSegLoadDocString, args("self", "path"))
@@ -747,7 +750,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
     //-------------------------------//
     class_<CClassifTaskWrap, bases<C2dImageTask>, std::shared_ptr<CClassifTaskWrap>>("CClassificationTask", _classifTaskDocString)
         .def(init<>("Default constructor", args("self")))
-        .def(init<const std::string&>(_ctor2ImageProcess2dDocString, args("self", "name")))
+        .def(init<const std::string&>(_ctorClassifDocString, args("self", "name")))
         .def("set_active", &CClassificationTask::setActive, &CClassifTaskWrap::default_setActive, _setActiveDocString, args("self", "is_active"))
         .def("update_static_outputs", &CClassificationTask::updateStaticOutputs, &CClassifTaskWrap::default_updateStaticOutputs, _updateStaticOutputsDocString, args("self"))
         .def("begin_task_run", &CClassificationTask::beginTaskRun, &CClassifTaskWrap::default_beginTaskRun, _beginTaskRunDocString, args("self"))
@@ -783,7 +786,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
 
     class_<CObjDetectTaskWrap, bases<C2dImageTask>, std::shared_ptr<CObjDetectTaskWrap>>("CObjectDetectionTask", _objDetTaskDocString)
         .def(init<>("Default constructor", args("self")))
-        .def(init<const std::string&>(_ctor2ImageProcess2dDocString, args("self", "name")))
+        .def(init<const std::string&>(_ctorObjDetectDocString, args("self", "name")))
         .def("set_active", &CObjectDetectionTask::setActive, &CObjDetectTaskWrap::default_setActive, _setActiveDocString, args("self", "is_active"))
         .def("update_static_outputs", &CObjectDetectionTask::updateStaticOutputs, &CObjDetectTaskWrap::default_updateStaticOutputs, _updateStaticOutputsDocString, args("self"))
         .def("begin_task_run", &CObjectDetectionTask::beginTaskRun, &CObjDetectTaskWrap::default_beginTaskRun, _beginTaskRunDocString, args("self"))
@@ -800,11 +803,40 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("execute_actions", &CObjectDetectionTask::executeActions, &CObjDetectTaskWrap::default_executeActions, _executeActionsDocString, args("self", "action"))
         .def("add_object", addObjectBox2, _objDetAddObject1DocString, args("self", "id", "class_index", "confidence", "x", "y", "width", "height"))
         .def("add_object", addObjectRotateBox2, _objDetAddObject2DocString, args("self", "id", "class_index", "confidence", "cx", "cy", "width", "height", "angle"))
-        .def("get_names", &CObjectDetectionTask::getNames, _objDetectGetNamesDocString, args("self"))
+        .def("get_names", &CObjectDetectionTask::getNames, _classifGetNamesDocString, args("self"))
         .def("get_results", &CObjectDetectionTask::getResults, _objDetectGetResultsDocString, args("self"))
-        .def("read_class_names", &CObjectDetectionTask::readClassNames, _objDetectReadClassNamesDocString, args("self", "path"))
-        .def("set_colors", &CObjectDetectionTask::setColors, _objDetectSetColorsDocString, args("self", "colors"))
-        .def("set_names", &CClassificationTask::setNames, _objDetectSetNamesDocString, args("self", "names"))
+        .def("read_class_names", &CObjectDetectionTask::readClassNames, _classifReadClassNamesDocString, args("self", "path"))
+        .def("set_colors", &CObjectDetectionTask::setColors, _classifSetColorsDocString, args("self", "colors"))
+        .def("set_names", &CObjectDetectionTask::setNames, _classifSetNamesDocString, args("self", "names"))
+    ;
+
+    //-------------------------------------//
+    //----- CSemanticSegmentationTask -----//
+    //-------------------------------------//
+    class_<CSemanticSegTaskWrap, bases<C2dImageTask>, std::shared_ptr<CSemanticSegTaskWrap>>("CSemanticSegmentationTask", _semSegTaskDocString)
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const std::string&>(_ctorSemSegDocString, args("self", "name")))
+        .def("set_active", &CSemanticSegTask::setActive, &CSemanticSegTaskWrap::default_setActive, _setActiveDocString, args("self", "is_active"))
+        .def("update_static_outputs", &CSemanticSegTask::updateStaticOutputs, &CSemanticSegTaskWrap::default_updateStaticOutputs, _updateStaticOutputsDocString, args("self"))
+        .def("begin_task_run", &CSemanticSegTask::beginTaskRun, &CSemanticSegTaskWrap::default_beginTaskRun, _beginTaskRunDocString, args("self"))
+        .def("end_task_run", &CSemanticSegTask::endTaskRun, &CSemanticSegTaskWrap::default_endTaskRun, _endTaskRunDocString, args("self"))
+        .def("graphics_changed", &CSemanticSegTask::graphicsChanged, &CSemanticSegTaskWrap::default_graphicsChanged, _graphicsChangedDocString, args("self"))
+        .def("global_input_changed", &CSemanticSegTask::globalInputChanged, &CSemanticSegTaskWrap::default_globalInputChanged, _globalInputChangedDocString, args("self", "is_new_sequence"))
+        .def("get_progress_steps", &CSemanticSegTask::getProgressSteps, &CSemanticSegTaskWrap::default_getProgressSteps, _getProgressStepsDocString, args("self"))
+        .def("run", &CSemanticSegTask::run, &CSemanticSegTaskWrap::default_run, _runDocString, args("self"))
+        .def("stop", &CSemanticSegTask::stop, &CSemanticSegTaskWrap::default_stop, _stopDocString, args("self"))
+        .def("emit_add_sub_progress_steps", &CSemanticSegTaskWrap::emitAddSubProgressSteps, _emitAddSubProgressSteps, args("self", "count"))
+        .def("emit_step_progress", &CSemanticSegTaskWrap::emitStepProgress, _emitStepProgressDocString, args("self"))
+        .def("emit_graphics_context_changed", &CSemanticSegTaskWrap::emitGraphicsContextChanged, _emitGraphicsContextChangedDocString, args("self"))
+        .def("emit_output_changed", &CSemanticSegTaskWrap::emitOutputChanged, _emitOutputChangedDocString, args("self"))
+        .def("execute_actions", &CSemanticSegTask::executeActions, &CSemanticSegTaskWrap::default_executeActions, _executeActionsDocString, args("self", "action"))
+        .def("get_names", &CSemanticSegTask::getNames, _classifGetNamesDocString, args("self"))
+        .def("get_results", &CSemanticSegTask::getResults, _semSegGetResultsDocString, args("self"))
+        .def("get_color_mask_image", &CSemanticSegTask::getColorMaskImage, _semSegGetColorMaskImgDocString, args("self"))
+        .def("read_class_names", &CSemanticSegTask::readClassNames, _classifReadClassNamesDocString, args("self", "path"))
+        .def("set_colors", &CSemanticSegTask::setColors, _classifSetColorsDocString, args("self", "colors"))
+        .def("set_names", &CSemanticSegTask::setNames, _classifSetNamesDocString, args("self", "names"))
+        .def("set_mask", &CSemanticSegTask::setMask, _semSegGetMaskDocString, args("self", "mask"))
     ;
 
     //---------------------------//

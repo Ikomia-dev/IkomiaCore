@@ -78,16 +78,25 @@ void CSemanticSegIO::setMask(const CMat &mask)
     std::vector<cv::Mat> inputs;
     inputs.push_back(mask);
     cv::calcHist(inputs, {0}, cv::Mat(), m_histo, {256}, {0, 256}, false);
+    generateLegend();
 }
 
-void CSemanticSegIO::setClassNames(const std::vector<std::string> &names, const std::vector<cv::Vec3b> &colors)
+void CSemanticSegIO::setClassNames(const std::vector<std::string> &names)
 {
-    if (names.size() != colors.size())
+    if (m_colors.size() != 0 && names.size() != m_colors.size())
         throw CException(CoreExCode::INVALID_SIZE, "Semantic segmentation output error: there must be the same number of classes and colors.", __func__, __FILE__, __LINE__);
 
     m_classes = names;
+    if (m_colors.empty())
+        generateRandomColors();
+}
+
+void CSemanticSegIO::setClassColors(const std::vector<cv::Vec3b> &colors)
+{
+    if (colors.size() < m_classes.size())
+        throw CException(CoreExCode::INVALID_SIZE, "Colors count must be greater or equal of class names count", __func__, __FILE__, __LINE__);
+
     m_colors = colors;
-    generateLegend();
 }
 
 bool CSemanticSegIO::isDataAvailable() const
@@ -251,4 +260,20 @@ void CSemanticSegIO::generateLegend()
         cv::putText(legend, m_classes[colorIndices[i]], textOrigin, font, fontScale, {0, 0, 0}, thickness);
     }
     m_imgLegendIOPtr->setImage(legend);
+}
+
+void CSemanticSegIO::generateRandomColors()
+{
+    std::srand(RANDOM_COLOR_SEED);
+    double factor = 255.0 / (double)RAND_MAX;
+
+    for (size_t i=0; i<m_classes.size(); ++i)
+    {
+        cv::Vec3b color = {
+            (uchar)((double)std::rand() * factor),
+            (uchar)((double)std::rand() * factor),
+            (uchar)((double)std::rand() * factor)
+        };
+        m_colors.push_back(color);
+    }
 }
