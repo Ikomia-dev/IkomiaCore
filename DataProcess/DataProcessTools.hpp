@@ -69,7 +69,7 @@ namespace Ikomia
                     }
                 return ovrImg;
             }
-            inline CMat         mergeColorMask(const CMat& image, const CMat& mask, const CMat& colormap, double opacity)
+            inline CMat         mergeColorMask(const CMat& image, const CMat& mask, const CMat& colormap, double opacity, bool transparentZero)
             {
                 CMat result, colorMask;
 
@@ -80,9 +80,13 @@ namespace Ikomia
 
                 cv::applyColorMap(colorMask, colorMask, colormap);
                 cv::addWeighted(image, (1.0 - opacity), colorMask, opacity, 0.0, result, image.depth());
-                cv::Mat maskNot = mask > 0;
-                cv::bitwise_not(maskNot, maskNot);
-                image.copyTo(result, maskNot);
+
+                if (transparentZero)
+                {
+                    cv::Mat maskNot = mask > 0;
+                    cv::bitwise_not(maskNot, maskNot);
+                    image.copyTo(result, maskNot);
+                }
                 return result;
             }
             inline std::string  toJson(const CMat& image, const std::vector<std::string> &options)
