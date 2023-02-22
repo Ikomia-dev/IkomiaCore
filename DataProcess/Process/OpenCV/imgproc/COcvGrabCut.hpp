@@ -72,7 +72,7 @@ class COcvGrabCut : public C2dImageInteractiveTask
             removeInput(1);
             setOutputDataType(IODataType::IMAGE_BINARY, 0);
             addOutput(std::make_shared<CImageIO>());
-            setOutputColorMap(1, 0, {{255,0,0}});
+            setOutputColorMap(1, 0, {{255, 0, 0}});
         }
         COcvGrabCut(const std::string name, const std::shared_ptr<COcvGrabCutParam>& pParam) : C2dImageInteractiveTask(name)
         {
@@ -80,7 +80,7 @@ class COcvGrabCut : public C2dImageInteractiveTask
             removeInput(1);
             setOutputDataType(IODataType::IMAGE_BINARY, 0);
             addOutput(std::make_shared<CImageIO>());
-            setOutputColorMap(1, 0, {{255,0,0}});
+            setOutputColorMap(1, 0, {{255, 0, 0}});
             m_pParam = std::make_shared<COcvGrabCutParam>(*pParam);
         }
 

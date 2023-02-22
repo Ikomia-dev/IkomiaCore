@@ -69,14 +69,14 @@ class COcvMeanShift : public CVideoTask
             setOutputDataType(IODataType::IMAGE_BINARY, 0);
             addOutput(std::make_shared<CImageIO>());
             addOutput(std::make_shared<CBlobMeasureIO>());
-            setOutputColorMap(1, 0, {{255,0,0}});
+            setOutputColorMap(1, 0, {{255, 0, 0}});
         }
         COcvMeanShift(const std::string name, const std::shared_ptr<COcvMeanShiftParam>& pParam) : CVideoTask(name)
         {
             setOutputDataType(IODataType::IMAGE_BINARY, 0);
             addOutput(std::make_shared<CImageIO>());
             addOutput(std::make_shared<CBlobMeasureIO>());
-            setOutputColorMap(1, 0, {{255,0,0}});
+            setOutputColorMap(1, 0, {{255, 0, 0}});
             m_pParam = std::make_shared<COcvMeanShiftParam>(*pParam);
         }
 

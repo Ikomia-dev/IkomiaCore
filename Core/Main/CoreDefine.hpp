@@ -164,7 +164,7 @@ namespace Ikomia
     using VectorString = std::vector<std::string>;
     using VectorPairString = std::vector<std::pair<std::string, std::string>>;
     using VectorPairQString = std::vector<std::pair<QString, QString>>;
-    using CColor = std::vector<int>;
+    using CColor = std::vector<uchar>;
 }
 
 using namespace Ikomia;

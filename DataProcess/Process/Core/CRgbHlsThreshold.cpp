@@ -68,7 +68,7 @@ CRgbHlsThreshold::CRgbHlsThreshold() : C2dImageInteractiveTask()
 {
     setOutputDataType(IODataType::IMAGE_BINARY, 0);
     addOutput(std::make_shared<CImageIO>());
-    setOutputColorMap(1, 0, {{255,0,0}});
+    setOutputColorMap(1, 0, {{255, 0, 0}});
 }
 
 CRgbHlsThreshold::CRgbHlsThreshold(const std::string name, const std::shared_ptr<CRgbHlsThresholdParam> &pParam)
@@ -76,7 +76,7 @@ CRgbHlsThreshold::CRgbHlsThreshold(const std::string name, const std::shared_ptr
 {
     setOutputDataType(IODataType::IMAGE_BINARY, 0);
     addOutput(std::make_shared<CImageIO>());
-    setOutputColorMap(1, 0, {{255,0,0}});
+    setOutputColorMap(1, 0, {{255, 0, 0}});
     m_pParam = std::make_shared<CRgbHlsThresholdParam>(*pParam);
 }
 

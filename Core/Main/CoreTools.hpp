@@ -256,7 +256,7 @@ namespace Ikomia
             }
             inline CColor           toCColor(const QColor& color)
             {
-                CColor ccolor = {color.red(), color.green(), color.blue(), color.alpha()};
+                CColor ccolor = {(uchar)(color.red()), (uchar)(color.green()), (uchar)(color.blue()), (uchar)(color.alpha())};
                 return ccolor;
             }
             inline QColor           getRandomQColor()

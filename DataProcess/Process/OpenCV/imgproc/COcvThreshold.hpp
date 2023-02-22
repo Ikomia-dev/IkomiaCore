@@ -67,14 +67,14 @@ class COcvThreshold : public C2dImageTask
         {
             addOutput(std::make_shared<CImageIO>());
             getOutput(0)->setDataType(IODataType::IMAGE_BINARY);
-            setOutputColorMap(1, 0, {{255,0,0}});
+            setOutputColorMap(1, 0, {{255, 0, 0}});
         }
         COcvThreshold(const std::string name, const std::shared_ptr<COcvThresholdParam>& pParam) : C2dImageTask(name)
         {
             m_pParam = std::make_shared<COcvThresholdParam>(*pParam);
             addOutput(std::make_shared<CImageIO>());
             getOutput(0)->setDataType(IODataType::IMAGE_BINARY);
-            setOutputColorMap(1, 0, {{255,0,0}});
+            setOutputColorMap(1, 0, {{255, 0, 0}});
         }
 
         size_t  getProgressSteps() override

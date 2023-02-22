@@ -71,13 +71,13 @@ class COcvBckgndSubMog : public CVideoTask
         {
             setOutputDataType(IODataType::IMAGE_BINARY, 0);
             addOutput(std::make_shared<CImageIO>());
-            setOutputColorMap(1, 0, {{255,0,0}});
+            setOutputColorMap(1, 0, {{255, 0, 0}});
         }
         COcvBckgndSubMog(const std::string name, const std::shared_ptr<COcvBckgndSubMogParam>& pParam) : CVideoTask(name)
         {
             setOutputDataType(IODataType::IMAGE_BINARY, 0);
             addOutput(std::make_shared<CImageIO>());
-            setOutputColorMap(1, 0, {{255,0,0}});
+            setOutputColorMap(1, 0, {{255, 0, 0}});
             m_pParam = std::make_shared<COcvBckgndSubMogParam>(*pParam);
         }
 

@@ -56,13 +56,13 @@ class COcvRetinaSegmentation : public C2dImageTask
         {
             setOutputDataType(IODataType::IMAGE_BINARY, 0);
             addOutput(std::make_shared<CImageIO>());
-            setOutputColorMap(1, 0, {{255,0,0}});
+            setOutputColorMap(1, 0, {{255, 0, 0}});
         }
         COcvRetinaSegmentation(const std::string name, const std::shared_ptr<COcvRetinaSegmentationParam>& pParam) : C2dImageTask(name)
         {
             setOutputDataType(IODataType::IMAGE_BINARY, 0);
             addOutput(std::make_shared<CImageIO>());
-            setOutputColorMap(1, 0, {{255,0,0}});
+            setOutputColorMap(1, 0, {{255, 0, 0}});
             m_pParam = std::make_shared<COcvRetinaSegmentationParam>(*pParam);
         }
 
