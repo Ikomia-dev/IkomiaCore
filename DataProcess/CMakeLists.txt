@@ -131,8 +131,10 @@ add_library(ikDataProcess SHARED
     Process/OpenCV/dnn/COcvDnnDetector.hpp
     Process/OpenCV/dnn/COcvDnnProcess.cpp
     Process/OpenCV/dnn/COcvDnnProcess.h
-    Process/OpenCV/dnn/COcvDnnSegmentation.cpp
-    Process/OpenCV/dnn/COcvDnnSegmentation.h
+    Process/OpenCV/dnn/COcvDnnInstanceSeg.cpp
+    Process/OpenCV/dnn/COcvDnnInstanceSeg.h
+    Process/OpenCV/dnn/COcvDnnSemanticSeg.cpp
+    Process/OpenCV/dnn/COcvDnnSemanticSeg.h
     Process/OpenCV/features2d/COcvAGAST.hpp
     Process/OpenCV/features2d/COcvAKAZE.hpp
     Process/OpenCV/features2d/COcvBFMatcher.hpp
@@ -244,6 +246,8 @@ add_library(ikDataProcess SHARED
     Task/CClassificationTask.h
     Task/CDnnTrainTask.cpp
     Task/CDnnTrainTask.h
+    Task/CInstanceSegTask.cpp
+    Task/CInstanceSegTask.h
     Task/CMlflowTrainTask.cpp
     Task/CMlflowTrainTask.h
     Task/CObjectDetectionTask.cpp
@@ -337,7 +341,8 @@ add_library(ikDataProcess SHARED
     Widget/OpenCV/dnn/COcvWidgetDnnDetector.hpp
     Widget/OpenCV/dnn/COcvWidgetDnnProcess.cpp
     Widget/OpenCV/dnn/COcvWidgetDnnProcess.h
-    Widget/OpenCV/dnn/COcvWidgetDnnSegmentation.hpp
+    Widget/OpenCV/dnn/COcvWidgetDnnInstanceSeg.hpp
+    Widget/OpenCV/dnn/COcvWidgetDnnSemanticSeg.hpp
     Widget/OpenCV/features2d/COcvWidgetAGAST.hpp
     Widget/OpenCV/features2d/COcvWidgetAKAZE.hpp
     Widget/OpenCV/features2d/COcvWidgetBFMatcher.hpp
@@ -475,6 +480,7 @@ set(PUBLIC_HEADERS_TASK
     Task/CVideoTrackingTask.h
     Task/C2dFeatureImageTask.h
     Task/C2dFeatureMatcherTask.h
+    Task/CInstanceSegTask.h
     Task/CTaskInfo.h
     Task/CDnnTrainTask.h
     Task/CMlflowTrainTask.h

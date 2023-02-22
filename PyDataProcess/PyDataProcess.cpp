@@ -33,6 +33,7 @@
 #include "Task/CClassifTaskWrap.h"
 #include "Task/CObjDetectTaskWrap.h"
 #include "Task/CSemanticSegTaskWrap.h"
+#include "Task/CInstanceSegTaskWrap.h"
 #include "CWidgetFactoryWrap.h"
 #include "CPluginProcessInterfaceWrap.h"
 #include "IO/CNumericIOWrap.hpp"
@@ -576,10 +577,10 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def(init<const CSemanticSegIO&>("Copy constructor"))
         .def("get_mask", &CSemanticSegIO::getMask, _getMaskDocString, args("self"))
         .def("get_class_names", &CSemanticSegIO::getClassNames, _getClassNamesDocString, args("self"))
-        .def("get_colors", &CSemanticSegIOWrap::getColorsWrap, _getColorsDocString, args("self"))
+        .def("get_colors", &CSemanticSegIO::getColors, _getColorsDocString, args("self"))
         .def("set_mask", &CSemanticSegIO::setMask, _setMaskDocString, args("self", "mask"))
         .def("set_class_names", &CSemanticSegIO::setClassNames, _setClassNamesDocString, args("self", "names"))
-        .def("set_class_colors", &CSemanticSegIOWrap::setClassColors, _setClassColorsDocString, args("self", "colors"))
+        .def("set_class_colors", &CSemanticSegIO::setClassColors, _setClassColorsDocString, args("self", "colors"))
         .def("is_data_available", &CSemanticSegIO::isDataAvailable, &CSemanticSegIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
         .def("clear_data", &CSemanticSegIO::clearData, &CSemanticSegIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
         .def("load", &CSemanticSegIO::load, &CSemanticSegIOWrap::default_load, _instanceSegLoadDocString, args("self", "path"))
@@ -598,7 +599,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def(init<const std::string&>(_ctor2ImageProcess2dDocString, args("self", "name")))
         .def(init<const std::string&, bool>(_ctor3ImageProcess2dDocString, args("self", "name", "has_graphics_input")))
         .def("set_active", &C2dImageTask::setActive, &C2dImageTaskWrap::default_setActive, _setActiveDocString, args("self", "is_active"))
-        .def("set_output_color_map", &C2dImageTaskWrap::setOutputColorMap, _setOutputColorMapDocString, args("self", "index", "mask_index", "colors"))
+        .def("set_output_color_map", &C2dImageTask::setOutputColorMap, _setOutputColorMapDocString, args("self", "index", "mask_index", "colors"))
         .def("update_static_outputs", &C2dImageTask::updateStaticOutputs, &C2dImageTaskWrap::default_updateStaticOutputs, _updateStaticOutputsDocString, args("self"))
         .def("begin_task_run", &C2dImageTask::beginTaskRun, &C2dImageTaskWrap::default_beginTaskRun, _beginTaskRunDocString, args("self"))
         .def("end_task_run", &C2dImageTask::endTaskRun, &C2dImageTaskWrap::default_endTaskRun, _endTaskRunDocString, args("self"))
@@ -837,6 +838,34 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("set_colors", &CSemanticSegTask::setColors, _classifSetColorsDocString, args("self", "colors"))
         .def("set_names", &CSemanticSegTask::setNames, _classifSetNamesDocString, args("self", "names"))
         .def("set_mask", &CSemanticSegTask::setMask, _semSegGetMaskDocString, args("self", "mask"))
+    ;
+
+    //-------------------------------------//
+    //----- CInstanceSegmentationTask -----//
+    //-------------------------------------//
+    class_<CInstanceSegTaskWrap, bases<C2dImageTask>, std::shared_ptr<CInstanceSegTaskWrap>>("CInstanceSegmentationTask", _instanceSegTaskDocString)
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const std::string&>(_ctorInstanceSegDocString, args("self", "name")))
+        .def("set_active", &CInstanceSegTask::setActive, &CInstanceSegTaskWrap::default_setActive, _setActiveDocString, args("self", "is_active"))
+        .def("update_static_outputs", &CInstanceSegTask::updateStaticOutputs, &CInstanceSegTaskWrap::default_updateStaticOutputs, _updateStaticOutputsDocString, args("self"))
+        .def("begin_task_run", &CInstanceSegTask::beginTaskRun, &CInstanceSegTaskWrap::default_beginTaskRun, _beginTaskRunDocString, args("self"))
+        .def("end_task_run", &CInstanceSegTask::endTaskRun, &CInstanceSegTaskWrap::default_endTaskRun, _endTaskRunDocString, args("self"))
+        .def("graphics_changed", &CInstanceSegTask::graphicsChanged, &CInstanceSegTaskWrap::default_graphicsChanged, _graphicsChangedDocString, args("self"))
+        .def("global_input_changed", &CInstanceSegTask::globalInputChanged, &CInstanceSegTaskWrap::default_globalInputChanged, _globalInputChangedDocString, args("self", "is_new_sequence"))
+        .def("get_progress_steps", &CInstanceSegTask::getProgressSteps, &CInstanceSegTaskWrap::default_getProgressSteps, _getProgressStepsDocString, args("self"))
+        .def("run", &CInstanceSegTask::run, &CInstanceSegTaskWrap::default_run, _runDocString, args("self"))
+        .def("stop", &CInstanceSegTask::stop, &CInstanceSegTaskWrap::default_stop, _stopDocString, args("self"))
+        .def("emit_add_sub_progress_steps", &CInstanceSegTaskWrap::emitAddSubProgressSteps, _emitAddSubProgressSteps, args("self", "count"))
+        .def("emit_step_progress", &CInstanceSegTaskWrap::emitStepProgress, _emitStepProgressDocString, args("self"))
+        .def("emit_graphics_context_changed", &CInstanceSegTaskWrap::emitGraphicsContextChanged, _emitGraphicsContextChangedDocString, args("self"))
+        .def("emit_output_changed", &CInstanceSegTaskWrap::emitOutputChanged, _emitOutputChangedDocString, args("self"))
+        .def("execute_actions", &CInstanceSegTask::executeActions, &CInstanceSegTaskWrap::default_executeActions, _executeActionsDocString, args("self", "action"))
+        .def("add_instance", &CInstanceSegTask::addInstance, _instanceSegAddInstanceDocString, args("self", "id", "type", "class_index", "confidence", "x", "y", "width", "height", "mask"))
+        .def("get_names", &CInstanceSegTask::getNames, _classifGetNamesDocString, args("self"))
+        .def("get_results", &CInstanceSegTask::getResults, _instanceSegGetResultsDocString, args("self"))
+        .def("read_class_names", &CInstanceSegTask::readClassNames, _classifReadClassNamesDocString, args("self", "path"))
+        .def("set_colors", &CInstanceSegTask::setColors, _classifSetColorsDocString, args("self", "colors"))
+        .def("set_names", &CInstanceSegTask::setNames, _classifSetNamesDocString, args("self", "names"))
     ;
 
     //---------------------------//

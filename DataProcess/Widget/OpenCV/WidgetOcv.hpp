@@ -61,7 +61,8 @@
 #include "dnn/COcvWidgetDnnClassifier.hpp"
 #include "dnn/COcvWidgetDnnColorization.hpp"
 #include "dnn/COcvWidgetDnnDetector.hpp"
-#include "dnn/COcvWidgetDnnSegmentation.hpp"
+#include "dnn/COcvWidgetDnnInstanceSeg.hpp"
+#include "dnn/COcvWidgetDnnSemanticSeg.hpp"
 /********************
  *FEATURES2D
 ********************/

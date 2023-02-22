@@ -61,6 +61,8 @@ add_library(pydataprocess SHARED
     Task/CObjDetectTaskWrap.h
     Task/CSemanticSegTaskWrap.cpp
     Task/CSemanticSegTaskWrap.h
+    Task/CInstanceSegTaskWrap.cpp
+    Task/CInstanceSegTaskWrap.h
 )
 
 set_target_properties(pydataprocess PROPERTIES

@@ -42,7 +42,8 @@
 #include "dnn/COcvDnnClassifier.hpp"
 #include "dnn/COcvDnnColorization.hpp"
 #include "dnn/COcvDnnDetector.hpp"
-#include "dnn/COcvDnnSegmentation.h"
+#include "dnn/COcvDnnInstanceSeg.h"
+#include "dnn/COcvDnnSemanticSeg.h"
 /********************
  *FEATURES2D
 ********************/

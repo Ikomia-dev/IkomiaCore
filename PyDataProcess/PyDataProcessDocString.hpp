@@ -1787,7 +1787,7 @@ constexpr auto _objDetectGetResultsDocString =
 constexpr auto _semSegTaskDocString =
         "Base class for semantic segmentatio task in Computer Vision. It consists in "
         "labelling each pixel of input image with a class. Common outputs for such task are "
-        "graylevel mask and  color labelled image for visualization. "
+        "graylevel mask and color labelled image for visualization. "
         "It defines a task with the following properties:\n\n"
         "Inputs:\n\n"
         "- image (:py:class:`CImageIO`)\n"
@@ -1798,7 +1798,7 @@ constexpr auto _semSegTaskDocString =
         "Derived from :py:class:`~ikomia.dataprocess.pydataprocess.C2dImageTask`.\n\n";
 
 constexpr auto _ctorSemSegDocString =
-        "Construct CObjectDetectionTask object with the given name.\n\n"
+        "Construct CSemanticSegmentationTask object with the given name.\n\n"
         "Args:\n\n"
         "   name (str): task name, must be unique\n\n";
 
@@ -1817,6 +1817,46 @@ constexpr auto _semSegGetMaskDocString =
         "Set the segmentation mask computed from the input image.\n\n"
         "Args:\n\n"
         "   mask (2D - 1 channel numpy array): segmentation mask\n\n";
+
+//-------------------------------------//
+//----- CInstanceSegmentationTask -----//
+//-------------------------------------//
+constexpr auto _instanceSegTaskDocString =
+        "Base class for instance segmentatio task in Computer Vision. It consists in "
+        "detecting object instances of various classes and compute pixel mask of each instance. "
+        "Common outputs for such task are bounding boxes and graylevel masks for each instance "
+        "and color labelled image for visualization. "
+        "It defines a task with the following properties:\n\n"
+        "Inputs:\n\n"
+        "- image (:py:class:`CImageIO`)\n"
+        "- graphics (:py:class:`CGraphicsInput`)\n\n"
+        "Outputs:\n\n"
+        "- image IO (:py:class:`CImageIO`): by default source image is forwarded.\n"
+        "- instance segmentation IO (:py:class:`CInstanceSegmentationIO`)\n\n"
+        "Derived from :py:class:`~ikomia.dataprocess.pydataprocess.C2dImageTask`.\n\n";
+
+constexpr auto _ctorInstanceSegDocString =
+        "Construct CInstanceSegmentationTask object with the given name.\n\n"
+        "Args:\n\n"
+        "   name (str): task name, must be unique\n\n";
+
+constexpr auto _instanceSegAddInstanceDocString =
+        "Add segmented instance result localized in image through regular bounding box and mask.\n\n"
+        "Args:\n\n"
+        "   id (int): instance identifier\n\n"
+        "   type (int): segmentation instance type (0:THING - 1:STUFF)\n\n"
+        "   class_index (int): index of the associated class\n\n"
+        "   confidence (float): confidence of the prediction \n\n"
+        "   x (float): left coordinate of object bounding box\n\n"
+        "   y (float): top coordinate of object bounding box\n\n"
+        "   width (float): width of object bounding box\n\n"
+        "   height (float): height of object bounding box\n\n"
+        "   mask (numpy array): binary mask\n\n";
+
+constexpr auto _instanceSegGetResultsDocString =
+        "Get semantic segmentation results as a :py:class:`CSemanticSegmentationIO` instance.\n\n"
+        "Returns:\n\n"
+        "   :py:class:`CSemanticSegmentationIO`: semantic segmentation data\n\n";
 
 //---------------------------//
 //----- CIkomiaRegistry -----//

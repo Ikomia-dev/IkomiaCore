@@ -85,7 +85,7 @@ class DATAPROCESSSHARED_EXPORT C2dImageTask : public CWorkflowTask
          * @param maskIndex: zero-based index of the output representing the mask used to generate the color overlay.
          * @param colors: list of colors for the color map. If empty, the system generates random colors.
          */
-        void    setOutputColorMap(size_t index, size_t maskIndex, const std::vector<cv::Vec3b>& colors={});
+        void    setOutputColorMap(size_t index, size_t maskIndex, const std::vector<CColor>& colors={});
 
         /**
          * @brief Determines output data type automatically from input data types.

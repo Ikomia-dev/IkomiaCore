@@ -74,7 +74,7 @@ void C2dImageTask::setActive(bool bActive)
     CWorkflowTask::setActive(bActive);
 }
 
-void C2dImageTask::setOutputColorMap(size_t index, size_t maskIndex, const std::vector<cv::Vec3b> &colors)
+void C2dImageTask::setOutputColorMap(size_t index, size_t maskIndex, const std::vector<CColor> &colors)
 {
     if(index > getOutputCount() - 1)
         throw CException(CoreExCode::INVALID_SIZE, "Invalid output index", __func__, __FILE__, __LINE__);
@@ -99,12 +99,15 @@ void C2dImageTask::setOutputColorMap(size_t index, size_t maskIndex, const std::
     else if(colors.size() == 1)
     {
         colormap = cv::Mat::zeros(colormap.rows, colormap.cols, CV_8UC3);
-        colormap.at<cv::Vec3b>(255, 0) = colors[0];
+        colormap.at<cv::Vec3b>(255, 0) = {colors[0][0], colors[0][1], colors[0][2]};
     }
     else
-    {        
-        for(int i=0; i<std::min<int>(256, (int)colors.size()); ++i)
-            colormap.at<cv::Vec3b>(i, 0) = colors[i];
+    {
+        colormap = cv::Mat::zeros(colormap.rows, colormap.cols, CV_8UC3);
+
+        //We let first color map entry to black -> zero pixel are considered as background
+        for(int i=0; i<std::min<int>(255, (int)colors.size()); ++i)
+            colormap.at<cv::Vec3b>(i+1, 0) = {colors[i][0], colors[i][1], colors[i][2]};
 
         for(int i=(int)colors.size(); i<256; ++i)
             colormap.at<cv::Vec3b>(i, 0) = {(uchar)i, (uchar)i, (uchar)i};
