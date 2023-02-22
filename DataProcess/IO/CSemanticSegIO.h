@@ -21,13 +21,13 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
 
         CMat                                getMask() const;
         std::vector<std::string>            getClassNames() const;
-        std::vector<cv::Vec3b>              getColors() const;
+        std::vector<CColor>                 getColors() const;
         std::shared_ptr<CImageIO>           getMaskImageIO() const;
         std::shared_ptr<CImageIO>           getLegendImageIO() const;
 
         void                                setMask(const CMat& mask);
         void                                setClassNames(const std::vector<std::string>& names);
-        void                                setClassColors(const std::vector<cv::Vec3b>& colors);
+        void                                setClassColors(const std::vector<CColor>& colors);
 
         bool                                isDataAvailable() const override;
         bool                                isComposite() const override;
@@ -56,7 +56,7 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
     private:
 
         std::vector<std::string>    m_classes;
-        std::vector<cv::Vec3b>      m_colors;
+        std::vector<CColor>         m_colors;
         cv::Mat                     m_histo;
         std::shared_ptr<CImageIO>   m_imgMaskIOPtr = nullptr;
         std::shared_ptr<CImageIO>   m_imgLegendIOPtr = nullptr;

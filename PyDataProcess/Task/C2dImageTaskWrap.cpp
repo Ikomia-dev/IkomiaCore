@@ -100,32 +100,6 @@ void C2dImageTaskWrap::default_setActive(bool bActive)
     }
 }
 
-void C2dImageTaskWrap::setOutputColorMap(size_t index, size_t maskIndex, const std::vector<std::vector<uchar>>& colors)
-{
-    CPyEnsureGIL gil;
-    try
-    {
-        std::vector<cv::Vec3b> cvcolors;
-        for(size_t i=0; i<colors.size(); ++i)
-        {
-            cv::Vec3b cvcolor;
-            for(size_t j=0; j<3; j++)
-            {
-                if(j < colors[i].size())
-                    cvcolor[j] = colors[i][j];
-                else
-                    cvcolor[j] = 0;
-            }
-            cvcolors.push_back(cvcolor);
-        }
-        this->C2dImageTask::setOutputColorMap(index, maskIndex, cvcolors);
-    }
-    catch(boost::python::error_already_set&)
-    {
-        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
-    }
-}
-
 CMat C2dImageTaskWrap::applyGraphicsMask(const CMat &src, int maskIndex)
 {
     CPyEnsureGIL gil;

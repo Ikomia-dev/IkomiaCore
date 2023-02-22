@@ -57,7 +57,7 @@ std::vector<std::string> CSemanticSegIO::getClassNames() const
     return m_classes;
 }
 
-std::vector<cv::Vec3b> CSemanticSegIO::getColors() const
+std::vector<CColor> CSemanticSegIO::getColors() const
 {
     return m_colors;
 }
@@ -91,7 +91,7 @@ void CSemanticSegIO::setClassNames(const std::vector<std::string> &names)
         generateRandomColors();
 }
 
-void CSemanticSegIO::setClassColors(const std::vector<cv::Vec3b> &colors)
+void CSemanticSegIO::setClassColors(const std::vector<CColor> &colors)
 {
     if (colors.size() < m_classes.size())
         throw CException(CoreExCode::INVALID_SIZE, "Colors count must be greater or equal of class names count", __func__, __FILE__, __LINE__);
@@ -215,7 +215,7 @@ void CSemanticSegIO::fromJsonInternal(const QJsonDocument &doc)
     for (int i=0; i<colors.size(); ++i)
     {
         QJsonObject obj = colors[i].toObject();
-        cv::Vec3b color;
+        CColor color;
         color[0] = obj["r"].toInt();
         color[1] = obj["g"].toInt();
         color[2] = obj["b"].toInt();
@@ -253,8 +253,9 @@ void CSemanticSegIO::generateLegend()
     for (size_t i=0; i<nbColors; ++i)
     {
         // Color frame
+        cv::Vec3b color = {m_colors[colorIndices[i]][0], m_colors[colorIndices[i]][1], m_colors[colorIndices[i]][2]};
         cv::Rect colorFrameRect = cv::Rect(offsetX, offsetY + (i * (rectHeight + interline)), rectWidth, rectHeight);
-        cv::rectangle(legend, colorFrameRect, m_colors[colorIndices[i]], -1);
+        cv::rectangle(legend, colorFrameRect, color, -1);
         // Class name
         cv::Point textOrigin(3 * offsetX + rectWidth, offsetY + (i * (rectHeight + interline)) + (rectHeight / 2));
         cv::putText(legend, m_classes[colorIndices[i]], textOrigin, font, fontScale, {0, 0, 0}, thickness);
@@ -269,7 +270,7 @@ void CSemanticSegIO::generateRandomColors()
 
     for (size_t i=0; i<m_classes.size(); ++i)
     {
-        cv::Vec3b color = {
+        CColor color = {
             (uchar)((double)std::rand() * factor),
             (uchar)((double)std::rand() * factor),
             (uchar)((double)std::rand() * factor)

@@ -72,14 +72,14 @@ class COcvNiblackThreshold : public C2dImageTask
         {
             setOutputDataType(IODataType::IMAGE_BINARY, 0);
             addOutput(std::make_shared<CImageIO>());
-            setOutputColorMap(1, 0, {{255,0,0}});
+            setOutputColorMap(1, 0, {{255, 0, 0}});
         }
         COcvNiblackThreshold(const std::string name, const std::shared_ptr<COcvNiblackThresholdParam>& pParam) : C2dImageTask(name)
         {
             m_pParam = std::make_shared<COcvNiblackThresholdParam>(*pParam);
             setOutputDataType(IODataType::IMAGE_BINARY, 0);
             addOutput(std::make_shared<CImageIO>());
-            setOutputColorMap(1, 0, {{255,0,0}});
+            setOutputColorMap(1, 0, {{255, 0, 0}});
         }
 
         size_t     getProgressSteps() override

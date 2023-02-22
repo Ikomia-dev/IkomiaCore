@@ -84,7 +84,7 @@ void CSemanticSegTask::readClassNames(const std::string &path)
     segIOPtr->setClassNames(names);
 }
 
-void CSemanticSegTask::setColors(const std::vector<cv::Vec3b> &colors)
+void CSemanticSegTask::setColors(const std::vector<CColor> &colors)
 {
     auto segIOPtr = std::dynamic_pointer_cast<CSemanticSegIO>(getOutput(1));
     if (segIOPtr == nullptr)

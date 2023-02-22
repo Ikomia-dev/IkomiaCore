@@ -32,7 +32,7 @@ class DATAPROCESSSHARED_EXPORT CObjectDetection
         std::string         m_label = "";
         double              m_confidence = 0;
         std::vector<double> m_box;
-        CColor              m_color = {255,0,0};
+        CColor              m_color = {255, 0, 0};
 };
 
 
