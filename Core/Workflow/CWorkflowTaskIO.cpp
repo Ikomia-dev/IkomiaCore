@@ -343,6 +343,9 @@ std::string CWorkflowTaskIO::getClassName(IODataType ioDataType)
         case IODataType::SEMANTIC_SEGMENTATION:
             return "CSemanticSegIO";
 
+        case IODataType::KEYPOINTS:
+            return "CKeypointsIO";
+
         default: return "";
     }
 }

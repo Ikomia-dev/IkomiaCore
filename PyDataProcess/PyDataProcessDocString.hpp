@@ -1822,9 +1822,9 @@ constexpr auto _semSegGetMaskDocString =
 //----- CInstanceSegmentationTask -----//
 //-------------------------------------//
 constexpr auto _instanceSegTaskDocString =
-        "Base class for instance segmentatio task in Computer Vision. It consists in "
+        "Base class for instance segmentation task in Computer Vision. It consists in "
         "detecting object instances of various classes and compute pixel mask of each instance. "
-        "Common outputs for such task are bounding boxes and graylevel masks for each instance "
+        "Common outputs for such task are bounding boxes and binary masks for each instance "
         "and color labelled image for visualization. "
         "It defines a task with the following properties:\n\n"
         "Inputs:\n\n"

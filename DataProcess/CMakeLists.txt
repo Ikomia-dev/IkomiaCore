@@ -31,6 +31,8 @@ add_library(ikDataProcess SHARED
     IO/CImageIO.h
     IO/CInstanceSegIO.cpp
     IO/CInstanceSegIO.h
+    IO/CKeypointsIO.cpp
+    IO/CKeypointsIO.h
     IO/CNumericIO.cpp
     IO/CNumericIO.h
     IO/CObjectDetectionIO.cpp

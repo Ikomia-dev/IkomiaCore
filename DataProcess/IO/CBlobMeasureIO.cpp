@@ -20,6 +20,7 @@
 #include "CBlobMeasureIO.h"
 #include "CObjectDetectionIO.h"
 #include "CInstanceSegIO.h"
+#include "CKeypointsIO.h"
 #include "CException.h"
 #include "Main/CoreTools.hpp"
 #include <QJsonArray>
@@ -248,6 +249,20 @@ void CBlobMeasureIO::copy(const std::shared_ptr<CWorkflowTaskIO> &ioPtr)
         if (pInstanceSegIO)
         {
             auto blobMeasureOutPtr = pInstanceSegIO->getBlobMeasureIO();
+            if (blobMeasureOutPtr)
+            {
+                auto pBlobOut = dynamic_cast<const CBlobMeasureIO*>(blobMeasureOutPtr.get());
+                if (pBlobOut)
+                    *this = *pBlobOut;
+            }
+        }
+    }
+    else if (type == IODataType::KEYPOINTS)
+    {
+        auto keyptsIOPtr = std::dynamic_pointer_cast<CKeypointsIO>(ioPtr);
+        if (keyptsIOPtr)
+        {
+            auto blobMeasureOutPtr = keyptsIOPtr->getBlobMeasureIO();
             if (blobMeasureOutPtr)
             {
                 auto pBlobOut = dynamic_cast<const CBlobMeasureIO*>(blobMeasureOutPtr.get());
