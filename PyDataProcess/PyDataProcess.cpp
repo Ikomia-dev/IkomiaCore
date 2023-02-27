@@ -48,6 +48,7 @@
 #include "IO/CObjectDetectionIOWrap.h"
 #include "IO/CInstanceSegIOWrap.h"
 #include "IO/CSemanticSegIOWrap.h"
+#include "IO/CKeyptsIOWrap.h"
 #include "CIkomiaRegistryWrap.h"
 #include "CWorkflowWrap.h"
 
@@ -154,6 +155,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
     registerStdVector<CInstanceSegmentation>();
     registerStdVector<CMat>();
     registerStdVector<std::vector<cv::Point>>();
+    registerStdVector<CKeypointLink>();
 
     // Register std::map<T>
     registerStdMap<int, std::string>();
@@ -588,6 +590,52 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("to_json", semSegToJsonNoOpt, &CSemanticSegIOWrap::default_toJsonNoOpt, _imageIOToJsonNoOptDocString, args("self"))
         .def("to_json", semSegToJson, &CSemanticSegIOWrap::default_toJson, _instanceSegToJsonDocString, args("self", "options"))
         .def("from_json", &CSemanticSegIO::fromJson, &CSemanticSegIOWrap::default_fromJson, _instanceSegFromJsonDocString, args("self", "jsonStr"))
+    ;
+
+    //------------------------//
+    //----- CKeypointsIO -----//
+    //------------------------//
+    class_<CObjectKeypoints>("CObjectKeypoints", _objkeyptsDocString)
+        .def(init<>("Default constructor", args("self")))
+        .add_property("id", &CObjectKeypoints::getId, &CObjectKeypoints::setId, "Object ID (int)")
+        .add_property("label", &CObjectKeypoints::getLabel, &CObjectKeypoints::setLabel, "Object label (str)")
+        .add_property("confidence", &CObjectKeypoints::getConfidence, &CObjectKeypoints::setConfidence, "Prediction confidence (double)")
+        .add_property("box", &CObjectKeypoints::getBox, &CObjectKeypoints::setBox, "Object bounding box [x, y, width, height]")
+        .add_property("color", &CObjectKeypoints::getColor, &CObjectKeypoints::setColor, "Object display color [r, g, b, a]")
+        .add_property("points", &CObjectKeypoints::getKeypoints, &CObjectKeypoints::setKeypoints, "Keypoints list (:py:class:`~ikomia.core.pycore.CPointF`)")
+    ;
+
+    class_<CKeypointLink>("CKeypointLink", _keyptLinkDocString)
+        .def(init<>("Default constructor", args("self")))
+        .add_property("start_point_index", &CKeypointLink::getStartPointIndex, &CKeypointLink::setStartPointIndex, "Starting point index (int)")
+        .add_property("end_point_index", &CKeypointLink::getEndPointIndex, &CKeypointLink::setEndPointIndex, "Ending point index (int)")
+        .add_property("label", &CKeypointLink::getLabel, &CKeypointLink::setLabel, "Link label (str)")
+        .add_property("color", &CKeypointLink::getColor, &CKeypointLink::setColor, "Link color [r, g, b]")
+    ;
+
+    std::string (CKeypointsIO::*keyptsToJsonNoOpt)() const = &CKeypointsIO::toJson;
+    std::string (CKeypointsIO::*keyptsToJson)(const std::vector<std::string>&) const = &CKeypointsIO::toJson;
+
+    class_<CKeyptsIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CKeyptsIOWrap>>("CKeypointsIO", _keyptsIODocString)
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const CKeypointsIO&>("Copy constructor"))
+        .def("add_object", &CKeypointsIO::addObject, _keyptsAddObjDocString, args("self", "id", "label", "confidence", "box_x", "box_y", "box_width", "box_height", "keypoints", "color"))
+        .def("clear_data", &CKeypointsIO::clearData, &CKeyptsIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
+        .def("get_object_count", &CKeypointsIO::getObjectCount, _keyptsGetObjCountDocString, args("self"))
+        .def("get_object", &CKeypointsIO::getObject, _keyptsGetObjDocString, args("self", "index"))
+        .def("get_objects", &CKeypointsIO::getObjects, _keyptsGetObjectsDocString, args("self"))
+        .def("get_graphics_io", &CKeypointsIO::getGraphicsIO, _keyptsGetGraphicsIODocString, args("self"))
+        .def("get_keypoint_links", &CKeypointsIO::getKeypointLinks, _getKeyptsLinksDocString, args("self"))
+        .def("get_keypoint_names", &CKeypointsIO::getKeypointNames, _getKeyptsNamesDocString, args("self"))
+        .def("init", &CKeypointsIO::init, _keyptsInitDocString, args("self", "task_name", "ref_image_index"))
+        .def("is_data_available", &CKeypointsIO::isDataAvailable, &CKeyptsIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
+        .def("set_keypoint_names", &CKeypointsIO::setKeypointNames, _setKeyptNamesDocString, args("self", "names"))
+        .def("set_keypoint_links", &CKeypointsIO::setKeypointLinks, _setKeyptLinksDocString, args("self", "links"))
+        .def("load", &CKeypointsIO::load, &CKeyptsIOWrap::default_load, _keyptsLoadDocString, args("self", "path"))
+        .def("save", &CKeypointsIO::save, &CKeyptsIOWrap::default_save, _keyptsSaveDocString, args("self", "path"))
+        .def("to_json", keyptsToJsonNoOpt, &CKeyptsIOWrap::default_toJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
+        .def("to_json", keyptsToJson, &CKeyptsIOWrap::default_toJson, _objDetectToJsonDocString, args("self", "options"))
+        .def("from_json", &CKeypointsIO::fromJson, &CKeyptsIOWrap::default_fromJson, _objDetectFromJsonDocString, args("self", "json_str"))
     ;
 
     //------------------------//

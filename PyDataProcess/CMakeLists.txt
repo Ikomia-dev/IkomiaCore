@@ -25,6 +25,8 @@ add_library(pydataprocess SHARED
     IO/CImageIOWrap.h
     IO/CInstanceSegIOWrap.cpp
     IO/CInstanceSegIOWrap.h
+    IO/CKeyptsIOWrap.cpp
+    IO/CKeyptsIOWrap.h
     IO/CNumericIOWrap.hpp
     IO/CObjectDetectionIOWrap.cpp
     IO/CObjectDetectionIOWrap.h

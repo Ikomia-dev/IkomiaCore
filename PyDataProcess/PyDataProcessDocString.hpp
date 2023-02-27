@@ -1170,7 +1170,7 @@ constexpr auto _addObject2DocString =
         "   color (int list - rgba): display color\n\n";
 
 constexpr auto _objDetectLoadDocString =
-        "Load object detection input/output for JSON file.\n\n"
+        "Load object detection input/output from JSON file.\n\n"
         "Args:\n\n"
         "   path (str): path to JSON file\n\n";
 
@@ -1323,6 +1323,103 @@ constexpr auto _setClassColorsDocString =
         "Set class colors associated with segmentation mask. Sizes of names and colors must be equal.\n\n"
         "Args:\n\n"
         "   colors (list of list of int): colors as [r, g, b] list\n\n";
+
+//------------------------//
+//----- CKeypointsIO -----//
+//------------------------//
+constexpr auto _objkeyptsDocString =
+        "Store single object keypoints information (class properties): label, confidence, box, color and points. "
+        "It is used within workflow input/output of type :py:class:`~ikomia.dataprocess.pydataprocess.CKeypointsIO`.\n\n";
+
+constexpr auto _keyptLinkDocString =
+        "Store link information between two keypoints (class properties): starting point index, ending point index, label and color. "
+        "It is used within workflow input/output of type :py:class:`~ikomia.dataprocess.pydataprocess.CKeypointsIO`.\n\n";
+
+constexpr auto _keyptsIODocString =
+        "Define input or output managing common information extracted by keypoints detection task. "
+        "Such task are able to automatically detect objects in image and get keypoints for each one. "
+        "For each object, information is stored in a :py:class:`~ikomia.dataprocess.pydataprocess.CObjectKeypoints` instance. "
+        "Links between points is also a required information and is stored in a :py:class:`~ikomia.dataprocess.pydataprocess.CKeypointLink` "
+        "instance. Among others, algorithms like pose estimation are keypoints detection tasks.\n\n";
+
+constexpr auto _keyptsAddObjDocString =
+        "Add detected object and associated keypoints.\n\n"
+        "Args:\n\n"
+        "   id (int): object identifier\n\n"
+        "   label (str): object class label\n\n"
+        "   confidence (double): prediction confidence\n\n"
+        "   x (double): left coordinate of object bounding box\n\n"
+        "   y (double): top coordinate of object bounding box\n\n"
+        "   width (double): width of object bounding box\n\n"
+        "   height (double): height of object bounding box\n\n"
+        "   keypoints (list of tuple): keypoints as list of pairs (index, :py:class:`~ikomia.core.pycore.CPointF`)\n\n"
+        "   color (int list - rgba): display color\n\n";
+
+constexpr auto _keyptsGetObjCountDocString =
+        "Get the number of detected objects.\n\n"
+        "Returns:\n\n"
+        "   int: object count\n\n";
+
+constexpr auto _keyptsGetObjDocString =
+        "Get object information at a given index.\n\n"
+        "Args:\n\n"
+        "   index (int): object index\n\n"
+        "Returns:\n\n"
+        "   :py:class:`~ikomia.dataprocess.pydataprocess.CObjectKeypoints`: object information instance\n\n";
+
+constexpr auto _keyptsGetObjectsDocString =
+        "Get all detected objects.\n\n"
+        "Returns:\n\n"
+        "   :py:class:`~ikomia.dataprocess.pydataprocess.CObjectKeypoints` list: detected objets\n\n";
+
+constexpr auto _keyptsGetGraphicsIODocString =
+        "Get internal graphics output instance. It stores graphics items representing boxes, labels and keypoints of "
+        "detected objects in image.\n\n"
+        "Returns:\n\n"
+        "   :py:class:`~ikomia.dataprocess.pydataprocess.CGraphicsOutput`: graphics output instance\n\n";
+
+constexpr auto _getKeyptsLinksDocString =
+        "Get the global connection scheme of detected keypoints. It consists in a list of links between points with "
+        "the following information: starting point index, ending point index, link label and link color. Keypoints list "
+        "order is very important: there is a strict equivalence between prediction keypoints index, name index and connection scheme.\n\n"
+        "Returns:\n\n"
+        "   :py:class:`~ikomia.dataprocess.pydataprocess.CKeypointLink` list\n\n";
+
+constexpr auto _getKeyptsNamesDocString =
+        "Get keypoint names. Each keypoint is associated with a label. Order in this list is very important: there is "
+        "a strict equivalence between prediction keypoints index, name index and connection scheme.\n\n"
+        "Returns:\n\n"
+        "   str list: keypoint names\n\n";
+
+constexpr auto _keyptsInitDocString =
+        "Initialisation step to set associated task (name) and reference image. The reference image is the task output index "
+        "where the graphics information (label, box) will be displayed as an overlay layer.\n\n"
+        "Args:\n\n"
+        "   task_name (str): task that contains the output\n\n"
+        "   ref_image_index (int): zero-based index of the output containing the reference image\n\n";
+
+constexpr auto _setKeyptNamesDocString =
+        "Set keypoint names. Each keypoint is associated with a label. Moreover, order in this list is very important as there must "
+        "have a strict equivalence between prediction keypoints index, name index and connection scheme.\n\n"
+        "Args:\n\n"
+        "   names (list of str)\n\n";
+
+constexpr auto _setKeyptLinksDocString =
+        "Set the global connection scheme of detected keypoints. It consists in a list of links between points with "
+        "the following information: starting point index, ending point index, link label and link color. Keypoints index "
+        "are given with respect to prediction model and names structures.\n\n"
+        "Args:\n\n"
+        "   links (:py:class:`~ikomia.dataprocess.pydataprocess.CKeypointLink` list)\n\n";
+
+constexpr auto _keyptsLoadDocString =
+        "Load object keypoints detection input/output from JSON file.\n\n"
+        "Args:\n\n"
+        "   path (str): path to JSON file\n\n";
+
+constexpr auto _keyptsSaveDocString =
+        "Save object keypoints detection input/output to JSON file.\n\n"
+        "Args:\n\n"
+        "   path (str): path to JSON file\n\n";
 
 //------------------------//
 //----- C2dImageTask -----//

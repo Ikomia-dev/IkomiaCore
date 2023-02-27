@@ -100,6 +100,7 @@ BOOST_PYTHON_MODULE(pycore)
     // Register std::pair<T1,T2>
     registerStdPair<int, int>();
     registerStdPair<std::string, std::string>();
+    registerStdPair<int, CPointF>();
 
     // Register std::vector<T>
     registerStdVector<int>();
@@ -116,6 +117,7 @@ BOOST_PYTHON_MODULE(pycore)
     registerStdVector<IODataType>();
     registerStdVector<std::pair<int, int>>();
     registerStdVector<std::pair<std::string, std::string>>();
+    registerStdVector<std::pair<int, CPointF>>();
 
     //Register exceptions
     register_exception_translator<CException>(&translateCException);
