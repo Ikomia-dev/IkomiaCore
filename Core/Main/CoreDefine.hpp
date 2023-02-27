@@ -166,6 +166,7 @@ namespace Ikomia
     using VectorPairString = std::vector<std::pair<std::string, std::string>>;
     using VectorPairQString = std::vector<std::pair<QString, QString>>;
     using CColor = std::vector<uchar>;
+    using Keypoint = std::pair<int, CPointF>;
 }
 
 using namespace Ikomia;

@@ -14,7 +14,22 @@ class CObjectKeypoints
 {
     public:
 
-        QJsonObject toJson() const;
+        int                     getId() const;
+        std::string             getLabel() const;
+        double                  getConfidence() const;
+        std::vector<double>     getBox() const;
+        CColor                  getColor() const;
+        std::vector<Keypoint>   getKeypoints() const;
+        CPointF                 getKeypoint(int index) const;
+
+        void                    setId(int id);
+        void                    setLabel(const std::string& label);
+        void                    setConfidence(double conf);
+        void                    setBox(const std::vector<double>& box);
+        void                    setColor(const CColor& color);
+        void                    setKeypoints(const std::vector<Keypoint>& pts);
+
+        QJsonObject             toJson() const;
 
     public:
 
@@ -23,7 +38,7 @@ class CObjectKeypoints
         double                  m_confidence = 0.0;
         std::vector<double>     m_box;
         CColor                  m_color;
-        std::vector<CPointF>    m_pts;
+        std::vector<Keypoint>   m_keypts;
 };
 
 //-------------------------//
@@ -33,8 +48,19 @@ class CKeypointLink
 {
     public:
 
-        QJsonObject toJson() const;
+        int         getStartPointIndex() const;
+        int         getEndPointIndex() const;
+        std::string getLabel() const;
+        CColor      getColor() const;
+
+        void        setStartPointIndex(int index);
+        void        setEndPointIndex(int index);
+        void        setLabel(const std::string& label);
+        void        setColor(const CColor& color);
+
         void        fromJson(const QJsonObject &jsonObj);
+        QJsonObject toJson() const;
+
     public:
 
         int         m_ptIndex1 = -1;
@@ -63,7 +89,7 @@ class CKeypointsIO: public CWorkflowTaskIO
 
         void                                addObject(int id, const std::string& label, double confidence,
                                                       double x, double y, double width, double height,
-                                                      const std::vector<CPointF> keypts, CColor color);
+                                                      const std::vector<Keypoint> keypts, CColor color);
 
         void                                clearData() override;
 
@@ -78,6 +104,8 @@ class CKeypointsIO: public CWorkflowTaskIO
         std::vector<CObjectKeypoints>       getObjects() const;
         std::vector<CKeypointLink>          getKeypointLinks() const;
         std::vector<std::string>            getKeypointNames() const;
+
+        void                                init(const std::string& taskName, int imageIndex);
 
         bool                                isComposite() const override;
         bool                                isDataAvailable() const override;

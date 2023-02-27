@@ -4,6 +4,77 @@
 //----- CObjectKeypoints -----//
 //----------------------------//
 
+int CObjectKeypoints::getId() const
+{
+    return m_id;
+}
+
+std::string CObjectKeypoints::getLabel() const
+{
+    return m_label;
+}
+
+double CObjectKeypoints::getConfidence() const
+{
+    return m_confidence;
+}
+
+std::vector<double> CObjectKeypoints::getBox() const
+{
+    return m_box;
+}
+
+CColor CObjectKeypoints::getColor() const
+{
+    return m_color;
+}
+
+std::vector<Keypoint> CObjectKeypoints::getKeypoints() const
+{
+    return m_keypts;
+}
+
+CPointF CObjectKeypoints::getKeypoint(int index) const
+{
+    for (size_t i=0; i<m_keypts.size(); ++i)
+    {
+        if (m_keypts[i].first == index)
+            return m_keypts[i].second;
+    }
+    //No point found
+    throw CException(CoreExCode::INVALID_PARAMETER, "Invalid keypoint index", __func__, __FILE__, __LINE__);
+}
+
+void CObjectKeypoints::setId(int id)
+{
+    m_id = id;
+}
+
+void CObjectKeypoints::setLabel(const std::string &label)
+{
+    m_label = label;
+}
+
+void CObjectKeypoints::setConfidence(double conf)
+{
+    m_confidence = conf;
+}
+
+void CObjectKeypoints::setBox(const std::vector<double> &box)
+{
+    m_box = box;
+}
+
+void CObjectKeypoints::setColor(const CColor &color)
+{
+    m_color = color;
+}
+
+void CObjectKeypoints::setKeypoints(const std::vector<Keypoint> &pts)
+{
+    m_keypts = pts;
+}
+
 QJsonObject CObjectKeypoints::toJson() const
 {
     QJsonObject obj;
@@ -20,11 +91,12 @@ QJsonObject CObjectKeypoints::toJson() const
     obj["box"] = box;
 
     QJsonArray pts;
-    for (size_t i=0; i<m_pts.size(); ++i)
+    for (size_t i=0; i<m_keypts.size(); ++i)
     {
         QJsonObject pt;
-        pt["x"] = m_pts[i].m_x;
-        pt["y"] = m_pts[i].m_x;
+        pt["index"] = m_keypts[i].first;
+        pt["x"] = m_keypts[i].second.m_x;
+        pt["y"] = m_keypts[i].second.m_y;
         pts.append(pt);
     }
     obj["points"] = pts;
@@ -34,6 +106,54 @@ QJsonObject CObjectKeypoints::toJson() const
 //-------------------------//
 //----- CKeypointLink -----//
 //-------------------------//
+
+int CKeypointLink::getStartPointIndex() const
+{
+    return m_ptIndex1;
+}
+
+int CKeypointLink::getEndPointIndex() const
+{
+    return m_ptIndex2;
+}
+
+std::string CKeypointLink::getLabel() const
+{
+    return m_label;
+}
+
+CColor CKeypointLink::getColor() const
+{
+    return m_color;
+}
+
+void CKeypointLink::setStartPointIndex(int index)
+{
+    m_ptIndex1 = index;
+}
+
+void CKeypointLink::setEndPointIndex(int index)
+{
+    m_ptIndex2 = index;
+}
+
+void CKeypointLink::setLabel(const std::string &label)
+{
+    m_label = label;
+}
+
+void CKeypointLink::setColor(const CColor &color)
+{
+    m_color = color;
+}
+
+void CKeypointLink::fromJson(const QJsonObject& jsonObj)
+{
+    m_ptIndex1 = jsonObj["index1"].toInt();
+    m_ptIndex1 = jsonObj["index2"].toInt();
+    m_label = jsonObj["label"].toString().toStdString();
+    m_color = Utils::Graphics::colorFromJson(jsonObj["color"].toObject());
+}
 
 QJsonObject CKeypointLink::toJson() const
 {
@@ -45,13 +165,6 @@ QJsonObject CKeypointLink::toJson() const
     return obj;
 }
 
-void CKeypointLink::fromJson(const QJsonObject& jsonObj)
-{
-    m_ptIndex1 = jsonObj["index1"].toInt();
-    m_ptIndex1 = jsonObj["index2"].toInt();
-    m_label = jsonObj["label"].toString().toStdString();
-    m_color = Utils::Graphics::colorFromJson(jsonObj["color"].toObject());
-}
 
 //------------------------//
 //----- CKeypointsIO -----//
@@ -110,19 +223,18 @@ CKeypointsIO &CKeypointsIO::operator=(const CKeypointsIO &&io)
     return *this;
 }
 
-void CKeypointsIO::addObject(int id, const std::string &label, double confidence, double x, double y, double width, double height, const std::vector<CPointF> keypts, CColor color)
+void CKeypointsIO::addObject(int id, const std::string &label, double confidence, double x, double y, double width, double height, const std::vector<Keypoint> keypts, CColor color)
 {
     CObjectKeypoints obj;
     obj.m_id = id;
     obj.m_label = label;
     obj.m_confidence = confidence;
     obj.m_box = {x, y, width, height};
-    obj.m_pts = keypts;
+    obj.m_keypts = keypts;
     obj.m_color = color;
     m_objects.push_back(obj);
 
     //Set integrated I/O
-
     //Create rectangle graphics of bbox
     CGraphicsRectProperty rectProp;
     rectProp.m_category = label;
@@ -137,56 +249,43 @@ void CKeypointsIO::addObject(int id, const std::string &label, double confidence
     m_graphicsIOPtr->addText(graphicsLabel, x + 5, y + 5, textProperty);
 
     //Keypoints graphics
-    CGraphicsPointProperty ptProp;
-    ptProp.m_brushColor = color;
-    ptProp.m_penColor = color;
-    ptProp.m_size = 5;
-
-    for (size_t i=0; i<keypts.size(); ++i)
-        m_graphicsIOPtr->addPoint(keypts[i], ptProp);
-
-    //Keypoints links graphics
-    for (size_t i=0; i<m_links.size(); ++i)
+    if (keypts.size() > 0)
     {
-        CGraphicsPolylineProperty lineProp;
-        lineProp.m_penColor = m_links[i].m_color;
-        CPoint p1 = keypts[m_links[i].m_ptIndex1];
-        CPoint p2 = keypts[m_links[i].m_ptIndex2];
-        m_graphicsIOPtr->addPolyline({p1, p2}, lineProp);
+        CGraphicsPointProperty ptProp;
+        ptProp.m_brushColor = color;
+        ptProp.m_penColor = color;
+        ptProp.m_size = 5;
+
+        for (size_t i=0; i<keypts.size(); ++i)
+            m_graphicsIOPtr->addPoint(keypts[i].second, ptProp);
+
+        //Keypoints links graphics
+        for (size_t i=0; i<m_links.size(); ++i)
+        {
+            CGraphicsPolylineProperty lineProp;
+            lineProp.m_penColor = m_links[i].m_color;
+            CPoint p1 = obj.getKeypoint(m_links[i].m_ptIndex1);
+            CPoint p2 = obj.getKeypoint(m_links[i].m_ptIndex2);
+            m_graphicsIOPtr->addPolyline({p1, p2}, lineProp);
+        }
     }
 
     //Store object values to be shown in results table
     std::vector<CObjectMeasure> objRes;
-    std::vector<double> coords;
+    std::vector<double> keyptsInfo;
 
     for (size_t i=0; i<keypts.size(); ++i)
     {
-        coords.push_back(keypts[i].m_x);
-        coords.push_back(keypts[i].m_y);
+        keyptsInfo.push_back(keypts[i].first);
+        keyptsInfo.push_back(keypts[i].second.m_x);
+        keyptsInfo.push_back(keypts[i].second.m_y);
     }
 
     objRes.emplace_back(CObjectMeasure(CMeasure(CMeasure::CUSTOM, QObject::tr("Identifier").toStdString()), id, graphicsObj->getId(), label));
     objRes.emplace_back(CObjectMeasure(CMeasure(CMeasure::CUSTOM, QObject::tr("Confidence").toStdString()), confidence, graphicsObj->getId(), label));
     objRes.emplace_back(CObjectMeasure(CMeasure::Id::BBOX, {x, y, width, height}, graphicsObj->getId(), label));
-    objRes.emplace_back(CObjectMeasure(CMeasure(CMeasure::CUSTOM, QObject::tr("Keypoints(x,y)").toStdString()), coords, graphicsObj->getId(), label));
+    objRes.emplace_back(CObjectMeasure(CMeasure(CMeasure::CUSTOM, QObject::tr("Keypoints").toStdString()), keyptsInfo, graphicsObj->getId(), label));
     m_objMeasureIOPtr->addObjectMeasures(objRes);
-
-    //Store keypoints links to be shown in results table
-    std::vector<std::string> startPtIndices;
-    std::vector<std::string> endPtIndices;
-    std::vector<std::string> labels;
-
-    for (size_t i=0; i<m_links.size(); ++i)
-    {
-        startPtIndices.push_back(std::to_string(m_links[i].m_ptIndex1));
-        endPtIndices.push_back(std::to_string(m_links[i].m_ptIndex1));
-        labels.push_back(m_links[i].m_label);
-    }
-
-    m_keyptsLinkIOPtr->addValueList(startPtIndices, "Start point");
-    m_keyptsLinkIOPtr->addValueList(endPtIndices, "End point");
-    m_keyptsLinkIOPtr->addValueList(labels, "Label");
-
 }
 
 void CKeypointsIO::clearData()
@@ -257,6 +356,13 @@ std::vector<CKeypointLink> CKeypointsIO::getKeypointLinks() const
 std::vector<std::string> CKeypointsIO::getKeypointNames() const
 {
     return m_keyptsNames;
+}
+
+void CKeypointsIO::init(const std::string &taskName, int imageIndex)
+{
+    clearData();
+    m_graphicsIOPtr->setNewLayer(taskName);
+    m_graphicsIOPtr->setImageIndex(imageIndex);
 }
 
 bool CKeypointsIO::isComposite() const
@@ -359,13 +465,13 @@ void CKeypointsIO::fromJsonInternal(const QJsonDocument &doc)
         double width = box["width"].toDouble();
         double height = box["height"].toDouble();
 
-        std::vector<CPointF> keypts;
+        std::vector<Keypoint> keypts;
         QJsonArray jsonPts = obj["points"].toArray();
 
         for (int i=0; i<jsonPts.size(); ++i)
         {
             QJsonObject pt = jsonPts[i].toObject();
-            keypts.push_back(CPointF(pt["x"].toDouble(), pt["y"].toDouble()));
+            keypts.push_back(std::make_pair(pt["index"].toInt(), CPointF(pt["x"].toDouble(), pt["y"].toDouble())));
         }
 
         addObject(id, label, confidence, x, y, width, height, keypts, color);
@@ -394,6 +500,23 @@ void CKeypointsIO::setKeypointNames(const std::vector<std::string> &names)
 void CKeypointsIO::setKeypointLinks(const std::vector<CKeypointLink> &links)
 {
     m_links = links;
+    m_keyptsLinkIOPtr->clearData();
+
+    //Store keypoints links to be shown in results table
+    std::vector<std::string> startPtIndices;
+    std::vector<std::string> endPtIndices;
+    std::vector<std::string> labels;
+
+    for (size_t i=0; i<m_links.size(); ++i)
+    {
+        startPtIndices.push_back(std::to_string(m_links[i].m_ptIndex1));
+        endPtIndices.push_back(std::to_string(m_links[i].m_ptIndex1));
+        labels.push_back(m_links[i].m_label);
+    }
+
+    m_keyptsLinkIOPtr->addValueList(startPtIndices, "Start point");
+    m_keyptsLinkIOPtr->addValueList(endPtIndices, "End point");
+    m_keyptsLinkIOPtr->addValueList(labels, "Label");
 }
 
 std::shared_ptr<CWorkflowTaskIO> CKeypointsIO::cloneImp() const
