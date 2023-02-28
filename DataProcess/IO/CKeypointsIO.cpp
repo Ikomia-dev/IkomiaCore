@@ -264,9 +264,17 @@ void CKeypointsIO::addObject(int id, const std::string &label, double confidence
         {
             CGraphicsPolylineProperty lineProp;
             lineProp.m_penColor = m_links[i].m_color;
-            CPoint p1 = obj.getKeypoint(m_links[i].m_ptIndex1);
-            CPoint p2 = obj.getKeypoint(m_links[i].m_ptIndex2);
-            m_graphicsIOPtr->addPolyline({p1, p2}, lineProp);
+
+            try
+            {
+                CPoint p1 = obj.getKeypoint(m_links[i].m_ptIndex1);
+                CPoint p2 = obj.getKeypoint(m_links[i].m_ptIndex2);
+                m_graphicsIOPtr->addPolyline({p1, p2}, lineProp);
+            }
+            catch(CException&)
+            {
+                //Skip invalid link
+            }
         }
     }
 
