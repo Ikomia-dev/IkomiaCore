@@ -1955,6 +1955,42 @@ constexpr auto _instanceSegGetResultsDocString =
         "Returns:\n\n"
         "   :py:class:`CSemanticSegmentationIO`: semantic segmentation data\n\n";
 
+//----------------------------------//
+//----- CKeypointDetectionTask -----//
+//----------------------------------//
+constexpr auto _keyDetTaskDocString =
+        "Base class for keypoint detection task in Computer Vision. "
+        "It defines a task with the following properties:\n\n"
+        "Inputs:\n\n"
+        "- image (:py:class:`CImageIO`)\n"
+        "- graphics (:py:class:`CGraphicsInput`)\n\n"
+        "Outputs:\n\n"
+        "- image IO (:py:class:`CImageIO`): by default source image is forwarded.\n"
+        "- keypoints detection IO (:py:class:`CKeypointsIO`)\n\n"
+        "Derived from :py:class:`~ikomia.dataprocess.pydataprocess.C2dImageTask`.\n\n";
+
+constexpr auto _ctorKeyDetDocString =
+        "Construct CKeypointDetectionTask object with the given name.\n\n"
+        "Args:\n\n"
+        "   name (str): task name, must be unique\n\n";
+
+constexpr auto _keyDetAddObjectDocString =
+        "Add detected object with its associated keypoints.\n\n"
+        "Args:\n\n"
+        "   id (int): object identifier\n\n"
+        "   class_index (int): index of the object class\n\n"
+        "   confidence (float): confidence of the prediction\n\n"
+        "   x (float): left coordinate of object bounding box\n\n"
+        "   y (float): top coordinate of object bounding box\n\n"
+        "   width (float): width of object bounding box\n\n"
+        "   height (float): height of object bounding box\n\n"
+        "   keypoints (list of tuple): keypoints as list of pairs (index, :py:class:`~ikomia.core.pycore.CPointF`)\n\n";
+
+constexpr auto _keyDetGetResultsDocString =
+        "Get keypoint detection results as a :py:class:`CKeypointsIO` instance.\n\n"
+        "Returns:\n\n"
+        "   :py:class:`CKeypointsIO`: keypoint detection results\n\n";
+
 //---------------------------//
 //----- CIkomiaRegistry -----//
 //---------------------------//

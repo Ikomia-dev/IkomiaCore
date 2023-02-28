@@ -250,6 +250,8 @@ add_library(ikDataProcess SHARED
     Task/CDnnTrainTask.h
     Task/CInstanceSegTask.cpp
     Task/CInstanceSegTask.h
+    Task/CKeypointDetectionTask.cpp
+    Task/CKeypointDetectionTask.h
     Task/CMlflowTrainTask.cpp
     Task/CMlflowTrainTask.h
     Task/CObjectDetectionTask.cpp

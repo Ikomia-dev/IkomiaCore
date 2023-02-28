@@ -49,6 +49,8 @@ add_library(pydataprocess SHARED
     Task/C2dImageTaskWrap.h
     Task/CDnnTrainTaskWrap.cpp
     Task/CDnnTrainTaskWrap.h
+    Task/CKeyptsDetectTaskWrap.cpp
+    Task/CKeyptsDetectTaskWrap.h
     Task/CTaskFactoryWrap.cpp
     Task/CTaskFactoryWrap.h
     Task/CVideoOFTaskWrap.cpp

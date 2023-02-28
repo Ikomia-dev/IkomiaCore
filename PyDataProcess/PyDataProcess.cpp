@@ -34,6 +34,7 @@
 #include "Task/CObjDetectTaskWrap.h"
 #include "Task/CSemanticSegTaskWrap.h"
 #include "Task/CInstanceSegTaskWrap.h"
+#include "Task/CKeyptsDetectTaskWrap.h"
 #include "CWidgetFactoryWrap.h"
 #include "CPluginProcessInterfaceWrap.h"
 #include "IO/CNumericIOWrap.hpp"
@@ -914,6 +915,38 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("read_class_names", &CInstanceSegTask::readClassNames, _classifReadClassNamesDocString, args("self", "path"))
         .def("set_colors", &CInstanceSegTask::setColors, _classifSetColorsDocString, args("self", "colors"))
         .def("set_names", &CInstanceSegTask::setNames, _classifSetNamesDocString, args("self", "names"))
+    ;
+
+    //----------------------------------//
+    //----- CKeypointDetectionTask -----//
+    //----------------------------------//
+    class_<CKeyptsDetectTaskWrap, bases<C2dImageTask>, std::shared_ptr<CKeyptsDetectTaskWrap>>("CKeypointDetectionTask", _keyDetTaskDocString)
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const std::string&>(_ctorKeyDetDocString, args("self", "name")))
+        .def("set_active", &CKeypointDetectionTask::setActive, &CKeyptsDetectTaskWrap::default_setActive, _setActiveDocString, args("self", "is_active"))
+        .def("update_static_outputs", &CKeypointDetectionTask::updateStaticOutputs, &CKeyptsDetectTaskWrap::default_updateStaticOutputs, _updateStaticOutputsDocString, args("self"))
+        .def("begin_task_run", &CKeypointDetectionTask::beginTaskRun, &CKeyptsDetectTaskWrap::default_beginTaskRun, _beginTaskRunDocString, args("self"))
+        .def("end_task_run", &CKeypointDetectionTask::endTaskRun, &CKeyptsDetectTaskWrap::default_endTaskRun, _endTaskRunDocString, args("self"))
+        .def("graphics_changed", &CKeypointDetectionTask::graphicsChanged, &CKeyptsDetectTaskWrap::default_graphicsChanged, _graphicsChangedDocString, args("self"))
+        .def("global_input_changed", &CKeypointDetectionTask::globalInputChanged, &CKeyptsDetectTaskWrap::default_globalInputChanged, _globalInputChangedDocString, args("self", "is_new_sequence"))
+        .def("get_progress_steps", &CKeypointDetectionTask::getProgressSteps, &CKeyptsDetectTaskWrap::default_getProgressSteps, _getProgressStepsDocString, args("self"))
+        .def("run", &CKeypointDetectionTask::run, &CKeyptsDetectTaskWrap::default_run, _runDocString, args("self"))
+        .def("stop", &CKeypointDetectionTask::stop, &CKeyptsDetectTaskWrap::default_stop, _stopDocString, args("self"))
+        .def("emit_add_sub_progress_steps", &CKeyptsDetectTaskWrap::emitAddSubProgressSteps, _emitAddSubProgressSteps, args("self", "count"))
+        .def("emit_step_progress", &CKeyptsDetectTaskWrap::emitStepProgress, _emitStepProgressDocString, args("self"))
+        .def("emit_graphics_context_changed", &CKeyptsDetectTaskWrap::emitGraphicsContextChanged, _emitGraphicsContextChangedDocString, args("self"))
+        .def("emit_output_changed", &CKeyptsDetectTaskWrap::emitOutputChanged, _emitOutputChangedDocString, args("self"))
+        .def("execute_actions", &CKeypointDetectionTask::executeActions, &CKeyptsDetectTaskWrap::default_executeActions, _executeActionsDocString, args("self", "action"))
+        .def("add_object", &CKeypointDetectionTask::addObject, _keyDetAddObjectDocString, args("self", "id", "class_index", "confidence", "x", "y", "width", "height", "keypoints"))
+        .def("get_keypoint_links", &CKeypointDetectionTask::getKeypointLinks, _getKeyptsLinksDocString, args("self"))
+        .def("get_keypoint_names", &CKeypointDetectionTask::getKeypointNames, _getKeyptsNamesDocString, args("self"))
+        .def("get_object_names", &CKeypointDetectionTask::getObjectNames, _classifGetNamesDocString, args("self"))
+        .def("get_results", &CKeypointDetectionTask::getResults, _keyDetGetResultsDocString, args("self"))
+        .def("read_class_names", &CKeypointDetectionTask::readClassNames, _classifReadClassNamesDocString, args("self", "path"))
+        .def("set_keypoint_links", &CKeypointDetectionTask::setKeypointLinks, _setKeyptLinksDocString, args("self", "links"))
+        .def("set_keypoint_names", &CKeypointDetectionTask::setKeypointNames, _setKeyptNamesDocString, args("self", "names"))
+        .def("set_object_colors", &CKeypointDetectionTask::setObjectColors, _classifSetColorsDocString, args("self", "colors"))
+        .def("set_object_names", &CKeypointDetectionTask::setObjectNames, _classifSetNamesDocString, args("self", "names"))
     ;
 
     //---------------------------//
