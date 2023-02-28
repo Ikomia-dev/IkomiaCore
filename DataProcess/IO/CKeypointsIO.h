@@ -87,56 +87,59 @@ class CKeypointsIO: public CWorkflowTaskIO
         CKeypointsIO& operator=(const CKeypointsIO& io);
         CKeypointsIO& operator=(const CKeypointsIO&& io);
 
-        void                                addObject(int id, const std::string& label, double confidence,
-                                                      double x, double y, double width, double height,
-                                                      const std::vector<Keypoint> keypts, CColor color);
+        void                            addObject(int id, const std::string& label, double confidence,
+                                                  double x, double y, double width, double height,
+                                                  const std::vector<Keypoint> keypts, CColor color);
 
-        void                                clearData() override;
+        void                            clearData() override;
 
-        std::shared_ptr<CKeypointsIO>       clone() const;
+        std::shared_ptr<CKeypointsIO>   clone() const;
 
-        std::shared_ptr<CBlobMeasureIO>     getBlobMeasureIO() const;
-        CDataInfoPtr                        getDataInfo() override;
-        DataStringIOPtr                     getDataStringIO() const;
-        std::shared_ptr<CGraphicsOutput>    getGraphicsIO() const;
-        size_t                              getObjectCount() const;
-        CObjectKeypoints                    getObject(size_t index) const;
-        std::vector<CObjectKeypoints>       getObjects() const;
-        std::vector<CKeypointLink>          getKeypointLinks() const;
-        std::vector<std::string>            getKeypointNames() const;
+        BlobMeasureIOPtr                getBlobMeasureIO() const;
+        CDataInfoPtr                    getDataInfo() override;
+        DataStringIOPtr                 getDataStringIO() const;
+        GraphicsOutputPtr               getGraphicsIO() const;
+        size_t                          getObjectCount() const;
+        CObjectKeypoints                getObject(size_t index) const;
+        std::vector<CObjectKeypoints>   getObjects() const;
+        std::vector<CKeypointLink>      getKeypointLinks() const;
+        std::vector<std::string>        getKeypointNames() const;
 
-        void                                init(const std::string& taskName, int imageIndex);
+        void                            init(const std::string& taskName, int imageIndex);
 
-        bool                                isComposite() const override;
-        bool                                isDataAvailable() const override;
+        bool                            isComposite() const override;
+        bool                            isDataAvailable() const override;
 
-        void                                load(const std::string &path) override;
-        void                                save(const std::string &path) override;
+        void                            load(const std::string &path) override;
+        void                            save(const std::string &path) override;
 
-        std::string                         toJson() const override;
-        std::string                         toJson(const std::vector<std::string>& options) const override;
-        void                                fromJson(const std::string &jsonStr) override;
+        std::string                     toJson() const override;
+        std::string                     toJson(const std::vector<std::string>& options) const override;
+        void                            fromJson(const std::string &jsonStr) override;
 
-        void                                setKeypointNames(const std::vector<std::string>& names);
-        void                                setKeypointLinks(const std::vector<CKeypointLink>& links);
-
-    private:
-
-        std::shared_ptr<CWorkflowTaskIO>    cloneImp() const override;
-        QJsonObject                         toJsonInternal() const;
-        void                                fromJsonInternal(const QJsonDocument& doc);
-
+        void                            setKeypointNames(const std::vector<std::string>& names);
+        void                            setKeypointLinks(const std::vector<CKeypointLink>& links);
 
     private:
 
-        std::vector<CObjectKeypoints>       m_objects;
-        std::vector<std::string>            m_keyptsNames;
-        std::vector<CKeypointLink>          m_links;
+        WorkflowTaskIOPtr               cloneImp() const override;
+        QJsonObject                     toJsonInternal() const;
+        void                            fromJsonInternal(const QJsonDocument& doc);
 
-        std::shared_ptr<CGraphicsOutput>    m_graphicsIOPtr = nullptr;
-        std::shared_ptr<CBlobMeasureIO>     m_objMeasureIOPtr = nullptr;
-        DataStringIOPtr                     m_keyptsLinkIOPtr = nullptr;
+
+    private:
+
+        std::vector<CObjectKeypoints>   m_objects;
+        std::vector<std::string>        m_keyptsNames;
+        std::vector<CKeypointLink>      m_links;
+
+        GraphicsOutputPtr               m_graphicsIOPtr = nullptr;
+        BlobMeasureIOPtr                m_objMeasureIOPtr = nullptr;
+        DataStringIOPtr                 m_keyptsLinkIOPtr = nullptr;
 };
+
+using KeypointsIOPtr = std::shared_ptr<CKeypointsIO>;
+
 
 class DATAPROCESSSHARED_EXPORT CKeypointsIOFactory: public CWorkflowTaskIOFactory
 {

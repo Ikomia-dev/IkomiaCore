@@ -57,9 +57,9 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegIO: public CWorkflowTaskIO
         CInstanceSegmentation               getInstance(size_t index) const;
         std::vector<CInstanceSegmentation>  getInstances() const;
         CDataInfoPtr                        getDataInfo() override;
-        std::shared_ptr<CImageIO>           getMaskImageIO() const;
-        std::shared_ptr<CGraphicsOutput>    getGraphicsIO() const;
-        std::shared_ptr<CBlobMeasureIO>     getBlobMeasureIO() const;
+        ImageIOPtr                          getMaskImageIO() const;
+        GraphicsOutputPtr                   getGraphicsIO() const;
+        BlobMeasureIOPtr                    getBlobMeasureIO() const;
         CMat                                getMergeMask() const;
 
         bool                                isDataAvailable() const override;
@@ -84,17 +84,20 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegIO: public CWorkflowTaskIO
 
     private:
 
-        std::shared_ptr<CWorkflowTaskIO>    cloneImp() const override;
+        WorkflowTaskIOPtr                   cloneImp() const override;
         QJsonObject                         toJsonInternal(const std::vector<std::string> &options) const;
         void                                fromJsonInternal(const QJsonDocument& doc);
 
     private:
 
         std::vector<CInstanceSegmentation>  m_instances;
-        std::shared_ptr<CImageIO>           m_imgIOPtr = nullptr;
-        std::shared_ptr<CGraphicsOutput>    m_graphicsIOPtr = nullptr;
-        std::shared_ptr<CBlobMeasureIO>     m_blobMeasureIOPtr = nullptr;
+        ImageIOPtr                          m_imgIOPtr = nullptr;
+        GraphicsOutputPtr                   m_graphicsIOPtr = nullptr;
+        BlobMeasureIOPtr                    m_blobMeasureIOPtr = nullptr;
 };
+
+using InstanceSegIOPtr = std::shared_ptr<CInstanceSegIO>;
+
 
 class DATAPROCESSSHARED_EXPORT CInstanceSegIOFactory: public CWorkflowTaskIOFactory
 {

@@ -56,8 +56,8 @@ class DATAPROCESSSHARED_EXPORT CObjectDetectionIO: public CWorkflowTaskIO
         CObjectDetection                    getObject(size_t index) const;
         std::vector<CObjectDetection>       getObjects() const;
         CDataInfoPtr                        getDataInfo() override;
-        std::shared_ptr<CGraphicsOutput>    getGraphicsIO() const;
-        std::shared_ptr<CBlobMeasureIO>     getBlobMeasureIO() const;
+        GraphicsOutputPtr                   getGraphicsIO() const;
+        BlobMeasureIOPtr                    getBlobMeasureIO() const;
 
         bool                                isDataAvailable() const override;
         bool                                isComposite() const override;
@@ -87,16 +87,18 @@ class DATAPROCESSSHARED_EXPORT CObjectDetectionIO: public CWorkflowTaskIO
 
     private:
 
-        std::shared_ptr<CWorkflowTaskIO>    cloneImp() const override;
+        WorkflowTaskIOPtr                   cloneImp() const override;
         QJsonObject                         toJsonInternal() const;
         void                                fromJsonInternal(const QJsonDocument& doc);
 
     private:
 
-        std::vector<CObjectDetection>       m_objects;
-        std::shared_ptr<CGraphicsOutput>    m_graphicsIOPtr = nullptr;
-        std::shared_ptr<CBlobMeasureIO>     m_blobMeasureIOPtr = nullptr;
+        std::vector<CObjectDetection>   m_objects;
+        GraphicsOutputPtr               m_graphicsIOPtr = nullptr;
+        BlobMeasureIOPtr                m_blobMeasureIOPtr = nullptr;
 };
+
+using ObjectDetectionIOPtr = std::shared_ptr<CObjectDetectionIO>;
 
 class DATAPROCESSSHARED_EXPORT CObjectDetectionIOFactory: public CWorkflowTaskIOFactory
 {

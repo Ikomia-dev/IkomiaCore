@@ -113,17 +113,17 @@ CDataInfoPtr CInstanceSegIO::getDataInfo()
     return m_infoPtr;
 }
 
-std::shared_ptr<CImageIO> CInstanceSegIO::getMaskImageIO() const
+ImageIOPtr CInstanceSegIO::getMaskImageIO() const
 {
     return m_imgIOPtr;
 }
 
-std::shared_ptr<CGraphicsOutput> CInstanceSegIO::getGraphicsIO() const
+GraphicsOutputPtr CInstanceSegIO::getGraphicsIO() const
 {
     return m_graphicsIOPtr;
 }
 
-std::shared_ptr<CBlobMeasureIO> CInstanceSegIO::getBlobMeasureIO() const
+BlobMeasureIOPtr CInstanceSegIO::getBlobMeasureIO() const
 {
     return m_blobMeasureIOPtr;
 }
@@ -287,7 +287,7 @@ std::shared_ptr<CInstanceSegIO> CInstanceSegIO::clone() const
     return std::static_pointer_cast<CInstanceSegIO>(cloneImp());
 }
 
-std::shared_ptr<CWorkflowTaskIO> CInstanceSegIO::cloneImp() const
+WorkflowTaskIOPtr CInstanceSegIO::cloneImp() const
 {
     return std::shared_ptr<CInstanceSegIO>(new CInstanceSegIO(*this));
 }

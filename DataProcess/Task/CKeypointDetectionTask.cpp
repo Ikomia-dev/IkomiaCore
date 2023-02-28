@@ -70,13 +70,27 @@ std::vector<std::string> CKeypointDetectionTask::getObjectNames() const
     return m_classNames;
 }
 
-std::shared_ptr<CKeypointsIO> CKeypointDetectionTask::getResults() const
+KeypointsIOPtr CKeypointDetectionTask::getResults() const
 {
     auto keyptsIOPtr = std::dynamic_pointer_cast<CKeypointsIO>(getOutput(1));
     if (keyptsIOPtr == nullptr)
         throw CException(CoreExCode::NULL_POINTER, "Invalid keypoint detection output", __func__, __FILE__, __LINE__);
 
     return keyptsIOPtr;
+}
+
+CMat CKeypointDetectionTask::getVisualizationImage() const
+{
+    auto imgIOPtr = std::dynamic_pointer_cast<CImageIO>(getOutput(0));
+    if (imgIOPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Invalid image output", __func__, __FILE__, __LINE__);
+
+    auto kptsIOPtr = std::dynamic_pointer_cast<CKeypointsIO>(getOutput(1));
+    if (kptsIOPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Invalid object detection output", __func__, __FILE__, __LINE__);
+
+    auto graphicsIOPtr = kptsIOPtr->getGraphicsIO();
+    return imgIOPtr->getImageWithGraphics(graphicsIOPtr);
 }
 
 void CKeypointDetectionTask::readClassNames(const std::string &path)

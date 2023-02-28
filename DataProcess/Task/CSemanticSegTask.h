@@ -11,21 +11,21 @@ class CSemanticSegTask: public C2dImageTask
         CSemanticSegTask();
         CSemanticSegTask(const std::string& name);
 
-        void                            endTaskRun() override;
+        void                        endTaskRun() override;
 
-        std::vector<std::string>        getNames() const;
-        std::shared_ptr<CSemanticSegIO> getResults() const;
-        CMat                            getColorMaskImage() const;
+        std::vector<std::string>    getNames() const;
+        SemanticSegIOPtr            getResults() const;
+        CMat                        getVisualizationImage() const;
 
-        void                            readClassNames(const std::string& path);
+        void                        readClassNames(const std::string& path);
 
-        void                            setColors(const std::vector<CColor> &colors);
-        void                            setNames(const std::vector<std::string>& names);
-        void                            setMask(const CMat& mask);
+        void                        setColors(const std::vector<CColor> &colors);
+        void                        setNames(const std::vector<std::string>& names);
+        void                        setMask(const CMat& mask);
 
     private:
 
-        void                            init();
+        void                        init();
 };
 
 #endif // CSEMANTICSEGMENTATIONTASK_H

@@ -304,7 +304,7 @@ std::shared_ptr<CKeypointsIO> CKeypointsIO::clone() const
     return std::static_pointer_cast<CKeypointsIO>(cloneImp());
 }
 
-std::shared_ptr<CBlobMeasureIO> CKeypointsIO::getBlobMeasureIO() const
+BlobMeasureIOPtr CKeypointsIO::getBlobMeasureIO() const
 {
     return m_objMeasureIOPtr;
 }
@@ -325,7 +325,7 @@ CKeypointsIO::DataStringIOPtr CKeypointsIO::getDataStringIO() const
     return m_keyptsLinkIOPtr;
 }
 
-std::shared_ptr<CGraphicsOutput> CKeypointsIO::getGraphicsIO() const
+GraphicsOutputPtr CKeypointsIO::getGraphicsIO() const
 {
     return m_graphicsIOPtr;
 }
@@ -519,7 +519,7 @@ void CKeypointsIO::setKeypointLinks(const std::vector<CKeypointLink> &links)
     m_keyptsLinkIOPtr->addValueList(labels, "Label");
 }
 
-std::shared_ptr<CWorkflowTaskIO> CKeypointsIO::cloneImp() const
+WorkflowTaskIOPtr CKeypointsIO::cloneImp() const
 {
     return std::shared_ptr<CKeypointsIO>(new CKeypointsIO(*this));
 }

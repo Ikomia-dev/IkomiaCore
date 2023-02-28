@@ -62,12 +62,12 @@ std::vector<CColor> CSemanticSegIO::getColors() const
     return m_colors;
 }
 
-std::shared_ptr<CImageIO> CSemanticSegIO::getMaskImageIO() const
+ImageIOPtr CSemanticSegIO::getMaskImageIO() const
 {
     return m_imgMaskIOPtr;
 }
 
-std::shared_ptr<CImageIO> CSemanticSegIO::getLegendImageIO() const
+ImageIOPtr CSemanticSegIO::getLegendImageIO() const
 {
     return m_imgLegendIOPtr;
 }
@@ -171,7 +171,7 @@ std::shared_ptr<CSemanticSegIO> CSemanticSegIO::clone() const
     return std::static_pointer_cast<CSemanticSegIO>(cloneImp());
 }
 
-std::shared_ptr<CWorkflowTaskIO> CSemanticSegIO::cloneImp() const
+WorkflowTaskIOPtr CSemanticSegIO::cloneImp() const
 {
     return std::shared_ptr<CSemanticSegIO>(new CSemanticSegIO(*this));
 }

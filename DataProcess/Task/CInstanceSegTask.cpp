@@ -1,4 +1,5 @@
 #include "CInstanceSegTask.h"
+#include "DataProcessTools.hpp"
 
 CInstanceSegTask::CInstanceSegTask(): C2dImageTask()
 {
@@ -62,13 +63,28 @@ std::vector<std::string> CInstanceSegTask::getNames() const
     return m_classNames;
 }
 
-std::shared_ptr<CInstanceSegIO> CInstanceSegTask::getResults() const
+InstanceSegIOPtr CInstanceSegTask::getResults() const
 {
     auto instanceSegIOPtr = std::dynamic_pointer_cast<CInstanceSegIO>(getOutput(1));
     if (instanceSegIOPtr == nullptr)
         throw CException(CoreExCode::NULL_POINTER, "Invalid object detection output", __func__, __FILE__, __LINE__);
 
     return instanceSegIOPtr;
+}
+
+CMat CInstanceSegTask::getVisualizationImage() const
+{
+    auto imgIOPtr = std::dynamic_pointer_cast<CImageIO>(getOutput(0));
+    if (imgIOPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Invalid image output", __func__, __FILE__, __LINE__);
+
+    auto instanceSegIOPtr = std::dynamic_pointer_cast<CInstanceSegIO>(getOutput(1));
+    if (instanceSegIOPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Invalid object detection output", __func__, __FILE__, __LINE__);
+
+    auto graphicsIOPtr = instanceSegIOPtr->getGraphicsIO();
+    CMat imgWithGraphics = imgIOPtr->getImageWithGraphics(graphicsIOPtr);
+    return Utils::Image::mergeColorMask(imgWithGraphics, instanceSegIOPtr->getMergeMask(), getColorMap(0), 0.7, false);
 }
 
 void CInstanceSegTask::readClassNames(const std::string &path)

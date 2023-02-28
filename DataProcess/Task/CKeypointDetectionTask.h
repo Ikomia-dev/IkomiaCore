@@ -12,28 +12,29 @@ class CKeypointDetectionTask: public C2dImageTask
         CKeypointDetectionTask();
         CKeypointDetectionTask(const std::string& name);
 
-        void                            addObject(int id, int classIndex, double confidence,
-                                                  double x, double y, double width, double height,
-                                                  const std::vector<Keypoint> keypts);
+        void                        addObject(int id, int classIndex, double confidence,
+                                              double x, double y, double width, double height,
+                                              const std::vector<Keypoint> keypts);
 
-        void                            endTaskRun() override;
+        void                        endTaskRun() override;
 
-        std::vector<CKeypointLink>      getKeypointLinks() const;
-        std::vector<std::string>        getKeypointNames() const;
-        std::vector<std::string>        getObjectNames() const;
-        std::shared_ptr<CKeypointsIO>   getResults() const;
+        std::vector<CKeypointLink>  getKeypointLinks() const;
+        std::vector<std::string>    getKeypointNames() const;
+        std::vector<std::string>    getObjectNames() const;
+        KeypointsIOPtr              getResults() const;
+        CMat                        getVisualizationImage() const;
 
-        void                            readClassNames(const std::string& path);
+        void                        readClassNames(const std::string& path);
 
-        void                            setKeypointLinks(const std::vector<CKeypointLink>& links);
-        void                            setKeypointNames(const std::vector<std::string>& names);
-        void                            setObjectColors(const std::vector<CColor>& colors);
-        void                            setObjectNames(const std::vector<std::string>& names);
+        void                        setKeypointLinks(const std::vector<CKeypointLink>& links);
+        void                        setKeypointNames(const std::vector<std::string>& names);
+        void                        setObjectColors(const std::vector<CColor>& colors);
+        void                        setObjectNames(const std::vector<std::string>& names);
 
     private:
 
-        void                            initIO();
-        void                            generateRandomColors();
+        void                        initIO();
+        void                        generateRandomColors();
 
     protected:
 

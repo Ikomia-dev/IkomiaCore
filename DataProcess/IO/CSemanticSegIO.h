@@ -19,39 +19,39 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
         CSemanticSegIO& operator=(const CSemanticSegIO& io);
         CSemanticSegIO& operator=(const CSemanticSegIO&& io);
 
-        CMat                                getMask() const;
-        std::vector<std::string>            getClassNames() const;
-        std::vector<CColor>                 getColors() const;
-        std::shared_ptr<CImageIO>           getMaskImageIO() const;
-        std::shared_ptr<CImageIO>           getLegendImageIO() const;
+        CMat                            getMask() const;
+        std::vector<std::string>        getClassNames() const;
+        std::vector<CColor>             getColors() const;
+        ImageIOPtr                      getMaskImageIO() const;
+        ImageIOPtr                      getLegendImageIO() const;
 
-        void                                setMask(const CMat& mask);
-        void                                setClassNames(const std::vector<std::string>& names);
-        void                                setClassColors(const std::vector<CColor>& colors);
+        void                            setMask(const CMat& mask);
+        void                            setClassNames(const std::vector<std::string>& names);
+        void                            setClassColors(const std::vector<CColor>& colors);
 
-        bool                                isDataAvailable() const override;
-        bool                                isComposite() const override;
+        bool                            isDataAvailable() const override;
+        bool                            isComposite() const override;
 
-        void                                clearData() override;
+        void                            clearData() override;
 
-        void                                load(const std::string &path) override;
-        void                                save(const std::string &path) override;
+        void                            load(const std::string &path) override;
+        void                            save(const std::string &path) override;
 
-        std::string                         toJson() const override;
-        std::string                         toJson(const std::vector<std::string>& options) const override;
-        void                                fromJson(const std::string &jsonStr) override;
+        std::string                     toJson() const override;
+        std::string                     toJson(const std::vector<std::string>& options) const override;
+        void                            fromJson(const std::string &jsonStr) override;
 
-        std::shared_ptr<CSemanticSegIO>     clone() const;
+        std::shared_ptr<CSemanticSegIO> clone() const;
 
     private:
 
-        std::shared_ptr<CWorkflowTaskIO>    cloneImp() const override;
+        WorkflowTaskIOPtr               cloneImp() const override;
 
-        QJsonObject                         toJsonInternal(const std::vector<std::string> &options) const;
-        void                                fromJsonInternal(const QJsonDocument& doc);
+        QJsonObject                     toJsonInternal(const std::vector<std::string> &options) const;
+        void                            fromJsonInternal(const QJsonDocument& doc);
 
-        void                                generateLegend();
-        void                                generateRandomColors();
+        void                            generateLegend();
+        void                            generateRandomColors();
 
     private:
 
@@ -61,6 +61,9 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
         std::shared_ptr<CImageIO>   m_imgMaskIOPtr = nullptr;
         std::shared_ptr<CImageIO>   m_imgLegendIOPtr = nullptr;
 };
+
+using SemanticSegIOPtr = std::shared_ptr<CSemanticSegIO>;
+
 
 class DATAPROCESSSHARED_EXPORT CSemanticSegIOFactory: public CWorkflowTaskIOFactory
 {

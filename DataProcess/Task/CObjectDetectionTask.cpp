@@ -1,5 +1,4 @@
 #include "CObjectDetectionTask.h"
-#include "IO/CObjectDetectionIO.h"
 
 CObjectDetectionTask::CObjectDetectionTask(): C2dImageTask()
 {
@@ -52,13 +51,27 @@ std::vector<std::string> CObjectDetectionTask::getNames() const
     return m_classNames;
 }
 
-std::shared_ptr<CObjectDetectionIO> CObjectDetectionTask::getResults() const
+ObjectDetectionIOPtr CObjectDetectionTask::getResults() const
 {
     auto objDetIOPtr = std::dynamic_pointer_cast<CObjectDetectionIO>(getOutput(1));
     if (objDetIOPtr == nullptr)
         throw CException(CoreExCode::NULL_POINTER, "Invalid object detection output", __func__, __FILE__, __LINE__);
 
     return objDetIOPtr;
+}
+
+CMat CObjectDetectionTask::getVisualizationImage() const
+{
+    auto imgIOPtr = std::dynamic_pointer_cast<CImageIO>(getOutput(0));
+    if (imgIOPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Invalid image output", __func__, __FILE__, __LINE__);
+
+    auto objDetIOPtr = std::dynamic_pointer_cast<CObjectDetectionIO>(getOutput(1));
+    if (objDetIOPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Invalid object detection output", __func__, __FILE__, __LINE__);
+
+    auto graphicsIOPtr = objDetIOPtr->getGraphicsIO();
+    return imgIOPtr->getImageWithGraphics(graphicsIOPtr);
 }
 
 void CObjectDetectionTask::initIO()

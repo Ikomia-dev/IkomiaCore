@@ -2,7 +2,7 @@
 #define COBJECTDETECTIONTASK_H
 
 #include "C2dImageTask.h"
-
+#include "IO/CObjectDetectionIO.h"
 
 class CObjectDetectionTask: public C2dImageTask
 {
@@ -19,8 +19,8 @@ class CObjectDetectionTask: public C2dImageTask
         void                                endTaskRun() override;
 
         std::vector<std::string>            getNames() const;
-        std::shared_ptr<CObjectDetectionIO> getResults() const;
-
+        ObjectDetectionIOPtr                getResults() const;
+        CMat                                getVisualizationImage() const;
 
         void                                readClassNames(const std::string& path);
 

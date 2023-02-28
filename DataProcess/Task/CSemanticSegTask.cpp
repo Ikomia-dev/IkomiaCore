@@ -36,7 +36,7 @@ std::vector<std::string> CSemanticSegTask::getNames() const
     return segIOPtr->getClassNames();
 }
 
-std::shared_ptr<CSemanticSegIO> CSemanticSegTask::getResults() const
+SemanticSegIOPtr CSemanticSegTask::getResults() const
 {
     auto segIOPtr = std::dynamic_pointer_cast<CSemanticSegIO>(getOutput(1));
     if (segIOPtr == nullptr)
@@ -45,7 +45,7 @@ std::shared_ptr<CSemanticSegIO> CSemanticSegTask::getResults() const
     return segIOPtr;
 }
 
-CMat CSemanticSegTask::getColorMaskImage() const
+CMat CSemanticSegTask::getVisualizationImage() const
 {
     auto imgIOPtr = std::dynamic_pointer_cast<CImageIO>(getInput(0));
     if (imgIOPtr == nullptr)

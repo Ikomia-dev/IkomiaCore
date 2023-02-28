@@ -1,5 +1,4 @@
 #include "CClassificationTask.h"
-#include "IO/CObjectDetectionIO.h"
 #include "IO/CGraphicsOutput.h"
 #include "IO/CNumericIO.h"
 
@@ -86,7 +85,7 @@ CMat CClassificationTask::getObjectSubImage(const ProxyGraphicsItemPtr &objectPt
     return subImg;
 }
 
-std::shared_ptr<CObjectDetectionIO> CClassificationTask::getObjectsResults() const
+ObjectDetectionIOPtr CClassificationTask::getObjectsResults() const
 {
     auto objDetectIOPtr = std::dynamic_pointer_cast<CObjectDetectionIO>(getOutput(1));
     if (objDetectIOPtr == nullptr)
@@ -112,6 +111,31 @@ std::vector<PairString> CClassificationTask::getWholeImageResults() const
         results.push_back(std::make_pair(names[i], confidences[i]));
 
     return results;
+}
+
+CMat CClassificationTask::getVisualizationImage() const
+{
+    auto imgIOPtr = std::dynamic_pointer_cast<CImageIO>(getOutput(0));
+    if (imgIOPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Invalid image output", __func__, __FILE__, __LINE__);
+
+    if (isWholeImageClassification())
+    {
+        auto graphicsIOPtr = std::dynamic_pointer_cast<CGraphicsOutput>(getOutput(2));
+        if (graphicsIOPtr == nullptr)
+            throw CException(CoreExCode::NULL_POINTER, "Invalid graphics output", __func__, __FILE__, __LINE__);
+
+        return imgIOPtr->getImageWithGraphics(graphicsIOPtr);
+    }
+    else
+    {
+        auto objDetIOPtr = std::dynamic_pointer_cast<CObjectDetectionIO>(getOutput(1));
+        if (objDetIOPtr == nullptr)
+            throw CException(CoreExCode::NULL_POINTER, "Invalid object detection output", __func__, __FILE__, __LINE__);
+
+        auto graphicsIOPtr = objDetIOPtr->getGraphicsIO();
+        return imgIOPtr->getImageWithGraphics(graphicsIOPtr);
+    }
 }
 
 bool CClassificationTask::isWholeImageClassification() const

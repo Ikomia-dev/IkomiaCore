@@ -11,24 +11,25 @@ class CInstanceSegTask: public C2dImageTask
         CInstanceSegTask();
         CInstanceSegTask(const std::string& name);
 
-        void                            addInstance(int id, int type, int classIndex, double confidence,
-                                                    double x, double y, double width, double height,
-                                                    const CMat& mask);
+        void                        addInstance(int id, int type, int classIndex, double confidence,
+                                                double x, double y, double width, double height,
+                                                const CMat& mask);
 
-        void                            endTaskRun() override;
+        void                        endTaskRun() override;
 
-        std::vector<std::string>        getNames() const;
-        std::shared_ptr<CInstanceSegIO> getResults() const;
+        std::vector<std::string>    getNames() const;
+        InstanceSegIOPtr            getResults() const;
+        CMat                        getVisualizationImage() const;
 
-        void                            readClassNames(const std::string& path);
+        void                        readClassNames(const std::string& path);
 
-        void                            setColors(const std::vector<CColor> &colors);
-        void                            setNames(const std::vector<std::string>& names);
+        void                        setColors(const std::vector<CColor> &colors);
+        void                        setNames(const std::vector<std::string>& names);
 
     private:
 
-        void                            init();
-        void                            generateRandomColors();
+        void                        init();
+        void                        generateRandomColors();
 
     protected:
 

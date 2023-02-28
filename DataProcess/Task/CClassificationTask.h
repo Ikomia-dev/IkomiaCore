@@ -2,7 +2,7 @@
 #define CCLASSIFICATIONTASK_H
 
  #include "C2dImageTask.h"
-
+#include "IO/CObjectDetectionIO.h"
 
 class CClassificationTask: public C2dImageTask
 {
@@ -14,8 +14,9 @@ class CClassificationTask: public C2dImageTask
         std::vector<std::string>            getNames() const;
         std::vector<ProxyGraphicsItemPtr>   getInputObjects() const;
         CMat                                getObjectSubImage(const ProxyGraphicsItemPtr& objectPtr) const;
-        std::shared_ptr<CObjectDetectionIO> getObjectsResults() const;
+        ObjectDetectionIOPtr                getObjectsResults() const;
         std::vector<PairString>             getWholeImageResults() const;
+        CMat                                getVisualizationImage() const;
 
         bool                                isWholeImageClassification() const;
 

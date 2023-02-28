@@ -127,12 +127,12 @@ CDataInfoPtr CObjectDetectionIO::getDataInfo()
     return m_infoPtr;
 }
 
-std::shared_ptr<CGraphicsOutput> CObjectDetectionIO::getGraphicsIO() const
+GraphicsOutputPtr CObjectDetectionIO::getGraphicsIO() const
 {
     return m_graphicsIOPtr;
 }
 
-std::shared_ptr<CBlobMeasureIO> CObjectDetectionIO::getBlobMeasureIO() const
+BlobMeasureIOPtr CObjectDetectionIO::getBlobMeasureIO() const
 {
     return m_blobMeasureIOPtr;
 }
@@ -363,7 +363,7 @@ void CObjectDetectionIO::copy(const std::shared_ptr<CWorkflowTaskIO> &ioPtr)
     }
 }
 
-std::shared_ptr<CWorkflowTaskIO> CObjectDetectionIO::cloneImp() const
+WorkflowTaskIOPtr CObjectDetectionIO::cloneImp() const
 {
     return std::shared_ptr<CObjectDetectionIO>(new CObjectDetectionIO(*this));
 }
