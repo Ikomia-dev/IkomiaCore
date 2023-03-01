@@ -74,23 +74,25 @@ void C2dImageTask::setActive(bool bActive)
     CWorkflowTask::setActive(bActive);
 }
 
-void C2dImageTask::setOutputColorMap(size_t index, size_t maskIndex, const std::vector<CColor> &colors)
+void C2dImageTask::setOutputColorMap(size_t index, size_t maskIndex, const std::vector<CColor> &colors, bool bReserveZero)
 {
     if(index > getOutputCount() - 1)
         throw CException(CoreExCode::INVALID_SIZE, "Invalid output index", __func__, __FILE__, __LINE__);
 
     if(index >= m_colorMaps.size())
-    {
         m_colorMaps.resize(index + 1);
-        m_colorMapMaskIndices.resize(index + 1);
-    }
 
-    CMat colormap(256, 1, CV_8UC3);
+    int startIndex = 0;
+    cv::Mat colormap = cv::Mat::zeros(256, 1, CV_8UC3);
+
+    if (bReserveZero)
+        startIndex = 1;
+
     if(colors.size() == 0)
     {
         //Random colors
         std::srand(RANDOM_COLOR_SEED);
-        for(int i=(int)colors.size(); i<256; ++i)
+        for(int i=startIndex; i<256; ++i)
         {
             for(int j=0; j<3; ++j)
                 colormap.at<cv::Vec3b>(i, 0)[j] = (uchar)((double)std::rand() / (double)RAND_MAX * 255.0);
@@ -98,22 +100,22 @@ void C2dImageTask::setOutputColorMap(size_t index, size_t maskIndex, const std::
     }
     else if(colors.size() == 1)
     {
-        colormap = cv::Mat::zeros(colormap.rows, colormap.cols, CV_8UC3);
-        colormap.at<cv::Vec3b>(255, 0) = {colors[0][0], colors[0][1], colors[0][2]};
+        if (bReserveZero)
+            colormap.at<cv::Vec3b>(startIndex, 0) = {colors[0][0], colors[0][1], colors[0][2]};
+        else
+            colormap.at<cv::Vec3b>(255, 0) = {colors[0][0], colors[0][1], colors[0][2]};
     }
     else
     {
-        colormap = cv::Mat::zeros(colormap.rows, colormap.cols, CV_8UC3);
-
-        //We let first color map entry to black -> zero pixel are considered as background
         for(int i=0; i<std::min<int>(255, (int)colors.size()); ++i)
-            colormap.at<cv::Vec3b>(i+1, 0) = {colors[i][0], colors[i][1], colors[i][2]};
+            colormap.at<cv::Vec3b>(i+startIndex, 0) = {colors[i][0], colors[i][1], colors[i][2]};
 
-        for(int i=(int)colors.size(); i<256; ++i)
+        for(int i=(int)colors.size()+1; i<256; ++i)
             colormap.at<cv::Vec3b>(i, 0) = {(uchar)i, (uchar)i, (uchar)i};
     }
-    m_colorMaps[index] = colormap;
-    m_colorMapMaskIndices[index] = maskIndex;
+    m_colorMaps[index].m_map = colormap;
+    m_colorMaps[index].m_index = maskIndex;
+    m_colorMaps[index].m_bReserveZero = bReserveZero;
 }
 
 void C2dImageTask::updateStaticOutputs()
@@ -227,7 +229,6 @@ void C2dImageTask::beginTaskRun()
 
     // Clear color overlay from mask
     m_colorMaps.clear();
-    m_colorMapMaskIndices.clear();
 
     auto imageOutputs = getOutputs({IODataType::IMAGE, IODataType::IMAGE_LABEL, IODataType::IMAGE_BINARY});
     for (size_t i=0; i<imageOutputs.size(); i++)
@@ -353,7 +354,7 @@ CMat C2dImageTask::getColorMap(size_t index) const
    if (index >= m_colorMaps.size())
        throw CException(CoreExCode::INDEX_OVERFLOW, "No color map at given index", __func__, __FILE__, __LINE__);
 
-   return m_colorMaps[index];
+   return m_colorMaps[index].m_map;
 }
 
 CMat C2dImageTask::getGraphicsMask(size_t index) const
@@ -404,10 +405,10 @@ void C2dImageTask::createOverlayMasks()
     // TODO Bad design -> we have to move this output based logic elsewhere...
     for(size_t i=0; i<getOutputCount(); ++i)
     {
-        if(i < m_colorMaps.size() && m_colorMaps[i].empty() == false)
+        if(i < m_colorMaps.size() && m_colorMaps[i].m_map.empty() == false)
         {
             CMat maskImage;
-            auto pOutputMask = getOutput(m_colorMapMaskIndices[i]);
+            auto pOutputMask = getOutput(m_colorMaps[i].m_index);
 
             if (pOutputMask->getDataType() == IODataType::INSTANCE_SEGMENTATION)
             {
@@ -428,7 +429,7 @@ void C2dImageTask::createOverlayMasks()
             auto pOutput = std::dynamic_pointer_cast<CImageIO>(getOutput(i));
             if (pOutput && maskImage.empty() == false)
             {
-                auto mask = Utils::Image::createOverlayMask(maskImage, m_colorMaps[i]);
+                auto mask = Utils::Image::createOverlayMask(maskImage, m_colorMaps[i].m_map, m_colorMaps[i].m_bReserveZero);
                 pOutput->setOverlayMask(mask);
             }
         }
