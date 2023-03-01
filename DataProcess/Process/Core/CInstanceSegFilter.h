@@ -1,7 +1,7 @@
 #ifndef CINSTANCESEGFILTER_H
 #define CINSTANCESEGFILTER_H
 
-#include "Workflow/CWorkflowTask.h"
+#include "Task/CInstanceSegTask.h"
 #include "Task/CTaskFactory.hpp"
 #include "Workflow/CWorkflowTaskWidget.h"
 #include "Core/CWidgetFactory.hpp"
@@ -29,7 +29,7 @@ class CInstanceSegFilterParam: public CWorkflowTaskParam
 //------------------------------//
 //----- CInstanceSegFilter -----//
 //------------------------------//
-class CInstanceSegFilter: public CWorkflowTask
+class CInstanceSegFilter: public CInstanceSegTask
 {
     public:
 
@@ -39,6 +39,10 @@ class CInstanceSegFilter: public CWorkflowTask
         size_t  getProgressSteps() override;
 
         void    run() override;
+
+    private:
+
+        void    initIO();
 };
 
 //-------------------------------------//

@@ -26,16 +26,20 @@ UMapString CObjDetectFilterParam::getParamMap() const
 //----------------------------//
 //----- CObjDetectFilter -----//
 //----------------------------//
-CObjDetectFilter::CObjDetectFilter() : CWorkflowTask()
+CObjDetectFilter::CObjDetectFilter() : C2dImageTask(false)
 {
-    addInput(std::make_shared<CObjectDetectionIO>());
-    addOutput(std::make_shared<CObjectDetectionIO>());
+    initIO();
 }
 
 CObjDetectFilter::CObjDetectFilter(const std::string name, const std::shared_ptr<CObjDetectFilterParam> &pParam)
-    : CWorkflowTask(name)
+    : C2dImageTask(name, false)
 {
     m_pParam = std::make_shared<CObjDetectFilterParam>(*pParam);
+    initIO();
+}
+
+void CObjDetectFilter::initIO()
+{
     addInput(std::make_shared<CObjectDetectionIO>());
     addOutput(std::make_shared<CObjectDetectionIO>());
 }
@@ -47,14 +51,21 @@ size_t CObjDetectFilter::getProgressSteps()
 
 void CObjDetectFilter::run()
 {
-    auto objDetectIn = std::dynamic_pointer_cast<CObjectDetectionIO>(getInput(0));
+    beginTaskRun();
+
     auto paramPtr = std::dynamic_pointer_cast<CObjDetectFilterParam>(m_pParam);
+    if (paramPtr == nullptr)
+        throw CException(CoreExCode::INVALID_PARAMETER, "Invalid task parameter", __func__, __FILE__, __LINE__);
 
-    if(objDetectIn == nullptr || paramPtr == nullptr)
-        throw CException(CoreExCode::INVALID_PARAMETER, "Invalid input", __func__, __FILE__, __LINE__);
+    auto objDetectIn = std::dynamic_pointer_cast<CObjectDetectionIO>(getInput(1));
+    if (objDetectIn == nullptr)
+        throw CException(CoreExCode::INVALID_PARAMETER, "Invalid object detection input", __func__, __FILE__, __LINE__);
 
-    auto objDetectOut = std::dynamic_pointer_cast<CObjectDetectionIO>(getOutput(0));
-    objDetectOut->clearData();
+    auto objDetIOPtr = std::dynamic_pointer_cast<CObjectDetectionIO>(getOutput(1));
+    if (objDetIOPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Invalid object detection output", __func__, __FILE__, __LINE__);
+
+    objDetIOPtr->init(getName(), 0);
 
     std::set<std::string> categories;
     if(paramPtr->m_categories != "all")
@@ -72,13 +83,15 @@ void CObjDetectFilter::run()
         if (objects[i].m_confidence >= paramPtr->m_confidence &&
                 (categories.empty() || categories.find(objects[i].m_label) != categories.end()))
         {
-            objDetectOut->addObject(objects[i].m_id, objects[i].m_label, objects[i].m_confidence,
-                                    objects[i].m_box[0], objects[i].m_box[1], objects[i].m_box[2], objects[i].m_box[3],
-                                    objects[i].m_color);
+            objDetIOPtr->addObject(objects[i].m_id, objects[i].m_label, objects[i].m_confidence,
+                                   objects[i].m_box[0], objects[i].m_box[1], objects[i].m_box[2], objects[i].m_box[3],
+                                   objects[i].m_color);
         }
     }
 
+    forwardInputImage(0, 0);
     emit m_signalHandler->doProgress();
+    endTaskRun();
 }
 
 //-----------------------------------//
@@ -86,7 +99,7 @@ void CObjDetectFilter::run()
 //-----------------------------------//
 CObjDetectFilterFactory::CObjDetectFilterFactory()
 {
-    m_info.m_name = "ik_obj_detection_filter";
+    m_info.m_name = "ik_object_detection_filter";
     m_info.m_description = QObject::tr("This process filters object detection results based on confidence and object category.").toStdString();
     m_info.m_path = QObject::tr("Core/Utils").toStdString();
     m_info.m_iconPath = QObject::tr(":/Images/default-process.png").toStdString();
@@ -145,7 +158,7 @@ void CWidgetObjDetectFilter::onApply()
 //-----------------------------------------//
 CWidgetObjDetectFilterFactory::CWidgetObjDetectFilterFactory()
 {
-    m_name = "ik_obj_detection_filter";
+    m_name = "ik_object_detection_filter";
 }
 
 WorkflowTaskWidgetPtr CWidgetObjDetectFilterFactory::create(std::shared_ptr<CWorkflowTaskParam> pParam)

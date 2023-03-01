@@ -24,17 +24,24 @@ UMapString CSemanticSegFilterParam::getParamMap() const
 //------------------------------//
 //----- CSemanticSegFilter -----//
 //------------------------------//
-CSemanticSegFilter::CSemanticSegFilter() : CWorkflowTask()
+CSemanticSegFilter::CSemanticSegFilter() : CSemanticSegTask()
 {
-    addInput(std::make_shared<CSemanticSegIO>());
-    addOutput(std::make_shared<CSemanticSegIO>());
+    initIO();
 }
 
-CSemanticSegFilter::CSemanticSegFilter(const std::string name, const std::shared_ptr<CSemanticSegFilterParam> &pParam): CWorkflowTask(name)
+CSemanticSegFilter::CSemanticSegFilter(const std::string name, const std::shared_ptr<CSemanticSegFilterParam> &pParam)
+    : CSemanticSegTask(name)
 {
     m_pParam = std::make_shared<CSemanticSegFilterParam>(*pParam);
+    initIO();
+}
+
+void CSemanticSegFilter::initIO()
+{
+    // Remove graphics input
+    removeInput(1);
+    // Add semantic segmentation input
     addInput(std::make_shared<CSemanticSegIO>());
-    addOutput(std::make_shared<CSemanticSegIO>());
 }
 
 size_t CSemanticSegFilter::getProgressSteps()
@@ -44,50 +51,70 @@ size_t CSemanticSegFilter::getProgressSteps()
 
 void CSemanticSegFilter::run()
 {
-    auto semanticSegIn = std::dynamic_pointer_cast<CSemanticSegIO>(getInput(0));
     auto paramPtr = std::dynamic_pointer_cast<CSemanticSegFilterParam>(m_pParam);
+    if(paramPtr == nullptr)
+        throw CException(CoreExCode::INVALID_PARAMETER, "Invalid parameter", __func__, __FILE__, __LINE__);
 
-    if(semanticSegIn == nullptr || paramPtr == nullptr)
-        throw CException(CoreExCode::INVALID_PARAMETER, "Invalid input", __func__, __FILE__, __LINE__);
+    auto semanticSegIn = std::dynamic_pointer_cast<CSemanticSegIO>(getInput(1));
+    if(semanticSegIn == nullptr)
+        throw CException(CoreExCode::INVALID_PARAMETER, "Invalid semantic segmentation input", __func__, __FILE__, __LINE__);
 
-    auto semanticSegOut = std::dynamic_pointer_cast<CSemanticSegIO>(getOutput(0));
+    beginTaskRun();
+    auto semanticSegOut = std::dynamic_pointer_cast<CSemanticSegIO>(getOutput(1));
     semanticSegOut->clearData();
-    auto classNames = semanticSegIn->getClassNames();
-    semanticSegOut->setClassNames(classNames);
-    semanticSegOut->setClassColors(semanticSegIn->getColors());
+    auto srcNames = semanticSegIn->getClassNames();
+    auto srcColors = semanticSegIn->getColors();
 
     if(paramPtr->m_categories != "all")
     {
+        m_classNames.clear();
+        for (size_t i=0; i<srcNames.size(); ++i)
+            m_classNames.push_back("other");
+
+        m_classColors.clear();
+        for (size_t i=0; i<srcColors.size(); ++i)
+            m_classColors.push_back({0, 0, 0});
+
         std::set<std::string> categories;
         std::vector<std::string> categs;
         Utils::String::tokenize(paramPtr->m_categories, categs, ",");
         categories.insert(categs.begin(), categs.end());
 
         std::vector<int> classIndices;
-        for (size_t i=0; i<classNames.size(); ++i)
+        for (size_t i=0; i<srcNames.size(); ++i)
         {
-            auto it = categories.find(classNames[i]);
+            auto it = categories.find(srcNames[i]);
             if (it != categories.end())
-            {
                 classIndices.push_back((int)i);
-            }
         }
 
+        int empty_index = 0;
         CMat originalMask = semanticSegIn->getMask();
-        CMat newMask(originalMask.rows, originalMask.cols, CV_8UC1, cv::Scalar(0));
         CMat binMergeMask(originalMask.rows, originalMask.cols, CV_8UC1, cv::Scalar(0));
 
         for (size_t i=0; i<classIndices.size(); ++i)
         {
-            cv::Mat binMaskPerClass = (originalMask == classIndices[i]);
+            int classIndex = classIndices[i];
+            if (empty_index == classIndex)
+                empty_index++;
+
+            m_classNames[classIndex] = srcNames[classIndex];
+            m_classColors[classIndex] = srcColors[classIndex];
+            cv::Mat binMaskPerClass = (originalMask == classIndex);
             cv::bitwise_or(binMergeMask, binMaskPerClass, binMergeMask);
         }
+        CMat newMask(originalMask.rows, originalMask.cols, CV_8UC1, cv::Scalar(empty_index));
         originalMask.copyTo(newMask, binMergeMask);
-        semanticSegOut->setMask(newMask);
+        setMask(newMask);
     }
     else
-        semanticSegOut->setMask(semanticSegIn->getMask());
+    {
+        m_classNames = srcNames;
+        m_classColors = srcColors;
+        setMask(semanticSegIn->getMask());
+    }
 
+    endTaskRun();
     emit m_signalHandler->doProgress();
 }
 

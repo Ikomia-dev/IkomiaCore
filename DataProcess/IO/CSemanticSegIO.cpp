@@ -238,27 +238,30 @@ void CSemanticSegIO::generateLegend()
 
     const int imgH = 1024;
     const int imgW = 1024;
-    size_t nbColors = colorIndices.size();
-    const int offsetX = 10;
-    const int offsetY = 10;
-    const int interline = 5;
-    int rectHeight = (int)((imgH - (2*offsetY) - ((nbColors-1)*interline)) / nbColors);
-    int rectWidth = imgW / 3;
-
     CMat legend(imgH, imgW, CV_8UC3, cv::Scalar(255,255,255));
-    int font = cv::FONT_HERSHEY_SIMPLEX;
-    const int fontScale = 1;
-    const int thickness = 2;
 
-    for (size_t i=0; i<nbColors; ++i)
+    size_t nbColors = colorIndices.size();
+    if (nbColors > 0)
     {
-        // Color frame
-        cv::Vec3b color = {m_colors[colorIndices[i]][0], m_colors[colorIndices[i]][1], m_colors[colorIndices[i]][2]};
-        cv::Rect colorFrameRect = cv::Rect(offsetX, offsetY + (i * (rectHeight + interline)), rectWidth, rectHeight);
-        cv::rectangle(legend, colorFrameRect, color, -1);
-        // Class name
-        cv::Point textOrigin(3 * offsetX + rectWidth, offsetY + (i * (rectHeight + interline)) + (rectHeight / 2));
-        cv::putText(legend, m_classes[colorIndices[i]], textOrigin, font, fontScale, {0, 0, 0}, thickness);
+        const int offsetX = 10;
+        const int offsetY = 10;
+        const int interline = 5;
+        int rectHeight = (int)((imgH - (2*offsetY) - ((nbColors-1)*interline)) / nbColors);
+        int rectWidth = imgW / 3;
+        int font = cv::FONT_HERSHEY_SIMPLEX;
+        const int fontScale = 1;
+        const int thickness = 2;
+
+        for (size_t i=0; i<nbColors; ++i)
+        {
+            // Color frame
+            cv::Vec3b color = {m_colors[colorIndices[i]][0], m_colors[colorIndices[i]][1], m_colors[colorIndices[i]][2]};
+            cv::Rect colorFrameRect = cv::Rect(offsetX, offsetY + (i * (rectHeight + interline)), rectWidth, rectHeight);
+            cv::rectangle(legend, colorFrameRect, color, -1);
+            // Class name
+            cv::Point textOrigin(3 * offsetX + rectWidth, offsetY + (i * (rectHeight + interline)) + (rectHeight / 2));
+            cv::putText(legend, m_classes[colorIndices[i]], textOrigin, font, fontScale, {0, 0, 0}, thickness);
+        }
     }
     m_imgLegendIOPtr->setImage(legend);
 }

@@ -26,6 +26,11 @@ class CSemanticSegTask: public C2dImageTask
     private:
 
         void                        init();
+
+    protected:
+
+        std::vector<std::string>    m_classNames;
+        std::vector<CColor>         m_classColors;
 };
 
 #endif // CSEMANTICSEGMENTATIONTASK_H

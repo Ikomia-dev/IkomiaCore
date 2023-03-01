@@ -26,18 +26,24 @@ UMapString CInstanceSegFilterParam::getParamMap() const
 //------------------------------//
 //----- CInstanceSegFilter -----//
 //------------------------------//
-CInstanceSegFilter::CInstanceSegFilter() : CWorkflowTask()
+CInstanceSegFilter::CInstanceSegFilter() : CInstanceSegTask()
 {
-    addInput(std::make_shared<CInstanceSegIO>());
-    addOutput(std::make_shared<CInstanceSegIO>());
+    initIO();
 }
 
 CInstanceSegFilter::CInstanceSegFilter(const std::string name, const std::shared_ptr<CInstanceSegFilterParam> &pParam)
-    : CWorkflowTask(name)
+    : CInstanceSegTask(name)
 {
     m_pParam = std::make_shared<CInstanceSegFilterParam>(*pParam);
+    initIO();
+}
+
+void CInstanceSegFilter::initIO()
+{
+    // Remove graphics input
+    removeInput(1);
+    // Add instance segmentation input
     addInput(std::make_shared<CInstanceSegIO>());
-    addOutput(std::make_shared<CInstanceSegIO>());
 }
 
 size_t CInstanceSegFilter::getProgressSteps()
@@ -47,16 +53,29 @@ size_t CInstanceSegFilter::getProgressSteps()
 
 void CInstanceSegFilter::run()
 {
-    auto instanceSegIn = std::dynamic_pointer_cast<CInstanceSegIO>(getInput(0));
+    beginTaskRun();
+    m_classNames.clear();
+    m_classColors.clear();
+
     auto paramPtr = std::dynamic_pointer_cast<CInstanceSegFilterParam>(m_pParam);
+    if (paramPtr == nullptr)
+        throw CException(CoreExCode::INVALID_PARAMETER, "Invalid parameters", __func__, __FILE__, __LINE__);
 
-    if(instanceSegIn == nullptr || paramPtr == nullptr)
-        throw CException(CoreExCode::INVALID_PARAMETER, "Invalid input", __func__, __FILE__, __LINE__);
+    auto imgInPtr = std::dynamic_pointer_cast<CImageIO>(getInput(0));
+    if (imgInPtr == nullptr)
+        throw CException(CoreExCode::INVALID_PARAMETER, "Invalid image input", __func__, __FILE__, __LINE__);
 
-    auto instanceSegOut = std::dynamic_pointer_cast<CInstanceSegIO>(getOutput(0));
+    auto instanceSegIn = std::dynamic_pointer_cast<CInstanceSegIO>(getInput(1));
+    if (instanceSegIn == nullptr)
+        throw CException(CoreExCode::INVALID_PARAMETER, "Invalid instance segmentation input", __func__, __FILE__, __LINE__);
+
+    auto instanceSegOut = std::dynamic_pointer_cast<CInstanceSegIO>(getOutput(1));
+    if (instanceSegOut == nullptr)
+        throw CException(CoreExCode::INVALID_PARAMETER, "Invalid instance segmentation output", __func__, __FILE__, __LINE__);
+
     instanceSegOut->clearData();
     CMat maskIn = instanceSegIn->getMergeMask();
-    instanceSegOut->init("InstanceSegmentationFilter", 0, maskIn.cols, maskIn.rows);
+    instanceSegOut->init(m_name, 0, maskIn.cols, maskIn.rows);
 
     std::set<std::string> categories;
     if(paramPtr->m_categories != "all")
@@ -65,7 +84,6 @@ void CInstanceSegFilter::run()
         Utils::String::tokenize(paramPtr->m_categories, categs, ",");
         categories.insert(categs.begin(), categs.end());
     }
-
     emit m_signalHandler->doProgress();
 
     auto instances = instanceSegIn->getInstances();
@@ -74,13 +92,30 @@ void CInstanceSegFilter::run()
         if (instances[i].m_confidence >= paramPtr->m_confidence &&
                 (categories.empty() || categories.find(instances[i].m_label) != categories.end()))
         {
-            instanceSegOut->addInstance(instances[i].m_id, instances[i].m_type, instances[i].m_classIndex,
-                                        instances[i].m_label, instances[i].m_confidence,
+            int classIndex = instances[i].m_classIndex;
+            if (classIndex >= m_classNames.size())
+            {
+                for (size_t i=m_classNames.size(); i<classIndex; ++i)
+                {
+                    m_classNames.push_back("other");
+                    m_classColors.push_back({0, 0, 0});
+                }
+                m_classNames.push_back(instances[i].m_label);
+                m_classColors.push_back(instances[i].m_color);
+            }
+            else
+            {
+                m_classNames[classIndex] = instances[i].m_label;
+                m_classColors[classIndex] = instances[i].m_color;
+            }
+
+            instanceSegOut->addInstance(instances[i].m_id, instances[i].m_type, classIndex, instances[i].m_label, instances[i].m_confidence,
                                         instances[i].m_box[0], instances[i].m_box[1], instances[i].m_box[2], instances[i].m_box[3],
                                         instances[i].m_mask, instances[i].m_color);
         }
     }
     emit m_signalHandler->doProgress();
+    endTaskRun();
 }
 
 //-----------------------------------//

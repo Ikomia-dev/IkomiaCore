@@ -160,7 +160,7 @@ void CInstanceSegIO::addInstance(int id, int type, int classIndex, const std::st
     //Check mandatory initialization
     auto mergeMask = m_imgIOPtr->getImage();
     if (mergeMask.empty())
-        throw CException(CoreExCode::INVALID_USAGE, "A first call to init(...) method is mandatory to initialize segmentation mask dimension.");
+        throw CException(CoreExCode::INVALID_USAGE, "A first call to init() method is mandatory to initialize segmentation mask dimension.");
 
     CInstanceSegmentation obj;
     obj.m_id = id;
@@ -207,7 +207,7 @@ void CInstanceSegIO::addInstance(int id, int type, int classIndex, const std::st
     results.emplace_back(CObjectMeasure(CMeasure::Id::BBOX, {boxX, boxY, boxWidth, boxHeight}, graphicsId, label));
     m_blobMeasureIOPtr->addObjectMeasures(results);
 
-    //Create label mask according to the object index (we do index + 1 because 0 is the background label)
+    //Create label mask according to the object index (we do index + 1 because 0 is reserved for background)
     if (boxWidth > 0 && boxHeight > 0)
     {
         cv::Mat labelImg(boxHeight, boxWidth, CV_8UC1, cv::Scalar(obj.m_classIndex + 1));

@@ -38,7 +38,7 @@ void CInstanceSegTask::init()
 void CInstanceSegTask::endTaskRun()
 {
     forwardInputImage(0, 0);
-    setOutputColorMap(0, 1, m_classColors);
+    setOutputColorMap(0, 1, m_classColors, true);
     C2dImageTask::endTaskRun();
 }
 
@@ -47,7 +47,7 @@ void CInstanceSegTask::generateRandomColors()
     std::srand(RANDOM_COLOR_SEED);
     double factor = 255.0 / (double)RAND_MAX;
 
-    for (size_t i=1; i<m_classNames.size(); ++i)
+    for (size_t i=0; i<m_classNames.size(); ++i)
     {
         CColor color = {
             (uchar)((double)std::rand() * factor),
@@ -84,7 +84,7 @@ CMat CInstanceSegTask::getVisualizationImage() const
 
     auto graphicsIOPtr = instanceSegIOPtr->getGraphicsIO();
     CMat imgWithGraphics = imgIOPtr->getImageWithGraphics(graphicsIOPtr);
-    return Utils::Image::mergeColorMask(imgWithGraphics, instanceSegIOPtr->getMergeMask(), getColorMap(0), 0.7, false);
+    return Utils::Image::mergeColorMask(imgWithGraphics, instanceSegIOPtr->getMergeMask(), getColorMap(0), 0.7, true);
 }
 
 void CInstanceSegTask::readClassNames(const std::string &path)
