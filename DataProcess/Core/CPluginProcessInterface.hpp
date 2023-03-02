@@ -20,7 +20,7 @@
 #ifndef CPROCESSWIDGETINTERFACE_HPP
 #define CPROCESSWIDGETINTERFACE_HPP
 
-#include "Core/CTaskFactory.hpp"
+#include "Task/CTaskFactory.hpp"
 #include "Core/CWidgetFactory.hpp"
 
 /**

@@ -23,7 +23,7 @@
 #define C2DIMAGEINTERACTIVETASKWRAP_H
 
 #include "PyDataProcessGlobal.h"
-#include "Core/C2dImageInteractiveTask.h"
+#include "Task/C2dImageInteractiveTask.h"
 
 //----------------------------------------------------------//
 //-----------  C2dImageInteractiveTaskWrap  -------------//

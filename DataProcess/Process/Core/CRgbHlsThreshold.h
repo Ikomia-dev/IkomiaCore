@@ -22,7 +22,7 @@
 #ifndef CRGBHLSTHRESHOLD_H
 #define CRGBHLSTHRESHOLD_H
 
-#include "Core/C2dImageInteractiveTask.h"
+#include "Task/C2dImageInteractiveTask.h"
 
 //---------------------------------//
 //----- CRgbHlsThresholdParam -----//

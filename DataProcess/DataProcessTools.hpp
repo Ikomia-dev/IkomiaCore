@@ -46,7 +46,7 @@ namespace Ikomia
                 }
                 return maxValue;
             }
-            inline CMat         createOverlayMask(const CMat& image, const CMat& colorMap)
+            inline CMat         createOverlayMask(const CMat& image, const CMat& colorMap, bool bTransparentZero)
             {
                 CMat srcOvrImg, ovrImg;
 
@@ -58,18 +58,21 @@ namespace Ikomia
                 cv::applyColorMap(srcOvrImg, ovrImg, colorMap);
                 cv::cvtColor(ovrImg, ovrImg, cv::COLOR_RGB2RGBA);
 
-                #pragma omp parallel for
-                    for(int i=0; i<ovrImg.rows; ++i)
-                    {
-                        for(int j=0; j<ovrImg.cols; ++j)
+                if (bTransparentZero)
+                {
+                    #pragma omp parallel for
+                        for(int i=0; i<ovrImg.rows; ++i)
                         {
-                            if(ovrImg.at<cv::Vec4b>(i, j)[0] == 0 && ovrImg.at<cv::Vec4b>(i, j)[1] == 0 && ovrImg.at<cv::Vec4b>(i, j)[2] == 0)
-                                ovrImg.at<cv::Vec4b>(i, j)[3] = 0;
+                            for(int j=0; j<ovrImg.cols; ++j)
+                            {
+                                if(ovrImg.at<cv::Vec4b>(i, j)[0] == 0 && ovrImg.at<cv::Vec4b>(i, j)[1] == 0 && ovrImg.at<cv::Vec4b>(i, j)[2] == 0)
+                                    ovrImg.at<cv::Vec4b>(i, j)[3] = 0;
+                            }
                         }
-                    }
+                }
                 return ovrImg;
             }
-            inline CMat         mergeColorMask(const CMat& image, const CMat& mask, const CMat& colormap, double opacity)
+            inline CMat         mergeColorMask(const CMat& image, const CMat& mask, const CMat& colormap, double opacity, bool bTransparentZero)
             {
                 CMat result, colorMask;
 
@@ -80,9 +83,13 @@ namespace Ikomia
 
                 cv::applyColorMap(colorMask, colorMask, colormap);
                 cv::addWeighted(image, (1.0 - opacity), colorMask, opacity, 0.0, result, image.depth());
-                cv::Mat maskNot = mask > 0;
-                cv::bitwise_not(maskNot, maskNot);
-                image.copyTo(result, maskNot);
+
+                if (bTransparentZero)
+                {
+                    cv::Mat maskNot = mask > 0;
+                    cv::bitwise_not(maskNot, maskNot);
+                    image.copyTo(result, maskNot);
+                }
                 return result;
             }
             inline std::string  toJson(const CMat& image, const std::vector<std::string> &options)

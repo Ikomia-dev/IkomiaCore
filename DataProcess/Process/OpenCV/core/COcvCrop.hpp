@@ -20,7 +20,7 @@
 #ifndef COCVCROP_HPP
 #define COCVCROP_HPP
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 #include "IO/CImageIO.h"
 #include "Graphics/CGraphicsRectangle.h"
 

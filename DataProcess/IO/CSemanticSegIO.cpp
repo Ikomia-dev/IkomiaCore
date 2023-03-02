@@ -57,17 +57,17 @@ std::vector<std::string> CSemanticSegIO::getClassNames() const
     return m_classes;
 }
 
-std::vector<cv::Vec3b> CSemanticSegIO::getColors() const
+std::vector<CColor> CSemanticSegIO::getColors() const
 {
     return m_colors;
 }
 
-std::shared_ptr<CImageIO> CSemanticSegIO::getMaskImageIO() const
+ImageIOPtr CSemanticSegIO::getMaskImageIO() const
 {
     return m_imgMaskIOPtr;
 }
 
-std::shared_ptr<CImageIO> CSemanticSegIO::getLegendImageIO() const
+ImageIOPtr CSemanticSegIO::getLegendImageIO() const
 {
     return m_imgLegendIOPtr;
 }
@@ -78,16 +78,25 @@ void CSemanticSegIO::setMask(const CMat &mask)
     std::vector<cv::Mat> inputs;
     inputs.push_back(mask);
     cv::calcHist(inputs, {0}, cv::Mat(), m_histo, {256}, {0, 256}, false);
+    generateLegend();
 }
 
-void CSemanticSegIO::setClassNames(const std::vector<std::string> &names, const std::vector<cv::Vec3b> &colors)
+void CSemanticSegIO::setClassNames(const std::vector<std::string> &names)
 {
-    if (names.size() != colors.size())
+    if (m_colors.size() != 0 && names.size() != m_colors.size())
         throw CException(CoreExCode::INVALID_SIZE, "Semantic segmentation output error: there must be the same number of classes and colors.", __func__, __FILE__, __LINE__);
 
     m_classes = names;
+    if (m_colors.empty())
+        generateRandomColors();
+}
+
+void CSemanticSegIO::setClassColors(const std::vector<CColor> &colors)
+{
+    if (colors.size() < m_classes.size())
+        throw CException(CoreExCode::INVALID_SIZE, "Colors count must be greater or equal of class names count", __func__, __FILE__, __LINE__);
+
     m_colors = colors;
-    generateLegend();
 }
 
 bool CSemanticSegIO::isDataAvailable() const
@@ -162,7 +171,7 @@ std::shared_ptr<CSemanticSegIO> CSemanticSegIO::clone() const
     return std::static_pointer_cast<CSemanticSegIO>(cloneImp());
 }
 
-std::shared_ptr<CWorkflowTaskIO> CSemanticSegIO::cloneImp() const
+WorkflowTaskIOPtr CSemanticSegIO::cloneImp() const
 {
     return std::shared_ptr<CSemanticSegIO>(new CSemanticSegIO(*this));
 }
@@ -206,10 +215,7 @@ void CSemanticSegIO::fromJsonInternal(const QJsonDocument &doc)
     for (int i=0; i<colors.size(); ++i)
     {
         QJsonObject obj = colors[i].toObject();
-        cv::Vec3b color;
-        color[0] = obj["r"].toInt();
-        color[1] = obj["g"].toInt();
-        color[2] = obj["b"].toInt();
+        CColor color = {obj["r"].toInt(), obj["g"].toInt(), obj["b"].toInt()};
         m_colors.push_back(color);
     }
     generateLegend();
@@ -229,26 +235,46 @@ void CSemanticSegIO::generateLegend()
 
     const int imgH = 1024;
     const int imgW = 1024;
-    size_t nbColors = colorIndices.size();
-    const int offsetX = 10;
-    const int offsetY = 10;
-    const int interline = 5;
-    int rectHeight = (int)((imgH - (2*offsetY) - ((nbColors-1)*interline)) / nbColors);
-    int rectWidth = imgW / 3;
-
     CMat legend(imgH, imgW, CV_8UC3, cv::Scalar(255,255,255));
-    int font = cv::FONT_HERSHEY_SIMPLEX;
-    const int fontScale = 1;
-    const int thickness = 2;
 
-    for (size_t i=0; i<nbColors; ++i)
+    size_t nbColors = colorIndices.size();
+    if (nbColors > 0)
     {
-        // Color frame
-        cv::Rect colorFrameRect = cv::Rect(offsetX, offsetY + (i * (rectHeight + interline)), rectWidth, rectHeight);
-        cv::rectangle(legend, colorFrameRect, m_colors[colorIndices[i]], -1);
-        // Class name
-        cv::Point textOrigin(3 * offsetX + rectWidth, offsetY + (i * (rectHeight + interline)) + (rectHeight / 2));
-        cv::putText(legend, m_classes[colorIndices[i]], textOrigin, font, fontScale, {0, 0, 0}, thickness);
+        const int offsetX = 10;
+        const int offsetY = 10;
+        const int interline = 5;
+        int rectHeight = (int)((imgH - (2*offsetY) - ((nbColors-1)*interline)) / nbColors);
+        int rectWidth = imgW / 3;
+        int font = cv::FONT_HERSHEY_SIMPLEX;
+        const int fontScale = 1;
+        const int thickness = 2;
+
+        for (size_t i=0; i<nbColors; ++i)
+        {
+            // Color frame
+            cv::Vec3b color = {m_colors[colorIndices[i]][0], m_colors[colorIndices[i]][1], m_colors[colorIndices[i]][2]};
+            cv::Rect colorFrameRect = cv::Rect(offsetX, offsetY + (i * (rectHeight + interline)), rectWidth, rectHeight);
+            cv::rectangle(legend, colorFrameRect, color, -1);
+            // Class name
+            cv::Point textOrigin(3 * offsetX + rectWidth, offsetY + (i * (rectHeight + interline)) + (rectHeight / 2));
+            cv::putText(legend, m_classes[colorIndices[i]], textOrigin, font, fontScale, {0, 0, 0}, thickness);
+        }
     }
     m_imgLegendIOPtr->setImage(legend);
+}
+
+void CSemanticSegIO::generateRandomColors()
+{
+    std::srand(RANDOM_COLOR_SEED);
+    double factor = 255.0 / (double)RAND_MAX;
+
+    for (size_t i=0; i<m_classes.size(); ++i)
+    {
+        CColor color = {
+            (uchar)((double)std::rand() * factor),
+            (uchar)((double)std::rand() * factor),
+            (uchar)((double)std::rand() * factor)
+        };
+        m_colors.push_back(color);
+    }
 }

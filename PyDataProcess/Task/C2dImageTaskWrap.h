@@ -23,7 +23,7 @@
 #define C2DIMAGETASKWRAP_H
 
 #include "PyDataProcessGlobal.h"
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 
 //----------------------------------------------//
 //------------  C2dImageTaskWrap  --------------//

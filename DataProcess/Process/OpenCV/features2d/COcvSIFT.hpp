@@ -20,7 +20,7 @@
 #ifndef COCVSIFT_HPP
 #define COCVSIFT_HPP
 
-#include "Core/C2dFeatureImageTask.h"
+#include "Task/C2dFeatureImageTask.h"
 
 //-------------------------//
 //----- COcvSIFTParam -----//

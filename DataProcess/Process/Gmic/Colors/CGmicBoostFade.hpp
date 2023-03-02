@@ -20,7 +20,7 @@
 #ifndef CGMICBOOSTFADE_HPP
 #define CGMICBOOSTFADE_HPP
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 #include "Process/Gmic/CGmicTaskParam.hpp"
 #include "Process/Gmic/CGmicImageConverter.h"
 

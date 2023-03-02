@@ -20,7 +20,7 @@
 #ifndef COCVTRACKERKCF_HPP
 #define COCVTRACKERKCF_HPP
 
-#include "Core/CVideoTrackingTask.h"
+#include "Task/CVideoTrackingTask.h"
 #include "IO/CImageIO.h"
 #include <opencv2/tracking.hpp>
 

@@ -112,6 +112,8 @@ class DATAPROCESSSHARED_EXPORT CBlobMeasureIO : public CWorkflowTaskIO
         ObjectsMeasures m_measures;
 };
 
+using BlobMeasureIOPtr = std::shared_ptr<CBlobMeasureIO>;
+
 class DATAPROCESSSHARED_EXPORT CBlobMeasureIOFactory: public CWorkflowTaskIOFactory
 {
     public:

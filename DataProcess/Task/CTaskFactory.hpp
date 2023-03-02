@@ -21,7 +21,7 @@
 #define CTASKFACTORY_H
 
 #include "DesignPattern/CAbstractFactory.hpp"
-#include "Core/CTaskInfo.h"
+#include "Task/CTaskInfo.h"
 #include "Workflow/CWorkflowTaskParam.h"
 #include "Workflow/CWorkflowTask.h"
 

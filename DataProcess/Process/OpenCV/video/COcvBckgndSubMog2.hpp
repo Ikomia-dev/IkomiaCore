@@ -21,7 +21,7 @@
 #define COCVBCKGNDSUBMOG2_HPP
 
 #include "opencv2/video/background_segm.hpp"
-#include "Core/CVideoTask.h"
+#include "Task/CVideoTask.h"
 
 //----------------------------------//
 //----- COcvBckgndSubMog2Param -----//
@@ -68,13 +68,13 @@ class COcvBckgndSubMog2 : public CVideoTask
         {
             setOutputDataType(IODataType::IMAGE_BINARY, 0);
             addOutput(std::make_shared<CImageIO>());
-            setOutputColorMap(1, 0, {{255,0,0}});
+            setOutputColorMap(1, 0, {{255, 0, 0}});
         }
         COcvBckgndSubMog2(const std::string name, const std::shared_ptr<COcvBckgndSubMog2Param>& pParam) : CVideoTask(name)
         {
             setOutputDataType(IODataType::IMAGE_BINARY, 0);
             addOutput(std::make_shared<CImageIO>());
-            setOutputColorMap(1, 0, {{255,0,0}});
+            setOutputColorMap(1, 0, {{255, 0, 0}});
             m_pParam = std::make_shared<COcvBckgndSubMog2Param>(*pParam);
         }
 

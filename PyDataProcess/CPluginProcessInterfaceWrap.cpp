@@ -24,7 +24,7 @@ std::shared_ptr<CTaskFactory> CPluginProcessInterfaceWrap::getProcessFactory()
     CPyEnsureGIL gil;
     try
     {
-        return this->get_override("getProcessFactory")();
+        return this->get_override("get_process_factory")();
     }
     catch(boost::python::error_already_set&)
     {
@@ -37,7 +37,7 @@ std::shared_ptr<CWidgetFactory> CPluginProcessInterfaceWrap::getWidgetFactory()
     CPyEnsureGIL gil;
     try
     {
-        return this->get_override("getWidgetFactory")();
+        return this->get_override("get_widget_factory")();
     }
     catch(boost::python::error_already_set&)
     {

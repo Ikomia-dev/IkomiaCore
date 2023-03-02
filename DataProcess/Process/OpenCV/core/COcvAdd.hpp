@@ -20,7 +20,7 @@
 #ifndef COCVADD_HPP
 #define COCVADD_HPP
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 
 //--------------------------------//
 //----- COcvAddParam -----//

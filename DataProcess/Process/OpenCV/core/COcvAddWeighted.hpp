@@ -20,7 +20,7 @@
 #ifndef COCVADDWEIGHTED_H
 #define COCVADDWEIGHTED_H
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 #include "IO/CImageIO.h"
 
 //--------------------------------//

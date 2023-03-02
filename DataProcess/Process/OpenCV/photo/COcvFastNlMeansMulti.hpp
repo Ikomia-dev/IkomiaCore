@@ -20,7 +20,7 @@
 #ifndef COCVFASTNLMEANSMULTI_HPP
 #define COCVFASTNLMEANSMULTI_HPP
 
-#include "Core/CVideoTask.h"
+#include "Task/CVideoTask.h"
 #include "UtilsTools.hpp"
 
 //---------------------------------//

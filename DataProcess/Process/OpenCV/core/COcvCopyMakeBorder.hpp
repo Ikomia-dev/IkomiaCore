@@ -20,7 +20,7 @@
 #ifndef COCVCOPYMAKEBORDER_HPP
 #define COCVCOPYMAKEBORDER_HPP
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 
 //-----------------------------------//
 //----- COcvCopyMakeBorderParam -----//

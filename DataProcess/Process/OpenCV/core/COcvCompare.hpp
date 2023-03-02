@@ -19,7 +19,7 @@
 
 #ifndef COCVCOMPARE_HPP
 #define COCVCOMPARE_HPP
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 
 //----------------------------//
 //----- COcvCompareParam -----//

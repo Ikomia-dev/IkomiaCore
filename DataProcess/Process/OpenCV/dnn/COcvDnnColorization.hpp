@@ -56,14 +56,15 @@ static float hullPts[] = {
 //-------------------------------//
 //----- COcvDnnColorization -----//
 //-------------------------------//
-class COcvDnnColorization: public COcvDnnProcess
+class COcvDnnColorization: public COcvDnnProcess, public C2dImageTask
 {
     public:
 
-        COcvDnnColorization() : COcvDnnProcess()
+        COcvDnnColorization() : COcvDnnProcess(), C2dImageTask()
         {
         }
-        COcvDnnColorization(const std::string& name, const std::shared_ptr<COcvDnnProcessParam>& pParam) : COcvDnnProcess(name)
+        COcvDnnColorization(const std::string& name, const std::shared_ptr<COcvDnnProcessParam>& pParam)
+            : COcvDnnProcess(), C2dImageTask(name)
         {
             m_pParam = std::make_shared<COcvDnnProcessParam>(*pParam);
         }
@@ -115,7 +116,7 @@ class COcvDnnColorization: public COcvDnnProcess
             {
                 if(m_net.empty() || pParam->m_bUpdate)
                 {
-                    m_net = readDnn();
+                    m_net = readDnn(pParam);
                     if(m_net.empty())
                         throw CException(CoreExCode::INVALID_PARAMETER, "Failed to load network", __func__, __FILE__, __LINE__);
 
@@ -135,7 +136,6 @@ class COcvDnnColorization: public COcvDnnProcess
                 throw CException(CoreExCode::INVALID_PARAMETER, e, __func__, __FILE__, __LINE__);
             }
 
-            readClassNames();
             endTaskRun();
             emit m_signalHandler->doProgress();
             manageOutput(dnnOutput);

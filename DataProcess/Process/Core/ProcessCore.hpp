@@ -20,7 +20,7 @@
 #ifndef PROCESSCORE_HPP
 #define PROCESSCORE_HPP
 
-#include "Core/CTaskFactory.hpp"
+#include "Task/CTaskFactory.hpp"
 #include "CBlobMeasure.h"
 #include "CPlotMerge.hpp"
 #include "CRgbHlsThreshold.h"

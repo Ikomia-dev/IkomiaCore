@@ -21,7 +21,7 @@
 #define COCVBCKGNDSUBKNN_HPP
 
 #include "opencv2/video/background_segm.hpp"
-#include "Core/CVideoTask.h"
+#include "Task/CVideoTask.h"
 
 //---------------------------------//
 //----- COcvBckgndSubKnnParam -----//
@@ -68,13 +68,13 @@ class COcvBckgndSubKnn : public CVideoTask
         {
             setOutputDataType(IODataType::IMAGE_BINARY, 0);
             addOutput(std::make_shared<CImageIO>());
-            setOutputColorMap(1, 0, {{255,0,0}});
+            setOutputColorMap(1, 0, {{255, 0, 0}});
         }
         COcvBckgndSubKnn(const std::string name, const std::shared_ptr<COcvBckgndSubKnnParam>& pParam) : CVideoTask(name)
         {
             setOutputDataType(IODataType::IMAGE_BINARY, 0);
             addOutput(std::make_shared<CImageIO>());
-            setOutputColorMap(1, 0, {{255,0,0}});
+            setOutputColorMap(1, 0, {{255, 0, 0}});
             m_pParam = std::make_shared<COcvBckgndSubKnnParam>(*pParam);
         }
 

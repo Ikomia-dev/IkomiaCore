@@ -21,35 +21,32 @@
 #define COCVWIDGETDNNSEGMENTATION_HPP
 
 #include "COcvWidgetDnnProcess.h"
-#include "Process/OpenCV/dnn/COcvDnnSegmentation.h"
+#include "Process/OpenCV/dnn/COcvDnnInstanceSeg.h"
 
-class COcvWidgetDnnSegmentation: public COcvWidgetDnnProcess
+class COcvWidgetDnnSemanticSeg: public COcvWidgetDnnProcess
 {
     public:
 
-        COcvWidgetDnnSegmentation(QWidget *parent = Q_NULLPTR): COcvWidgetDnnProcess(parent)
+        COcvWidgetDnnSemanticSeg(QWidget *parent = Q_NULLPTR): COcvWidgetDnnProcess(parent)
         {
             init();
         }
-        COcvWidgetDnnSegmentation(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : COcvWidgetDnnProcess(pParam, parent)
+        COcvWidgetDnnSemanticSeg(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : COcvWidgetDnnProcess(pParam, parent)
         {
-            m_pParam = std::dynamic_pointer_cast<COcvDnnSegmentationParam>(pParam);
+            m_pParam = std::dynamic_pointer_cast<COcvDnnInstanceSegParam>(pParam);
             init();
         }
 
         void init()
         {
             if(m_pParam == nullptr)
-                m_pParam = std::make_shared<COcvDnnSegmentationParam>();
+                m_pParam = std::make_shared<COcvDnnInstanceSegParam>();
 
-            auto pParam = std::dynamic_pointer_cast<COcvDnnSegmentationParam>(m_pParam);
+            auto pParam = std::dynamic_pointer_cast<COcvDnnInstanceSegParam>(m_pParam);
             assert(pParam);
 
             m_pComboNetType = addCombo(tr("Network type"));
-            m_pComboNetType->addItem("ENet", COcvDnnSegmentationParam::NetworkType::ENET);
-            m_pComboNetType->addItem("FCN", COcvDnnSegmentationParam::NetworkType::FCN);
-            m_pComboNetType->addItem("Mask RCNN", COcvDnnSegmentationParam::NetworkType::MASK_RCNN);
-            m_pComboNetType->addItem("UNet", COcvDnnSegmentationParam::NetworkType::UNET);
+            m_pComboNetType->addItem("Mask RCNN", COcvDnnInstanceSegParam::NetworkType::MASK_RCNN);
             m_pComboNetType->setCurrentIndex(m_pComboNetType->findData(pParam->m_netType));
 
             m_pSpinConfidence = addDoubleSpin(tr("Confidence"), pParam->m_confidence, 0.0, 1.0, 0.1, 2);
@@ -62,16 +59,16 @@ class COcvWidgetDnnSegmentation: public COcvWidgetDnnProcess
 
         void    initConnections()
         {
-            connect(m_pComboNetType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &COcvWidgetDnnSegmentation::onNetworkTypeChanged);
+            connect(m_pComboNetType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &COcvWidgetDnnSemanticSeg::onNetworkTypeChanged);
             connect(m_pSpinConfidence, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [&](double val)
             {
-                auto pParam = std::dynamic_pointer_cast<COcvDnnSegmentationParam>(m_pParam);
+                auto pParam = std::dynamic_pointer_cast<COcvDnnInstanceSegParam>(m_pParam);
                 assert(pParam);
                 pParam->m_confidence = val;
             });
             connect(m_pSpinMaskThreshold, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [&](double val)
             {
-                auto pParam = std::dynamic_pointer_cast<COcvDnnSegmentationParam>(m_pParam);
+                auto pParam = std::dynamic_pointer_cast<COcvDnnInstanceSegParam>(m_pParam);
                 assert(pParam);
                 pParam->m_maskThreshold = val;
             });
@@ -82,7 +79,7 @@ class COcvWidgetDnnSegmentation: public COcvWidgetDnnProcess
         void    onNetworkTypeChanged(int index)
         {
             Q_UNUSED(index);
-            auto pParam = std::dynamic_pointer_cast<COcvDnnSegmentationParam>(m_pParam);
+            auto pParam = std::dynamic_pointer_cast<COcvDnnInstanceSegParam>(m_pParam);
             assert(pParam);
             pParam->m_netType = m_pComboNetType->currentData().toInt();
         }
@@ -100,12 +97,12 @@ class COcvWidgetDnnSegmentationFactory : public CWidgetFactory
 
         COcvWidgetDnnSegmentationFactory()
         {
-            m_name = "ocv_dnn_segmentation";
+            m_name = "ocv_dnn_instance_segmentation";
         }
 
         virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
         {
-            return std::make_shared<COcvWidgetDnnSegmentation>(pParam);
+            return std::make_shared<COcvWidgetDnnSemanticSeg>(pParam);
         }
 };
 

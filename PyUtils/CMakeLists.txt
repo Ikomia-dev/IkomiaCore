@@ -1,7 +1,6 @@
 set(CMAKE_INSTALL_IKOMIA_PYUTILS ${CMAKE_INSTALL_IKOMIA_PYTHON_LIB}/utils)
 
 add_library(pyutils SHARED
-    PairToPythonTupleConverter.hpp
     PyUtils.cpp
     PyUtils.h
     PyUtilsDocString.hpp

@@ -20,7 +20,7 @@
 #ifndef COCVBOXFILTER_H
 #define COCVBOXFILTER_H
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 #include "IO/CImageIO.h"
 
 //------------------------------//

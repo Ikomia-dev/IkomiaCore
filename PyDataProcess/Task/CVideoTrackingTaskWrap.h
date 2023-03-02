@@ -23,7 +23,7 @@
 #define CVIDEOTRACKINGTASKWRAP_H
 
 #include "PyDataProcessGlobal.h"
-#include "Core/CVideoTrackingTask.h"
+#include "Task/CVideoTrackingTask.h"
 
 //----------------------------------------------------------//
 //-----------    CVideoTrackingTaskWrap     -------------//

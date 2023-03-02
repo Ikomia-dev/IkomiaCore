@@ -23,17 +23,18 @@
 #define COCVDNNSEGMENTATION_HPP
 
 #include "COcvDnnProcess.h"
+#include "Task/CSemanticSegTask.h"
 
-//------------------------------------//
-//----- COcvDnnSegmentationParam -----//
-//------------------------------------//
-class COcvDnnSegmentationParam: public COcvDnnProcessParam
+//-----------------------------------//
+//----- COcvDnnSemanticSegParam -----//
+//-----------------------------------//
+class COcvDnnSemanticSegParam: public COcvDnnProcessParam
 {
     public:
 
-        enum NetworkType {ENET, FCN, MASK_RCNN, UNET};
+        enum NetworkType {ENET, FCN, UNET};
 
-        COcvDnnSegmentationParam();
+        COcvDnnSemanticSegParam();
 
         void        setParamMap(const UMapString& paramMap) override;
 
@@ -46,15 +47,15 @@ class COcvDnnSegmentationParam: public COcvDnnProcessParam
         double  m_maskThreshold = 0.3;
 };
 
-//-------------------------------//
-//----- COcvDnnSegmentation -----//
-//-------------------------------//
-class COcvDnnSegmentation: public COcvDnnProcess
+//------------------------------//
+//----- COcvDnnSemanticSeg -----//
+//------------------------------//
+class COcvDnnSemanticSeg: public COcvDnnProcess, public CSemanticSegTask
 {
     public:
 
-        COcvDnnSegmentation();
-        COcvDnnSegmentation(const std::string name, const std::shared_ptr<COcvDnnSegmentationParam> &pParam);
+        COcvDnnSemanticSeg();
+        COcvDnnSemanticSeg(const std::string name, const std::shared_ptr<COcvDnnSemanticSegParam> &pParam);
 
         size_t                  getProgressSteps() override;
         int                     getNetworkInputSize() const override;
@@ -63,20 +64,11 @@ class COcvDnnSegmentation: public COcvDnnProcess
 
         std::vector<cv::String> getOutputsNames() const override;
 
-        bool                    isBgr();
-
         void                    run();
 
     private:
 
-        void                    manageOutput(std::vector<cv::Mat> &netOutputs);
-        void                    manageMaskRCNNOutput(std::vector<cv::Mat> &netOutputs);
-
-        void                    createLabelImageOutput(const cv::Mat &netOutput);
-
-        std::vector<cv::Vec3b>  generateColorMap(const cv::Mat &netOutput, bool bWithBackgroundClass);
-
-        void                    createLegendImage(const cv::Mat &netOutput, const std::vector<cv::Vec3b>& colors, bool bWithBackgroundClass);
+        void                    manageOutput(const cv::Mat &netOutput);
 };
 
 //----------------------------------//
@@ -88,7 +80,7 @@ class COcvDnnSegmentationFactory : public CTaskFactory
 
         COcvDnnSegmentationFactory()
         {
-            m_info.m_name = "ocv_dnn_segmentation";
+            m_info.m_name = "ocv_dnn_semantic_segmentation";
             m_info.m_description = QObject::tr("This process gives the possibility to launch inference from already trained networks for segmentation purpose (CAFFE, TENSORFLOW, DARKNET and TORCH)).").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Deep neural network").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
@@ -98,17 +90,17 @@ class COcvDnnSegmentationFactory : public CTaskFactory
 
         virtual WorkflowTaskPtr create(const WorkflowTaskParamPtr& pParam) override
         {
-            auto pDerivedParam = std::dynamic_pointer_cast<COcvDnnSegmentationParam>(pParam);
+            auto pDerivedParam = std::dynamic_pointer_cast<COcvDnnSemanticSegParam>(pParam);
             if(pDerivedParam != nullptr)
-                return std::make_shared<COcvDnnSegmentation>(m_info.m_name, pDerivedParam);
+                return std::make_shared<COcvDnnSemanticSeg>(m_info.m_name, pDerivedParam);
             else
                 return create();
         }
         virtual WorkflowTaskPtr create() override
         {
-            auto pDerivedParam = std::make_shared<COcvDnnSegmentationParam>();
+            auto pDerivedParam = std::make_shared<COcvDnnSemanticSegParam>();
             assert(pDerivedParam != nullptr);
-            return std::make_shared<COcvDnnSegmentation>(m_info.m_name, pDerivedParam);
+            return std::make_shared<COcvDnnSemanticSeg>(m_info.m_name, pDerivedParam);
         }
 };
 

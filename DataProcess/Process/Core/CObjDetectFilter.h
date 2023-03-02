@@ -1,8 +1,8 @@
 #ifndef COBJDETECTFILTER_H
 #define COBJDETECTFILTER_H
 
-#include "Workflow/CWorkflowTask.h"
-#include "Core/CTaskFactory.hpp"
+#include "Task/C2dImageTask.h"
+#include "Task/CTaskFactory.hpp"
 #include "Workflow/CWorkflowTaskWidget.h"
 #include "Core/CWidgetFactory.hpp"
 
@@ -29,7 +29,7 @@ class CObjDetectFilterParam: public CWorkflowTaskParam
 //----------------------------//
 //----- CObjDetectFilter -----//
 //----------------------------//
-class CObjDetectFilter: public CWorkflowTask
+class CObjDetectFilter: public C2dImageTask
 {
     public:
 
@@ -39,6 +39,10 @@ class CObjDetectFilter: public CWorkflowTask
         size_t  getProgressSteps() override;
 
         void    run() override;
+
+    private:
+
+        void    initIO();
 };
 
 //-----------------------------------//

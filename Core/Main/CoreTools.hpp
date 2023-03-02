@@ -256,7 +256,7 @@ namespace Ikomia
             }
             inline CColor           toCColor(const QColor& color)
             {
-                CColor ccolor = {color.red(), color.green(), color.blue(), color.alpha()};
+                CColor ccolor = {(uchar)(color.red()), (uchar)(color.green()), (uchar)(color.blue()), (uchar)(color.alpha())};
                 return ccolor;
             }
             inline QColor           getRandomQColor()
@@ -405,6 +405,10 @@ namespace Ikomia
                         return QObject::tr("Instance segmentation");
                     case IODataType::SEMANTIC_SEGMENTATION:
                         return QObject::tr("Semantic segmentation");
+                    case IODataType::KEYPOINTS:
+                        return QObject::tr("Keypoints detection");
+                    case IODataType::TEXT:
+                        return QObject::tr("Text detection");
                 }
                 return QString();
             }
@@ -442,6 +446,17 @@ namespace Ikomia
                     return targetData == IODataType::INPUT_GRAPHICS;
                 else if (srcData == IODataType::OBJECT_DETECTION)
                     return targetData == IODataType::INPUT_GRAPHICS || targetData == IODataType::BLOB_VALUES;
+                else if (srcData == IODataType::KEYPOINTS)
+                {
+                    return targetData == IODataType::INPUT_GRAPHICS ||
+                            targetData == IODataType::BLOB_VALUES ||
+                            targetData == IODataType::NUMERIC_VALUES;
+                }
+                else if (srcData == IODataType::TEXT)
+                {
+                    return targetData == IODataType::INPUT_GRAPHICS ||
+                            targetData == IODataType::NUMERIC_VALUES;
+                }
                 else if (srcData == IODataType::INSTANCE_SEGMENTATION)
                 {
                     return targetData == IODataType::INPUT_GRAPHICS ||

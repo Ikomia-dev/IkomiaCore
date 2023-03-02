@@ -20,7 +20,7 @@
 #ifndef COCVCAMSHIFT_HPP
 #define COCVCAMSHIFT_HPP
 
-#include "Core/CVideoTask.h"
+#include "Task/CVideoTask.h"
 #include "Graphics/CGraphicsPolygon.h"
 
 //------------------------------//
@@ -69,14 +69,14 @@ class COcvCamShift : public CVideoTask
             setOutputDataType(IODataType::IMAGE_BINARY, 0);
             addOutput(std::make_shared<CImageIO>());
             addOutput(std::make_shared<CBlobMeasureIO>());
-            setOutputColorMap(1, 0, {{255,0,0}});
+            setOutputColorMap(1, 0, {{255, 0, 0}});
         }
         COcvCamShift(const std::string name, const std::shared_ptr<COcvCamShiftParam>& pParam) : CVideoTask(name)
         {
             setOutputDataType(IODataType::IMAGE_BINARY, 0);
             addOutput(std::make_shared<CImageIO>());
             addOutput(std::make_shared<CBlobMeasureIO>());
-            setOutputColorMap(1, 0, {{255,0,0}});
+            setOutputColorMap(1, 0, {{255, 0, 0}});
             m_pParam = std::make_shared<COcvCamShiftParam>(*pParam);            
         }
 

@@ -8,48 +8,6 @@ CSemanticSegIOWrap::CSemanticSegIOWrap(const CSemanticSegIO &io): CSemanticSegIO
 {
 }
 
-void CSemanticSegIOWrap::setClassNames(const std::vector<std::string> &names, const std::vector<std::vector<uchar>> &colors)
-{
-    CPyEnsureGIL gil;
-    try
-    {
-        std::vector<cv::Vec3b> cvcolors;
-        for(size_t i=0; i<colors.size(); ++i)
-        {
-            cv::Vec3b cvcolor;
-            for(size_t j=0; j<3; ++j)
-            {
-                if(j < colors[i].size())
-                    cvcolor[j] = colors[i][j];
-                else
-                    cvcolor[j] = 0;
-            }
-            cvcolors.push_back(cvcolor);
-        }
-        this->CSemanticSegIO::setClassNames(names, cvcolors);
-    }
-    catch(boost::python::error_already_set&)
-    {
-        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
-    }
-}
-
-std::vector<std::vector<uchar> > CSemanticSegIOWrap::getColorsWrap() const
-{
-    std::vector<std::vector<uchar>> colors;
-    auto cvcolors = this->CSemanticSegIO::getColors();
-
-    for(size_t i=0; i<cvcolors.size(); ++i)
-    {
-        std::vector<uchar> color;
-        for(size_t j=0; j<3; ++j)
-            color.push_back(cvcolors[i][j]);
-
-        colors.push_back(color);
-    }
-    return colors;
-}
-
 bool CSemanticSegIOWrap::isDataAvailable() const
 {
     CPyEnsureGIL gil;

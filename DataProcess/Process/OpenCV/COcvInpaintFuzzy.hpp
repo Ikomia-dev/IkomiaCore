@@ -1,7 +1,7 @@
 #ifndef COCVINPAINTFUZZY_HPP
 #define COCVINPAINTFUZZY_HPP
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 #include "opencv2/fuzzy/fuzzy_image.hpp"
 
 //---------------------------------//

@@ -29,8 +29,8 @@ class CPluginProcessInterfaceWrap : public CPluginProcessInterface, public wrapp
 {
     public:
 
-        std::shared_ptr<CTaskFactory>    getProcessFactory();
-        std::shared_ptr<CWidgetFactory>     getWidgetFactory();
+        std::shared_ptr<CTaskFactory>   getProcessFactory();
+        std::shared_ptr<CWidgetFactory> getWidgetFactory();
 };
 
 #endif // CPLUGININTERFACEWRAP_H

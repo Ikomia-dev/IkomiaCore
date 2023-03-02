@@ -21,7 +21,7 @@
 #define COCVADAPTIVEMANIFOLD_H
 
 #include "opencv2/ximgproc.hpp"
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 
 //-------------------------------------//
 //----- COcvAdaptiveManifoldParam -----//

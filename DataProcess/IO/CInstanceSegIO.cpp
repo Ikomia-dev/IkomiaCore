@@ -113,17 +113,17 @@ CDataInfoPtr CInstanceSegIO::getDataInfo()
     return m_infoPtr;
 }
 
-std::shared_ptr<CImageIO> CInstanceSegIO::getMaskImageIO() const
+ImageIOPtr CInstanceSegIO::getMaskImageIO() const
 {
     return m_imgIOPtr;
 }
 
-std::shared_ptr<CGraphicsOutput> CInstanceSegIO::getGraphicsIO() const
+GraphicsOutputPtr CInstanceSegIO::getGraphicsIO() const
 {
     return m_graphicsIOPtr;
 }
 
-std::shared_ptr<CBlobMeasureIO> CInstanceSegIO::getBlobMeasureIO() const
+BlobMeasureIOPtr CInstanceSegIO::getBlobMeasureIO() const
 {
     return m_blobMeasureIOPtr;
 }
@@ -160,7 +160,7 @@ void CInstanceSegIO::addInstance(int id, int type, int classIndex, const std::st
     //Check mandatory initialization
     auto mergeMask = m_imgIOPtr->getImage();
     if (mergeMask.empty())
-        throw CException(CoreExCode::INVALID_USAGE, "A first call to init(...) method is mandatory to initialize segmentation mask dimension.");
+        throw CException(CoreExCode::INVALID_USAGE, "A first call to init() method is mandatory to initialize segmentation mask dimension.");
 
     CInstanceSegmentation obj;
     obj.m_id = id;
@@ -207,7 +207,7 @@ void CInstanceSegIO::addInstance(int id, int type, int classIndex, const std::st
     results.emplace_back(CObjectMeasure(CMeasure::Id::BBOX, {boxX, boxY, boxWidth, boxHeight}, graphicsId, label));
     m_blobMeasureIOPtr->addObjectMeasures(results);
 
-    //Create label mask according to the object index (we do index + 1 because 0 is the background label)
+    //Create label mask according to the object index (we do index + 1 because 0 is reserved for background)
     if (boxWidth > 0 && boxHeight > 0)
     {
         cv::Mat labelImg(boxHeight, boxWidth, CV_8UC1, cv::Scalar(obj.m_classIndex + 1));
@@ -287,7 +287,7 @@ std::shared_ptr<CInstanceSegIO> CInstanceSegIO::clone() const
     return std::static_pointer_cast<CInstanceSegIO>(cloneImp());
 }
 
-std::shared_ptr<CWorkflowTaskIO> CInstanceSegIO::cloneImp() const
+WorkflowTaskIOPtr CInstanceSegIO::cloneImp() const
 {
     return std::shared_ptr<CInstanceSegIO>(new CInstanceSegIO(*this));
 }

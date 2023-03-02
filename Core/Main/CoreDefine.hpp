@@ -27,6 +27,8 @@
 #include <QString>
 #include "Graphics/CPoint.hpp"
 
+#define RANDOM_COLOR_SEED 5
+
 namespace Ikomia
 {
     /**
@@ -81,6 +83,8 @@ namespace Ikomia
         OBJECT_DETECTION,       /**< I/O for object detection management */
         INSTANCE_SEGMENTATION,  /**< I/O for instance segmentation management */
         SEMANTIC_SEGMENTATION,  /**< I/O for semantic segmentation management */
+        KEYPOINTS,              /**< I/O for keypoints management */
+        TEXT,                   /**< I/O for text fields management */
         NONE                    /**< Unknown data type */
     };
 
@@ -162,7 +166,8 @@ namespace Ikomia
     using VectorString = std::vector<std::string>;
     using VectorPairString = std::vector<std::pair<std::string, std::string>>;
     using VectorPairQString = std::vector<std::pair<QString, QString>>;
-    using CColor = std::vector<int>;
+    using CColor = std::vector<uchar>;
+    using Keypoint = std::pair<int, CPointF>;
 }
 
 using namespace Ikomia;

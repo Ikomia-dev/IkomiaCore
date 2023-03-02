@@ -23,6 +23,8 @@
 #include "CGraphicsOutput.h"
 #include "CObjectDetectionIO.h"
 #include "CInstanceSegIO.h"
+#include "CKeypointsIO.h"
+#include "CTextIO.h"
 #include "UtilsTools.hpp"
 #include <QJsonDocument>
 #include <QJsonArray>
@@ -201,6 +203,34 @@ void CGraphicsInput::copy(const std::shared_ptr<CWorkflowTaskIO> &ioPtr)
         if (pInstanceSegIO)
         {
             auto graphicsOutPtr = pInstanceSegIO->getGraphicsIO();
+            if (graphicsOutPtr)
+            {
+                auto pGraphicsOut = dynamic_cast<const CGraphicsOutput*>(graphicsOutPtr.get());
+                if (pGraphicsOut)
+                    *this = *pGraphicsOut;
+            }
+        }
+    }
+    else if (type == IODataType::KEYPOINTS)
+    {
+        auto keyptsIOPtr = std::dynamic_pointer_cast<CKeypointsIO>(ioPtr);
+        if (keyptsIOPtr)
+        {
+            auto graphicsOutPtr = keyptsIOPtr->getGraphicsIO();
+            if (graphicsOutPtr)
+            {
+                auto pGraphicsOut = dynamic_cast<const CGraphicsOutput*>(graphicsOutPtr.get());
+                if (pGraphicsOut)
+                    *this = *pGraphicsOut;
+            }
+        }
+    }
+    else if (type == IODataType::TEXT)
+    {
+        auto textIOPtr = std::dynamic_pointer_cast<CTextIO>(ioPtr);
+        if (textIOPtr)
+        {
+            auto graphicsOutPtr = textIOPtr->getGraphicsIO();
             if (graphicsOutPtr)
             {
                 auto pGraphicsOut = dynamic_cast<const CGraphicsOutput*>(graphicsOutPtr.get());

@@ -40,6 +40,7 @@
 #include "Graphics/CGraphicsConversion.h"
 #include "VectorConverter.hpp"
 #include "MapConverter.hpp"
+#include "PairConverter.hpp"
 
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #define PY_ARRAY_UNIQUE_SYMBOL IKOMIA_ARRAY_API
@@ -93,6 +94,14 @@ BOOST_PYTHON_MODULE(pycore)
     register_ptr_to_python<std::shared_ptr<CWorkflowTask>>();
     register_ptr_to_python<std::shared_ptr<CWorkflowTaskWidget>>();
 
+    // Register std::unordered_map<T>
+    registerStdUMap<std::string, std::string>();
+
+    // Register std::pair<T1,T2>
+    registerStdPair<int, int>();
+    registerStdPair<std::string, std::string>();
+    registerStdPair<int, CPointF>();
+
     // Register std::vector<T>
     registerStdVector<int>();
     registerStdVector<size_t>();
@@ -106,9 +115,9 @@ BOOST_PYTHON_MODULE(pycore)
     registerStdVector<std::shared_ptr<CWorkflowTask>>();
     registerStdVector<CMeasure>();
     registerStdVector<IODataType>();
-
-    // Register std::unordered_map<T>
-    registerStdUMap<std::string, std::string>();
+    registerStdVector<std::pair<int, int>>();
+    registerStdVector<std::pair<std::string, std::string>>();
+    registerStdVector<std::pair<int, CPointF>>();
 
     //Register exceptions
     register_exception_translator<CException>(&translateCException);
@@ -327,6 +336,8 @@ BOOST_PYTHON_MODULE(pycore)
         .value("OBJECT_DETECTION", IODataType::OBJECT_DETECTION)
         .value("INSTANCE_SEGMENTATION", IODataType::INSTANCE_SEGMENTATION)
         .value("SEMANTIC_SEGMENTATION", IODataType::SEMANTIC_SEGMENTATION)
+        .value("KEYPOINTS", IODataType::KEYPOINTS)
+        .value("TEXT", IODataType::TEXT)
     ;
 
     void (CWorkflowTaskIOWrap::*ioSave)(const std::string&) = &CWorkflowTaskIOWrap::save;

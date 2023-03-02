@@ -21,7 +21,7 @@
 #define COCVADAPTIVETHRESHOLD_HPP
 
 #include "DataProcessTools.hpp"
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 #include "IO/CImageIO.h"
 
 //--------------------------------------//
@@ -72,14 +72,14 @@ class COcvAdaptiveThreshold : public C2dImageTask
         {
             getOutput(0)->setDataType(IODataType::IMAGE_BINARY);
             addOutput(std::make_shared<CImageIO>());
-            setOutputColorMap(1, 0, {{255,0,0}});
+            setOutputColorMap(1, 0, {{255, 0, 0}});
         }
         COcvAdaptiveThreshold(const std::string name, const std::shared_ptr<COcvAdaptiveThresholdParam>& pParam) : C2dImageTask(name)
         {
             m_pParam = std::make_shared<COcvAdaptiveThresholdParam>(*pParam);
             getOutput(0)->setDataType(IODataType::IMAGE_BINARY);
             addOutput(std::make_shared<CImageIO>());
-            setOutputColorMap(1, 0, {{255,0,0}});
+            setOutputColorMap(1, 0, {{255, 0, 0}});
         }
 
         size_t     getProgressSteps() override

@@ -23,7 +23,7 @@
 #define CDNNTRAINTASKWRAP_H
 
 #include "PyDataProcessGlobal.h"
-#include "Core/CDnnTrainTask.h"
+#include "Task/CDnnTrainTask.h"
 
 
 class CDnnTrainTaskWrap : public CDnnTrainTask, public wrapper<CDnnTrainTask>

@@ -21,7 +21,7 @@
 #define COCVINPAINTX_HPP
 
 #include "opencv2/xphoto.hpp"
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 
 class COcvInpaintX : public C2dImageTask
 {

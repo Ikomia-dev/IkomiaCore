@@ -20,7 +20,7 @@
 #ifndef COCVSPARSETODENSEOF_HPP
 #define COCVSPARSETODENSEOF_HPP
 
-#include "Core/CVideoOFTask.h"
+#include "Task/CVideoOFTask.h"
 #include "IO/CVideoIO.h"
 #include "opencv2/optflow.hpp"
 

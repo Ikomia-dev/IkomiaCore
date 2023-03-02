@@ -21,6 +21,7 @@
 #define COCVDNNDETECTOR_HPP
 
 #include "COcvDnnProcess.h"
+#include "Task/CObjectDetectionTask.h"
 
 //--------------------------------//
 //----- COcvDnnDetectorParam -----//
@@ -62,20 +63,17 @@ class COcvDnnDetectorParam: public COcvDnnProcessParam
 //---------------------------//
 //----- COcvDnnDetector -----//
 //---------------------------//
-class COcvDnnDetector: public COcvDnnProcess
+class COcvDnnDetector: public COcvDnnProcess, public CObjectDetectionTask
 {
     public:
 
-        COcvDnnDetector() : COcvDnnProcess()
+        COcvDnnDetector() : COcvDnnProcess(), CObjectDetectionTask()
         {
-            addOutput(std::make_shared<CGraphicsOutput>());
-            addOutput(std::make_shared<CBlobMeasureIO>());
         }
-        COcvDnnDetector(const std::string name, const std::shared_ptr<COcvDnnDetectorParam> &pParam): COcvDnnProcess(name)
+        COcvDnnDetector(const std::string name, const std::shared_ptr<COcvDnnDetectorParam> &pParam)
+            : COcvDnnProcess(), CObjectDetectionTask(name)
         {
             m_pParam = std::make_shared<COcvDnnDetectorParam>(*pParam);
-            addOutput(std::make_shared<CGraphicsOutput>());
-            addOutput(std::make_shared<CBlobMeasureIO>());
         }
 
         size_t      getProgressSteps() override
@@ -136,15 +134,17 @@ class COcvDnnDetector: public COcvDnnProcess
         void        run()
         {
             beginTaskRun();
-            auto pInput = std::dynamic_pointer_cast<CImageIO>(getInput(0));
-            //auto pGraphicsInput = std::dynamic_pointer_cast<CGraphicsInput>(getInput(1));
-            auto pParam = std::dynamic_pointer_cast<COcvDnnDetectorParam>(m_pParam);
 
-            if(pInput == nullptr || pParam == nullptr)
+            auto pInput = std::dynamic_pointer_cast<CImageIO>(getInput(0));
+            if (pInput == nullptr)
+                throw CException(CoreExCode::INVALID_PARAMETER, "Invalid input image", __func__, __FILE__, __LINE__);
+
+            auto pParam = std::dynamic_pointer_cast<COcvDnnDetectorParam>(m_pParam);
+            if (pParam == nullptr)
                 throw CException(CoreExCode::INVALID_PARAMETER, "Invalid parameters", __func__, __FILE__, __LINE__);
 
-            if(pInput->isDataAvailable() == false)
-                throw CException(CoreExCode::INVALID_PARAMETER, "Empty image", __func__, __FILE__, __LINE__);
+            if (pInput->isDataAvailable() == false)
+                throw CException(CoreExCode::INVALID_PARAMETER, "Source image is empty", __func__, __FILE__, __LINE__);
 
             CMat imgSrc;
             CMat imgOrigin = pInput->getImage();
@@ -163,29 +163,21 @@ class COcvDnnDetector: public COcvDnnProcess
             {
                 if(m_net.empty() || pParam->m_bUpdate)
                 {
-                    m_net = readDnn();
+                    m_net = readDnn(pParam);
                     if(m_net.empty())
                         throw CException(CoreExCode::INVALID_PARAMETER, "Failed to load network", __func__, __FILE__, __LINE__);
 
+                    readClassNames(pParam->m_labelsFile);
                     pParam->m_bUpdate = false;
                 }
-
                 prepareNetInputs();
-                int size = getNetworkInputSize();
-                double scaleFactor = getNetworkInputScaleFactor();
-                cv::Scalar mean = getNetworkInputMean();
-                auto inputBlob = cv::dnn::blobFromImage(imgSrc, scaleFactor, cv::Size(size,size), mean, false, false);
-                m_net.setInput(inputBlob);
-
-                auto netOutNames = getOutputsNames();
-                m_net.forward(netOutputs, netOutNames);
+                forward(imgSrc, netOutputs, pParam);
             }
             catch(cv::Exception& e)
             {
                 throw CException(CoreExCode::INVALID_PARAMETER, e, __func__, __FILE__, __LINE__);
             }
 
-            readClassNames();
             endTaskRun();
             emit m_signalHandler->doProgress();
             manageOutput(netOutputs);
@@ -206,8 +198,6 @@ class COcvDnnDetector: public COcvDnnProcess
 
         void        manageOutput(std::vector<cv::Mat> &netOutputs)
         {
-            forwardInputImage();
-
             auto pParam = std::dynamic_pointer_cast<COcvDnnDetectorParam>(m_pParam);
             switch(pParam->m_netType)
             {
@@ -232,18 +222,10 @@ class COcvDnnDetector: public COcvDnnProcess
             // Network produces output blob with a shape 1x1xNx7 where N is a number of
             // detections and an every detection is a vector of values
             // [batchId, classId, confidence, left, top, right, bottom]
+            int id = 0;
             auto pParam = std::dynamic_pointer_cast<COcvDnnDetectorParam>(m_pParam);
             auto pInput = std::dynamic_pointer_cast<CImageIO>(getInput(0));
             CMat imgSrc = pInput->getImage();
-
-            //Graphics output
-            auto pGraphicsOutput = std::dynamic_pointer_cast<CGraphicsOutput>(getOutput(1));
-            pGraphicsOutput->setNewLayer("DnnLayer");
-            pGraphicsOutput->setImageIndex(0);
-
-            //Measures output
-            auto pMeasureOutput = std::dynamic_pointer_cast<CBlobMeasureIO>(getOutput(2));
-            pMeasureOutput->clearData();
 
             for(int i=0; i<dnnOutput.size[2]; i++)
             {
@@ -268,19 +250,7 @@ class COcvDnnDetector: public COcvDnnProcess
                     float width = right - left + 1;
                     float height = bottom - top + 1;
 
-                    //Create rectangle graphics of bbox
-                    auto graphicsBox = pGraphicsOutput->addRectangle(left, top, width, height);
-
-                    //Retrieve class label
-                    std::string className = classId < m_classNames.size() ? m_classNames[classId] : "unknown " + std::to_string(classId);
-                    std::string label = className + " : " + std::to_string(confidence);
-                    pGraphicsOutput->addText(label, left + 5, top + 5);
-
-                    //Store values to be shown in results table
-                    std::vector<CObjectMeasure> results;
-                    results.emplace_back(CObjectMeasure(CMeasure(CMeasure::CUSTOM, QObject::tr("Confidence").toStdString()), confidence, graphicsBox->getId(), className));
-                    results.emplace_back(CObjectMeasure(CMeasure::Id::BBOX, {left, top, width, height}, graphicsBox->getId(), className));
-                    pMeasureOutput->addObjectMeasures(results);
+                    addObject(id++, classId, confidence, left, top, width, height);
                 }
             }
         }
@@ -290,15 +260,7 @@ class COcvDnnDetector: public COcvDnnProcess
             auto pInput = std::dynamic_pointer_cast<CImageIO>(getInput(0));
             CMat imgSrc = pInput->getImage();
 
-            //Graphics output
-            auto pGraphicsOutput = std::dynamic_pointer_cast<CGraphicsOutput>(getOutput(1));
-            pGraphicsOutput->setNewLayer("DnnLayer");
-            pGraphicsOutput->setImageIndex(0);
-
-            //Measures output
-            auto pMeasureOutput = std::dynamic_pointer_cast<CBlobMeasureIO>(getOutput(2));
-            pMeasureOutput->clearData();
-
+            int id = 0;
             int size = getNetworkInputSize();
             float xFactor = (float)imgSrc.cols / (float)size;
             float yFactor = (float)imgSrc.rows / (float)size;
@@ -326,19 +288,7 @@ class COcvDnnDetector: public COcvDnnProcess
                     float width = right - left + 1;
                     float height = bottom - top + 1;
 
-                    //Create rectangle graphics of bbox
-                    auto graphicsBox = pGraphicsOutput->addRectangle(left, top, width, height);
-
-                    //Retrieve class label
-                    std::string className = classId < m_classNames.size() ? m_classNames[classId] : "unknown " + std::to_string(classId);
-                    std::string label = className + " : " + std::to_string(confidence);
-                    pGraphicsOutput->addText(label, left + 5, top + 5);
-
-                    //Store values to be shown in results table
-                    std::vector<CObjectMeasure> results;
-                    results.emplace_back(CObjectMeasure(CMeasure(CMeasure::CUSTOM, QObject::tr("Confidence").toStdString()), confidence, graphicsBox->getId(), className));
-                    results.emplace_back(CObjectMeasure(CMeasure::Id::BBOX, {left, top, width, height}, graphicsBox->getId(), className));
-                    pMeasureOutput->addObjectMeasures(results);
+                    addObject(id++, classId, confidence, left, top, width, height);
                 }
             }
         }
@@ -381,33 +331,14 @@ class COcvDnnDetector: public COcvDnnProcess
             std::vector<int> indices;
             cv::dnn::NMSBoxes(detections, confidences, pParam->m_confidence, pParam->m_nmsThreshold, indices);
 
-            //Graphics output
-            auto pGraphicsOutput = std::dynamic_pointer_cast<CGraphicsOutput>(getOutput(1));
-            pGraphicsOutput->setNewLayer("DnnLayer");
-            pGraphicsOutput->setImageIndex(0);
-
-            //Measures output
-            auto pMeasureOutput = std::dynamic_pointer_cast<CBlobMeasureIO>(getOutput(2));
-            pMeasureOutput->clearData();
-
+            int id = 0;
             for(size_t i=0; i<indices.size(); ++i)
             {
-                //Create rectangle graphics of bbox
-                cv::Rect2d box = detections[indices[i]];
-                auto graphicsObj = pGraphicsOutput->addRectangle(box.x, box.y, box.width, box.height);
-
-                //Retrieve class label
-                float confidence = confidences[indices[i]];
-                size_t classId = classIds[indices[i]];
-                std::string className = classId < m_classNames.size() ? m_classNames[classId] : "unknown " + std::to_string(classId);
-                std::string label = className + " : " + std::to_string(confidence);
-                pGraphicsOutput->addText(label, box.x + 5, box.y + 5);
-
-                //Store values to be shown in results table
-                std::vector<CObjectMeasure> results;
-                results.emplace_back(CObjectMeasure(CMeasure(CMeasure::CUSTOM, QObject::tr("Confidence").toStdString()), confidence, graphicsObj->getId(), className));
-                results.emplace_back(CObjectMeasure(CMeasure::Id::BBOX, {box.x, box.y, box.width, box.height}, graphicsObj->getId(), className));
-                pMeasureOutput->addObjectMeasures(results);
+                const int index = indices[i];
+                cv::Rect2d box = detections[index];
+                float confidence = confidences[index];
+                size_t classId = classIds[index];
+                addObject(id++, classId, confidence, box.x, box.y, box.width, box.height);
             }
         }
         void        manageEASTOutput(const std::vector<cv::Mat>& netOutputs)
@@ -467,37 +398,18 @@ class COcvDnnDetector: public COcvDnnProcess
             std::vector<int> indices;
             cv::dnn::NMSBoxes(detections, confidences, pParam->m_confidence, pParam->m_nmsThreshold, indices);
 
-            //Graphics output
-            auto pGraphicsOutput = std::dynamic_pointer_cast<CGraphicsOutput>(getOutput(1));
-            pGraphicsOutput->setNewLayer("DnnLayer");
-            pGraphicsOutput->setImageIndex(0);
-
-            //Measures output
-            auto pMeasureOutput = std::dynamic_pointer_cast<CBlobMeasureIO>(getOutput(2));
-            pMeasureOutput->clearData();
-
+            // Add objects
+            int id = 0;
             int size = getNetworkInputSize();
             float xFactor = (float)imgSrc.cols / (float)size;
             float yFactor = (float)imgSrc.rows / (float)size;
 
             for(size_t i=0; i<indices.size(); ++i)
             {
-                //Create polygon graphics of rotated box
                 cv::RotatedRect& box = detections[indices[i]];
-                cv::Point2f vertices[4];
-                box.points(vertices);
-
-                PolygonF poly;
-                for(int j=0; j<4; ++j)
-                    poly.push_back(CPointF(vertices[j].x * xFactor, vertices[j].y * yFactor));
-
-                auto graphicsObj = pGraphicsOutput->addPolygon(poly);
-
-                //Store values to be shown in results table
-                std::vector<CObjectMeasure> results;
-                results.emplace_back(CObjectMeasure(CMeasure(CMeasure::CUSTOM, QObject::tr("Confidence").toStdString()), confidences[indices[i]], graphicsObj->getId(), "Text"));
-                results.emplace_back(CObjectMeasure(CMeasure::Id::ORIENTED_BBOX, {box.center.x * xFactor, box.center.y * yFactor, box.size.width, box.size.height, box.angle}, graphicsObj->getId(), "Text"));
-                pMeasureOutput->addObjectMeasures(results);
+                addObject(id++, 0, confidences[indices[i]],
+                        box.center.x * xFactor, box.center.y * yFactor,
+                        box.size.width, box.size.height, box.angle);
             }
         }
 };

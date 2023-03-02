@@ -20,7 +20,7 @@
 #ifndef CGMICREDEYE_HPP
 #define CGMICREDEYE_HPP
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 #include "Process/Gmic/CGmicTaskParam.hpp"
 #include "Process/Gmic/CGmicImageConverter.h"
 

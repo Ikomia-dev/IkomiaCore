@@ -20,7 +20,7 @@
 #ifndef COCVFLANNMATCHER_HPP
 #define COCVFLANNMATCHER_HPP
 
-#include "Core/C2dFeatureMatcherTask.h"
+#include "Task/C2dFeatureMatcherTask.h"
 #include "IO/CImageIO.h"
 
 //--------------------------------//

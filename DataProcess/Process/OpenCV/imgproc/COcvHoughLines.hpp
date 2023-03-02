@@ -20,7 +20,7 @@
 #ifndef COCVHOUGHLINES_HPP
 #define COCVHOUGHLINES_HPP
 
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 
 //-------------------------------//
 //----- COcvHoughLinesParam -----//

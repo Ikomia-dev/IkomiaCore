@@ -274,7 +274,7 @@ bool CImageIO::isDataAvailable() const
         m_dataType == IODataType::VIDEO_LABEL ||
         m_dataType == IODataType::DESCRIPTORS)
     {
-        return m_image.data != nullptr;
+        return m_image.empty() == false && m_image.data != nullptr;
     }
     else
         return false;

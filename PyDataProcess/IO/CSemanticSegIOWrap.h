@@ -11,10 +11,6 @@ class CSemanticSegIOWrap: public CSemanticSegIO, public wrapper<CSemanticSegIO>
         CSemanticSegIOWrap();
         CSemanticSegIOWrap(const CSemanticSegIO& io);
 
-        void        setClassNames(const std::vector<std::string>& names, const std::vector<std::vector<uchar>>& colors);
-
-        std::vector<std::vector<uchar>> getColorsWrap() const;
-
         bool        isDataAvailable() const override;
         bool        default_isDataAvailable() const;
 

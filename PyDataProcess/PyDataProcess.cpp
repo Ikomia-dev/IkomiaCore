@@ -30,6 +30,11 @@
 #include "Task/CVideoOFTaskWrap.h"
 #include "Task/CVideoTrackingTaskWrap.h"
 #include "Task/CDnnTrainTaskWrap.h"
+#include "Task/CClassifTaskWrap.h"
+#include "Task/CObjDetectTaskWrap.h"
+#include "Task/CSemanticSegTaskWrap.h"
+#include "Task/CInstanceSegTaskWrap.h"
+#include "Task/CKeyptsDetectTaskWrap.h"
 #include "CWidgetFactoryWrap.h"
 #include "CPluginProcessInterfaceWrap.h"
 #include "IO/CNumericIOWrap.hpp"
@@ -44,6 +49,8 @@
 #include "IO/CObjectDetectionIOWrap.h"
 #include "IO/CInstanceSegIOWrap.h"
 #include "IO/CSemanticSegIOWrap.h"
+#include "IO/CTextIOWrap.h"
+#include "IO/CKeyptsIOWrap.h"
 #include "CIkomiaRegistryWrap.h"
 #include "CWorkflowWrap.h"
 
@@ -130,6 +137,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
     register_ptr_to_python<std::shared_ptr<CPathIO>>();
     register_ptr_to_python<std::shared_ptr<CDatasetIO>>();
     register_ptr_to_python<std::shared_ptr<CArrayIO>>();
+    register_ptr_to_python<std::shared_ptr<CObjectDetectionIO>>();
+    register_ptr_to_python<std::shared_ptr<CSemanticSegIO>>();
     register_ptr_to_python<std::shared_ptr<C2dImageTask>>();
     register_ptr_to_python<std::shared_ptr<C2dImageInteractiveTask>>();
     register_ptr_to_python<std::shared_ptr<CVideoTask>>();
@@ -148,6 +157,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
     registerStdVector<CInstanceSegmentation>();
     registerStdVector<CMat>();
     registerStdVector<std::vector<cv::Point>>();
+    registerStdVector<CKeypointLink>();
+    registerStdVector<CTextField>();
 
     // Register std::map<T>
     registerStdMap<int, std::string>();
@@ -499,6 +510,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .add_property("color", &CObjectDetection::getColor, &CObjectDetection::setColor, "Object display color [r, g, b, a]")
     ;
 
+    void (CObjectDetectionIO::*addObjectBox1)(int, const std::string&, double, double, double, double, double, const CColor&) = &CObjectDetectionIO::addObject;
+    void (CObjectDetectionIO::*addObjectRotateBox1)(int, const std::string&, double, double, double, double, double, double, const CColor&) = &CObjectDetectionIO::addObject;
     std::string (CObjectDetectionIO::*objDetectToJsonNoOpt)() const = &CObjectDetectionIO::toJson;
     std::string (CObjectDetectionIO::*objDetectToJson)(const std::vector<std::string>&) const = &CObjectDetectionIO::toJson;
 
@@ -509,9 +522,10 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("get_object", &CObjectDetectionIO::getObject, _getObjectDocString, args("self", "index"))
         .def("get_objects", &CObjectDetectionIO::getObjects, _getObjectsDocString, args("self"))
         .def("get_graphics_io", &CObjectDetectionIO::getGraphicsIO, _getGraphicsIODocString, args("self"))
-        .def("is_data_available", &CObjectDetectionIOWrap::isDataAvailable, &CObjectDetectionIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
+        .def("is_data_available", &CObjectDetectionIO::isDataAvailable, &CObjectDetectionIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
         .def("init", &CObjectDetectionIO::init, _initObjDetectIODocString, args("self", "task_name", "ref_image_index"))
-        .def("add_object", &CObjectDetectionIO::addObject, _addObjectDocString, args("self", "id", "label", "confidence", "box_x", "box_y", "box_width", "box_height", "color"))
+        .def("add_object", addObjectBox1, _addObjectDocString, args("self", "id", "label", "confidence", "box_x", "box_y", "box_width", "box_height", "color"))
+        .def("add_object", addObjectRotateBox1, _addObject2DocString, args("self", "id", "label", "confidence", "cx", "cy", "width", "height", "angle", "color"))
         .def("clear_data", &CObjectDetectionIO::clearData, &CObjectDetectionIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
         .def("load", &CObjectDetectionIO::load, &CObjectDetectionIOWrap::default_load, _objDetectLoadDocString, args("self", "path"))
         .def("save", &CObjectDetectionIO::save, &CObjectDetectionIOWrap::default_save, _objDetectSaveDocString, args("self", "path"))
@@ -568,9 +582,10 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def(init<const CSemanticSegIO&>("Copy constructor"))
         .def("get_mask", &CSemanticSegIO::getMask, _getMaskDocString, args("self"))
         .def("get_class_names", &CSemanticSegIO::getClassNames, _getClassNamesDocString, args("self"))
-        .def("get_colors", &CSemanticSegIOWrap::getColorsWrap, _getColorsDocString, args("self"))
+        .def("get_colors", &CSemanticSegIO::getColors, _getColorsDocString, args("self"))
         .def("set_mask", &CSemanticSegIO::setMask, _setMaskDocString, args("self", "mask"))
-        .def("set_class_names", &CSemanticSegIOWrap::setClassNames, _setClassNamesDocString, args("self", "names", "colors"))
+        .def("set_class_names", &CSemanticSegIO::setClassNames, _setClassNamesDocString, args("self", "names"))
+        .def("set_class_colors", &CSemanticSegIO::setClassColors, _setClassColorsDocString, args("self", "colors"))
         .def("is_data_available", &CSemanticSegIO::isDataAvailable, &CSemanticSegIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
         .def("clear_data", &CSemanticSegIO::clearData, &CSemanticSegIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
         .def("load", &CSemanticSegIO::load, &CSemanticSegIOWrap::default_load, _instanceSegLoadDocString, args("self", "path"))
@@ -578,6 +593,90 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("to_json", semSegToJsonNoOpt, &CSemanticSegIOWrap::default_toJsonNoOpt, _imageIOToJsonNoOptDocString, args("self"))
         .def("to_json", semSegToJson, &CSemanticSegIOWrap::default_toJson, _instanceSegToJsonDocString, args("self", "options"))
         .def("from_json", &CSemanticSegIO::fromJson, &CSemanticSegIOWrap::default_fromJson, _instanceSegFromJsonDocString, args("self", "jsonStr"))
+    ;
+
+    //------------------------//
+    //----- CKeypointsIO -----//
+    //------------------------//
+    class_<CObjectKeypoints>("CObjectKeypoints", _objkeyptsDocString)
+        .def(init<>("Default constructor", args("self")))
+        .add_property("id", &CObjectKeypoints::getId, &CObjectKeypoints::setId, "Object ID (int)")
+        .add_property("label", &CObjectKeypoints::getLabel, &CObjectKeypoints::setLabel, "Object label (str)")
+        .add_property("confidence", &CObjectKeypoints::getConfidence, &CObjectKeypoints::setConfidence, "Prediction confidence (double)")
+        .add_property("box", &CObjectKeypoints::getBox, &CObjectKeypoints::setBox, "Object bounding box [x, y, width, height]")
+        .add_property("color", &CObjectKeypoints::getColor, &CObjectKeypoints::setColor, "Object display color [r, g, b, a]")
+        .add_property("points", &CObjectKeypoints::getKeypoints, &CObjectKeypoints::setKeypoints, "Keypoints list (:py:class:`~ikomia.core.pycore.CPointF`)")
+    ;
+
+    class_<CKeypointLink>("CKeypointLink", _keyptLinkDocString)
+        .def(init<>("Default constructor", args("self")))
+        .add_property("start_point_index", &CKeypointLink::getStartPointIndex, &CKeypointLink::setStartPointIndex, "Starting point index (int)")
+        .add_property("end_point_index", &CKeypointLink::getEndPointIndex, &CKeypointLink::setEndPointIndex, "Ending point index (int)")
+        .add_property("label", &CKeypointLink::getLabel, &CKeypointLink::setLabel, "Link label (str)")
+        .add_property("color", &CKeypointLink::getColor, &CKeypointLink::setColor, "Link color [r, g, b]")
+    ;
+
+    std::string (CKeypointsIO::*keyptsToJsonNoOpt)() const = &CKeypointsIO::toJson;
+    std::string (CKeypointsIO::*keyptsToJson)(const std::vector<std::string>&) const = &CKeypointsIO::toJson;
+
+    class_<CKeyptsIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CKeyptsIOWrap>>("CKeypointsIO", _keyptsIODocString)
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const CKeypointsIO&>("Copy constructor"))
+        .def("add_object", &CKeypointsIO::addObject, _keyptsAddObjDocString, args("self", "id", "label", "confidence", "box_x", "box_y", "box_width", "box_height", "keypoints", "color"))
+        .def("clear_data", &CKeypointsIO::clearData, &CKeyptsIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
+        .def("get_object_count", &CKeypointsIO::getObjectCount, _keyptsGetObjCountDocString, args("self"))
+        .def("get_object", &CKeypointsIO::getObject, _keyptsGetObjDocString, args("self", "index"))
+        .def("get_objects", &CKeypointsIO::getObjects, _keyptsGetObjectsDocString, args("self"))
+        .def("get_graphics_io", &CKeypointsIO::getGraphicsIO, _keyptsGetGraphicsIODocString, args("self"))
+        .def("get_keypoint_links", &CKeypointsIO::getKeypointLinks, _getKeyptsLinksDocString, args("self"))
+        .def("get_keypoint_names", &CKeypointsIO::getKeypointNames, _getKeyptsNamesDocString, args("self"))
+        .def("init", &CKeypointsIO::init, _keyptsInitDocString, args("self", "task_name", "ref_image_index"))
+        .def("is_data_available", &CKeypointsIO::isDataAvailable, &CKeyptsIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
+        .def("set_keypoint_names", &CKeypointsIO::setKeypointNames, _setKeyptNamesDocString, args("self", "names"))
+        .def("set_keypoint_links", &CKeypointsIO::setKeypointLinks, _setKeyptLinksDocString, args("self", "links"))
+        .def("load", &CKeypointsIO::load, &CKeyptsIOWrap::default_load, _keyptsLoadDocString, args("self", "path"))
+        .def("save", &CKeypointsIO::save, &CKeyptsIOWrap::default_save, _keyptsSaveDocString, args("self", "path"))
+        .def("to_json", keyptsToJsonNoOpt, &CKeyptsIOWrap::default_toJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
+        .def("to_json", keyptsToJson, &CKeyptsIOWrap::default_toJson, _objDetectToJsonDocString, args("self", "options"))
+        .def("from_json", &CKeypointsIO::fromJson, &CKeyptsIOWrap::default_fromJson, _objDetectFromJsonDocString, args("self", "json_str"))
+    ;
+
+    //-------------------//
+    //----- CTextIO -----//
+    //-------------------//
+    class_<CTextField>("CTextField", _textFieldDocString)
+        .def(init<>("Default constructor", args("self")))
+        .add_property("id", &CTextField::getId, &CTextField::setId, "Text field ID (int)")
+        .add_property("label", &CTextField::getLabel, &CTextField::setLabel, "Text field label (str)")
+        .add_property("text", &CTextField::getText, &CTextField::setText, "Text field value (str)")
+        .add_property("confidence", &CTextField::getConfidence, &CTextField::setConfidence, "Prediction confidence (double)")
+        .add_property("polygon", &CTextField::getPolygon, &CTextField::setPolygon, "Text field polygon: list of :py:class:`~ikomia.core.pycore.CPointF`")
+        .add_property("color", &CTextField::getColor, &CTextField::setColor, "Text field display color [r, g, b, a]")
+    ;
+
+    void (CTextIO::*addFieldBox)(int, const std::string&, const std::string&, double, double, double, double, double, const CColor&) = &CTextIO::addTextField;
+    void (CTextIO::*addFieldPoly)(int, const std::string&, const std::string&, double, const PolygonF&, const CColor&) = &CTextIO::addTextField;
+    std::string (CTextIO::*textToJsonNoOpt)() const = &CTextIO::toJson;
+    std::string (CTextIO::*textToJson)(const std::vector<std::string>&) const = &CTextIO::toJson;
+
+    class_<CTextIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CTextIOWrap>>("CTextIO", _textIODocString)
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const CTextIO&>("Copy constructor"))
+        .def("get_text_field_count", &CTextIO::getTextFieldCount, _getTextFieldCountDocString, args("self"))
+        .def("get_text_field", &CTextIO::getTextField, _getTextFieldDocString, args("self", "index"))
+        .def("get_text_fields", &CTextIO::getTextFields, _getTextFieldsDocString, args("self"))
+        .def("get_graphics_io", &CTextIO::getGraphicsIO, _textIOGetGraphicsIODocString, args("self"))
+        .def("is_data_available", &CTextIO::isDataAvailable, &CTextIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
+        .def("init", &CTextIO::init, _initObjDetectIODocString, args("self", "task_name", "ref_image_index"))
+        .def("finalize", &CTextIO::finalize, _textIOFinalizeIODocString, args("self"))
+        .def("add_text_field", addFieldBox, _addTextFieldBoxDocString, args("self", "id", "label", "text", "confidence", "box_x", "box_y", "box_width", "box_height", "color"))
+        .def("add_text_field", addFieldPoly, _addTextFieldPolyDocString, args("self", "id", "label", "text", "confidence", "polygon", "color"))
+        .def("clear_data", &CTextIO::clearData, &CTextIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
+        .def("load", &CTextIO::load, &CTextIOWrap::default_load, _textLoadDocString, args("self", "path"))
+        .def("save", &CTextIO::save, &CTextIOWrap::default_save, _textSaveDocString, args("self", "path"))
+        .def("to_json", textToJsonNoOpt, &CTextIOWrap::default_toJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
+        .def("to_json", textToJson, &CTextIOWrap::default_toJson, _objDetectToJsonDocString, args("self", "options"))
+        .def("from_json", &CTextIO::fromJson, &CTextIOWrap::default_fromJson, _objDetectFromJsonDocString, args("self", "json_str"))
     ;
 
     //------------------------//
@@ -589,7 +688,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def(init<const std::string&>(_ctor2ImageProcess2dDocString, args("self", "name")))
         .def(init<const std::string&, bool>(_ctor3ImageProcess2dDocString, args("self", "name", "has_graphics_input")))
         .def("set_active", &C2dImageTask::setActive, &C2dImageTaskWrap::default_setActive, _setActiveDocString, args("self", "is_active"))
-        .def("set_output_color_map", &C2dImageTaskWrap::setOutputColorMap, _setOutputColorMapDocString, args("self", "index", "mask_index", "colors"))
+        .def("set_output_color_map", &C2dImageTask::setOutputColorMap, _setOutputColorMapDocString, args("self", "index", "mask_index", "colors"))
         .def("update_static_outputs", &C2dImageTask::updateStaticOutputs, &C2dImageTaskWrap::default_updateStaticOutputs, _updateStaticOutputsDocString, args("self"))
         .def("begin_task_run", &C2dImageTask::beginTaskRun, &C2dImageTaskWrap::default_beginTaskRun, _beginTaskRunDocString, args("self"))
         .def("end_task_run", &C2dImageTask::endTaskRun, &C2dImageTaskWrap::default_endTaskRun, _endTaskRunDocString, args("self"))
@@ -734,6 +833,164 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("run", &CDnnTrainTask::run, &CDnnTrainTaskWrap::default_run, _runDocString, args("self"))
         .def("set_active", &CDnnTrainTask::setActive, &CDnnTrainTaskWrap::default_setActive, _setActiveDocString, args("self", "is_active"))
         .def("stop", &CDnnTrainTask::stop, &CDnnTrainTaskWrap::default_stop, _stopDocString, args("self"))
+    ;
+
+    //-------------------------------//
+    //----- CClassificationTask -----//
+    //-------------------------------//
+    class_<CClassifTaskWrap, bases<C2dImageTask>, std::shared_ptr<CClassifTaskWrap>>("CClassificationTask", _classifTaskDocString)
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const std::string&>(_ctorClassifDocString, args("self", "name")))
+        .def("set_active", &CClassificationTask::setActive, &CClassifTaskWrap::default_setActive, _setActiveDocString, args("self", "is_active"))
+        .def("update_static_outputs", &CClassificationTask::updateStaticOutputs, &CClassifTaskWrap::default_updateStaticOutputs, _updateStaticOutputsDocString, args("self"))
+        .def("begin_task_run", &CClassificationTask::beginTaskRun, &CClassifTaskWrap::default_beginTaskRun, _beginTaskRunDocString, args("self"))
+        .def("end_task_run", &CClassificationTask::endTaskRun, &CClassifTaskWrap::default_endTaskRun, _endTaskRunDocString, args("self"))
+        .def("graphics_changed", &CClassificationTask::graphicsChanged, &CClassifTaskWrap::default_graphicsChanged, _graphicsChangedDocString, args("self"))
+        .def("global_input_changed", &CClassificationTask::globalInputChanged, &CClassifTaskWrap::default_globalInputChanged, _globalInputChangedDocString, args("self", "is_new_sequence"))
+        .def("get_progress_steps", &CClassificationTask::getProgressSteps, &CClassifTaskWrap::default_getProgressSteps, _getProgressStepsDocString, args("self"))
+        .def("run", &CClassificationTask::run, &CClassifTaskWrap::default_run, _runDocString, args("self"))
+        .def("stop", &CClassificationTask::stop, &CClassifTaskWrap::default_stop, _stopDocString, args("self"))
+        .def("emit_add_sub_progress_steps", &CClassifTaskWrap::emitAddSubProgressSteps, _emitAddSubProgressSteps, args("self", "count"))
+        .def("emit_step_progress", &CClassifTaskWrap::emitStepProgress, _emitStepProgressDocString, args("self"))
+        .def("emit_graphics_context_changed", &CClassifTaskWrap::emitGraphicsContextChanged, _emitGraphicsContextChangedDocString, args("self"))
+        .def("emit_output_changed", &CClassifTaskWrap::emitOutputChanged, _emitOutputChangedDocString, args("self"))
+        .def("execute_actions", &CClassificationTask::executeActions, &CClassifTaskWrap::default_executeActions, _executeActionsDocString, args("self", "action"))
+        .def("add_object", &CClassificationTask::addObject, _classifAddObjectDocString, args("self", "graphics_item", "class_index", "confidence"))
+        .def("get_names", &CClassificationTask::getNames, _classifGetNamesDocString, args("self"))
+        .def("get_input_objects", &CClassificationTask::getInputObjects, _classifGetInputObjectsDocString, args("self"))
+        .def("get_object_sub_image", &CClassificationTask::getObjectSubImage, _classifGetObjectSubImageDocString, args("self", "item"))
+        .def("get_objects_results", &CClassificationTask::getObjectsResults, _classifGetObjectsResultsDocString, args("self"))
+        .def("get_whole_image_results", &CClassificationTask::getWholeImageResults, _classifGetWholeImageResultsDocString, args("self"))
+        .def("get_visualization_image", &CClassificationTask::getVisualizationImage, _classifGetVisuImageDocString, args("self"))
+        .def("is_whole_image_classification", &CClassificationTask::isWholeImageClassification, _classifIsWholeImageDocString, args("self"))
+        .def("read_class_names", &CClassificationTask::readClassNames, _classifReadClassNamesDocString, args("self", "path"))
+        .def("set_colors", &CClassificationTask::setColors, _classifSetColorsDocString, args("self", "colors"))
+        .def("set_names", &CClassificationTask::setNames, _classifSetNamesDocString, args("self", "names"))
+        .def("set_whole_image_results", &CClassificationTask::setWholeImageResults, _classifSetWholeImageResultsDocString, args("self", "names", "confidences"))
+    ;
+
+    //--------------------------------//
+    //----- CObjectDetectionTask -----//
+    //--------------------------------//
+    void (CObjectDetectionTask::*addObjectBox2)(int, int, double, double, double, double, double) = &CObjectDetectionTask::addObject;
+    void (CObjectDetectionTask::*addObjectRotateBox2)(int, int, double, double, double, double, double, double) = &CObjectDetectionTask::addObject;
+
+    class_<CObjDetectTaskWrap, bases<C2dImageTask>, std::shared_ptr<CObjDetectTaskWrap>>("CObjectDetectionTask", _objDetTaskDocString)
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const std::string&>(_ctorObjDetectDocString, args("self", "name")))
+        .def("set_active", &CObjectDetectionTask::setActive, &CObjDetectTaskWrap::default_setActive, _setActiveDocString, args("self", "is_active"))
+        .def("update_static_outputs", &CObjectDetectionTask::updateStaticOutputs, &CObjDetectTaskWrap::default_updateStaticOutputs, _updateStaticOutputsDocString, args("self"))
+        .def("begin_task_run", &CObjectDetectionTask::beginTaskRun, &CObjDetectTaskWrap::default_beginTaskRun, _beginTaskRunDocString, args("self"))
+        .def("end_task_run", &CObjectDetectionTask::endTaskRun, &CObjDetectTaskWrap::default_endTaskRun, _endTaskRunDocString, args("self"))
+        .def("graphics_changed", &CObjectDetectionTask::graphicsChanged, &CObjDetectTaskWrap::default_graphicsChanged, _graphicsChangedDocString, args("self"))
+        .def("global_input_changed", &CObjectDetectionTask::globalInputChanged, &CObjDetectTaskWrap::default_globalInputChanged, _globalInputChangedDocString, args("self", "is_new_sequence"))
+        .def("get_progress_steps", &CObjectDetectionTask::getProgressSteps, &CObjDetectTaskWrap::default_getProgressSteps, _getProgressStepsDocString, args("self"))
+        .def("run", &CObjectDetectionTask::run, &CObjDetectTaskWrap::default_run, _runDocString, args("self"))
+        .def("stop", &CObjectDetectionTask::stop, &CObjDetectTaskWrap::default_stop, _stopDocString, args("self"))
+        .def("emit_add_sub_progress_steps", &CObjDetectTaskWrap::emitAddSubProgressSteps, _emitAddSubProgressSteps, args("self", "count"))
+        .def("emit_step_progress", &CObjDetectTaskWrap::emitStepProgress, _emitStepProgressDocString, args("self"))
+        .def("emit_graphics_context_changed", &CObjDetectTaskWrap::emitGraphicsContextChanged, _emitGraphicsContextChangedDocString, args("self"))
+        .def("emit_output_changed", &CObjDetectTaskWrap::emitOutputChanged, _emitOutputChangedDocString, args("self"))
+        .def("execute_actions", &CObjectDetectionTask::executeActions, &CObjDetectTaskWrap::default_executeActions, _executeActionsDocString, args("self", "action"))
+        .def("add_object", addObjectBox2, _objDetAddObject1DocString, args("self", "id", "class_index", "confidence", "x", "y", "width", "height"))
+        .def("add_object", addObjectRotateBox2, _objDetAddObject2DocString, args("self", "id", "class_index", "confidence", "cx", "cy", "width", "height", "angle"))
+        .def("get_names", &CObjectDetectionTask::getNames, _classifGetNamesDocString, args("self"))
+        .def("get_results", &CObjectDetectionTask::getResults, _objDetectGetResultsDocString, args("self"))
+        .def("get_visualization_image", &CObjectDetectionTask::getVisualizationImage, _classifGetVisuImageDocString, args("self"))
+        .def("read_class_names", &CObjectDetectionTask::readClassNames, _classifReadClassNamesDocString, args("self", "path"))
+        .def("set_colors", &CObjectDetectionTask::setColors, _classifSetColorsDocString, args("self", "colors"))
+        .def("set_names", &CObjectDetectionTask::setNames, _classifSetNamesDocString, args("self", "names"))
+    ;
+
+    //-------------------------------------//
+    //----- CSemanticSegmentationTask -----//
+    //-------------------------------------//
+    class_<CSemanticSegTaskWrap, bases<C2dImageTask>, std::shared_ptr<CSemanticSegTaskWrap>>("CSemanticSegmentationTask", _semSegTaskDocString)
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const std::string&>(_ctorSemSegDocString, args("self", "name")))
+        .def("set_active", &CSemanticSegTask::setActive, &CSemanticSegTaskWrap::default_setActive, _setActiveDocString, args("self", "is_active"))
+        .def("update_static_outputs", &CSemanticSegTask::updateStaticOutputs, &CSemanticSegTaskWrap::default_updateStaticOutputs, _updateStaticOutputsDocString, args("self"))
+        .def("begin_task_run", &CSemanticSegTask::beginTaskRun, &CSemanticSegTaskWrap::default_beginTaskRun, _beginTaskRunDocString, args("self"))
+        .def("end_task_run", &CSemanticSegTask::endTaskRun, &CSemanticSegTaskWrap::default_endTaskRun, _endTaskRunDocString, args("self"))
+        .def("graphics_changed", &CSemanticSegTask::graphicsChanged, &CSemanticSegTaskWrap::default_graphicsChanged, _graphicsChangedDocString, args("self"))
+        .def("global_input_changed", &CSemanticSegTask::globalInputChanged, &CSemanticSegTaskWrap::default_globalInputChanged, _globalInputChangedDocString, args("self", "is_new_sequence"))
+        .def("get_progress_steps", &CSemanticSegTask::getProgressSteps, &CSemanticSegTaskWrap::default_getProgressSteps, _getProgressStepsDocString, args("self"))
+        .def("run", &CSemanticSegTask::run, &CSemanticSegTaskWrap::default_run, _runDocString, args("self"))
+        .def("stop", &CSemanticSegTask::stop, &CSemanticSegTaskWrap::default_stop, _stopDocString, args("self"))
+        .def("emit_add_sub_progress_steps", &CSemanticSegTaskWrap::emitAddSubProgressSteps, _emitAddSubProgressSteps, args("self", "count"))
+        .def("emit_step_progress", &CSemanticSegTaskWrap::emitStepProgress, _emitStepProgressDocString, args("self"))
+        .def("emit_graphics_context_changed", &CSemanticSegTaskWrap::emitGraphicsContextChanged, _emitGraphicsContextChangedDocString, args("self"))
+        .def("emit_output_changed", &CSemanticSegTaskWrap::emitOutputChanged, _emitOutputChangedDocString, args("self"))
+        .def("execute_actions", &CSemanticSegTask::executeActions, &CSemanticSegTaskWrap::default_executeActions, _executeActionsDocString, args("self", "action"))
+        .def("get_names", &CSemanticSegTask::getNames, _classifGetNamesDocString, args("self"))
+        .def("get_results", &CSemanticSegTask::getResults, _semSegGetResultsDocString, args("self"))
+        .def("get_visualization_image", &CSemanticSegTask::getVisualizationImage, _semSegGetVisuImgDocString, args("self"))
+        .def("read_class_names", &CSemanticSegTask::readClassNames, _classifReadClassNamesDocString, args("self", "path"))
+        .def("set_colors", &CSemanticSegTask::setColors, _classifSetColorsDocString, args("self", "colors"))
+        .def("set_names", &CSemanticSegTask::setNames, _classifSetNamesDocString, args("self", "names"))
+        .def("set_mask", &CSemanticSegTask::setMask, _semSegGetMaskDocString, args("self", "mask"))
+    ;
+
+    //-------------------------------------//
+    //----- CInstanceSegmentationTask -----//
+    //-------------------------------------//
+    class_<CInstanceSegTaskWrap, bases<C2dImageTask>, std::shared_ptr<CInstanceSegTaskWrap>>("CInstanceSegmentationTask", _instanceSegTaskDocString)
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const std::string&>(_ctorInstanceSegDocString, args("self", "name")))
+        .def("set_active", &CInstanceSegTask::setActive, &CInstanceSegTaskWrap::default_setActive, _setActiveDocString, args("self", "is_active"))
+        .def("update_static_outputs", &CInstanceSegTask::updateStaticOutputs, &CInstanceSegTaskWrap::default_updateStaticOutputs, _updateStaticOutputsDocString, args("self"))
+        .def("begin_task_run", &CInstanceSegTask::beginTaskRun, &CInstanceSegTaskWrap::default_beginTaskRun, _beginTaskRunDocString, args("self"))
+        .def("end_task_run", &CInstanceSegTask::endTaskRun, &CInstanceSegTaskWrap::default_endTaskRun, _endTaskRunDocString, args("self"))
+        .def("graphics_changed", &CInstanceSegTask::graphicsChanged, &CInstanceSegTaskWrap::default_graphicsChanged, _graphicsChangedDocString, args("self"))
+        .def("global_input_changed", &CInstanceSegTask::globalInputChanged, &CInstanceSegTaskWrap::default_globalInputChanged, _globalInputChangedDocString, args("self", "is_new_sequence"))
+        .def("get_progress_steps", &CInstanceSegTask::getProgressSteps, &CInstanceSegTaskWrap::default_getProgressSteps, _getProgressStepsDocString, args("self"))
+        .def("run", &CInstanceSegTask::run, &CInstanceSegTaskWrap::default_run, _runDocString, args("self"))
+        .def("stop", &CInstanceSegTask::stop, &CInstanceSegTaskWrap::default_stop, _stopDocString, args("self"))
+        .def("emit_add_sub_progress_steps", &CInstanceSegTaskWrap::emitAddSubProgressSteps, _emitAddSubProgressSteps, args("self", "count"))
+        .def("emit_step_progress", &CInstanceSegTaskWrap::emitStepProgress, _emitStepProgressDocString, args("self"))
+        .def("emit_graphics_context_changed", &CInstanceSegTaskWrap::emitGraphicsContextChanged, _emitGraphicsContextChangedDocString, args("self"))
+        .def("emit_output_changed", &CInstanceSegTaskWrap::emitOutputChanged, _emitOutputChangedDocString, args("self"))
+        .def("execute_actions", &CInstanceSegTask::executeActions, &CInstanceSegTaskWrap::default_executeActions, _executeActionsDocString, args("self", "action"))
+        .def("add_instance", &CInstanceSegTask::addInstance, _instanceSegAddInstanceDocString, args("self", "id", "type", "class_index", "confidence", "x", "y", "width", "height", "mask"))
+        .def("get_names", &CInstanceSegTask::getNames, _classifGetNamesDocString, args("self"))
+        .def("get_results", &CInstanceSegTask::getResults, _instanceSegGetResultsDocString, args("self"))
+        .def("get_visualization_image", &CInstanceSegTask::getVisualizationImage, _instanceSegGetVisuImgDocString, args("self"))
+        .def("read_class_names", &CInstanceSegTask::readClassNames, _classifReadClassNamesDocString, args("self", "path"))
+        .def("set_colors", &CInstanceSegTask::setColors, _classifSetColorsDocString, args("self", "colors"))
+        .def("set_names", &CInstanceSegTask::setNames, _classifSetNamesDocString, args("self", "names"))
+    ;
+
+    //----------------------------------//
+    //----- CKeypointDetectionTask -----//
+    //----------------------------------//
+    class_<CKeyptsDetectTaskWrap, bases<C2dImageTask>, std::shared_ptr<CKeyptsDetectTaskWrap>>("CKeypointDetectionTask", _keyDetTaskDocString)
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const std::string&>(_ctorKeyDetDocString, args("self", "name")))
+        .def("set_active", &CKeypointDetectionTask::setActive, &CKeyptsDetectTaskWrap::default_setActive, _setActiveDocString, args("self", "is_active"))
+        .def("update_static_outputs", &CKeypointDetectionTask::updateStaticOutputs, &CKeyptsDetectTaskWrap::default_updateStaticOutputs, _updateStaticOutputsDocString, args("self"))
+        .def("begin_task_run", &CKeypointDetectionTask::beginTaskRun, &CKeyptsDetectTaskWrap::default_beginTaskRun, _beginTaskRunDocString, args("self"))
+        .def("end_task_run", &CKeypointDetectionTask::endTaskRun, &CKeyptsDetectTaskWrap::default_endTaskRun, _endTaskRunDocString, args("self"))
+        .def("graphics_changed", &CKeypointDetectionTask::graphicsChanged, &CKeyptsDetectTaskWrap::default_graphicsChanged, _graphicsChangedDocString, args("self"))
+        .def("global_input_changed", &CKeypointDetectionTask::globalInputChanged, &CKeyptsDetectTaskWrap::default_globalInputChanged, _globalInputChangedDocString, args("self", "is_new_sequence"))
+        .def("get_progress_steps", &CKeypointDetectionTask::getProgressSteps, &CKeyptsDetectTaskWrap::default_getProgressSteps, _getProgressStepsDocString, args("self"))
+        .def("run", &CKeypointDetectionTask::run, &CKeyptsDetectTaskWrap::default_run, _runDocString, args("self"))
+        .def("stop", &CKeypointDetectionTask::stop, &CKeyptsDetectTaskWrap::default_stop, _stopDocString, args("self"))
+        .def("emit_add_sub_progress_steps", &CKeyptsDetectTaskWrap::emitAddSubProgressSteps, _emitAddSubProgressSteps, args("self", "count"))
+        .def("emit_step_progress", &CKeyptsDetectTaskWrap::emitStepProgress, _emitStepProgressDocString, args("self"))
+        .def("emit_graphics_context_changed", &CKeyptsDetectTaskWrap::emitGraphicsContextChanged, _emitGraphicsContextChangedDocString, args("self"))
+        .def("emit_output_changed", &CKeyptsDetectTaskWrap::emitOutputChanged, _emitOutputChangedDocString, args("self"))
+        .def("execute_actions", &CKeypointDetectionTask::executeActions, &CKeyptsDetectTaskWrap::default_executeActions, _executeActionsDocString, args("self", "action"))
+        .def("add_object", &CKeypointDetectionTask::addObject, _keyDetAddObjectDocString, args("self", "id", "class_index", "confidence", "x", "y", "width", "height", "keypoints"))
+        .def("get_keypoint_links", &CKeypointDetectionTask::getKeypointLinks, _getKeyptsLinksDocString, args("self"))
+        .def("get_keypoint_names", &CKeypointDetectionTask::getKeypointNames, _getKeyptsNamesDocString, args("self"))
+        .def("get_object_names", &CKeypointDetectionTask::getObjectNames, _classifGetNamesDocString, args("self"))
+        .def("get_results", &CKeypointDetectionTask::getResults, _keyDetGetResultsDocString, args("self"))
+        .def("get_visualization_image", &CKeypointDetectionTask::getVisualizationImage, _classifGetVisuImageDocString, args("self"))
+        .def("read_class_names", &CKeypointDetectionTask::readClassNames, _classifReadClassNamesDocString, args("self", "path"))
+        .def("set_keypoint_links", &CKeypointDetectionTask::setKeypointLinks, _setKeyptLinksDocString, args("self", "links"))
+        .def("set_keypoint_names", &CKeypointDetectionTask::setKeypointNames, _setKeyptNamesDocString, args("self", "names"))
+        .def("set_object_colors", &CKeypointDetectionTask::setObjectColors, _classifSetColorsDocString, args("self", "colors"))
+        .def("set_object_names", &CKeypointDetectionTask::setObjectNames, _classifSetNamesDocString, args("self", "names"))
     ;
 
     //---------------------------//

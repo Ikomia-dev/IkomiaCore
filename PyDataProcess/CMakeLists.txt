@@ -25,6 +25,8 @@ add_library(pydataprocess SHARED
     IO/CImageIOWrap.h
     IO/CInstanceSegIOWrap.cpp
     IO/CInstanceSegIOWrap.h
+    IO/CKeyptsIOWrap.cpp
+    IO/CKeyptsIOWrap.h
     IO/CNumericIOWrap.hpp
     IO/CObjectDetectionIOWrap.cpp
     IO/CObjectDetectionIOWrap.h
@@ -32,6 +34,8 @@ add_library(pydataprocess SHARED
     IO/CPathIOWrap.h
     IO/CSemanticSegIOWrap.cpp
     IO/CSemanticSegIOWrap.h
+    IO/CTextIOWrap.cpp
+    IO/CTextIOWrap.h
     IO/CVideoIOWrap.cpp
     IO/CVideoIOWrap.h
     IO/CWidgetOutputWrap.cpp
@@ -47,6 +51,8 @@ add_library(pydataprocess SHARED
     Task/C2dImageTaskWrap.h
     Task/CDnnTrainTaskWrap.cpp
     Task/CDnnTrainTaskWrap.h
+    Task/CKeyptsDetectTaskWrap.cpp
+    Task/CKeyptsDetectTaskWrap.h
     Task/CTaskFactoryWrap.cpp
     Task/CTaskFactoryWrap.h
     Task/CVideoOFTaskWrap.cpp
@@ -55,6 +61,14 @@ add_library(pydataprocess SHARED
     Task/CVideoTaskWrap.h
     Task/CVideoTrackingTaskWrap.cpp
     Task/CVideoTrackingTaskWrap.h
+    Task/CClassifTaskWrap.cpp
+    Task/CClassifTaskWrap.h
+    Task/CObjDetectTaskWrap.cpp
+    Task/CObjDetectTaskWrap.h
+    Task/CSemanticSegTaskWrap.cpp
+    Task/CSemanticSegTaskWrap.h
+    Task/CInstanceSegTaskWrap.cpp
+    Task/CInstanceSegTaskWrap.h
 )
 
 set_target_properties(pydataprocess PROPERTIES

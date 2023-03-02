@@ -20,7 +20,7 @@
 #ifndef COCVSIMPLEFLOW_HPP
 #define COCVSIMPLEFLOW_HPP
 
-#include "Core/CVideoOFTask.h"
+#include "Task/CVideoOFTask.h"
 #include "IO/CVideoIO.h"
 #include "opencv2/optflow.hpp"
 

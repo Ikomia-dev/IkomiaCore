@@ -22,8 +22,8 @@
 #ifndef CGRAPHICSTOBINARY_H
 #define CGRAPHICSTOBINARY_H
 
-#include "Core/CTaskFactory.hpp"
-#include "Core/C2dImageTask.h"
+#include "Task/CTaskFactory.hpp"
+#include "Task/C2dImageTask.h"
 
 //----------------------------------//
 //----- CGraphicsToBinaryParam -----//
