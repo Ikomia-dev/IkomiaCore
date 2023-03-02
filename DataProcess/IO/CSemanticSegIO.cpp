@@ -215,10 +215,7 @@ void CSemanticSegIO::fromJsonInternal(const QJsonDocument &doc)
     for (int i=0; i<colors.size(); ++i)
     {
         QJsonObject obj = colors[i].toObject();
-        CColor color;
-        color[0] = obj["r"].toInt();
-        color[1] = obj["g"].toInt();
-        color[2] = obj["b"].toInt();
+        CColor color = {obj["r"].toInt(), obj["g"].toInt(), obj["b"].toInt()};
         m_colors.push_back(color);
     }
     generateLegend();
