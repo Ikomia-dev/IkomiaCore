@@ -1110,7 +1110,7 @@ constexpr auto _objDetectionDocString =
 constexpr auto _objDetectionIODocString =
         "Define input or output managing common information extracted by object detection task. "
         "Such task are able to automatically detect objects in image and get class label, confidence and "
-        "bounding box for each one. For each object, information is stored in a "
+        "bounding box for each one. For each object, information are stored in a "
         ":py:class:`~ikomia.dataprocess.pydataprocess.CObjectDetection` instance. Among others, algorithms "
         "like FasterRCNN, RetinaNet and YOLO series are object detection tasks.\n\n";
 
@@ -1418,6 +1418,79 @@ constexpr auto _keyptsLoadDocString =
 
 constexpr auto _keyptsSaveDocString =
         "Save object keypoints detection input/output to JSON file.\n\n"
+        "Args:\n\n"
+        "   path (str): path to JSON file\n\n";
+
+//-------------------//
+//----- CTextIO -----//
+//-------------------//
+constexpr auto _textFieldDocString =
+        "Store single text field information (class properties): label, text, confidence, polygon and color. "
+        "It is used within workflow input/output of type :py:class:`~ikomia.dataprocess.pydataprocess.CTextIO`.\n\n";
+
+constexpr auto _textIODocString =
+        "Define input or output managing common information extracted by OCR task. "
+        "Such task are able to automatically detect text fields in image and get class label, text value, confidence and "
+        "polygon for each one. For each field, information are stored in a "
+        ":py:class:`~ikomia.dataprocess.pydataprocess.CTextField` instance.\n\n";
+
+constexpr auto _getTextFieldCountDocString =
+        "Get the number of detected text fields.\n\n"
+        "Returns:\n\n"
+        "   int: object count\n\n";
+
+constexpr auto _getTextFieldDocString =
+        "Get text field information at a given index.\n\n"
+        "Args:\n\n"
+        "   index (int): field index\n\n"
+        "Returns:\n\n"
+        "   :py:class:`~ikomia.dataprocess.pydataprocess.CTextField`: field information instance\n\n";
+
+constexpr auto _getTextFieldsDocString =
+        "Get all detected text fields.\n\n"
+        "Returns:\n\n"
+        "   :py:class:`~ikomia.dataprocess.pydataprocess.CTextField` list: detected fields\n\n";
+
+constexpr auto _textIOGetGraphicsIODocString =
+        "Get internal graphics output instance. It stores graphics items representing polygon, labels and "
+        "value of detected text fields in image.\n\n"
+        "Returns:\n\n"
+        "   :py:class:`~ikomia.dataprocess.pydataprocess.CGraphicsOutput`: graphics output instance\n\n";
+
+constexpr auto _textIOFinalizeIODocString =
+        "Method to call after all fields are added. It will compute data output that will be shown as table "
+        "in Ikomia Studio.\n\n";
+
+constexpr auto _addTextFieldBoxDocString =
+        "Add detected text fields with bounding box.\n\n"
+        "Args:\n\n"
+        "   id (int): object identifier\n\n"
+        "   label (str): class label\n\n"
+        "   text (str): field value\n\n"
+        "   confidence (double): prediction confidence\n\n"
+        "   box_x (double): left coordinate of object bounding box\n\n"
+        "   box_y (double): top coordinate of object bounding box\n\n"
+        "   box_width (double): width of object bounding box\n\n"
+        "   box_height (double): height of object bounding box\n\n"
+        "   color (int list - rgba): display color\n\n";
+
+constexpr auto _addTextFieldPolyDocString =
+        "Add detected text fields with polygon.\n\n"
+        "Args:\n\n"
+        "   id (int): object identifier\n\n"
+        "   label (str): class label\n\n"
+        "   text (str): field value\n\n"
+        "   confidence (double): prediction confidence\n\n"
+        "   polygon (list of :py:class:`~ikomia.core.pycore.CPointF`): polygon points coordinates\n\n"
+        "   color (int list - rgba): display color\n\n";
+
+constexpr auto _textLoadDocString =
+        "Load text field detection input/output from JSON file.\n\n"
+        "Args:\n\n"
+        "   path (str): path to JSON file\n\n";
+
+constexpr auto _textSaveDocString =
+        "Save text field detection input/output to JSON file.\n\n"
         "Args:\n\n"
         "   path (str): path to JSON file\n\n";
 

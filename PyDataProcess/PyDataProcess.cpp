@@ -49,6 +49,7 @@
 #include "IO/CObjectDetectionIOWrap.h"
 #include "IO/CInstanceSegIOWrap.h"
 #include "IO/CSemanticSegIOWrap.h"
+#include "IO/CTextIOWrap.h"
 #include "IO/CKeyptsIOWrap.h"
 #include "CIkomiaRegistryWrap.h"
 #include "CWorkflowWrap.h"
@@ -157,6 +158,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
     registerStdVector<CMat>();
     registerStdVector<std::vector<cv::Point>>();
     registerStdVector<CKeypointLink>();
+    registerStdVector<CTextField>();
 
     // Register std::map<T>
     registerStdMap<int, std::string>();
@@ -520,7 +522,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("get_object", &CObjectDetectionIO::getObject, _getObjectDocString, args("self", "index"))
         .def("get_objects", &CObjectDetectionIO::getObjects, _getObjectsDocString, args("self"))
         .def("get_graphics_io", &CObjectDetectionIO::getGraphicsIO, _getGraphicsIODocString, args("self"))
-        .def("is_data_available", &CObjectDetectionIOWrap::isDataAvailable, &CObjectDetectionIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
+        .def("is_data_available", &CObjectDetectionIO::isDataAvailable, &CObjectDetectionIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
         .def("init", &CObjectDetectionIO::init, _initObjDetectIODocString, args("self", "task_name", "ref_image_index"))
         .def("add_object", addObjectBox1, _addObjectDocString, args("self", "id", "label", "confidence", "box_x", "box_y", "box_width", "box_height", "color"))
         .def("add_object", addObjectRotateBox1, _addObject2DocString, args("self", "id", "label", "confidence", "cx", "cy", "width", "height", "angle", "color"))
@@ -637,6 +639,44 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("to_json", keyptsToJsonNoOpt, &CKeyptsIOWrap::default_toJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
         .def("to_json", keyptsToJson, &CKeyptsIOWrap::default_toJson, _objDetectToJsonDocString, args("self", "options"))
         .def("from_json", &CKeypointsIO::fromJson, &CKeyptsIOWrap::default_fromJson, _objDetectFromJsonDocString, args("self", "json_str"))
+    ;
+
+    //-------------------//
+    //----- CTextIO -----//
+    //-------------------//
+    class_<CTextField>("CTextField", _textFieldDocString)
+        .def(init<>("Default constructor", args("self")))
+        .add_property("id", &CTextField::getId, &CTextField::setId, "Text field ID (int)")
+        .add_property("label", &CTextField::getLabel, &CTextField::setLabel, "Text field label (str)")
+        .add_property("text", &CTextField::getText, &CTextField::setText, "Text field value (str)")
+        .add_property("confidence", &CTextField::getConfidence, &CTextField::setConfidence, "Prediction confidence (double)")
+        .add_property("polygon", &CTextField::getPolygon, &CTextField::setPolygon, "Text field polygon: list of :py:class:`~ikomia.core.pycore.CPointF`")
+        .add_property("color", &CTextField::getColor, &CTextField::setColor, "Text field display color [r, g, b, a]")
+    ;
+
+    void (CTextIO::*addFieldBox)(int, const std::string&, const std::string&, double, double, double, double, double, const CColor&) = &CTextIO::addTextField;
+    void (CTextIO::*addFieldPoly)(int, const std::string&, const std::string&, double, const PolygonF&, const CColor&) = &CTextIO::addTextField;
+    std::string (CTextIO::*textToJsonNoOpt)() const = &CTextIO::toJson;
+    std::string (CTextIO::*textToJson)(const std::vector<std::string>&) const = &CTextIO::toJson;
+
+    class_<CTextIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CTextIOWrap>>("CTextIO", _textIODocString)
+        .def(init<>("Default constructor", args("self")))
+        .def(init<const CTextIO&>("Copy constructor"))
+        .def("get_text_field_count", &CTextIO::getTextFieldCount, _getTextFieldCountDocString, args("self"))
+        .def("get_text_field", &CTextIO::getTextField, _getTextFieldDocString, args("self", "index"))
+        .def("get_text_fields", &CTextIO::getTextFields, _getTextFieldsDocString, args("self"))
+        .def("get_graphics_io", &CTextIO::getGraphicsIO, _textIOGetGraphicsIODocString, args("self"))
+        .def("is_data_available", &CTextIO::isDataAvailable, &CTextIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
+        .def("init", &CTextIO::init, _initObjDetectIODocString, args("self", "task_name", "ref_image_index"))
+        .def("finalize", &CTextIO::finalize, _textIOFinalizeIODocString, args("self"))
+        .def("add_text_field", addFieldBox, _addTextFieldBoxDocString, args("self", "id", "label", "text", "confidence", "box_x", "box_y", "box_width", "box_height", "color"))
+        .def("add_text_field", addFieldPoly, _addTextFieldPolyDocString, args("self", "id", "label", "text", "confidence", "polygon", "color"))
+        .def("clear_data", &CTextIO::clearData, &CTextIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
+        .def("load", &CTextIO::load, &CTextIOWrap::default_load, _textLoadDocString, args("self", "path"))
+        .def("save", &CTextIO::save, &CTextIOWrap::default_save, _textSaveDocString, args("self", "path"))
+        .def("to_json", textToJsonNoOpt, &CTextIOWrap::default_toJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
+        .def("to_json", textToJson, &CTextIOWrap::default_toJson, _objDetectToJsonDocString, args("self", "options"))
+        .def("from_json", &CTextIO::fromJson, &CTextIOWrap::default_fromJson, _objDetectFromJsonDocString, args("self", "json_str"))
     ;
 
     //------------------------//

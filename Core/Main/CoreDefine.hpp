@@ -84,6 +84,7 @@ namespace Ikomia
         INSTANCE_SEGMENTATION,  /**< I/O for instance segmentation management */
         SEMANTIC_SEGMENTATION,  /**< I/O for semantic segmentation management */
         KEYPOINTS,              /**< I/O for keypoints management */
+        TEXT,                   /**< I/O for text fields management */
         NONE                    /**< Unknown data type */
     };
 

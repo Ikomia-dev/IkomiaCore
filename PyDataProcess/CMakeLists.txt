@@ -34,6 +34,8 @@ add_library(pydataprocess SHARED
     IO/CPathIOWrap.h
     IO/CSemanticSegIOWrap.cpp
     IO/CSemanticSegIOWrap.h
+    IO/CTextIOWrap.cpp
+    IO/CTextIOWrap.h
     IO/CVideoIOWrap.cpp
     IO/CVideoIOWrap.h
     IO/CWidgetOutputWrap.cpp

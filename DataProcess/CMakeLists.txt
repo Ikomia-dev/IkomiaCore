@@ -43,6 +43,8 @@ add_library(ikDataProcess SHARED
     IO/CSemanticSegIO.h
     IO/CTaskIORegistration.cpp
     IO/CTaskIORegistration.h
+    IO/CTextIO.cpp
+    IO/CTextIO.h
     IO/CVideoIO.cpp
     IO/CVideoIO.h
     IO/CWidgetOutput.cpp
@@ -469,6 +471,8 @@ set(PUBLIC_HEADERS_IO
     IO/CDatasetIO.h
     IO/CObjectDetectionIO.h
     IO/CInstanceSegIO.h
+    IO/CSemanticSegIO.h
+    IO/CTextIO.h
 )
 
 set(PUBLIC_HEADERS_PROCESS

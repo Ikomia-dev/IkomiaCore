@@ -346,6 +346,9 @@ std::string CWorkflowTaskIO::getClassName(IODataType ioDataType)
         case IODataType::KEYPOINTS:
             return "CKeypointsIO";
 
+        case IODataType::TEXT:
+            return "CTextIO";
+
         default: return "";
     }
 }

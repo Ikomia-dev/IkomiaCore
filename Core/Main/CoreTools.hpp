@@ -407,6 +407,8 @@ namespace Ikomia
                         return QObject::tr("Semantic segmentation");
                     case IODataType::KEYPOINTS:
                         return QObject::tr("Keypoints detection");
+                    case IODataType::TEXT:
+                        return QObject::tr("Text detection");
                 }
                 return QString();
             }
@@ -448,6 +450,11 @@ namespace Ikomia
                 {
                     return targetData == IODataType::INPUT_GRAPHICS ||
                             targetData == IODataType::BLOB_VALUES ||
+                            targetData == IODataType::NUMERIC_VALUES;
+                }
+                else if (srcData == IODataType::TEXT)
+                {
+                    return targetData == IODataType::INPUT_GRAPHICS ||
                             targetData == IODataType::NUMERIC_VALUES;
                 }
                 else if (srcData == IODataType::INSTANCE_SEGMENTATION)

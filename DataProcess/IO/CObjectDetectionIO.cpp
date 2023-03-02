@@ -1,7 +1,7 @@
 #include "CObjectDetectionIO.h"
-#include "Main/CoreTools.hpp"
 #include <QJsonArray>
-#include "CInstanceSegIO.h"
+#include "Main/CoreTools.hpp"
+#include "IO/CInstanceSegIO.h"
 
 //----------------------------//
 //----- CObjectDetection -----//

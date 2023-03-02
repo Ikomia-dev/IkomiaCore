@@ -337,6 +337,7 @@ BOOST_PYTHON_MODULE(pycore)
         .value("INSTANCE_SEGMENTATION", IODataType::INSTANCE_SEGMENTATION)
         .value("SEMANTIC_SEGMENTATION", IODataType::SEMANTIC_SEGMENTATION)
         .value("KEYPOINTS", IODataType::KEYPOINTS)
+        .value("TEXT", IODataType::TEXT)
     ;
 
     void (CWorkflowTaskIOWrap::*ioSave)(const std::string&) = &CWorkflowTaskIOWrap::save;
