@@ -2029,9 +2029,9 @@ constexpr auto _instanceSegAddInstanceDocString =
         "   mask (numpy array): binary mask\n\n";
 
 constexpr auto _instanceSegGetResultsDocString =
-        "Get semantic segmentation results as a :py:class:`CSemanticSegmentationIO` instance.\n\n"
+        "Get instance segmentation results as a :py:class:`CInstanceSegmentationIO` instance.\n\n"
         "Returns:\n\n"
-        "   :py:class:`CSemanticSegmentationIO`: semantic segmentation data\n\n";
+        "   :py:class:`CInstanceSegmentationIO`: semantic segmentation data\n\n";
 
 constexpr auto _instanceSegGetVisuImgDocString =
         "Get a visualization image composed by original input image, colored segmentation mask and "
