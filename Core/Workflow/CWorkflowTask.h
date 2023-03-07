@@ -253,6 +253,11 @@ class CORESHARED_EXPORT CWorkflowTask
          */
         Type                        getType() const;
         /**
+         * @brief Gets the task uuid.
+         * @return UUID of the task.
+         */
+        std::string                 getUUID() const;
+        /**
          * @brief Gets the task name.
          * @return Name of the task.
          */
@@ -648,11 +653,16 @@ class CORESHARED_EXPORT CWorkflowTask
 
         void                        download(const std::string& url, const std::string& to);
 
+    private:
+
+        std::string                 generateUUID() const;
+
     /** @cond INTERNAL */
     protected:
 
         Type                                m_type = Type::GENERIC;
         std::unique_ptr<CSignalHandler>     m_signalHandler;
+        std::string                         m_uuid = "";
         std::string                         m_name = "";
         std::string                         m_outputFolder = "";
         WorkflowTaskParamPtr                m_pParam = nullptr;

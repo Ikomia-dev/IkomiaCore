@@ -18,6 +18,9 @@
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include <QJsonArray>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
 #include "CWorkflowTask.h"
 #include "CException.h"
 #include "CNetworkManager.h"
@@ -62,15 +65,18 @@ void CSignalHandler::onGraphicsContextChanged()
 //--------------------------------//
 CWorkflowTask::CWorkflowTask() : m_signalHandler(std::make_unique<CSignalHandler>())
 {
+    m_uuid = generateUUID();
 }
 
 CWorkflowTask::CWorkflowTask(const std::string &name) : m_signalHandler(std::make_unique<CSignalHandler>())
 {
     m_name = name;
+    m_uuid = generateUUID();
 }
 
 CWorkflowTask::CWorkflowTask(const CWorkflowTask &task) : m_signalHandler(std::make_unique<CSignalHandler>())
 {
+    m_uuid = generateUUID();
     m_name = task.m_name;
     m_outputFolder = task.m_outputFolder;
     m_inputs = task.m_inputs;
@@ -89,6 +95,7 @@ CWorkflowTask::CWorkflowTask(const CWorkflowTask &task) : m_signalHandler(std::m
 
 CWorkflowTask::CWorkflowTask(const CWorkflowTask&& task) : m_signalHandler(std::make_unique<CSignalHandler>())
 {
+    m_uuid = generateUUID();
     m_name = std::move(task.m_name);
     m_outputFolder = std::move(task.m_outputFolder);
     m_inputs = std::move(task.m_inputs);
@@ -108,6 +115,7 @@ CWorkflowTask::CWorkflowTask(const CWorkflowTask&& task) : m_signalHandler(std::
 CWorkflowTask &CWorkflowTask::operator=(const CWorkflowTask &task)
 {
     m_signalHandler = std::make_unique<CSignalHandler>();
+    m_uuid = task.m_uuid;
     m_name = task.m_name;
     m_outputFolder = task.m_outputFolder;
     m_inputs = task.m_inputs;
@@ -121,16 +129,10 @@ CWorkflowTask &CWorkflowTask::operator=(const CWorkflowTask &task)
     return *this;
 }
 
-CWorkflowTask::~CWorkflowTask()
-{
-    CPyEnsureGIL gil;
-    m_inputs.clear();
-    m_outputs.clear();
-}
-
 CWorkflowTask &CWorkflowTask::operator=(const CWorkflowTask&& task)
-{ 
+{
     m_signalHandler = std::make_unique<CSignalHandler>();
+    m_uuid = task.m_uuid;
     m_name = std::move(task.m_name);
     m_outputFolder = std::move(task.m_outputFolder);
     m_inputs = std::move(task.m_inputs);
@@ -142,6 +144,13 @@ CWorkflowTask &CWorkflowTask::operator=(const CWorkflowTask&& task)
     m_pParam = std::move(task.m_pParam);
     m_bActive = std::move(task.m_bActive);
     return *this;
+}
+
+CWorkflowTask::~CWorkflowTask()
+{
+    CPyEnsureGIL gil;
+    m_inputs.clear();
+    m_outputs.clear();
 }
 
 std::ostream& operator<<(std::ostream& os, const CWorkflowTask& task)
@@ -191,6 +200,12 @@ std::ostream& operator<<(std::ostream& os, const CWorkflowTask& task)
 
     os << "\n###################################" << std::endl;
     return os;
+}
+
+std::string CWorkflowTask::generateUUID() const
+{
+    boost::uuids::uuid uuid = boost::uuids::random_generator()();
+    return boost::uuids::to_string(uuid);
 }
 
 void CWorkflowTask::setInputDataType(const IODataType &dataType, size_t index)
@@ -347,6 +362,11 @@ void CWorkflowTask::setAutoSave(bool bEnable)
 CWorkflowTask::Type CWorkflowTask::getType() const
 {
     return m_type;
+}
+
+std::string CWorkflowTask::getUUID() const
+{
+    return m_uuid;
 }
 
 std::string CWorkflowTask::getName() const
