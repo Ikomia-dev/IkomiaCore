@@ -38,6 +38,7 @@ class CWorkflowWrap: public CWorkflow, public wrapper<CWorkflow>
 
         std::intptr_t               getRootID();
         std::vector<std::intptr_t>  getTaskIDs();
+        std::intptr_t               getActiveTaskID();
         WorkflowTaskPtr             getTask(std::intptr_t id);
         double                      getElapsedTimeTo(std::intptr_t id);
         std::vector<std::intptr_t>  getParents(std::intptr_t id);

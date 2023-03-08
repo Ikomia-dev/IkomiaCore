@@ -33,6 +33,11 @@ std::vector<std::intptr_t> CWorkflowWrap::getTaskIDs()
     return nodes;
 }
 
+intptr_t CWorkflowWrap::getActiveTaskID()
+{
+    return reinterpret_cast<std::intptr_t>(getActiveTaskId());
+}
+
 WorkflowTaskPtr CWorkflowWrap::getTask(intptr_t id)
 {
     WorkflowVertex vertex = reinterpret_cast<WorkflowVertex>(id);

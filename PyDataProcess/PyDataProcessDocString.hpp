@@ -2253,6 +2253,13 @@ constexpr auto _wfGetTaskIDsDocString =
         "You can then retrieve task object from ID with the function "
         ":py:meth:`~ikomia.dataprocess.pydataprocess.CWorkflow.get_task`.\n\n";
 
+constexpr auto _wfGetActiveTaskIDDocString =
+        "Get the active task of the workflow (last added).\n"
+        "You can then retrieve task object from ID with the function "
+        ":py:meth:`~ikomia.dataprocess.pydataprocess.CWorkflow.get_task`.\n\n"
+        "Returns:\n\n"
+        "   int: workflow task id\n\n";
+
 constexpr auto _wfGetTaskDocString =
         "Get the task object from the given ID.\n"
         "Unique task identifiers can be retrieved with the functions "
