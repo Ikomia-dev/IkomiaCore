@@ -33,9 +33,9 @@ std::vector<std::intptr_t> CWorkflowWrap::getTaskIDs()
     return nodes;
 }
 
-intptr_t CWorkflowWrap::getActiveTaskID()
+intptr_t CWorkflowWrap::getLastTaskID()
 {
-    return reinterpret_cast<std::intptr_t>(getActiveTaskId());
+    return reinterpret_cast<std::intptr_t>(getLastTaskId());
 }
 
 WorkflowTaskPtr CWorkflowWrap::getTask(intptr_t id)
