@@ -40,7 +40,7 @@ target_link_libraries(pydataio PRIVATE
     Python3::Python
     Boost::system
     Boost::filesystem
-    Boost::python${PYTHON_VERSION_NO_DOT}
+    ${BOOST_PYTHON_TARGET}
     opencv_core
     opencv_imgcodecs
     ikUtils

@@ -29,7 +29,7 @@ target_link_libraries(ikDataManagement PRIVATE
     Qt::Widgets
     OpenMP::OpenMP_CXX
     Boost::filesystem
-    Boost::python${PYTHON_VERSION_NO_DOT}
+    ${BOOST_PYTHON_TARGET}
     Python3::Python
     opencv_core
     opencv_highgui

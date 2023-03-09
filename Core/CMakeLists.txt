@@ -130,7 +130,7 @@ target_link_libraries(ikCore PRIVATE
     Python3::Python
     Boost::system
     Boost::filesystem
-    Boost::python${PYTHON_VERSION_NO_DOT}
+    ${BOOST_PYTHON_TARGET}
     OpenMP::OpenMP_CXX
     ikUtils
     opencv_core

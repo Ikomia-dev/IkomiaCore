@@ -43,7 +43,7 @@ target_link_libraries(ikDataPlot PRIVATE
     Qt::Sql
     Qt::Widgets
     Python3::Python
-    Boost::python${PYTHON_VERSION_NO_DOT}
+    ${BOOST_PYTHON_TARGET}
     opencv_core
     qwt
     ikUtils

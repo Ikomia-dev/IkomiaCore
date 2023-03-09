@@ -20,6 +20,10 @@ include(LocalSettings.cmake)
 find_package(Qt5 REQUIRED COMPONENTS Core Concurrent Gui Network OpenGL Sql Test Widgets LinguistTools)
 
 # Python
+if(CENTOS7)
+    set(Python3_DIR "/work/shared/local")
+endif()
+
 find_package(Python3 ${PYTHON_VERSION_DOT} EXACT REQUIRED COMPONENTS Interpreter Development NumPy)
 
 # OpenMP
@@ -40,7 +44,15 @@ find_package(OpenCV ${OPENCV_VERSION} REQUIRED)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost REQUIRED COMPONENTS system filesystem python${PYTHON_VERSION_NO_DOT})
+
+if(CENTOS7)
+    set(BUILD_SHARED_LIBS ON)
+    set(BOOST_PYTHON_TARGET Boost::python)
+    find_package(Boost REQUIRED COMPONENTS system filesystem python)
+else()
+    set(BOOST_PYTHON_TARGET Boost::python${PYTHON_VERSION_NO_DOT})
+    find_package(Boost REQUIRED COMPONENTS system filesystem python${PYTHON_VERSION_NO_DOT})
+endif()
 
 # VTK
 find_package(VTK ${VTK_MAJOR_MINOR_VERSION} REQUIRED)
@@ -53,7 +65,11 @@ add_subdirectory(DataIO)
 add_subdirectory(DataManagement)
 add_subdirectory(DataProcess)
 add_subdirectory(DataPlot)
-add_subdirectory(VolumeRender)
+
+if(NOT ${IK_CPU})
+    add_subdirectory(VolumeRender)
+endif()
+
 add_subdirectory(PyDataIO)
 add_subdirectory(PyCore)
 add_subdirectory(PyUtils)

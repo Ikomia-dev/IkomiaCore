@@ -46,14 +46,6 @@ if(UNIX AND CENTOS7)
     include_directories(
         # Global include
         /work/shared/local/include
-        # Python
-        #/work/shared/local/include/python${PYTHON_VERSION_DOT_M}
-        # Numpy
-        #/work/shared/local/lib/python$${PYTHON_VERSION_DOT}/site-packages/numpy/core/include
-        # VTK
-        /work/shared/local/include/vtk-${VTK_MAJOR_MINOR_VERSION}
-        #OpenCV
-        /work/shared/local/include/opencv4
     )
 endif()
 
@@ -63,3 +55,10 @@ endif()
 link_directories(
     ${CMAKE_CURRENT_LIST_DIR}/Build/lib
 )
+
+if(UNIX AND CENTOS7)
+    link_directories(
+        /work/shared/local/lib
+        /work/shared/local/lib64
+    )
+endif()
