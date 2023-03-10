@@ -48,6 +48,7 @@ target_link_libraries(ikVolumeRender PRIVATE
     Qt::Sql
     Qt::Widgets
     OpenMP::OpenMP_CXX
+    Python3::Python
     ${BOOST_PYTHON_TARGET}
     opencv_core
     opencv_highgui
