@@ -233,6 +233,7 @@ void CProcessRegistration::registerCvImgproc()
 {
     registerProcess(std::make_shared<COcvAdaptiveThresholdFactory>(), std::make_shared<COcvWidgetAdaptiveThresholdFactory>());
     registerProcess(std::make_shared<COcvBilateralFactory>(), std::make_shared<COcvWidgetBilateralFactory>());
+    registerProcess(std::make_shared<COcvBlurFactory>(), std::make_shared<COcvWidgetBlurFactory>());
     registerProcess(std::make_shared<COcvBoxFilterFactory>(), std::make_shared<COcvWidgetBoxFilterFactory>());
     registerProcess(std::make_shared<COcvCalcHistFactory>(), std::make_shared<COcvWidgetCalcHistFactory>());
     registerProcess(std::make_shared<COcvCannyFactory>(), std::make_shared<COcvWidgetCannyFactory>());

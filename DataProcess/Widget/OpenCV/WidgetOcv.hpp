@@ -82,6 +82,7 @@
 ********************/
 #include "imgproc/COcvWidgetAdaptiveThreshold.hpp"
 #include "imgproc/COcvWidgetBilateral.hpp"
+#include "imgproc/COcvWidgetBlur.hpp"
 #include "imgproc/COcvWidgetBoxFilter.hpp"
 #include "imgproc/COcvWidgetCalcHist.hpp"
 #include "imgproc/COcvWidgetColorMap.hpp"

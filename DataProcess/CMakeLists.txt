@@ -152,6 +152,7 @@ add_library(ikDataProcess SHARED
     Process/OpenCV/features2d/COcvSimpleBlobDetector.hpp
     Process/OpenCV/imgproc/COcvAdaptiveThreshold.hpp
     Process/OpenCV/imgproc/COcvBilateral.hpp
+    Process/OpenCV/imgproc/COcvBlur.hpp
     Process/OpenCV/imgproc/COcvBoxFilter.hpp
     Process/OpenCV/imgproc/COcvCLAHE.hpp
     Process/OpenCV/imgproc/COcvCalcHist.hpp
@@ -362,6 +363,7 @@ add_library(ikDataProcess SHARED
     Widget/OpenCV/features2d/COcvWidgetSimpleBlobDetector.hpp
     Widget/OpenCV/imgproc/COcvWidgetAdaptiveThreshold.hpp
     Widget/OpenCV/imgproc/COcvWidgetBilateral.hpp
+    Widget/OpenCV/imgproc/COcvWidgetBlur.hpp
     Widget/OpenCV/imgproc/COcvWidgetBoxFilter.hpp
     Widget/OpenCV/imgproc/COcvWidgetCLAHE.hpp
     Widget/OpenCV/imgproc/COcvWidgetCalcHist.hpp

@@ -63,6 +63,7 @@
 ********************/
 #include "imgproc/COcvAdaptiveThreshold.hpp"
 #include "imgproc/COcvBilateral.hpp"
+#include "imgproc/COcvBlur.hpp"
 #include "imgproc/COcvBoxFilter.hpp"
 #include "imgproc/COcvCalcHist.hpp"
 #include "imgproc/COcvColorMap.hpp"
