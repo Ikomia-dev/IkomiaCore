@@ -46,6 +46,8 @@ if(UNIX AND CENTOS7)
     include_directories(
         # Global include
         /work/shared/local/include
+        # Qwt -> should be patched...
+        /include
     )
 endif()
 
