@@ -1,13 +1,38 @@
 #include "UtilsTools.hpp"
-#ifdef Q_OS_WIN64
-#include <windows.h>
-#endif
-#include "UtilsTools.hpp"
 #include "CIkomiaRegistry.h"
 #include "CPluginProcessInterface.hpp"
 #include "Core/CPluginTools.h"
 
+//-------------------------------//
+//----- CDllSearchPathAdder -----//
+//-------------------------------//
+CDllSearchPathAdder::CDllSearchPathAdder(const std::string &directory)
+{
+#ifdef Q_OS_WIN64
+    //Add directory to the search path of the DLL loader
+    SetDllDirectoryA(directory.c_str());
+#endif
+}
 
+CDllSearchPathAdder::~CDllSearchPathAdder()
+{
+#ifdef Q_OS_WIN64
+    //Restore standard DLL search path
+    SetDllDirectoryA(NULL);
+#endif
+}
+
+void CDllSearchPathAdder::addDirectory(const std::string &directory)
+{
+#ifdef Q_OS_WIN64
+    //Add directory to the search path of the DLL loader
+    SetDllDirectoryA(directory.c_str());
+#endif
+}
+
+//---------------------------//
+//----- CIkomiaRegistry -----//
+//---------------------------//
 CIkomiaRegistry::CIkomiaRegistry()
 {
     m_pluginsDir = Utils::IkomiaApp::getIkomiaFolder() + "/Plugins";

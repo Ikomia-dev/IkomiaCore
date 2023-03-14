@@ -28,7 +28,7 @@ namespace Ikomia
 {
     namespace Utils
     {
-        class CPluginTools
+        class DATAPROCESSSHARED_EXPORT CPluginTools
         {
             public:
 

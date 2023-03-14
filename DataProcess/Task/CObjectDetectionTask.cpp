@@ -87,9 +87,9 @@ void CObjectDetectionTask::generateRandomColors()
     for (size_t i=0; i<m_classNames.size(); ++i)
     {
         CColor color = {
-            (int)((double)std::rand() * factor),
-            (int)((double)std::rand() * factor),
-            (int)((double)std::rand() * factor)
+            (uchar)((double)std::rand() * factor),
+            (uchar)((double)std::rand() * factor),
+            (uchar)((double)std::rand() * factor)
         };
         m_classColors.push_back(color);
     }

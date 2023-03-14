@@ -1,10 +1,10 @@
 #ifndef CCLASSIFICATIONTASK_H
 #define CCLASSIFICATIONTASK_H
 
- #include "C2dImageTask.h"
+#include "C2dImageTask.h"
 #include "IO/CObjectDetectionIO.h"
 
-class CClassificationTask: public C2dImageTask
+class DATAPROCESSSHARED_EXPORT CClassificationTask: public C2dImageTask
 {
     public:
 

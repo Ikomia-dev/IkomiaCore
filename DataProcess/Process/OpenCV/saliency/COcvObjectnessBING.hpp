@@ -93,7 +93,7 @@ class COcvObjectnessBING : public C2dImageTask
             {
                 cv::Vec4i bb = saliencyMap[i];
                 // Set different color for each bb
-                prop.m_penColor = {((i*step)%255), 50, 255-((i*step)%255), 255};
+                prop.m_penColor = {(uchar)((i*step)%255), 50, (uchar)(255-((i*step)%255)), 255};
                 //Create rectangle graphics of bbox
                 pOutput->addRectangle(bb[0], bb[1], bb[2]-bb[0], bb[3]-bb[1], prop);
             }

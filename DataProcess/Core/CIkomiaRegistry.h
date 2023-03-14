@@ -5,34 +5,23 @@
 #include "CProcessRegistration.h"
 #include "IO/CTaskIORegistration.h"
 
-
+//-------------------------------//
+//----- CDllSearchPathAdder -----//
+//-------------------------------//
 class CDllSearchPathAdder
 {
     public:
 
-        CDllSearchPathAdder(const std::string& directory)
-        {
-#ifdef Q_OS_WIN64
-            //Add directory to the search path of the DLL loader
-            SetDllDirectoryA(directory.c_str());
-#endif
-        }
-        ~CDllSearchPathAdder()
-        {
-#ifdef Q_OS_WIN64
-            //Restore standard DLL search path
-            SetDllDirectoryA(NULL);
-#endif
-        }
-        void addDirectory(const std::string& directory)
-        {
-#ifdef Q_OS_WIN64
-            //Add directory to the search path of the DLL loader
-            SetDllDirectoryA(directory.c_str());
-#endif
-        }
+        CDllSearchPathAdder(const std::string& directory);
+
+        ~CDllSearchPathAdder();
+
+        void addDirectory(const std::string& directory);
 };
 
+//---------------------------//
+//----- CIkomiaRegistry -----//
+//---------------------------//
 class DATAPROCESSSHARED_EXPORT CIkomiaRegistry
 {
     public:

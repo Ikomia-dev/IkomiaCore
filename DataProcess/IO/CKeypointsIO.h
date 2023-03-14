@@ -10,7 +10,7 @@
 //----------------------------//
 //----- CObjectKeypoints -----//
 //----------------------------//
-class CObjectKeypoints
+class DATAPROCESSSHARED_EXPORT CObjectKeypoints
 {
     public:
 
@@ -44,7 +44,7 @@ class CObjectKeypoints
 //-------------------------//
 //----- CKeypointLink -----//
 //-------------------------//
-class CKeypointLink
+class DATAPROCESSSHARED_EXPORT CKeypointLink
 {
     public:
 
@@ -72,7 +72,7 @@ class CKeypointLink
 //------------------------//
 //----- CKeypointsIO -----//
 //------------------------//
-class CKeypointsIO: public CWorkflowTaskIO
+class DATAPROCESSSHARED_EXPORT CKeypointsIO: public CWorkflowTaskIO
 {
     using DataStringIOPtr = std::shared_ptr<CNumericIO<std::string>>;
 

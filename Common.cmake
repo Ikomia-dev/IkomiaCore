@@ -1,6 +1,7 @@
 add_compile_definitions(
     QT_DEPRECATED_WARNINGS
     BOOST_ALL_NO_LIB
+    __STDC_FORMAT_MACROS
 )
 
 if(MSVC)

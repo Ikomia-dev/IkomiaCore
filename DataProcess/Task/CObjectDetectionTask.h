@@ -4,7 +4,7 @@
 #include "C2dImageTask.h"
 #include "IO/CObjectDetectionIO.h"
 
-class CObjectDetectionTask: public C2dImageTask
+class DATAPROCESSSHARED_EXPORT CObjectDetectionTask: public C2dImageTask
 {
     public:
 

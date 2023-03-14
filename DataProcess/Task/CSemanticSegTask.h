@@ -4,7 +4,7 @@
 #include "C2dImageTask.h"
 #include "IO/CSemanticSegIO.h"
 
-class CSemanticSegTask: public C2dImageTask
+class DATAPROCESSSHARED_EXPORT CSemanticSegTask: public C2dImageTask
 {
     public:
 

@@ -4,7 +4,7 @@
 #include "C2dImageTask.h"
 #include "IO/CInstanceSegIO.h"
 
-class CInstanceSegTask: public C2dImageTask
+class DATAPROCESSSHARED_EXPORT CInstanceSegTask: public C2dImageTask
 {
     public:
 

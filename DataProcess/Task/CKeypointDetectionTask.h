@@ -5,7 +5,7 @@
 #include "IO/CKeypointsIO.h"
 
 
-class CKeypointDetectionTask: public C2dImageTask
+class DATAPROCESSSHARED_EXPORT CKeypointDetectionTask: public C2dImageTask
 {
     public:
 
