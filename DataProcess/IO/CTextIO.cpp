@@ -236,11 +236,17 @@ void CTextIO::addTextField(int id, const std::string &label, const std::string& 
     m_graphicsIOPtr->addPolygon(field.m_polygon, prop);
 
     //Class label
-    std::string graphicsLabel = label + " #" + std::to_string(id) + ": " + text + " (" + std::to_string(confidence) + ")";
+    std::string graphicsLabel = "#" + std::to_string(id);
+    if (!label.empty())
+        graphicsLabel += " - " + label;
+
+    if (!text.empty())
+        graphicsLabel += " - " + text;
+
     CGraphicsTextProperty textProperty;
     textProperty.m_color = color;
     textProperty.m_fontSize = 8;
-    m_graphicsIOPtr->addText(graphicsLabel, x + 5, y + 5, textProperty);
+    m_graphicsIOPtr->addText(graphicsLabel, x + 1, y + 1, textProperty);
 }
 
 void CTextIO::addTextField(int id, const std::string& label, const std::string& text,
@@ -255,6 +261,15 @@ void CTextIO::addTextField(int id, const std::string& label, const std::string& 
     field.m_color = color;
     m_fields.push_back(field);
 
+    float top = std::numeric_limits<float>::max();
+    float left = std::numeric_limits<float>::max();
+
+    for (size_t i=0; i<polygon.size(); ++i)
+    {
+        left = std::min(left, polygon[i].m_x);
+        top = std::min(top, polygon[i].m_y);
+    }
+
     //Set integrated I/O
     //Create rectangle graphics of bbox
     CGraphicsPolygonProperty prop;
@@ -263,11 +278,17 @@ void CTextIO::addTextField(int id, const std::string& label, const std::string& 
     m_graphicsIOPtr->addPolygon(polygon, prop);
 
     //Class label
-    std::string graphicsLabel = label + " #" + std::to_string(id) + ": " + text + " (" + std::to_string(confidence) + ")";
+    std::string graphicsLabel = "#" + std::to_string(id);
+    if (!label.empty())
+        graphicsLabel += " - " + label;
+
+    if (!text.empty())
+        graphicsLabel += " - " + text;
+
     CGraphicsTextProperty textProperty;
     textProperty.m_color = color;
     textProperty.m_fontSize = 8;
-    m_graphicsIOPtr->addText(graphicsLabel, polygon[0].m_x + 5, polygon[0].m_y + 5, textProperty);
+    m_graphicsIOPtr->addText(graphicsLabel, left + 1, top + 1, textProperty);
 }
 
 void CTextIO::clearData()
