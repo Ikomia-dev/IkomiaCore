@@ -15,7 +15,7 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegTask: public C2dImageTask
 
         std::vector<std::string>    getNames() const;
         SemanticSegIOPtr            getResults() const;
-        CMat                        getVisualizationImage() const;
+        CMat                        getImageWithMask() const;
 
         void                        readClassNames(const std::string& path);
 

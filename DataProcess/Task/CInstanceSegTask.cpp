@@ -72,7 +72,34 @@ InstanceSegIOPtr CInstanceSegTask::getResults() const
     return instanceSegIOPtr;
 }
 
-CMat CInstanceSegTask::getVisualizationImage() const
+CMat CInstanceSegTask::getImageWithMask() const
+{
+    auto imgIOPtr = std::dynamic_pointer_cast<CImageIO>(getOutput(0));
+    if (imgIOPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Invalid image output", __func__, __FILE__, __LINE__);
+
+    auto instanceSegIOPtr = std::dynamic_pointer_cast<CInstanceSegIO>(getOutput(1));
+    if (instanceSegIOPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Invalid object detection output", __func__, __FILE__, __LINE__);
+
+    return Utils::Image::mergeColorMask(imgIOPtr->getImage(), instanceSegIOPtr->getMergeMask(), getColorMap(0), 0.7, false);
+}
+
+CMat CInstanceSegTask::getImageWithGraphics() const
+{
+    auto imgIOPtr = std::dynamic_pointer_cast<CImageIO>(getOutput(0));
+    if (imgIOPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Invalid image output", __func__, __FILE__, __LINE__);
+
+    auto instanceSegIOPtr = std::dynamic_pointer_cast<CInstanceSegIO>(getOutput(1));
+    if (instanceSegIOPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Invalid object detection output", __func__, __FILE__, __LINE__);
+
+    auto graphicsIOPtr = instanceSegIOPtr->getGraphicsIO();
+    return imgIOPtr->getImageWithGraphics(graphicsIOPtr);
+}
+
+CMat CInstanceSegTask::getImageWithMaskAndGraphics() const
 {
     auto imgIOPtr = std::dynamic_pointer_cast<CImageIO>(getOutput(0));
     if (imgIOPtr == nullptr)
@@ -85,6 +112,7 @@ CMat CInstanceSegTask::getVisualizationImage() const
     auto graphicsIOPtr = instanceSegIOPtr->getGraphicsIO();
     CMat imgWithGraphics = imgIOPtr->getImageWithGraphics(graphicsIOPtr);
     return Utils::Image::mergeColorMask(imgWithGraphics, instanceSegIOPtr->getMergeMask(), getColorMap(0), 0.7, true);
+
 }
 
 void CInstanceSegTask::readClassNames(const std::string &path)

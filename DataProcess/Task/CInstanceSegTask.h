@@ -19,7 +19,9 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegTask: public C2dImageTask
 
         std::vector<std::string>    getNames() const;
         InstanceSegIOPtr            getResults() const;
-        CMat                        getVisualizationImage() const;
+        CMat                        getImageWithMask() const;
+        CMat                        getImageWithGraphics() const;
+        CMat                        getImageWithMaskAndGraphics() const;
 
         void                        readClassNames(const std::string& path);
 

@@ -113,7 +113,7 @@ std::vector<PairString> CClassificationTask::getWholeImageResults() const
     return results;
 }
 
-CMat CClassificationTask::getVisualizationImage() const
+CMat CClassificationTask::getImageWithGraphics() const
 {
     auto imgIOPtr = std::dynamic_pointer_cast<CImageIO>(getOutput(0));
     if (imgIOPtr == nullptr)

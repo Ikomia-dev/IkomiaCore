@@ -20,7 +20,7 @@ class DATAPROCESSSHARED_EXPORT CObjectDetectionTask: public C2dImageTask
 
         std::vector<std::string>            getNames() const;
         ObjectDetectionIOPtr                getResults() const;
-        CMat                                getVisualizationImage() const;
+        CMat                                getImageWithGraphics() const;
 
         void                                readClassNames(const std::string& path);
 

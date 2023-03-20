@@ -1874,7 +1874,7 @@ constexpr auto _classifGetWholeImageResultsDocString =
         "Returns:\n\n"
         "   list of tuples (name, confidence): classification results\n\n";
 
-constexpr auto _classifGetVisuImageDocString =
+constexpr auto _classifGetImgWithGraphicsDocString =
         "Get visualization image where all extracted information are embedded (graphics items).\n\n"
         "Returns:\n\n"
         "   2D Numpy array: visualization image\n\n";
@@ -1982,7 +1982,7 @@ constexpr auto _semSegGetResultsDocString =
         "Returns:\n\n"
         "   :py:class:`CSemanticSegmentationIO`: semantic segmentation data\n\n";
 
-constexpr auto _semSegGetVisuImgDocString =
+constexpr auto _semSegGetImgWithMaskDocString =
         "Get a visualization image composed by original input image and colored segmentation mask. "
         "A transparency factor is applied to see both information.\n\n"
         "Returns:\n\n"
@@ -2033,7 +2033,7 @@ constexpr auto _instanceSegGetResultsDocString =
         "Returns:\n\n"
         "   :py:class:`CInstanceSegmentationIO`: semantic segmentation data\n\n";
 
-constexpr auto _instanceSegGetVisuImgDocString =
+constexpr auto _instanceSegGetImgWithMaskAndGraphicsDocString =
         "Get a visualization image composed by original input image, colored segmentation mask and "
         "embedded graphics (object detection). A transparency factor is applied between original "
         "image and mask.\n\n"

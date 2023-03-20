@@ -60,7 +60,7 @@ ObjectDetectionIOPtr CObjectDetectionTask::getResults() const
     return objDetIOPtr;
 }
 
-CMat CObjectDetectionTask::getVisualizationImage() const
+CMat CObjectDetectionTask::getImageWithGraphics() const
 {
     auto imgIOPtr = std::dynamic_pointer_cast<CImageIO>(getOutput(0));
     if (imgIOPtr == nullptr)

@@ -22,7 +22,7 @@ class DATAPROCESSSHARED_EXPORT CKeypointDetectionTask: public C2dImageTask
         std::vector<std::string>    getKeypointNames() const;
         std::vector<std::string>    getObjectNames() const;
         KeypointsIOPtr              getResults() const;
-        CMat                        getVisualizationImage() const;
+        CMat                        getImageWithGraphics() const;
 
         void                        readClassNames(const std::string& path);
 

@@ -79,7 +79,7 @@ KeypointsIOPtr CKeypointDetectionTask::getResults() const
     return keyptsIOPtr;
 }
 
-CMat CKeypointDetectionTask::getVisualizationImage() const
+CMat CKeypointDetectionTask::getImageWithGraphics() const
 {
     auto imgIOPtr = std::dynamic_pointer_cast<CImageIO>(getOutput(0));
     if (imgIOPtr == nullptr)

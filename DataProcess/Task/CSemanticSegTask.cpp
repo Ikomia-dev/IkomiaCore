@@ -45,7 +45,7 @@ SemanticSegIOPtr CSemanticSegTask::getResults() const
     return segIOPtr;
 }
 
-CMat CSemanticSegTask::getVisualizationImage() const
+CMat CSemanticSegTask::getImageWithMask() const
 {
     auto imgIOPtr = std::dynamic_pointer_cast<CImageIO>(getInput(0));
     if (imgIOPtr == nullptr)

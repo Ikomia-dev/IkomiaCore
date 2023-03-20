@@ -16,7 +16,7 @@ class DATAPROCESSSHARED_EXPORT CClassificationTask: public C2dImageTask
         CMat                                getObjectSubImage(const ProxyGraphicsItemPtr& objectPtr) const;
         ObjectDetectionIOPtr                getObjectsResults() const;
         std::vector<PairString>             getWholeImageResults() const;
-        CMat                                getVisualizationImage() const;
+        CMat                                getImageWithGraphics() const;
 
         bool                                isWholeImageClassification() const;
 
