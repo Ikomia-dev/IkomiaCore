@@ -47,8 +47,6 @@ class C2dImageTaskWrap : public C2dImageTask, public wrapper<C2dImageTask>
         void            setActive(bool bActive) override;
         void            default_setActive(bool bActive);
 
-        void            setOutputColorMap(size_t index, size_t maskIndex, const std::vector<std::vector<uchar>>& colors={});
-
         CMat            applyGraphicsMask(const CMat &src, int maskIndex);
         CMat            applyGraphicsMaskToBinary(const CMat &src, int maskIndex);
 

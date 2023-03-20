@@ -1533,7 +1533,8 @@ constexpr auto _setOutputColorMapDocString =
         "Args:\n\n"
         "   index (int): zero-based index of the output to be displayed with the color map. The output must be a :py:class:`~ikomia.dataprocess.pydataprocess.CImageIO` or derived.\n\n"
         "   mask_index (int): zero-based index of the output representing the mask used to generate the color overlay.\n\n"
-        "   colors (list): list of tuples (r,g,b values) for the color map. If empty, the system generates random colors.\n\n";
+        "   colors (list): list of tuples (r,g,b values) for the color map. If empty, the system generates random colors.\n\n"
+        "   reserve_zero (bool): reserve zero pixels of the mask for background so that it will appear transparent in Ikomia Studio.\n\n";
 
 constexpr auto _updateStaticOutputsDocString =
         "Determine output data type automatically from input data types. "
