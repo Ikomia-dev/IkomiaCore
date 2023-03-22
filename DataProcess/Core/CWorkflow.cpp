@@ -157,6 +157,47 @@ void CWorkflow::initDefaultConfig()
     m_cfg["VideoWriteTimeout"] = "60000"; //in milliseconds
 }
 
+void CWorkflow::to_ostream(std::ostream &os) const
+{
+    os << "###################################" << std::endl;
+    os << "#\t" << m_name << std::endl;
+    os << "###################################\n" << std::endl;
+
+    os << "\n***********************************" << std::endl;
+    os << "*\t TASKS" << std::endl;
+    os << "***********************************\n" << std::endl;
+    auto vertices = boost::vertices(m_graph);
+    for(auto it=vertices.first; it!=vertices.second; ++it)
+    {
+        auto t = getTask(*it);
+        if (t != nullptr)
+            os << t->getName() << std::endl;
+    }
+
+    auto inputs = getInputs();
+    if(!inputs.empty())
+    {
+        os << "\n***********************************" << std::endl;
+        os << "*\t INPUTS" << std::endl;
+        os << "***********************************\n" << std::endl;
+        for(size_t i=0; i<inputs.size(); ++i)
+            os << *(inputs[i]);
+    }
+
+    auto outputs = getOutputs();
+    if(!outputs.empty())
+    {
+        os << "\n***********************************" << std::endl;
+        os << "*\t OUTPUTS" << std::endl;
+        os << "***********************************\n" << std::endl;
+        for(size_t i=0; i<outputs.size(); ++i)
+            os << *(outputs[i]);
+    }
+
+    os << std::endl << "Output folder: " << m_outputFolder << std::endl;
+    os << "\n###################################" << std::endl;
+}
+
 /***********/
 /* SETTERS */
 /***********/
@@ -356,7 +397,7 @@ WorkflowVertex CWorkflow::getTaskId(const std::string &name) const
     return boost::graph_traits<WorkflowGraph>::null_vertex();
 }
 
-WorkflowTaskPtr CWorkflow::getTask(const WorkflowVertex &id)
+WorkflowTaskPtr CWorkflow::getTask(const WorkflowVertex &id) const
 {
     if(id == boost::graph_traits<WorkflowGraph>::null_vertex())
         return m_graph[m_root];

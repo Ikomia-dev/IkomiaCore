@@ -98,6 +98,8 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         WorkflowTaskPtr                 operator[](WorkflowVertex v);
         WorkflowEdgePtr                 operator[](WorkflowEdge e);
 
+        friend DATAPROCESSSHARED_EXPORT std::ostream& operator<<(std::ostream& os, const CWorkflow& wf);
+
         //Setters
         void                            setDescription(const std::string& description);
         void                            setKeywords(const std::string& keywords);
@@ -123,7 +125,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         WorkflowVertex                  getActiveTaskId() const;
         WorkflowVertex                  getRunningTaskId() const;
         WorkflowVertex                  getTaskId(const std::string& name) const;
-        WorkflowTaskPtr                 getTask(const WorkflowVertex& id);
+        WorkflowTaskPtr                 getTask(const WorkflowVertex& id) const;
         std::vector<WorkflowVertex>     getParents(const WorkflowVertex& id) const;
         void                            getAllParents(const WorkflowVertex& id, std::vector<WorkflowVertex>& parents) const;
         std::vector<WorkflowVertex>     getChilds(const WorkflowVertex &parent) const;
@@ -218,6 +220,10 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
 
         // Tells compiler (clang) we want all getProgressSteps functions
         using CWorkflowTask::getProgressSteps;
+
+    protected:
+
+        void                            to_ostream(std::ostream& os) const override;
 
     private:
 
