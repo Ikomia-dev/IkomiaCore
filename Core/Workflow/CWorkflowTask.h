@@ -653,6 +653,10 @@ class CORESHARED_EXPORT CWorkflowTask
 
         void                        download(const std::string& url, const std::string& to);
 
+    protected:
+
+        virtual void                to_ostream(std::ostream& os) const;
+
     private:
 
         std::string                 generateUUID() const;

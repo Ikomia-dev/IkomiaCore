@@ -155,50 +155,7 @@ CWorkflowTask::~CWorkflowTask()
 
 std::ostream& operator<<(std::ostream& os, const CWorkflowTask& task)
 {
-    os << "###################################" << std::endl;
-    os << "#\t" << task.m_name << std::endl;
-    os << "###################################\n" << std::endl;
-
-    if(task.m_pParam)
-    {
-        os << "***********************************" << std::endl;
-        os << "*\t PARAMETERS" << std::endl;
-        os << "***********************************\n" << std::endl;
-        os << *(task.m_pParam);
-    }
-
-    if(!task.m_inputs.empty())
-    {
-        os << "\n***********************************" << std::endl;
-        os << "*\t INPUTS" << std::endl;
-        os << "***********************************\n" << std::endl;
-        for(size_t i=0; i<task.m_inputs.size(); ++i)
-            os << *(task.m_inputs[i]);
-    }
-
-    if(!task.m_outputs.empty())
-    {
-        os << "\n***********************************" << std::endl;
-        os << "*\t OUTPUTS" << std::endl;
-        os << "***********************************\n" << std::endl;
-        for(size_t i=0; i<task.m_outputs.size(); ++i)
-            os << *(task.m_outputs[i]);
-    }
-
-    os << "\n***********************************" << std::endl;
-    os << "*\t INFORMATION" << std::endl;
-    os << "***********************************\n" << std::endl;
-    os << "Running time: " << task.m_elapsedTime << std::endl;
-    os << "Output folder: " << task.m_outputFolder << std::endl;
-
-    if(!task.m_customInfo.empty())
-    {
-        os << "----- Custom info -----" << std::endl;
-        for(size_t i=0; i<task.m_customInfo.size(); ++i)
-            os << task.m_customInfo[i].first << task.m_customInfo[i].second << std::endl;
-    }
-
-    os << "\n###################################" << std::endl;
+    task.to_ostream(os);
     return os;
 }
 
@@ -206,6 +163,54 @@ std::string CWorkflowTask::generateUUID() const
 {
     boost::uuids::uuid uuid = boost::uuids::random_generator()();
     return boost::uuids::to_string(uuid);
+}
+
+void CWorkflowTask::to_ostream(std::ostream &os) const
+{
+    os << "###################################" << std::endl;
+    os << "#\t" << m_name << std::endl;
+    os << "###################################\n" << std::endl;
+
+    if(m_pParam)
+    {
+        os << "***********************************" << std::endl;
+        os << "*\t PARAMETERS" << std::endl;
+        os << "***********************************\n" << std::endl;
+        os << *(m_pParam);
+    }
+
+    if(!m_inputs.empty())
+    {
+        os << "\n***********************************" << std::endl;
+        os << "*\t INPUTS" << std::endl;
+        os << "***********************************\n" << std::endl;
+        for(size_t i=0; i<m_inputs.size(); ++i)
+            os << *(m_inputs[i]);
+    }
+
+    if(!m_outputs.empty())
+    {
+        os << "\n***********************************" << std::endl;
+        os << "*\t OUTPUTS" << std::endl;
+        os << "***********************************\n" << std::endl;
+        for(size_t i=0; i<m_outputs.size(); ++i)
+            os << *(m_outputs[i]);
+    }
+
+    os << "\n***********************************" << std::endl;
+    os << "*\t INFORMATION" << std::endl;
+    os << "***********************************\n" << std::endl;
+    os << "Running time: " << m_elapsedTime << std::endl;
+    os << "Output folder: " << m_outputFolder << std::endl;
+
+    if(!m_customInfo.empty())
+    {
+        os << "----- Custom info -----" << std::endl;
+        for(size_t i=0; i<m_customInfo.size(); ++i)
+            os << m_customInfo[i].first << m_customInfo[i].second << std::endl;
+    }
+
+    os << "\n###################################" << std::endl;
 }
 
 void CWorkflowTask::setInputDataType(const IODataType &dataType, size_t index)
