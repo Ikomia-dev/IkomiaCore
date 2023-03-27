@@ -76,6 +76,9 @@ namespace Ikomia
             {
                 CMat result, colorMask;
 
+                if (mask.empty() || mask.data == nullptr)
+                    return image;
+
                 if(mask.depth() != CV_8U)
                     mask.convertTo(colorMask, CV_8U);
                 else
