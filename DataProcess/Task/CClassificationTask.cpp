@@ -185,6 +185,9 @@ void CClassificationTask::readClassNames(const std::string& path)
 
 void CClassificationTask::setWholeImageResults(const std::vector<std::string> &sortedNames, const std::vector<std::string> &sortedConfidences)
 {
+    if (sortedNames.size() == 0)
+        return;
+
     if (sortedNames.size() != sortedConfidences.size())
         throw CException(CoreExCode::INVALID_SIZE, "Size of class names and class confidences must be equal", __func__, __FILE__, __LINE__);
 
