@@ -97,6 +97,7 @@
 #include "imgproc/COcvWidgetResize.hpp"
 #include "imgproc/COcvWidgetRotateEx.hpp"
 #include "imgproc/COcvWidgetSobel.hpp"
+#include "imgproc/COcvWidgetStackBlur.hpp"
 #include "imgproc/COcvWidgetWatershed.hpp"
 #include "imgproc/COcvWidgetLaplacian.hpp"
 #include "imgproc/COcvWidgetCanny.hpp"

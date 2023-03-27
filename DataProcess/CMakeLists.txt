@@ -171,6 +171,7 @@ add_library(ikDataProcess SHARED
     Process/OpenCV/imgproc/COcvResize.hpp
     Process/OpenCV/imgproc/COcvRotateEx.hpp
     Process/OpenCV/imgproc/COcvSobel.hpp
+    Process/OpenCV/imgproc/COcvStackBlur.hpp
     Process/OpenCV/imgproc/COcvThreshold.hpp
     Process/OpenCV/imgproc/COcvWatershed.hpp
     Process/OpenCV/objdetect/COcvCascadeClassifier.hpp
@@ -382,6 +383,7 @@ add_library(ikDataProcess SHARED
     Widget/OpenCV/imgproc/COcvWidgetResize.hpp
     Widget/OpenCV/imgproc/COcvWidgetRotateEx.hpp
     Widget/OpenCV/imgproc/COcvWidgetSobel.hpp
+    Widget/OpenCV/imgproc/COcvWidgetStackBlur.hpp
     Widget/OpenCV/imgproc/COcvWidgetThreshold.hpp
     Widget/OpenCV/imgproc/COcvWidgetWatershed.hpp
     Widget/OpenCV/objdetect/COcvWidgetCascadeClassifier.hpp

@@ -78,6 +78,7 @@
 #include "imgproc/COcvResize.hpp"
 #include "imgproc/COcvRotateEx.hpp"
 #include "imgproc/COcvSobel.hpp"
+#include "imgproc/COcvStackBlur.hpp"
 #include "imgproc/COcvWatershed.hpp"
 #include "imgproc/COcvLaplacian.hpp"
 #include "imgproc/COcvCanny.hpp"
