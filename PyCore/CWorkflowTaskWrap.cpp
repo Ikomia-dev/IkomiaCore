@@ -64,7 +64,7 @@ void CWorkflowTaskWrap::default_setInputDataType(const IODataType &dataType, siz
     }
 }
 
-void CWorkflowTaskWrap::setInput(const WorkflowTaskIOPtr &pInput, size_t index, bool bNewSequence)
+void CWorkflowTaskWrap::setInput(const WorkflowTaskIOPtr &pInput, size_t index)
 {
     CPyEnsureGIL gil;
     try
@@ -72,7 +72,7 @@ void CWorkflowTaskWrap::setInput(const WorkflowTaskIOPtr &pInput, size_t index, 
         if(override setInputOver = this->get_override("set_input"))
             setInputOver(pInput, index);
         else
-            CWorkflowTask::setInput(pInput, index, bNewSequence);
+            CWorkflowTask::setInput(pInput, index);
     }
     catch(boost::python::error_already_set&)
     {
@@ -80,12 +80,12 @@ void CWorkflowTaskWrap::setInput(const WorkflowTaskIOPtr &pInput, size_t index, 
     }
 }
 
-void CWorkflowTaskWrap::default_setInput(const WorkflowTaskIOPtr &pInput, size_t index, bool bNewSequence)
+void CWorkflowTaskWrap::default_setInput(const WorkflowTaskIOPtr &pInput, size_t index)
 {
     CPyEnsureGIL gil;
     try
     {
-        this->CWorkflowTask::setInput(pInput, index, bNewSequence);
+        this->CWorkflowTask::setInput(pInput, index);
     }
     catch(boost::python::error_already_set&)
     {
@@ -93,15 +93,15 @@ void CWorkflowTaskWrap::default_setInput(const WorkflowTaskIOPtr &pInput, size_t
     }
 }
 
-void CWorkflowTaskWrap::setInputs(const InputOutputVect &inputs, bool bNewSequence)
+void CWorkflowTaskWrap::setInputs(const InputOutputVect &inputs)
 {
     CPyEnsureGIL gil;
     try
     {
         if(override setInputsOver = this->get_override("set_inputs"))
-            setInputsOver(inputs, bNewSequence);
+            setInputsOver(inputs);
         else
-            CWorkflowTask::setInputs(inputs, bNewSequence);
+            CWorkflowTask::setInputs(inputs);
     }
     catch(boost::python::error_already_set&)
     {
@@ -109,12 +109,12 @@ void CWorkflowTaskWrap::setInputs(const InputOutputVect &inputs, bool bNewSequen
     }
 }
 
-void CWorkflowTaskWrap::default_setInputs(const InputOutputVect &inputs, bool bNewSequence)
+void CWorkflowTaskWrap::default_setInputs(const InputOutputVect &inputs)
 {
     CPyEnsureGIL gil;
     try
     {
-        this->CWorkflowTask::setInputs(inputs, bNewSequence);
+        this->CWorkflowTask::setInputs(inputs);
     }
     catch(boost::python::error_already_set&)
     {

@@ -42,11 +42,11 @@ class CWorkflowTaskWrap : public CWorkflowTask, public wrapper<CWorkflowTask>
         void    setInputDataType(const IODataType& dataType, size_t index = 0) override;
         void    default_setInputDataType(const IODataType& dataType, size_t index = 0);
 
-        void    setInput(const WorkflowTaskIOPtr& pInput, size_t index = 0, bool bNewSequence=false) override;
-        void    default_setInput(const WorkflowTaskIOPtr& pInput, size_t index = 0, bool bNewSequence=false);
+        void    setInput(const WorkflowTaskIOPtr& pInput, size_t index = 0) override;
+        void    default_setInput(const WorkflowTaskIOPtr& pInput, size_t index = 0);
 
-        void    setInputs(const InputOutputVect& inputs, bool bNewSequence) override;
-        void    default_setInputs(const InputOutputVect& inputs, bool bNewSequence);
+        void    setInputs(const InputOutputVect& inputs) override;
+        void    default_setInputs(const InputOutputVect& inputs);
 
         void    setOutputDataType(const IODataType& dataType, size_t index = 0) override;
         void    default_setOutputDataType(const IODataType& dataType, size_t index = 0);

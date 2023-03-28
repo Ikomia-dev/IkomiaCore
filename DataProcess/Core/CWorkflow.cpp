@@ -212,12 +212,17 @@ void CWorkflow::setKeywords(const std::string &keywords)
     m_keywords = keywords;
 }
 
+void CWorkflow::setInput(const WorkflowTaskIOPtr &pInput, size_t index)
+{
+    setInput(pInput, index, true);
+}
+
 void CWorkflow::setInput(const WorkflowTaskIOPtr &pInput, size_t index, bool bNewSequence)
 {
-    CWorkflowTask::setInput(pInput, index, bNewSequence);
+    CWorkflowTask::setInputNoCheck(pInput, index);
 
     auto pRootTask = m_graph[m_root];
-    pRootTask->setInput(pInput, index);
+    pRootTask->setInputNoCheck(pInput, index);
     pRootTask->setOutput(pInput, index);
 
     auto pActiveTask = m_graph[m_activeTask];
@@ -230,12 +235,17 @@ void CWorkflow::setInput(const WorkflowTaskIOPtr &pInput, size_t index, bool bNe
     startIOAnalysis(m_root);
 }
 
+void CWorkflow::setInputs(const InputOutputVect &inputs)
+{
+    setInputs(inputs, true);
+}
+
 void CWorkflow::setInputs(const InputOutputVect &inputs, bool bNewSequence)
 {
-    CWorkflowTask::setInputs(inputs, bNewSequence);
+    CWorkflowTask::setInputs(inputs);
 
     auto pRootTask = m_graph[m_root];
-    pRootTask->setInputs(inputs, bNewSequence);
+    pRootTask->setInputs(inputs);
     pRootTask->setOutputs(inputs);
 
     auto pActiveTask = m_graph[m_activeTask];
@@ -1537,7 +1547,7 @@ void CWorkflow::analyzeTaskIO(const WorkflowVertex &id)
 void CWorkflow::createRoot()
 {
     auto pRootTask = std::make_shared<CWorkflowTask>("Root");
-    pRootTask->setInputs(getInputs(), false);
+    pRootTask->setInputs(getInputs());
     m_root = boost::add_vertex(pRootTask, m_graph);
     m_lastTaskAdded = m_root;
 }

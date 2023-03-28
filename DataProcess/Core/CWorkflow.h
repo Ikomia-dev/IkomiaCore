@@ -103,8 +103,10 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         //Setters
         void                            setDescription(const std::string& description);
         void                            setKeywords(const std::string& keywords);
-        void                            setInput(const WorkflowTaskIOPtr& pInput, size_t index, bool bNewSequence) override;
-        void                            setInputs(const InputOutputVect& inputs, bool bNewSequence) override;
+        void                            setInput(const WorkflowTaskIOPtr& pInput, size_t index) override;
+        void                            setInput(const WorkflowTaskIOPtr& pInput, size_t index, bool bNewSequence);
+        void                            setInputs(const InputOutputVect& inputs) override;
+        void                            setInputs(const InputOutputVect& inputs, bool bNewSequence);
         void                            setOutputFolder(const std::string& folder) override;
         void                            setActiveTask(const WorkflowVertex& id);
         void                            setRunningTask(const WorkflowVertex& id);

@@ -1028,6 +1028,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
     registerStdVector<std::intptr_t>();
 
     void (CWorkflowWrap::*addInputRef)(const WorkflowTaskIOPtr&) = &CWorkflowWrap::addInput;
+    void (CWorkflowWrap::*setInputNewSeq)(const WorkflowTaskIOPtr&, size_t, bool) = &CWorkflowWrap::setInput;
 
     class_<CWorkflowWrap, bases<CWorkflowTask>, std::shared_ptr<CWorkflowWrap>>("CWorkflow", _workflowDocString)
         .def(init<>("Default constructor", args("self")))
@@ -1035,7 +1036,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def(init<const std::string&, const std::shared_ptr<CIkomiaRegistry>&>(_ctor2WorkflowDocString, args("self", "name", "registry")))
         .add_property("description", &CWorkflow::getDescription, &CWorkflow::setDescription, "Workflow description")
         .add_property("keywords", &CWorkflow::getKeywords, &CWorkflow::setKeywords, "Workflow associated keywords")
-        .def("set_input", &CWorkflow::setInput, _wfSetInputDocString, args("self", "input", "index", "new_sequence"))
+        .def("set_input", setInputNewSeq, _wfSetInputDocString, args("self", "input", "index", "new_sequence"))
         .def("set_output_folder", &CWorkflow::setOutputFolder, _wfSetOutputFolderDocString, args("self", "path"))
         .def("set_auto_save", &CWorkflow::setAutoSave, _wfSetAutoSaveDocString, args("self", "enable"))
         .def("set_cfg_entry", &CWorkflow::setCfgEntry, _wfSetCfgEntryDocString, args("self", "key", "value"))

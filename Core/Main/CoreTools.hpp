@@ -424,8 +424,8 @@ namespace Ikomia
                 return (nameFrom == nameTo ||
                         (nameFrom == "CImageIO" && nameTo == "CVideoIO") ||
                         (nameFrom == "CVideoIO" && nameTo == "CImageIO") ||
-                        (nameFrom == "CPathIO" && nameTo == "CImageIO") ||
-                        (nameFrom == "CPathIO" && nameTo == "CVideoIO"));
+                        (nameFrom == "CImageIO" && nameTo == "CPathIO") ||
+                        (nameFrom == "CVideoIO" && nameTo == "CPathIO"));
             }
 
             /**

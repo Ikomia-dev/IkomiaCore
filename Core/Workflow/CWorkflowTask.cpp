@@ -224,16 +224,15 @@ void CWorkflowTask::setInputDataType(const IODataType &dataType, size_t index)
     }
 }
 
-void CWorkflowTask::setInput(const WorkflowTaskIOPtr &pInput, size_t index, bool bNewSequence)
+void CWorkflowTask::setInput(const WorkflowTaskIOPtr &pInput, size_t index)
 {    
-    Q_UNUSED(bNewSequence);        
-
     if(index >= m_inputs.size())
     {
         //New input
         m_inputs.resize(index + 1);
         m_originalInputTypes.resize(index + 1);
-        m_inputViewProps.emplace_back(CViewPropertyIO());
+        m_inputViewProps.resize(index + 1);
+        m_inputViewProps[index] = CViewPropertyIO();
 
         if(pInput)
             m_originalInputTypes[index] = pInput->getDataType();
@@ -262,9 +261,34 @@ void CWorkflowTask::setInput(const WorkflowTaskIOPtr &pInput, size_t index, bool
     updateStaticOutputs();
 }
 
-void CWorkflowTask::setInputs(const InputOutputVect &inputs, bool bNewSequence)
+void CWorkflowTask::setInputNoCheck(const WorkflowTaskIOPtr &pInput, size_t index)
 {
-    Q_UNUSED(bNewSequence);
+    if(index >= m_inputs.size())
+    {
+        //New input
+        m_inputs.resize(index + 1);
+        m_originalInputTypes.resize(index + 1);
+        m_inputViewProps.resize(index + 1);
+        m_inputViewProps[index] = CViewPropertyIO();
+
+        if(pInput)
+            m_originalInputTypes[index] = pInput->getDataType();
+        else
+            m_originalInputTypes[index] = IODataType::NONE;
+    }
+
+    if(pInput == nullptr && m_inputs[index] != nullptr)
+        m_inputs[index]->clearData();
+
+    //Just share pointer
+    CPyEnsureGIL gil;
+    m_inputs[index] = pInput;
+
+    updateStaticOutputs();
+}
+
+void CWorkflowTask::setInputs(const InputOutputVect &inputs)
+{
     m_inputs = inputs;
     m_inputViewProps.resize(m_inputs.size());
     updateStaticOutputs();
@@ -288,8 +312,9 @@ void CWorkflowTask::setOutput(const WorkflowTaskIOPtr &pOutput, size_t index)
     else
     {
         m_outputs.resize(index + 1);
+        m_outputViewProps.resize(index + 1);
         m_outputs[index] = pOutput;
-        m_outputViewProps.emplace_back(CViewPropertyIO());
+        m_outputViewProps[index] = CViewPropertyIO();
     }
 }
 

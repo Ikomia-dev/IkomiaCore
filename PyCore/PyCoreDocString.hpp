@@ -454,8 +454,7 @@ constexpr auto _setInputDocString =
         "and sets the input at position index.\n\n"
         "Args:\n\n"
         "   input_tot (:py:class:`~ikomia.core.pycore.CWorkflowTaskIO` based object)\n\n"
-        "   index (int): zero-based input index\n\n"
-        "   is_new_sequence (bool): indicate if new input is a new sequence (ex: new frame of the same video is not a new sequence)\n\n";
+        "   index (int): zero-based input index\n\n";
 
 constexpr auto _setInputDataTypeDocString =
         "Set the data type for the input at position index. "
@@ -468,8 +467,7 @@ constexpr auto _setInputDataTypeDocString =
 constexpr auto _setInputsDocString =
         "Set the whole list of inputs with the given one.\n\n"
         "Args:\n\n"
-        "   inputs (list of :py:class:`~ikomia.core.pycore.CWorkflowTaskIO` based objects)\n\n"
-        "   is_new_sequence (bool): indicate if new input is a new sequence (ex: new frame of the same video is not a new sequence)\n\n";
+        "   inputs (list of :py:class:`~ikomia.core.pycore.CWorkflowTaskIO` based objects)\n\n";
 
 constexpr auto _setOutputDocString =
         "Set output at position index with the given one. "

@@ -166,13 +166,14 @@ class CORESHARED_EXPORT CWorkflowTask
          * @param index: zero-based index of the input.
          * @param bNewSequence: unused
          */
-        virtual void                setInput(const WorkflowTaskIOPtr& pInput, size_t index = 0, bool bNewSequence=false);
+        virtual void                setInput(const WorkflowTaskIOPtr& pInput, size_t index = 0);
+        void                        setInputNoCheck(const WorkflowTaskIOPtr& pInput, size_t index = 0);
         /**
          * @brief Sets the whole list of inputs with the given one.
          * @param inputs: vector of CWorkflowTaskIO based shared pointer.
          * @param bNewSequence: unused
          */
-        virtual void                setInputs(const InputOutputVect& inputs, bool bNewSequence);
+        virtual void                setInputs(const InputOutputVect& inputs);
         /**
          * @brief Sets the data type for the output at position index.
          * If the output at position index does not exist, the function creates as many generic outputs to reach the number of index+1 and sets the data type for the output at position index.
@@ -682,8 +683,6 @@ class CORESHARED_EXPORT CWorkflowTask
         ViewPropertiesIO                    m_outputViewProps;
         VectorPairString                    m_customInfo;
     /** @endcond */
-
-    private:
 
         InputOutputVect                     m_inputs;
         InputOutputVect                     m_outputs;
