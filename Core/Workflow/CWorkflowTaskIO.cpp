@@ -256,7 +256,8 @@ std::shared_ptr<CWorkflowTaskIO> CWorkflowTaskIO::clone() const
 
 void CWorkflowTaskIO::copy(const std::shared_ptr<CWorkflowTaskIO> &ioPtr)
 {
-    *this = *ioPtr;
+    // Does nothing by default, should be overriden if needed
+    Q_UNUSED(ioPtr);
 }
 
 void CWorkflowTaskIO::copyStaticData(const std::shared_ptr<CWorkflowTaskIO> &ioPtr)
