@@ -981,7 +981,7 @@ constexpr auto _datasetIODocString =
         "       - instance_seg_masks_file: full path of the ground truth instance segmentation image file.\n"
         "       - semantic_seg_masks_file: full path of the ground truth semantic segmentation image file.\n"
         "   - metadata (dict): key-value mapping that contains information that's shared among the entire dataset:\n"
-        "       - category_names (list[str]).\n"
+        "       - category_names (dict{id (int): name (str)]).\n"
         "       - category_colors (list[tuple(r,g,b)]).\n"
         "       - keypoint_names (list[str]).\n"
         "       - keypoint_connection_rules (list[tuple(str, str, (r,g,b))]): each tuple specifies a pair of keypoints that "
