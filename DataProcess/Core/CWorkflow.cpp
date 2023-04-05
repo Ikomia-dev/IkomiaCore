@@ -1553,7 +1553,7 @@ void CWorkflow::analyzeTaskIO(const WorkflowVertex &id)
 
 void CWorkflow::createRoot()
 {
-    auto pRootTask = std::make_shared<CWorkflowTask>("Root");
+    auto pRootTask = std::make_shared<CWorkflowTask>("root");
     pRootTask->setInputs(getInputs());
     m_root = boost::add_vertex(pRootTask, m_graph);
     m_lastTaskAdded = m_root;
