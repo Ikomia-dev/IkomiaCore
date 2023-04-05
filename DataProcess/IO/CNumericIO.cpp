@@ -1,6 +1,14 @@
 # include "CNumericIO.h"
 
 template <>
+std::string CNumericIO<std::string>::repr() const
+{
+    std::stringstream s;
+    s << "CDataStringIO(" << m_name << ")";
+    return s.str();
+}
+
+template <>
 std::vector<std::vector<std::string> > CNumericIO<std::string>::getAllValuesAsString() const
 {
     return m_values;

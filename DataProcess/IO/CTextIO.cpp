@@ -121,6 +121,13 @@ CTextIO &CTextIO::operator=(const CTextIO &io)
     return *this;
 }
 
+std::string CTextIO::repr() const
+{
+    std::stringstream s;
+    s << "CTextIO()";
+    return s.str();
+}
+
 CTextIO &CTextIO::operator=(const CTextIO &&io)
 {
     CWorkflowTaskIO::operator=(io);

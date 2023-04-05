@@ -10,6 +10,13 @@ CObjectDetectionTask::CObjectDetectionTask(const std::string &name): C2dImageTas
     initIO();
 }
 
+std::string CObjectDetectionTask::repr() const
+{
+    std::stringstream s;
+    s << "CObjectDetectionTask(" << m_name <<  ")";
+    return s.str();
+}
+
 void CObjectDetectionTask::addObject(int id, int classIndex, double confidence, double boxX, double boxY, double boxWidth, double boxHeight)
 {
     auto objDetIOPtr = std::dynamic_pointer_cast<CObjectDetectionIO>(getOutput(1));

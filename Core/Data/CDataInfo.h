@@ -60,6 +60,10 @@ class CORESHARED_EXPORT CDataInfo
         UMapString&                 metadata();
         virtual VectorPairString    getStringList() const;
 
+    protected:
+
+        virtual void                to_ostream(std::ostream& os) const;
+
     private:
 
         IODataType      m_type;

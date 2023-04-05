@@ -74,6 +74,8 @@ class DATAPROCESSSHARED_EXPORT C2dImageTask : public CWorkflowTask
 
         virtual ~C2dImageTask();
 
+        std::string repr() const override;
+
         /**
          * @brief see CWorkflowTask::setActive for more details.
          * @param bActive

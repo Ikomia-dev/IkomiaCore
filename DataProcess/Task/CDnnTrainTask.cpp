@@ -46,6 +46,13 @@ CDnnTrainTask::CDnnTrainTask(const std::string &name, const std::shared_ptr<CWor
         m_pParam = std::make_shared<CWorkflowTaskParam>();
 }
 
+std::string CDnnTrainTask::repr() const
+{
+    std::stringstream s;
+    s << "CDnnTrainTask(" << m_name <<  ")";
+    return s.str();
+}
+
 void CDnnTrainTask::enableMlflow(bool bEnable)
 {
     m_bOpenMlflow = bEnable;

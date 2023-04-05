@@ -15,6 +15,9 @@ class CObjDetectTaskWrap: public CObjectDetectionTask, public wrapper<CObjectDet
 
         ~CObjDetectTaskWrap() = default;
 
+        std::string     repr() const override;
+        std::string     default_repr() const;
+
         size_t          getProgressSteps() override;
         size_t          default_getProgressSteps();
 

@@ -58,6 +58,13 @@ CArrayIO &CArrayIO::operator=(const CArrayIO &io)
     return *this;
 }
 
+std::string CArrayIO::repr() const
+{
+    std::stringstream s;
+    s << "CArrayIO(" << m_name << ")";
+    return s.str();
+}
+
 CArrayIO &CArrayIO::operator=(const CArrayIO &&io)
 {
     CWorkflowTaskIO::operator=(io);

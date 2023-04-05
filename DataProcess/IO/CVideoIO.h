@@ -97,6 +97,8 @@ class DATAPROCESSSHARED_EXPORT CVideoIO : public CImageIO
          */
         CVideoIO& operator=(const CVideoIO&& io);
 
+        std::string         repr() const override;
+
         /**
          * @brief Sets the source path of the video.
          * @param path: it can be a file path, an IP address or an internal camera reference.

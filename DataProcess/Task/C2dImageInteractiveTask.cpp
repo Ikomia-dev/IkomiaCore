@@ -36,6 +36,13 @@ C2dImageInteractiveTask::C2dImageInteractiveTask(const C2dImageInteractiveTask &
     m_blobs = process.m_blobs;
 }
 
+std::string C2dImageInteractiveTask::repr() const
+{
+    std::stringstream s;
+    s << "C2dImageInteractiveTask(" << m_name << ")";
+    return s.str();
+}
+
 void C2dImageInteractiveTask::setActive(bool bActive)
 {
     C2dImageTask::setActive(bActive);

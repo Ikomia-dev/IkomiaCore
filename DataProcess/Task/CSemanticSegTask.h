@@ -11,6 +11,8 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegTask: public C2dImageTask
         CSemanticSegTask();
         CSemanticSegTask(const std::string& name);
 
+        std::string                 repr() const;
+
         void                        endTaskRun() override;
 
         std::vector<std::string>    getNames() const;

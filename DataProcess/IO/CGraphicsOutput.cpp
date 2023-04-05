@@ -75,6 +75,13 @@ CGraphicsOutput &CGraphicsOutput::operator=(const CGraphicsOutput &out)
     return *this;
 }
 
+std::string CGraphicsOutput::repr() const
+{
+    std::stringstream s;
+    s << "CGraphicsOutput(" << m_name << ")";
+    return s.str();
+}
+
 CGraphicsOutput &CGraphicsOutput::operator=(CGraphicsOutput&& out)
 {
     CWorkflowTaskIO::operator=(out);

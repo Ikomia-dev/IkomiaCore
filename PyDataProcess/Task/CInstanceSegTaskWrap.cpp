@@ -12,6 +12,35 @@ CInstanceSegTaskWrap::CInstanceSegTaskWrap(const CInstanceSegTask &task): CInsta
 {
 }
 
+std::string CInstanceSegTaskWrap::repr() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override reprOver = this->get_override("__repr__"))
+            return reprOver();
+
+        return CInstanceSegTask::repr();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+std::string CInstanceSegTaskWrap::default_repr() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        return this->CInstanceSegTask::repr();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 size_t CInstanceSegTaskWrap::getProgressSteps()
 {
     CPyEnsureGIL gil;

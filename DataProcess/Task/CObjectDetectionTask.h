@@ -11,6 +11,8 @@ class DATAPROCESSSHARED_EXPORT CObjectDetectionTask: public C2dImageTask
         CObjectDetectionTask();
         CObjectDetectionTask(const std::string& name);
 
+        std::string                         repr() const;
+
         void                                addObject(int id, int classIndex, double confidence,
                                                       double boxX, double boxY, double boxWidth, double boxHeight);
         void                                addObject(int id, int classIndex, double confidence,

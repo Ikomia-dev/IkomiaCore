@@ -98,6 +98,8 @@ class DATAPROCESSSHARED_EXPORT CImageIO : public CWorkflowTaskIO
          */
         CImageIO& operator=(const CImageIO&& io);
 
+        std::string     repr() const override;
+
         /**
          * @brief Sets the image.
          * @param image: CMat object for C++ and Numpy array for Python.

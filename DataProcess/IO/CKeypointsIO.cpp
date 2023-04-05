@@ -211,6 +211,13 @@ CKeypointsIO &CKeypointsIO::operator=(const CKeypointsIO &io)
     return *this;
 }
 
+std::string CKeypointsIO::repr() const
+{
+    std::stringstream s;
+    s << "CKeypointsIO()";
+    return s.str();
+}
+
 CKeypointsIO &CKeypointsIO::operator=(const CKeypointsIO &&io)
 {
     CWorkflowTaskIO::operator=(io);

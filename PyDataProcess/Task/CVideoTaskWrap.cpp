@@ -34,6 +34,35 @@ CVideoTaskWrap::CVideoTaskWrap(const CVideoTask &process) : CVideoTask(process)
 {
 }
 
+std::string CVideoTaskWrap::repr() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override reprOver = this->get_override("__repr__"))
+            return reprOver();
+
+        return CVideoTask::repr();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+std::string CVideoTaskWrap::default_repr() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        return this->CVideoTask::repr();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 size_t CVideoTaskWrap::getProgressSteps()
 {
     CPyEnsureGIL gil;

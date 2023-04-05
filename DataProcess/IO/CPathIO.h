@@ -41,6 +41,8 @@ class DATAPROCESSSHARED_EXPORT CPathIO : public CWorkflowTaskIO
         CPathIO&    operator=(const CPathIO& in);
         CPathIO&    operator=(CPathIO&& in);
 
+        std::string repr() const override;
+
         void        setPath(const std::string& path);
 
         std::string getPath() const;

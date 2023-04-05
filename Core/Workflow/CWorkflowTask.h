@@ -151,6 +151,8 @@ class CORESHARED_EXPORT CWorkflowTask
 
         virtual ~CWorkflowTask();
 
+        virtual std::string         repr() const;
+
         //Setters
         /**
          * @brief Sets the data type for the input at position index.

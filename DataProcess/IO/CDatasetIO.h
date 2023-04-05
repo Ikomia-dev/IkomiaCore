@@ -38,6 +38,8 @@ class DATAPROCESSSHARED_EXPORT CDatasetIO: public CWorkflowTaskIO
 
         virtual ~CDatasetIO() = default;
 
+        std::string                                 repr() const override;
+
         std::string                                 getSourceFormat() const;
         virtual std::vector<std::string>            getImagePaths() const;
         virtual MapIntStr                           getCategories() const;

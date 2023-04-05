@@ -12,6 +12,35 @@ CClassifTaskWrap::CClassifTaskWrap(const CClassificationTask &task) : CClassific
 {
 }
 
+std::string CClassifTaskWrap::repr() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override reprOver = this->get_override("__repr__"))
+            return reprOver();
+
+        return CClassificationTask::repr();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+std::string CClassifTaskWrap::default_repr() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        return this->CClassificationTask::repr();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 size_t CClassifTaskWrap::getProgressSteps()
 {
     CPyEnsureGIL gil;

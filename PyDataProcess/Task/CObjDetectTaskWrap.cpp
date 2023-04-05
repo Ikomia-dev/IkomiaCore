@@ -12,6 +12,35 @@ CObjDetectTaskWrap::CObjDetectTaskWrap(const CObjectDetectionTask &task) : CObje
 {
 }
 
+std::string CObjDetectTaskWrap::repr() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override reprOver = this->get_override("__repr__"))
+            return reprOver();
+
+        return CObjectDetectionTask::repr();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+std::string CObjDetectTaskWrap::default_repr() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        return this->CObjectDetectionTask::repr();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 size_t CObjDetectTaskWrap::getProgressSteps()
 {
     CPyEnsureGIL gil;

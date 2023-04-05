@@ -10,6 +10,13 @@ CKeypointDetectionTask::CKeypointDetectionTask(const std::string &name): C2dImag
     initIO();
 }
 
+std::string CKeypointDetectionTask::repr() const
+{
+    std::stringstream s;
+    s << "CKeypointDetectionTask(" << m_name <<  ")";
+    return s.str();
+}
+
 void CKeypointDetectionTask::initIO()
 {
     addOutput(std::make_shared<CKeypointsIO>());

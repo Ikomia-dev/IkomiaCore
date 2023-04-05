@@ -37,6 +37,9 @@ class CVideoTaskWrap: public CVideoTask, public wrapper<CVideoTask>
         CVideoTaskWrap(const std::string& name);
         CVideoTaskWrap(const CVideoTask& process);
 
+        std::string     repr() const override;
+        std::string     default_repr() const;
+
         size_t  getProgressSteps() override;
         size_t  default_getProgressSteps();
 

@@ -92,9 +92,13 @@ class DATAPROCESSSHARED_EXPORT CTaskInfo
 
         friend DATAPROCESSSHARED_EXPORT std::ostream& operator<<(std::ostream& os, const CTaskInfo& info);
 
+    protected:
+
+        virtual void    to_ostream(std::ostream& os) const;
+
     private:
 
-        std::string getOSName() const;
+        std::string     getOSName() const;
 
     public:
 

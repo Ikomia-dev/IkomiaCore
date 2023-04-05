@@ -53,6 +53,8 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegIO: public CWorkflowTaskIO
         CInstanceSegIO& operator=(const CInstanceSegIO& io);
         CInstanceSegIO& operator=(const CInstanceSegIO&& io);
 
+        std::string                         repr() const override;
+
         size_t                              getInstanceCount() const;
         CInstanceSegmentation               getInstance(size_t index) const;
         std::vector<CInstanceSegmentation>  getInstances() const;

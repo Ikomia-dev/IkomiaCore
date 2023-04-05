@@ -49,9 +49,13 @@ uint CWorkflowTaskParam::getHashValue() const
 
 std::ostream& operator<<(std::ostream& os, const CWorkflowTaskParam& param)
 {
-    auto params = param.getParamMap();
+    param.to_ostream(os);
+    return os;
+}
+
+void CWorkflowTaskParam::to_ostream(std::ostream &os) const
+{
+    auto params = getParamMap();
     for(auto it=params.begin(); it!=params.end(); ++it)
         os << it->first << ":" << it->second << std::endl;
-
-    return os;
 }

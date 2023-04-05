@@ -11,6 +11,13 @@ CInstanceSegTask::CInstanceSegTask(const std::string &name): C2dImageTask(name)
     init();
 }
 
+std::string CInstanceSegTask::repr() const
+{
+    std::stringstream s;
+    s << "CInstanceSegmentationTask(" << m_name <<  ")";
+    return s.str();
+}
+
 void CInstanceSegTask::addInstance(int id, int type, int classIndex, double confidence, double x, double y, double width, double height, const CMat &mask)
 {
     auto instanceSegIOPtr = std::dynamic_pointer_cast<CInstanceSegIO>(getOutput(1));

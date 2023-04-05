@@ -142,6 +142,13 @@ WorkflowTaskPtr CWorkflow::operator[](WorkflowVertex v)
     return m_graph[v];
 }
 
+std::string CWorkflow::repr() const
+{
+    std::stringstream s;
+    s << "CWorkflow(" << m_name <<  ")";
+    return s.str();
+}
+
 WorkflowEdgePtr CWorkflow::operator[](WorkflowEdge e)
 {
     return m_graph[e];
@@ -160,12 +167,12 @@ void CWorkflow::initDefaultConfig()
 void CWorkflow::to_ostream(std::ostream &os) const
 {
     os << "###################################" << std::endl;
-    os << "#\t" << m_name << std::endl;
-    os << "###################################\n" << std::endl;
+    os << "#\t" << "Workflow: " << m_name << std::endl;
+    os << "###################################" << std::endl;
 
-    os << "\n***********************************" << std::endl;
-    os << "*\t TASKS" << std::endl;
-    os << "***********************************\n" << std::endl;
+    os << "-----------------------------------" << std::endl;
+    os << "-\t TASKS" << std::endl;
+    os << "-----------------------------------" << std::endl;
     auto vertices = boost::vertices(m_graph);
     for(auto it=vertices.first; it!=vertices.second; ++it)
     {
@@ -177,25 +184,25 @@ void CWorkflow::to_ostream(std::ostream &os) const
     auto inputs = getInputs();
     if(!inputs.empty())
     {
-        os << "\n***********************************" << std::endl;
-        os << "*\t INPUTS" << std::endl;
-        os << "***********************************\n" << std::endl;
+        os << std::endl << "-----------------------------------" << std::endl;
+        os << "-\t INPUTS" << std::endl;
+        os << "-----------------------------------" << std::endl;
         for(size_t i=0; i<inputs.size(); ++i)
-            os << *(inputs[i]);
+            os << inputs[i]->repr();
     }
 
     auto outputs = getOutputs();
     if(!outputs.empty())
     {
-        os << "\n***********************************" << std::endl;
-        os << "*\t OUTPUTS" << std::endl;
-        os << "***********************************\n" << std::endl;
+        os << std::endl << "-----------------------------------" << std::endl;
+        os << "-\t OUTPUTS" << std::endl;
+        os << "-----------------------------------" << std::endl;
         for(size_t i=0; i<outputs.size(); ++i)
-            os << *(outputs[i]);
+            os << outputs[i]->repr();
     }
 
     os << std::endl << "Output folder: " << m_outputFolder << std::endl;
-    os << "\n###################################" << std::endl;
+    os << "###################################" << std::endl;
 }
 
 /***********/

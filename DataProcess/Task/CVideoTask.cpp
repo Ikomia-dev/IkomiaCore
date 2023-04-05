@@ -29,6 +29,13 @@ CVideoTask::CVideoTask(const std::string& name) : C2dImageTask(name)
     m_type = CWorkflowTask::Type::VIDEO;
 }
 
+std::string CVideoTask::repr() const
+{
+    std::stringstream s;
+    s << "CVideoTask(" << m_name <<  ")";
+    return s.str();
+}
+
 void CVideoTask::beginTaskRun()
 {
     std::lock_guard<std::mutex> lock(m_mutex);

@@ -21,6 +21,7 @@
 #include "Data/CDataVideoInfo.h"
 #include "CDataVideoIO.h"
 #include "UtilsTools.hpp"
+#include "Main/CoreTools.hpp"
 #include "Data/CDataConversion.h"
 
 CVideoIO::CVideoIO() : CImageIO(IODataType::VIDEO, "CVideoIO")
@@ -78,6 +79,17 @@ CVideoIO &CVideoIO::operator=(const CVideoIO& io)
     m_frameIndex = io.m_frameIndex;
     m_frameIndexRead = io.m_frameIndexRead;
     return *this;
+}
+
+std::string CVideoIO::repr() const
+{
+    std::stringstream s;
+    if (m_pVideoBuffer && !m_pVideoBuffer->getCurrentPath().empty())
+        s << "CVideoIO(" << Utils::Workflow::getIODataEnumName(m_dataType) << ", " << m_name << ", " << m_pVideoBuffer->getCurrentPath() << ")";
+    else
+        s << "CVideoIO(" << Utils::Workflow::getIODataEnumName(m_dataType) << ", " << m_name <<  ")";
+
+    return s.str();
 }
 
 CVideoIO &CVideoIO::operator=(const CVideoIO&& io)

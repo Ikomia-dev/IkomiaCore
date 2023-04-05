@@ -12,6 +12,8 @@ class DATAPROCESSSHARED_EXPORT CKeypointDetectionTask: public C2dImageTask
         CKeypointDetectionTask();
         CKeypointDetectionTask(const std::string& name);
 
+        std::string                 repr() const;
+
         void                        addObject(int id, int classIndex, double confidence,
                                               double x, double y, double width, double height,
                                               const std::vector<Keypoint> keypts);

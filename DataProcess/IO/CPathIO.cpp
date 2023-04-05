@@ -19,6 +19,7 @@
 
 #include <QObject>
 #include <boost/filesystem.hpp>
+#include "Main/CoreTools.hpp"
 #include "CPathIO.h"
 
 CPathIO::CPathIO() : CWorkflowTaskIO(IODataType::FILE_PATH, "PathIO")
@@ -65,6 +66,13 @@ CPathIO &CPathIO::operator=(const CPathIO &in)
     m_path = in.m_path;
     m_infoPtr = std::make_shared<CDataInfo>(m_dataType, m_path);
     return *this;
+}
+
+std::string CPathIO::repr() const
+{
+    std::stringstream s;
+    s << "CPathIO(" << Utils::Workflow::getIODataEnumName(m_dataType) << ", " << m_path << ", " << m_name <<  ")";
+    return s.str();
 }
 
 CPathIO &CPathIO::operator=(CPathIO &&in)

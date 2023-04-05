@@ -69,14 +69,7 @@ CDataInfo &CDataInfo::operator=(CDataInfo &&data)
 
 std::ostream& operator<<(std::ostream& os, const CDataInfo& info)
 {
-    os << "File name: " << info.m_fileName << std::endl;
-
-    if(!info.m_metadata.empty())
-    {
-        os << "----- Metadata -----" << std::endl;
-        for(auto it : info.m_metadata)
-            os << it.first << it.second;
-    }
+    info.to_ostream(os);
     return os;
 }
 
@@ -127,5 +120,17 @@ VectorPairString CDataInfo::getStringList() const
         infoList.push_back(std::make_pair(it.first, it.second));
 
     return infoList;
+}
+
+void CDataInfo::to_ostream(std::ostream &os) const
+{
+    os << "File name: " << m_fileName << std::endl;
+
+    if(!m_metadata.empty())
+    {
+        os << "----- Metadata -----" << std::endl;
+        for(auto it : m_metadata)
+            os << it.first << it.second;
+    }
 }
 

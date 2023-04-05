@@ -35,6 +35,35 @@ CDnnTrainTaskWrap::CDnnTrainTaskWrap(const CDnnTrainTask &process) : CDnnTrainTa
 {
 }
 
+std::string CDnnTrainTaskWrap::repr() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override reprOver = this->get_override("__repr__"))
+            return reprOver();
+
+        return CDnnTrainTask::repr();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+std::string CDnnTrainTaskWrap::default_repr() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        return this->CDnnTrainTask::repr();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 size_t CDnnTrainTaskWrap::getProgressSteps()
 {
     CPyEnsureGIL gil;

@@ -75,6 +75,13 @@ CInstanceSegIO &CInstanceSegIO::operator=(const CInstanceSegIO &io)
     return *this;
 }
 
+std::string CInstanceSegIO::repr() const
+{
+    std::stringstream s;
+    s << "CInstanceSegIO()";
+    return s.str();
+}
+
 CInstanceSegIO &CInstanceSegIO::operator=(const CInstanceSegIO &&io)
 {
     CWorkflowTaskIO::operator=(io);

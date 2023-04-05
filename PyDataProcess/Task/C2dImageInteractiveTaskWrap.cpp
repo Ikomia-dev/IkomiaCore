@@ -34,6 +34,35 @@ C2dImageInteractiveTaskWrap::C2dImageInteractiveTaskWrap(const C2dImageInteracti
 {
 }
 
+std::string C2dImageInteractiveTaskWrap::repr() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override reprOver = this->get_override("__repr__"))
+            return reprOver();
+
+        return C2dImageInteractiveTask::repr();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+std::string C2dImageInteractiveTaskWrap::default_repr() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        return this->C2dImageInteractiveTask::repr();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 size_t C2dImageInteractiveTaskWrap::getProgressSteps()
 {
     CPyEnsureGIL gil;

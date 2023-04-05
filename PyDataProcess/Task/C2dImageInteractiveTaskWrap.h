@@ -37,6 +37,9 @@ class C2dImageInteractiveTaskWrap: public C2dImageInteractiveTask, public wrappe
         C2dImageInteractiveTaskWrap(const std::string& name);
         C2dImageInteractiveTaskWrap(const C2dImageInteractiveTask& process);
 
+        std::string     repr() const override;
+        std::string     default_repr() const;
+
         size_t  getProgressSteps() override;
         size_t  default_getProgressSteps();
 

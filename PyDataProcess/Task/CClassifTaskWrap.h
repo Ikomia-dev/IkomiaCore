@@ -14,6 +14,9 @@ class CClassifTaskWrap: public CClassificationTask, public wrapper<CClassificati
 
         ~CClassifTaskWrap() = default;
 
+        std::string     repr() const override;
+        std::string     default_repr() const;
+
         size_t          getProgressSteps() override;
         size_t          default_getProgressSteps();
 

@@ -57,6 +57,8 @@ class DATAPROCESSSHARED_EXPORT C2dImageInteractiveTask : public C2dImageTask
 
         virtual ~C2dImageInteractiveTask() = default;
 
+        std::string     repr() const;
+
         /**
          * @brief Makes the task and its graphics interaction layer active or inactive.
          * @param bActive: True to activate, False to desactivate.

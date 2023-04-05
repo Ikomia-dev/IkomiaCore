@@ -30,6 +30,13 @@ CDatasetIO::CDatasetIO(const std::string &name, const std::string &srcFormat) : 
     m_saveFormat = DataFileFormat::JSON;
 }
 
+std::string CDatasetIO::repr() const
+{
+    std::stringstream s;
+    s << "CDatasetIO(" << m_name << ", " << m_srcFormat << ")";
+    return s.str();
+}
+
 std::string CDatasetIO::getSourceFormat() const
 {
     return m_srcFormat;

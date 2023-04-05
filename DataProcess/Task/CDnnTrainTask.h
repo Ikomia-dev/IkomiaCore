@@ -39,6 +39,8 @@ class DATAPROCESSSHARED_EXPORT CDnnTrainTask : public CWorkflowTask
 
         ~CDnnTrainTask() = default;
 
+        std::string     repr() const;
+
         void            enableMlflow(bool bEnable);
         void            enableTensorboard(bool bEnable);
 

@@ -49,6 +49,8 @@ class DATAPROCESSSHARED_EXPORT CVideoTask : public C2dImageTask
 
         virtual ~CVideoTask() = default;
 
+        std::string     repr() const;
+
         /**
          * @brief Performs checks before the process is started
          */

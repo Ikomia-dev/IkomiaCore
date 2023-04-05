@@ -69,6 +69,8 @@ class DATAPROCESSSHARED_EXPORT CBlobMeasureIO : public CWorkflowTaskIO
         CBlobMeasureIO&         operator=(const CBlobMeasureIO& io);
         CBlobMeasureIO&         operator=(const CBlobMeasureIO&& io);
 
+        std::string             repr() const override;
+
         void                    setObjectMeasure(size_t index, const CObjectMeasure& measure);
 
         ObjectsMeasures         getMeasures() const;

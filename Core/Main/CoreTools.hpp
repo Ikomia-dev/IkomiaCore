@@ -346,6 +346,7 @@ namespace Ikomia
 
         namespace Workflow
         {
+            // TODO: not elegant and could lead to maintenance issue...
             inline QString  getIODataName(IODataType dataType)
             {
                 switch(dataType)
@@ -411,6 +412,75 @@ namespace Ikomia
                         return QObject::tr("Text detection");
                 }
                 return QString();
+            }
+
+            // TODO: not elegant and could lead to maintenance issue...
+            inline std::string  getIODataEnumName(IODataType dataType)
+            {
+                switch(dataType)
+                {
+                    case IODataType::NONE:
+                        return "IODataType.NONE";
+                    case IODataType::IMAGE:
+                        return "IODataType.IMAGE";
+                    case IODataType::IMAGE_BINARY:
+                        return "IODataType.IMAGE_BINARY";
+                    case IODataType::IMAGE_LABEL:
+                        return "IODataType.IMAGE_LABEL";
+                    case IODataType::VOLUME:
+                        return "IODataType.VOLUME";
+                    case IODataType::VOLUME_BINARY:
+                        return "IODataType.VOLUME_BINARY";
+                    case IODataType::VOLUME_LABEL:
+                        return "IODataType.VOLUME_LABEL";
+                    case IODataType::INPUT_GRAPHICS:
+                        return "IODataType.INPUT_GRAPHICS";
+                    case IODataType::OUTPUT_GRAPHICS:
+                        return "IODataType.OUTPUT_GRAPHICS";
+                    case IODataType::BLOB_VALUES:
+                        return "IODataType.BLOB_VALUES";
+                    case IODataType::NUMERIC_VALUES:
+                        return "IODataType.NUMERIC_VALUES";
+                    case IODataType::VIDEO:
+                        return "IODataType.VIDEO";
+                    case IODataType::VIDEO_BINARY:
+                        return "IODataType.VIDEO_BINARY";
+                    case IODataType::VIDEO_LABEL:
+                        return "IODataType.VIDEO_LABEL";
+                    case IODataType::LIVE_STREAM:
+                        return "IODataType.LIVE_STREAM";
+                    case IODataType::LIVE_STREAM_BINARY:
+                        return "IODataType.LIVE_STREAM_BINARY";
+                    case IODataType::LIVE_STREAM_LABEL:
+                        return "IODataType.LIVE_STREAM_LABEL";
+                    case IODataType::WIDGET:
+                        return "IODataType.WIDGET";
+                    case IODataType::DESCRIPTORS:
+                        return "IODataType.DESCRIPTORS";
+                    case IODataType::PROJECT_FOLDER:
+                        return "IODataType.PROJECT_FOLDER";
+                    case IODataType::FOLDER_PATH:
+                        return "IODataType.FOLDER_PATH";
+                    case IODataType::FILE_PATH:
+                        return "IODataType.FILE_PATH";
+                    case IODataType::DNN_DATASET:
+                        return "IODataType.DNN_DATASET";
+                    case IODataType::ARRAY:
+                        return "IODataType.ARRAY";
+                    case IODataType::DATA_DICT:
+                        return "IODataType.DATA_DICT";
+                    case IODataType::OBJECT_DETECTION:
+                        return "IODataType.OBJECT_DETECTION";
+                    case IODataType::INSTANCE_SEGMENTATION:
+                        return "IODataType.INSTANCE_SEGMENTATION";
+                    case IODataType::SEMANTIC_SEGMENTATION:
+                        return "IODataType.SEMANTIC_SEGMENTATION";
+                    case IODataType::KEYPOINTS:
+                        return "IODataType.KEYPOINTS";
+                    case IODataType::TEXT:
+                        return "IODataType.TEXT";
+                }
+                return "";
             }
 
             inline bool     isConvertibleIO(WorkflowTaskIOPtr from, WorkflowTaskIOPtr to)

@@ -255,6 +255,13 @@ class CNumericIO : public CNumericIOBase
             return *this;
         }
 
+        std::string                 repr() const override
+        {
+            std::stringstream s;
+            s << "CNumericIO(" << m_name << ")";
+            return s.str();
+        }
+
         /**
          * @brief Checks if some numeric values or labels are available.
          * @return True if numeric value list or label list are not empty, False otherwise.
@@ -550,6 +557,9 @@ class CNumericIO : public CNumericIOBase
 
 // Partial specializations
 template <>
+DATAPROCESSSHARED_EXPORT std::string CNumericIO<std::string>::repr() const;
+
+template <>
 DATAPROCESSSHARED_EXPORT CNumericIOBase::VectorOfStringVector CNumericIO<std::string>::getAllValuesAsString() const;
 
 template <>
@@ -582,18 +592,18 @@ DATAPROCESSSHARED_EXPORT void CNumericIO<int>::fromJson(const std::string &jsonS
 
 class DATAPROCESSSHARED_EXPORT CNumericIOFactory: public CWorkflowTaskIOFactory
 {
-public:
+    public:
 
-    CNumericIOFactory()
-    {
-        m_name = "CNumericIO";
-    }
+        CNumericIOFactory()
+        {
+            m_name = "CNumericIO";
+        }
 
-    virtual WorkflowTaskIOPtr   create(IODataType dataType)
-    {
-        Q_UNUSED(dataType);
-        return std::make_shared<CNumericIO<double>>();
-    }
+        virtual WorkflowTaskIOPtr   create(IODataType dataType)
+        {
+            Q_UNUSED(dataType);
+            return std::make_shared<CNumericIO<double>>();
+        }
 };
 
 #endif // CNUMERICIO_H

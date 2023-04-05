@@ -17,6 +17,35 @@ CWorkflowWrap::CWorkflowWrap(const CWorkflow &workflow): CWorkflow(workflow)
 {
 }
 
+std::string CWorkflowWrap::repr() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override reprOver = this->get_override("__repr__"))
+            return reprOver();
+
+        return CWorkflow::repr();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+std::string CWorkflowWrap::default_repr() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        return this->CWorkflow::repr();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 intptr_t CWorkflowWrap::getRootID()
 {
     return reinterpret_cast<std::intptr_t>(getRootId());

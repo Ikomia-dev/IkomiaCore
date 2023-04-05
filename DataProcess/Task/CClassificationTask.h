@@ -11,6 +11,8 @@ class DATAPROCESSSHARED_EXPORT CClassificationTask: public C2dImageTask
         CClassificationTask();
         CClassificationTask(const std::string& name);
 
+        std::string                         repr() const;
+
         std::vector<std::string>            getNames() const;
         std::vector<ProxyGraphicsItemPtr>   getInputObjects() const;
         CMat                                getObjectSubImage(const ProxyGraphicsItemPtr& objectPtr) const;

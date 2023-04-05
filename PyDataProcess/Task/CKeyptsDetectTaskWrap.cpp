@@ -12,6 +12,35 @@ CKeyptsDetectTaskWrap::CKeyptsDetectTaskWrap(const CKeypointDetectionTask &task)
 {
 }
 
+std::string CKeyptsDetectTaskWrap::repr() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override reprOver = this->get_override("__repr__"))
+            return reprOver();
+
+        return CKeypointDetectionTask::repr();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+std::string CKeyptsDetectTaskWrap::default_repr() const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        return this->CKeypointDetectionTask::repr();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 size_t CKeyptsDetectTaskWrap::getProgressSteps()
 {
     CPyEnsureGIL gil;

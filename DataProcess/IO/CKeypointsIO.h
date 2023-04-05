@@ -87,6 +87,8 @@ class DATAPROCESSSHARED_EXPORT CKeypointsIO: public CWorkflowTaskIO
         CKeypointsIO& operator=(const CKeypointsIO& io);
         CKeypointsIO& operator=(const CKeypointsIO&& io);
 
+        std::string                     repr() const override;
+
         void                            addObject(int id, const std::string& label, double confidence,
                                                   double x, double y, double width, double height,
                                                   const std::vector<Keypoint> keypts, CColor color);

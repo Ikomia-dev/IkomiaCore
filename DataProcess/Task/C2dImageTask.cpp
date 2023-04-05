@@ -69,6 +69,13 @@ C2dImageTask::~C2dImageTask()
 {
 }
 
+std::string C2dImageTask::repr() const
+{
+    std::stringstream s;
+    s << "C2dImageTask(" << m_name << ", " << std::to_string(m_bEnableGraphics) << ")";
+    return s.str();
+}
+
 void C2dImageTask::setActive(bool bActive)
 {
     CWorkflowTask::setActive(bActive);

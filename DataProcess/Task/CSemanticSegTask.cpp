@@ -11,6 +11,13 @@ CSemanticSegTask::CSemanticSegTask(const std::string &name): C2dImageTask(name)
     init();
 }
 
+std::string CSemanticSegTask::repr() const
+{
+    std::stringstream s;
+    s << "CSemanticSegmentationTask(" << m_name <<  ")";
+    return s.str();
+}
+
 void CSemanticSegTask::init()
 {
     addOutput(std::make_shared<CSemanticSegIO>());

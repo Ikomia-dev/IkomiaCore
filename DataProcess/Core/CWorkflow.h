@@ -98,7 +98,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         WorkflowTaskPtr                 operator[](WorkflowVertex v);
         WorkflowEdgePtr                 operator[](WorkflowEdge e);
 
-        friend DATAPROCESSSHARED_EXPORT std::ostream& operator<<(std::ostream& os, const CWorkflow& wf);
+        std::string                     repr() const;
 
         //Setters
         void                            setDescription(const std::string& description);

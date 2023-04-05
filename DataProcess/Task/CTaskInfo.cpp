@@ -246,25 +246,30 @@ std::string CTaskInfo::getOSName() const
 
 std::ostream& operator<<(std::ostream& os, const CTaskInfo& info)
 {
-    os << "Name: " << info.m_name << std::endl;
-    os << "Path: " << info.m_path << std::endl;
-    os << "Short description: " << info.m_shortDescription << std::endl;
-    os << "Description: " << info.m_description << std::endl;
-    os << "Documentation link: " << info.m_docLink << std::endl;
-    os << "Icon path: " << info.m_iconPath << std::endl;
-    os << "Keywords: " << info.m_keywords << std::endl;
-    os << "Authors link: " << info.m_authors << std::endl;
-    os << "Article: " << info.m_article << std::endl;
-    os << "Journal/conference: " << info.m_journal << std::endl;
-    os << "Year: " << std::to_string(info.m_year) << std::endl;
-    os << "Version: " << info.m_version << std::endl;
-    os << "API version: " << info.m_ikomiaVersion << std::endl;
-    os << "Created: " << info.m_createdDate << std::endl;
-    os << "Modified: " << info.m_modifiedDate << std::endl;
-    os << "License: " << info.m_license << std::endl;
-    os << "Repository: " << info.m_repo << std::endl;
-    std::string language = info.m_language == ApiLanguage::CPP ? "C++" : "Python";
-    os << "Language: " << language << std::endl;
-    os << "OS: " << info.getOSName() << std::endl;
+    info.to_ostream(os);
     return os;
+}
+
+void CTaskInfo::to_ostream(std::ostream &os) const
+{
+    os << "Name: " << m_name << std::endl;
+    os << "Path: " << m_path << std::endl;
+    os << "Short description: " << m_shortDescription << std::endl;
+    os << "Description: " << m_description << std::endl;
+    os << "Documentation link: " << m_docLink << std::endl;
+    os << "Icon path: " << m_iconPath << std::endl;
+    os << "Keywords: " << m_keywords << std::endl;
+    os << "Authors link: " << m_authors << std::endl;
+    os << "Article: " << m_article << std::endl;
+    os << "Journal/conference: " << m_journal << std::endl;
+    os << "Year: " << std::to_string(m_year) << std::endl;
+    os << "Version: " << m_version << std::endl;
+    os << "API version: " << m_ikomiaVersion << std::endl;
+    os << "Created: " << m_createdDate << std::endl;
+    os << "Modified: " << m_modifiedDate << std::endl;
+    os << "License: " << m_license << std::endl;
+    os << "Repository: " << m_repo << std::endl;
+    std::string language = m_language == ApiLanguage::CPP ? "C++" : "Python";
+    os << "Language: " << language << std::endl;
+    os << "OS: " << getOSName() << std::endl;
 }

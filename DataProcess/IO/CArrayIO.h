@@ -71,6 +71,8 @@ class DATAPROCESSSHARED_EXPORT CArrayIO : public CWorkflowTaskIO
          */
         CArrayIO& operator=(const CArrayIO&& io);
 
+        std::string     repr() const override;
+
         /**
          * @brief Sets the array.
          * @param array: CMat object for C++ and Numpy array for Python.

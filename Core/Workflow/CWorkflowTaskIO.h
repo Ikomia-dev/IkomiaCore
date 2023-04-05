@@ -73,6 +73,8 @@ class CORESHARED_EXPORT CWorkflowTaskIO
 
         virtual ~CWorkflowTaskIO();
 
+        virtual std::string repr() const;
+
         //Getters
         /**
          * @brief Gets input or output name.
@@ -278,6 +280,7 @@ class CORESHARED_EXPORT CWorkflowTaskIO
     protected:
 
         std::string         toFormattedJson(const QJsonDocument& doc, const std::vector<std::string>& options) const;
+        virtual void        to_ostream(std::ostream& os) const;
 
     private:
 

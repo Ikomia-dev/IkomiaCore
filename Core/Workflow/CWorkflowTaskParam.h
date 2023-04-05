@@ -63,6 +63,10 @@ class CORESHARED_EXPORT CWorkflowTaskParam
 
         friend CORESHARED_EXPORT std::ostream& operator<<(std::ostream& os, const CWorkflowTaskParam& param);
 
+    protected:
+
+        virtual void        to_ostream(std::ostream& os) const;
+
     public:
 
         UMapString   m_cfg;

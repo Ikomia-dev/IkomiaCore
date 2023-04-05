@@ -159,6 +159,13 @@ std::ostream& operator<<(std::ostream& os, const CWorkflowTask& task)
     return os;
 }
 
+std::string CWorkflowTask::repr() const
+{
+    std::stringstream s;
+    s << "CWorkflowTask(" << getName() << ")";
+    return s.str();
+}
+
 std::string CWorkflowTask::generateUUID() const
 {
     boost::uuids::uuid uuid = boost::uuids::random_generator()();
@@ -168,38 +175,38 @@ std::string CWorkflowTask::generateUUID() const
 void CWorkflowTask::to_ostream(std::ostream &os) const
 {
     os << "###################################" << std::endl;
-    os << "#\t" << m_name << std::endl;
-    os << "###################################\n" << std::endl;
+    os << "#\t" << "Task: " << m_name << std::endl;
+    os << "###################################" << std::endl;
 
     if(m_pParam)
     {
-        os << "***********************************" << std::endl;
-        os << "*\t PARAMETERS" << std::endl;
-        os << "***********************************\n" << std::endl;
+        os << "-----------------------------------" << std::endl;
+        os << "-\t PARAMETERS" << std::endl;
+        os << "-----------------------------------" << std::endl;
         os << *(m_pParam);
     }
 
     if(!m_inputs.empty())
     {
-        os << "\n***********************************" << std::endl;
-        os << "*\t INPUTS" << std::endl;
-        os << "***********************************\n" << std::endl;
+        os << std::endl << "-----------------------------------" << std::endl;
+        os << "-\t INPUTS" << std::endl;
+        os << "-----------------------------------" << std::endl;
         for(size_t i=0; i<m_inputs.size(); ++i)
-            os << *(m_inputs[i]);
+            os << m_inputs[i]->repr() << std::endl;
     }
 
     if(!m_outputs.empty())
     {
-        os << "\n***********************************" << std::endl;
-        os << "*\t OUTPUTS" << std::endl;
-        os << "***********************************\n" << std::endl;
+        os << std::endl << "-----------------------------------" << std::endl;
+        os << "-\t OUTPUTS" << std::endl;
+        os << "-----------------------------------" << std::endl;
         for(size_t i=0; i<m_outputs.size(); ++i)
-            os << *(m_outputs[i]);
+            os << m_outputs[i]->repr() << std::endl;
     }
 
-    os << "\n***********************************" << std::endl;
-    os << "*\t INFORMATION" << std::endl;
-    os << "***********************************\n" << std::endl;
+    os << std::endl << "-----------------------------------" << std::endl;
+    os << "-\t INFORMATION" << std::endl;
+    os << "-----------------------------------" << std::endl;
     os << "Running time: " << m_elapsedTime << std::endl;
     os << "Output folder: " << m_outputFolder << std::endl;
 
@@ -209,8 +216,7 @@ void CWorkflowTask::to_ostream(std::ostream &os) const
         for(size_t i=0; i<m_customInfo.size(); ++i)
             os << m_customInfo[i].first << m_customInfo[i].second << std::endl;
     }
-
-    os << "\n###################################" << std::endl;
+    os << "###################################" << std::endl;
 }
 
 void CWorkflowTask::setInputDataType(const IODataType &dataType, size_t index)

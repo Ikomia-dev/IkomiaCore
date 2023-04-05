@@ -57,6 +57,8 @@ class DATAPROCESSSHARED_EXPORT CTextIO: public CWorkflowTaskIO
         CTextIO& operator=(const CTextIO& io);
         CTextIO& operator=(const CTextIO&& io);
 
+        std::string                 repr() const override;
+
         size_t                      getTextFieldCount() const;
         CTextField                  getTextField(size_t index) const;
         std::vector<CTextField>     getTextFields() const;

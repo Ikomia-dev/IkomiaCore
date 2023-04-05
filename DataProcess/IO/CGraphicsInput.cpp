@@ -86,6 +86,13 @@ CGraphicsInput &CGraphicsInput::operator=(const CGraphicsInput &in)
     return *this;
 }
 
+std::string CGraphicsInput::repr() const
+{
+    std::stringstream s;
+    s << "CGraphicsInput(" << m_name << ")";
+    return s.str();
+}
+
 CGraphicsInput &CGraphicsInput::operator=(CGraphicsInput &&in)
 {
     CWorkflowTaskIO::operator=(in);

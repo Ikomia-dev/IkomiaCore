@@ -78,7 +78,7 @@ CImageIO::CImageIO(IODataType data, const std::string& name, const std::string &
     m_saveFormat = DataFileFormat::PNG;
 
     if (m_name.empty())
-        m_name = Utils::File::getFileNameWithoutExtension(path);
+        m_name = "CImageIO";
 
     CImageDataIO io(path);
     m_image = io.read();
@@ -89,6 +89,10 @@ CImageIO::CImageIO(IODataType data, const std::string& name, const std::string &
         m_channelCount = m_image.channels();
         m_bNewDataInfo = true;
     }
+
+    auto infoPtr = getDataInfo();
+    if (infoPtr)
+        infoPtr->setFileName(path);
 }
 
 CImageIO::CImageIO(const CImageIO &io) : CWorkflowTaskIO(io)
@@ -118,6 +122,17 @@ CImageIO &CImageIO::operator=(const CImageIO& io)
     m_currentIndex = io.m_currentIndex;
     m_bNewDataInfo = true;
     return *this;
+}
+
+std::string CImageIO::repr() const
+{
+    std::stringstream s;
+    if (m_infoPtr && !m_infoPtr->getFileName().empty())
+        s << "CImageIO(" << Utils::Workflow::getIODataEnumName(m_dataType) << ", " << m_name << ", " << m_infoPtr->getFileName() << ")";
+    else
+        s << "CImageIO(" << Utils::Workflow::getIODataEnumName(m_dataType) << ", " << m_name << ")";
+
+    return s.str();
 }
 
 CImageIO &CImageIO::operator=(const CImageIO&& io)

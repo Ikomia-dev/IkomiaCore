@@ -52,6 +52,8 @@ class DATAPROCESSSHARED_EXPORT CObjectDetectionIO: public CWorkflowTaskIO
         CObjectDetectionIO& operator=(const CObjectDetectionIO& io);
         CObjectDetectionIO& operator=(const CObjectDetectionIO&& io);
 
+        std::string                         repr() const override;
+
         size_t                              getObjectCount() const;
         CObjectDetection                    getObject(size_t index) const;
         std::vector<CObjectDetection>       getObjects() const;

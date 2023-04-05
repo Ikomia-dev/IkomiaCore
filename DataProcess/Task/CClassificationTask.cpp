@@ -12,6 +12,13 @@ CClassificationTask::CClassificationTask(const std::string &name): C2dImageTask(
     initIO();
 }
 
+std::string CClassificationTask::repr() const
+{
+    std::stringstream s;
+    s << "CClassificationTask(" << m_name <<  ")";
+    return s.str();
+}
+
 std::vector<std::string> CClassificationTask::getNames() const
 {
     return m_classNames;

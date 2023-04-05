@@ -90,6 +90,13 @@ CObjectDetectionIO &CObjectDetectionIO::operator=(const CObjectDetectionIO &io)
     return *this;
 }
 
+std::string CObjectDetectionIO::repr() const
+{
+    std::stringstream s;
+    s << "CObjectDetectionIO()";
+    return s.str();
+}
+
 CObjectDetectionIO &CObjectDetectionIO::operator=(const CObjectDetectionIO &&io)
 {
     CWorkflowTaskIO::operator=(io);

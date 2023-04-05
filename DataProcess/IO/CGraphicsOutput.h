@@ -53,6 +53,8 @@ class DATAPROCESSSHARED_EXPORT CGraphicsOutput : public CWorkflowTaskIO
         CGraphicsOutput&            operator=(CGraphicsOutput&& out);
         CGraphicsOutput&            operator=(const CGraphicsInput& in);
 
+        std::string                 repr() const override;
+
         void                        setNewLayer(const std::string name);
         void                        setImageIndex(int index);
         void                        setItems(const std::vector<ProxyGraphicsItemPtr>& items);

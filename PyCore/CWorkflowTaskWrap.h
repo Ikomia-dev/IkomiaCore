@@ -39,77 +39,77 @@ class CWorkflowTaskWrap : public CWorkflowTask, public wrapper<CWorkflowTask>
 
         ~CWorkflowTaskWrap() = default;
 
-        void    setInputDataType(const IODataType& dataType, size_t index = 0) override;
-        void    default_setInputDataType(const IODataType& dataType, size_t index = 0);
+        void        setInputDataType(const IODataType& dataType, size_t index = 0) override;
+        void        default_setInputDataType(const IODataType& dataType, size_t index = 0);
 
-        void    setInput(const WorkflowTaskIOPtr& pInput, size_t index = 0) override;
-        void    default_setInput(const WorkflowTaskIOPtr& pInput, size_t index = 0);
+        void        setInput(const WorkflowTaskIOPtr& pInput, size_t index = 0) override;
+        void        default_setInput(const WorkflowTaskIOPtr& pInput, size_t index = 0);
 
-        void    setInputs(const InputOutputVect& inputs) override;
-        void    default_setInputs(const InputOutputVect& inputs);
+        void        setInputs(const InputOutputVect& inputs) override;
+        void        default_setInputs(const InputOutputVect& inputs);
 
-        void    setOutputDataType(const IODataType& dataType, size_t index = 0) override;
-        void    default_setOutputDataType(const IODataType& dataType, size_t index = 0);
+        void        setOutputDataType(const IODataType& dataType, size_t index = 0) override;
+        void        default_setOutputDataType(const IODataType& dataType, size_t index = 0);
 
-        void    setOutput(const WorkflowTaskIOPtr& pOutput, size_t index = 0) override;
-        void    default_setOutput(const WorkflowTaskIOPtr& pOutput, size_t index = 0);
+        void        setOutput(const WorkflowTaskIOPtr& pOutput, size_t index = 0) override;
+        void        default_setOutput(const WorkflowTaskIOPtr& pOutput, size_t index = 0);
 
-        void    setOutputs(const InputOutputVect &outputs) override;
-        void    default_setOutputs(const InputOutputVect &outputs);
+        void        setOutputs(const InputOutputVect &outputs) override;
+        void        default_setOutputs(const InputOutputVect &outputs);
 
-        void    setActive(bool bActive) override;
-        void    default_setActive(bool bActive);
+        void        setActive(bool bActive) override;
+        void        default_setActive(bool bActive);
 
-        size_t  getProgressSteps() override;
-        size_t  default_getProgressSteps();
+        size_t      getProgressSteps() override;
+        size_t      default_getProgressSteps();
 
-        bool    isGraphicsChangedListening() const override;
-        bool    default_isGraphicsChangedListening() const;
+        bool        isGraphicsChangedListening() const override;
+        bool        default_isGraphicsChangedListening() const;
 
-        void    addInput(const WorkflowTaskIOPtr& pInput) override;
-        void    default_addInput(const WorkflowTaskIOPtr& pInput);
+        void        addInput(const WorkflowTaskIOPtr& pInput) override;
+        void        default_addInput(const WorkflowTaskIOPtr& pInput);
 
-        void    addOutput(const WorkflowTaskIOPtr& pOutput) override;
-        void    default_addOutput(const WorkflowTaskIOPtr& pOutput);
+        void        addOutput(const WorkflowTaskIOPtr& pOutput) override;
+        void        default_addOutput(const WorkflowTaskIOPtr& pOutput);
 
-        void    run() override;
-        void    default_run();
+        void        run() override;
+        void        default_run();
 
-        void    stop() override;
-        void    default_stop();
+        void        stop() override;
+        void        default_stop();
 
-        void    executeActions(int flags) override;
-        void    default_executeActions(int flags);
+        void        executeActions(int flags) override;
+        void        default_executeActions(int flags);
 
-        void    updateStaticOutputs() override;
-        void    default_updateStaticOutputs();
+        void        updateStaticOutputs() override;
+        void        default_updateStaticOutputs();
 
-        void    beginTaskRun() override;
-        void    default_beginTaskRun();
+        void        beginTaskRun() override;
+        void        default_beginTaskRun();
 
-        void    endTaskRun() override;
-        void    default_endTaskRun();
+        void        endTaskRun() override;
+        void        default_endTaskRun();
 
-        void    parametersModified() override;
-        void    default_parametersModified();
+        void        parametersModified() override;
+        void        default_parametersModified();
 
-        void    graphicsChanged() override;
-        void    default_graphicsChanged();
+        void        graphicsChanged() override;
+        void        default_graphicsChanged();
 
-        void    globalInputChanged(bool bNewSequence) override;
-        void    default_globalInputChanged(bool bNewSequence);
+        void        globalInputChanged(bool bNewSequence) override;
+        void        default_globalInputChanged(bool bNewSequence);
 
-        void    workflowStarted() override;
-        void    default_workflowStarted();
+        void        workflowStarted() override;
+        void        default_workflowStarted();
 
-        void    workflowFinished() override;
-        void    default_workflowFinished();
+        void        workflowFinished() override;
+        void        default_workflowFinished();
 
         //Signal wrapped
-        void            emitAddSubProgressSteps(int count);
-        void            emitStepProgress();
-        void            emitGraphicsContextChanged();
-        void            emitOutputChanged();
+        void        emitAddSubProgressSteps(int count);
+        void        emitStepProgress();
+        void        emitGraphicsContextChanged();
+        void        emitOutputChanged();
 };
 
 #endif // CWORKFLOWTASKWRAP_H

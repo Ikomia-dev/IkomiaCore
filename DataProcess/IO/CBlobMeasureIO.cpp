@@ -143,6 +143,13 @@ CBlobMeasureIO &CBlobMeasureIO::operator=(const CBlobMeasureIO& io)
     return *this;
 }
 
+std::string CBlobMeasureIO::repr() const
+{
+    std::stringstream s;
+    s << "CBlobMeasureIO(" << m_name << ")";
+    return s.str();
+}
+
 CBlobMeasureIO &CBlobMeasureIO::operator=(const CBlobMeasureIO&& io)
 {
     CWorkflowTaskIO::operator=(io);

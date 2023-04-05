@@ -37,6 +37,13 @@ CSemanticSegIO &CSemanticSegIO::operator=(const CSemanticSegIO &io)
     return *this;
 }
 
+std::string CSemanticSegIO::repr() const
+{
+    std::stringstream s;
+    s << "CSemanticSegIO()";
+    return s.str();
+}
+
 CSemanticSegIO &CSemanticSegIO::operator=(const CSemanticSegIO &&io)
 {
     CWorkflowTaskIO::operator=(io);

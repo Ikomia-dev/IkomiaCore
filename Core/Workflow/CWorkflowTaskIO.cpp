@@ -96,28 +96,20 @@ CWorkflowTaskIO &CWorkflowTaskIO::operator=(const CWorkflowTaskIO&& io)
 
 std::ostream& operator<<(std::ostream& os, const CWorkflowTaskIO& io)
 {
-    os << "-----------------------------------" << std::endl;
-    os << "Name: " << io.m_name << std::endl;
-    os << "-----------------------------------" << std::endl;
-    os << "Description: " << io.m_description << std::endl;
-    os << "Save folder: " << io.m_saveFolder << std::endl;
-    os << "Auto-save: " << io.m_bAutoSave << std::endl;
-    os << "Data type: " << Utils::Workflow::getIODataName(io.m_dataType).toStdString() << std::endl;
-    os << "Save format: " << Utils::Data::getFileFormatExtension(io.m_saveFormat) << std::endl;
-    os << "Dimension count: " << io.m_dimCount << std::endl;
-    os << "Displayable: " << io.m_bDisplayable << std::endl;
-    os << "Composite: " << io.isComposite() << std::endl;
-    os << "Data available: " << io.isDataAvailable() << std::endl;
-
-    if(io.m_infoPtr)
-        os << *(io.m_infoPtr);
-
+    io.to_ostream(os);
     return os;
 }
 
 CWorkflowTaskIO::~CWorkflowTaskIO()
 {
     deleteTemporaryFiles();
+}
+
+std::string CWorkflowTaskIO::repr() const
+{
+    std::stringstream s;
+    s << "CWorkflowTaskIO(" << Utils::Workflow::getIODataEnumName(m_dataType) << ", " << m_name << ")";
+    return s.str();
 }
 
 std::string CWorkflowTaskIO::getName() const
@@ -385,6 +377,25 @@ std::string CWorkflowTaskIO::toFormattedJson(const QJsonDocument &doc, const std
         return doc.toJson(QJsonDocument::Compact).toStdString();
     else
         return doc.toJson(QJsonDocument::Indented).toStdString();
+}
+
+void CWorkflowTaskIO::to_ostream(std::ostream &os) const
+{
+    os << "-----------------------------------" << std::endl;
+    os << "-\t" << "I/O: " << m_name << std::endl;
+    os << "-----------------------------------" << std::endl;
+    os << "Description: " << m_description << std::endl;
+    os << "Save folder: " << m_saveFolder << std::endl;
+    os << "Auto-save: " << m_bAutoSave << std::endl;
+    os << "Data type: " << Utils::Workflow::getIODataName(m_dataType).toStdString() << std::endl;
+    os << "Save format: " << Utils::Data::getFileFormatExtension(m_saveFormat) << std::endl;
+    os << "Dimension count: " << m_dimCount << std::endl;
+    os << "Displayable: " << m_bDisplayable << std::endl;
+    os << "Composite: " << isComposite() << std::endl;
+    os << "Data available: " << isDataAvailable() << std::endl;
+
+    if(m_infoPtr)
+        os << *(m_infoPtr);
 }
 
 std::shared_ptr<CWorkflowTaskIO> CWorkflowTaskIO::cloneImp() const
