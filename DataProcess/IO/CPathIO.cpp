@@ -101,11 +101,6 @@ bool CPathIO::isDataAvailable() const
     return boost::filesystem::exists(boostPath);
 }
 
-bool CPathIO::isAutoInput() const
-{
-    return true;
-}
-
 void CPathIO::clearData()
 {
     m_path.clear();

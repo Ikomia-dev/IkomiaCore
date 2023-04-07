@@ -79,11 +79,6 @@ bool CDatasetIO::isDataAvailable() const
     return false;
 }
 
-bool CDatasetIO::isAutoInput() const
-{
-    return true;
-}
-
 void CDatasetIO::clearData()
 {
 }

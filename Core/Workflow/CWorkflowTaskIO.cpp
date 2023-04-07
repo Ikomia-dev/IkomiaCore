@@ -176,11 +176,6 @@ bool CWorkflowTaskIO::isDataAvailable() const
     return false;
 }
 
-bool CWorkflowTaskIO::isAutoInput() const
-{
-    return false;
-}
-
 bool CWorkflowTaskIO::isAutoSave() const
 {
     return m_bAutoSave;

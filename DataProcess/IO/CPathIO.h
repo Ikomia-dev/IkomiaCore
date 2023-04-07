@@ -48,7 +48,6 @@ class DATAPROCESSSHARED_EXPORT CPathIO : public CWorkflowTaskIO
         std::string getPath() const;
 
         bool        isDataAvailable() const override;
-        bool        isAutoInput() const override;
 
         void        clearData() override;
 

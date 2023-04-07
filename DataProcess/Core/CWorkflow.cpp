@@ -1073,6 +1073,13 @@ WorkflowEdge CWorkflow::connect(const WorkflowVertex &src, size_t srcIndex, cons
     auto srcTaskPtr = m_graph[source];
     auto targetTaskPtr = m_graph[target];
 
+    if (targetTaskPtr->isSelfInput())
+    {
+        QString errorMsg = QString("Self input task %1 can't be a target for workflow connection")
+                .arg(QString::fromStdString(targetTaskPtr->getName()));
+        throw CException(CoreExCode::INVALID_PARAMETER, errorMsg.toStdString(), __func__, __FILE__, __LINE__);
+    }
+
     if(source == m_root && srcTaskPtr->getOutputCount() == 0)
     {
         //Add connection

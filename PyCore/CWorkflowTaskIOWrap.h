@@ -40,9 +40,6 @@ class CWorkflowTaskIOWrap : public CWorkflowTaskIO, public wrapper<CWorkflowTask
         bool        isDataAvailable() const override;
         bool        default_isDataAvailable() const;
 
-        bool        isAutoInput() const override;
-        bool        default_isAutoInput() const;
-
         bool        isComposite() const override;
         bool        default_isComposite() const;
 

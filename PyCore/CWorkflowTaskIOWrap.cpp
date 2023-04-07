@@ -91,34 +91,6 @@ bool CWorkflowTaskIOWrap::default_isDataAvailable() const
     }
 }
 
-bool CWorkflowTaskIOWrap::isAutoInput() const
-{
-    CPyEnsureGIL gil;
-    try
-    {
-        if(override isAutoInputOver = this->get_override("is_auto_input"))
-            return isAutoInputOver();
-        return CWorkflowTaskIO::isAutoInput();
-    }
-    catch(boost::python::error_already_set&)
-    {
-        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
-    }
-}
-
-bool CWorkflowTaskIOWrap::default_isAutoInput() const
-{
-    CPyEnsureGIL gil;
-    try
-    {
-        return this->CWorkflowTaskIO::isAutoInput();
-    }
-    catch(boost::python::error_already_set&)
-    {
-        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
-    }
-}
-
 bool CWorkflowTaskIOWrap::isComposite() const
 {
     CPyEnsureGIL gil;

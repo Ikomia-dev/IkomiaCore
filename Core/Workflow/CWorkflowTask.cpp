@@ -619,10 +619,7 @@ bool CWorkflowTask::isSelfInput() const
     {
         for(size_t i=0; i<m_inputs.size(); ++i)
         {
-            if(m_inputs[i] == nullptr)
-                continue;
-
-            if(!m_inputs[i]->isAutoInput())
+            if(m_inputs[i] != nullptr)
                 return false;
         }
         return true;

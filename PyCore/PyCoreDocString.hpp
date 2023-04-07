@@ -559,11 +559,6 @@ constexpr auto _isDataAvailableDocString =
         "Returns:\n\n"
         "   bool: True if data is available, False otherwise\n\n";
 
-constexpr auto _isAutoInputDocString =
-        "Check whether input data from external source is mandatory.\n\n"
-        "Returns:\n\n"
-        "   bool: True or False\n\n";
-
 constexpr auto _isCompositeDocString =
         "Check whether I/O object is a composite one. This method should be overriden for custom input or output.\n\n"
         "Returns:\n\n"

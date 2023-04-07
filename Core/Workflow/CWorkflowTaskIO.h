@@ -140,11 +140,6 @@ class CORESHARED_EXPORT CWorkflowTaskIO
          */
         virtual bool        isDataAvailable() const;
         /**
-          * @brief Checks whether the input needs external data.
-          * @return True or False.
-          */
-        virtual bool        isAutoInput() const;
-        /**
           * @brief Check whether input/output is a combination of atomic I/O
           * @return True or False.
           */

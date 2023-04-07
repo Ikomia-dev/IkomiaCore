@@ -49,7 +49,6 @@ class DATAPROCESSSHARED_EXPORT CDatasetIO: public CWorkflowTaskIO
         QJsonDocument                               getJsonDocument() const;
 
         bool                                        isDataAvailable() const override;
-        bool                                        isAutoInput() const override;
 
         void                                        clearData();
 
