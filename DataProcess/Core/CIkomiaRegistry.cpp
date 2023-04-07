@@ -342,8 +342,15 @@ void CIkomiaRegistry::loadPythonPlugin(const std::string &directory)
                     }
 
                     // Plugin registration
-                    auto widgetFactoryPtr = plugin->getWidgetFactory();
-                    registerTaskAndWidget(taskFactoryPtr, widgetFactoryPtr);
+                    if (Utils::IkomiaApp::isAppStarted())
+                    {
+                        auto widgetFactoryPtr = plugin->getWidgetFactory();
+                        registerTaskAndWidget(taskFactoryPtr, widgetFactoryPtr);
+                    }
+                    else
+                    {
+                        registerTask(taskFactoryPtr);
+                    }
                     Utils::print(QString("Algorithm %1 is loaded.").arg(fileName).toStdString(), QtDebugMsg);
                 }
             }
@@ -401,7 +408,9 @@ boost::python::object CIkomiaRegistry::loadPythonMainModule(const std::string& f
 
     //Load mandatory plugin interface modules - order matters
     Utils::CPluginTools::loadPythonModule(processName, true);
-    Utils::CPluginTools::loadPythonModule(widgetName, true);
+    if (Utils::IkomiaApp::isAppStarted())
+        Utils::CPluginTools::loadPythonModule(widgetName, true);
+
     auto mainModule = Utils::CPluginTools::loadPythonModule(mainModuleName, true);
     Utils::CPluginTools::loadPythonModule(name, true);
     return mainModule;
