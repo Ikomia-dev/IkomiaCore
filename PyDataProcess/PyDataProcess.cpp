@@ -141,6 +141,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
     register_ptr_to_python<std::shared_ptr<CObjectDetectionIO>>();
     register_ptr_to_python<std::shared_ptr<CSemanticSegIO>>();
     register_ptr_to_python<std::shared_ptr<CInstanceSegIO>>();
+    register_ptr_to_python<std::shared_ptr<CKeypointsIO>>();
     register_ptr_to_python<std::shared_ptr<C2dImageTask>>();
     register_ptr_to_python<std::shared_ptr<C2dImageInteractiveTask>>();
     register_ptr_to_python<std::shared_ptr<CVideoTask>>();
