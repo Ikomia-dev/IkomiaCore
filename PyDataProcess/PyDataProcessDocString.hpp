@@ -542,7 +542,7 @@ constexpr auto _setItemsDocString =
         "   items (list of :py:class:`~ikomia.core.pycore.CGraphicsItem`): based objects\n\n";
 
 constexpr auto _getItemsDocString =
-        "Get list of input graphics items.\n\n"
+        "Get list of graphics items.\n\n"
         "Returns:\n\n"
         "   list of :py:class:`~ikomia.core.pycore.CGraphicsItem` based objects\n\n";
 
