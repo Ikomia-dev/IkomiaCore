@@ -50,8 +50,8 @@ class C2dImageTaskWrap : public C2dImageTask, public wrapper<C2dImageTask>
         void            setActive(bool bActive) override;
         void            default_setActive(bool bActive);
 
-        CMat            applyGraphicsMask(const CMat &src, int maskIndex);
-        CMat            applyGraphicsMaskToBinary(const CMat &src, int maskIndex);
+        CMat            applyGraphicsMask(const CMat &src, const CMat &processed, int maskIndex);
+        CMat            applyGraphicsMaskToBinary(const CMat &src, const CMat &processed, int maskIndex);
 
         void            updateStaticOutputs() override;
         void            default_updateStaticOutputs();

@@ -129,13 +129,13 @@ void C2dImageTaskWrap::default_setActive(bool bActive)
     }
 }
 
-CMat C2dImageTaskWrap::applyGraphicsMask(const CMat &src, int maskIndex)
+CMat C2dImageTaskWrap::applyGraphicsMask(const CMat &origin, const CMat& processed, int maskIndex)
 {
     CPyEnsureGIL gil;
     try
     {
-        CMat res = src.clone();
-        this->C2dImageTask::applyGraphicsMask(src, res, (size_t)(maskIndex));
+        CMat res = processed.clone();
+        this->C2dImageTask::applyGraphicsMask(origin, res, (size_t)(maskIndex));
         return res;
     }
     catch(boost::python::error_already_set&)
@@ -144,12 +144,12 @@ CMat C2dImageTaskWrap::applyGraphicsMask(const CMat &src, int maskIndex)
     }
 }
 
-CMat C2dImageTaskWrap::applyGraphicsMaskToBinary(const CMat &src, int maskIndex)
+CMat C2dImageTaskWrap::applyGraphicsMaskToBinary(const CMat &src, const CMat& processed, int maskIndex)
 {
     CPyEnsureGIL gil;
     try
     {
-        CMat res = src.clone();
+        CMat res = processed.clone();
         this->C2dImageTask::applyGraphicsMaskToBinary(src, res, (size_t)(maskIndex));
         return res;
     }

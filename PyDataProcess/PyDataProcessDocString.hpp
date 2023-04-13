@@ -1571,18 +1571,20 @@ constexpr auto _createGraphicsMaskDocString =
         "   graphics (:py:class:`~ikomia.dataprocess.pydataprocess.CGraphicsInput`): graphics items become white blobs in the black background mask\n\n";
 
 constexpr auto _applyGraphicsMaskDocString =
-        "Apply the mask generated from graphics input to the result image so that only masked areas seems to be processed.\n\n"
+        "Apply the mask generated from graphics to the result image so that only masked areas seems to be processed.\n\n"
         "Args:\n\n"
-        "   src (Numpy array): source image of the task\n\n"
+        "   origin (Numpy array): input image of the task\n\n"
+        "   processed (Numpy array): result image of the task\n\n"
         "   index (int): zero-based index of the mask\n\n"
         "Returns:\n\n"
         "   Numpy array: result image\n\n";
 
 constexpr auto _applyGraphicsMaskToBinaryDocString =
-        "Apply the mask generated from graphics input to the binary source image. "
+        "Apply the mask generated from graphics to the binary source image. "
         "Only white areas on both image and mask are kept in the result image.\n\n"
         "Args:\n\n"
-        "   src (Numpy array): source image of the task\n\n"
+        "   origin (Numpy array): input image of the task\n\n"
+        "   processed (Numpy array): result image of the task\n\n"
         "   index (int): zero-based index of the mask\n\n"
         "Returns:\n\n"
         "   Numpy array: result image\n\n";
