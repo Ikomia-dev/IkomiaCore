@@ -1813,16 +1813,16 @@ void CWorkflow::updateCompositeInputName()
 
         if(inputPtr && inputNames.find(sourceIndex) == inputNames.end())
         {
-            std::string name = inputPtr->getName();
-            if(name.empty())
+            std::string name;
+            CDataInfoPtr infoPtr = inputPtr->getDataInfo();
+
+            if(infoPtr)
             {
-                CDataInfoPtr infoPtr = inputPtr->getDataInfo();
-                if(infoPtr)
-                {
-                    std::string basePath = Utils::File::getPathFromPattern(infoPtr->getFileName(), 0);
-                    name = Utils::File::getFileNameWithoutExtension(basePath);
-                }
+                std::string basePath = Utils::File::getPathFromPattern(infoPtr->getFileName(), 0);
+                name = Utils::File::getFileNameWithoutExtension(basePath);
             }
+            else
+                name = inputPtr->getName();
 
             if(name.empty())
                 inputNames[sourceIndex] = "empty";

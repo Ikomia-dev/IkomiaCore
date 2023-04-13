@@ -161,7 +161,7 @@ void CRunTaskManager::manageOutputs(const WorkflowTaskPtr &taskPtr, const std::s
         if (std::stoi(m_pCfg->at("WholeVideo")))
             saveVideoOutputs(taskPtr, inputName);
         else
-            taskPtr->saveOutputs(inputName);
+            taskPtr->saveOutputs(Utils::File::getAvailablePath(inputName));
     }
 }
 
