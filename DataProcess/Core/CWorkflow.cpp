@@ -785,8 +785,16 @@ double CWorkflow::getTotalElapsedTime() const
     auto propMapIndex = createBfsPropertyMap(mapIndex);
     double elapsedTime = 0.0;
     CElapsedTimeVisitor visitor(elapsedTime);
-    boost::breadth_first_search(m_graph, m_root, boost::visitor(visitor).vertex_index_map(propMapIndex));
 
+    size_t childrenCount = getChildCount(m_root);
+    if (childrenCount > 0)
+        boost::breadth_first_search(m_graph, m_root, boost::visitor(visitor).vertex_index_map(propMapIndex));
+    else
+    {
+        auto selfInputTasks = getSelfInputTasks();
+        if (selfInputTasks.size() > 0)
+            boost::breadth_first_search(m_graph, selfInputTasks[0], boost::visitor(visitor).vertex_index_map(propMapIndex));
+    }
     return elapsedTime;
 }
 
@@ -1860,7 +1868,9 @@ void CWorkflow::load(const std::string &path)
 
 void CWorkflow::saveJSON(const std::string& path)
 {
+    Utils::File::createDirectory(Utils::File::getParentPath(path));
     QFile jsonFile(QString::fromStdString(path));
+
     if(!jsonFile.open(QFile::WriteOnly))
         throw CException(CoreExCode::INVALID_FILE, "Could not save file: " + path, __func__, __FILE__, __LINE__);
 
@@ -2218,7 +2228,6 @@ void CNotifyVideoVisitor::discover_vertex(WorkflowVertex vertexId, const Workflo
 //----------------------------//
 CElapsedTimeVisitor::CElapsedTimeVisitor(double& elapsedTime) : m_elapsedTime(elapsedTime)
 {
-
 }
 
 void CElapsedTimeVisitor::discover_vertex(WorkflowVertex vertexId, const WorkflowGraph& graph)
