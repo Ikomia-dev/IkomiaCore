@@ -2,7 +2,7 @@
 #define COCVWIDGETSTACKBLUR_HPP
 
 #include "Core/CWidgetFactory.hpp"
-#include "Process/OpenCV/imgproc/COcvStackBlur.hpp".hpp"
+#include "Process/OpenCV/imgproc/COcvStackBlur.hpp"
 #include <QSpinBox>
 #include <QLabel>
 
