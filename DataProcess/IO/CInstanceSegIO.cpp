@@ -37,6 +37,33 @@ void CInstanceSegmentation::setMask(const CMat &mask)
     m_mask = mask;
 }
 
+std::string CInstanceSegmentation::repr() const
+{
+    return "CInstanceSegmentation()";
+}
+
+std::ostream& operator<<(std::ostream& os, const CInstanceSegmentation& obj)
+{
+    os << "----- Object: " << std::to_string(obj.m_id) << " -----" << std::endl;
+    os << "Label: " << obj.m_label << std::endl;
+    os << "Confidence: " << std::to_string(obj.m_confidence) << std::endl;
+    os << "Type: " << (obj.m_type == 0 ? "0 (THING)" : "1 (STUFF)") << std::endl;
+    os << "Class index: " << std::to_string(obj.m_classIndex) << std::endl;
+
+    os << "Box: [";
+    for (size_t i=0; i<obj.m_box.size(); ++i)
+    {
+        os << std::to_string(obj.m_box[i]);
+        if (i < obj.m_box.size() - 1)
+            os << ", ";
+    }
+    os << "]" << std::endl;
+
+    os << "Mask (binary): (" << std::to_string(obj.m_mask.getNbCols()) << ", " << std::to_string(obj.m_mask.getNbCols()) << ")" << std::endl;
+    os << "Color: [" << std::to_string(obj.m_color[0]) << ", " << std::to_string(obj.m_color[0]) << ", " << std::to_string(obj.m_color[0]) << "]" << std::endl;
+    return os;
+}
+
 //--------------------------//
 //----- CInstanceSegIO -----//
 //--------------------------//
@@ -92,12 +119,12 @@ CInstanceSegIO &CInstanceSegIO::operator=(const CInstanceSegIO &&io)
     return *this;
 }
 
-size_t CInstanceSegIO::getInstanceCount() const
+size_t CInstanceSegIO::getObjectCount() const
 {
     return m_instances.size();
 }
 
-CInstanceSegmentation CInstanceSegIO::getInstance(size_t index) const
+CInstanceSegmentation CInstanceSegIO::getObject(size_t index) const
 {
     if (index >= m_instances.size())
         throw CException(CoreExCode::INDEX_OVERFLOW, "No instance segmentation at given index: index overflow", __func__, __FILE__, __LINE__);
@@ -105,7 +132,7 @@ CInstanceSegmentation CInstanceSegIO::getInstance(size_t index) const
     return m_instances[index];
 }
 
-std::vector<CInstanceSegmentation> CInstanceSegIO::getInstances() const
+std::vector<CInstanceSegmentation> CInstanceSegIO::getObjects() const
 {
     return m_instances;
 }
@@ -160,7 +187,7 @@ void CInstanceSegIO::init(const std::string &taskName, int refImageIndex, int im
     m_imgIOPtr->setImage(mergeMask);
 }
 
-void CInstanceSegIO::addInstance(int id, int type, int classIndex, const std::string &label, double confidence,
+void CInstanceSegIO::addObject(int id, int type, int classIndex, const std::string &label, double confidence,
                                  double boxX, double boxY, double boxWidth, double boxHeight,
                                  const CMat &mask, const CColor &color)
 {
@@ -356,6 +383,6 @@ void CInstanceSegIO::fromJsonInternal(const QJsonDocument &doc)
             init("", 0, mask.cols, mask.rows);
             bInit = true;
         }
-        addInstance(id, type, classIndex, label, confidence, x, y, w, h, mask, color);
+        addObject(id, type, classIndex, label, confidence, x, y, w, h, mask, color);
     }
 }

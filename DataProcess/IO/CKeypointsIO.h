@@ -31,6 +31,10 @@ class DATAPROCESSSHARED_EXPORT CObjectKeypoints
 
         QJsonObject             toJson() const;
 
+        std::string             repr() const;
+
+        friend DATAPROCESSSHARED_EXPORT std::ostream& operator<<(std::ostream& os, const CObjectKeypoints& obj);
+
     public:
 
         int                     m_id = 0;
@@ -60,6 +64,10 @@ class DATAPROCESSSHARED_EXPORT CKeypointLink
 
         void        fromJson(const QJsonObject &jsonObj);
         QJsonObject toJson() const;
+
+        std::string repr() const;
+
+        friend DATAPROCESSSHARED_EXPORT std::ostream& operator<<(std::ostream& os, const CKeypointLink& link);
 
     public:
 

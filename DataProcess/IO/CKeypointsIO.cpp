@@ -103,6 +103,39 @@ QJsonObject CObjectKeypoints::toJson() const
     return obj;
 }
 
+std::string CObjectKeypoints::repr() const
+{
+    return "CObjectKeypoints()";
+}
+
+std::ostream& operator<<(std::ostream& os, const CObjectKeypoints& obj)
+{
+    os << "----- Object: " << std::to_string(obj.m_id) << " -----" << std::endl;
+    os << "Label: " << obj.m_label << std::endl;
+    os << "Confidence: " << std::to_string(obj.m_confidence) << std::endl;
+
+    os << "Box: [";
+    for (size_t i=0; i<obj.m_box.size(); ++i)
+    {
+        os << std::to_string(obj.m_box[i]);
+        if (i < obj.m_box.size() - 1)
+            os << ", ";
+    }
+    os << "]" << std::endl;
+
+    os << "Color: [" << std::to_string(obj.m_color[0]) << ", " << std::to_string(obj.m_color[0]) << ", " << std::to_string(obj.m_color[0]) << "]" << std::endl;
+
+    os << "Keypoints: [";
+    for (size_t i=0; i<obj.m_keypts.size(); ++i)
+    {
+        os << std::to_string(obj.m_keypts[i].first) << ": " << "(" << std::to_string(obj.m_keypts[i].second.m_x) << "," << std::to_string(obj.m_keypts[i].second.m_y) << ")";
+        if (i < obj.m_keypts.size() - 1)
+            os << ", ";
+    }
+    os << "]" << std::endl;
+    return os;
+}
+
 //-------------------------//
 //----- CKeypointLink -----//
 //-------------------------//
@@ -165,6 +198,20 @@ QJsonObject CKeypointLink::toJson() const
     return obj;
 }
 
+std::string CKeypointLink::repr() const
+{
+    return "CKeypointLink()";
+}
+
+std::ostream& operator<<(std::ostream& os, const CKeypointLink& link)
+{
+    os << "----- keypoints link -----" << std::endl;
+    os << "Keypoint index #1: " << std::to_string(link.m_ptIndex1) << std::endl;
+    os << "Keypoint index #2: " << std::to_string(link.m_ptIndex2) << std::endl;
+    os << "Label: " << link.m_label << std::endl;
+    os << "Color: [" << std::to_string(link.m_color[0]) << ", " << std::to_string(link.m_color[0]) << ", " << std::to_string(link.m_color[0]) << "]" << std::endl;
+    return os;
+}
 
 //------------------------//
 //----- CKeypointsIO -----//

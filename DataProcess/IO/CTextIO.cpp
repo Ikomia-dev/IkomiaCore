@@ -87,6 +87,31 @@ QJsonObject CTextField::toJson() const
     return obj;
 }
 
+std::string CTextField::repr() const
+{
+    return "CTextField()";
+}
+
+std::ostream& operator<<(std::ostream& os, const CTextField& field)
+{
+    os << "----- Text field: " << std::to_string(field.m_id) << " -----" << std::endl;
+    os << "Text: " << field.m_text << std::endl;
+    os << "Label: " << field.m_label << std::endl;
+    os << "Confidence: " << std::to_string(field.m_confidence) << std::endl;
+
+    os << "Polygon: [";
+    for (size_t i=0; i<field.m_polygon.size(); ++i)
+    {
+        os << "(" << std::to_string(field.m_polygon[i].m_x) << ", " << std::to_string(field.m_polygon[i].m_y) << ")";
+        if (i < field.m_polygon.size() - 1)
+            os << ", ";
+    }
+    os << "]" << std::endl;
+
+    os << "Color: [" << std::to_string(field.m_color[0]) << ", " << std::to_string(field.m_color[0]) << ", " << std::to_string(field.m_color[0]) << "]" << std::endl;
+    return os;
+}
+
 //-------------------//
 //----- CTextIO -----//
 //-------------------//

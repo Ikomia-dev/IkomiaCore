@@ -13,7 +13,7 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegTask: public C2dImageTask
 
         std::string                 repr() const;
 
-        void                        addInstance(int id, int type, int classIndex, double confidence,
+        void                        addObject(int id, int type, int classIndex, double confidence,
                                                 double x, double y, double width, double height,
                                                 const CMat& mask);
 

@@ -29,6 +29,10 @@ class DATAPROCESSSHARED_EXPORT CTextField
 
         QJsonObject         toJson() const;
 
+        std::string         repr() const;
+
+        friend DATAPROCESSSHARED_EXPORT std::ostream& operator<<(std::ostream& os, const CTextField& field);
+
     public:
 
         int         m_id;

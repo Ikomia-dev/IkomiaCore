@@ -26,6 +26,10 @@ class DATAPROCESSSHARED_EXPORT CObjectDetection
         void                setBox(const std::vector<double>& box);
         void                setColor(const CColor& color);
 
+        std::string         repr() const;
+
+        friend DATAPROCESSSHARED_EXPORT std::ostream& operator<<(std::ostream& os, const CObjectDetection& io);
+
     public:
 
         int                 m_id;

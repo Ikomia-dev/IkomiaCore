@@ -56,6 +56,30 @@ void CObjectDetection::setColor(const CColor &color)
     m_color = color;
 }
 
+std::string CObjectDetection::repr() const
+{
+    return "CObjectDetection()";
+}
+
+std::ostream& operator<<(std::ostream& os, const CObjectDetection& obj)
+{
+    os << "----- Object: " << std::to_string(obj.m_id) << " -----" << std::endl;
+    os << "Label: " << obj.m_label << std::endl;
+    os << "Confidence: " << std::to_string(obj.m_confidence) << std::endl;
+
+    os << "Box: [";
+    for (size_t i=0; i<obj.m_box.size(); ++i)
+    {
+        os << std::to_string(obj.m_box[i]);
+        if (i < obj.m_box.size() - 1)
+            os << ", ";
+    }
+    os << "]" << std::endl;
+
+    os << "Color: [" << std::to_string(obj.m_color[0]) << ", " << std::to_string(obj.m_color[0]) << ", " << std::to_string(obj.m_color[0]) << "]" << std::endl;
+    return os;
+}
+
 //------------------------------//
 //----- CObjectDetectionIO -----//
 //------------------------------//
@@ -358,13 +382,13 @@ void CObjectDetectionIO::copy(const std::shared_ptr<CWorkflowTaskIO> &ioPtr)
         if (instanceIOPtr)
         {
             clearData();
-            std::vector<CInstanceSegmentation> instances = instanceIOPtr->getInstances();
+            std::vector<CInstanceSegmentation> objects = instanceIOPtr->getObjects();
 
-            for (size_t i=0; i<instances.size(); ++i)
+            for (size_t i=0; i<objects.size(); ++i)
             {
-                addObject(instances[i].m_id, instances[i].m_label, instances[i].m_confidence,
-                          instances[i].m_box[0], instances[i].m_box[1], instances[i].m_box[2], instances[i].m_box[3],
-                          instances[i].m_color);
+                addObject(objects[i].m_id, objects[i].m_label, objects[i].m_confidence,
+                          objects[i].m_box[0], objects[i].m_box[1], objects[i].m_box[2], objects[i].m_box[3],
+                          objects[i].m_color);
             }
         }
     }

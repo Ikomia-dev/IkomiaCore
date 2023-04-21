@@ -18,7 +18,7 @@ std::string CInstanceSegTask::repr() const
     return s.str();
 }
 
-void CInstanceSegTask::addInstance(int id, int type, int classIndex, double confidence, double x, double y, double width, double height, const CMat &mask)
+void CInstanceSegTask::addObject(int id, int type, int classIndex, double confidence, double x, double y, double width, double height, const CMat &mask)
 {
     auto instanceSegIOPtr = std::dynamic_pointer_cast<CInstanceSegIO>(getOutput(1));
     if (instanceSegIOPtr == nullptr)
@@ -27,14 +27,14 @@ void CInstanceSegTask::addInstance(int id, int type, int classIndex, double conf
     if (classIndex >= m_classNames.size())
         throw CException(CoreExCode::INVALID_SIZE, "Invalid class index, index overflows class names list", __func__, __FILE__, __LINE__);
 
-    if (instanceSegIOPtr->getInstanceCount() == 0)
+    if (instanceSegIOPtr->getObjectCount() == 0)
     {
         auto imgInPtr = std::dynamic_pointer_cast<CImageIO>(getInput(0));
         CMat imgSrc = imgInPtr->getImage();
         instanceSegIOPtr->init(getName(), 0, imgSrc.cols, imgSrc.rows);
     }
 
-    instanceSegIOPtr->addInstance(id, type, classIndex, m_classNames[classIndex], confidence, x, y, width, height, mask, m_classColors[classIndex]);
+    instanceSegIOPtr->addObject(id, type, classIndex, m_classNames[classIndex], confidence, x, y, width, height, mask, m_classColors[classIndex]);
 }
 
 void CInstanceSegTask::init()

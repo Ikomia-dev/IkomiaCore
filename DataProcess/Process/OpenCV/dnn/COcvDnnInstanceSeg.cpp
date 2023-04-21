@@ -194,7 +194,7 @@ void COcvDnnInstanceSeg::manageMaskRCNNOutput(std::vector<cv::Mat> &netOutputs)
             cv::Mat roi(mask, cv::Rect(left, top, width, height));
             objMaskBinary.copyTo(roi);
 
-            addInstance(n, CInstanceSegmentation::ObjectType::THING, classId, confidence, left, top, width, height, mask);
+            addObject(n, CInstanceSegmentation::ObjectType::THING, classId, confidence, left, top, width, height, mask);
         }
     }
 }

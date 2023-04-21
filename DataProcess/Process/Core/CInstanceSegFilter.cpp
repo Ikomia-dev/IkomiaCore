@@ -86,13 +86,13 @@ void CInstanceSegFilter::run()
     }
     emit m_signalHandler->doProgress();
 
-    auto instances = instanceSegIn->getInstances();
-    for(size_t i=0; i<instances.size(); ++i)
+    auto objects = instanceSegIn->getObjects();
+    for(size_t i=0; i<objects.size(); ++i)
     {
-        if (instances[i].m_confidence >= paramPtr->m_confidence &&
-                (categories.empty() || categories.find(instances[i].m_label) != categories.end()))
+        if (objects[i].m_confidence >= paramPtr->m_confidence &&
+                (categories.empty() || categories.find(objects[i].m_label) != categories.end()))
         {
-            int classIndex = instances[i].m_classIndex;
+            int classIndex = objects[i].m_classIndex;
             if (classIndex >= m_classNames.size())
             {
                 for (size_t i=m_classNames.size(); i<classIndex; ++i)
@@ -100,18 +100,18 @@ void CInstanceSegFilter::run()
                     m_classNames.push_back("other");
                     m_classColors.push_back({0, 0, 0});
                 }
-                m_classNames.push_back(instances[i].m_label);
-                m_classColors.push_back(instances[i].m_color);
+                m_classNames.push_back(objects[i].m_label);
+                m_classColors.push_back(objects[i].m_color);
             }
             else
             {
-                m_classNames[classIndex] = instances[i].m_label;
-                m_classColors[classIndex] = instances[i].m_color;
+                m_classNames[classIndex] = objects[i].m_label;
+                m_classColors[classIndex] = objects[i].m_color;
             }
 
-            instanceSegOut->addInstance(instances[i].m_id, instances[i].m_type, classIndex, instances[i].m_label, instances[i].m_confidence,
-                                        instances[i].m_box[0], instances[i].m_box[1], instances[i].m_box[2], instances[i].m_box[3],
-                                        instances[i].m_mask, instances[i].m_color);
+            instanceSegOut->addObject(objects[i].m_id, objects[i].m_type, classIndex, objects[i].m_label, objects[i].m_confidence,
+                                      objects[i].m_box[0], objects[i].m_box[1], objects[i].m_box[2], objects[i].m_box[3],
+                                      objects[i].m_mask, objects[i].m_color);
         }
     }
     emit m_signalHandler->doProgress();

@@ -21,13 +21,17 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegmentation : public CObjectDetection
             STUFF = 1
         };
 
-        int     getType() const;
-        int     getClassIndex() const;
-        CMat    getMask() const;
+        int         getType() const;
+        int         getClassIndex() const;
+        CMat        getMask() const;
 
-        void    setType(int type);
-        void    setClassIndex(int index);
-        void    setMask(const CMat& mask);
+        void        setType(int type);
+        void        setClassIndex(int index);
+        void        setMask(const CMat& mask);
+
+        std::string repr() const;
+
+        friend DATAPROCESSSHARED_EXPORT std::ostream& operator<<(std::ostream& os, const CInstanceSegmentation& io);
 
     public:
 
@@ -55,9 +59,9 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegIO: public CWorkflowTaskIO
 
         std::string                         repr() const override;
 
-        size_t                              getInstanceCount() const;
-        CInstanceSegmentation               getInstance(size_t index) const;
-        std::vector<CInstanceSegmentation>  getInstances() const;
+        size_t                              getObjectCount() const;
+        CInstanceSegmentation               getObject(size_t index) const;
+        std::vector<CInstanceSegmentation>  getObjects() const;
         CDataInfoPtr                        getDataInfo() override;
         ImageIOPtr                          getMaskImageIO() const;
         GraphicsOutputPtr                   getGraphicsIO() const;
@@ -69,9 +73,9 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegIO: public CWorkflowTaskIO
 
         void                                init(const std::string& taskName, int refImageIndex, int imageWidth, int imageHeight);
 
-        void                                addInstance(int id, int type, int classIndex, const std::string& label, double confidence,
-                                                        double boxX, double boxY, double boxWidth, double boxHeight,
-                                                        const CMat& mask, const CColor &color);
+        void                                addObject(int id, int type, int classIndex, const std::string& label, double confidence,
+                                                      double boxX, double boxY, double boxWidth, double boxHeight,
+                                                      const CMat& mask, const CColor &color);
 
         void                                clearData() override;
 

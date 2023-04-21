@@ -160,6 +160,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
     registerStdVector<CInstanceSegmentation>();
     registerStdVector<CMat>();
     registerStdVector<std::vector<cv::Point>>();
+    registerStdVector<CObjectKeypoints>();
     registerStdVector<CKeypointLink>();
     registerStdVector<CTextField>();
 
@@ -519,6 +520,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .add_property("confidence", &CObjectDetection::getConfidence, &CObjectDetection::setConfidence, "Prediction confidence (double)")
         .add_property("box", &CObjectDetection::getBox, &CObjectDetection::setBox, "Object bounding box [x, y, width, height]")
         .add_property("color", &CObjectDetection::getColor, &CObjectDetection::setColor, "Object display color [r, g, b, a]")
+        .def("__repr__", &CObjectDetection::repr)
+        .def(self_ns::str(self_ns::self))
     ;
 
     void (CObjectDetectionIO::*addObjectBox1)(int, const std::string&, double, double, double, double, double, const CColor&) = &CObjectDetectionIO::addObject;
@@ -559,6 +562,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .add_property("box", &CInstanceSegmentation::getBox, &CInstanceSegmentation::setBox, "Object bounding box [x, y, width, height]")
         .add_property("mask", &CInstanceSegmentation::getMask, &CInstanceSegmentation::setMask, "Object mask (numpy array)")
         .add_property("color", &CInstanceSegmentation::getColor, &CInstanceSegmentation::setColor, "Object display color [r, g, b, a]")
+        .def("__repr__", &CInstanceSegmentation::repr)
+        .def(self_ns::str(self_ns::self))
     ;
 
     std::string (CInstanceSegIO::*instSegToJsonNoOpt)() const = &CInstanceSegIO::toJson;
@@ -568,14 +573,14 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def(init<>("Default constructor", args("self")))
         .def(init<const CInstanceSegIO&>("Copy constructor"))
         .def("__repr__", &CInstanceSegIO::repr)
-        .def("get_instance_count", &CInstanceSegIO::getInstanceCount, _getInstanceCountDocString, args("self"))
-        .def("get_instance", &CInstanceSegIO::getInstance, _getInstanceDocString, args("self", "index"))
-        .def("get_instances", &CInstanceSegIO::getInstances, _getInstancesDocString, args("self"))
+        .def("get_object_count", &CInstanceSegIO::getObjectCount, _getInstanceCountDocString, args("self"))
+        .def("get_object", &CInstanceSegIO::getObject, _getInstanceDocString, args("self", "index"))
+        .def("get_objects", &CInstanceSegIO::getObjects, _getInstancesDocString, args("self"))
         .def("get_graphics_io", &CInstanceSegIO::getGraphicsIO, _getGraphicsIODocString, args("self"))
         .def("get_merge_mask", &CInstanceSegIO::getMergeMask, _getMergeMaskDocString, args("self"))
         .def("is_data_available", &CInstanceSegIOWrap::isDataAvailable, &CInstanceSegIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
         .def("init", &CInstanceSegIO::init, _initInstanceSegIODocString, args("self", "task_name", "ref_image_index", "width", "heigh"))
-        .def("add_instance", &CInstanceSegIO::addInstance, _addInstanceDocString, args("self", "id", "type", "class_index", "label", "confidence", "box_x", "box_y", "box_width", "box_height", "mask", "color"))
+        .def("add_object", &CInstanceSegIO::addObject, _addInstanceDocString, args("self", "id", "type", "class_index", "label", "confidence", "box_x", "box_y", "box_width", "box_height", "mask", "color"))
         .def("clear_data", &CInstanceSegIO::clearData, &CInstanceSegIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
         .def("load", &CInstanceSegIO::load, &CInstanceSegIOWrap::default_load, _instanceSegLoadDocString, args("self", "path"))
         .def("save", &CInstanceSegIO::save, &CInstanceSegIOWrap::default_save, _instanceSegSaveDocString, args("self", "path"))
@@ -620,6 +625,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .add_property("box", &CObjectKeypoints::getBox, &CObjectKeypoints::setBox, "Object bounding box [x, y, width, height]")
         .add_property("color", &CObjectKeypoints::getColor, &CObjectKeypoints::setColor, "Object display color [r, g, b, a]")
         .add_property("points", &CObjectKeypoints::getKeypoints, &CObjectKeypoints::setKeypoints, "Keypoints list (:py:class:`~ikomia.core.pycore.CPointF`)")
+        .def("__repr__", &CObjectKeypoints::repr)
+        .def(self_ns::str(self_ns::self))
     ;
 
     class_<CKeypointLink>("CKeypointLink", _keyptLinkDocString)
@@ -628,6 +635,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .add_property("end_point_index", &CKeypointLink::getEndPointIndex, &CKeypointLink::setEndPointIndex, "Ending point index (int)")
         .add_property("label", &CKeypointLink::getLabel, &CKeypointLink::setLabel, "Link label (str)")
         .add_property("color", &CKeypointLink::getColor, &CKeypointLink::setColor, "Link color [r, g, b]")
+        .def("__repr__", &CKeypointLink::repr)
+        .def(self_ns::str(self_ns::self))
     ;
 
     std::string (CKeypointsIO::*keyptsToJsonNoOpt)() const = &CKeypointsIO::toJson;
@@ -667,6 +676,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .add_property("confidence", &CTextField::getConfidence, &CTextField::setConfidence, "Prediction confidence (double)")
         .add_property("polygon", &CTextField::getPolygon, &CTextField::setPolygon, "Text field polygon: list of :py:class:`~ikomia.core.pycore.CPointF`")
         .add_property("color", &CTextField::getColor, &CTextField::setColor, "Text field display color [r, g, b, a]")
+        .def("__repr__", &CTextField::repr)
+        .def(self_ns::str(self_ns::self))
     ;
 
     void (CTextIO::*addFieldBox)(int, const std::string&, const std::string&, double, double, double, double, double, const CColor&) = &CTextIO::addTextField;
@@ -975,7 +986,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("emit_graphics_context_changed", &CInstanceSegTaskWrap::emitGraphicsContextChanged, _emitGraphicsContextChangedDocString, args("self"))
         .def("emit_output_changed", &CInstanceSegTaskWrap::emitOutputChanged, _emitOutputChangedDocString, args("self"))
         .def("execute_actions", &CInstanceSegTask::executeActions, &CInstanceSegTaskWrap::default_executeActions, _executeActionsDocString, args("self", "action"))
-        .def("add_instance", &CInstanceSegTask::addInstance, _instanceSegAddInstanceDocString, args("self", "id", "type", "class_index", "confidence", "x", "y", "width", "height", "mask"))
+        .def("add_object", &CInstanceSegTask::addObject, _instanceSegAddInstanceDocString, args("self", "id", "type", "class_index", "confidence", "x", "y", "width", "height", "mask"))
         .def("get_names", &CInstanceSegTask::getNames, _classifGetNamesDocString, args("self"))
         .def("get_results", &CInstanceSegTask::getResults, _instanceSegGetResultsDocString, args("self"))
         .def("get_image_with_graphics", &CInstanceSegTask::getImageWithGraphics, _classifGetImgWithGraphicsDocString, args("self"))
