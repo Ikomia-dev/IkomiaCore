@@ -768,6 +768,23 @@ std::vector<WorkflowVertex> CWorkflow::getSelfInputTasks() const
     return tasks;
 }
 
+std::vector<WorkflowVertex> CWorkflow::getOrphanTasks() const
+{
+    std::vector<WorkflowVertex> tasks;
+    auto vertices = boost::vertices(m_graph);
+
+    for(auto it=vertices.first; it!=vertices.second; ++it)
+    {
+        if(*it != m_root && getInEdgesCount(*it) == 0)
+        {
+            WorkflowTaskPtr taskPtr = m_graph[*it];
+            if(taskPtr && !taskPtr->isSelfInput())
+                tasks.push_back(*it);
+        }
+    }
+    return tasks;
+}
+
 bool CWorkflow::isVertexExists(const WorkflowVertex &id) const
 {
     auto vertexRangeIt = boost::vertices(m_graph);
@@ -1255,6 +1272,7 @@ void CWorkflow::run()
     //Traverse graph and run each task
     clearOutputs();
     clearAllOutputData();
+    checkOrphans();
     auto tasks = getForwardPassTasks(m_root);
     runTasks(tasks);
     emit m_signalHandler->doFinishWorkflow();
@@ -1268,6 +1286,7 @@ void CWorkflow::runFrom(const WorkflowVertex &id)
         throw CException(CoreExCode::INVALID_SIZE, "Empty workflow can't be run", __func__, __FILE__, __LINE__);
 
     clearOutputDataFrom(id);
+    checkOrphans();
     auto tasks = getForwardPassTasks(id);
 
     // Search for and run all task not already executed before id
@@ -1295,6 +1314,7 @@ void CWorkflow::runTo(const WorkflowVertex& id)
         throw CException(CoreExCode::INVALID_SIZE, "Empty workflow can't be run", __func__, __FILE__, __LINE__);
 
     clearOutputDataTo(id);
+    checkOrphans();
 
     // Search for and run all task not already executed before id
     std::vector<WorkflowVertex> taskToExecute;
@@ -1627,6 +1647,19 @@ void CWorkflow::checkBatchModeState()
         }
     }
     m_cfg["BatchMode"] = std::to_string(batchMode);
+}
+
+void CWorkflow::checkOrphans() const
+{
+    auto orphans = getOrphanTasks();
+    if (orphans.size() > 0)
+    {
+        std::string strTasks = m_graph[orphans[0]]->getName();
+        for (size_t i=1; i<orphans.size(); ++i)
+            strTasks += ", " + m_graph[orphans[i]]->getName();
+
+        Utils::print("Warning, your workflow contains non connected task(s):" + strTasks);
+    }
 }
 
 void CWorkflow::updateHash()

@@ -234,6 +234,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         size_t                          getProgressSteps(const std::vector<WorkflowVertex>& tasks) const;
         std::vector<WorkflowVertex>     getForwardPassTasks(const WorkflowVertex& startVertex);
         std::vector<WorkflowVertex>     getSelfInputTasks() const;
+        std::vector<WorkflowVertex>     getOrphanTasks() const;
 
         bool                            isVertexExists(const WorkflowVertex& id) const;
 
@@ -242,6 +243,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
 
         bool                            checkConnection(const WorkflowVertex& src, size_t srcIndex, const WorkflowVertex& target, size_t targetIndex);
         void                            checkBatchModeState();
+        void                            checkOrphans() const;
 
         void                            connectSignals(const WorkflowTaskPtr& pNewTask);
 
