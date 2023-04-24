@@ -26,13 +26,13 @@ UMapString CObjDetectFilterParam::getParamMap() const
 //----------------------------//
 //----- CObjDetectFilter -----//
 //----------------------------//
-CObjDetectFilter::CObjDetectFilter() : C2dImageTask(false)
+CObjDetectFilter::CObjDetectFilter() : CObjectDetectionTask()
 {
     initIO();
 }
 
 CObjDetectFilter::CObjDetectFilter(const std::string name, const std::shared_ptr<CObjDetectFilterParam> &pParam)
-    : C2dImageTask(name, false)
+    : CObjectDetectionTask(name)
 {
     m_pParam = std::make_shared<CObjDetectFilterParam>(*pParam);
     initIO();
@@ -40,13 +40,53 @@ CObjDetectFilter::CObjDetectFilter(const std::string name, const std::shared_ptr
 
 void CObjDetectFilter::initIO()
 {
+    removeInput(1);
     addInput(std::make_shared<CObjectDetectionIO>());
-    addOutput(std::make_shared<CObjectDetectionIO>());
+}
+
+int CObjDetectFilter::getClassIndex(const std::string &name) const
+{
+    auto it = std::find(m_classNames.begin(), m_classNames.end(), name);
+    if (it == m_classNames.end())
+    {
+        std::string msg = "Class names " + name + " not found";
+        throw CException(CoreExCode::INDEX_OVERFLOW, msg, __func__, __FILE__, __LINE__);
+    }
+    else
+        return std::distance(m_classNames.begin(), it);
 }
 
 size_t CObjDetectFilter::getProgressSteps()
 {
     return 2;
+}
+
+void CObjDetectFilter::beginTaskRun()
+{
+    CObjectDetectionTask::beginTaskRun();
+
+    auto objDetectIn = std::dynamic_pointer_cast<CObjectDetectionIO>(getInput(1));
+    if (objDetectIn == nullptr)
+        throw CException(CoreExCode::INVALID_PARAMETER, "Invalid object detection input", __func__, __FILE__, __LINE__);
+
+    std::set<std::string> uniqueNames;
+    std::vector<std::string> names;
+    std::vector<CColor> colors;
+    auto objects = objDetectIn->getObjects();
+
+    for (size_t i=0; i<objects.size(); ++i)
+    {
+        auto it = uniqueNames.insert(objects[i].m_label);
+        if (it.second)
+        {
+            //New object class
+            names.push_back(objects[i].m_label);
+            colors.push_back(objects[i].m_color);
+        }
+    }
+
+    setNames(names);
+    setColors(colors);
 }
 
 void CObjDetectFilter::run()
@@ -60,12 +100,6 @@ void CObjDetectFilter::run()
     auto objDetectIn = std::dynamic_pointer_cast<CObjectDetectionIO>(getInput(1));
     if (objDetectIn == nullptr)
         throw CException(CoreExCode::INVALID_PARAMETER, "Invalid object detection input", __func__, __FILE__, __LINE__);
-
-    auto objDetIOPtr = std::dynamic_pointer_cast<CObjectDetectionIO>(getOutput(1));
-    if (objDetIOPtr == nullptr)
-        throw CException(CoreExCode::NULL_POINTER, "Invalid object detection output", __func__, __FILE__, __LINE__);
-
-    objDetIOPtr->init(getName(), 0);
 
     std::set<std::string> categories;
     if(paramPtr->m_categories != "all")
@@ -83,13 +117,11 @@ void CObjDetectFilter::run()
         if (objects[i].m_confidence >= paramPtr->m_confidence &&
                 (categories.empty() || categories.find(objects[i].m_label) != categories.end()))
         {
-            objDetIOPtr->addObject(objects[i].m_id, objects[i].m_label, objects[i].m_confidence,
-                                   objects[i].m_box[0], objects[i].m_box[1], objects[i].m_box[2], objects[i].m_box[3],
-                                   objects[i].m_color);
+            addObject(objects[i].m_id, getClassIndex(objects[i].m_label), objects[i].m_confidence,
+                      objects[i].m_box[0], objects[i].m_box[1], objects[i].m_box[2], objects[i].m_box[3]);
         }
     }
 
-    forwardInputImage(0, 0);
     emit m_signalHandler->doProgress();
     endTaskRun();
 }

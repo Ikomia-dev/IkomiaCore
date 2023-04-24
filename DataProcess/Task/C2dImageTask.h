@@ -184,7 +184,6 @@ class DATAPROCESSSHARED_EXPORT C2dImageTask : public CWorkflowTask
         bool                        m_bEnableGraphics = true;
         std::vector<CMat>           m_graphicsMasks;
         std::vector<_ColorMapInfo>  m_colorMaps;
-        //std::vector<size_t>         m_colorMapMaskIndices;
     /** @endcond */
 };
 

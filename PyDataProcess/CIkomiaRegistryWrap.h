@@ -11,7 +11,6 @@ class CIkomiaRegistryWrap: public CIkomiaRegistry, public wrapper<CIkomiaRegistr
 
         CIkomiaRegistryWrap();
         ~CIkomiaRegistryWrap() = default;
-
         CIkomiaRegistryWrap(const CIkomiaRegistry& reg);
 
         CTaskInfo getAlgorithmInfo(const std::string& name) const;
