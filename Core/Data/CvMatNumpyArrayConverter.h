@@ -19,6 +19,10 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#ifndef HAVE_SNPRINTF
+    #define HAVE_SNPRINTF
+#endif
+
 #include <opencv2/core/core.hpp>
 #include <boost/python.hpp>
 #include "Main/CoreGlobal.hpp"
