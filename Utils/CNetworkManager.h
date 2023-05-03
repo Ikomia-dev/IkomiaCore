@@ -24,8 +24,12 @@ class UTILSSHARED_EXPORT CNetworkManager: public QObject
 
     private:
 
+        bool    isQtAppStarted() const;
         bool    isGuiThread() const;
+
         void    workerDownload(const QString& url, const QString& to);
+
+        void    downloadWithPython(const std::string &url, const std::string &to);
 
     private:
 

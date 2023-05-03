@@ -60,7 +60,8 @@ namespace Ikomia
         PROCESS_CANCELLED,      /**< Process does not end correctly */
         PYTHON_EXCEPTION,       /**< Python error */
         TIMEOUT_REACHED,        /**< Timeout reached */
-        NOT_IMPLEMENTED         /**< Internal code */
+        NOT_IMPLEMENTED,         /**< Internal code */
+        NOT_FOUND
     };
 
     /**

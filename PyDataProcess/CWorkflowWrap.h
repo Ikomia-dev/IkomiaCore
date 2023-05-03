@@ -33,7 +33,6 @@ class CWorkflowWrap: public CWorkflow, public wrapper<CWorkflow>
         CWorkflowWrap();
         CWorkflowWrap(const std::string& name);
         CWorkflowWrap(const std::string &name, const std::shared_ptr<CIkomiaRegistry>& registryPtr);
-
         CWorkflowWrap(const CWorkflow &workflow);
 
         std::string                 repr() const override;

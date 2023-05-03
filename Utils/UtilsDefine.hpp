@@ -17,10 +17,11 @@ namespace Ikomia
      */
     enum OSType
     {
-        ALL,    /**< Cross-platform process, implemented in Python */
-        LINUX,  /**< Linux */
-        WIN,    /**< Windows 10 */
-        OSX     /**< Mac OS X 10.13 or higher */
+        UNDEFINED,  /**< Undefined */
+        ALL,        /**< Cross-platform */
+        LINUX,      /**< Linux */
+        WIN,        /**< Windows 10 */
+        OSX         /**< Mac OS X 10.13 or higher */
     };
 
     /**

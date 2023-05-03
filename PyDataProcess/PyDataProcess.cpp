@@ -115,7 +115,6 @@ void exposeNumericIO(const std::string& className)
     ;
 }
 
-
 BOOST_PYTHON_MODULE(pydataprocess)
 {
     // Enable user-defined docstrings and python signatures, while disabling the C++ signatures
@@ -714,6 +713,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def(init<bool>(_ctor1ImageProcess2dDocString, args("self", "has_graphics_input")))
         .def(init<const std::string&>(_ctor2ImageProcess2dDocString, args("self", "name")))
         .def(init<const std::string&, bool>(_ctor3ImageProcess2dDocString, args("self", "name", "has_graphics_input")))
+        .def(init<const C2dImageTaskWrap&>("Copy constructor"))
         .def("__repr__", &C2dImageTask::repr, &C2dImageTaskWrap::default_repr)
         .def("set_active", &C2dImageTask::setActive, &C2dImageTaskWrap::default_setActive, _setActiveDocString, args("self", "is_active"))
         .def("set_output_color_map", &C2dImageTask::setOutputColorMap, _setOutputColorMapDocString, args("self", "index", "mask_index", "colors", "reserve_zero"))
@@ -745,6 +745,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
     class_<C2dImageInteractiveTaskWrap, bases<C2dImageTask>, std::shared_ptr<C2dImageInteractiveTaskWrap>>("C2dImageInteractiveTask", _interactiveImageProcess2d)
         .def(init<>("Default constructor", args("self")))
         .def(init<const std::string&>(_ctorInteractiveImageProcessDocString, args("self", "name")))
+        .def(init<const C2dImageInteractiveTask&>("Copy constructor"))
         .def("__repr__", &C2dImageInteractiveTask::repr, &C2dImageInteractiveTaskWrap::default_repr)
         .def("set_active", &C2dImageInteractiveTask::setActive, &C2dImageInteractiveTaskWrap::default_setActive, _setActiveInteractiveDocString, args("self", "is_active"))
         .def("update_static_outputs", &C2dImageInteractiveTask::updateStaticOutputs, &C2dImageInteractiveTaskWrap::default_updateStaticOutputs, _updateStaticOutputsDocString, args("self"))
@@ -1037,7 +1038,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
     WorkflowTaskPtr (CIkomiaRegistry::*createInstance1)(const std::string&) = &CIkomiaRegistry::createInstance;
     WorkflowTaskPtr (CIkomiaRegistry::*createInstance2)(const std::string&, const WorkflowTaskParamPtr&) = &CIkomiaRegistry::createInstance;
 
-    class_<CIkomiaRegistryWrap, std::shared_ptr<CIkomiaRegistryWrap>>("CIkomiaRegistry", _ikomiaRegistryDocString)
+    class_<CIkomiaRegistryWrap, std::shared_ptr<CIkomiaRegistryWrap>, boost::noncopyable>("CIkomiaRegistry", _ikomiaRegistryDocString)
         .def(init<>("Default constructor", args("self")))
         .def("set_plugins_directory", &CIkomiaRegistry::setPluginsDirectory, _setPluginsDirDocString, args("self", "directory"))
         .def("get_plugins_directory", &CIkomiaRegistry::getPluginsDirectory, _getPluginsDirDocString, args("self"))
@@ -1069,6 +1070,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def(init<>("Default constructor", args("self")))
         .def(init<const std::string&>(_ctor1WorkflowDocString, args("self", "name")))
         .def(init<const std::string&, const std::shared_ptr<CIkomiaRegistry>&>(_ctor2WorkflowDocString, args("self", "name", "registry")))
+        .def(init<const CWorkflow&>("Copy constructor"))
         .add_property("description", &CWorkflow::getDescription, &CWorkflow::setDescription, "Workflow description")
         .add_property("keywords", &CWorkflow::getKeywords, &CWorkflow::setKeywords, "Workflow associated keywords")
         .def("__repr__", &CWorkflow::repr, &CWorkflowWrap::default_repr)

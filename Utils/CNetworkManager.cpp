@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include "CException.h"
+#include "UtilsTools.hpp"
 
 CNetworkManager::CNetworkManager(QObject *parent): QObject(parent)
 {
@@ -23,9 +24,15 @@ CNetworkManager::~CNetworkManager()
     {
         m_pSocketThread->quit();
         m_pSocketThread->wait();
-        delete m_pSocketThread;
+        m_pSocketThread->deleteLater();
         m_pSocketThread = nullptr;
     }
+}
+
+bool CNetworkManager::isQtAppStarted() const
+{
+    QCoreApplication *pCoreApp = QCoreApplication::instance();
+    return pCoreApp != nullptr;
 }
 
 bool CNetworkManager::isGuiThread() const
@@ -39,33 +46,43 @@ bool CNetworkManager::isGuiThread() const
 
 void CNetworkManager::download(const std::string &url, const std::string &to)
 {
-    QUrl qurl(QString::fromStdString(url));
-    if(qurl.isValid() == false)
-        throw CException(CoreExCode::INVALID_PARAMETER, "Invalid url", __func__, __FILE__, __LINE__);
-
-    QString pathTo = QString::fromStdString(to);
-    QFileInfo info(pathTo);
-
-    if (info.isDir())
-        pathTo = QString::fromStdString(to) + "/" + qurl.fileName();
-
-    if (isGuiThread())
+    if (isQtAppStarted())
     {
-        // For GUI threads, we use the non-blocking call and use QEventLoop to wait and yet keep the GUI alive
-        QMetaObject::invokeMethod(this, "slotDownload", Qt::QueuedConnection,
-                                  Q_ARG(void*, &m_loop),
-                                  Q_ARG(QString, qurl.url()),
-                                  Q_ARG(QString, pathTo));
-        m_loop.exec();
+        QUrl qurl(QString::fromStdString(url));
+        if(qurl.isValid() == false)
+            throw CException(CoreExCode::INVALID_PARAMETER, "Invalid url", __func__, __FILE__, __LINE__);
+
+        QString pathTo = QString::fromStdString(to);
+        QFileInfo info(pathTo);
+
+        if (info.isDir())
+            pathTo = QString::fromStdString(to) + "/" + qurl.fileName();
+
+        if (isGuiThread())
+        {
+            // For GUI threads, we use the non-blocking call and use QEventLoop to wait and yet keep the GUI alive
+            bool bOk = QMetaObject::invokeMethod(this, "slotDownload", Qt::QueuedConnection,
+                                                 Q_ARG(void*, &m_loop),
+                                                 Q_ARG(QString, qurl.url()),
+                                                 Q_ARG(QString, pathTo));
+            assert(bOk);
+            m_loop.exec();
+        }
+        else
+        {
+            // For non-GUI threads, QEventLoop would cause a deadlock, so we simply use a blocking call.
+            // (Does not hurt as no messages need to be processed either during the open operation).
+            bool bOk = QMetaObject::invokeMethod(this, "slotDownload", Qt::BlockingQueuedConnection,
+                                                 Q_ARG(void*, nullptr),
+                                                 Q_ARG(QString, qurl.url()),
+                                                 Q_ARG(QString, pathTo));
+            assert(bOk);
+        }
     }
     else
     {
-        // For non-GUI threads, QEventLoop would cause a deadlock, so we simply use a blocking call.
-        // (Does not hurt as no messages need to be processed either during the open operation).
-        QMetaObject::invokeMethod(this, "slotDownload", Qt::BlockingQueuedConnection,
-                                  Q_ARG(void*, nullptr),
-                                  Q_ARG(QString, qurl.url()),
-                                  Q_ARG(QString, pathTo));
+        // From Python -> use Python
+        downloadWithPython(url, to);
     }
 }
 
@@ -104,4 +121,17 @@ void CNetworkManager::workerDownload(const QString& url, const QString& to)
 
     pReply->close();
     pReply->deleteLater();
+}
+
+void CNetworkManager::downloadWithPython(const std::string &url, const std::string &to)
+{
+    QString script = QString(
+                "import requests\n"
+                "import shutil\n\n"
+                "with requests.get('%1', stream=True) as r:\n"
+                "    with open('%2', 'wb') as file:\n"
+                "        shutil.copyfileobj(r.raw, file)\n")
+            .arg(QString::fromStdString(url))
+            .arg(QString::fromStdString(to));
+    Utils::Python::runScript(script.toStdString());
 }

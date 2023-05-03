@@ -24,7 +24,6 @@
 CDataInfo::CDataInfo(IODataType type)
 {
     m_type = type;
-    m_fileName.empty();
 }
 
 CDataInfo::CDataInfo(IODataType type, const std::string& fileName)

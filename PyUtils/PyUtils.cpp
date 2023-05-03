@@ -33,7 +33,7 @@ void translate_exception(const CException& e)
 
 BOOST_PYTHON_MODULE(pyutils)
 {
-    using namespace  Ikomia::Utils;
+    using namespace Ikomia::Utils;
     using namespace boost::python;
 
     // Enable user-defined docstrings and python signatures, while disabling the C++ signatures

@@ -433,6 +433,15 @@ namespace Ikomia
                         break;
                 }
             }
+
+            inline void         runScript(const std::string& script)
+            {
+                CPyEnsureGIL gil;
+                str pyScript(script);
+                object main_module = import("__main__");
+                object main_namespace = main_module.attr("__dict__");
+                exec(pyScript, main_namespace, main_namespace);
+            }
         }
 
         namespace IkomiaApp
@@ -500,7 +509,7 @@ namespace Ikomia
 
         namespace OS
         {
-            inline int  getCurrent()
+            inline OSType   getCurrent()
             {
                 #if defined(Q_OS_LINUX)
                     return OSType::LINUX;
@@ -509,10 +518,10 @@ namespace Ikomia
                 #elif defined(Q_OS_WIN64)
                     return OSType::WIN;
                 #else
-                    return OSType::ALL;
+                    return OSType::NONE;
                 #endif
             }
-            inline void openUrl(const std::string& url)
+            inline void     openUrl(const std::string& url)
             {
                 bool bGuiStarted = Utils::IkomiaApp::isAppStarted();
                 if(bGuiStarted)
@@ -1137,7 +1146,7 @@ namespace Ikomia
             }
             inline PluginState  getCppState(const QString& version)
             {
-                const std::set<QString> breakChanges = {"0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0", "0.6.1", "0.7.0", "0.8.0", "0.8.1"};
+                const std::set<QString> breakChanges = {"0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0", "0.6.1", "0.7.0", "0.8.0", "0.8.1", "0.9.0"};
                 for(auto it=breakChanges.begin(); it!=breakChanges.end(); ++it)
                 {
                     if(version < *it)
@@ -1151,7 +1160,7 @@ namespace Ikomia
             }
             inline PluginState  getPythonState(const QString& version)
             {
-                const std::set<QString> breakChanges = {"0.3.0", "0.6.0", "0.8.0"};
+                const std::set<QString> breakChanges = {"0.3.0", "0.6.0", "0.8.0", "0.9.0"};
                 for(auto it=breakChanges.begin(); it!=breakChanges.end(); ++it)
                 {
                     if(version < *it)
