@@ -45,6 +45,8 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
 
         std::shared_ptr<CSemanticSegIO> clone() const;
 
+        void                            copy(const std::shared_ptr<CWorkflowTaskIO> &ioPtr) override;
+
     private:
 
         WorkflowTaskIOPtr               cloneImp() const override;

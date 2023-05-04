@@ -1,7 +1,8 @@
+#include <QJsonArray>
 #include "CSemanticSegIO.h"
 #include "Main/CoreTools.hpp"
 #include "DataProcessTools.hpp"
-#include <QJsonArray>
+#include "CInstanceSegIO.h"
 
 CSemanticSegIO::CSemanticSegIO() : CWorkflowTaskIO(IODataType::SEMANTIC_SEGMENTATION, "CSemanticSegIO")
 {
@@ -176,6 +177,33 @@ void CSemanticSegIO::fromJson(const std::string &jsonStr)
 std::shared_ptr<CSemanticSegIO> CSemanticSegIO::clone() const
 {
     return std::static_pointer_cast<CSemanticSegIO>(cloneImp());
+}
+
+void CSemanticSegIO::copy(const std::shared_ptr<CWorkflowTaskIO> &ioPtr)
+{
+    auto type = ioPtr->getDataType();
+    if (type == IODataType::SEMANTIC_SEGMENTATION)
+    {
+        //Should not be called in this case
+        auto pIO = dynamic_cast<const CSemanticSegIO*>(ioPtr.get());
+        if(pIO)
+            *this = *pIO;
+    }
+    else if (type == IODataType::INSTANCE_SEGMENTATION)
+    {
+        auto instanceIOPtr = std::dynamic_pointer_cast<CInstanceSegIO>(ioPtr);
+        if (instanceIOPtr)
+        {
+            clearData();
+            std::vector<std::string> instanceNames = instanceIOPtr->getClassNames();
+            CMat mask = instanceIOPtr->getMergeMask();
+            // Substract 1 as instance segmentation IO adds background class for zero-pixels in merge mask
+            mask = mask - 1;
+            // Set names and mask
+            setClassNames(instanceNames);
+            setMask(mask);
+        }
+    }
 }
 
 WorkflowTaskIOPtr CSemanticSegIO::cloneImp() const

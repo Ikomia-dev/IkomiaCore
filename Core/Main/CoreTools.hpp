@@ -532,6 +532,7 @@ namespace Ikomia
                     return targetData == IODataType::INPUT_GRAPHICS ||
                             targetData == IODataType::BLOB_VALUES ||
                             targetData == IODataType::OBJECT_DETECTION ||
+                            targetData == IODataType::SEMANTIC_SEGMENTATION ||
                             targetData == IODataType::IMAGE ||
                             targetData == IODataType::IMAGE_LABEL ||
                             targetData == IODataType::IMAGE_BINARY;

@@ -137,6 +137,22 @@ std::vector<CInstanceSegmentation> CInstanceSegIO::getObjects() const
     return m_instances;
 }
 
+std::vector<std::string> CInstanceSegIO::getClassNames() const
+{
+    std::vector<std::string> names;
+    size_t count = m_instances.size();
+
+    for (size_t i=0; i<count; ++i)
+    {
+        int index = m_instances[i].m_classIndex;
+        if (index >= count)
+            names.resize(index + 1);
+
+        names[index] = m_instances[i].m_label;
+    }
+    return names;
+}
+
 CDataInfoPtr CInstanceSegIO::getDataInfo()
 {
     if (m_infoPtr == nullptr)
@@ -241,7 +257,7 @@ void CInstanceSegIO::addObject(int id, int type, int classIndex, const std::stri
     results.emplace_back(CObjectMeasure(CMeasure::Id::BBOX, {boxX, boxY, boxWidth, boxHeight}, graphicsId, label));
     m_blobMeasureIOPtr->addObjectMeasures(results);
 
-    //Create label mask according to the object index (we do index + 1 because 0 is reserved for background)
+    //Create label mask according to the object class index (we do index + 1 because 0 is reserved for background)
     if (boxWidth > 0 && boxHeight > 0)
     {
         cv::Mat labelImg(boxHeight, boxWidth, CV_8UC1, cv::Scalar(obj.m_classIndex + 1));

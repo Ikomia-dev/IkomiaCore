@@ -62,6 +62,7 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegIO: public CWorkflowTaskIO
         size_t                              getObjectCount() const;
         CInstanceSegmentation               getObject(size_t index) const;
         std::vector<CInstanceSegmentation>  getObjects() const;
+        std::vector<std::string>            getClassNames() const;
         CDataInfoPtr                        getDataInfo() override;
         ImageIOPtr                          getMaskImageIO() const;
         GraphicsOutputPtr                   getGraphicsIO() const;
