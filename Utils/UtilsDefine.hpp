@@ -17,11 +17,11 @@ namespace Ikomia
      */
     enum OSType
     {
-        UNDEFINED,  /**< Undefined */
         ALL,        /**< Cross-platform */
         LINUX,      /**< Linux */
         WIN,        /**< Windows 10 */
-        OSX         /**< Mac OS X 10.13 or higher */
+        OSX,         /**< Mac OS X 10.13 or higher */
+        UNDEFINED  /**< Undefined */
     };
 
     /**
