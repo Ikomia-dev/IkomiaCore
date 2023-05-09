@@ -59,7 +59,7 @@ BOOST_PYTHON_MODULE(pyutils)
         .value("OSX", OSType::OSX)
     ;
 
-    enum_<ApiLanguage>("ApiLanguage", "Enum - List of supported programming language")
+    enum_<ApiLanguage>("ApiLanguage", "Enum - List of supported programming languages")
         .value("CPP", ApiLanguage::CPP)
         .value("PYTHON", ApiLanguage::PYTHON)
     ;

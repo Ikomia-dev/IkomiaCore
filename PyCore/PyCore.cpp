@@ -388,7 +388,7 @@ BOOST_PYTHON_MODULE(pycore)
         .value("DNN_TRAIN", CWorkflowTask::Type::DNN_TRAIN)
     ;
 
-    enum_<CWorkflowTask::ActionFlag>("ActionFlag", "Enum - List of specific behaviors or actions that can be enable/disable for a task")
+    enum_<CWorkflowTask::ActionFlag>("ActionFlag", "Enum - List of specific behaviors or actions that can be enabled/disabled for a task")
         .value("APPLY_VOLUME", CWorkflowTask::ActionFlag::APPLY_VOLUME)
         .value("OUTPUT_AUTO_EXPORT", CWorkflowTask::ActionFlag::OUTPUT_AUTO_EXPORT)
     ;

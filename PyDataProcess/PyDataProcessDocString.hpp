@@ -23,13 +23,13 @@
 constexpr auto _moduleDocString =
         "Module offering implementation of specialization classes to handle **inputs/outputs** and **tasks** involved in Ikomia workflows for concrete use cases. It consists of Python bindings from C++ Ikomia Core.\n\n"
         "In addiction to workflow management, the system uses factory design pattern to allow integration of third-party plugins. "
-        "To this end, when you want to add your own plugin, you have to implement (override) three factory classes derived from the followings:\n\n"
+        "To this end, when you want to add your own plugin, you have to implement (override) three factory classes derived from the following:\n\n"
         "   - :py:class:`~ikomia.dataprocess.pydataprocess.CPluginProcessInterface`: abstract base class exposing the two factories required by the plugin engine (task and widget)\n"
         "   - :py:class:`~ikomia.dataprocess.pydataprocess.CTaskFactory`: abstract base class for process instanciation\n"
         "   - :py:class:`~ikomia.dataprocess.pydataprocess.CWidgetFactory`: abstract base class for widget instanciation\n\n"
         "This module provides class specialization for several types of usual inputs/outputs.\n"
         "It also provides class specialization for common processing task.\n"
-        "You will find below details about implementation of usual inputs/outputs and common processing tasks.\n\n";
+        "You will find below details about implementation of such specializations.\n\n";
 
 //---------------------//
 //----- CTaskInfo -----//

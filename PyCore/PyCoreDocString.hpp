@@ -23,7 +23,7 @@
 constexpr auto _moduleDocString =
         "Module offering core features to handle **tasks**, **I/O**, **parameters** and **widgets**. "
         "It consists of Python bindings from C++ Ikomia Core.\n\n"
-        "The extension capability of Ikomia platform is based on inheritance and this module offers the main base classes. "
+        "The extension capability of Ikomia API is based on inheritance and this module offers the main base classes. "
         "The system uses the concept of worflow to process images. "
         "A worflow is a graph composed of processing tasks, each task comes with its parameters, its inputs and its outputs. "
         "Additionnally, a widget is associated with the task to ensure user interaction in Ikomia Studio. "
@@ -43,10 +43,10 @@ constexpr auto _ctorCPointDocString =
 //-------------------------//
 constexpr auto _graphicsItemDocString =
         "Base class for all graphics items that aim to be displayed on top of images. "
-        "Such graphics items are inserted into an overlay layer associated with image. "
+        "Such graphics items are inserted into an overlay layer associated with an image. "
         "Image content is not modified so that it can be forwarded directly as input of another task. "
         "Moreover, graphics layer can also be forwarded as input of another task. "
-        "One can imagine an example where we want to apply specific process to tracked object. "
+        "One can imagine an example where we want to apply a specific process to tracked objects. "
         "Each graphics item has a type (see :py:class:`~ikomia.core.pycore.GraphicsItem` for possible values) and a category (ie label).\n\n";
 
 constexpr auto _setGraphicsCategoryDocString =
@@ -269,8 +269,8 @@ constexpr auto _graphicsToBinaryMaskDocString =
 constexpr auto _WorkflowTaskDocString =
         "Base class for all tasks that aim to be executed in a workflow. "
         "It provides all basic mechanisms to handle inputs and outputs, task parameters and progress feedbacks. "
-        "It also provides an interface through overridable methods to set a formal scope to design custom task. "
-        "This interface allows the implementation of various image-based process. "
+        "It also provides an interface through overridable methods to set a formal scope to design custom tasks. "
+        "This interface allows the implementation of various image-based processes. "
         "One can also use the derived classes of the API which cover basic needs for "
         "2D image, volume (see :py:class:`~ikomia.dataprocess.pydataprocess.C2dImageTask`), "
         "or video (see :py:class:`~ikomia.dataprocess.pydataprocess.CVideoTask`).\n\n";
@@ -442,7 +442,7 @@ constexpr auto _setActiveDocString =
 
 constexpr auto _setAutoSaveDocString =
         "Enable/disable auto-save mode. When this mode is enabled, task outputs are automatically save to disk when the run() function "
-        "is executed. Save formats are already defined for all builtin I/O objects. For custom I/O object, one must implement"
+        "is executed. Save formats are already defined for all builtin I/O objects. For custom I/O object, one must implement "
         ":py:meth:`~ikomia.core.pycore.CWorkflowTaskIO.load` and :py:meth:`~ikomia.core.pycore.CWorkflowTaskIO.save` methods. "
         "Output folder can be set with :py:attr:`~ikomia.core.pycore.CWorkflowTask.output_folder`.\n\n"
         "Args:\n\n"
@@ -502,13 +502,13 @@ constexpr auto _setParamValuesDocString =
 
 constexpr auto _stopDocString =
         "Notify that the task is requested to stop. "
-        "It is higly recommended to manage this stop event and override the method for time-consuming task. "
+        "It is higly recommended to manage this stop event and override the method for time-consuming tasks. "
         "Base class implementation must be called before any other instructions.\n\n";
 
 constexpr auto _updateStaticOutputsDocString =
         "Updates the static information deduced from inputs. "
         "The static data corresponds to all data that can be deduced without the runtime context. "
-        "This method is called each time inputs changed.\n\n";
+        "This method is called each time inputs change.\n\n";
 
 constexpr auto _workflowStartedDocString =
         "Notify that the workflow executing the task is started. The function is called before the run() function of each task."
@@ -530,7 +530,7 @@ constexpr auto _downloadDocString =
 //---------------------------//
 constexpr auto _WorkflowTaskIODocString =
         "Base class for task inputs and outputs. "
-        "Each task can have as many inputs and outputs. Each input/output class must inherit this class and override the needed methods.\n\n";
+        "Each task can have as many inputs and outputs as necessary. Each input/output class must inherit this class and override the needed methods.\n\n";
 
 constexpr auto _ctor1WorkflowTaskIODocString =
         "Constructor with parameters\n\n"
@@ -544,8 +544,8 @@ constexpr auto _ctor2WorkflowTaskIODocString =
         "   name (str): custom name associated to input/output to give more insights to end user\n\n";
 
 constexpr auto _getUnitElementCountDocString =
-        "Get the number of unit element in terms of processing scheme. "
-        "This value is used to define the number of progress steps for progress bar component in **Ikomia Studio**. "
+        "Get the number of unit elements in terms of processing scheme. "
+        "This value is used to define the number of progress steps for progress bar component in **Ikomia STUDIO**. "
         "For an image, the count is 1. For Z-stack volume, the count is the number of Z levels. "
         "Should be overriden for custom input or output.\n\n"
         "Returns:\n\n"
@@ -650,8 +650,8 @@ constexpr auto _getHashValueDocString =
 constexpr auto _WorkflowTaskWidget =
         "Base class for all widgets associated with a task. "
         "Each process comes with a Qt widget to manage algorithm parameters and user actions. "
-        "The widget class implementation is mandatory for Ikomia Studio. "
-        "This class offers some basic tools to build rapidly a functionnal user interface. "
+        "The widget class implementation is mandatory for Ikomia STUDIO. "
+        "This class offers some basic tools to rapidly build a functionnal user interface. "
         "As it is derived from Qt QWidget, one can easily customize it to fit more complex needs. U"
         "se of bindings like PyQt5 or PySide2 are recommended.\n\n";
 
