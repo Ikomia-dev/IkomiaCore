@@ -28,7 +28,7 @@ include_directories(
 if(WIN32)
     include_directories(
         # Boost
-        ${Boost_INCLUDE_DIRS}/Boost/include/boost-${BOOST_VERSION}
+        ${Boost_INCLUDE_DIRS}
         # OpenCL
         "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v${CUDA_VERSION}/include"
     )
