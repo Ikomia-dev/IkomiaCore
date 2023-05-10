@@ -102,9 +102,18 @@ namespace Ikomia
 
                 CMat img8bits;
                 if (image.depth() != CV_8U)
+                {
                     CDataConversion::to8Bits(image, img8bits);
+                    if(image.channels() > 1)
+                        cv::cvtColor(img8bits, img8bits, cv::COLOR_RGB2BGR);
+                }
                 else
-                    img8bits = image;
+                {
+                    if(image.channels() > 1)
+                        cv::cvtColor(image, img8bits, cv::COLOR_RGB2BGR);
+                    else
+                        img8bits = image;
+                }
 
                 std::string format = ".jpg";
                 auto it = std::find(options.begin(), options.end(), "image_format");
@@ -120,6 +129,7 @@ namespace Ikomia
                 }
 
                 std::vector<uchar> buffer;
+                // cv::imencode need BGR array
                 cv::imencode(format, img8bits, buffer);
                 auto* pEncodedBuf = reinterpret_cast<unsigned char*>(buffer.data());
                 return base64_encode(pEncodedBuf, buffer.size());
@@ -128,7 +138,10 @@ namespace Ikomia
             {
                 std::string decoded = base64_decode_fast(b64ImgStr.c_str(), b64ImgStr.size());
                 std::vector<uchar> data(decoded.begin(), decoded.end());
-                return cv::imdecode(CMat(data), cv::IMREAD_COLOR);
+                cv::Mat img = cv::imdecode(CMat(data), cv::IMREAD_UNCHANGED);
+                // cv::imdecode return BGR array
+                cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
+                return img;
             }
         }
     }
