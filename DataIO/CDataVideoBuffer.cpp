@@ -23,6 +23,27 @@
 #include "UtilsTools.hpp"
 #include "CTimer.hpp"
 
+const std::vector<int>  _orderedFourccList = {
+    cv::VideoWriter::fourcc('H','2','6','5'),
+    cv::VideoWriter::fourcc('h','2','6','5'),
+    cv::VideoWriter::fourcc('X','2','6','5'),
+    cv::VideoWriter::fourcc('x','2','6','5'),
+    cv::VideoWriter::fourcc('H','2','6','4'),
+    cv::VideoWriter::fourcc('h','2','6','4'),
+    cv::VideoWriter::fourcc('X','2','6','4'),
+    cv::VideoWriter::fourcc('x','2','6','4'),
+    cv::VideoWriter::fourcc('A','V','C','1'),
+    cv::VideoWriter::fourcc('a','v','c','1'),
+    cv::VideoWriter::fourcc('H','2','6','3'),
+    cv::VideoWriter::fourcc('h','2','6','3'),
+    cv::VideoWriter::fourcc('X','2','6','3'),
+    cv::VideoWriter::fourcc('x','2','6','3'),
+    cv::VideoWriter::fourcc('M','P','4','V'),
+    cv::VideoWriter::fourcc('m','p','4','v'),
+    cv::VideoWriter::fourcc('F','M','P','4'),
+    cv::VideoWriter::fourcc('f','m','p','4')
+};
+
 CDataVideoBuffer::CDataVideoBuffer()
 {
 }
@@ -113,8 +134,6 @@ void CDataVideoBuffer::openVideo()
 
         m_width = m_reader.get(cv::CAP_PROP_FRAME_WIDTH);
         m_height = m_reader.get(cv::CAP_PROP_FRAME_HEIGHT);
-        // Default video compress mode format
-        //m_fourcc = m_reader.get(CV_CAP_PROP_FOURCC);
     }
 }
 
@@ -470,6 +489,7 @@ void CDataVideoBuffer::setMode(int mode)
 void CDataVideoBuffer::setFourCC(int code)
 {
     m_fourcc = code;
+    checkFourcc();
 }
 
 std::string CDataVideoBuffer::getCurrentPath() const
@@ -626,9 +646,6 @@ void CDataVideoBuffer::updateWrite()
 
 void CDataVideoBuffer::updateStreamWrite()
 {
-    // Test codec (default is Motion JPEG)
-    checkFourcc();
-
     //Default API backend is FFMPEG
     cv::VideoWriter writer;
     writer.open(m_path, m_fourcc, (double)m_fps, cv::Size(m_width, m_height));
@@ -714,9 +731,6 @@ void CDataVideoBuffer::writeImageSequenceThread()
 
 void CDataVideoBuffer::writeVideoThread()
 {
-    // Test codec (default is Motion JPEG)
-    checkFourcc();
-
     //Default API backend is FFMPEG
     cv::VideoWriter writer;
     writer.open(m_path, m_fourcc, (double)m_fps, cv::Size(m_width, m_height));
@@ -900,19 +914,26 @@ void CDataVideoBuffer::isWritable()
 }
 
 void CDataVideoBuffer::checkFourcc()
-{
+{    
     // Test codec (default is Motion JPEG)
     if(m_type == CDataVideoBuffer::IMAGE_SEQUENCE)
         m_fourcc = 0;
-    else if(m_fourcc == -1)
+    else
     {
-        std::string ext = Utils::File::extension(m_path);
-        if (ext == ".avi")
-            m_fourcc = cv::VideoWriter::fourcc('F','M','P','4');
-        else if (ext == ".mp4")
-            m_fourcc = cv::VideoWriter::fourcc('m','p','4','v');
-        else
-            m_fourcc = 0;
+        cv::VideoWriter writer;
+        if ( m_fourcc != -1 && writer.open(m_path, m_fourcc, (double)m_fps, cv::Size(m_width, m_height)))
+            return;
+
+        for (size_t i=0; i<_orderedFourccList.size(); ++i)
+        {
+            if (writer.open(m_path, _orderedFourccList[i], (double)m_fps, cv::Size(m_width, m_height)))
+            {
+                m_fourcc = _orderedFourccList[i];
+                return;
+            }
+        }
+        Utils::print("No suitable video codec was found. Video will be saved without compression.", QtWarningMsg);
+        m_fourcc = 0;
     }
 }
 
