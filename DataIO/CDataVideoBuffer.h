@@ -113,8 +113,11 @@ class DATAIOSHARED_EXPORT CDataVideoBuffer: public QObject
         bool            isNumber(const std::string& s) const;
         void            isWritable();
 
-        bool            checkWriterBackend();
-        bool            checkFourcc();
+        bool            checkVideoWriterConfig();
+
+        int             getBestFourcc(int backend);
+        std::string     getBackendName(int backend) const;
+        int             getBackendFromName(const std::string& name) const;
 
     private:
 

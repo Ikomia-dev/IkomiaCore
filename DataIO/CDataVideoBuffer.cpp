@@ -51,51 +51,31 @@ void CDataVideoBuffer::initFourccList()
 {
     m_orderedFourccList = {
         cv::VideoWriter::fourcc('H','2','6','5'),
-        cv::VideoWriter::fourcc('h','2','6','5'),
         cv::VideoWriter::fourcc('X','2','6','5'),
-        cv::VideoWriter::fourcc('x','2','6','5'),
         cv::VideoWriter::fourcc('H','2','6','4'),
-        cv::VideoWriter::fourcc('h','2','6','4'),
         cv::VideoWriter::fourcc('X','2','6','4'),
-        cv::VideoWriter::fourcc('x','2','6','4'),
         cv::VideoWriter::fourcc('W','M','V','P'),
-        cv::VideoWriter::fourcc('w','m','v','p'),
         cv::VideoWriter::fourcc('A','V','C','1'),
-        cv::VideoWriter::fourcc('a','v','c','1'),
         cv::VideoWriter::fourcc('H','2','6','3'),
-        cv::VideoWriter::fourcc('h','2','6','3'),
         cv::VideoWriter::fourcc('X','2','6','3'),
-        cv::VideoWriter::fourcc('x','2','6','3'),
         cv::VideoWriter::fourcc('D','I','V','X'),
-        cv::VideoWriter::fourcc('d','i','v','x'),
+        cv::VideoWriter::fourcc('X','V','I','D'),
         cv::VideoWriter::fourcc('M','P','4','V'),
-        cv::VideoWriter::fourcc('m','p','4','v'),
-        cv::VideoWriter::fourcc('F','M','P','4'),
-        cv::VideoWriter::fourcc('f','m','p','4')
+        cv::VideoWriter::fourcc('F','M','P','4'),        
     };
 
     m_fourccNames[m_orderedFourccList[0]] = "H265";
-    m_fourccNames[m_orderedFourccList[1]] = "h265";
+    m_fourccNames[m_orderedFourccList[1]] = "X265";
     m_fourccNames[m_orderedFourccList[2]] = "H264";
-    m_fourccNames[m_orderedFourccList[3]] = "h264";
-    m_fourccNames[m_orderedFourccList[4]] = "X265";
-    m_fourccNames[m_orderedFourccList[5]] = "x265";
-    m_fourccNames[m_orderedFourccList[6]] = "X264";
-    m_fourccNames[m_orderedFourccList[7]] = "x264";
-    m_fourccNames[m_orderedFourccList[8]] = "WMVP";
-    m_fourccNames[m_orderedFourccList[9]] = "wmvp";
-    m_fourccNames[m_orderedFourccList[10]] = "AVC1";
-    m_fourccNames[m_orderedFourccList[11]] = "avc1";
-    m_fourccNames[m_orderedFourccList[12]] = "H263";
-    m_fourccNames[m_orderedFourccList[13]] = "h263";
-    m_fourccNames[m_orderedFourccList[14]] = "X263";
-    m_fourccNames[m_orderedFourccList[15]] = "x263";
-    m_fourccNames[m_orderedFourccList[16]] = "DIVX";
-    m_fourccNames[m_orderedFourccList[17]] = "divx";
-    m_fourccNames[m_orderedFourccList[18]] = "MP4V";
-    m_fourccNames[m_orderedFourccList[19]] = "mp4v";
-    m_fourccNames[m_orderedFourccList[20]] = "FMP4";
-    m_fourccNames[m_orderedFourccList[21]] = "fmp4";
+    m_fourccNames[m_orderedFourccList[3]] = "X264";
+    m_fourccNames[m_orderedFourccList[4]] = "WMVP";
+    m_fourccNames[m_orderedFourccList[5]] = "AVC1";
+    m_fourccNames[m_orderedFourccList[6]] = "H263";
+    m_fourccNames[m_orderedFourccList[7]] = "X263";
+    m_fourccNames[m_orderedFourccList[8]] = "DIVX";
+    m_fourccNames[m_orderedFourccList[9]] = "XVID";
+    m_fourccNames[m_orderedFourccList[10]] = "MP4V";
+    m_fourccNames[m_orderedFourccList[11]] = "FMP4";
 }
 
 void CDataVideoBuffer::close()
@@ -523,7 +503,6 @@ void CDataVideoBuffer::setMode(int mode)
 void CDataVideoBuffer::setFourCC(int code)
 {
     m_fourcc = code;
-    checkFourcc();
 }
 
 std::string CDataVideoBuffer::getCurrentPath() const
@@ -936,82 +915,119 @@ void CDataVideoBuffer::isWritable()
     if(m_type == CDataVideoBuffer::IMAGE_SEQUENCE)
         return;
 
-    if (checkWriterBackend() == false)
-        throw CException(CoreExCode::INVALID_VIDEO_WRITER, "Failed to find a suitable backend to open video writer:" + m_path, __func__, __FILE__, __LINE__);
+    if (checkVideoWriterConfig() == false)
+        throw CException(CoreExCode::INVALID_VIDEO_WRITER, "Failed to find a suitable backend/fourcc to open video writer:" + m_path, __func__, __FILE__, __LINE__);
 
-    if (checkFourcc() == false)
-        throw CException(CoreExCode::INVALID_VIDEO_WRITER, "Failed to find a suitable codec to open video writer:" + m_path, __func__, __FILE__, __LINE__);
+    if (m_fourcc == 0)
+        Utils::print("No suitable video codec was found. Video will be saved without compression.", QtWarningMsg);
 
-    std::string msg = "Video writer codec: " + m_fourccNames[m_fourcc];
+    std::string msg = "Video writer configuration: backend = " + getBackendName(m_writeBackend) + " codec = " + m_fourccNames[m_fourcc];
     Utils::print(msg, QtDebugMsg);
 }
 
-bool CDataVideoBuffer::checkWriterBackend()
+bool CDataVideoBuffer::checkVideoWriterConfig()
 {
-    // Try default backend: FFMPEG
     cv::VideoWriter writer;
-    int fourcc = 0;
-
-    if(writer.open(m_path, m_writeBackend, fourcc, (double)m_fps, cv::Size(m_width, m_height)) == false)
+    if (m_fourcc != -1)
     {
-        close();
-
-        // Let OpenCV choose the backend
-        if (writer.open(m_path, fourcc, (double)m_fps, cv::Size(m_width, m_height)) == false)
-            return false;
+        // Try current couple backend/fourcc
+        if (writer.open(m_path, m_writeBackend, m_fourcc, (double)m_fps, cv::Size(m_width, m_height)) == true)
+            return true;
         else
         {
-            // Get the choosen backend
-            std::string backendName = writer.getBackendName();
-            auto backends = cv::videoio_registry::getWriterBackends();
-
-            for (size_t i=0; i<backends.size(); ++i)
+            // Try if another fourcc match
+            int fourcc = getBestFourcc(m_writeBackend);
+            if (fourcc != -1)
             {
-                std::string name = cv::videoio_registry::getBackendName(backends[i]);
-                if (name == backendName)
+                m_fourcc = fourcc;
+                return true;
+            }
+            else
+            {
+                // Let OpenCV choose a backend for the current fourcc
+                if (writer.open(m_path, m_fourcc, (double)m_fps, cv::Size(m_width, m_height)) == true)
                 {
-                    m_writeBackend = backends[i];
-                    break;
+                    m_writeBackend = getBackendFromName(writer.getBackendName());
+                    return true;
                 }
             }
         }
     }
-    std::string msg = "Video writer backend: " + writer.getBackendName();
-    Utils::print(msg, QtDebugMsg);
-    return true;
+    else
+    {
+        int fourcc = getBestFourcc(m_writeBackend);
+        if (fourcc != -1)
+        {
+            m_fourcc = fourcc;
+            return true;
+        }
+    }
+
+    // Find a valid couple backend/fourcc
+    std::vector<int> fallbackBackend;
+    auto backends = cv::videoio_registry::getWriterBackends();
+    for (size_t i=0; i<backends.size(); ++i)
+    {
+        int fourcc = getBestFourcc(backends[i]);
+        if (fourcc > 0)
+        {
+            m_writeBackend = backends[i];
+            m_fourcc = fourcc;
+            return true;
+        }
+        else if( fourcc == 0)
+            fallbackBackend.push_back(backends[i]);
+    }
+
+    if (fallbackBackend.size() > 0)
+    {
+        m_writeBackend = fallbackBackend[0];
+        m_fourcc = 0;
+        return true;
+    }
+    return false;
 }
 
-bool CDataVideoBuffer::checkFourcc()
+int CDataVideoBuffer::getBestFourcc(int backend)
 {    
-    if(m_type == CDataVideoBuffer::IMAGE_SEQUENCE)
+    if (m_type == CDataVideoBuffer::IMAGE_SEQUENCE)
     {
         // No compression
-        m_fourcc = 0;
+        return 0;
     }
     else
     {
         cv::VideoWriter writer;
-        if ( m_fourcc != -1 && writer.open(m_path, m_writeBackend, m_fourcc, (double)m_fps, cv::Size(m_width, m_height)))
-            return true;
 
         // Find best codec among the predefined ordered list
         for (size_t i=0; i<m_orderedFourccList.size(); ++i)
         {
-            if (writer.open(m_path, m_writeBackend, m_orderedFourccList[i], (double)m_fps, cv::Size(m_width, m_height)))
-            {
-                m_fourcc = m_orderedFourccList[i];
-                return true;
-            }
+            if (writer.open(m_path, backend, m_orderedFourccList[i], (double)m_fps, cv::Size(m_width, m_height)))
+                return m_orderedFourccList[i];
         }
 
-        // No codec so no compression
-        m_fourcc = 0;
-        if ( writer.open(m_path, m_writeBackend, m_fourcc, (double)m_fps, cv::Size(m_width, m_height)))
-            Utils::print("No suitable video codec was found. Video will be saved without compression.", QtWarningMsg);
-        else
-            return false;
+        // No codec so try no compression
+        if ( writer.open(m_path, backend, 0, (double)m_fps, cv::Size(m_width, m_height)))
+            return 0;
+
+        return -1;
     }
-    return true;
+}
+
+std::string CDataVideoBuffer::getBackendName(int backend) const
+{
+    return cv::videoio_registry::getBackendName(static_cast<cv::VideoCaptureAPIs>(backend));
+}
+
+int CDataVideoBuffer::getBackendFromName(const std::string &name) const
+{
+    auto backends = cv::videoio_registry::getWriterBackends();
+    for (size_t i=0; i<backends.size(); ++i)
+    {
+        if (name == getBackendName(backends[i]))
+            return backends[i];
+    }
+    return cv::CAP_ANY;
 }
 
 #include "moc_CDataVideoBuffer.cpp"
