@@ -100,6 +100,7 @@ class DATAIOSHARED_EXPORT CDataVideoBuffer: public QObject
     private:
 
         void            init();
+        void            initFourccList();
 
         void            updateRead();
         void            updateWrite();
@@ -112,7 +113,8 @@ class DATAIOSHARED_EXPORT CDataVideoBuffer: public QObject
         bool            isNumber(const std::string& s) const;
         void            isWritable();
 
-        void            checkFourcc();
+        bool            checkWriterBackend();
+        bool            checkFourcc();
 
     private:
 
@@ -136,8 +138,11 @@ class DATAIOSHARED_EXPORT CDataVideoBuffer: public QObject
         int                     m_height = 0;
         int                     m_fourcc = -1;
         int                     m_mode = 0;
-        int                     m_writeAPI = cv::CAP_FFMPEG;
+        int                     m_writeBackend = cv::CAP_FFMPEG;
         int                     m_timeout = 5000; // in milliseconds
+        std::vector<int>        m_orderedFourccList;
+        std::map<int, std::string>  m_fourccNames;
+
 };
 
 using CDataVideoBufferPtr = std::unique_ptr<CDataVideoBuffer>;
