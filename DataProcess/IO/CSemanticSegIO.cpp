@@ -60,6 +60,11 @@ CMat CSemanticSegIO::getMask() const
     return m_imgMaskIOPtr->getImage();
 }
 
+CMat CSemanticSegIO::getLegend() const
+{
+    return m_imgLegendIOPtr->getImage();
+}
+
 std::vector<std::string> CSemanticSegIO::getClassNames() const
 {
     return m_classes;

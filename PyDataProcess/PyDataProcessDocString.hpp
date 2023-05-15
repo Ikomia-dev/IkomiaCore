@@ -1137,6 +1137,11 @@ constexpr auto _getGraphicsIODocString =
         "Returns:\n\n"
         "   :py:class:`~ikomia.dataprocess.pydataprocess.CGraphicsOutput`: graphics output instance\n\n";
 
+constexpr auto _getBlobMeasureIODocString =
+        "Get internal blob measure output instance.\n\n"
+        "Returns:\n\n"
+        "   :py:class:`~ikomia.dataprocess.pydataprocess.CBlobMeasureIO`: blob measure output instance\n\n";
+
 constexpr auto _initObjDetectIODocString =
         "Initialisation step to set associated task (name) and reference image. The reference image is the task output index "
         "where the graphics information (label, box) will be displayed as an overlay layer.\n\n"
@@ -1291,6 +1296,11 @@ constexpr auto _semanticSegIODocString =
         "Thus, this input/output stores labelled image, class names and class colors. "
         "Among others, algorithms like DeepLabV3+, UNet or TransUNet are semantic segmentation tasks.\n\n";
 
+constexpr auto _getLegendDocString =
+        "Get legend image with class labels and colors.\n\n"
+        "Returns:\n\n"
+        "   Numpy array: legend image\n\n";
+
 constexpr auto _getMaskDocString =
         "Get labelled image (ie graylevel) where each pixel has a specific value corresponding to its class. "
         "You can find the correspondence between pixel value and class name with :py:meth:`ikomia.dataprocess.pydataprocess.CSemanticIO.get_class_names`.\n\n"
@@ -1378,6 +1388,11 @@ constexpr auto _keyptsGetGraphicsIODocString =
         "Returns:\n\n"
         "   :py:class:`~ikomia.dataprocess.pydataprocess.CGraphicsOutput`: graphics output instance\n\n";
 
+constexpr auto _keyptsGetDataStringIODocString =
+        "Get internal data string output instance. It stores keypoint links information.\n\n"
+        "Returns:\n\n"
+        "   :py:class:`~ikomia.dataprocess.pydataprocess.CDataStringIO`: data string output instance\n\n";
+
 constexpr auto _getKeyptsLinksDocString =
         "Get the global connection scheme of detected keypoints. It consists in a list of links between points with "
         "the following information: starting point index, ending point index, link label and link color. Keypoints list "
@@ -1456,6 +1471,11 @@ constexpr auto _textIOGetGraphicsIODocString =
         "value of detected text fields in image.\n\n"
         "Returns:\n\n"
         "   :py:class:`~ikomia.dataprocess.pydataprocess.CGraphicsOutput`: graphics output instance\n\n";
+
+constexpr auto _textIOGetDataStringIODocString =
+        "Get internal data string output instance. It stores text information.\n\n"
+        "Returns:\n\n"
+        "   :py:class:`~ikomia.dataprocess.pydataprocess.CDataStringIO`: data string output instance\n\n";
 
 constexpr auto _textIOFinalizeIODocString =
         "Method to call after all fields are added. It will compute data output that will be shown as table "
