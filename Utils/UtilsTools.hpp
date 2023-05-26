@@ -487,11 +487,11 @@ namespace Ikomia
             }
             inline QString      getCurrentVersionNumber()
             {
-                return "0.9.0";
+                return "0.10.0";
             }
             inline QString      getCurrentVersionName()
             {
-                return "0.9.0";
+                return "0.10.0";
             }
             inline std::string  getIkomiaLibFolder()
             {
@@ -546,6 +546,26 @@ namespace Ikomia
                     proc.start(cmd, args);
                     proc.waitForFinished();
                 }
+            }
+            inline std::string getName(OSType type)
+            {
+                std::string osName = "ALL";
+                switch(type)
+                {
+                    case OSType::LINUX:
+                        osName = "LINUX";
+                        break;
+                    case OSType::WIN:
+                        osName = "WINDOWS";
+                        break;
+                    case OSType::OSX:
+                        osName = "MACOS";
+                        break;
+                    case OSType::ALL:
+                        osName = "ALL";
+                        break;
+                }
+                return osName;
             }
         }
 
@@ -1146,7 +1166,7 @@ namespace Ikomia
             }
             inline PluginState  getCppState(const QString& version)
             {
-                const std::set<QString> breakChanges = {"0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0", "0.6.1", "0.7.0", "0.8.0", "0.8.1", "0.9.0"};
+                const std::set<QString> breakChanges = {"0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0", "0.6.1", "0.7.0", "0.8.0", "0.8.1", "0.9.0", "0.10.0"};
                 for(auto it=breakChanges.begin(); it!=breakChanges.end(); ++it)
                 {
                     if(version < *it)
@@ -1183,7 +1203,7 @@ namespace Ikomia
             }
             inline std::string  getCurrentApiVersion()
             {
-                return "0.9.0";
+                return "0.10.0";
             }
             inline std::string  getModelHubUrl()
             {
@@ -1232,6 +1252,16 @@ namespace Ikomia
                 std::string archiKeywords = getArchitectureKeywords();
                 std::size_t found = keywords.find(archiKeywords);
                 return (found != std::string::npos);
+            }
+            inline std::string  getLanguageName(ApiLanguage language)
+            {
+                std::string name;
+                switch(language)
+                {
+                    case ApiLanguage::CPP: name = "CPP"; break;
+                    case ApiLanguage::PYTHON: name = "PYTHON"; break;
+                }
+                return name;
             }
         }
 

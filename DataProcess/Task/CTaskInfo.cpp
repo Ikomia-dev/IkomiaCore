@@ -115,9 +115,14 @@ ApiLanguage CTaskInfo::getLanguage() const
     return m_language;
 }
 
-int CTaskInfo::getOS() const
+OSType CTaskInfo::getOS() const
 {
     return m_os;
+}
+
+std::string CTaskInfo::getMinPythonVersion() const
+{
+    return m_minPythonVersion;
 }
 
 bool CTaskInfo::isInternal() const
@@ -210,38 +215,19 @@ void CTaskInfo::setLanguage(const ApiLanguage language)
     m_language = language;
 }
 
-void CTaskInfo::setOS(const int os)
+void CTaskInfo::setOS(const OSType os)
 {
     m_os = os;
+}
+
+void CTaskInfo::setMinPythonVersion(const std::string &version)
+{
+    m_minPythonVersion = version;
 }
 
 void CTaskInfo::setInternal(bool bInternal)
 {
     m_bInternal = bInternal;
-}
-
-std::string CTaskInfo::getOSName() const
-{
-    std::string osName = "Any";
-    switch(m_os)
-    {
-        case OSType::LINUX:
-            osName = "Linux";
-            break;
-        case OSType::WIN:
-            osName = "Windows";
-            break;
-        case OSType::OSX:
-            osName = "MacOS";
-            break;
-        case OSType::ALL:
-            osName = "Any";
-            break;
-        default:
-            osName = "Any";
-            break;
-    }
-    return osName;
 }
 
 std::ostream& operator<<(std::ostream& os, const CTaskInfo& info)
@@ -271,5 +257,5 @@ void CTaskInfo::to_ostream(std::ostream &os) const
     os << "Repository: " << m_repo << std::endl;
     std::string language = m_language == ApiLanguage::CPP ? "C++" : "Python";
     os << "Language: " << language << std::endl;
-    os << "OS: " << getOSName() << std::endl;
+    os << "OS: " << Utils::OS::getName(m_os) << std::endl;
 }
