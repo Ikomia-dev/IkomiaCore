@@ -53,6 +53,8 @@ add_library(ikUtils SHARED
     base64.hpp
     qaesencryption.cpp
     qaesencryption.h
+    CSemanticVersion.h
+    CSemanticVersion.cpp
 )
 
 set_target_properties(ikUtils PROPERTIES VERSION ${IKOMIA_VERSION} SOVERSION ${IKOMIA_VERSION})
@@ -69,6 +71,7 @@ set(PUBLIC_HEADERS_UTILS
     CProgressSignalHandler.h
     CWindowsDeviceEnumerator.h
     PythonThread.hpp
+    CSemanticVersion.h
 )
 
 set(PUBLIC_HEADERS_DESIGN_PATTERN

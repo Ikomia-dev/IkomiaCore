@@ -48,6 +48,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <QRegularExpression>
+#include "CSemanticVersion.h"
 
 //Avoid conflict with Qt slots keyword
 #undef slots
@@ -1167,13 +1168,17 @@ namespace Ikomia
             inline PluginState  getCppState(const QString& version)
             {
                 const std::set<QString> breakChanges = {"0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0", "0.6.1", "0.7.0", "0.8.0", "0.8.1", "0.9.0", "0.10.0"};
+                CSemanticVersion algoVersion(version.toStdString());
+
                 for(auto it=breakChanges.begin(); it!=breakChanges.end(); ++it)
                 {
-                    if(version < *it)
+                    CSemanticVersion breakChangesVersion((*it).toStdString());
+                    if(algoVersion < breakChangesVersion)
                         return PluginState::DEPRECATED;
                 }
 
-                if(version > Utils::IkomiaApp::getCurrentVersionNumber())
+                CSemanticVersion currentVersion(Utils::IkomiaApp::getCurrentVersionNumber().toStdString());
+                if(algoVersion > currentVersion)
                     return PluginState::UPDATED;
 
                 return PluginState::VALID;
@@ -1181,13 +1186,17 @@ namespace Ikomia
             inline PluginState  getPythonState(const QString& version)
             {
                 const std::set<QString> breakChanges = {"0.3.0", "0.6.0", "0.8.0", "0.9.0"};
+                CSemanticVersion algoVersion(version.toStdString());
+
                 for(auto it=breakChanges.begin(); it!=breakChanges.end(); ++it)
                 {
-                    if(version < *it)
+                    CSemanticVersion breakChangesVersion((*it).toStdString());
+                    if(algoVersion < breakChangesVersion)
                         return PluginState::DEPRECATED;
                 }
 
-                if(version > Utils::IkomiaApp::getCurrentVersionNumber())
+                CSemanticVersion currentVersion(Utils::IkomiaApp::getCurrentVersionNumber().toStdString());
+                if(algoVersion > currentVersion)
                     return PluginState::UPDATED;
 
                 return PluginState::VALID;
