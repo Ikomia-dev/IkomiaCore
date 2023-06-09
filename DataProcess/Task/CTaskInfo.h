@@ -25,6 +25,7 @@
 #include <string>
 #include "DataProcessGlobal.hpp"
 #include "UtilsDefine.hpp"
+#include "Main/CoreDefine.hpp"
 
 using namespace Ikomia;
 
@@ -52,17 +53,19 @@ class DATAPROCESSSHARED_EXPORT CTaskInfo
         std::string getKeywords() const;
         std::string getAuthors() const;
         std::string getArticle() const;
+        std::string getArticleUrl() const;
         std::string getJournal() const;
         std::string getVersion() const;
-        std::string getIkomiaVersion() const;
-        std::string getCreatedDate() const;
-        std::string getModifiedDate() const;
+        std::string getIkomiaVersion() const;        
         std::string getLicense() const;
         std::string getRepository() const;
+        std::string getOriginalRepository() const;
         int         getYear() const;
         ApiLanguage getLanguage() const;
         OSType      getOS() const;
         std::string getMinPythonVersion() const;
+        AlgoType    getAlgoType() const;
+        std::string getAlgoTasks() const;
 
         /** @cond INTERNAL */
         bool        isInternal() const;
@@ -77,16 +80,18 @@ class DATAPROCESSSHARED_EXPORT CTaskInfo
         void        setKeywords(const std::string& keywords);
         void        setAuthors(const std::string& authors);
         void        setArticle(const std::string& article);
+        void        setArticleUrl(const std::string& url);
         void        setJournal(const std::string& journal);
         void        setVersion(const std::string& version);
-        void        setCreatedDate(const std::string& date);
-        void        setModifiedDate(const std::string& date);
         void        setLicense(const std::string& license);
         void        setRepository(const std::string& repository);
+        void        setOriginalRepository(const std::string& repository);
         void        setYear(const int year);
-        void        setLanguage(const ApiLanguage language);
-        void        setOS(const OSType os);
+        void        setLanguage(const ApiLanguage& language);
+        void        setOS(const OSType& os);
         void        setMinPythonVersion(const std::string& version);
+        void        setAlgoType(const AlgoType& type);
+        void        setAlgoTasks(const std::string& tasks);
 
         /** @cond INTERNAL */
         void        setInternal(bool bInternal);
@@ -106,26 +111,30 @@ class DATAPROCESSSHARED_EXPORT CTaskInfo
         bool        m_bInternal = true;
         /** @endcond */
 
-        std::string m_name = "";                    /**< Process task name. Must be unique */
-        std::string m_path = "";                    /**< Path in the system tree structure of the process library */
-        std::string m_shortDescription = "";        /**< Short description of the process */
-        std::string m_description = "";             /**< Full description of the process */
-        std::string m_docLink = "";                 /**< Internet link to an associated documentation page */
-        std::string m_iconPath = "";                /**< File path to a custom icon */
-        std::string m_keywords = "";                /**< Keywords associated with the process: useful for search engine */
-        std::string m_authors = "";                 /**< Authors of the process */
-        std::string m_article = "";                 /**< Associated research article */
-        std::string m_journal = "";                 /**< Journal of the article */
+        std::string m_name;                         /**< Process task name. Must be unique */
+        std::string m_path;                         /**< Path in the system tree structure of the process library */
+        std::string m_shortDescription;             /**< Short description of the process */
+        std::string m_description;                  /**< Full description of the process */
+        std::string m_docLink;                      /**< Internet link to an associated documentation page */
+        std::string m_iconPath;                     /**< File path to a custom icon */
+        std::string m_keywords;                     /**< Keywords associated with the process: useful for search engine */
+        std::string m_authors;                      /**< Authors of the process */
+        std::string m_article;                      /**< Associated research article */
+        std::string m_articleUrl;                   /**< Url of artivle */
+        std::string m_journal;                      /**< Journal of the article */
         std::string m_version = "1.0.0";            /**< Version of the implementation */
-        std::string m_ikomiaVersion = "";           /**< Version of the Ikomia APP & API */
-        std::string m_createdDate = "";             /**< Date of creation */
-        std::string m_modifiedDate = "";            /**< Date of modification */
-        std::string m_license = "";                 /**< Algorithm licence */
-        std::string m_repo = "";                    /**< Original repository */
+        std::string m_minIkomiaVersion;             /**< Version of the Ikomia APP & API */
+        std::string m_license;                      /**< Algorithm licence */
+        std::string m_repo;                         /**< Implementation repository */
+        std::string m_originalRepo;                 /**< Original repository */
+        std::string m_createdDate;
+        std::string m_modifiedDate;
         int         m_year = -1;                    /**< Year of the article or the algorithme */
         ApiLanguage m_language = ApiLanguage::CPP;  /**< Programming language */
         OSType      m_os = OSType::LINUX;           /**< Compatible operating system */
         std::string m_minPythonVersion = "3.7";     /**< Minimum compatible Python version */
+        AlgoType    m_algoType = AlgoType::OTHER;   /**< Type of algorithm */
+        std::string m_algoTasks = "NONE";           /**< Type of tasks adressed: CLASSIFICATION, OBJECT_DETECTION... */
 };
 
 #endif // CTASKINFO_H

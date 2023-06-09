@@ -126,6 +126,14 @@ namespace Ikomia
         AVI, MPEG
     };
 
+    enum class AlgoType : int
+    {
+        INFER,
+        TRAIN,
+        DATASET,
+        OTHER
+    };
+
     /**
      * @brief
      *

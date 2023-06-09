@@ -652,6 +652,25 @@ namespace Ikomia
                 return value;
             }
         }
+
+        namespace Algo
+        {
+            inline std::string getTypeName(const AlgoType& type)
+            {
+                switch(type)
+                {
+                    case AlgoType::INFER:
+                        return "INFERENCE";
+                    case AlgoType::TRAIN:
+                        return "TRAIN";
+                    case AlgoType::DATASET:
+                        return "DATASET";
+                    case AlgoType::OTHER:
+                    default:
+                        return "OTHER";
+                }
+            }
+        }
     }
 }
 
