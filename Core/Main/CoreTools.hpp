@@ -365,6 +365,8 @@ namespace Ikomia
                         return QObject::tr("binary volume");
                     case IODataType::VOLUME_LABEL:
                         return QObject::tr("label volume");
+                    case IODataType::POSITION:
+                        return QObject::tr("position image sequence");
                     case IODataType::INPUT_GRAPHICS:
                     case IODataType::OUTPUT_GRAPHICS:
                         return QObject::tr("graphics");
@@ -433,6 +435,8 @@ namespace Ikomia
                         return "IODataType.VOLUME_BINARY";
                     case IODataType::VOLUME_LABEL:
                         return "IODataType.VOLUME_LABEL";
+                    case IODataType::POSITION:
+                        return "IODataType.POSITION";
                     case IODataType::INPUT_GRAPHICS:
                         return "IODataType.INPUT_GRAPHICS";
                     case IODataType::OUTPUT_GRAPHICS:
@@ -568,6 +572,10 @@ namespace Ikomia
                 {
                     return (targetData == IODataType::IMAGE ||
                             targetData == IODataType::IMAGE_LABEL);
+                }
+                else if(srcData == IODataType::POSITION)
+                {
+                    return targetData == IODataType::IMAGE;
                 }
                 else if(srcData == IODataType::VIDEO)
                 {

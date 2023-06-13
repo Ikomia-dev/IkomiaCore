@@ -285,6 +285,7 @@ std::string CWorkflowTaskIO::getClassName(IODataType ioDataType)
         case IODataType::VOLUME:
         case IODataType::VOLUME_BINARY:
         case IODataType::VOLUME_LABEL:
+        case IODataType::POSITION:
         case IODataType::DESCRIPTORS:
             return "CImageIO";
 
