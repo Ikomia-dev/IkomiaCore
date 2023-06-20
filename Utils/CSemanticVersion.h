@@ -27,7 +27,17 @@ class CSemanticVersion
         bool operator==(const CSemanticVersion& rhs) const;
         bool operator!=(const CSemanticVersion& rhs) const;
 
+        void        nextMajor();
+        void        nextMinor();
+        void        nextPatch();
+
+        std::string toString() const;
+
         friend std::istream& operator>>(std::istream& str, VersionDigit& digit);
+
+    private:
+
+        void        updateString();
 
     private:
 
