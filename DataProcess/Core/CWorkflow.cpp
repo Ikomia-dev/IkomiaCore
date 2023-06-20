@@ -1914,7 +1914,7 @@ void CWorkflow::saveJSON(const std::string& path)
 
     // API
     QJsonObject apiInfo;
-    apiInfo["version"] = Utils::IkomiaApp::getCurrentVersionName();
+    apiInfo["version"] = QString::fromStdString(Utils::IkomiaApp::getCurrentVersionName());
     jsonWorkflow["api"] = apiInfo;
 
     // Metadata

@@ -48,7 +48,6 @@ BOOST_PYTHON_MODULE(pyutils)
     enum_<PluginState>("PluginState", "Enum - List of plugin states for version compatibility")
         .value("VALID", PluginState::VALID)
         .value("DEPRECATED", PluginState::DEPRECATED)
-        .value("UPDATED", PluginState::UPDATED)
         .value("INVALID", PluginState::INVALID)
     ;
 
@@ -65,8 +64,7 @@ BOOST_PYTHON_MODULE(pyutils)
     ;
 
     def("get_api_version", &Utils::Plugin::getCurrentApiVersion, _getCurrentVersionDocString);
-    def("get_compatibility_state", &Utils::Plugin::getCompatibilityState, _pythonStateDocString, args("version", "language"));
-    def("check_architecture_keywords", &Utils::Plugin::checkArchitectureKeywords, _checkArchiKeywordsDocString, args("keywords"));
+    def("get_compatibility_state", &Utils::Plugin::getApiCompatibilityState, _pythonStateDocString, args("version", "language"));
     def("is_app_started", &Utils::IkomiaApp::isAppStarted, "Internal use only");
     def("get_model_hub_url", &Utils::Plugin::getModelHubUrl, _getModelHubUrlDocString);
 

@@ -25,6 +25,7 @@
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
+#include <boost/predef.h>
 #include <QDebug>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -127,6 +128,34 @@ namespace Ikomia
         {
             using namespace boost::python;
 
+            inline std::string  getVersion()
+            {
+                CPyEnsureGIL gil;
+                object main_module = import("__main__");
+                object main_namespace = main_module.attr("__dict__");
+
+                str code
+                (
+                    "import sys\n\n"
+                    "major, minor, patch, _, _ = sys.version_info\n"
+                );
+                exec(code, main_namespace, main_namespace);
+                object bpMajor = main_namespace["major"];
+                object bpMinor = main_namespace["minor"];
+                object bpPatch = main_namespace["patch"];
+                int major = extract<int>(bpMajor);
+                int minor = extract<int>(bpMinor);
+                int patch = extract<int>(bpPatch);
+                return std::to_string(major) + "." + std::to_string(minor) + "." + std::to_string(patch);
+            }
+            inline std::string  getMinSupportedVersion()
+            {
+                return "3.7.0";
+            }
+            inline std::string  getMaxSupportedVersion()
+            {
+                return "3.10.0";
+            }
             inline std::string  getExceptionType(PyObject *pType)
             {
                 std::string ret;
@@ -486,11 +515,11 @@ namespace Ikomia
                 return ""; // TODO
     #endif
             }
-            inline QString      getCurrentVersionNumber()
+            inline std::string  getCurrentVersionNumber()
             {
                 return "0.10.0";
             }
-            inline QString      getCurrentVersionName()
+            inline std::string  getCurrentVersionName()
             {
                 return "0.10.0";
             }
@@ -510,7 +539,7 @@ namespace Ikomia
 
         namespace OS
         {
-            inline OSType   getCurrent()
+            inline OSType       getCurrent()
             {
                 #if defined(Q_OS_LINUX)
                     return OSType::LINUX;
@@ -522,7 +551,7 @@ namespace Ikomia
                     return OSType::NONE;
                 #endif
             }
-            inline void     openUrl(const std::string& url)
+            inline void         openUrl(const std::string& url)
             {
                 bool bGuiStarted = Utils::IkomiaApp::isAppStarted();
                 if(bGuiStarted)
@@ -548,7 +577,7 @@ namespace Ikomia
                     proc.waitForFinished();
                 }
             }
-            inline std::string getName(OSType type)
+            inline std::string  getName(OSType type)
             {
                 std::string osName = "ALL";
                 switch(type)
@@ -567,6 +596,61 @@ namespace Ikomia
                         break;
                 }
                 return osName;
+            }
+            inline CpuArch      getCpuArch()
+            {
+                #if BOOST_ARCH_X86
+                    #if BOOST_ARCH_X86_64
+                        return CpuArch::X86_64;
+                    #else
+                        return CpuArch::NOT_SUPPORTED;
+                    #endif
+                #elif BOOST_ARCH_ARM
+                    #if BOOST_ARCH_ARM > BOOST_VERSION_NUMBER(8, 0, 0)
+                        #if BOOST_ARCH_WORD_BITS == 64
+                            return CpuArch::ARM_64;
+                        #elif BOOST_ARCH_WORD_BITS == 32
+                            return CpuArch::ARM_32;
+                        #else
+                            return CpuArch::NOT_SUPPORTED;
+                        #endif
+                    #else
+                        return CpuArch::NOT_SUPPORTED;
+                    #endif
+                #else
+                    return CpuArch::NOT_SUPPORTED;
+                #endif
+            }
+            inline std::string  getCpuArchName(CpuArch arch)
+            {
+                std::string archName;
+                switch(arch)
+                {
+                    case CpuArch::X86_64:
+                        archName = "X86_64";
+                        break;
+                    case CpuArch::ARM_64:
+                        archName = "ARM_64";
+                        break;
+                    case CpuArch::ARM_32:
+                        archName = "ARM_32";
+                        break;
+                    case CpuArch::NOT_SUPPORTED:
+                        archName = "";
+                }
+                return archName;
+            }
+            inline std::string  getCudaVersionName()
+            {
+                #if defined(CUDA10)
+                    return "CUDA10";
+                #elif defined(CUDA11)
+                    return "CUDA11";
+                #elif defined(CUDA12)
+                    return "CUDA12";
+                #else
+                    return "";
+                #endif
             }
         }
 
@@ -697,6 +781,12 @@ namespace Ikomia
             inline std::string toCamelCase(const std::string& str)
             {
                 return toCamelCase(QString::fromStdString(str)).toStdString();
+            }
+            inline std::string toLower(const std::string& str)
+            {
+                std::string lower(str);
+                std::transform(lower.begin(), lower.end(), lower.begin(), [](unsigned char c){ return std::tolower(c); });
+                return lower;
             }
         }
 
@@ -1165,48 +1255,60 @@ namespace Ikomia
             {
                 return IkomiaApp::getIkomiaFolder() + "/Plugins/C++";
             }
-            inline PluginState  getCppState(const QString& version)
+            inline PluginState  getCppApiState(const std::string& minVersion, const std::string& maxVersion)
             {
-                const std::set<QString> breakChanges = {"0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0", "0.6.1", "0.7.0", "0.8.0", "0.8.1", "0.9.0", "0.10.0"};
-                CSemanticVersion algoVersion(version.toStdString());
+                const std::set<std::string> breakChanges = {"0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0", "0.6.1", "0.7.0", "0.8.0", "0.8.1", "0.9.0", "0.10.0"};
+                CSemanticVersion algoMinVersion(minVersion);
 
                 for(auto it=breakChanges.begin(); it!=breakChanges.end(); ++it)
                 {
-                    CSemanticVersion breakChangesVersion((*it).toStdString());
-                    if(algoVersion < breakChangesVersion)
+                    CSemanticVersion breakChangesVersion((*it));
+                    if(algoMinVersion < breakChangesVersion)
                         return PluginState::DEPRECATED;
                 }
 
-                CSemanticVersion currentVersion(Utils::IkomiaApp::getCurrentVersionNumber().toStdString());
-                if(algoVersion > currentVersion)
-                    return PluginState::UPDATED;
+                CSemanticVersion currentVersion(Utils::IkomiaApp::getCurrentVersionNumber());
+                if(algoMinVersion > currentVersion)
+                    return PluginState::INVALID;
 
+                if (maxVersion.empty() == false)
+                {
+                    CSemanticVersion algoMaxVersion(maxVersion);
+                    if (algoMaxVersion < currentVersion)
+                        return PluginState::INVALID;
+                }
                 return PluginState::VALID;
             }
-            inline PluginState  getPythonState(const QString& version)
+            inline PluginState  getPythonApiState(const std::string& minVersion, const std::string& maxVersion)
             {
-                const std::set<QString> breakChanges = {"0.3.0", "0.6.0", "0.8.0", "0.9.0"};
-                CSemanticVersion algoVersion(version.toStdString());
+                const std::set<std::string> breakChanges = {"0.3.0", "0.6.0", "0.8.0", "0.9.0"};
+                CSemanticVersion algoMinVersion(minVersion);
 
                 for(auto it=breakChanges.begin(); it!=breakChanges.end(); ++it)
                 {
-                    CSemanticVersion breakChangesVersion((*it).toStdString());
-                    if(algoVersion < breakChangesVersion)
+                    CSemanticVersion breakChangesVersion((*it));
+                    if(algoMinVersion < breakChangesVersion)
                         return PluginState::DEPRECATED;
                 }
 
-                CSemanticVersion currentVersion(Utils::IkomiaApp::getCurrentVersionNumber().toStdString());
-                if(algoVersion > currentVersion)
-                    return PluginState::UPDATED;
+                CSemanticVersion currentVersion(Utils::IkomiaApp::getCurrentVersionNumber());
+                if(algoMinVersion > currentVersion)
+                    return PluginState::INVALID;
 
+                if (maxVersion.empty() == false)
+                {
+                    CSemanticVersion algoMaxVersion(maxVersion);
+                    if (algoMaxVersion < currentVersion)
+                        return PluginState::INVALID;
+                }
                 return PluginState::VALID;
             }
-            inline PluginState  getCompatibilityState(const std::string& version, ApiLanguage language)
+            inline PluginState  getApiCompatibilityState(const std::string& minVersion, const std::string& maxVersion, ApiLanguage language)
             {
                 if(language == ApiLanguage::CPP)
-                    return getCppState(QString::fromStdString(version));
+                    return getCppApiState(minVersion, maxVersion);
                 else if(language == ApiLanguage::PYTHON)
-                    return getPythonState(QString::fromStdString(version));
+                    return getPythonApiState(minVersion, maxVersion);
                 else
                     return PluginState::INVALID;
             }
@@ -1218,51 +1320,7 @@ namespace Ikomia
             {
                 return "https://s3.eu-west-3.amazonaws.com/models.ikomia.com";
             }
-            inline std::string  getArchitectureKeywords()
-            {
-#ifdef PY37
-    #ifdef CUDA10
-                return "python37,cuda10";
-    #elif CUDA11
-                return "python37,cuda11";
-    #else
-                return "python37,cpu";
-    #endif
-#elif PY38
-    #ifdef CUDA10
-                return "python38,cuda10";
-    #elif CUDA11
-                return "python38,cuda11";
-    #else
-                return "python38,cpu";
-    #endif
-#elif PY39
-    #ifdef CUDA10
-                return "python39,cuda10";
-    #elif CUDA11
-                return "python39,cuda11";
-    #else
-                return "python39,cpu";
-    #endif
-#elif PY310
-    #ifdef CUDA10
-                return "python310,cuda10";
-    #elif CUDA11
-                return "python310,cuda11";
-    #else
-                return "python310,cpu";
-    #endif
-#else
-                return "";
-#endif
-            }
-            inline bool         checkArchitectureKeywords(const std::string& keywords)
-            {
-                std::string archiKeywords = getArchitectureKeywords();
-                std::size_t found = keywords.find(archiKeywords);
-                return (found != std::string::npos);
-            }
-            inline std::string  getLanguageName(ApiLanguage language)
+            inline std::string  getLanguageString(ApiLanguage language)
             {
                 std::string name;
                 switch(language)
@@ -1271,6 +1329,52 @@ namespace Ikomia
                     case ApiLanguage::PYTHON: name = "PYTHON"; break;
                 }
                 return name;
+            }
+            inline std::string  getLicenseString(License license)
+            {
+                std::string name;
+                switch(license)
+                {
+                    case CUSTOM: name = "CUSTOM"; break;
+                    case AGPL_30: name = "AGPL_30"; break;
+                    case APACHE_20: name = "APACHE_20"; break;
+                    case BSD_2_CLAUSE: name = "BSD_2_CLAUSE"; break;
+                    case BSD_3_CLAUSE: name = "BSD_3_CLAUSE"; break;
+                    case CC0_10: name = "CC0_10"; break;
+                    case CC_BY_NC_40: name = "CC_BY_NC_40"; break;
+                    case GPL_30: name = "GPL_30"; break;
+                    case LGPL_30: name = "LGPL_30"; break;
+                    case MIT: name = "MIT"; break;
+                }
+                return name;
+            }
+            inline License      getLicenseFromName(const std::string& name)
+            {
+                std::string licenseStr = Utils::String::toLower(name);
+                if (licenseStr.find("mit") != std::string::npos)
+                    return License::MIT;
+                else if (licenseStr.find("agpl") != std::string::npos || licenseStr.find("affero") != std::string::npos)
+                    return License::AGPL_30;
+                else if (licenseStr.find("gpl") != std::string::npos || licenseStr.find("gnu") != std::string::npos)
+                    return License::GPL_30;
+                else if (licenseStr.find("apache") != std::string::npos)
+                    return License::APACHE_20;
+                else if (licenseStr.find("bsd") != std::string::npos)
+                {
+                    if (licenseStr.find("2-clause") != std::string::npos)
+                        return License::BSD_2_CLAUSE;
+                    else
+                        return License::BSD_3_CLAUSE;
+                }
+                else if (licenseStr.find("creative") != std::string::npos || licenseStr.find("cc") != std::string::npos)
+                {
+                    if (licenseStr.find("nc") != std::string::npos || licenseStr.find("non commercial") != std::string::npos)
+                        return License::CC_BY_NC_40;
+                    else
+                        return License::CC0_10;
+                }
+                else
+                    return License::CUSTOM;
             }
         }
 
