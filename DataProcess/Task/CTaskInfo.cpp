@@ -23,7 +23,7 @@
 
 CTaskInfo::CTaskInfo()
 {
-    m_minIkomiaVersion = Utils::IkomiaApp::getCurrentVersionNumber().toStdString();
+    m_minIkomiaVersion = Utils::IkomiaApp::getCurrentVersionNumber();
 }
 
 std::string CTaskInfo::getName() const
@@ -86,9 +86,24 @@ std::string CTaskInfo::getVersion() const
     return m_version;
 }
 
-std::string CTaskInfo::getIkomiaVersion() const
+std::string CTaskInfo::getMinIkomiaVersion() const
 {
     return m_minIkomiaVersion;
+}
+
+std::string CTaskInfo::getMaxIkomiaVersion() const
+{
+    return m_maxIkomiaVersion;
+}
+
+std::string CTaskInfo::getMinPythonVersion() const
+{
+    return m_minPythonVersion;
+}
+
+std::string CTaskInfo::getMaxPythonVersion() const
+{
+    return m_maxPythonVersion;
 }
 
 std::string CTaskInfo::getLicense() const
@@ -119,11 +134,6 @@ ApiLanguage CTaskInfo::getLanguage() const
 OSType CTaskInfo::getOS() const
 {
     return m_os;
-}
-
-std::string CTaskInfo::getMinPythonVersion() const
-{
-    return m_minPythonVersion;
 }
 
 AlgoType CTaskInfo::getAlgoType() const
@@ -196,9 +206,34 @@ void CTaskInfo::setJournal(const std::string &journal)
     m_journal = journal;
 }
 
+void CTaskInfo::setYear(const int year)
+{
+    m_year = year;
+}
+
 void CTaskInfo::setVersion(const std::string &version)
 {
     m_version = version;
+}
+
+void CTaskInfo::setMinIkomiaVersion(const std::string &version)
+{
+    m_minIkomiaVersion = version;
+}
+
+void CTaskInfo::setMaxIkomiaVersion(const std::string &version)
+{
+    m_maxIkomiaVersion = version;
+}
+
+void CTaskInfo::setMinPythonVersion(const std::string &version)
+{
+    m_minPythonVersion = version;
+}
+
+void CTaskInfo::setMaxPythonVersion(const std::string &version)
+{
+    m_maxPythonVersion = version;
 }
 
 void CTaskInfo::setLicense(const std::string& license)
@@ -216,11 +251,6 @@ void CTaskInfo::setOriginalRepository(const std::string &repository)
     m_originalRepo = repository;
 }
 
-void CTaskInfo::setYear(const int year)
-{
-    m_year = year;
-}
-
 void CTaskInfo::setLanguage(const ApiLanguage &language)
 {
     m_language = language;
@@ -231,11 +261,6 @@ void CTaskInfo::setOS(const OSType &os)
     m_os = os;
 }
 
-void CTaskInfo::setMinPythonVersion(const std::string &version)
-{
-    m_minPythonVersion = version;
-}
-
 void CTaskInfo::setAlgoType(const AlgoType &type)
 {
     m_algoType = type;
@@ -244,11 +269,6 @@ void CTaskInfo::setAlgoType(const AlgoType &type)
 void CTaskInfo::setAlgoTasks(const std::string &tasks)
 {
     m_algoTasks = tasks;
-}
-
-void CTaskInfo::setInternal(bool bInternal)
-{
-    m_bInternal = bInternal;
 }
 
 std::ostream& operator<<(std::ostream& os, const CTaskInfo& info)
