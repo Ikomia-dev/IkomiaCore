@@ -138,7 +138,6 @@ void CIkomiaRegistry::registerIO(const TaskIOFactoryPtr &factoryPtr)
 
 void CIkomiaRegistry::loadPlugins()
 {
-    // TODO: manage lazy loading system
     loadCppPlugins();
     loadPythonPlugins();
     m_bAllLoaded = true;

@@ -1355,6 +1355,8 @@ namespace Ikomia
                     return License::MIT;
                 else if (licenseStr.find("agpl") != std::string::npos || licenseStr.find("affero") != std::string::npos)
                     return License::AGPL_30;
+                else if (licenseStr.find("lgpl") != std::string::npos || licenseStr.find("lesser") != std::string::npos)
+                    return License::LGPL_30;
                 else if (licenseStr.find("gpl") != std::string::npos || licenseStr.find("gnu") != std::string::npos)
                     return License::GPL_30;
                 else if (licenseStr.find("apache") != std::string::npos)

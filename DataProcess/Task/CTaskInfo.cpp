@@ -291,7 +291,7 @@ void CTaskInfo::to_ostream(std::ostream &os) const
     os << "Article link: " << m_articleUrl << std::endl;
     os << "Journal/conference: " << m_journal << std::endl;
     os << "Year: " << std::to_string(m_year) << std::endl;
-    os << "Type: " << Utils::Algo::getTypeName(m_algoType) << std::endl;
+    os << "Type: " << Utils::Plugin::getAlgoTypeString(m_algoType) << std::endl;
     os << "Tasks: " << m_algoTasks << std::endl;
     os << "Version: " << m_version << std::endl;
     os << "Ikomia minimum version: " << m_minIkomiaVersion << std::endl;
