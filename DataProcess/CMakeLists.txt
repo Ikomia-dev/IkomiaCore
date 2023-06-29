@@ -31,6 +31,8 @@ add_library(ikDataProcess SHARED
     IO/CImageIO.h
     IO/CInstanceSegIO.cpp
     IO/CInstanceSegIO.h
+    IO/CJsonIO.cpp
+    IO/CJsonIO.h
     IO/CKeypointsIO.cpp
     IO/CKeypointsIO.h
     IO/CNumericIO.cpp
@@ -477,6 +479,7 @@ set(PUBLIC_HEADERS_IO
     IO/CInstanceSegIO.h
     IO/CSemanticSegIO.h
     IO/CTextIO.h
+    IO/CJsonIO.h
 )
 
 set(PUBLIC_HEADERS_PROCESS
