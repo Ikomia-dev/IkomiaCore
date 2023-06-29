@@ -338,6 +338,9 @@ std::string CWorkflowTaskIO::getClassName(IODataType ioDataType)
         case IODataType::TEXT:
             return "CTextIO";
 
+        case IODataType::JSON:
+            return "CJsonIO";
+
         default: return "";
     }
 }

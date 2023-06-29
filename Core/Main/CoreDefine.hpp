@@ -86,6 +86,7 @@ namespace Ikomia
         KEYPOINTS,              /**< I/O for keypoints management */
         TEXT,                   /**< I/O for text fields management */
         POSITION,               /**< Position image sequence */
+        JSON,                   /**< JSON data */
         NONE                    /**< Unknown data type */
     };
 
