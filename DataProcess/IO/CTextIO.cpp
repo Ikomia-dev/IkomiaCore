@@ -195,8 +195,11 @@ GraphicsOutputPtr CTextIO::getGraphicsIO() const
     return m_graphicsIOPtr;
 }
 
-CTextIO::DataStringIOPtr CTextIO::getDataStringIO() const
+CTextIO::DataStringIOPtr CTextIO::getDataStringIO()
 {
+    if (m_textDataIOPtr->isDataAvailable() == false)
+        finalize();
+
     return m_textDataIOPtr;
 }
 
