@@ -27,6 +27,7 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
         std::vector<CColor>             getColors() const;
         ImageIOPtr                      getMaskImageIO() const;
         ImageIOPtr                      getLegendImageIO() const;
+        InputOutputVect                 getSubIOList(const std::set<IODataType> &dataTypes) const override;
 
         void                            setMask(const CMat& mask);
         void                            setClassNames(const std::vector<std::string>& names);

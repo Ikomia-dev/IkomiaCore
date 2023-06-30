@@ -69,6 +69,7 @@ class DATAPROCESSSHARED_EXPORT CTextIO: public CWorkflowTaskIO
         CDataInfoPtr                getDataInfo() override;
         GraphicsOutputPtr           getGraphicsIO() const;
         DataStringIOPtr             getDataStringIO() const;
+        InputOutputVect             getSubIOList(const std::set<IODataType> &dataTypes) const override;
 
         bool                        isDataAvailable() const override;
         bool                        isComposite() const override;

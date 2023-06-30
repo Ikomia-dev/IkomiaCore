@@ -85,6 +85,19 @@ ImageIOPtr CSemanticSegIO::getLegendImageIO() const
     return m_imgLegendIOPtr;
 }
 
+InputOutputVect CSemanticSegIO::getSubIOList(const std::set<IODataType> &dataTypes) const
+{
+    InputOutputVect ioList;
+
+    auto it = dataTypes.find(IODataType::IMAGE);
+    if(it != dataTypes.end())
+    {
+        ioList.push_back(m_imgMaskIOPtr);
+        ioList.push_back(m_imgLegendIOPtr);
+    }
+    return ioList;
+}
+
 void CSemanticSegIO::setMask(const CMat &mask)
 {
     m_imgMaskIOPtr->setImage(mask);

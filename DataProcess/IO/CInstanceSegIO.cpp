@@ -183,6 +183,25 @@ CMat CInstanceSegIO::getMergeMask() const
     return m_imgIOPtr->getImage();
 }
 
+InputOutputVect CInstanceSegIO::getSubIOList(const std::set<IODataType> &dataTypes) const
+{
+    InputOutputVect ioList;
+
+    auto it = dataTypes.find(IODataType::IMAGE);
+    if(it != dataTypes.end())
+        ioList.push_back(m_imgIOPtr);
+
+    it = dataTypes.find(IODataType::OUTPUT_GRAPHICS);
+    if(it != dataTypes.end())
+        ioList.push_back(m_graphicsIOPtr);
+
+    it = dataTypes.find(IODataType::BLOB_VALUES);
+    if(it != dataTypes.end())
+        ioList.push_back(m_blobMeasureIOPtr);
+
+    return ioList;
+}
+
 bool CInstanceSegIO::isDataAvailable() const
 {
     return m_instances.size() > 0;

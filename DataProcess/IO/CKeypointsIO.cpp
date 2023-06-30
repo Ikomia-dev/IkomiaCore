@@ -420,6 +420,25 @@ std::vector<std::string> CKeypointsIO::getKeypointNames() const
     return m_keyptsNames;
 }
 
+InputOutputVect CKeypointsIO::getSubIOList(const std::set<IODataType> &dataTypes) const
+{
+    InputOutputVect ioList;
+
+    auto it = dataTypes.find(IODataType::OUTPUT_GRAPHICS);
+    if(it != dataTypes.end())
+        ioList.push_back(m_graphicsIOPtr);
+
+    it = dataTypes.find(IODataType::BLOB_VALUES);
+    if(it != dataTypes.end())
+        ioList.push_back(m_objMeasureIOPtr);
+
+    it = dataTypes.find(IODataType::NUMERIC_VALUES);
+    if(it != dataTypes.end())
+        ioList.push_back(m_keyptsLinkIOPtr);
+
+    return ioList;
+}
+
 void CKeypointsIO::init(const std::string &taskName, int imageIndex)
 {
     clearData();

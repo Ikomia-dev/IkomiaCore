@@ -63,6 +63,34 @@ size_t CWorkflowTaskIOWrap::default_getUnitElementCount() const
     }
 }
 
+InputOutputVect CWorkflowTaskIOWrap::getSubIOList(const std::set<IODataType> &dataTypes) const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override getOver = this->get_override("get_sub_io_list"))
+            return getOver();
+        return CWorkflowTaskIO::getSubIOList(dataTypes);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+InputOutputVect CWorkflowTaskIOWrap::default_getSubIOList(const std::set<IODataType> &dataTypes) const
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        return this->CWorkflowTaskIO::getSubIOList(dataTypes);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 bool CWorkflowTaskIOWrap::isDataAvailable() const
 {
     CPyEnsureGIL gil;

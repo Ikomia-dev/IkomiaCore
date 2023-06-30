@@ -37,6 +37,9 @@ class CWorkflowTaskIOWrap : public CWorkflowTaskIO, public wrapper<CWorkflowTask
         size_t      getUnitElementCount() const override;
         size_t      default_getUnitElementCount() const;
 
+        InputOutputVect getSubIOList(const std::set<IODataType> &dataTypes) const override;
+        InputOutputVect default_getSubIOList(const std::set<IODataType> &dataTypes) const;
+
         bool        isDataAvailable() const override;
         bool        default_isDataAvailable() const;
 
