@@ -124,6 +124,42 @@ void CJsonIO::save(const std::string &path)
     );
 }
 
+// FIXME : this method is set for compatibility with the 'doDisplayText' signal
+// It will be able to removed if a specific doDisplayJson is created
+std::string CJsonIO::toJson() const
+{
+    std::vector<std::string> options = {"json_format", "indented"};
+    return toJson(options);
+}
+
+// FIXME : this method is set for compatibility with the 'doDisplayText' signal
+// It will be able to removed if a specific doDisplayJson is created
+std::string CJsonIO::toJson(const std::vector<std::string>& options) const
+{
+    // By default, the JSON output is 'compact'
+    QJsonDocument::JsonFormat format = QJsonDocument::Compact;
+
+    // We check if the option 'json_format' is defined into the option list
+    if(std::find(options.begin(), options.end(), "json_format") == options.end())
+    {
+        // This method intends to arrange data in a JSON form but the option
+        // 'json_format' was not found inside 'options': an exception is thrown
+        throw CException(
+            CoreExCode::INVALID_PARAMETER,
+            "The option 'json_format' was not set inside the option list",
+            __func__, __FILE__, __LINE__
+        );
+    }
+
+    // If 'indented' is defined inside 'options' then we modify the output's style
+    if(std::find(options.begin(), options.end(), "indented") != options.end())
+    {
+        format = QJsonDocument::Indented;
+    }
+
+    return toString(format);
+}
+
 std::string CJsonIO::toString(QJsonDocument::JsonFormat format) const
 {
     return m_rootJSON.toJson(format).toStdString();

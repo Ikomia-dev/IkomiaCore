@@ -119,6 +119,18 @@ class DATAPROCESSSHARED_EXPORT CJsonIO: public CWorkflowTaskIO
         void save(const std::string &path) override;
 
         /**
+         * @brief Convert the JSON tree to a string. This is a convenient function, created for
+         * compatibility with the 'doDisplayText' signal.
+         */
+        std::string toJson() const;
+
+        /**
+         * @brief Convert the JSON tree to a string. This is a convenient function, created for
+         * compatibility with the 'doDisplayText' signal.
+         */
+        std::string toJson(const std::vector<std::string>& options) const;
+
+        /**
          * @brief Converts the JSON tree to a string.
          * @details Indentation of the result string can be controlled by the 'format' parameter.
          * @param format: QJsonDocument::Compact = no indent / QJsonDocument::Indent = default indentation
