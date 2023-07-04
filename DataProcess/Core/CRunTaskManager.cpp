@@ -22,6 +22,7 @@
 #include "IO/CGraphicsOutput.h"
 #include "IO/CVideoIO.h"
 #include "Main/CoreTools.hpp"
+#include "DataProcessTools.hpp"
 
 CRunTaskManager::CRunTaskManager()
 {
@@ -225,18 +226,17 @@ void CRunTaskManager::saveVideoOutputs(const WorkflowTaskPtr &taskPtr, const std
             if(outputPtr->isWriteStarted() == false)
                 outputPtr->startVideoWrite(img.getNbCols(), img.getNbRows(), infoPtr->m_frameCount, infoPtr->m_fps, infoPtr->m_fourcc, m_timeout);
 
-            if(bEmbedGraphics && graphicsOutputs.size() > 0)
+            if(bEmbedGraphics)
             {
                 for(size_t j=0; j<graphicsOutputs.size(); ++j)
                 {
                     auto graphicsOutPtr = std::static_pointer_cast<CGraphicsOutput>(graphicsOutputs[j]);
                     if(graphicsOutPtr->getImageIndex() == (int)i)
-                    {
-                        CGraphicsConversion graphicsConv((int)img.getNbCols(), (int)img.getNbRows());
-                        for(auto it : graphicsOutPtr->getItems())
-                            it->insertToImage(img, graphicsConv, false, false);
-                    }
+                        Utils::Image::burnGraphics(img, graphicsOutPtr->getItems());
                 }
+
+                if (outputPtr->isOverlayAvailable())
+                    img = Utils::Image::mergeColorMask(img, outputPtr->getOverlayMask(), 0.7, true);
             }
             outputPtr->writeImage(img);
         }
