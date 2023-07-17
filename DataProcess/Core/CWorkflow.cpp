@@ -1900,6 +1900,12 @@ void CWorkflow::load(const std::string &path)
 
 void CWorkflow::saveJSON(const std::string& path)
 {
+    if (m_name.empty() || m_name == "untitled")
+    {
+        // Set name with filename
+        m_name = Utils::File::getFileNameWithoutExtension(path);
+    }
+
     Utils::File::createDirectory(Utils::File::getParentPath(path));
     QFile jsonFile(QString::fromStdString(path));
 
