@@ -677,6 +677,12 @@ namespace Ikomia
             {
                 return toCamelCase(QString::fromStdString(str)).toStdString();
             }
+            inline std::string toLower(const std::string& str)
+            {
+                std::string strLower = str;
+                std::transform(strLower.begin(), strLower.end(), strLower.begin(), ::tolower);
+                return strLower;
+            }
         }
 
         namespace Database
@@ -847,12 +853,12 @@ namespace Ikomia
         }
 
         namespace File
-        {
+        {            
             inline std::string extension(const std::string &fileName)
             {
                 boost::filesystem::path file(fileName);
                 std::string ext = file.extension().string();
-                std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+                ext = Utils::String::toLower(ext);
                 return ext;
             }
 
