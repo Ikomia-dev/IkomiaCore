@@ -98,6 +98,11 @@ InputOutputVect CSemanticSegIO::getSubIOList(const std::set<IODataType> &dataTyp
     return ioList;
 }
 
+int CSemanticSegIO::getReferenceImageIndex() const
+{
+    return m_refImageIndex;
+}
+
 void CSemanticSegIO::setMask(const CMat &mask)
 {
     m_imgMaskIOPtr->setImage(mask);
@@ -123,6 +128,11 @@ void CSemanticSegIO::setClassColors(const std::vector<CColor> &colors)
         throw CException(CoreExCode::INVALID_SIZE, "Colors count must be greater or equal of class names count", __func__, __FILE__, __LINE__);
 
     m_colors = colors;
+}
+
+void CSemanticSegIO::setReferenceImageIndex(int index)
+{
+    m_refImageIndex = index;
 }
 
 bool CSemanticSegIO::isDataAvailable() const
@@ -250,6 +260,7 @@ QJsonObject CSemanticSegIO::toJsonInternal(const std::vector<std::string> &optio
         colors.append(obj);
     }
     root["colors"] = colors;
+    root["referenceImageIndex"] = m_refImageIndex;
     return root;
 }
 

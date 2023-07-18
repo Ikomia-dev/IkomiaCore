@@ -513,6 +513,7 @@ QJsonObject CKeypointsIO::toJsonInternal() const
     root["objects"] = objects;
     root["names"] = keyptNames;
     root["links"] = keyptLinks;
+    root["referenceImageIndex"] = m_graphicsIOPtr->getImageIndex();
     return root;
 }
 

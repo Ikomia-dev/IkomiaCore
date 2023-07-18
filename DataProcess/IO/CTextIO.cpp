@@ -396,6 +396,7 @@ QJsonObject CTextIO::toJsonInternal() const
 
     QJsonObject root;
     root["fields"] = jsonFields;
+    root["referenceImageIndex"] = m_graphicsIOPtr->getImageIndex();
     return root;
 }
 

@@ -386,6 +386,7 @@ QJsonObject CInstanceSegIO::toJsonInternal(const std::vector<std::string> &optio
     }
     QJsonObject root;
     root["detections"] = objects;
+    root["referenceImageIndex"] = m_graphicsIOPtr->getImageIndex();
     return root;
 }
 

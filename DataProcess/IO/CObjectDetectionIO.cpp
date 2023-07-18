@@ -342,6 +342,7 @@ QJsonObject CObjectDetectionIO::toJsonInternal() const
     }
     QJsonObject root;
     root["detections"] = objects;
+    root["referenceImageIndex"] = m_graphicsIOPtr->getImageIndex();
     return root;
 }
 

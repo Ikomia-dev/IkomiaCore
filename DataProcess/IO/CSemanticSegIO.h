@@ -28,10 +28,12 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
         ImageIOPtr                      getMaskImageIO() const;
         ImageIOPtr                      getLegendImageIO() const;
         InputOutputVect                 getSubIOList(const std::set<IODataType> &dataTypes) const override;
+        int                             getReferenceImageIndex() const;
 
         void                            setMask(const CMat& mask);
         void                            setClassNames(const std::vector<std::string>& names);
         void                            setClassColors(const std::vector<CColor>& colors);
+        void                            setReferenceImageIndex(int index);
 
         bool                            isDataAvailable() const override;
         bool                            isComposite() const override;
@@ -66,6 +68,7 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
         cv::Mat                     m_histo;
         std::shared_ptr<CImageIO>   m_imgMaskIOPtr = nullptr;
         std::shared_ptr<CImageIO>   m_imgLegendIOPtr = nullptr;
+        int                         m_refImageIndex = 0;
 };
 
 using SemanticSegIOPtr = std::shared_ptr<CSemanticSegIO>;

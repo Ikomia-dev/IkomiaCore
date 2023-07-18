@@ -31,6 +31,7 @@ void CSemanticSegTask::endTaskRun()
 
     forwardInputImage(0, 0);
     setOutputColorMap(0, 1, segIOPtr->getColors());
+    segIOPtr->setReferenceImageIndex(0);
     C2dImageTask::endTaskRun();
 }
 
