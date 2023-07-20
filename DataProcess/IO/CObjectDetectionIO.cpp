@@ -168,6 +168,21 @@ BlobMeasureIOPtr CObjectDetectionIO::getBlobMeasureIO() const
     return m_blobMeasureIOPtr;
 }
 
+InputOutputVect CObjectDetectionIO::getSubIOList(const std::set<IODataType> &dataTypes) const
+{
+    InputOutputVect ioList;
+
+    auto it = dataTypes.find(IODataType::OUTPUT_GRAPHICS);
+    if(it != dataTypes.end())
+        ioList.push_back(m_graphicsIOPtr);
+
+    it = dataTypes.find(IODataType::BLOB_VALUES);
+    if(it != dataTypes.end())
+        ioList.push_back(m_blobMeasureIOPtr);
+
+    return ioList;
+}
+
 bool CObjectDetectionIO::isDataAvailable() const
 {
     return m_objects.size() > 0;
@@ -327,6 +342,7 @@ QJsonObject CObjectDetectionIO::toJsonInternal() const
     }
     QJsonObject root;
     root["detections"] = objects;
+    root["referenceImageIndex"] = m_graphicsIOPtr->getImageIndex();
     return root;
 }
 

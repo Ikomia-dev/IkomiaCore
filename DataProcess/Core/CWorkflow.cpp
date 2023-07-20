@@ -1239,13 +1239,7 @@ void CWorkflow::clearOutputDataFrom(const WorkflowVertex &id)
 {
     auto vertexList = getAllChilds(id);
     vertexList.insert(vertexList.begin(), id);
-
-    for(const auto& it : vertexList)
-    {
-        WorkflowTaskPtr taskPtr = m_graph[it];
-        if(it != m_root && taskPtr)
-            taskPtr->clearOutputData();
-    }
+    clearOutputData(vertexList);
 }
 
 void CWorkflow::clearOutputDataTo(const WorkflowVertex &id)
@@ -1253,8 +1247,12 @@ void CWorkflow::clearOutputDataTo(const WorkflowVertex &id)
     std::vector<WorkflowVertex> vertexList;
     getAllParents(id, vertexList);
     vertexList.push_back(id);
+    clearOutputData(vertexList);
+}
 
-    for(const auto& it : vertexList)
+void CWorkflow::clearOutputData(const std::vector<WorkflowVertex> &tasks)
+{
+    for(const auto& it : tasks)
     {
         WorkflowTaskPtr taskPtr = m_graph[it];
         if(it != m_root && taskPtr)
@@ -1421,6 +1419,7 @@ void CWorkflow::runTasksVideo(const std::vector<WorkflowVertex> &taskToExecute)
                 inputPtr->setFrameToRead(i);
             }
             runTasksSimple(taskToExecute);
+            clearOutputData(taskToExecute);
         }
     }
     catch(std::exception& e)
@@ -1901,6 +1900,12 @@ void CWorkflow::load(const std::string &path)
 
 void CWorkflow::saveJSON(const std::string& path)
 {
+    if (m_name.empty() || m_name == "untitled")
+    {
+        // Set name with filename
+        m_name = Utils::File::getFileNameWithoutExtension(path);
+    }
+
     Utils::File::createDirectory(Utils::File::getParentPath(path));
     QFile jsonFile(QString::fromStdString(path));
 

@@ -171,6 +171,12 @@ std::string CWorkflowTaskIO::getSourceFilePath()
         return "";
 }
 
+InputOutputVect CWorkflowTaskIO::getSubIOList(const std::set<IODataType> &dataTypes) const
+{
+    Q_UNUSED(dataTypes);
+    return InputOutputVect();
+}
+
 bool CWorkflowTaskIO::isDataAvailable() const
 {
     return false;

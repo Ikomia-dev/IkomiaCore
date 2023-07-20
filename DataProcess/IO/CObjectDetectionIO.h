@@ -64,6 +64,7 @@ class DATAPROCESSSHARED_EXPORT CObjectDetectionIO: public CWorkflowTaskIO
         CDataInfoPtr                        getDataInfo() override;
         GraphicsOutputPtr                   getGraphicsIO() const;
         BlobMeasureIOPtr                    getBlobMeasureIO() const;
+        InputOutputVect                     getSubIOList(const std::set<IODataType> &dataTypes) const override;
 
         bool                                isDataAvailable() const override;
         bool                                isComposite() const override;

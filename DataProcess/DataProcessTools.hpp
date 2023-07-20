@@ -24,6 +24,8 @@
 #include "Data/CMat.hpp"
 #include "base64.hpp"
 #include "Data/CDataConversion.h"
+#include "Graphics/CGraphicsConversion.h"
+#include "Graphics/CGraphicsItem.hpp"
 
 namespace Ikomia
 {
@@ -72,9 +74,17 @@ namespace Ikomia
                 }
                 return ovrImg;
             }
+            inline void         burnGraphics(CMat &image, const std::vector<ProxyGraphicsItemPtr> &items)
+            {
+                CGraphicsConversion graphicsConv((int)image.getNbCols(), (int)image.getNbRows());
+
+                //Double dispatch design pattern
+                for(auto it : items)
+                    it->insertToImage(image, graphicsConv, false, false);
+            }
             inline CMat         mergeColorMask(const CMat& image, const CMat& mask, const CMat& colormap, double opacity, bool bTransparentZero)
             {
-                CMat result, colorMask;
+                CMat src, result, colorMask;
 
                 if (mask.empty() || mask.data == nullptr)
                     return image;
@@ -84,14 +94,49 @@ namespace Ikomia
                 else
                     colorMask = mask;
 
+                if (image.channels() == 1)
+                    cv::cvtColor(image, src, cv::COLOR_GRAY2RGB);
+                else
+                    src = image;
+
                 cv::applyColorMap(colorMask, colorMask, colormap);
-                cv::addWeighted(image, (1.0 - opacity), colorMask, opacity, 0.0, result, image.depth());
+                cv::addWeighted(src, (1.0 - opacity), colorMask, opacity, 0.0, result, src.depth());
 
                 if (bTransparentZero)
                 {
                     cv::Mat maskNot = mask > 0;
                     cv::bitwise_not(maskNot, maskNot);
-                    image.copyTo(result, maskNot);
+                    src.copyTo(result, maskNot);
+                }
+                return result;
+            }
+            inline CMat         mergeColorMask(const CMat& image, const CMat& mask, double opacity, bool bTransparentZero)
+            {
+                CMat src, result, colorMask;
+
+                if (mask.empty() || mask.data == nullptr || mask.channels() == 1)
+                    return image;
+
+                if (image.channels() == 1)
+                    cv::cvtColor(image, src, cv::COLOR_GRAY2RGB);
+                else
+                    src = image;
+
+                if (mask.channels() == 4)
+                    cv::cvtColor(mask, colorMask, cv::COLOR_RGBA2RGB);
+                else
+                    colorMask = mask;
+
+                if(colorMask.depth() != CV_8U)
+                    colorMask.convertTo(colorMask, CV_8U);
+
+                cv::addWeighted(image, (1.0 - opacity), colorMask, opacity, 0.0, result, src.depth());
+
+                if (bTransparentZero)
+                {
+                    cv::Mat maskNot = colorMask > 0;
+                    cv::bitwise_not(maskNot, maskNot);
+                    src.copyTo(result, maskNot);
                 }
                 return result;
             }

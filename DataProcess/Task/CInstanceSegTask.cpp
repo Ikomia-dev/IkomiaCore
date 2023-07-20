@@ -119,7 +119,6 @@ CMat CInstanceSegTask::getImageWithMaskAndGraphics() const
     auto graphicsIOPtr = instanceSegIOPtr->getGraphicsIO();
     CMat imgWithGraphics = imgIOPtr->getImageWithGraphics(graphicsIOPtr);
     return Utils::Image::mergeColorMask(imgWithGraphics, instanceSegIOPtr->getMergeMask(), getColorMap(0), 0.7, true);
-
 }
 
 void CInstanceSegTask::readClassNames(const std::string &path)

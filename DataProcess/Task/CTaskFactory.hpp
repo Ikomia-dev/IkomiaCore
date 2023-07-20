@@ -93,7 +93,11 @@ class CTaskAbstractFactory: public CAbstractFactory<std::string, WorkflowTaskPtr
             auto it = std::find_if(m_factories.begin(),
                                    m_factories.end(),
                                    [&name](const TaskFactoryPtr& factoryPtr){ return factoryPtr->getInfo().getName() == name;});
-            return *it;
+
+            if (it == m_factories.end())
+                return nullptr;
+            else
+                return *it;
         }
 
         void            remove(const std::string& name)

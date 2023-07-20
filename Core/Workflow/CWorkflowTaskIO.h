@@ -130,6 +130,10 @@ class CORESHARED_EXPORT CWorkflowTaskIO
          * @return std::string
          */
         std::string         getSourceFilePath();
+        /**
+         * @brief Gets sub IO objects of given types in case of composite IO
+         */
+        virtual std::vector<std::shared_ptr<CWorkflowTaskIO>>   getSubIOList(const std::set<IODataType> &dataTypes) const;
 
         /**
          * @brief Checks if input or output object contains valid data.

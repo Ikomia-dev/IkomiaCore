@@ -958,12 +958,12 @@ namespace Ikomia
         }
 
         namespace File
-        {
+        {            
             inline std::string extension(const std::string &fileName)
             {
                 boost::filesystem::path file(fileName);
                 std::string ext = file.extension().string();
-                std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+                ext = Utils::String::toLower(ext);
                 return ext;
             }
 
@@ -1257,7 +1257,7 @@ namespace Ikomia
             }
             inline PluginState  getCppApiState(const std::string& minVersion, const std::string& maxVersion)
             {
-                const std::set<std::string> breakChanges = {"0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0", "0.6.1", "0.7.0", "0.8.0", "0.8.1", "0.9.0", "0.10.0"};
+                const std::set<std::string> breakChanges = {"0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0", "0.6.1", "0.7.0", "0.8.0", "0.8.1", "0.9.0", "0.9.1", "0.10.0"};
                 CSemanticVersion algoMinVersion(minVersion);
 
                 for(auto it=breakChanges.begin(); it!=breakChanges.end(); ++it)

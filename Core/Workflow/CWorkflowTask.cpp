@@ -442,6 +442,11 @@ InputOutputVect CWorkflowTask::getInputs(const std::set<IODataType> &types) cons
             auto it = types.find(m_inputs[i]->getDataType());
             if(it != types.end())
                 inputs.push_back(m_inputs[i]);
+            else if (m_inputs[i]->isComposite())
+            {
+                InputOutputVect subInputs = m_inputs[i]->getSubIOList(types);
+                inputs.insert(inputs.end(), subInputs.begin(), subInputs.end());
+            }
         }
     }
     return inputs;
@@ -484,11 +489,16 @@ InputOutputVect CWorkflowTask::getOutputs() const
 InputOutputVect CWorkflowTask::getOutputs(const std::set<IODataType> &dataTypes) const
 {
     InputOutputVect outputs;
-    for(size_t i=0; i<m_outputs.size(); ++i)
+    for (size_t i=0; i<m_outputs.size(); ++i)
     {
         auto it = dataTypes.find(m_outputs[i]->getDataType());
-        if(it != dataTypes.end())
+        if (it != dataTypes.end())
             outputs.push_back(m_outputs[i]);
+        else if (m_outputs[i]->isComposite())
+        {
+            InputOutputVect subOutputs = m_outputs[i]->getSubIOList(dataTypes);
+            outputs.insert(outputs.end(), subOutputs.begin(), subOutputs.end());
+        }
     }
     return outputs;
 }

@@ -68,7 +68,8 @@ class DATAPROCESSSHARED_EXPORT CTextIO: public CWorkflowTaskIO
         std::vector<CTextField>     getTextFields() const;
         CDataInfoPtr                getDataInfo() override;
         GraphicsOutputPtr           getGraphicsIO() const;
-        DataStringIOPtr             getDataStringIO() const;
+        DataStringIOPtr             getDataStringIO();
+        InputOutputVect             getSubIOList(const std::set<IODataType> &dataTypes) const override;
 
         bool                        isDataAvailable() const override;
         bool                        isComposite() const override;
