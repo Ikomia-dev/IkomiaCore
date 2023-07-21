@@ -398,7 +398,12 @@ void CImageIO::load(const std::string &path)
 
 std::string CImageIO::toJson() const
 {
-    std::vector<std::string> options = {"json_format", "compact", "image_format", "jpg"};
+    std::vector<std::string> options;
+    if (m_dataType == IODataType::IMAGE_LABEL || m_dataType == IODataType::IMAGE_BINARY)
+        options = {"json_format", "compact", "image_format", "png"};
+    else
+        options = {"json_format", "compact", "image_format", "jpg"};
+
     return toJson(options);
 }
 

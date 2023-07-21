@@ -326,13 +326,13 @@ void CInstanceSegIO::save(const std::string &path)
     if(!jsonFile.open(QFile::WriteOnly | QFile::Text))
         throw CException(CoreExCode::INVALID_FILE, "Couldn't write file:" + path, __func__, __FILE__, __LINE__);
 
-    QJsonDocument jsonDoc(toJsonInternal({"image_format", "jpg"}));
+    QJsonDocument jsonDoc(toJsonInternal({"image_format", "png"}));
     jsonFile.write(jsonDoc.toJson());
 }
 
 std::string CInstanceSegIO::toJson() const
 {
-    std::vector<std::string> options = {"json_format", "compact", "image_format", "jpg"};
+    std::vector<std::string> options = {"json_format", "compact", "image_format", "png"};
     return toJson(options);
 }
 
