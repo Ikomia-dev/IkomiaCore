@@ -14,18 +14,12 @@ CSemanticVersion::CSemanticVersion(const std::string &version)
     // Copy all parts of the version number into the version Info vector.
     m_versionParts.assign(std::istream_iterator<VersionDigit>(versionStream),
                           std::istream_iterator<VersionDigit>());
-
-    // Ensure major.minor.patch format
-    if (m_versionParts.size() < 3)
-    {
-        for (size_t i=m_versionParts.size()-1; i<3; ++i)
-            m_versionParts.push_back(0);
-    }
 }
 
 bool CSemanticVersion::operator<(const CSemanticVersion &rhs) const
 {
-    return std::lexicographical_compare(m_versionParts.begin(), m_versionParts.end(), rhs.m_versionParts.begin(), rhs.m_versionParts.end());
+    size_t nbParts = std::min(m_versionParts.size(), rhs.m_versionParts.size());
+    return std::lexicographical_compare(m_versionParts.begin(), m_versionParts.begin() + nbParts, rhs.m_versionParts.begin(), rhs.m_versionParts.begin() + nbParts);
 }
 
 bool CSemanticVersion::operator>(const CSemanticVersion &rhs) const
@@ -45,7 +39,8 @@ bool CSemanticVersion::operator>=(const CSemanticVersion &rhs) const
 
 bool CSemanticVersion::operator==(const CSemanticVersion &rhs) const
 {
-    return std::equal(m_versionParts.begin(), m_versionParts.end(), rhs.m_versionParts.begin(), rhs.m_versionParts.end());
+    size_t nbParts = std::min(m_versionParts.size(), rhs.m_versionParts.size());
+    return std::equal(m_versionParts.begin(), m_versionParts.begin() + nbParts, rhs.m_versionParts.begin(), rhs.m_versionParts.begin() + nbParts);
 }
 
 bool CSemanticVersion::operator!=(const CSemanticVersion &rhs) const
@@ -65,21 +60,34 @@ void CSemanticVersion::nextMajor()
 
 void CSemanticVersion::nextMinor()
 {
-    m_versionParts[1] += 1;
-
-    for (size_t i=2; i< m_versionParts.size(); ++i)
-        m_versionParts[i] = 0;
+    if (m_versionParts.size() >= 2)
+    {
+        m_versionParts[1] += 1;
+        for (size_t i=2; i< m_versionParts.size(); ++i)
+            m_versionParts[i] = 0;
+    }
+    else
+        m_versionParts.push_back(1);
 
     updateString();
 }
 
 void CSemanticVersion::nextPatch()
 {
-    m_versionParts[2] += 1;
+    size_t nbParts = m_versionParts.size();
+    if (nbParts >= 3)
+    {
+        m_versionParts[2] += 1;
+        for (size_t i=3; i< nbParts; ++i)
+            m_versionParts[i] = 0;
+    }
+    else
+    {
+        if (nbParts == 1)
+            m_versionParts.push_back(0);
 
-    for (size_t i=3; i< m_versionParts.size(); ++i)
-        m_versionParts[i] = 0;
-
+        m_versionParts.push_back(1);
+    }
     updateString();
 }
 
