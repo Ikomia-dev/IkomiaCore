@@ -63,10 +63,20 @@ BOOST_PYTHON_MODULE(pyutils)
         .value("PYTHON", ApiLanguage::PYTHON)
     ;
 
+    enum_<CpuArch>("CpuArch", "Enum - List of possible CPU architectures")
+        .value("X86_64", CpuArch::X86_64)
+        .value("ARM_64", CpuArch::ARM_64)
+        .value("ARM_32", CpuArch::ARM_32)
+        .value("NOT_SUPPORTED", CpuArch::NOT_SUPPORTED)
+    ;
+
     def("get_api_version", &Utils::Plugin::getCurrentApiVersion, _getCurrentVersionDocString);
-    def("get_compatibility_state", &Utils::Plugin::getApiCompatibilityState, _pythonStateDocString, args("version", "language"));
+    def("get_compatibility_state", &Utils::Plugin::getApiCompatibilityState, _pythonStateDocString, args("min_version", "max_version", "language"));
     def("is_app_started", &Utils::IkomiaApp::isAppStarted, "Internal use only");
     def("get_model_hub_url", &Utils::Plugin::getModelHubUrl, _getModelHubUrlDocString);
+    def("get_cpu_arch", &Utils::OS::getCpuArch, _getCpuArchDocString);
+    def("get_cpu_arch_name", &Utils::OS::getCpuArchName, _getCpuArchNameDocString);
+    def("get_cuda_version", &Utils::OS::getCudaVersionName, _getCudaVersionNameDocString);
 
     //----- Binding CException -----
     class_<CException>("CException", _exceptionDocString, init<>("Default constructor"))
