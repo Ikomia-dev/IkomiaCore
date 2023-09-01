@@ -1307,6 +1307,11 @@ constexpr auto _getMaskDocString =
         "Returns:\n\n"
         "   Numpy array: grayscale mask\n\n";
 
+constexpr auto _getPolygonsDocString =
+        "Get polygons of connected components extracted from segmentation mask.\n\n"
+        "Returns:\n\n"
+        "   list of :py:class:`~ikomia.core.pycore.CGraphicsItem` based objects\n\n";
+
 constexpr auto _getClassNamesDocString =
         "Get class names list associated with the semantic mask. "
         "Class index in the list corresponds to the pixel value in the mask.\n\n"
@@ -2010,6 +2015,18 @@ constexpr auto _semSegGetImgWithMaskDocString =
         "A transparency factor is applied to see both information.\n\n"
         "Returns:\n\n"
         "   2D numpy array (3 channels): color mask image\n\n";
+
+constexpr auto _semSegGetImgWithGraphicsDocString =
+        "Get visualization image where extracted outlines from connected components are embedded (graphics items).\n\n"
+        "Returns:\n\n"
+        "   2D Numpy array: visualization image\n\n";
+
+constexpr auto _semSegGetImgWithMaskAndGraphicsDocString =
+        "Get a visualization image composed by original input image, colored segmentation mask and "
+        "embedded graphics (outlines of connected components). A transparency factor is applied between original "
+        "image and mask.\n\n"
+        "Returns:\n\n"
+        "   2D numpy array (3 channels): visualization image\n\n";
 
 constexpr auto _semSegGetMaskDocString =
         "Set the segmentation mask computed from the input image.\n\n"
