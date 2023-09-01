@@ -296,12 +296,6 @@ void CGraphicsOutput::fromJsonInternal(const QJsonDocument &jsonDoc)
     }
 }
 
-void CGraphicsOutput::save()
-{
-    std::string path = m_saveFolder + m_saveBaseName + Utils::Data::getFileFormatExtension(m_saveFormat);
-    save(path);
-}
-
 void CGraphicsOutput::save(const std::string &path)
 {
     QFile jsonFile(QString::fromStdString(path));

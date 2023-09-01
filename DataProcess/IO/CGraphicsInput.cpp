@@ -23,6 +23,7 @@
 #include "CGraphicsOutput.h"
 #include "CObjectDetectionIO.h"
 #include "CInstanceSegIO.h"
+#include "CSemanticSegIO.h"
 #include "CKeypointsIO.h"
 #include "CTextIO.h"
 #include "UtilsTools.hpp"
@@ -210,6 +211,20 @@ void CGraphicsInput::copy(const std::shared_ptr<CWorkflowTaskIO> &ioPtr)
         if (pInstanceSegIO)
         {
             auto graphicsOutPtr = pInstanceSegIO->getGraphicsIO();
+            if (graphicsOutPtr)
+            {
+                auto pGraphicsOut = dynamic_cast<const CGraphicsOutput*>(graphicsOutPtr.get());
+                if (pGraphicsOut)
+                    *this = *pGraphicsOut;
+            }
+        }
+    }
+    else if (type == IODataType::SEMANTIC_SEGMENTATION)
+    {
+        auto pSemanticSegIO = std::dynamic_pointer_cast<CSemanticSegIO>(ioPtr);
+        if (pSemanticSegIO)
+        {
+            auto graphicsOutPtr = pSemanticSegIO->getGraphicsIO();
             if (graphicsOutPtr)
             {
                 auto pGraphicsOut = dynamic_cast<const CGraphicsOutput*>(graphicsOutPtr.get());

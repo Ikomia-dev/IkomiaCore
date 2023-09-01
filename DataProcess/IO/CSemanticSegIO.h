@@ -25,8 +25,10 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
         CMat                            getLegend() const;
         std::vector<std::string>        getClassNames() const;
         std::vector<CColor>             getColors() const;
+        std::vector<ProxyGraphicsItemPtr> getPolygons() const;
         ImageIOPtr                      getMaskImageIO() const;
         ImageIOPtr                      getLegendImageIO() const;
+        GraphicsOutputPtr               getGraphicsIO() const;
         InputOutputVect                 getSubIOList(const std::set<IODataType> &dataTypes) const override;
         int                             getReferenceImageIndex() const;
 
@@ -53,6 +55,8 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
 
     private:
 
+        void                            computePolygons();
+
         WorkflowTaskIOPtr               cloneImp() const override;
 
         QJsonObject                     toJsonInternal(const std::vector<std::string> &options) const;
@@ -68,6 +72,7 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
         cv::Mat                     m_histo;
         std::shared_ptr<CImageIO>   m_imgMaskIOPtr = nullptr;
         std::shared_ptr<CImageIO>   m_imgLegendIOPtr = nullptr;
+        GraphicsOutputPtr           m_graphicsIOPtr = nullptr;
         int                         m_refImageIndex = 0;
 };
 

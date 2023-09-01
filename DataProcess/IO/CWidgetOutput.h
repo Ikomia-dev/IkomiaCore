@@ -83,7 +83,6 @@ class DATAPROCESSSHARED_EXPORT CWidgetOutput : public CWorkflowTaskIO
          */
         void        clearData() override;
 
-        void        save() override;
         void        save(const std::string& path) override;
 
         /**

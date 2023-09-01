@@ -10,6 +10,7 @@ CSemanticSegIO::CSemanticSegIO() : CWorkflowTaskIO(IODataType::SEMANTIC_SEGMENTA
     m_saveFormat = DataFileFormat::JSON;
     m_imgMaskIOPtr = std::make_shared<CImageIO>(IODataType::IMAGE_LABEL);
     m_imgLegendIOPtr = std::make_shared<CImageIO>(IODataType::IMAGE);
+    m_graphicsIOPtr = std::make_shared<CGraphicsOutput>();
 }
 
 CSemanticSegIO::CSemanticSegIO(const CSemanticSegIO &io): CWorkflowTaskIO(io)
@@ -18,6 +19,7 @@ CSemanticSegIO::CSemanticSegIO(const CSemanticSegIO &io): CWorkflowTaskIO(io)
     m_colors = io.m_colors;
     m_imgMaskIOPtr = io.m_imgMaskIOPtr->clone();
     m_imgLegendIOPtr = io.m_imgLegendIOPtr->clone();
+    m_graphicsIOPtr = io.m_graphicsIOPtr->clone();
 }
 
 CSemanticSegIO::CSemanticSegIO(const CSemanticSegIO &&io): CWorkflowTaskIO(io)
@@ -26,6 +28,7 @@ CSemanticSegIO::CSemanticSegIO(const CSemanticSegIO &&io): CWorkflowTaskIO(io)
     m_colors = std::move(io.m_colors);
     m_imgMaskIOPtr = io.m_imgMaskIOPtr->clone();
     m_imgLegendIOPtr = io.m_imgLegendIOPtr->clone();
+    m_graphicsIOPtr = io.m_graphicsIOPtr->clone();
 }
 
 CSemanticSegIO &CSemanticSegIO::operator=(const CSemanticSegIO &io)
@@ -35,6 +38,7 @@ CSemanticSegIO &CSemanticSegIO::operator=(const CSemanticSegIO &io)
     m_colors = io.m_colors;
     m_imgMaskIOPtr = io.m_imgMaskIOPtr->clone();
     m_imgLegendIOPtr = io.m_imgLegendIOPtr->clone();
+    m_graphicsIOPtr = io.m_graphicsIOPtr->clone();
     return *this;
 }
 
@@ -52,6 +56,7 @@ CSemanticSegIO &CSemanticSegIO::operator=(const CSemanticSegIO &&io)
     m_colors = std::move(io.m_colors);
     m_imgMaskIOPtr = io.m_imgMaskIOPtr->clone();
     m_imgLegendIOPtr = io.m_imgLegendIOPtr->clone();
+    m_graphicsIOPtr = io.m_graphicsIOPtr->clone();
     return *this;
 }
 
@@ -75,6 +80,11 @@ std::vector<CColor> CSemanticSegIO::getColors() const
     return m_colors;
 }
 
+std::vector<ProxyGraphicsItemPtr> CSemanticSegIO::getPolygons() const
+{
+    return m_graphicsIOPtr->getItems();
+}
+
 ImageIOPtr CSemanticSegIO::getMaskImageIO() const
 {
     return m_imgMaskIOPtr;
@@ -83,6 +93,11 @@ ImageIOPtr CSemanticSegIO::getMaskImageIO() const
 ImageIOPtr CSemanticSegIO::getLegendImageIO() const
 {
     return m_imgLegendIOPtr;
+}
+
+GraphicsOutputPtr CSemanticSegIO::getGraphicsIO() const
+{
+    return m_graphicsIOPtr;
 }
 
 InputOutputVect CSemanticSegIO::getSubIOList(const std::set<IODataType> &dataTypes) const
@@ -109,6 +124,7 @@ void CSemanticSegIO::setMask(const CMat &mask)
     std::vector<cv::Mat> inputs;
     inputs.push_back(mask);
     cv::calcHist(inputs, {0}, cv::Mat(), m_histo, {256}, {0, 256}, false);
+    computePolygons();
     generateLegend();
 }
 
@@ -234,6 +250,38 @@ void CSemanticSegIO::copy(const std::shared_ptr<CWorkflowTaskIO> &ioPtr)
     }
 }
 
+void CSemanticSegIO::computePolygons()
+{
+    m_graphicsIOPtr->clearData();
+
+    if (m_histo.data == nullptr)
+        return;
+
+    auto semanticMask = m_imgMaskIOPtr->getImage();
+    if (semanticMask.data == nullptr)
+        return;
+
+    CMat binaryMask;
+    CColor emptyBrush = {255, 0, 0, 0};
+
+    for (size_t i=0; i<m_colors.size(); ++i)
+    {
+        if (m_histo.at<float>(i) > 0)
+        {
+            cv::compare(semanticMask, cv::Scalar(i), binaryMask, cv::CMP_EQ);
+            CGraphicsConversion conv;
+            auto graphics = conv.binaryMaskToProxyGraphics(binaryMask, m_colors[i], emptyBrush, 1);
+
+            for (size_t j=0; j<graphics.size(); ++j)
+            {
+                GraphicsItem type = graphics[j]->getType();
+                if (type == GraphicsItem::POLYGON || type == GraphicsItem::COMPLEX_POLYGON)
+                    m_graphicsIOPtr->addItem(graphics[j]);
+            }
+        }
+    }
+}
+
 WorkflowTaskIOPtr CSemanticSegIO::cloneImp() const
 {
     return std::shared_ptr<CSemanticSegIO>(new CSemanticSegIO(*this));
@@ -261,6 +309,21 @@ QJsonObject CSemanticSegIO::toJsonInternal(const std::vector<std::string> &optio
     }
     root["colors"] = colors;
     root["referenceImageIndex"] = m_refImageIndex;
+
+    auto polygons = m_graphicsIOPtr->getItems();
+    size_t polygonsCount = polygons.size();
+
+    if (polygonsCount > 0)
+    {
+        QJsonArray jsonPolygons;
+        for (size_t i=0; i<polygonsCount; ++i)
+        {
+            QJsonObject jsonPolygon;
+            polygons[i]->toJson(jsonPolygon);
+            jsonPolygons.append(jsonPolygon);
+        }
+        root["polygons"] = jsonPolygons;
+    }
     return root;
 }
 

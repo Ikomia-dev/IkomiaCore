@@ -24,10 +24,13 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegmentation : public CObjectDetection
         int         getType() const;
         int         getClassIndex() const;
         CMat        getMask() const;
+        std::vector<ProxyGraphicsItemPtr>   getPolygons() const;
 
         void        setType(int type);
         void        setClassIndex(int index);
         void        setMask(const CMat& mask);
+
+        void        computePolygons();
 
         std::string repr() const;
 
@@ -35,9 +38,10 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegmentation : public CObjectDetection
 
     public:
 
-        int     m_type = ObjectType::THING;
-        int     m_classIndex = 0;
-        CMat    m_mask;
+        int                                 m_type = ObjectType::THING;
+        int                                 m_classIndex = 0;
+        CMat                                m_mask;
+        std::vector<ProxyGraphicsItemPtr>   m_polygons;
 };
 
 

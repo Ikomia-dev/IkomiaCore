@@ -66,6 +66,35 @@ CMat CSemanticSegTask::getImageWithMask() const
     return Utils::Image::mergeColorMask(imgIOPtr->getImage(), segIOPtr->getMask(), getColorMap(0), 0.7, false);
 }
 
+CMat CSemanticSegTask::getImageWithGraphics() const
+{
+    auto imgIOPtr = std::dynamic_pointer_cast<CImageIO>(getOutput(0));
+    if (imgIOPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Invalid image output", __func__, __FILE__, __LINE__);
+
+    auto semanticSegIOPtr = std::dynamic_pointer_cast<CSemanticSegIO>(getOutput(1));
+    if (semanticSegIOPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Invalid semantic segmentation output", __func__, __FILE__, __LINE__);
+
+    auto graphicsIOPtr = semanticSegIOPtr->getGraphicsIO();
+    return imgIOPtr->getImageWithGraphics(graphicsIOPtr);
+}
+
+CMat CSemanticSegTask::getImageWithMaskAndGraphics() const
+{
+    auto imgIOPtr = std::dynamic_pointer_cast<CImageIO>(getOutput(0));
+    if (imgIOPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Invalid image output", __func__, __FILE__, __LINE__);
+
+    auto semanticSegIOPtr = std::dynamic_pointer_cast<CSemanticSegIO>(getOutput(1));
+    if (semanticSegIOPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Invalid semantic segmentation output", __func__, __FILE__, __LINE__);
+
+    auto graphicsIOPtr = semanticSegIOPtr->getGraphicsIO();
+    CMat imgWithGraphics = imgIOPtr->getImageWithGraphics(graphicsIOPtr);
+    return Utils::Image::mergeColorMask(imgWithGraphics, semanticSegIOPtr->getMask(), getColorMap(0), 0.7, true);
+}
+
 void CSemanticSegTask::readClassNames(const std::string &path)
 {
     if(path.empty())

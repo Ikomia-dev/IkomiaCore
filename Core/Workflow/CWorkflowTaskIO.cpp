@@ -271,6 +271,8 @@ void CWorkflowTaskIO::load(const std::string &path)
 
 void CWorkflowTaskIO::save()
 {
+    std::string path = m_saveFolder + m_saveBaseName + Utils::Data::getFileFormatExtension(m_saveFormat);
+    save(path);
 }
 
 void CWorkflowTaskIO::save(const std::string &path)
