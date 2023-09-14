@@ -26,7 +26,7 @@
 #include "CSemanticSegIO.h"
 #include "CKeypointsIO.h"
 #include "CTextIO.h"
-#include "UtilsTools.hpp"
+#include "DataProcessTools.hpp"
 #include <QJsonDocument>
 #include <QJsonArray>
 
@@ -160,6 +160,21 @@ QRectF CGraphicsInput::getBoundingRect() const
         rect = rect.united(m_items[i]->getBoundingQRect());
 
     return rect;
+}
+
+CMat CGraphicsInput::getImageWithGraphics(const CMat &image) const
+{
+    if(image.empty())
+        return CMat();
+
+    CMat img =image.clone();
+    Utils::Image::burnGraphics(img, getItems());
+    return img;
+}
+
+CMat CGraphicsInput::getImageWithMaskAndGraphics(const CMat &image) const
+{
+    return getImageWithGraphics(image);
 }
 
 bool CGraphicsInput::isDataAvailable() const

@@ -218,6 +218,20 @@ InputOutputVect CTextIO::getSubIOList(const std::set<IODataType> &dataTypes) con
     return ioList;
 }
 
+CMat CTextIO::getImageWithGraphics(const CMat &image) const
+{
+    auto graphicsIOPtr = getGraphicsIO();
+    if (graphicsIOPtr)
+        return graphicsIOPtr->getImageWithGraphics(image);
+    else
+        return image;
+}
+
+CMat CTextIO::getImageWithMaskAndGraphics(const CMat &image) const
+{
+    return getImageWithGraphics(image);
+}
+
 bool CTextIO::isDataAvailable() const
 {
     return m_fields.size() > 0;

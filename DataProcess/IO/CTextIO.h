@@ -70,6 +70,8 @@ class DATAPROCESSSHARED_EXPORT CTextIO: public CWorkflowTaskIO
         GraphicsOutputPtr           getGraphicsIO() const;
         DataStringIOPtr             getDataStringIO();
         InputOutputVect             getSubIOList(const std::set<IODataType> &dataTypes) const override;
+        CMat                        getImageWithGraphics(const CMat &image) const override;
+        CMat                        getImageWithMaskAndGraphics(const CMat &image) const override;
 
         bool                        isDataAvailable() const override;
         bool                        isComposite() const override;

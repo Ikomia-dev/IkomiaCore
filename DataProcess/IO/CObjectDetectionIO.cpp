@@ -183,6 +183,20 @@ InputOutputVect CObjectDetectionIO::getSubIOList(const std::set<IODataType> &dat
     return ioList;
 }
 
+CMat CObjectDetectionIO::getImageWithGraphics(const CMat &image) const
+{
+    auto graphicsIOPtr = getGraphicsIO();
+    if (graphicsIOPtr)
+        return graphicsIOPtr->getImageWithGraphics(image);
+    else
+        return image;
+}
+
+CMat CObjectDetectionIO::getImageWithMaskAndGraphics(const CMat &image) const
+{
+    return getImageWithGraphics(image);
+}
+
 bool CObjectDetectionIO::isDataAvailable() const
 {
     return m_objects.size() > 0;

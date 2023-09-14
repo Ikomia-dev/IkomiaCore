@@ -27,6 +27,7 @@
 #include "DesignPattern/CObjectLocker.hpp"
 #include "CWorkflowTaskParam.h"
 #include "Data/CDataInfo.h"
+#include "Data/CMat.hpp"
 #include <QJsonDocument>
 
 /**
@@ -130,10 +131,24 @@ class CORESHARED_EXPORT CWorkflowTaskIO
          * @return std::string
          */
         std::string         getSourceFilePath();
+
         /**
          * @brief Gets sub IO objects of given types in case of composite IO
          */
         virtual std::vector<std::shared_ptr<CWorkflowTaskIO>>   getSubIOList(const std::set<IODataType> &dataTypes) const;
+
+        /**
+         * @brief Generate visual image with graphics
+         */
+        virtual CMat        getImageWithGraphics(const CMat& image) const;
+        /**
+         * @brief Generate visual image with mask as overlay
+         */
+        virtual CMat        getImageWithMask(const CMat& image) const;
+        /**
+         * @brief Generate visual image with graphics and mask as overlay
+         */
+        virtual CMat        getImageWithMaskAndGraphics(const CMat& image) const;
 
         /**
          * @brief Checks if input or output object contains valid data.

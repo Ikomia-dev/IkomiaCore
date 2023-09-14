@@ -224,6 +224,41 @@ InputOutputVect CInstanceSegIO::getSubIOList(const std::set<IODataType> &dataTyp
     return ioList;
 }
 
+CMat CInstanceSegIO::getImageWithGraphics(const CMat &image) const
+{
+    auto graphicsIOPtr = getGraphicsIO();
+    if (graphicsIOPtr)
+        return graphicsIOPtr->getImageWithGraphics(image);
+    else
+        return image;
+}
+
+CMat CInstanceSegIO::getImageWithMask(const CMat &image) const
+{
+    CMat colormap = Utils::Image::createColorMap(getColors(), true);
+    return Utils::Image::mergeColorMask(image, getMergeMask(), colormap, 0.7, true);
+}
+
+CMat CInstanceSegIO::getImageWithMaskAndGraphics(const CMat &image) const
+{
+    CMat imgWithGraphics = getImageWithGraphics(image);
+    return getImageWithMask(imgWithGraphics);
+}
+
+std::vector<CColor> CInstanceSegIO::getColors() const
+{
+    std::vector<CColor> colors;
+    for (size_t i=0; i<m_instances.size(); ++i)
+    {
+        int classIndex = m_instances[i].m_classIndex;
+        if (classIndex >= colors.size())
+            colors.resize(classIndex + 1);
+
+        colors[classIndex] = m_instances[i].m_color;
+    }
+    return colors;
+}
+
 bool CInstanceSegIO::isDataAvailable() const
 {
     return m_instances.size() > 0;

@@ -212,30 +212,28 @@ CMat CImageIO::getImage()
     return CMat();
 }
 
-CMat CImageIO::getImageWithGraphics(const GraphicsInputPtr &graphics)
+CMat CImageIO::getImageWithGraphics(const WorkflowTaskIOPtr &io)
 {
-    auto internalImg = getImage();
-    if(internalImg.empty())
-        return CMat();
+    if (!io)
+        throw CException(CoreExCode::NULL_POINTER, "Input/output object is null", __func__, __FILE__, __LINE__);
 
-    CMat img =internalImg.clone();
-    if(graphics)
-        Utils::Image::burnGraphics(img, graphics->getItems());
-
-    return img;
+    return io->getImageWithGraphics(getImage());
 }
 
-CMat CImageIO::getImageWithGraphics(const GraphicsOutputPtr &graphics)
+CMat CImageIO::getImageWithMask(const WorkflowTaskIOPtr &io)
 {
-    auto internalImg = getImage();
-    if(internalImg.empty())
-        return CMat();
+    if (!io)
+        throw CException(CoreExCode::NULL_POINTER, "Input/output object is null", __func__, __FILE__, __LINE__);
 
-    CMat img =internalImg.clone();
-    if(graphics)
-        Utils::Image::burnGraphics(img, graphics->getItems());
+    return io->getImageWithMask(getImage());
+}
 
-    return img;
+CMat CImageIO::getImageWithMaskAndGraphics(const WorkflowTaskIOPtr &io)
+{
+    if (!io)
+        throw CException(CoreExCode::NULL_POINTER, "Input/output object is null", __func__, __FILE__, __LINE__);
+
+    return io->getImageWithMaskAndGraphics(getImage());
 }
 
 size_t CImageIO::getUnitElementCount() const

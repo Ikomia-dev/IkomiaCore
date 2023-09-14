@@ -20,6 +20,7 @@
 #include "CGraphicsOutput.h"
 #include <QJsonDocument>
 #include <QJsonArray>
+#include "DataProcessTools.hpp"
 #include "Main/CoreTools.hpp"
 #include "Graphics/CGraphicsPoint.h"
 #include "Graphics/CGraphicsEllipse.h"
@@ -122,6 +123,21 @@ int CGraphicsOutput::getImageIndex() const
 std::vector<ProxyGraphicsItemPtr> CGraphicsOutput::getItems() const
 {
     return m_items;
+}
+
+CMat CGraphicsOutput::getImageWithGraphics(const CMat &image) const
+{
+    if(image.empty())
+        return CMat();
+
+    CMat img =image.clone();
+    Utils::Image::burnGraphics(img, getItems());
+    return img;
+}
+
+CMat CGraphicsOutput::getImageWithMaskAndGraphics(const CMat &image) const
+{
+    return getImageWithGraphics(image);
 }
 
 bool CGraphicsOutput::isDataAvailable() const

@@ -62,6 +62,8 @@ class DATAPROCESSSHARED_EXPORT CGraphicsInput : public CWorkflowTaskIO
         const CGraphicsLayer*               getLayer() const;
         std::vector<ProxyGraphicsItemPtr>   getItems() const;
         QRectF                              getBoundingRect() const;
+        CMat                                getImageWithGraphics(const CMat &image) const override;
+        CMat                                getImageWithMaskAndGraphics(const CMat &image) const override;
 
         bool                isDataAvailable() const override;
 

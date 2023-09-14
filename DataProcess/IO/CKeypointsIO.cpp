@@ -439,6 +439,20 @@ InputOutputVect CKeypointsIO::getSubIOList(const std::set<IODataType> &dataTypes
     return ioList;
 }
 
+CMat CKeypointsIO::getImageWithGraphics(const CMat &image) const
+{
+    auto graphicsIOPtr = getGraphicsIO();
+    if (graphicsIOPtr)
+        return graphicsIOPtr->getImageWithGraphics(image);
+    else
+        return image;
+}
+
+CMat CKeypointsIO::getImageWithMaskAndGraphics(const CMat &image) const
+{
+    return getImageWithGraphics(image);
+}
+
 void CKeypointsIO::init(const std::string &taskName, int imageIndex)
 {
     clearData();

@@ -118,6 +118,27 @@ int CSemanticSegIO::getReferenceImageIndex() const
     return m_refImageIndex;
 }
 
+CMat CSemanticSegIO::getImageWithGraphics(const CMat &image) const
+{
+    auto graphicsIOPtr = getGraphicsIO();
+    if (graphicsIOPtr)
+        return graphicsIOPtr->getImageWithGraphics(image);
+    else
+        return image;
+}
+
+CMat CSemanticSegIO::getImageWithMask(const CMat &image) const
+{
+    CMat colormap = Utils::Image::createColorMap(m_colors, true);
+    return Utils::Image::mergeColorMask(image, getMask(), colormap, 0.7, false);
+}
+
+CMat CSemanticSegIO::getImageWithMaskAndGraphics(const CMat &image) const
+{
+    CMat imgWithGraphics = getImageWithGraphics(image);
+    return getImageWithMask(imgWithGraphics);
+}
+
 void CSemanticSegIO::setMask(const CMat &mask)
 {
     m_imgMaskIOPtr->setImage(mask);

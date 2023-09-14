@@ -354,8 +354,9 @@ BOOST_PYTHON_MODULE(pydataprocess)
     //--------------------//
     void (CImageIO::*drawGraphicsIn)(const GraphicsInputPtr&) = &CImageIO::drawGraphics;
     void (CImageIO::*drawGraphicsOut)(const GraphicsOutputPtr&) = &CImageIO::drawGraphics;
-    CMat (CImageIO::*getImageWithGraphicsIn)(const GraphicsInputPtr&) = &CImageIO::getImageWithGraphics;
-    CMat (CImageIO::*getImageWithGraphicsOut)(const GraphicsOutputPtr&) = &CImageIO::getImageWithGraphics;
+    CMat (CImageIO::*getImageWithGraphicsIO)(const WorkflowTaskIOPtr&) = &CImageIO::getImageWithGraphics;
+    CMat (CImageIO::*getImageWithMaskIO)(const WorkflowTaskIOPtr&) = &CImageIO::getImageWithMask;
+    CMat (CImageIO::*getImageWithMaskAndGraphicsIO)(const WorkflowTaskIOPtr&) = &CImageIO::getImageWithMaskAndGraphics;
     void (CImageIO::*saveImageIO)(const std::string&) = &CImageIO::save;
     std::string (CImageIO::*imgIOToJsonNoOpt)() const = &CImageIO::toJson;
     std::string (CImageIO::*imgIOToJson)(const std::vector<std::string>&) const = &CImageIO::toJson;
@@ -376,8 +377,9 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("get_channel_count", &CImageIO::getChannelCount, _getChannelCountDocString, args("self"))
         .def("get_data", &CImageIO::getData, _getDataDocString, args("self"))
         .def("get_image", &CImageIO::getImage, &CImageIOWrap::default_getImage, _getImageDocString, args("self"))
-        .def("get_image_with_graphics", getImageWithGraphicsIn, _getImageWithGraphicsInDocString, args("self", "graphics"))
-        .def("get_image_with_graphics", getImageWithGraphicsOut, _getImageWithGraphicsOutDocString, args("self", "graphics"))
+        .def("get_image_with_graphics", getImageWithGraphicsIO, _getImageWithGraphicsDocString, args("self", "io"))
+        .def("get_image_with_mask", getImageWithMaskIO, _getImageWithMaskDocString, args("self", "io"))
+        .def("get_image_with_mask_and_graphics", getImageWithMaskAndGraphicsIO, _getImageWithMaskAndGraphicsDocString, args("self", "io"))
         .def("get_overlay_mask", &CImageIO::getOverlayMask, _getOverlayMaskDocString, args("self"))
         .def("get_unit_element_count", &CImageIO::getUnitElementCount, &CImageIOWrap::default_getUnitElementCount, _getImageUnitElementCountDocString, args("self"))
         .def("is_data_available", &CImageIO::isDataAvailable, &CImageIOWrap::default_isDataAvailable, _isImageDataAvailableDocString, args("self"))

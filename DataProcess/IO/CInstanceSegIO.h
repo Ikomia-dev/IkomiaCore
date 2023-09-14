@@ -73,6 +73,10 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegIO: public CWorkflowTaskIO
         BlobMeasureIOPtr                    getBlobMeasureIO() const;
         CMat                                getMergeMask() const;
         InputOutputVect                     getSubIOList(const std::set<IODataType> &dataTypes) const override;
+        CMat                                getImageWithGraphics(const CMat &image) const override;
+        CMat                                getImageWithMask(const CMat &image) const override;
+        CMat                                getImageWithMaskAndGraphics(const CMat &image) const override;
+        std::vector<CColor>                 getColors() const;
 
         bool                                isDataAvailable() const override;
         bool                                isComposite() const override;

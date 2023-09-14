@@ -77,8 +77,7 @@ CMat CObjectDetectionTask::getImageWithGraphics() const
     if (objDetIOPtr == nullptr)
         throw CException(CoreExCode::NULL_POINTER, "Invalid object detection output", __func__, __FILE__, __LINE__);
 
-    auto graphicsIOPtr = objDetIOPtr->getGraphicsIO();
-    return imgIOPtr->getImageWithGraphics(graphicsIOPtr);
+    return imgIOPtr->getImageWithGraphics(objDetIOPtr);
 }
 
 void CObjectDetectionTask::initIO()

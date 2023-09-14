@@ -418,17 +418,24 @@ constexpr auto _getImageDocString =
         "Returns:\n\n"
         "   Numpy array: 2D image buffer\n\n";
 
-constexpr auto _getImageWithGraphicsInDocString =
-        "Get a copy of the internal image with graphics items from the given graphics input.\n\n"
+constexpr auto _getImageWithGraphicsDocString =
+        "Get a copy of the internal image with graphics items from the given I/O.\n\n"
         "Args:\n\n"
-        "   graphics (:py:class:`~ikomia.dataprocess.pydataprocess.CGraphicsInput`)\n\n"
+        "   io (:py:class:`~ikomia.dataprocess.pydataprocess.CWorkflowTaskIO`)\n\n"
         "Returns:\n\n"
         "   Numpy array: 2D image buffer\n\n";
 
-constexpr auto _getImageWithGraphicsOutDocString =
-        "Get a copy of the internal image with graphics items from the given graphics output.\n\n"
+constexpr auto _getImageWithMaskDocString =
+        "Get a copy of the internal image with mask overlay from the given I/O.\n\n"
         "Args:\n\n"
-        "   graphics (:py:class:`~ikomia.dataprocess.pydataprocess.CGraphicsOutput`)\n\n"
+        "   io (:py:class:`~ikomia.dataprocess.pydataprocess.CWorkflowTaskIO`)\n\n"
+        "Returns:\n\n"
+        "   Numpy array: 2D image buffer\n\n";
+
+constexpr auto _getImageWithMaskAndGraphicsDocString =
+        "Get a copy of the internal image with graphics and mask overlay from the given I/O.\n\n"
+        "Args:\n\n"
+        "   io (:py:class:`~ikomia.dataprocess.pydataprocess.CWorkflowTaskIO`)\n\n"
         "Returns:\n\n"
         "   Numpy array: 2D image buffer\n\n";
 
