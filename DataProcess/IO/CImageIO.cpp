@@ -228,6 +228,16 @@ CMat CImageIO::getImageWithMask(const WorkflowTaskIOPtr &io)
     return io->getImageWithMask(getImage());
 }
 
+CMat CImageIO::getImageWithMask(const CMat &image) const
+{
+    auto mask = m_image;
+    if (mask.channels() !=1 && mask.depth() != CV_8U)
+        return image;
+
+    CMat colormap = Utils::Image::createColorMap(std::vector<CColor>(), true);
+    return Utils::Image::mergeColorMask(image, mask, colormap, 0.7, true);
+}
+
 CMat CImageIO::getImageWithMaskAndGraphics(const WorkflowTaskIOPtr &io)
 {
     if (!io)
