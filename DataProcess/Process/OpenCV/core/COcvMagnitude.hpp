@@ -117,7 +117,7 @@ class COcvMagnitudeFactory : public CTaskFactory
         COcvMagnitudeFactory()
         {
             m_info.m_name = "ocv_magnitude";
-            m_info.m_description = QObject::tr("Calculates the magnitude of 2D vectors with the given formula:<br> <center><i>dst = sqrt( src1 * src1 + src2 * src2 )</i></center>").toStdString();
+            m_info.m_shortDescription = QObject::tr("Calculates the magnitude of 2D vectors with the given formula:<br> <center><i>dst = sqrt( src1 * src1 + src2 * src2 )</i></center>").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Core functionality/Operations on arrays").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Sum,Square,Root,Norm,Length";

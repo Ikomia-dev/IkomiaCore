@@ -119,7 +119,7 @@ class COcvL0SmoothFactory : public CTaskFactory
         COcvL0SmoothFactory()
         {
             m_info.m_name = "ocv_l0_smooth_filter";
-            m_info.m_description = QObject::tr("Global image smoothing via L0 gradient minimization.").toStdString();
+            m_info.m_shortDescription = QObject::tr("Global image smoothing via L0 gradient minimization.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Extra modules/Extended Image Processing/Filters").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Smooth,Blur,Anisotropic,Filter,Gaussian,Edge-preserving,Cartooning";

@@ -94,7 +94,7 @@ class CFillHolesFactory : public CTaskFactory
         CFillHolesFactory()
         {
             m_info.m_name = "ik_fill_holes";
-            m_info.m_description = QObject::tr("This process fill holes on binary images.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process fill holes on binary images.").toStdString();
             m_info.m_path = QObject::tr("Core/Utils").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/default-process.png").toStdString();
             m_info.m_keywords = "fill,holes,binary";

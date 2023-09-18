@@ -158,7 +158,7 @@ class COcvFastLineDetectorFactory : public CTaskFactory
         COcvFastLineDetectorFactory()
         {
             m_info.m_name = "ocv_fast_line_detector";
-            m_info.m_description = QObject::tr("This process finds lines in input image and creates graphics layer with lines as output).").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process finds lines in input image and creates graphics layer with lines as output).").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Extra modules/Extended Image Processing/Fast line detector").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Canny,line,fast,detector,hysteresis";

@@ -139,7 +139,7 @@ class COcvWatershedFactory : public CTaskFactory
         COcvWatershedFactory()
         {
             m_info.m_name = "ocv_watershed";
-            m_info.m_description = QObject::tr("This process implements one of the variants of watershed, non-parametric marker-based segmentation algorithm.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process implements one of the variants of watershed, non-parametric marker-based segmentation algorithm.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Image processing/Miscellaneous image transformations").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Watershed, segmentation, markers, label";

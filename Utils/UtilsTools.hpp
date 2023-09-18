@@ -517,11 +517,11 @@ namespace Ikomia
             }
             inline std::string  getCurrentVersionNumber()
             {
-                return "0.10.0";
+                return "0.9.2";
             }
             inline std::string  getCurrentVersionName()
             {
-                return "0.10.0";
+                return "0.9.2";
             }
             inline std::string  getIkomiaLibFolder()
             {
@@ -1540,6 +1540,17 @@ namespace Ikomia
         inline void print(const char* msg, const QtMsgType type=QtMsgType::QtInfoMsg)
         {
             print(std::string(msg), type);
+        }
+
+        inline void deprecationWarning(const std::string& msg, const std::string& maxVersion="", const QtMsgType type=QtMsgType::QtWarningMsg)
+        {
+            std::string fullMsg = msg;
+            if (!maxVersion.empty())
+                fullMsg += ". Will be removed from " + maxVersion + " version.";
+            else
+                fullMsg += ". Will be removed in future version.";
+
+            print(fullMsg, type);
         }
 
     #ifdef __linux__

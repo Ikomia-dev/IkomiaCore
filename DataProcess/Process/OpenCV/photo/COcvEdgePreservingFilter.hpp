@@ -124,7 +124,7 @@ class COcvEdgePreservingFilterFactory : public CTaskFactory
         COcvEdgePreservingFilterFactory()
         {
             m_info.m_name = "ocv_edge_preserving_filter";
-            m_info.m_description = QObject::tr("This process smoothes your image with an edge preserving filter.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process smoothes your image with an edge preserving filter.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Computational photography/Non-photorealistic rendering").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "smooth,blur,edge,preserving,filter";

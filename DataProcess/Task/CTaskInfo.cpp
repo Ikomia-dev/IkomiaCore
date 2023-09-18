@@ -168,6 +168,7 @@ void CTaskInfo::setShortDescription(const std::string &description)
 
 void CTaskInfo::setDescription(const std::string &description)
 {
+    Utils::deprecationWarning(m_name + ": description field is deprecated", "", QtDebugMsg);
     m_description = description;
 }
 

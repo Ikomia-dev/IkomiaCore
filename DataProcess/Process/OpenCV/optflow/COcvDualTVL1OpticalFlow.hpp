@@ -163,7 +163,7 @@ class COcvDualTVL1OFFactory : public CTaskFactory
         COcvDualTVL1OFFactory()
         {
             m_info.m_name = "ocv_dual_tvl1_flow";
-            m_info.m_description = QObject::tr("This process computes a dense optical flow using the Dual TV L1 algorithm.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process computes a dense optical flow using the Dual TV L1 algorithm.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Extra modules/Optical flow algorithms").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Farneback, Dense, Optical, Flow";

@@ -204,7 +204,7 @@ class COcvInRangeFactory : public CTaskFactory
         COcvInRangeFactory()
         {
             m_info.m_name = "ocv_in_range";
-            m_info.m_description = QObject::tr("The function checks if array elements lie between the elements of two other arrays or scalar").toStdString();
+            m_info.m_shortDescription = QObject::tr("The function checks if array elements lie between the elements of two other arrays or scalar").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Core functionality/Operations on arrays").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "arithmetic,inrange,range,per-element";

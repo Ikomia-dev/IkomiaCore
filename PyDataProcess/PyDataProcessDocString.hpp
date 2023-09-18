@@ -2234,7 +2234,7 @@ constexpr auto _ctor1WorkflowDocString =
 
 constexpr auto _ctor2WorkflowDocString =
         "Construct a new workflow object with the given name and Ikomia registry. You should use this constructor "
-        "if you intend to instanciate tasks from the Ikomia registry (built-in algorithms and Marketplace).\n\n"
+        "if you intend to instanciate tasks from the Ikomia registry (built-in algorithms and Ikomia HUB).\n\n"
         "Args:\n\n"
         "   name (str): workflow name\n\n"
         "   registry (:py:class:`~ikomia.dataprocess.registry.IkomiaRegistry`): algorithms registry\n\n";

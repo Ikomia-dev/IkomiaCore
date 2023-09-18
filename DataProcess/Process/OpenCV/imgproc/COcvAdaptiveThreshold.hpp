@@ -162,7 +162,7 @@ class COcvAdaptiveThresholdFactory : public CTaskFactory
         COcvAdaptiveThresholdFactory()
         {
             m_info.m_name = "ocv_adaptive_threshold";
-            m_info.m_description = QObject::tr("Adaptive thresholding according to local background estimation").toStdString();
+            m_info.m_shortDescription = QObject::tr("Adaptive thresholding according to local background estimation").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Image processing/Miscellaneous image transformations").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "segmentation,adaptive,threshold,mean,gaussian";

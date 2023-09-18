@@ -114,7 +114,7 @@ class COcvCvtColorFactory : public CTaskFactory
         COcvCvtColorFactory()
         {
             m_info.m_name = "ocv_color_conversion";
-            m_info.m_description = QObject::tr("This process converts an image from one color space to another.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process converts an image from one color space to another.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Image processing/Miscellaneous image transformations").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Conversion,Convert,Color,rgb2gray,gray2rgb";

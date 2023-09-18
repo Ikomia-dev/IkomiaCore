@@ -141,7 +141,7 @@ class COcvFlannMatcherFactory : public CTaskFactory
         COcvFlannMatcherFactory()
         {
             m_info.m_name = "ocv_flann_based_matcher";
-            m_info.m_description = QObject::tr("Flann-based descriptor matcher.").toStdString();
+            m_info.m_shortDescription = QObject::tr("Flann-based descriptor matcher.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/2D features framework/Descriptor matchers").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Features,Keypoints,Descriptors,Interest";

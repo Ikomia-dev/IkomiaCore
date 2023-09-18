@@ -36,14 +36,15 @@ namespace Ikomia
 
                 static std::string              getTransferPath();
                 static std::string              getDirectory(const std::string& name, int language);
-                static QString                  getCppPluginFolder(const QString& name);
-                static QString                  getPythonPluginFolder(const QString& name);
-
+                static std::string              getDirectory(const std::string& name);
+                static std::string              getCppValidPluginFolder(const std::string &name);
+                static std::string              getPythonPluginFolder(const std::string &name);
+                static std::string              getDescription(const std::string &name);
                 static boost::python::object    loadPythonModule(const std::string& name, bool bReload);
 
             private:
 
-                static QString                  getPythonLoadedPluginFolder(const QString &name);
+                static std::string              getPythonValidPluginFolder(const std::string &name);
         };
     }
 }

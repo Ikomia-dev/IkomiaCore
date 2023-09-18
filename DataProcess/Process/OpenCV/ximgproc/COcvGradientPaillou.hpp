@@ -127,7 +127,7 @@ class COcvGradientPaillouFactory : public CTaskFactory
         COcvGradientPaillouFactory()
         {
             m_info.m_name = "ocv_paillou_gradient_filter";
-            m_info.m_description = QObject::tr("Applies X or Y Paillou filter to an image").toStdString();
+            m_info.m_shortDescription = QObject::tr("Applies X or Y Paillou filter to an image").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Extra modules/Extended Image Processing/Filters").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Gradient,Derivation,X,Y";

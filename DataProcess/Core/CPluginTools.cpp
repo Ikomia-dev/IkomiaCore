@@ -40,19 +40,70 @@ std::string Utils::CPluginTools::getDirectory(const std::string& name, int langu
     return directory;
 }
 
-QString Utils::CPluginTools::getPythonPluginFolder(const QString &name)
+std::string Utils::CPluginTools::getDirectory(const std::string &name)
 {
-    auto pluginFolder = Utils::CPluginTools::getPythonLoadedPluginFolder(name);
-    if(pluginFolder.isEmpty())
+    std::string directory = Utils::Plugin::getPythonPath() + "/" + Utils::String::httpFormat(name);
+    if (Utils::File::isFileExist(directory))
+        return directory;
+
+    directory = Utils::Plugin::getCppPath() + "/" + Utils::String::httpFormat(name);
+    if (Utils::File::isFileExist(directory))
+        return directory;
+
+    return "";
+}
+
+std::string Utils::CPluginTools::getPythonPluginFolder(const std::string &name)
+{
+    auto pluginFolder = Utils::CPluginTools::getPythonValidPluginFolder(name);
+    if (pluginFolder.empty())
     {
-        pluginFolder = QString::fromStdString(Utils::Plugin::getPythonPath()) + "/" + name;
-        if(boost::filesystem::exists(pluginFolder.toStdString()) == false)
-            return QString();
+        pluginFolder = getDirectory(name, ApiLanguage::PYTHON);
+        if(boost::filesystem::exists(pluginFolder) == false)
+            return std::string();
     }
     return pluginFolder;
 }
 
-QString Utils::CPluginTools::getPythonLoadedPluginFolder(const QString &name)
+std::string Utils::CPluginTools::getDescription(const std::string &name)
+{
+    // List of file patterns used to search for plugin documentation file
+    // readme.md is reserved for git-based repository information
+    const QSet<QString> docFiles = {
+        "doc.md", "doc.html", "doc.htm",
+        "documentation.md", "documentation.html", "documentation.htm",
+        "info.md", "info.html", "info.htm",
+        "readme.md", "readme.html", "readme.htm",
+    };
+
+    std::string pluginDir = getDirectory(name);
+    QString docFilePath;
+    QDir qpluginDir(QString::fromStdString(pluginDir));
+
+    // Check if local doc file exists
+    foreach (QString fileName, qpluginDir.entryList(QDir::Files|QDir::NoSymLinks))
+    {
+        if(docFiles.contains(fileName.toLower()))
+        {
+            docFilePath = qpluginDir.absoluteFilePath(fileName);
+            break;
+        }
+    }
+
+    if(!docFilePath.isEmpty())
+    {
+        // Load doc file
+        QFile file(docFilePath);
+        if(file.open(QFile::ReadOnly | QFile::Text))
+        {
+            QString mdContent(file.readAll());
+            return mdContent.toStdString();
+        }
+    }
+    return std::string();
+}
+
+std::string Utils::CPluginTools::getPythonValidPluginFolder(const std::string &name)
 {
     CPyEnsureGIL gil;
     QDir pluginsDir(QString::fromStdString(Utils::Plugin::getPythonPath()));
@@ -85,8 +136,8 @@ QString Utils::CPluginTools::getPythonLoadedPluginFolder(const QString &name)
                         auto plugin = exFactory();
                         auto taskFactoryPtr = plugin->getProcessFactory();
 
-                        if(QString::fromStdString(taskFactoryPtr->getInfo().m_name) == name)
-                            return currentPluginDirPath;
+                        if(taskFactoryPtr->getInfo().m_name == name)
+                            return currentPluginDirPath.toStdString();
                     }
                 }
                 catch(boost::python::error_already_set&)
@@ -102,10 +153,10 @@ QString Utils::CPluginTools::getPythonLoadedPluginFolder(const QString &name)
             }
         }
     }
-    return QString();
+    return std::string();
 }
 
-QString Utils::CPluginTools::getCppPluginFolder(const QString &name)
+std::string Utils::CPluginTools::getCppValidPluginFolder(const std::string &name)
 {
     QDir pluginsDir(QString::fromStdString(Utils::Plugin::getCppPath()));
 
@@ -130,8 +181,8 @@ QString Utils::CPluginTools::getCppPluginFolder(const QString &name)
                         auto taskFactoryPtr = pPlugin->getProcessFactory();
                         if(taskFactoryPtr)
                         {
-                            if(QString::fromStdString(taskFactoryPtr->getInfo().m_name) == name)
-                                return currentPluginDirPath;
+                            if(taskFactoryPtr->getInfo().m_name == name)
+                                return currentPluginDirPath.toStdString();
                         }
                     }
                 }
@@ -139,7 +190,7 @@ QString Utils::CPluginTools::getCppPluginFolder(const QString &name)
             }
         }
     }
-    return QString();
+    return std::string();
 }
 
 boost::python::object Utils::CPluginTools::loadPythonModule(const std::string &name, bool bReload)

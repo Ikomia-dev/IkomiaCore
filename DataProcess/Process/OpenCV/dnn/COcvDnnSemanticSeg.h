@@ -81,7 +81,7 @@ class COcvDnnSegmentationFactory : public CTaskFactory
         COcvDnnSegmentationFactory()
         {
             m_info.m_name = "ocv_dnn_semantic_segmentation";
-            m_info.m_description = QObject::tr("This process gives the possibility to launch inference from already trained networks for segmentation purpose (CAFFE, TENSORFLOW, DARKNET and TORCH)).").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process gives the possibility to launch inference from already trained networks for segmentation purpose (CAFFE, TENSORFLOW, DARKNET and TORCH)).").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Deep neural network").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "cnn,dnn,deep,neural,network,segmentation";

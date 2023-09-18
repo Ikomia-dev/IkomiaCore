@@ -165,7 +165,7 @@ class COcvDTFilterEnhanceFactory : public CTaskFactory
         COcvDTFilterEnhanceFactory()
         {
             m_info.m_name = "ocv_dt_filter_enhance";
-            m_info.m_description = QObject::tr("This process produces enhanced image.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process produces enhanced image.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Extra modules/Extended Image Processing/Filters").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Details,Enhancement,DTFilterEnhance";

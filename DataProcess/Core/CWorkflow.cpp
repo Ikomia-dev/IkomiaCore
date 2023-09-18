@@ -2024,7 +2024,7 @@ void CWorkflow::loadJSON(const std::string &path)
 
         if(taskPtr == nullptr)
         {
-            std::string errorMsg = "Algorithm " +  jsonTaskData["name"].toString().toStdString() + " can't be created. Please check installation or marketplace connection.";
+            std::string errorMsg = "Algorithm " +  jsonTaskData["name"].toString().toStdString() + " can't be created. Please check installation or Ikomia HUB connection.";
             throw CException(CoreExCode::CREATE_FAILED, errorMsg, __func__, __FILE__, __LINE__);
         }
 

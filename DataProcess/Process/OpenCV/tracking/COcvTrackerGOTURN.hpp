@@ -129,7 +129,7 @@ class COcvTrackerGOTURNFactory : public CTaskFactory
         COcvTrackerGOTURNFactory()
         {
             m_info.m_name = "ocv_tracker_goturn";
-            m_info.m_description = QObject::tr("GOTURN is a kind of trackers based on Convolutional Neural Networks (CNN).").toStdString();
+            m_info.m_shortDescription = QObject::tr("GOTURN is a kind of trackers based on Convolutional Neural Networks (CNN).").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Extra modules/Tracking API").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Tracking,CNN,Deep,Learning";

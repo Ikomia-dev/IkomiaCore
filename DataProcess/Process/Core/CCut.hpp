@@ -150,7 +150,7 @@ class CCutFactory : public CTaskFactory
         CCutFactory()
         {
             m_info.m_name = "ik_blob_cut";
-            m_info.m_description = QObject::tr("This process cut connected objects on binary images according to a reference size.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process cut connected objects on binary images according to a reference size.").toStdString();
             m_info.m_path = QObject::tr("Core/Utils").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/default-process.png").toStdString();
             m_info.m_keywords = "cut,connected,separate,binary";

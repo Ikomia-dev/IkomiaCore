@@ -132,7 +132,7 @@ class COcvCLAHEFactory : public CTaskFactory
         COcvCLAHEFactory()
         {
             m_info.m_name = "ocv_clahe";
-            m_info.m_description = QObject::tr("This process equalizes the histogram of image using Contrast Limited Adaptive Histogram Equalization.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process equalizes the histogram of image using Contrast Limited Adaptive Histogram Equalization.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Image processing/Histograms").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "brightness,contrast,histogram,normalization,equalization,adaptive";

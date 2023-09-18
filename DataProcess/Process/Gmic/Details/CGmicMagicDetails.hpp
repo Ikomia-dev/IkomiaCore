@@ -165,7 +165,7 @@ class CGmicMagicDetailsFactory : public CTaskFactory
         CGmicMagicDetailsFactory()
         {
             m_info.m_name = "gmic_magic_details";
-            m_info.m_description = QObject::tr("This process increases details in images.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process increases details in images.").toStdString();
             m_info.m_path = QObject::tr("Gmic/Details").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/gmic.png").toStdString();
             m_info.m_keywords = "enhance,contrast";
