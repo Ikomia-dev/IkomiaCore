@@ -3,8 +3,9 @@
 
 #include <vector>
 #include <string>
+#include "UtilsGlobal.hpp"
 
-class CSemanticVersion
+class UTILSSHARED_EXPORT CSemanticVersion
 {
     struct VersionDigit
     {
