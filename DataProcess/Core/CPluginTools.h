@@ -39,7 +39,7 @@ namespace Ikomia
                 static std::string              getDirectory(const std::string& name);
                 static std::string              getCppValidPluginFolder(const std::string &name);
                 static std::string              getPythonPluginFolder(const std::string &name);
-                static std::string              getDescription(const std::string &name);
+                static std::string              getReadmeDescription(const std::string &name);
                 static boost::python::object    loadPythonModule(const std::string& name, bool bReload);
 
             private:

@@ -65,7 +65,7 @@ std::string Utils::CPluginTools::getPythonPluginFolder(const std::string &name)
     return pluginFolder;
 }
 
-std::string Utils::CPluginTools::getDescription(const std::string &name)
+std::string Utils::CPluginTools::getReadmeDescription(const std::string &name)
 {
     // List of file patterns used to search for plugin documentation file
     // readme.md is reserved for git-based repository information
