@@ -125,6 +125,11 @@ void CNetworkManager::workerDownload(const QString& url, const QString& to)
 
 void CNetworkManager::downloadWithPython(const std::string &url, const std::string &to)
 {
+    std::string formattedTo = to;
+#ifdef Q_OS_WIN64
+    Utils::String::replace(formattedTo, "\\", "\\\\");
+#endif
+
     QString script = QString(
                 "import requests\n"
                 "import shutil\n\n"
@@ -132,6 +137,6 @@ void CNetworkManager::downloadWithPython(const std::string &url, const std::stri
                 "    with open('%2', 'wb') as file:\n"
                 "        shutil.copyfileobj(r.raw, file)\n")
             .arg(QString::fromStdString(url))
-            .arg(QString::fromStdString(to));
+            .arg(QString::fromStdString(formattedTo));
     Utils::Python::runScript(script.toStdString());
 }
