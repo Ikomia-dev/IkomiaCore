@@ -141,7 +141,7 @@ class CGmicHotPixelsFactory : public CTaskFactory
         CGmicHotPixelsFactory()
         {
             m_info.m_name = "gmic_hot_pixels";
-            m_info.m_description = QObject::tr("This process automatically removes hot pixels in images.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process automatically removes hot pixels in images.").toStdString();
             m_info.m_docLink = "https://gmic.eu/reference.shtml#remove_hotpixels";
             m_info.m_path = QObject::tr("Gmic/Repair").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/gmic.png").toStdString();

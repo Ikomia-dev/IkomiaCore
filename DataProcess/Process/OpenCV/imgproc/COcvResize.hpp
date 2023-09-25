@@ -143,7 +143,7 @@ class COcvResizeFactory : public CTaskFactory
         COcvResizeFactory()
         {
             m_info.m_name = "ocv_resize";
-            m_info.m_description = QObject::tr("This process resize your image.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process resize your image.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Image processing/Geometric image transformations").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "resize, interpolation";

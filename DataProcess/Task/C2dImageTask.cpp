@@ -89,37 +89,7 @@ void C2dImageTask::setOutputColorMap(size_t index, size_t maskIndex, const std::
     if(index >= m_colorMaps.size())
         m_colorMaps.resize(index + 1);
 
-    int startIndex = 0;
-    cv::Mat colormap = cv::Mat::zeros(256, 1, CV_8UC3);
-
-    if (bReserveZero)
-        startIndex = 1;
-
-    if(colors.size() == 0)
-    {
-        //Random colors
-        std::srand(RANDOM_COLOR_SEED);
-        for(int i=startIndex; i<256; ++i)
-        {
-            for(int j=0; j<3; ++j)
-                colormap.at<cv::Vec3b>(i, 0)[j] = (uchar)((double)std::rand() / (double)RAND_MAX * 255.0);
-        }
-    }
-    else if(colors.size() == 1)
-    {
-        if (bReserveZero)
-            colormap.at<cv::Vec3b>(startIndex, 0) = {colors[0][0], colors[0][1], colors[0][2]};
-        else
-            colormap.at<cv::Vec3b>(255, 0) = {colors[0][0], colors[0][1], colors[0][2]};
-    }
-    else
-    {
-        for(int i=0; i<std::min<int>(255, (int)colors.size()); ++i)
-            colormap.at<cv::Vec3b>(i+startIndex, 0) = {colors[i][0], colors[i][1], colors[i][2]};
-
-        for(int i=(int)colors.size()+1; i<256; ++i)
-            colormap.at<cv::Vec3b>(i, 0) = {(uchar)i, (uchar)i, (uchar)i};
-    }
+    CMat colormap = Utils::Image::createColorMap(colors, bReserveZero);
     m_colorMaps[index].m_map = colormap;
     m_colorMaps[index].m_index = maskIndex;
     m_colorMaps[index].m_bReserveZero = bReserveZero;

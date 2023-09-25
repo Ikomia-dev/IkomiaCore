@@ -96,8 +96,7 @@ CMat CKeypointDetectionTask::getImageWithGraphics() const
     if (kptsIOPtr == nullptr)
         throw CException(CoreExCode::NULL_POINTER, "Invalid object detection output", __func__, __FILE__, __LINE__);
 
-    auto graphicsIOPtr = kptsIOPtr->getGraphicsIO();
-    return imgIOPtr->getImageWithGraphics(graphicsIOPtr);
+    return imgIOPtr->getImageWithGraphics(kptsIOPtr);
 }
 
 void CKeypointDetectionTask::readClassNames(const std::string &path)

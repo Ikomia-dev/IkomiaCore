@@ -130,7 +130,7 @@ class COcvTextureFlatteningFactory : public CTaskFactory
         COcvTextureFlatteningFactory()
         {
             m_info.m_name = "ocv_texture_flattening";
-            m_info.m_description = QObject::tr("By retaining only the gradients at edge locations, before integrating with the Poisson solver, one washes out the texture of the selected region, giving its contents a flat aspect. Here Canny Edge Detector is used.").toStdString();
+            m_info.m_shortDescription = QObject::tr("By retaining only the gradients at edge locations, before integrating with the Poisson solver, one washes out the texture of the selected region, giving its contents a flat aspect. Here Canny Edge Detector is used.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Computational photography/Seamless cloning").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Seamless,Cloning,Texture,Flattening,Bilateral";

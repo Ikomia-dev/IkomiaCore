@@ -124,7 +124,7 @@ class COcvBilateralFactory : public CTaskFactory
         COcvBilateralFactory()
         {            
             m_info.m_name = "ocv_bilateral_filter";
-            m_info.m_description = QObject::tr("This process smoothes your image with an edge-preserving filter (blur homogeneous area and keep borders intact).").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process smoothes your image with an edge-preserving filter (blur homogeneous area and keep borders intact).").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Image processing/Image filtering").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Smooth,Blur,Anisotropic,Filter,Gaussian,Edge-preserving";

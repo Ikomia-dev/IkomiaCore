@@ -65,6 +65,8 @@ class DATAPROCESSSHARED_EXPORT CIkomiaRegistry
 
         void                        _loadCppPlugin(const QString &fileName);
 
+        void                        checkCompatibility(const CTaskInfo &info);
+
     private:
 
         CProcessRegistration            m_processRegistrator;

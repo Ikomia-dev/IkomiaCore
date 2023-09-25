@@ -148,7 +148,7 @@ class COcvSimpleBlobDetectorFactory : public CTaskFactory
         COcvSimpleBlobDetectorFactory()
         {
             m_info.m_name = "ocv_simple_blob_detector";
-            m_info.m_description = QObject::tr("This process implements a simple algorithm for extracting blobs from an image.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process implements a simple algorithm for extracting blobs from an image.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/2D features framework/Feature detection and description").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Features,Keypoints,Descriptors,Interest";

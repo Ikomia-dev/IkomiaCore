@@ -83,7 +83,7 @@ class CBlobMeasureFactory : public CTaskFactory
         CBlobMeasureFactory()
         {
             m_info.m_name = "ik_blob_measurement";
-            m_info.m_description = QObject::tr("This process extract connected components from binary image and calculate selected measures for each.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process extract connected components from binary image and calculate selected measures for each.").toStdString();
             m_info.m_path = QObject::tr("Core/Measurements").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/default-process.png").toStdString();
             m_info.m_keywords = "Blob, quantification, measure, connected component";

@@ -150,7 +150,7 @@ class COcvDistanceTransformFactory : public CTaskFactory
         COcvDistanceTransformFactory()
         {
             m_info.m_name = "ocv_distance_transform";
-            m_info.m_description = QObject::tr("The function calculates the approximate or precise distance from every binary image pixel to the nearest zero pixel. For zero image pixels, the distance will obviously be zero.").toStdString();
+            m_info.m_shortDescription = QObject::tr("The function calculates the approximate or precise distance from every binary image pixel to the nearest zero pixel. For zero image pixels, the distance will obviously be zero.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Image processing/Miscellaneous image transformations").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "distance transform,binary,voronoi";

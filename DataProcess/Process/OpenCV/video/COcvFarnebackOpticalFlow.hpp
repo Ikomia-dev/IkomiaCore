@@ -153,7 +153,7 @@ class COcvFarnebackOFFactory : public CTaskFactory
         COcvFarnebackOFFactory()
         {
             m_info.m_name = "ocv_farneback_flow";
-            m_info.m_description = QObject::tr("This process computes a dense optical flow using the Gunnar Farneback algorithm.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process computes a dense optical flow using the Gunnar Farneback algorithm.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Video analysis/Object tracking").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Farneback, Dense, Optical, Flow";

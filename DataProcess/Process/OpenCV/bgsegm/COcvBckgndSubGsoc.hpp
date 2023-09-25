@@ -180,7 +180,7 @@ class COcvBckgndSubGsocFactory : public CTaskFactory
         COcvBckgndSubGsocFactory()
         {
             m_info.m_name = "ocv_bck_substractor_gsoc";
-            m_info.m_description = QObject::tr("This process removes background on video sequence based on counting algorithm.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process removes background on video sequence based on counting algorithm.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Extra modules/Improved Background-Foreground Segmentation Methods").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "video,background,substractor,segmentation,binary";

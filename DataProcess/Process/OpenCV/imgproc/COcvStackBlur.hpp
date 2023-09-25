@@ -101,7 +101,7 @@ class COcvStackBlurFactory : public CTaskFactory
         COcvStackBlurFactory()
         {
             m_info.m_name = "ocv_stack_blur";
-            m_info.m_description = QObject::tr("This process smoothes your image with similar results as Gaussian blur.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process smoothes your image with similar results as Gaussian blur.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Image processing/Image filtering").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Smooth,Blur,Isotropic,Filter,Gaussian";

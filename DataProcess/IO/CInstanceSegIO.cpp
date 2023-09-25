@@ -2,6 +2,7 @@
 #include "Data/CDataConversion.h"
 #include "Main/CoreTools.hpp"
 #include "DataProcessTools.hpp"
+#include "Graphics/CGraphicsConversion.h"
 #include <QJsonArray>
 
 //---------------------------------//
@@ -22,6 +23,11 @@ CMat CInstanceSegmentation::getMask() const
     return m_mask;
 }
 
+std::vector<ProxyGraphicsItemPtr> CInstanceSegmentation::getPolygons() const
+{
+    return m_polygons;
+}
+
 void CInstanceSegmentation::setType(int type)
 {
     m_type = type;
@@ -35,11 +41,27 @@ void CInstanceSegmentation::setClassIndex(int index)
 void CInstanceSegmentation::setMask(const CMat &mask)
 {
     m_mask = mask;
+    computePolygons();
 }
 
 std::string CInstanceSegmentation::repr() const
 {
     return "CInstanceSegmentation()";
+}
+
+void CInstanceSegmentation::computePolygons()
+{
+    m_polygons.clear();
+    CGraphicsConversion conv;
+    CColor emptyBrush = {255, 0, 0, 0};
+    auto graphics = conv.binaryMaskToProxyGraphics(m_mask, m_color, emptyBrush, 1);
+
+    for (size_t i=0; i<graphics.size(); ++i)
+    {
+        GraphicsItem type = graphics[i]->getType();
+        if (type == GraphicsItem::POLYGON || type == GraphicsItem::COMPLEX_POLYGON)
+            m_polygons.push_back(graphics[i]);
+    }
 }
 
 std::ostream& operator<<(std::ostream& os, const CInstanceSegmentation& obj)
@@ -202,6 +224,41 @@ InputOutputVect CInstanceSegIO::getSubIOList(const std::set<IODataType> &dataTyp
     return ioList;
 }
 
+CMat CInstanceSegIO::getImageWithGraphics(const CMat &image) const
+{
+    auto graphicsIOPtr = getGraphicsIO();
+    if (graphicsIOPtr)
+        return graphicsIOPtr->getImageWithGraphics(image);
+    else
+        return image;
+}
+
+CMat CInstanceSegIO::getImageWithMask(const CMat &image) const
+{
+    CMat colormap = Utils::Image::createColorMap(getColors(), true);
+    return Utils::Image::mergeColorMask(image, getMergeMask(), colormap, 0.7, true);
+}
+
+CMat CInstanceSegIO::getImageWithMaskAndGraphics(const CMat &image) const
+{
+    CMat imgWithGraphics = getImageWithGraphics(image);
+    return getImageWithMask(imgWithGraphics);
+}
+
+std::vector<CColor> CInstanceSegIO::getColors() const
+{
+    std::vector<CColor> colors;
+    for (size_t i=0; i<m_instances.size(); ++i)
+    {
+        int classIndex = m_instances[i].m_classIndex;
+        if (classIndex >= colors.size())
+            colors.resize(classIndex + 1);
+
+        colors[classIndex] = m_instances[i].m_color;
+    }
+    return colors;
+}
+
 bool CInstanceSegIO::isDataAvailable() const
 {
     return m_instances.size() > 0;
@@ -245,6 +302,7 @@ void CInstanceSegIO::addObject(int id, int type, int classIndex, const std::stri
     else
         obj.m_mask = mask.clone();
 
+    obj.computePolygons();
     m_instances.push_back(obj);
 
     //Set integrated I/O
@@ -258,6 +316,10 @@ void CInstanceSegIO::addObject(int id, int type, int classIndex, const std::stri
         auto graphicsObj = m_graphicsIOPtr->addRectangle(boxX, boxY, boxWidth, boxHeight, rectProp);
         graphicsId = graphicsObj->getId();
     }
+
+    // Create polygons graphics of mask outline
+    for (size_t i=0; i<obj.m_polygons.size(); ++i)
+        m_graphicsIOPtr->addItem(obj.m_polygons[i]);
 
     //Class label
     std::string graphicsLabel = label + " #" + std::to_string(id) + ": " + std::to_string(confidence);
@@ -326,13 +388,13 @@ void CInstanceSegIO::save(const std::string &path)
     if(!jsonFile.open(QFile::WriteOnly | QFile::Text))
         throw CException(CoreExCode::INVALID_FILE, "Couldn't write file:" + path, __func__, __FILE__, __LINE__);
 
-    QJsonDocument jsonDoc(toJsonInternal({"image_format", "jpg"}));
+    QJsonDocument jsonDoc(toJsonInternal({"image_format", "png"}));
     jsonFile.write(jsonDoc.toJson());
 }
 
 std::string CInstanceSegIO::toJson() const
 {
-    std::vector<std::string> options = {"json_format", "compact", "image_format", "jpg"};
+    std::vector<std::string> options = {"json_format", "compact", "image_format", "png"};
     return toJson(options);
 }
 
@@ -381,7 +443,20 @@ QJsonObject CInstanceSegIO::toJsonInternal(const std::vector<std::string> &optio
         obj["box"] = box;
 
         obj["mask"] = QString::fromStdString(Utils::Image::toJson(m_instances[i].m_mask, options));
-        obj["color"] = CGraphicsJSON::toJsonObject(m_instances[i].m_color);
+        obj["color"] = CGraphicsJSON::toJsonObject(m_instances[i].m_color);        
+
+        size_t polygonsCount = m_instances[i].m_polygons.size();
+        if (polygonsCount > 0)
+        {
+            QJsonArray polygons;
+            for (size_t j=0; j<polygonsCount; ++j)
+            {
+                QJsonObject polygon;
+                m_instances[i].m_polygons[j]->toJson(polygon);
+                polygons.append(polygon);
+            }
+            obj["polygons"] = polygons;
+        }
         objects.append(obj);
     }
     QJsonObject root;

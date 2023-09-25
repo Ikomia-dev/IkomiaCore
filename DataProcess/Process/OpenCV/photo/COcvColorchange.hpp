@@ -131,7 +131,7 @@ class COcvColorchangeFactory : public CTaskFactory
         COcvColorchangeFactory()
         {
             m_info.m_name = "ocv_color_change";
-            m_info.m_description = QObject::tr("Given an original color image, two differently colored versions of this image can be mixed seamlessly.").toStdString();
+            m_info.m_shortDescription = QObject::tr("Given an original color image, two differently colored versions of this image can be mixed seamlessly.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Computational photography/Seamless cloning").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Color,Mixing,Seamless";

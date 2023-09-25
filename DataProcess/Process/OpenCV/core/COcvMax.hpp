@@ -155,7 +155,7 @@ class COcvMaxFactory : public CTaskFactory
         COcvMaxFactory()
         {
             m_info.m_name = "ocv_max";
-            m_info.m_description = QObject::tr("The function calculates the per-element maximum of two arrays or array and a scalar.").toStdString();
+            m_info.m_shortDescription = QObject::tr("The function calculates the per-element maximum of two arrays or array and a scalar.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Core functionality/Operations on arrays").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "arithmetic,max,per-element";

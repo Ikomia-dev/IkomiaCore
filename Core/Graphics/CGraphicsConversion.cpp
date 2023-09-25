@@ -52,9 +52,21 @@ QList<QGraphicsItem*> CGraphicsConversion::binaryMaskToGraphics(const CMat &mask
     return blobsToGraphics(polygonArray, hierarchy, pParent, penColor, brushColor, lineSize);
 }
 
+std::vector<ProxyGraphicsItemPtr> CGraphicsConversion::binaryMaskToProxyGraphics(const CMat &mask, const CColor &penColor, const CColor &brushColor, int lineSize)
+{
+    std::vector<cv::Vec4i> hierarchy;
+    std::vector<std::vector<cv::Point>> polygonArray;
+
+    if(mask.data == nullptr || mask.type() != CV_8UC1)
+        return std::vector<ProxyGraphicsItemPtr>();
+
+    cv::findContours(mask, polygonArray, hierarchy, cv::RETR_CCOMP, cv::CHAIN_APPROX_TC89_L1);
+    return blobsToProxyGraphics(polygonArray, hierarchy, penColor, brushColor, lineSize);
+}
+
 QList<QGraphicsItem*> CGraphicsConversion::blobsToGraphics(const std::vector<std::vector<cv::Point>>& polygonArray,
-                                                            const std::vector<cv::Vec4i>& hierarchy, QGraphicsItem *pParent,
-                                                            const CColor &penColor, const CColor &brushColor, int lineSize)
+                                                           const std::vector<cv::Vec4i>& hierarchy, QGraphicsItem *pParent,
+                                                           const CColor &penColor, const CColor &brushColor, int lineSize)
 {
     int holeId;
     QList<QGraphicsItem*> graphicsList;
@@ -101,9 +113,9 @@ QList<QGraphicsItem*> CGraphicsConversion::blobsToGraphics(const std::vector<std
     return graphicsList;
 }
 
-std::vector<std::shared_ptr<CProxyGraphicsItem>> CGraphicsConversion::blobsToProxyGraphics(const std::vector<std::vector<cv::Point> > &polygonArray,
-                                                                                           const std::vector<cv::Vec4i> &hierarchy,
-                                                                                           const CColor &penColor, const CColor &brushColor, int lineSize)
+std::vector<ProxyGraphicsItemPtr> CGraphicsConversion::blobsToProxyGraphics(const std::vector<std::vector<cv::Point> > &polygonArray,
+                                                                            const std::vector<cv::Vec4i> &hierarchy,
+                                                                            const CColor &penColor, const CColor &brushColor, int lineSize)
 {
     int holeId;
     std::vector<ProxyGraphicsItemPtr> graphicsList;

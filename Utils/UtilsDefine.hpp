@@ -7,7 +7,6 @@ namespace Ikomia
     {
         VALID,
         DEPRECATED,
-        UPDATED,
         INVALID
     };
 
@@ -32,6 +31,28 @@ namespace Ikomia
     {
         CPP,    /**< C++ */
         PYTHON  /**< Python */
+    };
+
+    enum CpuArch
+    {
+        X86_64,
+        ARM_64,
+        ARM_32,
+        NOT_SUPPORTED
+    };
+
+    enum License
+    {
+        CUSTOM,
+        AGPL_30,
+        APACHE_20,
+        BSD_2_CLAUSE,
+        BSD_3_CLAUSE,
+        CC0_10,
+        CC_BY_NC_40,
+        GPL_30,
+        LGPL_30,
+        MIT
     };
 }
 

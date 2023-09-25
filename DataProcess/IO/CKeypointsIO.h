@@ -115,6 +115,8 @@ class DATAPROCESSSHARED_EXPORT CKeypointsIO: public CWorkflowTaskIO
         std::vector<CKeypointLink>      getKeypointLinks() const;
         std::vector<std::string>        getKeypointNames() const;
         InputOutputVect                 getSubIOList(const std::set<IODataType> &dataTypes) const override;
+        CMat                            getImageWithGraphics(const CMat &image) const override;
+        CMat                            getImageWithMaskAndGraphics(const CMat &image) const override;
 
         void                            init(const std::string& taskName, int imageIndex);
 

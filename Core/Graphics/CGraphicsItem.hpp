@@ -57,9 +57,9 @@ class CProxyGraphicsItem
         {
             return m_id;
         }
-        size_t                      getType() const
+        GraphicsItem                getType() const
         {
-            return static_cast<size_t>(m_type);
+            return m_type;
         }
         virtual std::string         getCategory() const = 0;
         virtual QRectF              getBoundingQRect() const = 0;

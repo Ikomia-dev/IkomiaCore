@@ -190,7 +190,7 @@ class COcvDftFactory : public CTaskFactory
         COcvDftFactory()
         {
             m_info.m_name = "ocv_dft";
-            m_info.m_description = QObject::tr("This process performs a forward or inverse Discrete Fourier transform of a 1D or 2D floating-point array.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process performs a forward or inverse Discrete Fourier transform of a 1D or 2D floating-point array.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Core functionality/Operations on arrays").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Fourier, dft, idft, transform";

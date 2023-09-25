@@ -140,6 +140,47 @@ namespace Ikomia
                 }
                 return result;
             }
+            inline CMat         createColorMap(const std::vector<CColor>& colors, bool bReserveZero)
+            {
+                int startIndex = 0;
+                cv::Mat colormap = cv::Mat::zeros(256, 1, CV_8UC3);
+
+                if (bReserveZero)
+                    startIndex = 1;
+
+                if(colors.size() == 0)
+                {
+                    //Random colors
+                    std::srand(RANDOM_COLOR_SEED);
+                    for(int i=startIndex; i<256; ++i)
+                    {
+                        for(int j=0; j<3; ++j)
+                            colormap.at<cv::Vec3b>(i, 0)[j] = (uchar)((double)std::rand() / (double)RAND_MAX * 255.0);
+                    }
+                }
+                else if(colors.size() == 1)
+                {
+                    if (colors[0].size() >= 3)
+                    {
+                        if (bReserveZero)
+                            colormap.at<cv::Vec3b>(startIndex, 0) = {colors[0][0], colors[0][1], colors[0][2]};
+                        else
+                            colormap.at<cv::Vec3b>(255, 0) = {colors[0][0], colors[0][1], colors[0][2]};
+                    }
+                }
+                else
+                {
+                    for(int i=0; i<std::min<int>(255, (int)colors.size()); ++i)
+                    {
+                        if (colors[i].size() >= 3)
+                            colormap.at<cv::Vec3b>(i+startIndex, 0) = {colors[i][0], colors[i][1], colors[i][2]};
+                    }
+
+                    for(int i=(int)colors.size()+1; i<256; ++i)
+                        colormap.at<cv::Vec3b>(i, 0) = {(uchar)i, (uchar)i, (uchar)i};
+                }
+                return colormap;
+            }
             inline std::string  toJson(const CMat& image, const std::vector<std::string> &options)
             {
                 if (image.data == nullptr)

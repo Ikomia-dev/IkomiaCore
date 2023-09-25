@@ -146,7 +146,7 @@ class CGmicSharpenTonesFactory : public CTaskFactory
         CGmicSharpenTonesFactory()
         {
             m_info.m_name = "gmic_sharpen_tones";
-            m_info.m_description = QObject::tr("This process performs deblurring on images.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process performs deblurring on images.").toStdString();
             m_info.m_path = QObject::tr("Gmic/Details").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/gmic.png").toStdString();
             m_info.m_keywords = "enhance,contrast,deconvolution";

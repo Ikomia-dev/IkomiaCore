@@ -89,7 +89,7 @@ CMat CInstanceSegTask::getImageWithMask() const
     if (instanceSegIOPtr == nullptr)
         throw CException(CoreExCode::NULL_POINTER, "Invalid object detection output", __func__, __FILE__, __LINE__);
 
-    return Utils::Image::mergeColorMask(imgIOPtr->getImage(), instanceSegIOPtr->getMergeMask(), getColorMap(0), 0.7, false);
+    return imgIOPtr->getImageWithMask(instanceSegIOPtr);
 }
 
 CMat CInstanceSegTask::getImageWithGraphics() const
@@ -102,8 +102,7 @@ CMat CInstanceSegTask::getImageWithGraphics() const
     if (instanceSegIOPtr == nullptr)
         throw CException(CoreExCode::NULL_POINTER, "Invalid object detection output", __func__, __FILE__, __LINE__);
 
-    auto graphicsIOPtr = instanceSegIOPtr->getGraphicsIO();
-    return imgIOPtr->getImageWithGraphics(graphicsIOPtr);
+    return imgIOPtr->getImageWithGraphics(instanceSegIOPtr);
 }
 
 CMat CInstanceSegTask::getImageWithMaskAndGraphics() const
@@ -116,9 +115,7 @@ CMat CInstanceSegTask::getImageWithMaskAndGraphics() const
     if (instanceSegIOPtr == nullptr)
         throw CException(CoreExCode::NULL_POINTER, "Invalid object detection output", __func__, __FILE__, __LINE__);
 
-    auto graphicsIOPtr = instanceSegIOPtr->getGraphicsIO();
-    CMat imgWithGraphics = imgIOPtr->getImageWithGraphics(graphicsIOPtr);
-    return Utils::Image::mergeColorMask(imgWithGraphics, instanceSegIOPtr->getMergeMask(), getColorMap(0), 0.7, true);
+    return imgIOPtr->getImageWithMaskAndGraphics(instanceSegIOPtr);
 }
 
 void CInstanceSegTask::readClassNames(const std::string &path)

@@ -23,9 +23,10 @@
 #include "CGraphicsOutput.h"
 #include "CObjectDetectionIO.h"
 #include "CInstanceSegIO.h"
+#include "CSemanticSegIO.h"
 #include "CKeypointsIO.h"
 #include "CTextIO.h"
-#include "UtilsTools.hpp"
+#include "DataProcessTools.hpp"
 #include <QJsonDocument>
 #include <QJsonArray>
 
@@ -161,6 +162,21 @@ QRectF CGraphicsInput::getBoundingRect() const
     return rect;
 }
 
+CMat CGraphicsInput::getImageWithGraphics(const CMat &image) const
+{
+    if(image.empty())
+        return CMat();
+
+    CMat img =image.clone();
+    Utils::Image::burnGraphics(img, getItems());
+    return img;
+}
+
+CMat CGraphicsInput::getImageWithMaskAndGraphics(const CMat &image) const
+{
+    return getImageWithGraphics(image);
+}
+
 bool CGraphicsInput::isDataAvailable() const
 {
     if(m_source == GraphicsSource::GRAPHICS_LAYER)
@@ -210,6 +226,20 @@ void CGraphicsInput::copy(const std::shared_ptr<CWorkflowTaskIO> &ioPtr)
         if (pInstanceSegIO)
         {
             auto graphicsOutPtr = pInstanceSegIO->getGraphicsIO();
+            if (graphicsOutPtr)
+            {
+                auto pGraphicsOut = dynamic_cast<const CGraphicsOutput*>(graphicsOutPtr.get());
+                if (pGraphicsOut)
+                    *this = *pGraphicsOut;
+            }
+        }
+    }
+    else if (type == IODataType::SEMANTIC_SEGMENTATION)
+    {
+        auto pSemanticSegIO = std::dynamic_pointer_cast<CSemanticSegIO>(ioPtr);
+        if (pSemanticSegIO)
+        {
+            auto graphicsOutPtr = pSemanticSegIO->getGraphicsIO();
             if (graphicsOutPtr)
             {
                 auto pGraphicsOut = dynamic_cast<const CGraphicsOutput*>(graphicsOutPtr.get());

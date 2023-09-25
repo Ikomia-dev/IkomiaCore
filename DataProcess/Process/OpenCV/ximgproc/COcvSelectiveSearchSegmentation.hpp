@@ -214,7 +214,7 @@ class COcvSelectiveSearchSegmentationFactory : public CTaskFactory
         COcvSelectiveSearchSegmentationFactory()
         {
             m_info.m_name = "ocv_selective_search_segmentation";
-            m_info.m_description = QObject::tr("This process performs a selective search segmentation.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process performs a selective search segmentation.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Extra modules/Extended Image Processing/Image segmentation").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "segmentation,graph,selective,search,multiple,strategy,color,texture,size,fill";

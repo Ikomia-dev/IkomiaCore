@@ -162,7 +162,7 @@ class COcvThresholdFactory : public CTaskFactory
         COcvThresholdFactory()
         {
             m_info.m_name = "ocv_threshold";
-            m_info.m_description = QObject::tr("The function applies fixed-level thresholding").toStdString();
+            m_info.m_shortDescription = QObject::tr("The function applies fixed-level thresholding").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Image processing/Miscellaneous image transformations").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "segmentation,threshold,otsu,triangle,binary";

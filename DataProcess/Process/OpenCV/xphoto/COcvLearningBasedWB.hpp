@@ -126,7 +126,7 @@ class COcvLearningBasedWBFactory : public CTaskFactory
         COcvLearningBasedWBFactory()
         {
             m_info.m_name = "ocv_learning_based_wb";
-            m_info.m_description = QObject::tr("More sophisticated learning-based automatic white balance algorithm.").toStdString();
+            m_info.m_shortDescription = QObject::tr("More sophisticated learning-based automatic white balance algorithm.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Extra modules/Additional photo processing algorithms").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "White,Balance,AutoWhiteBalance";

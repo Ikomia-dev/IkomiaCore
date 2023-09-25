@@ -124,7 +124,7 @@ void CInstanceSegFilter::run()
 CInstanceSegFilterFactory::CInstanceSegFilterFactory()
 {
     m_info.m_name = "ik_instance_segmentation_filter";
-    m_info.m_description = QObject::tr("This process filters instance segmentation results based on confidence and object category."
+    m_info.m_shortDescription = QObject::tr("This process filters instance segmentation results based on confidence and object category."
                                        "It can also be used for panoptic segmentation task results.").toStdString();
     m_info.m_path = QObject::tr("Core/Utils").toStdString();
     m_info.m_iconPath = QObject::tr(":/Images/default-process.png").toStdString();

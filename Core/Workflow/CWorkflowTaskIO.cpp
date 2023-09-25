@@ -271,6 +271,8 @@ void CWorkflowTaskIO::load(const std::string &path)
 
 void CWorkflowTaskIO::save()
 {
+    std::string path = m_saveFolder + m_saveBaseName + Utils::Data::getFileFormatExtension(m_saveFormat);
+    save(path);
 }
 
 void CWorkflowTaskIO::save(const std::string &path)
@@ -361,6 +363,21 @@ std::string CWorkflowTaskIO::toJson(const std::vector<std::string>& options) con
 void CWorkflowTaskIO::fromJson(const std::string &jsonStr)
 {
     Q_UNUSED(jsonStr);
+}
+
+CMat CWorkflowTaskIO::getImageWithGraphics(const CMat &image) const
+{
+    return image;
+}
+
+CMat CWorkflowTaskIO::getImageWithMask(const CMat &image) const
+{
+    return image;
+}
+
+CMat CWorkflowTaskIO::getImageWithMaskAndGraphics(const CMat &image) const
+{
+    return image;
 }
 
 std::string CWorkflowTaskIO::toFormattedJson(const QJsonDocument &doc, const std::vector<std::string> &options) const

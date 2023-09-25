@@ -212,30 +212,38 @@ CMat CImageIO::getImage()
     return CMat();
 }
 
-CMat CImageIO::getImageWithGraphics(const GraphicsInputPtr &graphics)
+CMat CImageIO::getImageWithGraphics(const WorkflowTaskIOPtr &io)
 {
-    auto internalImg = getImage();
-    if(internalImg.empty())
-        return CMat();
+    if (!io)
+        throw CException(CoreExCode::NULL_POINTER, "Input/output object is null", __func__, __FILE__, __LINE__);
 
-    CMat img =internalImg.clone();
-    if(graphics)
-        Utils::Image::burnGraphics(img, graphics->getItems());
-
-    return img;
+    return io->getImageWithGraphics(getImage());
 }
 
-CMat CImageIO::getImageWithGraphics(const GraphicsOutputPtr &graphics)
+CMat CImageIO::getImageWithMask(const WorkflowTaskIOPtr &io)
 {
-    auto internalImg = getImage();
-    if(internalImg.empty())
-        return CMat();
+    if (!io)
+        throw CException(CoreExCode::NULL_POINTER, "Input/output object is null", __func__, __FILE__, __LINE__);
 
-    CMat img =internalImg.clone();
-    if(graphics)
-        Utils::Image::burnGraphics(img, graphics->getItems());
+    return io->getImageWithMask(getImage());
+}
 
-    return img;
+CMat CImageIO::getImageWithMask(const CMat &image) const
+{
+    auto mask = m_image;
+    if (mask.channels() !=1 && mask.depth() != CV_8U)
+        return image;
+
+    CMat colormap = Utils::Image::createColorMap(std::vector<CColor>(), true);
+    return Utils::Image::mergeColorMask(image, mask, colormap, 0.7, true);
+}
+
+CMat CImageIO::getImageWithMaskAndGraphics(const WorkflowTaskIOPtr &io)
+{
+    if (!io)
+        throw CException(CoreExCode::NULL_POINTER, "Input/output object is null", __func__, __FILE__, __LINE__);
+
+    return io->getImageWithMaskAndGraphics(getImage());
 }
 
 size_t CImageIO::getUnitElementCount() const
@@ -398,7 +406,12 @@ void CImageIO::load(const std::string &path)
 
 std::string CImageIO::toJson() const
 {
-    std::vector<std::string> options = {"json_format", "compact", "image_format", "jpg"};
+    std::vector<std::string> options;
+    if (m_dataType == IODataType::IMAGE_LABEL || m_dataType == IODataType::IMAGE_BINARY)
+        options = {"json_format", "compact", "image_format", "png"};
+    else
+        options = {"json_format", "compact", "image_format", "jpg"};
+
     return toJson(options);
 }
 
