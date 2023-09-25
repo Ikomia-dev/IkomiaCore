@@ -517,11 +517,11 @@ namespace Ikomia
             }
             inline std::string  getCurrentVersionNumber()
             {
-                return "0.9.2";
+                return "0.10.0";
             }
             inline std::string  getCurrentVersionName()
             {
-                return "0.9.2";
+                return "0.10.0";
             }
             inline std::string  getIkomiaLibFolder()
             {
