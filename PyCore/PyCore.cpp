@@ -394,6 +394,13 @@ BOOST_PYTHON_MODULE(pycore)
         .value("OUTPUT_AUTO_EXPORT", CWorkflowTask::ActionFlag::OUTPUT_AUTO_EXPORT)
     ;
 
+    enum_<AlgoType>("AlgoType", "Enum - List of algorithms general type")
+        .value("INFER", AlgoType::INFER)
+        .value("TRAIN", AlgoType::TRAIN)
+        .value("DATASET", AlgoType::DATASET)
+        .value("OTHER", AlgoType::OTHER)
+    ;
+
     //Overload member functions
     InputOutputVect (CWorkflowTask::*getInputs)() const = &CWorkflowTask::getInputs;
     InputOutputVect (CWorkflowTask::*getOutputs)() const = &CWorkflowTask::getOutputs;

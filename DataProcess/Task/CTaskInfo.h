@@ -136,7 +136,7 @@ class DATAPROCESSSHARED_EXPORT CTaskInfo
         ApiLanguage m_language = ApiLanguage::CPP;  /**< Programming language */
         OSType      m_os = OSType::LINUX;           /**< Compatible operating system */
         AlgoType    m_algoType = AlgoType::OTHER;   /**< Type of algorithm */
-        std::string m_algoTasks = "";               /**< Type of tasks adressed: CLASSIFICATION, OBJECT_DETECTION... */
+        std::string m_algoTasks;                    /**< Type of tasks adressed: CLASSIFICATION, OBJECT_DETECTION... */
 };
 
 #endif // CTASKINFO_H
