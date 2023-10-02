@@ -85,8 +85,7 @@ namespace Ikomia
         SEMANTIC_SEGMENTATION,  /**< I/O for semantic segmentation management */
         KEYPOINTS,              /**< I/O for keypoints management */
         TEXT,                   /**< I/O for text fields management */
-        POSITION,               /**< Position image sequence */
-        JSON,                   /**< JSON data */
+        SCENE_3D,               /**< I/O for 3d scenes (made up of images, shapes, vector fields, plots, text...) */
         NONE                    /**< Unknown data type */
     };
 
