@@ -198,7 +198,6 @@ CMat CImageIO::getImage()
         m_dataType == IODataType::VIDEO_BINARY ||
         m_dataType == IODataType::VIDEO_LABEL ||
         m_dataType == IODataType::DESCRIPTORS ||
-        m_dataType == IODataType::POSITION ||
         m_dimCount == 2)
     {
         return m_image;
@@ -257,8 +256,7 @@ size_t CImageIO::getUnitElementCount() const
         return 1;
     }
     else if(m_dataType == IODataType::VOLUME ||
-            m_dataType == IODataType::VOLUME_BINARY ||
-            m_dataType == IODataType::POSITION)
+            m_dataType == IODataType::VOLUME_BINARY)
     {
         return m_image.getNbStacks();
     }
@@ -286,7 +284,6 @@ bool CImageIO::isDataAvailable() const
         m_dataType == IODataType::IMAGE_LABEL ||
         m_dataType == IODataType::VOLUME ||
         m_dataType == IODataType::VOLUME_BINARY ||
-        m_dataType == IODataType::POSITION ||
         m_dataType == IODataType::VIDEO ||
         m_dataType == IODataType::VIDEO_BINARY ||
         m_dataType == IODataType::VIDEO_LABEL ||
