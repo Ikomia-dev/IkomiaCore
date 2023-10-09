@@ -41,11 +41,7 @@ CScene3dObject::~CScene3dObject()
 
 CScene3dObject& CScene3dObject::operator = (const CScene3dObject &obj)
 {
-    // To avoid invalid self-assignment
-    if(this != &obj)
-    {
-        m_isVisible = obj.isVisible();
-    }
+    m_isVisible = obj.isVisible();
 
     return *this;
 }

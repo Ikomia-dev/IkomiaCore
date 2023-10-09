@@ -56,15 +56,10 @@ CScene3dShapeCircle::CScene3dShapeCircle(const CScene3dShapeCircle &shape) :
 
 CScene3dShapeCircle& CScene3dShapeCircle::operator = (const CScene3dShapeCircle& shape)
 {
-    // To avoid invalid self-assignment
-    if(this != &shape)
-    {
-        CScene3dObject::operator = (shape);
-
-        m_center = shape.getCenter();
-        m_color = shape.getColor();
-        m_radius = shape.getRadius();
-    }
+    CScene3dObject::operator = (shape);
+    m_center = shape.getCenter();
+    m_color = shape.getColor();
+    m_radius = shape.getRadius();
 
     return *this;
 }

@@ -53,14 +53,9 @@ CScene3dShapePoly::CScene3dShapePoly(const CScene3dShapePoly &shape) :
 
 CScene3dShapePoly& CScene3dShapePoly::operator = (const CScene3dShapePoly& shape)
 {
-    // To avoid invalid self-assignment
-    if(this != &shape)
-    {
-        CScene3dObject::operator = (shape);
-
-        m_lstPts = shape.getLstPts();
-        m_lineWidth = shape.getLineWidth();
-    }
+    CScene3dObject::operator = (shape);
+    m_lstPts = shape.getLstPts();
+    m_lineWidth = shape.getLineWidth();
 
     return *this;
 }

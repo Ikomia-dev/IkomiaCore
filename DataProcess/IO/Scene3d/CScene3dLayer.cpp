@@ -41,12 +41,8 @@ CScene3dLayer::CScene3dLayer(const CScene3dLayer& layer) :
 
 CScene3dLayer& CScene3dLayer::operator = (const CScene3dLayer& layer)
 {
-    // To avoid invalid self-assignment
-    if(this != &layer)
-    {
-        m_isVisible = layer.isVisible();
-        m_lstObjects = layer.getLstObjects();
-    }
+    m_isVisible = layer.isVisible();
+    m_lstObjects = layer.getLstObjects();
 
     return *this;
 }

@@ -42,13 +42,8 @@ CScene3dImage2d::CScene3dImage2d(const CScene3dImage2d &img) :
 
 CScene3dImage2d& CScene3dImage2d::operator = (const CScene3dImage2d& img)
 {
-    // To avoid invalid self-assignment
-    if(this != &img)
-    {
-        CScene3dObject::operator = (img);
-
-        m_data = img.getData();
-    }
+    CScene3dObject::operator = (img);
+    m_data = img.getData();
 
     return *this;
 }

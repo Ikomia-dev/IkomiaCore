@@ -39,13 +39,9 @@ CScene3dColor::CScene3dColor(const CScene3dColor &color) :
 
 CScene3dColor& CScene3dColor::operator = (const CScene3dColor &color)
 {
-    // To avoid invalid self-assignment
-    if(this != &color)
-    {
-        m_color[0] = color.getColorR();
-        m_color[1] = color.getColorG();
-        m_color[2] = color.getColorB();
-    }
+    m_color[0] = color.getColorR();
+    m_color[1] = color.getColorG();
+    m_color[2] = color.getColorB();
 
     return *this;
 }

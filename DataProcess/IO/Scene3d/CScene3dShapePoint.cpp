@@ -56,13 +56,10 @@ CScene3dShapePoint::CScene3dShapePoint(const CScene3dShapePoint &shape) :
 
 CScene3dShapePoint& CScene3dShapePoint::operator = (const CScene3dShapePoint& shape)
 {
-    if(this != &shape)
-    {
-        CScene3dObject::operator = (shape);
-        m_position = shape.getPosition();
-        m_color = shape.getColor();
-        m_size = shape.getSize();
-    }
+    CScene3dObject::operator = (shape);
+    m_position = shape.getPosition();
+    m_color = shape.getColor();
+    m_size = shape.getSize();
 
     return *this;
 }

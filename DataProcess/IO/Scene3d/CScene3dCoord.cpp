@@ -42,14 +42,10 @@ CScene3dCoord::CScene3dCoord(const CScene3dCoord &coord) :
 
 CScene3dCoord& CScene3dCoord::operator = (const CScene3dCoord &coord)
 {
-    // To avoid invalid self-assignment
-    if(this != &coord)
-    {
-        m_coord[0] = coord.getCoordX1();
-        m_coord[1] = coord.getCoordX2();
-        m_coord[2] = coord.getCoordX3();
-        m_coordSystem = coord.getCoordSystem();
-    }
+    m_coord[0] = coord.getCoordX1();
+    m_coord[1] = coord.getCoordX2();
+    m_coord[2] = coord.getCoordX3();
+    m_coordSystem = coord.getCoordSystem();
 
     return *this;
 }

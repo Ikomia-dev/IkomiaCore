@@ -37,12 +37,8 @@ CScene3d::CScene3d(const CScene3d &scene) :
 
 CScene3d& CScene3d::operator = (const CScene3d &scene)
 {
-    // To avoid invalid self-assignment
-    if(this != &scene)
-    {
-        m_lstLayers = scene.getLstLayers();
-        m_image2dCoordSystemOrigin = scene.getImage2dCoordSystemOrigin();
-    }
+    m_lstLayers = scene.getLstLayers();
+    m_image2dCoordSystemOrigin = scene.getImage2dCoordSystemOrigin();
 
     return *this;
 }

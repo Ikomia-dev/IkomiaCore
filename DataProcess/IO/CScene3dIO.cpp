@@ -58,26 +58,16 @@ CScene3dIO::CScene3dIO(const CScene3dIO &&io) :
 
 CScene3dIO& CScene3dIO::operator = (const CScene3dIO &io)
 {
-    // To avoid invalid self-assignment
-    if(this != &io)
-    {
-        CWorkflowTaskIO::operator = (io);
-
-        m_scene3d = io.getScene3d();
-    }
+    CWorkflowTaskIO::operator = (io);
+    m_scene3d = io.getScene3d();
 
     return *this;
 }
 
 CScene3dIO& CScene3dIO::operator = (const CScene3dIO &&io)
 {
-    // To avoid invalid self-assignment
-    if(this != &io)
-    {
-        CWorkflowTaskIO::operator = (io);
-
-        m_scene3d = io.getScene3d();
-    }
+    CWorkflowTaskIO::operator = (io);
+    m_scene3d = io.getScene3d();
 
     return *this;
 }
