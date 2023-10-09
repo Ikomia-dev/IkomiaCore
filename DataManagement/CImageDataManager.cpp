@@ -72,7 +72,8 @@ void CImageDataManager::fillDataset(CDataset<CMat> &dataset, const SubsetBounds 
     dataset.subset().clear();
     dataset.subset().setBounds(subsetBounds);
 
-    if(subsetDataInfo.hasDimension(DataDimension::VOLUME))
+    if(subsetDataInfo.hasDimension(DataDimension::VOLUME) ||
+            subsetDataInfo.hasDimension(DataDimension::POSITION))
     {
         // 3D management
         dataset.subset().setDimensions(dimensions(subsetBounds, DataDimension::IMAGE));
@@ -127,7 +128,8 @@ void CImageDataManager::fillDataset(CDataset<CMat> &dataset, const SubsetBounds 
 void CImageDataManager::cropDataset(CDataset<CMat> &dataset, const SubsetBounds &subsetBounds)
 {
     dataset.subset().setBounds(subsetBounds);
-    if(dataset.subset().data().hasDimension(DataDimension::VOLUME))
+    if(dataset.subset().data().hasDimension(DataDimension::VOLUME) ||
+            dataset.subset().data().hasDimension(DataDimension::POSITION))
     {
         //Crop subset
         SubsetBounds localBounds = dataset.subset().datasetToSubset(subsetBounds);
@@ -203,7 +205,8 @@ bool CImageDataManager::checkMemory(const CArrayDataInfo &arrayDataInfo)
 {
     unsigned long long totalSize = 0;
 
-    if(arrayDataInfo.hasDimension(DataDimension::VOLUME))
+    if(arrayDataInfo.hasDimension(DataDimension::VOLUME) ||
+            arrayDataInfo.hasDimension(DataDimension::POSITION))
     {
         auto filename = arrayDataInfo[0]->getFileName();
 
