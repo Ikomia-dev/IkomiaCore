@@ -39,6 +39,8 @@ add_library(ikDataProcess SHARED
     IO/CObjectDetectionIO.h
     IO/CPathIO.cpp
     IO/CPathIO.h
+    IO/CScene3dIO.cpp
+    IO/CScene3dIO.h
     IO/CSemanticSegIO.cpp
     IO/CSemanticSegIO.h
     IO/CTaskIORegistration.cpp
@@ -49,6 +51,24 @@ add_library(ikDataProcess SHARED
     IO/CVideoIO.h
     IO/CWidgetOutput.cpp
     IO/CWidgetOutput.h
+    IO/Scene3d/CScene3d.cpp
+    IO/Scene3d/CScene3d.h
+    IO/Scene3d/CScene3dColor.cpp
+    IO/Scene3d/CScene3dColor.h
+    IO/Scene3d/CScene3dCoord.cpp
+    IO/Scene3d/CScene3dCoord.h
+    IO/Scene3d/CScene3dImage2d.cpp
+    IO/Scene3d/CScene3dImage2d.h
+    IO/Scene3d/CScene3dLayer.cpp
+    IO/Scene3d/CScene3dLayer.h
+    IO/Scene3d/CScene3dObject.cpp
+    IO/Scene3d/CScene3dObject.h
+    IO/Scene3d/CScene3dShapeCircle.cpp
+    IO/Scene3d/CScene3dShapeCircle.h
+    IO/Scene3d/CScene3dShapePoint.cpp
+    IO/Scene3d/CScene3dShapePoint.h
+    IO/Scene3d/CScene3dShapePoly.cpp
+    IO/Scene3d/CScene3dShapePoly.h
     Process/Core/CBinaryToGraphics.cpp
     Process/Core/CBinaryToGraphics.h
     Process/Core/CBlobMeasure.cpp
@@ -475,8 +495,21 @@ set(PUBLIC_HEADERS_IO
     IO/CDatasetIO.h
     IO/CObjectDetectionIO.h
     IO/CInstanceSegIO.h
+    IO/CScene3dIO.h
     IO/CSemanticSegIO.h
     IO/CTextIO.h
+)
+
+set(PUBLIC_HEADERS_IO_SCENE_3D
+    IO/Scene3d/CScene3d.h
+    IO/Scene3d/CScene3dColor.h
+    IO/Scene3d/CScene3dCoord.h
+    IO/Scene3d/CScene3dImage2d.h
+    IO/Scene3d/CScene3dLayer.h
+    IO/Scene3d/CScene3dObject.h
+    IO/Scene3d/CScene3dShapeCircle.h
+    IO/Scene3d/CScene3dShapePoint.h
+    IO/Scene3d/CScene3dShapePoly.h
 )
 
 set(PUBLIC_HEADERS_PROCESS
@@ -616,6 +649,10 @@ install(FILES ${PUBLIC_HEADERS_CORE}
 
 install(FILES ${PUBLIC_HEADERS_IO}
     DESTINATION ${CMAKE_INSTALL_IKOMIA_INCLUDE}/DataProcess/IO
+)
+
+install(FILES ${PUBLIC_HEADERS_IO_SCENE_3D}
+    DESTINATION ${CMAKE_INSTALL_IKOMIA_INCLUDE}/DataProcess/IO/Scene3d
 )
 
 install(FILES ${PUBLIC_HEADERS_PROCESS}

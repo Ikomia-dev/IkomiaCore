@@ -365,8 +365,6 @@ namespace Ikomia
                         return QObject::tr("binary volume");
                     case IODataType::VOLUME_LABEL:
                         return QObject::tr("label volume");
-                    case IODataType::POSITION:
-                        return QObject::tr("position image sequence");
                     case IODataType::INPUT_GRAPHICS:
                     case IODataType::OUTPUT_GRAPHICS:
                         return QObject::tr("graphics");
@@ -412,6 +410,8 @@ namespace Ikomia
                         return QObject::tr("Keypoints detection");
                     case IODataType::TEXT:
                         return QObject::tr("Text detection");
+                    case IODataType::SCENE_3D:
+                        return QObject::tr("3D scene representation");
                 }
                 return QString();
             }
@@ -435,8 +435,6 @@ namespace Ikomia
                         return "IODataType.VOLUME_BINARY";
                     case IODataType::VOLUME_LABEL:
                         return "IODataType.VOLUME_LABEL";
-                    case IODataType::POSITION:
-                        return "IODataType.POSITION";
                     case IODataType::INPUT_GRAPHICS:
                         return "IODataType.INPUT_GRAPHICS";
                     case IODataType::OUTPUT_GRAPHICS:
@@ -483,6 +481,8 @@ namespace Ikomia
                         return "IODataType.KEYPOINTS";
                     case IODataType::TEXT:
                         return "IODataType.TEXT";
+                    case IODataType::SCENE_3D:
+                        return "IODataType.SCENE_3D";
                 }
                 return "";
             }
@@ -573,10 +573,6 @@ namespace Ikomia
                     return (targetData == IODataType::IMAGE ||
                             targetData == IODataType::IMAGE_LABEL);
                 }
-                else if(srcData == IODataType::POSITION)
-                {
-                    return targetData == IODataType::IMAGE;
-                }
                 else if(srcData == IODataType::VIDEO)
                 {
                     return targetData == IODataType::IMAGE;
@@ -629,6 +625,10 @@ namespace Ikomia
                             targetData == IODataType::VIDEO_LABEL ||
                             targetData == IODataType::PROJECT_FOLDER ||
                             targetData == IODataType::FOLDER_PATH;
+                }
+                else if (srcData == IODataType::SCENE_3D)
+                {
+                    return targetData == IODataType::SCENE_3D;
                 }
                 else
                     return false;
