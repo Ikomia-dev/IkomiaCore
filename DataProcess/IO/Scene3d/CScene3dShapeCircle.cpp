@@ -20,10 +20,12 @@
  */
 
 #include "CScene3dShapeCircle.h"
+#include "CScene3dObject.h"
+#include "CException.h"
+#include "ExceptionCode.hpp"
 
 #include <memory>
-
-#include "CScene3dObject.h"
+#include <QJsonObject>
 
 
 CScene3dShapeCircle::CScene3dShapeCircle() :
@@ -105,6 +107,36 @@ double CScene3dShapeCircle::getRadius() const
 void CScene3dShapeCircle::setRadius(double radius)
 {
     m_radius = radius;
+}
+
+QJsonObject CScene3dShapeCircle::toJson() const
+{
+    QJsonObject obj = CScene3dObject::toJson();
+
+    obj["kind"] = "SHAPE_CIRCLE";
+    obj["center"] = m_center.toJson();
+    obj["color"] = m_color.toJson();
+    obj["radius"] = m_radius;
+
+    return obj;
+}
+
+CScene3dShapeCirclePtr CScene3dShapeCircle::fromJson(const QJsonObject& obj)
+{
+    if(obj["kind"] != "SHAPE_CIRCLE")
+    {
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Invalid object type: 'SHAPE_CIRCLE' expected", __func__, __FILE__, __LINE__);
+    }
+
+    CScene3dCoord center = CScene3dCoord::fromJson(obj["center"].toObject());
+    CScene3dColor color = CScene3dColor::fromJson(obj["color"].toObject());
+
+    return CScene3dShapeCircle::create(
+        center.getCoordX1(), center.getCoordX2(), center.getCoordX3(), center.getCoordSystem(),
+        color.getColorR(), color.getColorG(), color.getColorB(),
+        obj["radius"].toDouble(),
+        obj["isVisible"].toBool()
+    );
 }
 
 CScene3dShapeCirclePtr CScene3dShapeCircle::create(

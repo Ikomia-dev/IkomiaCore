@@ -20,10 +20,12 @@
  */
 
 #include "CScene3dShapePoint.h"
+#include "CScene3dObject.h"
+#include "CException.h"
+#include "ExceptionCode.hpp"
 
 #include <memory>
-
-#include "CScene3dObject.h"
+#include <QJsonObject>
 
 
 CScene3dShapePoint::CScene3dShapePoint() :
@@ -103,6 +105,36 @@ double CScene3dShapePoint::getSize() const
 void CScene3dShapePoint::setSize(double size)
 {
     m_size = size;
+}
+
+QJsonObject CScene3dShapePoint::toJson() const
+{
+    QJsonObject obj = CScene3dObject::toJson();
+
+    obj["kind"] = "SHAPE_POINT";
+    obj["position"] = m_position.toJson();
+    obj["color"] = m_color.toJson();
+    obj["size"] = m_size;
+
+    return obj;
+}
+
+CScene3dShapePointPtr CScene3dShapePoint::fromJson(const QJsonObject& obj)
+{
+    if(obj["kind"] != "SHAPE_POINT")
+    {
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Invalid object type: 'SHAPE_POINT' expected", __func__, __FILE__, __LINE__);
+    }
+
+    CScene3dCoord position = CScene3dCoord::fromJson(obj["position"].toObject());
+    CScene3dColor color = CScene3dColor::fromJson(obj["color"].toObject());
+
+    return CScene3dShapePoint::create(
+        position.getCoordX1(), position.getCoordX2(), position.getCoordX3(), position.getCoordSystem(),
+        color.getColorR(), color.getColorG(), color.getColorB(),
+        obj["size"].toDouble(),
+        obj["isVisible"].toBool()
+    );
 }
 
 CScene3dShapePointPtr CScene3dShapePoint::create(

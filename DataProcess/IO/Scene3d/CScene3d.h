@@ -24,6 +24,7 @@
 
 #include <string>
 #include <vector>
+#include <QJsonObject>
 
 #include "CScene3dCoord.h"
 #include "CScene3dLayer.h"
@@ -118,6 +119,17 @@ public:
      * @param origin: the new '2D image coordinate system origin'.
      */
     void setImage2dCoordSystemOrigin(const CScene3dCoord &origin);
+
+    /**
+     * @brief Serialize data into a Qt's JSON object.
+     */
+    QJsonObject toJson() const;
+
+    /**
+     * @brief Deserialize data from a Qt's JSON object.
+     * @param obj: data to deserialize, must be in a JSON format.
+     */
+    static CScene3d fromJson(const QJsonObject& obj);
 
 protected:
     /**

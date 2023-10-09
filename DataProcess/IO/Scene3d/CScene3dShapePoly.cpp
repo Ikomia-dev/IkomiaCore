@@ -20,8 +20,13 @@
  */
 
 #include "CScene3dShapePoly.h"
+#include "CScene3dObject.h"
+#include "CException.h"
+#include "ExceptionCode.hpp"
 
 #include <memory>
+#include <QJsonArray>
+#include <QJsonObject>
 
 
 CScene3dShapePoly::CScene3dShapePoly() :
@@ -99,6 +104,55 @@ void CScene3dShapePoly::setLineWidth(double lineWidth)
     m_lineWidth = lineWidth;
 }
 
+QJsonObject CScene3dShapePoly::toJson() const
+{
+    QJsonObject obj = CScene3dObject::toJson();
+
+    QJsonArray lstPts;
+    for(auto pt : m_lstPts)
+    {
+        QJsonObject point;
+        point["position"] = std::get<0>(pt).toJson();
+        point["color"] = std::get<1>(pt).toJson();
+
+        lstPts.push_back(point);
+    }
+
+    obj["kind"] = "SHAPE_POLY";
+    obj["lstPts"] = lstPts;
+    obj["lineWidth"] = m_lineWidth;
+
+    return obj;
+}
+
+CScene3dShapePolyPtr CScene3dShapePoly::fromJson(const QJsonObject& obj)
+{
+    if(obj["kind"] != "SHAPE_POLY")
+    {
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Invalid object type: 'SHAPE_POINT' expected", __func__, __FILE__, __LINE__);
+    }
+
+    std::vector<CScene3dPt> lstPts;
+
+    QJsonArray lstPtsArray = obj["lstPts"].toArray();
+    for(auto point: lstPtsArray)
+    {
+        QJsonObject pointObject = point.toObject();
+
+        lstPts.push_back(
+            CScene3dPt(
+                CScene3dCoord::fromJson(pointObject["position"].toObject()),
+                CScene3dColor::fromJson(pointObject["color"].toObject())
+            )
+        );
+    }
+
+    return CScene3dShapePoly::create(
+        lstPts,
+        obj["lineWidth"].toDouble(),
+        obj["isVisible"].toBool()
+    );
+}
 
 CScene3dShapePolyPtr CScene3dShapePoly::create(
     double lineWidth,

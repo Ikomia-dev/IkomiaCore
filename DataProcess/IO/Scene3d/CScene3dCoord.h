@@ -22,6 +22,8 @@
 #ifndef CSCENE3DCOORD_H
 #define CSCENE3DCOORD_H
 
+#include <QJsonObject>
+
 
 /**
  * @brief This enumeration is used to defined the coordinate system
@@ -104,6 +106,17 @@ public:
      * @param cs: the new coordinate system.
      */
     void setCoordSystem(CScene3dCoordSystem cs);
+
+    /**
+     * @brief Serialize data into a Qt's JSON object.
+     */
+    QJsonObject toJson() const;
+
+    /**
+     * @brief Deserialize data from a Qt's JSON object.
+     * @param obj: data to deserialize, must be in a JSON format.
+     */
+    static CScene3dCoord fromJson(const QJsonObject& obj);
 
 protected:
     /**

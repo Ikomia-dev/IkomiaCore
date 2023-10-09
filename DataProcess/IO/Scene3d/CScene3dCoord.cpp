@@ -21,6 +21,9 @@
 
 #include "CScene3dCoord.h"
 
+#include <QJsonArray>
+#include <QJsonObject>
+
 
 CScene3dCoord::CScene3dCoord() :
     m_coord{0.0, 0.0, 0.0},
@@ -82,4 +85,30 @@ CScene3dCoordSystem CScene3dCoord::getCoordSystem() const
 void CScene3dCoord::setCoordSystem(CScene3dCoordSystem cs)
 {
     m_coordSystem = cs;
+}
+
+QJsonObject CScene3dCoord::toJson() const
+{
+    QJsonArray coord;
+    coord.push_back(m_coord[0]);
+    coord.push_back(m_coord[1]);
+    coord.push_back(m_coord[2]);
+
+    QJsonObject obj;
+    obj["coord"] = coord;
+    obj["cs"] = static_cast<std::uint8_t>(m_coordSystem);
+
+    return obj;
+}
+
+CScene3dCoord CScene3dCoord::fromJson(const QJsonObject& obj)
+{
+    QJsonArray coord_array = obj["coord"].toArray();
+
+    return CScene3dCoord(
+        coord_array.at(0).toDouble(),
+        coord_array.at(1).toDouble(),
+        coord_array.at(2).toDouble(),
+        static_cast<CScene3dCoordSystem>(obj["cs"].toInt())
+    );
 }

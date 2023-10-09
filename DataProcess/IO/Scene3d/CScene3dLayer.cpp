@@ -20,6 +20,13 @@
  */
 
 #include "CScene3d.h"
+#include "CScene3dImage2d.h"
+#include "CScene3dShapePoint.h"
+#include "CScene3dShapeCircle.h"
+#include "CScene3dShapePoly.h"
+
+#include <QJsonArray>
+#include <QJsonObject>
 
 
 CScene3dLayer::CScene3dLayer() :
@@ -63,4 +70,64 @@ void CScene3dLayer::addObject(CScene3dObjectPtr obj)
 const std::vector<CScene3dObjectPtr>& CScene3dLayer::getLstObjects() const
 {
     return m_lstObjects;
+}
+
+QJsonObject CScene3dLayer::toJson() const
+{
+    QJsonObject obj;
+
+    QJsonArray lst_objects;
+    for(auto object : m_lstObjects)
+    {
+        lst_objects.push_back(object->toJson());
+    }
+    obj["isVisible"] = m_isVisible;
+    obj["objects"] = lst_objects;
+
+    return obj;
+}
+
+CScene3dLayer CScene3dLayer::fromJson(const QJsonObject& obj)
+{
+    CScene3dLayer layer;
+
+    layer.setVisibility(obj["isVisible"].toBool());
+
+    QJsonArray lstObjectsArray = obj["objects"].toArray();
+    for(auto x: lstObjectsArray)
+    {
+        QJsonObject objectObject = x.toObject();
+        std::string objectObjectKind = objectObject["kind"].toString().toStdString();
+
+        if(objectObjectKind == "IMAGE2D")
+        {
+            layer.addObject(
+                CScene3dImage2d::fromJson(objectObject)
+            );
+        }
+        else if(objectObjectKind == "SHAPE_POINT")
+        {
+            layer.addObject(
+                CScene3dShapePoint::fromJson(objectObject)
+            );
+        }
+        else if(objectObjectKind == "SHAPE_CIRCLE")
+        {
+            layer.addObject(
+                CScene3dShapeCircle::fromJson(objectObject)
+            );
+        }
+        else if(objectObjectKind == "SHAPE_POLY")
+        {
+            layer.addObject(
+                CScene3dShapePoly::fromJson(objectObject)
+            );
+        }
+        else
+        {
+            throw CException(CoreExCode::INVALID_JSON_FORMAT, "Unknown object type", __func__, __FILE__, __LINE__);
+        }
+    }
+
+    return layer;
 }

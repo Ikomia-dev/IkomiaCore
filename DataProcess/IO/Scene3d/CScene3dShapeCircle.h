@@ -23,6 +23,7 @@
 #define CSCENE3DSHAPECIRCLE_H
 
 #include <memory>
+#include <QJsonObject>
 
 #include "CScene3dColor.h"
 #include "CScene3dCoord.h"
@@ -127,6 +128,17 @@ public:
      * @param radius: the new radius.
      */
     void setRadius(double radius);
+
+    /**
+     * @brief Serialize data into a Qt's JSON object.
+     */
+    QJsonObject toJson() const override;
+
+    /**
+     * @brief Deserialize data from a Qt's JSON object.
+     * @param obj: data to deserialize, must be in a JSON format.
+     */
+    static CScene3dShapeCirclePtr fromJson(const QJsonObject& obj);
 
     /**
      * @brief Static method used to create an new 'CScene3dShapeCircle' instance.

@@ -20,6 +20,9 @@
  */
 
 #include "CScene3dImage2d.h"
+#include "DataProcessTools.hpp"
+
+#include <QJsonObject>
 
 
 CScene3dImage2d::CScene3dImage2d() :
@@ -68,6 +71,32 @@ std::size_t CScene3dImage2d::getWidth() const
 std::size_t CScene3dImage2d::getHeight() const
 {
     return m_data.getNbRows();
+}
+
+QJsonObject CScene3dImage2d::toJson() const
+{
+    QJsonObject obj = CScene3dObject::toJson();
+
+    std::vector<std::string> options = {"json_format", "compact", "image_format", "jpg"};
+    obj["image"] = QString::fromStdString(Utils::Image::toJson(m_data, options));
+    obj["kind"] = "IMAGE2D";
+
+    return obj;
+}
+
+CScene3dImage2dPtr CScene3dImage2d::fromJson(const QJsonObject& obj)
+{
+    if(obj["kind"] != "IMAGE2D")
+    {
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Invalid object type: 'IMAGE2D' expected", __func__, __FILE__, __LINE__);
+    }
+
+    CMat data = Utils::Image::fromJson(obj["image"].toString().toStdString());
+
+    return CScene3dImage2d::create(
+        data,
+        obj["isVisible"].toBool()
+    );
 }
 
 CScene3dImage2dPtr CScene3dImage2d::create(const CMat &data, bool isVisible)

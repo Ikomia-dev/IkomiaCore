@@ -22,6 +22,9 @@
 #ifndef CSCENE3DIO_H
 #define CSCENE3DIO_H
 
+#include <string>
+#include <QJsonDocument>
+
 #include "DataProcessGlobal.hpp"
 #include "IO/Scene3d/CScene3d.h"
 #include "Workflow/CWorkflowTaskIO.h"
@@ -102,8 +105,23 @@ class DATAPROCESSSHARED_EXPORT CScene3dIO : public CWorkflowTaskIO
          */
         std::shared_ptr<CScene3dIO> clone() const;
 
+        /**
+         * @brief Clear all data
+         */
+        void clearData() override;
+
+        void save() override;
+        void save(const std::string &path) override;
+        void load(const std::string &path) override;
+
+        std::string toJson() const override;
+        std::string toJson(const std::vector<std::string>& options) const override;
+        void fromJson(const std::string &jsonStr) override;
+
     private:
         virtual std::shared_ptr<CWorkflowTaskIO> cloneImp() const override;
+        QJsonDocument toJsonInternal() const;
+        void fromJsonInternal(const QJsonDocument& doc);
 
     protected:
         CScene3d m_scene3d;

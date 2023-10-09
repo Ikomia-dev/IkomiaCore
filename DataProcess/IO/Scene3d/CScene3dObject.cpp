@@ -21,6 +21,9 @@
 
 #include "CScene3dObject.h"
 
+#include <QJsonObject>
+
+
 CScene3dObject::CScene3dObject() :
     m_isVisible(true)
 { }
@@ -55,4 +58,12 @@ bool CScene3dObject::isVisible() const
 void CScene3dObject::setVisibility(bool isVisible)
 {
     m_isVisible = isVisible;
+}
+
+QJsonObject CScene3dObject::toJson() const
+{
+    QJsonObject obj;
+    obj["isVisible"] = m_isVisible;
+
+    return obj;
 }

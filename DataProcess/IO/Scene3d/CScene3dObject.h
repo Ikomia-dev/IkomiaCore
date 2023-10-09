@@ -23,6 +23,7 @@
 #define CSCENE3DOBJECT_H
 
 #include <memory>
+#include <QJsonObject>
 
 
 /**
@@ -71,6 +72,11 @@ public:
      * @param isVisible: visibility of the current object (true = visible / false = hidden)
      */
     void setVisibility(bool isVisible);
+
+    /**
+     * @brief Serialize data into a Qt's JSON object.
+     */
+    virtual QJsonObject toJson() const;
 
 protected:
     /**

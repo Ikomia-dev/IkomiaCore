@@ -21,6 +21,9 @@
 
 #include "CScene3d.h"
 
+#include <QJsonArray>
+#include <QJsonObject>
+
 
 CScene3d::CScene3d() :
     m_lstLayers(std::vector<CScene3dLayer>()),
@@ -96,4 +99,39 @@ const CScene3dCoord& CScene3d::getImage2dCoordSystemOrigin() const
 void CScene3d::setImage2dCoordSystemOrigin(const CScene3dCoord &origin)
 {
     m_image2dCoordSystemOrigin = origin;
+}
+
+QJsonObject CScene3d::toJson() const
+{
+    QJsonObject obj;
+
+    QJsonArray lstLayersArray;
+    for(auto layer : m_lstLayers)
+    {
+        lstLayersArray.push_back(layer.toJson());
+    }
+    obj["layers"] = lstLayersArray;
+
+    obj["image2dCoordSystemOrigin"] = m_image2dCoordSystemOrigin.toJson();
+
+    return obj;
+}
+
+CScene3d CScene3d::fromJson(const QJsonObject& obj)
+{
+    CScene3d scene;
+
+    QJsonArray lstLayersArray = obj["layers"].toArray();
+    for(auto layer : lstLayersArray)
+    {
+        scene.addLayer(
+            CScene3dLayer::fromJson(layer.toObject())
+        );
+    }
+
+    scene.setImage2dCoordSystemOrigin(
+        CScene3dCoord::fromJson(obj["image2dCoordSystemOrigin"].toObject())
+    );
+
+    return scene;
 }

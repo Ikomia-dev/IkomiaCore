@@ -23,6 +23,7 @@
 #define CSCENE3DLAYER_H
 
 #include <vector>
+#include <QJsonObject>
 
 #include "CScene3dObject.h"
 
@@ -70,6 +71,17 @@ public:
      * @brief Return the list of the objects contained inside the layer.
      */
     const std::vector<CScene3dObjectPtr>& getLstObjects() const;
+
+    /**
+     * @brief Serialize data into a Qt's JSON object.
+     */
+    QJsonObject toJson() const;
+
+    /**
+     * @brief Deserialize data from a Qt's JSON object.
+     * @param obj: data to deserialize, must be in a JSON format.
+     */
+    static CScene3dLayer fromJson(const QJsonObject& obj);
 
 protected:
     /**

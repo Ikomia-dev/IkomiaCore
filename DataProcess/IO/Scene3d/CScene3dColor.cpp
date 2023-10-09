@@ -21,6 +21,9 @@
 
 #include "CScene3dColor.h"
 
+#include <QJsonArray>
+#include <QJsonObject>
+
 
 CScene3dColor::CScene3dColor() :
     m_color{0.0, 0.0, 0.0}
@@ -82,4 +85,28 @@ void CScene3dColor::setColor(double colorR, double colorG, double colorB)
     m_color[0] = colorR;
     m_color[1] = colorG;
     m_color[2] = colorB;
+}
+
+QJsonObject CScene3dColor::toJson() const
+{
+    QJsonArray color;
+    color.push_back(m_color[0]);
+    color.push_back(m_color[1]);
+    color.push_back(m_color[2]);
+
+    QJsonObject obj;
+    obj["rgb"] = color;
+
+    return obj;
+}
+
+CScene3dColor CScene3dColor::fromJson(const QJsonObject& obj)
+{
+    QJsonArray color_array = obj["rgb"].toArray();
+
+    return CScene3dColor(
+        color_array.at(0).toDouble(),
+        color_array.at(1).toDouble(),
+        color_array.at(2).toDouble()
+    );
 }

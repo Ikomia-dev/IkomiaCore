@@ -25,6 +25,7 @@
 #include <memory>
 #include <tuple>
 #include <vector>
+#include <QJsonObject>
 
 #include "CScene3dColor.h"
 #include "CScene3dCoord.h"
@@ -132,6 +133,17 @@ public:
         double lineWidth,
         bool isVisible
     );
+
+    /**
+     * @brief Serialize data into a Qt's JSON object.
+     */
+    QJsonObject toJson() const override;
+
+    /**
+     * @brief Deserialize data from a Qt's JSON object.
+     * @param obj: data to deserialize, must be in a JSON format.
+     */
+    static CScene3dShapePolyPtr fromJson(const QJsonObject& obj);
 
     /**
      * @brief Static method used to create an new 'CScene3dShapePoly' instance.

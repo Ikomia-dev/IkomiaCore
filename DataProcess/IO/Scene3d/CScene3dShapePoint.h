@@ -23,6 +23,7 @@
 #define CSCENE3DSHAPEPOINT_H
 
 #include <memory>
+#include <QJsonObject>
 
 #include "CScene3dColor.h"
 #include "CScene3dCoord.h"
@@ -128,6 +129,17 @@ public:
      * @param size: the new size.
      */
     void setSize(double size);
+
+    /**
+     * @brief Serialize data into a Qt's JSON object.
+     */
+    QJsonObject toJson() const override;
+
+    /**
+     * @brief Deserialize data from a Qt's JSON object.
+     * @param obj: data to deserialize, must be in a JSON format.
+     */
+    static CScene3dShapePointPtr fromJson(const QJsonObject& obj);
 
     /**
      * @brief Static method used to create an new 'CScene3dShapePoint' instance.

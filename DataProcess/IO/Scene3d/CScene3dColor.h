@@ -22,6 +22,9 @@
 #ifndef CSCENE3DCOLOR_H
 #define CSCENE3DCOLOR_H
 
+#include <QJsonObject>
+
+
 /**
  * @brief The CScene3dColor class represents a RGB color.
  * @details This class is used to associate a color for each point of
@@ -91,6 +94,17 @@ public:
      * @param colorB: the new blue component, a real value defined in [0.0, 1.0].
      */
     void setColor(double colorR, double colorG, double colorB);
+
+    /**
+     * @brief Serialize data into a Qt's JSON object.
+     */
+    QJsonObject toJson() const;
+
+    /**
+     * @brief Deserialize data from a Qt's JSON object.
+     * @param obj: data to deserialize, must be in a JSON format.
+     */
+    static CScene3dColor fromJson(const QJsonObject& obj);
 
 protected:
     /**

@@ -23,6 +23,7 @@
 #define CSCENE3DIMAGE2D_H
 
 #include <memory>
+#include <QJsonObject>
 
 #include "Data/CMat.hpp"
 #include "CScene3dObject.h"
@@ -86,6 +87,17 @@ public:
      * @brief Return the image's height.
      */
     std::size_t getHeight() const;
+
+    /**
+     * @brief Serialize data into a Qt's JSON object.
+     */
+    QJsonObject toJson() const override;
+
+    /**
+     * @brief Deserialize data from a Qt's JSON object.
+     * @param obj: data to deserialize, must be in a JSON format.
+     */
+    static CScene3dImage2dPtr fromJson(const QJsonObject& obj);
 
     /**
      * @brief Static method used to create an new 'CScene3dImage2d' instance.
