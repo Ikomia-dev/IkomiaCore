@@ -82,7 +82,7 @@ std::string CScene3dIO::repr() const
 bool CScene3dIO::isDataAvailable() const
 {
     // Data are available if there is one or more layers in the 3D scene
-    // (event if these layers are empty)
+    // (even if these layers are empty)
     return (m_scene3d.getLstLayers().size() > 0);
 }
 
