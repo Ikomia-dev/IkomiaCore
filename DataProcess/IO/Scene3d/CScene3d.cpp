@@ -55,7 +55,7 @@ void CScene3d::setCurrentVisibleLayer(int index)
     {
         // Only the layer associated to 'index' is visible -> setVisibility(true)
         // Other layers are hidden -> setVisibility(false)
-        m_lstLayers[i].setVisibility(i == index);
+        m_lstLayers.at(i).setVisibility(i == index);
     }
 }
 
@@ -63,7 +63,7 @@ void CScene3d::setLayerVisibility(int index, bool visibility)
 {
     // The visibility of the layer associated to 'index' is changed
     // Other layers are not changed
-    m_lstLayers[index].setVisibility(visibility);
+    m_lstLayers.at(index).setVisibility(visibility);
 }
 
 void CScene3d::addLayer(const CScene3dLayer &layer)
@@ -79,12 +79,12 @@ const std::vector<CScene3dLayer>& CScene3d::getLstLayers() const
 
 const CScene3dLayer& CScene3d::getLayer(int index) const
 {
-    return m_lstLayers[index];
+    return m_lstLayers.at(index);
 }
 
 CScene3dLayer& CScene3d::getLayer(int index)
 {
-    return m_lstLayers[index];
+    return m_lstLayers.at(index);
 }
 
 const CScene3dCoord& CScene3d::getImage2dCoordSystemOrigin() const
