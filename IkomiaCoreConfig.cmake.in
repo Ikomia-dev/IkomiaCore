@@ -1,0 +1,36 @@
+@PACKAGE_INIT@
+
+set(IkomiaCore_DIR @PACKAGE_IKOMIA_CORE_DIR@)
+set(IKOMIA_CORE_DIR @PACKAGE_IKOMIA_CORE_DIR@)
+
+# If we are here: always true
+set(IkomiaCore_FOUND YES)
+
+# Package’s header directories
+set(IkomiaCore_INCLUDE_DIRS @PACKAGE_IKOMIA_CORE_DIR@/Build/include)
+
+# Libraries to link against to use 'IkomiaCore' (full paths)
+set(IkomiaCore_LIBRARIES
+    @PACKAGE_IKOMIA_CORE_DIR@/Build/lib/libikCore.so
+    @PACKAGE_IKOMIA_CORE_DIR@/Build/lib/libikDataIO.so
+    @PACKAGE_IKOMIA_CORE_DIR@/Build/lib/libikDataManagement.so
+    @PACKAGE_IKOMIA_CORE_DIR@/Build/lib/libikDataPlot.so
+    @PACKAGE_IKOMIA_CORE_DIR@/Build/lib/libikDataProcess.so
+    @PACKAGE_IKOMIA_CORE_DIR@/Build/lib/libikUtils.so
+    @PACKAGE_IKOMIA_CORE_DIR@/Build/lib/libikVolumeRender.so
+)
+
+# Preprocessor definitions to use when compiling code that uses 'IkomiaCore'
+set(IkomiaCore_DEFINITIONS "")
+
+# There is no executable inside 'IkomiaCore'
+set(IkomiaCore_EXECUTABLE NOTFOUND)
+
+# Base directory of the installation of 'IkomiaCore'
+set(IkomiaCore_ROOT_DIR @PACKAGE_IKOMIA_CORE_DIR@/Build)
+
+# Version of the package. Here, only one version of the package is available
+set(IkomiaCore_VERSION_@IkomiaCore_UNDERSCORE_VERSION@ YES)
+
+# IkomiaCore's API is always available
+set(IkomiaCore_API_FOUND YES)
