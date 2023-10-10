@@ -57,25 +57,17 @@ CJsonIO::~CJsonIO()
 
 CJsonIO& CJsonIO::operator = (const CJsonIO &io)
 {
-    // Self-assignment check...
-    if(this != &io)
-    {
-        // Not a self-assignment : data are copied
-        CWorkflowTaskIO::operator = (io);
-        m_rootJSON = io.m_rootJSON;
-    }
+    CWorkflowTaskIO::operator = (io);
+    m_rootJSON = io.m_rootJSON;
+
     return *this;
 }
 
 CJsonIO& CJsonIO::operator = (const CJsonIO &&io)
 {
-    // Self-assignment check...
-    if(this != &io)
-    {
-        // Not a self-assignment : data are copied
-        CWorkflowTaskIO::operator = (io);
-        m_rootJSON = std::move(io.m_rootJSON);
-    }
+    CWorkflowTaskIO::operator = (io);
+    m_rootJSON = std::move(io.m_rootJSON);
+
     return *this;
 }
 
