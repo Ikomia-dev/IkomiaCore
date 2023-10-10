@@ -410,6 +410,8 @@ namespace Ikomia
                         return QObject::tr("Keypoints detection");
                     case IODataType::TEXT:
                         return QObject::tr("Text detection");
+                    case IODataType::JSON:
+                        return QObject::tr("JSON data");
                     case IODataType::SCENE_3D:
                         return QObject::tr("3D scene representation");
                 }
@@ -481,6 +483,8 @@ namespace Ikomia
                         return "IODataType.KEYPOINTS";
                     case IODataType::TEXT:
                         return "IODataType.TEXT";
+                    case IODataType::JSON:
+                        return "IODataType.JSON";
                     case IODataType::SCENE_3D:
                         return "IODataType.SCENE_3D";
                 }
@@ -625,6 +629,10 @@ namespace Ikomia
                             targetData == IODataType::VIDEO_LABEL ||
                             targetData == IODataType::PROJECT_FOLDER ||
                             targetData == IODataType::FOLDER_PATH;
+                }
+                else if (srcData == IODataType::JSON)
+                {
+                    return targetData == IODataType::JSON;
                 }
                 else if (srcData == IODataType::SCENE_3D)
                 {

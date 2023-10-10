@@ -337,6 +337,9 @@ std::string CWorkflowTaskIO::getClassName(IODataType ioDataType)
         case IODataType::TEXT:
             return "CTextIO";
 
+        case IODataType::JSON:
+            return "CJsonIO";
+
         case IODataType::SCENE_3D:
             return "CScene3dIO";
 
