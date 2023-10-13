@@ -402,16 +402,18 @@ WorkflowVertex CWorkflow::getRunningTaskId() const
     return m_runningTask;
 }
 
-WorkflowVertex CWorkflow::getTaskId(const std::string &name) const
+std::vector<WorkflowVertex> CWorkflow::getTaskIdList(const std::string &name) const
 {
+    std::vector<WorkflowVertex> ids;
     auto rangeIt = boost::vertices(m_graph);
-    for(auto it = rangeIt.first; it != rangeIt.second; ++it)
+
+    for (auto it = rangeIt.first; it != rangeIt.second; ++it)
     {
         auto taskPtr = m_graph[*it];
-        if(taskPtr != nullptr && taskPtr->getName() == name)
-            return *it;
+        if (taskPtr != nullptr && taskPtr->getName() == name)
+            ids.push_back(*it);
     }
-    return boost::graph_traits<WorkflowGraph>::null_vertex();
+    return ids;
 }
 
 WorkflowTaskPtr CWorkflow::getTask(const WorkflowVertex &id) const

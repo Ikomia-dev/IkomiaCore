@@ -126,7 +126,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         WorkflowVertex                  getLastTaskId() const;
         WorkflowVertex                  getActiveTaskId() const;
         WorkflowVertex                  getRunningTaskId() const;
-        WorkflowVertex                  getTaskId(const std::string& name) const;
+        std::vector<WorkflowVertex>     getTaskIdList(const std::string& name) const;
         WorkflowTaskPtr                 getTask(const WorkflowVertex& id) const;
         std::vector<WorkflowVertex>     getParents(const WorkflowVertex& id) const;
         void                            getAllParents(const WorkflowVertex& id, std::vector<WorkflowVertex>& parents) const;
