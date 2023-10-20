@@ -44,25 +44,12 @@ class UTILSSHARED_EXPORT CLogManager: public QObject
 
     public:
 
-        /**
-         * @brief
-         *
-         * @param
-         */
         CLogManager(const CLogManager&) = delete;
-        /**
-         * @brief
-         *
-         * @param
-         */
+
         void operator=(const CLogManager&) = delete;
 
-        /**
-         * @brief
-         *
-         * @return CLogManager
-         */
         static CLogManager& instance();
+
         /**
          * @brief
          *
@@ -78,21 +65,16 @@ class UTILSSHARED_EXPORT CLogManager: public QObject
          * @param outputFunc
          */
         void                addOutputManager(std::function<void (int, const QString&, const QString&)> outputFunc);
-        /**
-         * @brief
-         *
-         */
+
         void                clearOutputManagers();
 
         void                setStdRedirection(const QString& path);
 
     private:
 
-        /**
-         * @brief
-         *
-         */
         CLogManager();
+
+        void                processPythonMessage(const QString& msg, QString &fullMsg, QtMsgType &type);
 
     private slots:
 

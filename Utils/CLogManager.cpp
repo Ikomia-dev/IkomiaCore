@@ -19,6 +19,7 @@
 
 #include "CLogManager.h"
 #include <iostream>
+#include <QRegularExpression>
 
 #ifdef Q_OS_WIN64
 #include <io.h>
@@ -71,7 +72,13 @@ void CLogManager::handleMessage(QtMsgType type, const QMessageLogContext &contex
     }
 
     QString category;
-    if (context.category && strcmp(context.category, "default") != 0)
+    if (context.category && strcmp(context.category, "Python") == 0 && type == QtCriticalMsg)
+    {
+        // Python redirects almost all message to stderr, even no error message.
+        // We apply here simple rules to qualify real message status
+        processPythonMessage(msg, fullMsg, type);
+    }
+    else if (context.category && strcmp(context.category, "default") != 0)
     {
         category = QString(context.category);
         fullMsg += category + ": " + msg;
@@ -90,6 +97,35 @@ void CLogManager::handleMessage(QtMsgType type, const QMessageLogContext &contex
     }
     else
         std::cout << fullMsg.toStdString() << std::endl;
+}
+
+void CLogManager::processPythonMessage(const QString &msg, QString &fullMsg, QtMsgType& type)
+{
+    // Very simple rules (surely too simple) to check real status: info, warning or error.
+    QRegularExpression errorExpr("(?i)error|exception");
+    QRegularExpressionMatch match = errorExpr.match(msg);
+
+    if(match.hasMatch())
+    {
+        type = QtCriticalMsg;
+        fullMsg = "Critical:" + msg;
+    }
+    else
+    {
+        QRegularExpression warningExpr("(?i)warning");
+        match = warningExpr.match(msg);
+
+        if(match.hasMatch())
+        {
+            type = QtWarningMsg;
+            fullMsg = "Critical:" + msg;
+        }
+        else
+        {
+            type = QtInfoMsg;
+            fullMsg = "Info:" + msg;
+        }
+    }
 }
 
 void CLogManager::clearOutputManagers()
