@@ -59,7 +59,7 @@ CSimpleBarPlot* CDataPlot::createSimpleBarPlot()
     {
         for(size_t k=0; k<m_dataList.size(); ++k)
         {
-            QVector<double> data = QVector<double>::fromStdVector(m_dataList[k]);
+            QVector<double> data(m_dataList[k].begin(), m_dataList[k].end());
             QStringList titles;
             for(auto&& it : m_stringList[k])
                 titles << QString::fromStdString(it);
@@ -77,7 +77,7 @@ CMultiBarPlot* CDataPlot::createMultiBarPlot()
     {
         for(size_t k=0; k<m_dataList.size(); ++k)
         {
-            QVector<double> data = QVector<double>::fromStdVector(m_dataList[k]);
+            QVector<double> data(m_dataList[k].begin(), m_dataList[k].end());
             pPlot->addSerie(data);
         }
     }
@@ -91,7 +91,7 @@ CHistogramPlot* CDataPlot::createHistogramPlot()
     {
         for(size_t k=0; k<m_dataList.size(); ++k)
         {
-            QVector<double> data = QVector<double>::fromStdVector(m_dataList[k]);
+            QVector<double> data(m_dataList[k].begin(), m_dataList[k].end());
             pPlot->addHistogram(data, "Histogram");
         }
     }

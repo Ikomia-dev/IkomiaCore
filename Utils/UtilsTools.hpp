@@ -1234,7 +1234,7 @@ namespace Ikomia
                     Q_UNUSED(e)
                     try
                     {
-                        boost::filesystem::copy_file(pathFrom, pathTo, boost::filesystem::copy_option::overwrite_if_exists);
+                        boost::filesystem::copy_file(pathFrom, pathTo, boost::filesystem::copy_options::overwrite_existing);
                         boost::filesystem::remove(pathFrom);
                     }
                     catch(const boost::filesystem::filesystem_error& e)

@@ -18,6 +18,7 @@
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "CCurvePlot.h"
+#include <QRandomGenerator>
 #include <qwt_plot_curve.h>
 #include <qwt_plot_grid.h>
 #include <qwt_symbol.h>
@@ -49,7 +50,7 @@ QwtPlotCurve* CCurvePlot::addPlot(const QString& name, std::vector<double> x, st
 
         if(!color.isValid())
         {
-            auto rand = qrand();
+            auto rand = QRandomGenerator::global()->generate();
             color = QColor(QString::fromStdString(m_colorList[rand%m_colorList.size()]));
         }
 

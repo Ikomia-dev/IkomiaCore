@@ -18,6 +18,7 @@
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "CMultiBarPlot.h"
+#include <QRandomGenerator>
 #include <qwt_legend.h>
 #include <qwt_plot_multi_barchart.h>
 #include <qwt_plot_barchart.h>
@@ -164,7 +165,8 @@ void CMultiBarPlot::populate()
 
     for ( int i = 0; i < m_maxBar; i++ )
     {
-        auto color = m_colorList[qrand()%m_colorList.size()];
+        int colorIndex = QRandomGenerator::global()->generate() % m_colorList.size();
+        auto color = m_colorList[colorIndex];
         QwtColumnSymbol *symbol = new QwtColumnSymbol( QwtColumnSymbol::Box );
         symbol->setLineWidth( 2 );
         symbol->setFrameStyle( QwtColumnSymbol::Raised );
