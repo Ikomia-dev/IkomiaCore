@@ -52,6 +52,8 @@ class COcvWidgetBoxFilter : public CWorkflowTaskWidget
 
             m_pSpin = new QSpinBox;
             m_pSpin->setValue(m_pParam->m_ksize.width);
+            m_pSpin->setMinimum(1);
+            m_pSpin->setMaximum(2048);
             QLabel* pLabelSpin = new QLabel(tr("Filter size d"));
 
             m_pCheckNormalize = new QCheckBox("Normalize");

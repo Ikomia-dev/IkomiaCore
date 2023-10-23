@@ -143,7 +143,7 @@ class CGmicBoostFadeFactory : public CTaskFactory
         CGmicBoostFadeFactory()
         {
             m_info.m_name = "gmic_boost_fade";
-            m_info.m_description = QObject::tr("This process fades chromaticity in images.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process fades chromaticity in images.").toStdString();
             m_info.m_path = QObject::tr("Gmic/Colors").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/gmic.png").toStdString();
             m_info.m_keywords = "color,enhance";

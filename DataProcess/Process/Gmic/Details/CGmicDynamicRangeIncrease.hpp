@@ -158,7 +158,7 @@ class CGmicDynamicRangeIncreaseFactory : public CTaskFactory
         CGmicDynamicRangeIncreaseFactory()
         {
             m_info.m_name = "gmic_dynamic_range_increase";
-            m_info.m_description = QObject::tr("This process increases dynamic range of images.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process increases dynamic range of images.").toStdString();
             m_info.m_path = QObject::tr("Gmic/Details").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/gmic.png").toStdString();
             m_info.m_keywords = "enhance,contrast,hdr";

@@ -418,17 +418,24 @@ constexpr auto _getImageDocString =
         "Returns:\n\n"
         "   Numpy array: 2D image buffer\n\n";
 
-constexpr auto _getImageWithGraphicsInDocString =
-        "Get a copy of the internal image with graphics items from the given graphics input.\n\n"
+constexpr auto _getImageWithGraphicsDocString =
+        "Get a copy of the internal image with graphics items from the given I/O.\n\n"
         "Args:\n\n"
-        "   graphics (:py:class:`~ikomia.dataprocess.pydataprocess.CGraphicsInput`)\n\n"
+        "   io (:py:class:`~ikomia.dataprocess.pydataprocess.CWorkflowTaskIO`)\n\n"
         "Returns:\n\n"
         "   Numpy array: 2D image buffer\n\n";
 
-constexpr auto _getImageWithGraphicsOutDocString =
-        "Get a copy of the internal image with graphics items from the given graphics output.\n\n"
+constexpr auto _getImageWithMaskDocString =
+        "Get a copy of the internal image with mask overlay from the given I/O.\n\n"
         "Args:\n\n"
-        "   graphics (:py:class:`~ikomia.dataprocess.pydataprocess.CGraphicsOutput`)\n\n"
+        "   io (:py:class:`~ikomia.dataprocess.pydataprocess.CWorkflowTaskIO`)\n\n"
+        "Returns:\n\n"
+        "   Numpy array: 2D image buffer\n\n";
+
+constexpr auto _getImageWithMaskAndGraphicsDocString =
+        "Get a copy of the internal image with graphics and mask overlay from the given I/O.\n\n"
+        "Args:\n\n"
+        "   io (:py:class:`~ikomia.dataprocess.pydataprocess.CWorkflowTaskIO`)\n\n"
         "Returns:\n\n"
         "   Numpy array: 2D image buffer\n\n";
 
@@ -1307,6 +1314,11 @@ constexpr auto _getMaskDocString =
         "Returns:\n\n"
         "   Numpy array: grayscale mask\n\n";
 
+constexpr auto _getPolygonsDocString =
+        "Get polygons of connected components extracted from segmentation mask.\n\n"
+        "Returns:\n\n"
+        "   list of :py:class:`~ikomia.core.pycore.CGraphicsItem` based objects\n\n";
+
 constexpr auto _getClassNamesDocString =
         "Get class names list associated with the semantic mask. "
         "Class index in the list corresponds to the pixel value in the mask.\n\n"
@@ -2011,6 +2023,18 @@ constexpr auto _semSegGetImgWithMaskDocString =
         "Returns:\n\n"
         "   2D numpy array (3 channels): color mask image\n\n";
 
+constexpr auto _semSegGetImgWithGraphicsDocString =
+        "Get visualization image where extracted outlines from connected components are embedded (graphics items).\n\n"
+        "Returns:\n\n"
+        "   2D Numpy array: visualization image\n\n";
+
+constexpr auto _semSegGetImgWithMaskAndGraphicsDocString =
+        "Get a visualization image composed by original input image, colored segmentation mask and "
+        "embedded graphics (outlines of connected components). A transparency factor is applied between original "
+        "image and mask.\n\n"
+        "Returns:\n\n"
+        "   2D numpy array (3 channels): visualization image\n\n";
+
 constexpr auto _semSegGetMaskDocString =
         "Set the segmentation mask computed from the input image.\n\n"
         "Args:\n\n"
@@ -2210,7 +2234,7 @@ constexpr auto _ctor1WorkflowDocString =
 
 constexpr auto _ctor2WorkflowDocString =
         "Construct a new workflow object with the given name and Ikomia registry. You should use this constructor "
-        "if you intend to instanciate tasks from the Ikomia registry (built-in algorithms and Marketplace).\n\n"
+        "if you intend to instanciate tasks from the Ikomia registry (built-in algorithms and Ikomia HUB).\n\n"
         "Args:\n\n"
         "   name (str): workflow name\n\n"
         "   registry (:py:class:`~ikomia.dataprocess.registry.IkomiaRegistry`): algorithms registry\n\n";

@@ -153,7 +153,7 @@ class COcvFastNlMeansFactory : public CTaskFactory
         COcvFastNlMeansFactory()
         {
             m_info.m_name = "ocv_non_local_means_filter";
-            m_info.m_description = QObject::tr("This process smoothes your image with an edge-preserving filter (blur homogeneous area and keep borders intact).").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process smoothes your image with an edge-preserving filter (blur homogeneous area and keep borders intact).").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Computational photography/Denoising").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "smooth,blur,anisotropic,filter,Gaussian,edge preserving,fast";

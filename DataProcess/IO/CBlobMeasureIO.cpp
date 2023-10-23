@@ -324,12 +324,6 @@ void CBlobMeasureIO::loadCSV(const std::string &path)
     }
 }
 
-void CBlobMeasureIO::save()
-{
-    std::string path = m_saveFolder + m_saveBaseName + Utils::Data::getFileFormatExtension(m_saveFormat);
-    save(path);
-}
-
 void CBlobMeasureIO::save(const std::string &path)
 {
     auto extension = Utils::File::extension(path);

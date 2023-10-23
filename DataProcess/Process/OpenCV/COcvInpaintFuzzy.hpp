@@ -108,7 +108,7 @@ class COcvInpaintFuzzyFactory : public CTaskFactory
         COcvInpaintFuzzyFactory()
         {
             m_info.m_name = "ocv_inpaint_fuzzy";
-            m_info.m_description = QObject::tr("This process performs inpainting from region of interest drawn in original image.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process performs inpainting from region of interest drawn in original image.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Extra modules/Fuzzy mathematics/Fuzzy image processing").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "inpainting,photo,deletion,fuzzy,mathematics";

@@ -150,7 +150,7 @@ class CGmicSharpenLucyFactory : public CTaskFactory
         CGmicSharpenLucyFactory()
         {
             m_info.m_name = "gmic_sharpen_richardson_lucy";
-            m_info.m_description = QObject::tr("This process performs deblurring on images with Richardon-Lucy algorithm.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process performs deblurring on images with Richardon-Lucy algorithm.").toStdString();
             m_info.m_path = QObject::tr("Gmic/Details").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/gmic.png").toStdString();
             m_info.m_keywords = "enhance,contrast,deconvolution";

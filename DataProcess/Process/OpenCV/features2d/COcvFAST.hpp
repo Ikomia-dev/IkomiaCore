@@ -125,7 +125,7 @@ class COcvFASTFactory : public CTaskFactory
         COcvFASTFactory()
         {
             m_info.m_name = "ocv_fast";
-            m_info.m_description = QObject::tr("This process implements the FAST keypoint detector and descriptor extractor.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process implements the FAST keypoint detector and descriptor extractor.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/2D features framework/Feature detection and description").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Features,Keypoints,Descriptors,Interest";

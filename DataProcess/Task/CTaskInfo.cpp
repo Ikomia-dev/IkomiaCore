@@ -19,10 +19,11 @@
 
 #include "CTaskInfo.h"
 #include "UtilsTools.hpp"
+#include "Main/CoreTools.hpp"
 
 CTaskInfo::CTaskInfo()
 {
-    m_ikomiaVersion = Utils::IkomiaApp::getCurrentVersionNumber().toStdString();
+    m_minIkomiaVersion = Utils::IkomiaApp::getCurrentVersionNumber();
 }
 
 std::string CTaskInfo::getName() const
@@ -70,6 +71,11 @@ std::string CTaskInfo::getArticle() const
     return m_article;
 }
 
+std::string CTaskInfo::getArticleUrl() const
+{
+    return m_articleUrl;
+}
+
 std::string CTaskInfo::getJournal() const
 {
     return m_journal;
@@ -80,19 +86,24 @@ std::string CTaskInfo::getVersion() const
     return m_version;
 }
 
-std::string CTaskInfo::getIkomiaVersion() const
+std::string CTaskInfo::getMinIkomiaVersion() const
 {
-    return m_ikomiaVersion;
+    return m_minIkomiaVersion;
 }
 
-std::string CTaskInfo::getCreatedDate() const
+std::string CTaskInfo::getMaxIkomiaVersion() const
 {
-    return m_createdDate;
+    return m_maxIkomiaVersion;
 }
 
-std::string CTaskInfo::getModifiedDate() const
+std::string CTaskInfo::getMinPythonVersion() const
 {
-    return m_modifiedDate;
+    return m_minPythonVersion;
+}
+
+std::string CTaskInfo::getMaxPythonVersion() const
+{
+    return m_maxPythonVersion;
 }
 
 std::string CTaskInfo::getLicense() const
@@ -105,6 +116,11 @@ std::string CTaskInfo::getRepository() const
     return m_repo;
 }
 
+std::string CTaskInfo::getOriginalRepository() const
+{
+    return m_originalRepo;
+}
+
 int CTaskInfo::getYear() const
 {
     return m_year;
@@ -115,9 +131,19 @@ ApiLanguage CTaskInfo::getLanguage() const
     return m_language;
 }
 
-int CTaskInfo::getOS() const
+OSType CTaskInfo::getOS() const
 {
     return m_os;
+}
+
+AlgoType CTaskInfo::getAlgoType() const
+{
+    return m_algoType;
+}
+
+std::string CTaskInfo::getAlgoTasks() const
+{
+    return m_algoTasks;
 }
 
 bool CTaskInfo::isInternal() const
@@ -142,6 +168,7 @@ void CTaskInfo::setShortDescription(const std::string &description)
 
 void CTaskInfo::setDescription(const std::string &description)
 {
+    Utils::deprecationWarning(m_name + ": description field is deprecated", "", QtDebugMsg);
     m_description = description;
 }
 
@@ -170,9 +197,19 @@ void CTaskInfo::setArticle(const std::string &article)
     m_article = article;
 }
 
+void CTaskInfo::setArticleUrl(const std::string &url)
+{
+    m_articleUrl = url;
+}
+
 void CTaskInfo::setJournal(const std::string &journal)
 {
     m_journal = journal;
+}
+
+void CTaskInfo::setYear(const int year)
+{
+    m_year = year;
 }
 
 void CTaskInfo::setVersion(const std::string &version)
@@ -180,14 +217,24 @@ void CTaskInfo::setVersion(const std::string &version)
     m_version = version;
 }
 
-void CTaskInfo::setCreatedDate(const std::string &date)
+void CTaskInfo::setMinIkomiaVersion(const std::string &version)
 {
-    m_createdDate = date;
+    m_minIkomiaVersion = version;
 }
 
-void CTaskInfo::setModifiedDate(const std::string &date)
+void CTaskInfo::setMaxIkomiaVersion(const std::string &version)
 {
-    m_modifiedDate = date;
+    m_maxIkomiaVersion = version;
+}
+
+void CTaskInfo::setMinPythonVersion(const std::string &version)
+{
+    m_minPythonVersion = version;
+}
+
+void CTaskInfo::setMaxPythonVersion(const std::string &version)
+{
+    m_maxPythonVersion = version;
 }
 
 void CTaskInfo::setLicense(const std::string& license)
@@ -200,48 +247,29 @@ void CTaskInfo::setRepository(const std::string& repository)
     m_repo = repository;
 }
 
-void CTaskInfo::setYear(const int year)
+void CTaskInfo::setOriginalRepository(const std::string &repository)
 {
-    m_year = year;
+    m_originalRepo = repository;
 }
 
-void CTaskInfo::setLanguage(const ApiLanguage language)
+void CTaskInfo::setLanguage(const ApiLanguage &language)
 {
     m_language = language;
 }
 
-void CTaskInfo::setOS(const int os)
+void CTaskInfo::setOS(const OSType &os)
 {
     m_os = os;
 }
 
-void CTaskInfo::setInternal(bool bInternal)
+void CTaskInfo::setAlgoType(const AlgoType &type)
 {
-    m_bInternal = bInternal;
+    m_algoType = type;
 }
 
-std::string CTaskInfo::getOSName() const
+void CTaskInfo::setAlgoTasks(const std::string &tasks)
 {
-    std::string osName = "Any";
-    switch(m_os)
-    {
-        case OSType::LINUX:
-            osName = "Linux";
-            break;
-        case OSType::WIN:
-            osName = "Windows";
-            break;
-        case OSType::OSX:
-            osName = "MacOS";
-            break;
-        case OSType::ALL:
-            osName = "Any";
-            break;
-        default:
-            osName = "Any";
-            break;
-    }
-    return osName;
+    m_algoTasks = tasks;
 }
 
 std::ostream& operator<<(std::ostream& os, const CTaskInfo& info)
@@ -259,17 +287,19 @@ void CTaskInfo::to_ostream(std::ostream &os) const
     os << "Documentation link: " << m_docLink << std::endl;
     os << "Icon path: " << m_iconPath << std::endl;
     os << "Keywords: " << m_keywords << std::endl;
-    os << "Authors link: " << m_authors << std::endl;
+    os << "Authors: " << m_authors << std::endl;
     os << "Article: " << m_article << std::endl;
+    os << "Article link: " << m_articleUrl << std::endl;
     os << "Journal/conference: " << m_journal << std::endl;
     os << "Year: " << std::to_string(m_year) << std::endl;
+    os << "Type: " << Utils::Plugin::getAlgoTypeString(m_algoType) << std::endl;
+    os << "Tasks: " << m_algoTasks << std::endl;
     os << "Version: " << m_version << std::endl;
-    os << "API version: " << m_ikomiaVersion << std::endl;
-    os << "Created: " << m_createdDate << std::endl;
-    os << "Modified: " << m_modifiedDate << std::endl;
+    os << "Ikomia minimum version: " << m_minIkomiaVersion << std::endl;
+    os << "Python minimum version: " << m_minPythonVersion << std::endl;
     os << "License: " << m_license << std::endl;
     os << "Repository: " << m_repo << std::endl;
     std::string language = m_language == ApiLanguage::CPP ? "C++" : "Python";
     os << "Language: " << language << std::endl;
-    os << "OS: " << getOSName() << std::endl;
+    os << "OS: " << Utils::OS::getName(m_os) << std::endl;
 }

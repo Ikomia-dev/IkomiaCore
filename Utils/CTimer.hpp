@@ -23,6 +23,29 @@
 #include <string>
 #include <iostream>
 
+
+#if defined(__MACH__)
+
+    #include <mach/clock.h>
+    #include <mach/mach.h>
+
+#elif (defined(linux) || defined(__linux__) || defined(__linux)) || (defined(__DragonFly__) || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__))
+
+    #include <time.h>
+    #include <sys/time.h>
+
+#elif defined(_WIN32)
+
+    #if defined(_MSC_VER) && !defined(NOMINMAX)
+        #define NOMINMAX // Otherwise MS compilers act like idiots when using std::numeric_limits<>::max() and including windows.h
+    #endif
+
+    #include <windows.h>
+
+#endif
+
+
+
 // ~Nanosecond-precision cross-platform (linux/bsd/mac/windows, C++03/C++11) simple timer class:
 
 namespace Ikomia
@@ -32,8 +55,6 @@ namespace Ikomia
 
 // Mac OSX implementation:
 #if defined(__MACH__)
-    #include <mach/clock.h>
-    #include <mach/mach.h>
 
     /**
      * @brief
@@ -105,8 +126,6 @@ namespace Ikomia
 
 // Linux/BSD implementation:
 #elif (defined(linux) || defined(__linux__) || defined(__linux)) || (defined(__DragonFly__) || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__))
-    #include <time.h>
-    #include <sys/time.h>
 
     /**
      * @brief
@@ -172,11 +191,6 @@ namespace Ikomia
 
 // Windows implementation:
 #elif defined(_WIN32)
-    #if defined(_MSC_VER) && !defined(NOMINMAX)
-        #define NOMINMAX // Otherwise MS compilers act like idiots when using std::numeric_limits<>::max() and including windows.h
-    #endif
-
-    #include <windows.h>
 
     /**
      * @brief

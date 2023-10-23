@@ -208,7 +208,7 @@ class COcvDnnClassifierFactory : public CTaskFactory
         COcvDnnClassifierFactory()
         {
             m_info.m_name = "ocv_dnn_classification";
-            m_info.m_description = QObject::tr("This process gives the possibility to launch inference from already trained networks for classification purpose (CAFFE, TENSORFLOW, DARKNET and TORCH)).").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process gives the possibility to launch inference from already trained networks for classification purpose (CAFFE, TENSORFLOW, DARKNET and TORCH)).").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Deep neural network").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "cnn,dnn,deep,neural,network,classification";

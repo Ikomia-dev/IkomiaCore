@@ -402,16 +402,18 @@ WorkflowVertex CWorkflow::getRunningTaskId() const
     return m_runningTask;
 }
 
-WorkflowVertex CWorkflow::getTaskId(const std::string &name) const
+std::vector<WorkflowVertex> CWorkflow::getTaskIdList(const std::string &name) const
 {
+    std::vector<WorkflowVertex> ids;
     auto rangeIt = boost::vertices(m_graph);
-    for(auto it = rangeIt.first; it != rangeIt.second; ++it)
+
+    for (auto it = rangeIt.first; it != rangeIt.second; ++it)
     {
         auto taskPtr = m_graph[*it];
-        if(taskPtr != nullptr && taskPtr->getName() == name)
-            return *it;
+        if (taskPtr != nullptr && taskPtr->getName() == name)
+            ids.push_back(*it);
     }
-    return boost::graph_traits<WorkflowGraph>::null_vertex();
+    return ids;
 }
 
 WorkflowTaskPtr CWorkflow::getTask(const WorkflowVertex &id) const
@@ -1239,13 +1241,7 @@ void CWorkflow::clearOutputDataFrom(const WorkflowVertex &id)
 {
     auto vertexList = getAllChilds(id);
     vertexList.insert(vertexList.begin(), id);
-
-    for(const auto& it : vertexList)
-    {
-        WorkflowTaskPtr taskPtr = m_graph[it];
-        if(it != m_root && taskPtr)
-            taskPtr->clearOutputData();
-    }
+    clearOutputData(vertexList);
 }
 
 void CWorkflow::clearOutputDataTo(const WorkflowVertex &id)
@@ -1253,8 +1249,12 @@ void CWorkflow::clearOutputDataTo(const WorkflowVertex &id)
     std::vector<WorkflowVertex> vertexList;
     getAllParents(id, vertexList);
     vertexList.push_back(id);
+    clearOutputData(vertexList);
+}
 
-    for(const auto& it : vertexList)
+void CWorkflow::clearOutputData(const std::vector<WorkflowVertex> &tasks)
+{
+    for(const auto& it : tasks)
     {
         WorkflowTaskPtr taskPtr = m_graph[it];
         if(it != m_root && taskPtr)
@@ -1421,6 +1421,7 @@ void CWorkflow::runTasksVideo(const std::vector<WorkflowVertex> &taskToExecute)
                 inputPtr->setFrameToRead(i);
             }
             runTasksSimple(taskToExecute);
+            clearOutputData(taskToExecute);
         }
     }
     catch(std::exception& e)
@@ -1901,6 +1902,12 @@ void CWorkflow::load(const std::string &path)
 
 void CWorkflow::saveJSON(const std::string& path)
 {
+    if (m_name.empty() || m_name == "untitled")
+    {
+        // Set name with filename
+        m_name = Utils::File::getFileNameWithoutExtension(path);
+    }
+
     Utils::File::createDirectory(Utils::File::getParentPath(path));
     QFile jsonFile(QString::fromStdString(path));
 
@@ -1914,7 +1921,7 @@ void CWorkflow::saveJSON(const std::string& path)
 
     // API
     QJsonObject apiInfo;
-    apiInfo["version"] = Utils::IkomiaApp::getCurrentVersionName();
+    apiInfo["version"] = QString::fromStdString(Utils::IkomiaApp::getCurrentVersionName());
     jsonWorkflow["api"] = apiInfo;
 
     // Metadata
@@ -2019,7 +2026,7 @@ void CWorkflow::loadJSON(const std::string &path)
 
         if(taskPtr == nullptr)
         {
-            std::string errorMsg = "Algorithm " +  jsonTaskData["name"].toString().toStdString() + " can't be created. Please check installation or marketplace connection.";
+            std::string errorMsg = "Algorithm " +  jsonTaskData["name"].toString().toStdString() + " can't be created. Please check installation or Ikomia HUB connection.";
             throw CException(CoreExCode::CREATE_FAILED, errorMsg, __func__, __FILE__, __LINE__);
         }
 

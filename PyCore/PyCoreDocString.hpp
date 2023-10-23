@@ -551,6 +551,13 @@ constexpr auto _getUnitElementCountDocString =
         "Returns:\n\n"
         "   int: number of unit element to process\n\n";
 
+constexpr auto _getSubIOListDocString =
+        "Get the sub I/O objects of given types from a composite I/O.\n\n"
+        "Args:\n\n"
+        "   types (list of:py:class:`~ikomia.core.pycore.IODataType`): sub I/O types\n\n"
+        "Returns:\n\n"
+        "   list of :py:class:`~ikomia.core.pycore.CWorkflowTaskIO` based objects: sub IO objects\n\n";
+
 constexpr auto _isDataAvailableDocString =
         "Check whether input or output objects contain valid data. "
         "For inputs, it is the case when the previous process contains valid output data. "

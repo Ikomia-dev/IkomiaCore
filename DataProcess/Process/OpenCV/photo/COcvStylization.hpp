@@ -123,7 +123,7 @@ class COcvStylizationFactory : public CTaskFactory
         COcvStylizationFactory()
         {
             m_info.m_name = "ocv_stylization";
-            m_info.m_description = QObject::tr("Stylization aims to produce digital imagery with a wide variety of effects not focused on photorealism. Edge-aware filters are ideal for stylization, as they can abstract regions of low contrast while preserving, or enhancing, high-contrast features.").toStdString();
+            m_info.m_shortDescription = QObject::tr("Stylization aims to produce digital imagery with a wide variety of effects not focused on photorealism. Edge-aware filters are ideal for stylization, as they can abstract regions of low contrast while preserving, or enhancing, high-contrast features.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Computational photography/Non-photorealistic rendering").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Stylization";

@@ -129,7 +129,7 @@ class COcvDeepFlowFactory : public CTaskFactory
         COcvDeepFlowFactory()
         {
             m_info.m_name = "ocv_deepflow";
-            m_info.m_description = QObject::tr("This process computes a dense optical flow using the DeepFlow algorithm.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process computes a dense optical flow using the DeepFlow algorithm.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Extra modules/Optical flow algorithms").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Deep, Dense, Optical, Flow";

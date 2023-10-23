@@ -171,7 +171,7 @@ class CGmicConstrainedSharpenFactory : public CTaskFactory
         CGmicConstrainedSharpenFactory()
         {
             m_info.m_name = "gmic_constrained_sharpen";
-            m_info.m_description = QObject::tr("This process sharpens image but restricts pixels values to local minimum and maximum values to significantly reduce halos."
+            m_info.m_shortDescription = QObject::tr("This process sharpens image but restricts pixels values to local minimum and maximum values to significantly reduce halos."
                                                "<b>Sharpen Radius</b>, <b>Amount</b> and <b>Threshold</b> are the normal unsharp controls."
                                                "A high <b>Amount</b> will produce aliasing"
                                                "<b>Constraint Radius</b> sets the radius to find the local minimum and maximum."

@@ -24,10 +24,13 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegmentation : public CObjectDetection
         int         getType() const;
         int         getClassIndex() const;
         CMat        getMask() const;
+        std::vector<ProxyGraphicsItemPtr>   getPolygons() const;
 
         void        setType(int type);
         void        setClassIndex(int index);
         void        setMask(const CMat& mask);
+
+        void        computePolygons();
 
         std::string repr() const;
 
@@ -35,9 +38,10 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegmentation : public CObjectDetection
 
     public:
 
-        int     m_type = ObjectType::THING;
-        int     m_classIndex = 0;
-        CMat    m_mask;
+        int                                 m_type = ObjectType::THING;
+        int                                 m_classIndex = 0;
+        CMat                                m_mask;
+        std::vector<ProxyGraphicsItemPtr>   m_polygons;
 };
 
 
@@ -68,6 +72,11 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegIO: public CWorkflowTaskIO
         GraphicsOutputPtr                   getGraphicsIO() const;
         BlobMeasureIOPtr                    getBlobMeasureIO() const;
         CMat                                getMergeMask() const;
+        InputOutputVect                     getSubIOList(const std::set<IODataType> &dataTypes) const override;
+        CMat                                getImageWithGraphics(const CMat &image) const override;
+        CMat                                getImageWithMask(const CMat &image) const override;
+        CMat                                getImageWithMaskAndGraphics(const CMat &image) const override;
+        std::vector<CColor>                 getColors() const;
 
         bool                                isDataAvailable() const override;
         bool                                isComposite() const override;

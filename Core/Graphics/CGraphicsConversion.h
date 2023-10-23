@@ -49,21 +49,25 @@ class CGraphicsPolygonProperty;
 
 class CORESHARED_EXPORT CGraphicsConversion
 {
+    using ProxyGraphicsItemPtr = std::shared_ptr<CProxyGraphicsItem>;
+
     public:
 
         CGraphicsConversion();
         CGraphicsConversion(int width, int height);
 
-        QList<QGraphicsItem*>   binaryMaskToGraphics(const CMat& mask, QGraphicsItem *pParent,
-                                                     const CColor& penColor, const CColor& brushColor, int lineSize);
+        QList<QGraphicsItem*>               binaryMaskToGraphics(const CMat& mask, QGraphicsItem *pParent,
+                                                                 const CColor& penColor, const CColor& brushColor, int lineSize);
 
-        QList<QGraphicsItem*>   blobsToGraphics(const std::vector<std::vector<cv::Point>>& polygonArray,
-                                                const std::vector<cv::Vec4i>& hierarchy, QGraphicsItem *pParent,
-                                                const CColor &penColor, const CColor &brushColor, int lineSize);
+        std::vector<ProxyGraphicsItemPtr>   binaryMaskToProxyGraphics(const CMat& mask, const CColor& penColor, const CColor& brushColor, int lineSize);
 
-        std::vector<std::shared_ptr<CProxyGraphicsItem>> blobsToProxyGraphics(const std::vector<std::vector<cv::Point>>& polygonArray,
-                                                                              const std::vector<cv::Vec4i>& hierarchy,
-                                                                              const CColor& penColor, const CColor& brushColor, int lineSize);
+        QList<QGraphicsItem*>               blobsToGraphics(const std::vector<std::vector<cv::Point>>& polygonArray,
+                                                            const std::vector<cv::Vec4i>& hierarchy, QGraphicsItem *pParent,
+                                                            const CColor &penColor, const CColor &brushColor, int lineSize);
+
+        std::vector<ProxyGraphicsItemPtr>   blobsToProxyGraphics(const std::vector<std::vector<cv::Point>>& polygonArray,
+                                                                 const std::vector<cv::Vec4i>& hierarchy,
+                                                                 const CColor& penColor, const CColor& brushColor, int lineSize);
 
         CMat                    graphicsToBinaryMask(const QList<QGraphicsItem*>& graphics);
         CMat                    graphicsToBinaryMask(const std::vector<std::shared_ptr<CProxyGraphicsItem>>& graphics);

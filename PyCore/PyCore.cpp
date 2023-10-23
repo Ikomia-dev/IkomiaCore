@@ -359,6 +359,7 @@ BOOST_PYTHON_MODULE(pycore)
         .def(self_ns::str(self_ns::self))
         .def("__repr__", &CWorkflowTaskIO::repr)
         .def("get_unit_element_count", &CWorkflowTaskIO::getUnitElementCount, &CWorkflowTaskIOWrap::default_getUnitElementCount, _getUnitElementCountDocString, args("self"))
+        .def("get_sub_io_list", &CWorkflowTaskIO::getSubIOList, &CWorkflowTaskIOWrap::default_getSubIOList, _getSubIOListDocString, args("self", "types"))
         .def("is_data_available", &CWorkflowTaskIO::isDataAvailable, &CWorkflowTaskIOWrap::default_isDataAvailable, _isDataAvailableDocString, args("self"))
         .def("is_composite", &CWorkflowTaskIO::isComposite, &CWorkflowTaskIOWrap::default_isComposite, _isCompositeDocString, args("self"))
         .def("clear_data", &CWorkflowTaskIO::clearData, &CWorkflowTaskIOWrap::default_clearData, _clearDataDocString, args("self"))
@@ -391,6 +392,13 @@ BOOST_PYTHON_MODULE(pycore)
     enum_<CWorkflowTask::ActionFlag>("ActionFlag", "Enum - List of specific behaviors or actions that can be enabled/disabled for a task")
         .value("APPLY_VOLUME", CWorkflowTask::ActionFlag::APPLY_VOLUME)
         .value("OUTPUT_AUTO_EXPORT", CWorkflowTask::ActionFlag::OUTPUT_AUTO_EXPORT)
+    ;
+
+    enum_<AlgoType>("AlgoType", "Enum - List of algorithms general type")
+        .value("INFER", AlgoType::INFER)
+        .value("TRAIN", AlgoType::TRAIN)
+        .value("DATASET", AlgoType::DATASET)
+        .value("OTHER", AlgoType::OTHER)
     ;
 
     //Overload member functions

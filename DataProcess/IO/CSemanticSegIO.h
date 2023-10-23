@@ -25,12 +25,20 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
         CMat                            getLegend() const;
         std::vector<std::string>        getClassNames() const;
         std::vector<CColor>             getColors() const;
+        std::vector<ProxyGraphicsItemPtr> getPolygons() const;
         ImageIOPtr                      getMaskImageIO() const;
         ImageIOPtr                      getLegendImageIO() const;
+        GraphicsOutputPtr               getGraphicsIO() const;
+        InputOutputVect                 getSubIOList(const std::set<IODataType> &dataTypes) const override;
+        int                             getReferenceImageIndex() const;
+        CMat                            getImageWithGraphics(const CMat &image) const override;
+        CMat                            getImageWithMask(const CMat &image) const override;
+        CMat                            getImageWithMaskAndGraphics(const CMat &image) const override;
 
         void                            setMask(const CMat& mask);
         void                            setClassNames(const std::vector<std::string>& names);
         void                            setClassColors(const std::vector<CColor>& colors);
+        void                            setReferenceImageIndex(int index);
 
         bool                            isDataAvailable() const override;
         bool                            isComposite() const override;
@@ -50,6 +58,8 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
 
     private:
 
+        void                            computePolygons();
+
         WorkflowTaskIOPtr               cloneImp() const override;
 
         QJsonObject                     toJsonInternal(const std::vector<std::string> &options) const;
@@ -65,6 +75,8 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
         cv::Mat                     m_histo;
         std::shared_ptr<CImageIO>   m_imgMaskIOPtr = nullptr;
         std::shared_ptr<CImageIO>   m_imgLegendIOPtr = nullptr;
+        GraphicsOutputPtr           m_graphicsIOPtr = nullptr;
+        int                         m_refImageIndex = 0;
 };
 
 using SemanticSegIOPtr = std::shared_ptr<CSemanticSegIO>;

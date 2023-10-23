@@ -31,7 +31,8 @@ constexpr auto _getCurrentVersionDocString =
 constexpr auto _pythonStateDocString =
         "Get the plugin compatibility state, see :py:class:`~ikomia.utils.pyutils.PluginState` for possible values.\n\n"
         "Args:\n"
-        "   version (str): base version of the plugin\n"
+        "   min_version (str): minimum compatible Ikomia API version\n"
+        "   max_version (str): maximum compatible Ikomia API version\n"
         "   language (:py:class:`utils.pyutils.ApiLanguage`)\n\n"
         "Returns:\n"
         "   :py:class:`utils.pyutils.PluginState`: state\n";
@@ -48,6 +49,21 @@ constexpr auto _getModelHubUrlDocString =
         "Return root URL of Ikomia model HUB.\n\n"
         "Returns:\n\n"
         "   str: Ikomia model hub URL\n\n";
+
+constexpr auto _getCpuArchDocString =
+        "Return CPU architecture from current execution environment.\n\n"
+        "Returns:\n\n"
+        "   :py:class:`utils.pyutils.CpuArch`: current CPU architecture\n\n";
+
+constexpr auto _getCpuArchNameDocString =
+        "Return CPU architecture name from current execution environment.\n\n"
+        "Returns:\n\n"
+        "   str: current CPU architecture name\n\n";
+
+constexpr auto _getCudaVersionNameDocString =
+        "Return CUDA version string from current execution environment.\n\n"
+        "Returns:\n\n"
+        "   str: current CUDA version\n\n";
 
 //----------------------
 //----- CException -----

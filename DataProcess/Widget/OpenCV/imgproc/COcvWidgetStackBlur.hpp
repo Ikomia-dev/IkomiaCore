@@ -30,6 +30,9 @@ class COcvWidgetStackBlur : public CWorkflowTaskWidget
 
             m_pSpin = new QSpinBox;
             m_pSpin->setValue(m_pParam->m_ksize.width);
+            m_pSpin->setSingleStep(2);
+            m_pSpin->setMinimum(1);
+            m_pSpin->setMaximum(361); // Artefacts appear above this kernel size
             QLabel* pLabelSpin = new QLabel(tr("Filter size"));
 
             m_pLayout->addWidget(pLabelSpin, 0, 0);

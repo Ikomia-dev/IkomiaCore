@@ -158,7 +158,7 @@ class COcvMotionSaliencyBinWangApr2014Factory : public CTaskFactory
         COcvMotionSaliencyBinWangApr2014Factory()
         {
             m_info.m_name = "ocv_motion_saliency_bin_wang";
-            m_info.m_description = QObject::tr("This process highlights the moving objects or areas of change in the scene using the Fast Self-tuning Background Subtraction Algorithm.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process highlights the moving objects or areas of change in the scene using the Fast Self-tuning Background Subtraction Algorithm.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Extra modules/Saliency API").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Saliency,Motion,Features,Detection";

@@ -71,12 +71,6 @@ void CWidgetOutput::clearData()
     m_pWidget = nullptr;
 }
 
-void CWidgetOutput::save()
-{
-    std::string path = m_saveFolder + m_saveBaseName + Utils::Data::getFileFormatExtension(m_saveFormat);
-    save(path);
-}
-
 void CWidgetOutput::save(const std::string &path)
 {
     if(!m_pWidget)

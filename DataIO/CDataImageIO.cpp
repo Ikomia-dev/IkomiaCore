@@ -171,7 +171,7 @@ CDataImageIO::CImageDataIOPtr CDataImageIO::_allocateDataIOPtr(const std::string
 
 bool CDataImageIO::isImageFormat(const std::string &extension)
 {
-    return isOpencvCompatible(extension);
+    return isOpencvCompatible(Utils::String::toLower(extension));
 }
 
 bool CDataImageIO::isOpencvCompatible(const std::string &extension)

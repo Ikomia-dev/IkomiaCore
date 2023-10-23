@@ -144,7 +144,7 @@ class COcvSimpleFlowFactory : public CTaskFactory
         COcvSimpleFlowFactory()
         {
             m_info.m_name = "ocv_simple_flow";
-            m_info.m_description = QObject::tr("This process computes a dense optical flow using the Simple Flow algorithm.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process computes a dense optical flow using the Simple Flow algorithm.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Extra modules/Optical flow algorithms").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "SF, Dense, Optical, Flow";

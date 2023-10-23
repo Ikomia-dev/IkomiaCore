@@ -195,9 +195,41 @@ GraphicsOutputPtr CTextIO::getGraphicsIO() const
     return m_graphicsIOPtr;
 }
 
-CTextIO::DataStringIOPtr CTextIO::getDataStringIO() const
+CTextIO::DataStringIOPtr CTextIO::getDataStringIO()
 {
+    if (m_textDataIOPtr->isDataAvailable() == false)
+        finalize();
+
     return m_textDataIOPtr;
+}
+
+InputOutputVect CTextIO::getSubIOList(const std::set<IODataType> &dataTypes) const
+{
+    InputOutputVect ioList;
+
+    auto it = dataTypes.find(IODataType::OUTPUT_GRAPHICS);
+    if(it != dataTypes.end())
+        ioList.push_back(m_graphicsIOPtr);
+
+    it = dataTypes.find(IODataType::NUMERIC_VALUES);
+    if(it != dataTypes.end())
+        ioList.push_back(m_textDataIOPtr);
+
+    return ioList;
+}
+
+CMat CTextIO::getImageWithGraphics(const CMat &image) const
+{
+    auto graphicsIOPtr = getGraphicsIO();
+    if (graphicsIOPtr)
+        return graphicsIOPtr->getImageWithGraphics(image);
+    else
+        return image;
+}
+
+CMat CTextIO::getImageWithMaskAndGraphics(const CMat &image) const
+{
+    return getImageWithGraphics(image);
 }
 
 bool CTextIO::isDataAvailable() const
@@ -378,6 +410,7 @@ QJsonObject CTextIO::toJsonInternal() const
 
     QJsonObject root;
     root["fields"] = jsonFields;
+    root["referenceImageIndex"] = m_graphicsIOPtr->getImageIndex();
     return root;
 }
 

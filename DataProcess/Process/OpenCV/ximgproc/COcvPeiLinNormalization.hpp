@@ -123,7 +123,7 @@ class COcvPeiLinNormalizationFactory : public CTaskFactory
         COcvPeiLinNormalizationFactory()
         {
             m_info.m_name = "ocv_pei_lin_normalization";
-            m_info.m_description = QObject::tr("The process calculates and applies an affine transformation that normalize the given image using Pei & Lin Normalization.").toStdString();
+            m_info.m_shortDescription = QObject::tr("The process calculates and applies an affine transformation that normalize the given image using Pei & Lin Normalization.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Extra modules/Extended Image Processing").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "normalization,distortion,scaling,rotation,translation,skew";

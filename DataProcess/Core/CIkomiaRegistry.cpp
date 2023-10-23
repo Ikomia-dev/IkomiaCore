@@ -138,7 +138,6 @@ void CIkomiaRegistry::registerIO(const TaskIOFactoryPtr &factoryPtr)
 
 void CIkomiaRegistry::loadPlugins()
 {
-    // TODO: manage lazy loading system
     loadCppPlugins();
     loadPythonPlugins();
     m_bAllLoaded = true;
@@ -238,27 +237,11 @@ void CIkomiaRegistry::_loadCppPlugin(const QString &fileName)
         throw CException(CoreExCode::INVALID_FILE, msg, __func__, __FILE__, __LINE__);
     }
 
-    taskFactoryPtr->getInfo().setInternal(false);
-    taskFactoryPtr->getInfo().setLanguage(ApiLanguage::CPP);
-    taskFactoryPtr->getInfo().setOS(Utils::OS::getCurrent());
-    auto version = QString::fromStdString(taskFactoryPtr->getInfo().getIkomiaVersion());
-    auto state = Utils::Plugin::getCppState(version);
-
-    if(state == PluginState::DEPRECATED)
-    {
-        std::string msg = QString("Algorithm %1 is deprecated: based on Ikomia %2 while the current version is %3.")
-                .arg(QString::fromStdString(taskFactoryPtr->getInfo().getName()))
-                .arg(version)
-                .arg(Utils::IkomiaApp::getCurrentVersionNumber()).toStdString();
-        throw CException(CoreExCode::INVALID_VERSION, msg, __func__, __FILE__, __LINE__);
-    }
-    else if(state == PluginState::UPDATED)
-    {
-        std::string msg = QString("Algorithm %1 is not compatible: you must update Ikomia to version %2.")
-                .arg(QString::fromStdString(taskFactoryPtr->getInfo().getName()))
-                .arg(version).toStdString();
-        throw CException(CoreExCode::INVALID_VERSION, msg, __func__, __FILE__, __LINE__);
-    }
+    taskFactoryPtr->getInfo().m_bInternal = false;
+    taskFactoryPtr->getInfo().m_language = ApiLanguage::CPP;
+    taskFactoryPtr->getInfo().m_os = Utils::OS::getCurrent();
+    // Check compatibility -> throw if incompatible
+    checkCompatibility(taskFactoryPtr->getInfo());
 
     auto widgetFactoryPtr = pPlugin->getWidgetFactory();
     if(widgetFactoryPtr == nullptr)
@@ -270,6 +253,32 @@ void CIkomiaRegistry::_loadCppPlugin(const QString &fileName)
 
     m_processRegistrator.registerProcess(taskFactoryPtr, widgetFactoryPtr);
     Utils::print(QString("Algorithm %1 is loaded.").arg(fileName).toStdString(), QtDebugMsg);
+}
+
+void CIkomiaRegistry::checkCompatibility(const CTaskInfo& info)
+{
+    PluginState state = Utils::Plugin::getApiCompatibilityState(info.m_minIkomiaVersion, info.m_maxIkomiaVersion, info.m_language);
+    if(state != PluginState::VALID)
+    {
+        std::string msg;
+        if (state == PluginState::DEPRECATED)
+        {
+            msg = "Algorithm " + info.getName() +
+                    " is incompatible due to break changes in Ikomia API. Current Ikomia API version is " +
+                    Utils::IkomiaApp::getCurrentVersionNumber() + ".";
+        }
+        else
+        {
+            std::string apiCondition = ">=" + info.m_minIkomiaVersion;
+            if (info.m_maxIkomiaVersion.empty() == false)
+                apiCondition += ", <" + info.m_maxIkomiaVersion;
+
+            msg = "Algorithm " + info.getName() + " is incompatible. " +
+                    "Ikomia API condition is " + apiCondition +
+                    "while current Ikomia API version is " + Utils::IkomiaApp::getCurrentVersionNumber() + ".";
+        }
+        throw CException(CoreExCode::INVALID_VERSION, msg, __func__, __FILE__, __LINE__);
+    }
 }
 
 void CIkomiaRegistry::loadPythonPlugins()
@@ -318,29 +327,11 @@ void CIkomiaRegistry::loadPythonPlugin(const std::string &directory)
                 {
                     auto plugin = exFactory();
                     auto taskFactoryPtr = plugin->getProcessFactory();
-                    taskFactoryPtr->getInfo().setInternal(false);
+                    taskFactoryPtr->getInfo().m_bInternal = false;
                     taskFactoryPtr->getInfo().setLanguage(ApiLanguage::PYTHON);
-                    taskFactoryPtr->getInfo().setOS(OSType::ALL);
-
-                    // Check compatibility
-                    auto version = QString::fromStdString(taskFactoryPtr->getInfo().getIkomiaVersion());
-                    auto state = Utils::Plugin::getPythonState(version);
-
-                    if(state == PluginState::DEPRECATED)
-                    {
-                        QString msg = QObject::tr("Algorithm %1 is deprecated: based on Ikomia %2 while the current version is %3.")
-                                .arg(QString::fromStdString(taskFactoryPtr->getInfo().getName()))
-                                .arg(version)
-                                .arg(Utils::IkomiaApp::getCurrentVersionNumber());
-                        throw CException(CoreExCode::INVALID_VERSION, msg.toStdString(), __func__, __FILE__, __LINE__);
-                    }
-                    else if(state == PluginState::UPDATED)
-                    {
-                        QString msg = QObject::tr("Algorithm %1 is based on Ikomia %2 while the current version is %3. You should consider updating Ikomia.")
-                                .arg(QString::fromStdString(taskFactoryPtr->getInfo().getName()))
-                                .arg(version);
-                        throw CException(CoreExCode::INVALID_VERSION, msg.toStdString(), __func__, __FILE__, __LINE__);
-                    }
+                    taskFactoryPtr->getInfo().m_os = OSType::ALL;
+                    // Check compatibility -> throw if incompatible
+                    checkCompatibility(taskFactoryPtr->getInfo());
 
                     // Plugin registration
                     if (Utils::IkomiaApp::isAppStarted())

@@ -151,7 +151,7 @@ class CGmicDoGFactory : public CTaskFactory
         CGmicDoGFactory()
         {
             m_info.m_name = "gmic_diff_of_gaussians";
-            m_info.m_description = QObject::tr("This process performs DoG algorithm.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process performs DoG algorithm.").toStdString();
             m_info.m_path = QObject::tr("Gmic/Contours").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/gmic.png").toStdString();
             m_info.m_keywords = "edge,frequency";

@@ -265,7 +265,7 @@ class COcvGrabCutFactory : public CTaskFactory
         COcvGrabCutFactory()
         {
             m_info.m_name = "ocv_grabcut_segmentation";
-            m_info.m_description = QObject::tr("This process computes image segmentation based on graph cuts method.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process computes image segmentation based on graph cuts method.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Image processing/Miscellaneous image transformations").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Color segmentation, grabcut, gaussian mixture model, graph cuts";

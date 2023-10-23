@@ -166,7 +166,7 @@ class CPlotMergeFactory : public CTaskFactory
         CPlotMergeFactory()
         {
             m_info.m_name = "ik_plot_merge";
-            m_info.m_description = QObject::tr("This process mutualizes data for plotting.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process mutualizes data for plotting.").toStdString();
             m_info.m_path = QObject::tr("Core/Plots").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/default-process.png").toStdString();
             m_info.m_keywords = "Plot, histogram, chart";

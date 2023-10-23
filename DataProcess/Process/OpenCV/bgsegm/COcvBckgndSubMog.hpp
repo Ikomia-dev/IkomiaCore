@@ -151,7 +151,7 @@ class COcvBckgndSubMogFactory : public CTaskFactory
         COcvBckgndSubMogFactory()
         {
             m_info.m_name = "ocv_bck_substractor_mog";
-            m_info.m_description = QObject::tr("This process removes background on video sequence based on mixture of gaussian.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process removes background on video sequence based on mixture of gaussian.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Extra modules/Improved Background-Foreground Segmentation Methods").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "video,background,substractor,segmentation,binary,mixture,gaussian";

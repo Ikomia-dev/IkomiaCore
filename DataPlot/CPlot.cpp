@@ -174,7 +174,7 @@ void CPlot::setMovable(bool bEnable)
     {
         assert(m_pPanner == nullptr);
         m_pPanner = new QwtPlotPanner( canvas() );
-        m_pPanner->setMouseButton( Qt::MidButton );
+        m_pPanner->setMouseButton( Qt::MiddleButton );
     }
     else
     {

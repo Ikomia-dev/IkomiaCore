@@ -24,6 +24,8 @@
 #include "Data/CMat.hpp"
 #include "base64.hpp"
 #include "Data/CDataConversion.h"
+#include "Graphics/CGraphicsConversion.h"
+#include "Graphics/CGraphicsItem.hpp"
 
 namespace Ikomia
 {
@@ -72,9 +74,17 @@ namespace Ikomia
                 }
                 return ovrImg;
             }
+            inline void         burnGraphics(CMat &image, const std::vector<ProxyGraphicsItemPtr> &items)
+            {
+                CGraphicsConversion graphicsConv((int)image.getNbCols(), (int)image.getNbRows());
+
+                //Double dispatch design pattern
+                for(auto it : items)
+                    it->insertToImage(image, graphicsConv, false, false);
+            }
             inline CMat         mergeColorMask(const CMat& image, const CMat& mask, const CMat& colormap, double opacity, bool bTransparentZero)
             {
-                CMat result, colorMask;
+                CMat src, result, colorMask;
 
                 if (mask.empty() || mask.data == nullptr)
                     return image;
@@ -84,16 +94,92 @@ namespace Ikomia
                 else
                     colorMask = mask;
 
+                if (image.channels() == 1)
+                    cv::cvtColor(image, src, cv::COLOR_GRAY2RGB);
+                else
+                    src = image;
+
                 cv::applyColorMap(colorMask, colorMask, colormap);
-                cv::addWeighted(image, (1.0 - opacity), colorMask, opacity, 0.0, result, image.depth());
+                cv::addWeighted(src, (1.0 - opacity), colorMask, opacity, 0.0, result, src.depth());
 
                 if (bTransparentZero)
                 {
                     cv::Mat maskNot = mask > 0;
                     cv::bitwise_not(maskNot, maskNot);
-                    image.copyTo(result, maskNot);
+                    src.copyTo(result, maskNot);
                 }
                 return result;
+            }
+            inline CMat         mergeColorMask(const CMat& image, const CMat& mask, double opacity, bool bTransparentZero)
+            {
+                CMat src, result, colorMask;
+
+                if (mask.empty() || mask.data == nullptr || mask.channels() == 1)
+                    return image;
+
+                if (image.channels() == 1)
+                    cv::cvtColor(image, src, cv::COLOR_GRAY2RGB);
+                else
+                    src = image;
+
+                if (mask.channels() == 4)
+                    cv::cvtColor(mask, colorMask, cv::COLOR_RGBA2RGB);
+                else
+                    colorMask = mask;
+
+                if(colorMask.depth() != CV_8U)
+                    colorMask.convertTo(colorMask, CV_8U);
+
+                cv::addWeighted(image, (1.0 - opacity), colorMask, opacity, 0.0, result, src.depth());
+
+                if (bTransparentZero)
+                {
+                    cv::Mat maskNot = colorMask > 0;
+                    cv::bitwise_not(maskNot, maskNot);
+                    src.copyTo(result, maskNot);
+                }
+                return result;
+            }
+            inline CMat         createColorMap(const std::vector<CColor>& colors, bool bReserveZero)
+            {
+                int startIndex = 0;
+                cv::Mat colormap = cv::Mat::zeros(256, 1, CV_8UC3);
+
+                if (bReserveZero)
+                    startIndex = 1;
+
+                if(colors.size() == 0)
+                {
+                    //Random colors
+                    std::srand(RANDOM_COLOR_SEED);
+                    for(int i=startIndex; i<256; ++i)
+                    {
+                        for(int j=0; j<3; ++j)
+                            colormap.at<cv::Vec3b>(i, 0)[j] = (uchar)((double)std::rand() / (double)RAND_MAX * 255.0);
+                    }
+                }
+                else if(colors.size() == 1)
+                {
+                    if (colors[0].size() >= 3)
+                    {
+                        if (bReserveZero)
+                            colormap.at<cv::Vec3b>(startIndex, 0) = {colors[0][0], colors[0][1], colors[0][2]};
+                        else
+                            colormap.at<cv::Vec3b>(255, 0) = {colors[0][0], colors[0][1], colors[0][2]};
+                    }
+                }
+                else
+                {
+                    for(int i=0; i<std::min<int>(255, (int)colors.size()); ++i)
+                    {
+                        if (colors[i].size() >= 3)
+                            colormap.at<cv::Vec3b>(i+startIndex, 0) = {colors[i][0], colors[i][1], colors[i][2]};
+                    }
+
+                    for(int i=(int)colors.size()+1; i<256; ++i)
+                        colormap.at<cv::Vec3b>(i, 0) = {(uchar)i, (uchar)i, (uchar)i};
+                }
+                return colormap;
             }
             inline std::string  toJson(const CMat& image, const std::vector<std::string> &options)
             {

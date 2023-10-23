@@ -232,10 +232,11 @@ bool CDataVideoIO::isImageFormat(const std::string &extension)
     OpenEXR Image files - *.exr (see the Notes section)
     Radiance HDR - *.hdr, *.pic (always supported)
     Raster and Vector geospatial data supported by Gdal (see the Notes section)*/
-    return (extension == ".bmp" || extension == ".dib" || extension == ".jpeg" || extension == ".jpg" || extension == ".jpe" ||
-            extension == ".jp2" || extension == ".png" || extension == ".webp" || extension == ".pbm" || extension == ".pgm" ||
-            extension == ".ppm" || extension == ".pxm" || extension == ".pnm" || extension == ".sr" || extension == ".ras" ||
-            extension == ".tiff" || extension == ".tif" || extension == ".exr" || extension == ".hdr" || extension == ".pic");
+    std::string ext = Utils::String::toLower(extension);
+    return (ext == ".bmp" || ext == ".dib" || ext == ".jpeg" || ext == ".jpg" || ext == ".jpe" ||
+            ext == ".jp2" || ext == ".png" || ext == ".webp" || ext == ".pbm" || ext == ".pgm" ||
+            ext == ".ppm" || ext == ".pxm" || ext == ".pnm" || ext == ".sr" || ext == ".ras" ||
+            ext == ".tiff" || ext == ".tif" || ext == ".exr" || ext == ".hdr" || ext == ".pic");
 }
 
 std::pair<std::string, int> CDataVideoIO::getImageSequenceInfo(const std::string& fileName)

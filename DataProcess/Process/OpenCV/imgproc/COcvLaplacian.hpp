@@ -127,7 +127,7 @@ class COcvLaplacianFactory : public CTaskFactory
         COcvLaplacianFactory()
         {
             m_info.m_name = "ocv_laplacian";
-            m_info.m_description = QObject::tr("The function calculates the Laplacian of the source image by adding up the second x and y derivatives calculated using the Sobel operator.").toStdString();
+            m_info.m_shortDescription = QObject::tr("The function calculates the Laplacian of the source image by adding up the second x and y derivatives calculated using the Sobel operator.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Image processing/Image filtering").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Derivative,Laplace,Second,Order";

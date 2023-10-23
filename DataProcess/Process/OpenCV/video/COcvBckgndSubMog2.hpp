@@ -148,7 +148,7 @@ class COcvBckgndSubMog2Factory : public CTaskFactory
         COcvBckgndSubMog2Factory()
         {
             m_info.m_name = "ocv_bck_substractor_mog2";
-            m_info.m_description = QObject::tr("This process implements Gaussian mixture model background subtraction.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process implements Gaussian mixture model background subtraction.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Video analysis/Motion analysis").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "video,background,substractor,mog,gaussianr,mixture,model,segmentation,binary";

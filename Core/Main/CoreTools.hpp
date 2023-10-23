@@ -676,6 +676,36 @@ namespace Ikomia
                 return value;
             }
         }
+
+        namespace Plugin
+        {
+            inline std::string  getAlgoTypeString(const AlgoType& type)
+            {
+                switch(type)
+                {
+                    case AlgoType::INFER:
+                        return "INFER";
+                    case AlgoType::TRAIN:
+                        return "TRAIN";
+                    case AlgoType::DATASET:
+                        return "DATASET";
+                    case AlgoType::OTHER:
+                    default:
+                        return "OTHER";
+                }
+            }
+            inline AlgoType     getAlgoTypeFromString(const std::string& name)
+            {
+                if (name == "INFER" || name == "INFERENCE")
+                    return AlgoType::INFER;
+                else if (name == "TRAIN")
+                    return AlgoType::TRAIN;
+                else if (name == "DATASET")
+                    return AlgoType::DATASET;
+                else
+                    return AlgoType::OTHER;
+            }
+        }
     }
 }
 

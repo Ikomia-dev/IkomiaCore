@@ -179,7 +179,7 @@ class COcvOCRTesseractFactory : public CTaskFactory
         COcvOCRTesseractFactory()
         {
             m_info.m_name = "ocv_ocr_tesseract";
-            m_info.m_description = QObject::tr("Text recognition.").toStdString();
+            m_info.m_shortDescription = QObject::tr("Text recognition.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Extra modules/Scene text detection and recognition/Scene text recognition").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Text,Recognition";

@@ -18,6 +18,7 @@
 // Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "CHistogramPlot.h"
+#include <QRandomGenerator>
 #include <qwt_plot_canvas.h>
 #include <qwt_legend.h>
 #include <qwt_plot_histogram.h>
@@ -93,8 +94,10 @@ void CHistogramPlot::addHistogram(QVector<double> data, const QString& title, co
     if(color.isValid())
         m_colors += color;
     else
-        m_colors += QColor(QString::fromStdString(m_colorList[qrand()%m_colorList.size()]));
-
+    {
+        int colorIndex = QRandomGenerator::global()->generate() % m_colorList.size();
+        m_colors += QColor(QString::fromStdString(m_colorList[colorIndex]));
+    }
     populate();
 }
 

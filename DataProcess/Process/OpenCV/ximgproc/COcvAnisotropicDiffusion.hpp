@@ -122,7 +122,7 @@ class COcvAnisotropicDiffusionFactory : public CTaskFactory
         COcvAnisotropicDiffusionFactory()
         {
             m_info.m_name = "ocv_anisotropic_diffusion";
-            m_info.m_description = QObject::tr("The process applies Perona-Malik anisotropic diffusion to an image.").toStdString();
+            m_info.m_shortDescription = QObject::tr("The process applies Perona-Malik anisotropic diffusion to an image.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Extra modules/Extended Image Processing").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "anisotropic,diffusion,Perona-Malik";

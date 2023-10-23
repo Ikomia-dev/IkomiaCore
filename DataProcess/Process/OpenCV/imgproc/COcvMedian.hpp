@@ -115,7 +115,7 @@ class COcvMedianFactory : public CTaskFactory
         COcvMedianFactory()
         {
             m_info.m_name = "ocv_median_filter";
-            m_info.m_description = QObject::tr("This process smoothes your image with a median filter.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process smoothes your image with a median filter.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Main modules/Image processing/Image filtering").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "smooth,blur,isotropic,filter";

@@ -128,7 +128,7 @@ class COcvRollingGuidanceFilterFactory : public CTaskFactory
         COcvRollingGuidanceFilterFactory()
         {
             m_info.m_name = "ocv_rolling_guidance_filter";
-            m_info.m_description = QObject::tr("Applies the rolling guidance filter to an image.").toStdString();
+            m_info.m_shortDescription = QObject::tr("Applies the rolling guidance filter to an image.").toStdString();
             m_info.m_path = QObject::tr("OpenCV/Extra modules/Extended Image Processing/Filters").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/opencv.png").toStdString();
             m_info.m_keywords = "Smooth,Blur,Anisotropic,Filter,Gaussian,Edge-preserving";

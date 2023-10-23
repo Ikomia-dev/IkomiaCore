@@ -261,7 +261,7 @@ class CGmicColorPresetsFactory : public CTaskFactory
         CGmicColorPresetsFactory()
         {
             m_info.m_name = "gmic_color_presets";
-            m_info.m_description = QObject::tr("This process applies pre-defined LUT on images.").toStdString();
+            m_info.m_shortDescription = QObject::tr("This process applies pre-defined LUT on images.").toStdString();
             m_info.m_docLink = "https://gmic.eu/reference.shtml#remove_ColorPresets";
             m_info.m_path = QObject::tr("Gmic/Colors").toStdString();
             m_info.m_iconPath = QObject::tr(":/Images/gmic.png").toStdString();

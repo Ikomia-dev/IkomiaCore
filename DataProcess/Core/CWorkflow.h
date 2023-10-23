@@ -126,7 +126,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         WorkflowVertex                  getLastTaskId() const;
         WorkflowVertex                  getActiveTaskId() const;
         WorkflowVertex                  getRunningTaskId() const;
-        WorkflowVertex                  getTaskId(const std::string& name) const;
+        std::vector<WorkflowVertex>     getTaskIdList(const std::string& name) const;
         WorkflowTaskPtr                 getTask(const WorkflowVertex& id) const;
         std::vector<WorkflowVertex>     getParents(const WorkflowVertex& id) const;
         void                            getAllParents(const WorkflowVertex& id, std::vector<WorkflowVertex>& parents) const;
@@ -186,8 +186,6 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         void                            clear();
         void                            clearInputs() override;
         void                            clearAllOutputData();
-        void                            clearOutputDataFrom(const WorkflowVertex& id);
-        void                            clearOutputDataTo(const WorkflowVertex& id);
 
         void                            run() override;
         void                            runFrom(const WorkflowVertex& id);
@@ -258,6 +256,10 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
 
         void                            stopVideoRead(const InputOutputVect& ioVect);
         void                            stopVideoWrite(const InputOutputVect& ioVect, int timeout);
+
+        void                            clearOutputDataFrom(const WorkflowVertex& id);
+        void                            clearOutputDataTo(const WorkflowVertex& id);
+        void                            clearOutputData(const std::vector<WorkflowVertex>& tasks);
 
         void                            onTaskInputRemoved(size_t index);
         void                            onTaskOutputRemoved(size_t index);

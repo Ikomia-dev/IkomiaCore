@@ -371,11 +371,6 @@ class CNumericIO : public CNumericIOBase
             return std::static_pointer_cast<CNumericIO>(cloneImp());
         }
 
-        void                        save() override
-        {
-            std::string path = m_saveFolder + m_saveBaseName + Utils::Data::getFileFormatExtension(m_saveFormat);
-            save(path);
-        }
         void                        save(const std::string& path) override
         {
             auto extension = Utils::File::extension(path);
