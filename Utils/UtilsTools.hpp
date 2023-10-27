@@ -1121,7 +1121,7 @@ namespace Ikomia
                 try
                 {
                     boost::filesystem::path folderPath(path);
-                    if(!boost::filesystem::exists(folderPath))
+                    if (!path.empty() && !boost::filesystem::exists(folderPath))
                     {
                         if(!boost::filesystem::create_directories(folderPath))
                             throw CException(CoreExCode::INVALID_FILE, "Could not create directory: " + path);
