@@ -191,19 +191,20 @@ CDataInfoPtr CImageIO::getDataInfo()
 
 CMat CImageIO::getImage()
 {
-    if( m_dataType == IODataType::IMAGE ||
+    if (m_dataType == IODataType::IMAGE ||
         m_dataType == IODataType::IMAGE_BINARY ||
         m_dataType == IODataType::IMAGE_LABEL ||
         m_dataType == IODataType::VIDEO ||
         m_dataType == IODataType::VIDEO_BINARY ||
         m_dataType == IODataType::VIDEO_LABEL ||
         m_dataType == IODataType::DESCRIPTORS ||
-        m_dataType == IODataType::POSITION ||
         m_dimCount == 2)
     {
         return m_image;
     }
-    else if(m_dataType == IODataType::VOLUME || m_dataType == IODataType::VOLUME_BINARY)
+    else if (m_dataType == IODataType::VOLUME ||
+               m_dataType == IODataType::VOLUME_BINARY ||
+               m_dataType == IODataType::POSITION)
     {
         if(m_currentIndex < m_image.getNbStacks())
             return m_image.getPlane(m_currentIndex);
