@@ -60,7 +60,10 @@ void CInstanceSegmentation::computePolygons()
     {
         GraphicsItem type = graphics[i]->getType();
         if (type == GraphicsItem::POLYGON || type == GraphicsItem::COMPLEX_POLYGON)
+        {
+            graphics[i]->setCategory(m_label);
             m_polygons.push_back(graphics[i]);
+        }
     }
 }
 
