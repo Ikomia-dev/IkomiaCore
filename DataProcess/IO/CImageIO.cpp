@@ -159,7 +159,7 @@ void CImageIO::setChannelCount(size_t nb)
     m_channelCount = nb;
 }
 
-void CImageIO::setCurrentImage(size_t index)
+void CImageIO::setCurrentImageIndex(size_t index)
 {
     m_currentIndex = index;
 }
@@ -212,6 +212,11 @@ CMat CImageIO::getImage()
             return m_image.getPlane(0);
     }
     return CMat();
+}
+
+size_t CImageIO::getCurrentImageIndex() const
+{
+    return m_currentIndex;
 }
 
 CMat CImageIO::getImageWithGraphics(const WorkflowTaskIOPtr &io)

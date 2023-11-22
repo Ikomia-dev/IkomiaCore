@@ -407,6 +407,11 @@ constexpr auto _getChannelCountDocString =
         "Returns:\n\n"
         "   int: number of channel required for the input/output\n\n";
 
+constexpr auto _getCurrentImageIndexDocString =
+    "Get the index of the current image (2D plane) from 3D image data structure (volume, multi-position...).\n\n"
+    "Returns:\n\n"
+    "   index (int): zero-based index of the 2D plane\n\n";
+
 constexpr auto _getDataDocString =
         "Get the image data.\n\n"
         "Returns:\n\n"
@@ -470,7 +475,7 @@ constexpr auto _setChannelCountDocString =
         "Args:\n\n"
         "   nb (int): channel count, 1 for monochrome image, 3 for color image\n\n";
 
-constexpr auto _setCurrentImageDocString =
+constexpr auto _setCurrentImageIndexDocString =
         "Set the index of the current image (2D plane) from a volume (3D image data structure).\n\n"
         "Args:\n\n"
         "   index (int): zero-based index of the 2D plane\n\n";
