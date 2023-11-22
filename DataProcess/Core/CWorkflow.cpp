@@ -232,14 +232,15 @@ void CWorkflow::setInput(const WorkflowTaskIOPtr &pInput, size_t index, bool bNe
     pRootTask->setInputNoCheck(pInput, index);
     pRootTask->setOutput(pInput, index);
 
-    auto pActiveTask = m_graph[m_activeTask];
-    if(pActiveTask)
-        pActiveTask->globalInputChanged(bNewSequence);
-
-    if(bNewSequence)
+    if (bNewSequence)
         checkBatchModeState();
 
     startIOAnalysis(m_root);
+
+    // Order matters, send notification after workflow graph is updated
+    auto pActiveTask = m_graph[m_activeTask];
+    if(pActiveTask)
+        pActiveTask->globalInputChanged(bNewSequence);
 }
 
 void CWorkflow::setInputs(const InputOutputVect &inputs)
