@@ -61,7 +61,7 @@ void CWorkflowTaskWidget::setApplyBtnHidden(bool bHidden)
     m_pApplyBtn->setHidden(bHidden);
 }
 
-void CWorkflowTaskWidget::onParametersModified()
+void CWorkflowTaskWidget::onParametersChanged()
 {
 }
 

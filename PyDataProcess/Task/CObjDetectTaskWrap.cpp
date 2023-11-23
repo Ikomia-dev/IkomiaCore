@@ -351,7 +351,7 @@ void CObjDetectTaskWrap::emitOutputChanged()
     emit m_signalHandler->doOutputChanged();
 }
 
-void CObjDetectTaskWrap::emitParametersModified()
+void CObjDetectTaskWrap::emitParametersChanged()
 {
-    emit m_signalHandler->doParametersModified();
+    emit m_signalHandler->doParametersChanged();
 }

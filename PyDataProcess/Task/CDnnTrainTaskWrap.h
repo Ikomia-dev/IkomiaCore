@@ -64,7 +64,7 @@ class CDnnTrainTaskWrap : public CDnnTrainTask, public wrapper<CDnnTrainTask>
         void    emitAddSubProgressSteps(int count);
         void    emitStepProgress();
         void    emitOutputChanged();
-        void    emitParametersModified();
+        void    emitParametersChanged();
 };
 
 #endif // CDnnTrainTaskWrap_H

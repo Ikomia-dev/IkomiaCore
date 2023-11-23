@@ -42,7 +42,7 @@ class CWorkflowTaskWidgetWrap : public CWorkflowTaskWidget, public wrapper<CWork
 
         void            onApply();
 
-        void            onParametersModified();
+        void            onParametersChanged();
         void            default_onParametersModified();
 };
 

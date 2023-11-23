@@ -51,7 +51,7 @@ class CSemanticSegTaskWrap: public CSemanticSegTask, public wrapper<CSemanticSeg
         void            emitStepProgress();
         void            emitGraphicsContextChanged();
         void            emitOutputChanged();
-        void            emitParametersModified();
+        void            emitParametersChanged();
 };
 
 #endif // CSEMANTICSEGTASKWRAP_H

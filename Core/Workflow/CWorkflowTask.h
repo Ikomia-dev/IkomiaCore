@@ -61,7 +61,7 @@ class CORESHARED_EXPORT CSignalHandler : public CProgressSignalHandler
 
         void doLog(const QString& msg);
 
-        void doParametersModified();
+        void doParametersChanged();
 
     public slots:
 

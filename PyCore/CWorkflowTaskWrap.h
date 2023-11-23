@@ -110,7 +110,7 @@ class CWorkflowTaskWrap : public CWorkflowTask, public wrapper<CWorkflowTask>
         void        emitStepProgress();
         void        emitGraphicsContextChanged();
         void        emitOutputChanged();
-        void        emitParametersModified();
+        void        emitParametersChanged();
 };
 
 #endif // CWORKFLOWTASKWRAP_H

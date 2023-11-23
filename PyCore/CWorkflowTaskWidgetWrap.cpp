@@ -43,15 +43,15 @@ void CWorkflowTaskWidgetWrap::onApply()
     }
 }
 
-void CWorkflowTaskWidgetWrap::onParametersModified()
+void CWorkflowTaskWidgetWrap::onParametersChanged()
 {
     CPyEnsureGIL gil;
     try
     {
-        if(override onParamsModifiedOver = this->get_override("on_parameters_modified"))
+        if(override onParamsModifiedOver = this->get_override("on_parameters_changed"))
             onParamsModifiedOver();
         else
-            CWorkflowTaskWidget::onParametersModified();
+            CWorkflowTaskWidget::onParametersChanged();
     }
     catch(boost::python::error_already_set&)
     {
@@ -64,7 +64,7 @@ void CWorkflowTaskWidgetWrap::default_onParametersModified()
     CPyEnsureGIL gil;
     try
     {
-        this->CWorkflowTaskWidget::onParametersModified();
+        this->CWorkflowTaskWidget::onParametersChanged();
     }
     catch(boost::python::error_already_set&)
     {

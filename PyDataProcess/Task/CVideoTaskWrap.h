@@ -80,7 +80,7 @@ class CVideoTaskWrap: public CVideoTask, public wrapper<CVideoTask>
         void    emitStepProgress();
         void    emitGraphicsContextChanged();
         void    emitOutputChanged();
-        void    emitParametersModified();
+        void    emitParametersChanged();
 };
 
 #endif // CVIDEOTASKWRAP_H

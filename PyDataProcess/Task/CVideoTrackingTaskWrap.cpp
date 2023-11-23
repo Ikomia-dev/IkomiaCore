@@ -402,7 +402,7 @@ void CVideoTrackingTaskWrap::emitOutputChanged()
     emit m_signalHandler->doOutputChanged();
 }
 
-void CVideoTrackingTaskWrap::emitParametersModified()
+void CVideoTrackingTaskWrap::emitParametersChanged()
 {
-    emit m_signalHandler->doParametersModified();
+    emit m_signalHandler->doParametersChanged();
 }

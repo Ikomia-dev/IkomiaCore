@@ -351,7 +351,7 @@ void CClassifTaskWrap::emitOutputChanged()
     emit m_signalHandler->doOutputChanged();
 }
 
-void CClassifTaskWrap::emitParametersModified()
+void CClassifTaskWrap::emitParametersChanged()
 {
-    emit m_signalHandler->doParametersModified();
+    emit m_signalHandler->doParametersChanged();
 }

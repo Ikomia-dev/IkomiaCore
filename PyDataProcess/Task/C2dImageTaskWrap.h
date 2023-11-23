@@ -81,7 +81,7 @@ class C2dImageTaskWrap : public C2dImageTask, public wrapper<C2dImageTask>
         void            emitStepProgress();
         void            emitGraphicsContextChanged();
         void            emitOutputChanged();
-        void            emitParametersModified();
+        void            emitParametersChanged();
 };
 
 #endif // C2DIMAGETASKWRAP_H

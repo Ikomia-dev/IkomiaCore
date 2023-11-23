@@ -373,9 +373,9 @@ void C2dImageInteractiveTaskWrap::emitOutputChanged()
     emit m_signalHandler->doOutputChanged();
 }
 
-void C2dImageInteractiveTaskWrap::emitParametersModified()
+void C2dImageInteractiveTaskWrap::emitParametersChanged()
 {
-    emit m_signalHandler->doParametersModified();
+    emit m_signalHandler->doParametersChanged();
 }
 
 

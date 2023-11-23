@@ -431,7 +431,7 @@ void CVideoTaskWrap::emitOutputChanged()
     emit m_signalHandler->doOutputChanged();
 }
 
-void CVideoTaskWrap::emitParametersModified()
+void CVideoTaskWrap::emitParametersChanged()
 {
-    emit m_signalHandler->doParametersModified();
+    emit m_signalHandler->doParametersChanged();
 }
