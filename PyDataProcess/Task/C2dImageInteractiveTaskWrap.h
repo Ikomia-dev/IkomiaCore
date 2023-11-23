@@ -74,6 +74,7 @@ class C2dImageInteractiveTaskWrap: public C2dImageInteractiveTask, public wrappe
         void    emitStepProgress();
         void    emitGraphicsContextChanged();
         void    emitOutputChanged();
+        void    emitParametersModified();
 };
 
 #endif // C2DIMAGEINTERACTIVETASKWRAP_H

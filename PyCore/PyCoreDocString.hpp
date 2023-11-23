@@ -307,6 +307,9 @@ constexpr auto _emitGraphicsContextChangedDocString =
 constexpr auto _emitOutputChangedDocString =
         "Send event to notify that some outputs have changed and that display must be updated.\n\n";
 
+constexpr auto _emitParametersModifiedDocString =
+    "Send event to associated widget to notify that some parameter have changed.\n\n";
+
 constexpr auto _emitStepProgressDocString =
         "Send step event to notify progress bar system.\n\n";
 
@@ -678,6 +681,9 @@ constexpr auto _initDocString =
 
 constexpr auto _applyDocString =
         "Called when user presses the Apply button. Should be overriden: it's a good place to update parameters values.\n\n";
+
+constexpr auto _onParamsModifiedDocString =
+    "Called when parameters are modified from task side. Should be overriden to update widget elements accordingly.\n\n";
 
 constexpr auto _emitApplyDocString =
         "Send apply event to the system. The system then launches the task execution.\n\n";

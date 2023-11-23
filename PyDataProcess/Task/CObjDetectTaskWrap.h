@@ -52,6 +52,7 @@ class CObjDetectTaskWrap: public CObjectDetectionTask, public wrapper<CObjectDet
         void            emitStepProgress();
         void            emitGraphicsContextChanged();
         void            emitOutputChanged();
+        void            emitParametersModified();
 };
 
 #endif // COBJDETECTTASKWRAP_H

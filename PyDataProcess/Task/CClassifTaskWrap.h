@@ -51,6 +51,7 @@ class CClassifTaskWrap: public CClassificationTask, public wrapper<CClassificati
         void            emitStepProgress();
         void            emitGraphicsContextChanged();
         void            emitOutputChanged();
+        void            emitParametersModified();
 };
 
 #endif // CCLASSIFTASKWRAP_H

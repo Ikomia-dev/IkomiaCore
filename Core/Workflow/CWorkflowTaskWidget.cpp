@@ -61,6 +61,10 @@ void CWorkflowTaskWidget::setApplyBtnHidden(bool bHidden)
     m_pApplyBtn->setHidden(bHidden);
 }
 
+void CWorkflowTaskWidget::onParametersModified()
+{
+}
+
 QLineEdit* CWorkflowTaskWidget::addEdit(int row, const QString& title, const QString& value)
 {
     auto pLabel = new QLabel(title);

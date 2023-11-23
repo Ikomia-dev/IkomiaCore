@@ -57,22 +57,21 @@ class CORESHARED_EXPORT CSignalHandler : public CProgressSignalHandler
 
         void doAddGraphicsLayer(CGraphicsLayer* pLayer);
         void doRemoveGraphicsLayer(CGraphicsLayer* pLayer);
-
         void doGraphicsContextChanged();
 
         void doLog(const QString& msg);
 
+        void doParametersModified();
+
     public slots:
+
+        void onOutputChanged();
 
         void onAddGraphicsLayer(CGraphicsLayer* pLayer);
         void onRemoveGraphicsLayer(CGraphicsLayer* pLayer);
-
-        //void onProgress();
+        void onGraphicsContextChanged();
 
         void onFinishWorkflow();
-
-        void onOutputChanged();
-        void onGraphicsContextChanged();
 };
 
 /**

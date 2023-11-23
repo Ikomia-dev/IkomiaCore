@@ -52,6 +52,7 @@ class CInstanceSegTaskWrap: public CInstanceSegTask, public wrapper<CInstanceSeg
         void            emitStepProgress();
         void            emitGraphicsContextChanged();
         void            emitOutputChanged();
+        void            emitParametersModified();
 };
 
 #endif // CINSTANCESEGTASKWRAP_H

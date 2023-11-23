@@ -408,3 +408,8 @@ void CVideoOFTaskWrap::emitOutputChanged()
 {
     emit m_signalHandler->doOutputChanged();
 }
+
+void CVideoOFTaskWrap::emitParametersModified()
+{
+    emit m_signalHandler->doParametersModified();
+}

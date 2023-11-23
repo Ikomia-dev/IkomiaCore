@@ -1667,6 +1667,9 @@ constexpr auto _emitGraphicsContextChangedDocString =
 constexpr auto _emitOutputChangedDocString =
         "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.emit_output_changed`.\n\n";
 
+constexpr auto _emitParamsModifiedDocString =
+    "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.emit_parameters_modified`.\n\n";
+
 constexpr auto _executeActionsDocString =
         "Method called when a specific action is requested from the associated widget (see :py:meth:`~ikomia.core.pycore.CWorkflowTaskWidget.emit_send_process_action`).\n\n"
         "Args:\n\n"

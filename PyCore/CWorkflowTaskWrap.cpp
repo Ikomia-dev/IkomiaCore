@@ -693,3 +693,8 @@ void CWorkflowTaskWrap::emitOutputChanged()
     emit m_signalHandler->doOutputChanged();
 }
 
+void CWorkflowTaskWrap::emitParametersModified()
+{
+    emit m_signalHandler->doParametersModified();
+}
+

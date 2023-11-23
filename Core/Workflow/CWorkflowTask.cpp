@@ -334,6 +334,7 @@ void CWorkflowTask::setParam(const WorkflowTaskParamPtr &pParam)
 {
     m_pParam = pParam;
     parametersModified();
+    emit m_signalHandler->doParametersModified();
 }
 
 void CWorkflowTask::setActive(bool bActive)
@@ -354,6 +355,7 @@ void CWorkflowTask::setParamValues(const UMapString &paramMap)
         }
         m_pParam->setParamMap(params);
         parametersModified();
+        emit m_signalHandler->doParametersModified();
     }
 }
 

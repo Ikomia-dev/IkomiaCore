@@ -351,3 +351,8 @@ void CInstanceSegTaskWrap::emitOutputChanged()
     emit m_signalHandler->doOutputChanged();
 }
 
+void CInstanceSegTaskWrap::emitParametersModified()
+{
+    emit m_signalHandler->doParametersModified();
+}
+
