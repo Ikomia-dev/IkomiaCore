@@ -48,9 +48,7 @@ void CColorPushButton::init()
 
     setFlat(true);
     setToolTip(m_title);
-    setStyleSheet(QString("QPushButton { background-color: %1; border: none; } QPushButton:hover {border: 1px solid %2;}")
-                  .arg(m_color.name())
-                  .arg(hoverBorderColor.name()));
+    setStyleSheet(m_styleSheet.arg(m_color.name()).arg(hoverBorderColor.name()));
 }
 
 void CColorPushButton::initConnections()
@@ -71,9 +69,7 @@ void CColorPushButton::updateColor()
 {
     auto pal = qApp->palette();
     auto hoverBorderColor = pal.light().color();
-    setStyleSheet(QString("QPushButton { background-color: %1; border: none; } QPushButton:hover {border: 1px solid %2;}")
-                  .arg(m_color.name())
-                  .arg(hoverBorderColor.name()));
+    setStyleSheet(m_styleSheet.arg(m_color.name()).arg(hoverBorderColor.name()));
 }
 
 #include "moc_CColorPushButton.cpp"
