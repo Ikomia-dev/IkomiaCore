@@ -260,12 +260,15 @@ void CSemanticSegIO::copy(const std::shared_ptr<CWorkflowTaskIO> &ioPtr)
         if (instanceIOPtr)
         {
             clearData();
+            // Set names
             std::vector<std::string> instanceNames = instanceIOPtr->getClassNames();
+            setClassNames(instanceNames);
+            // Set mask
             CMat mask = instanceIOPtr->getMergeMask();
             // Substract 1 as instance segmentation IO adds background class for zero-pixels in merge mask
-            mask = mask - 1;
-            // Set names and mask
-            setClassNames(instanceNames);
+            if (!mask.empty())
+                mask = mask - 1;
+
             setMask(mask);
         }
     }
