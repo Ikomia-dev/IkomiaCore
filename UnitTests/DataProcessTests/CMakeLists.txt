@@ -1,0 +1,3 @@
+add_subdirectory(IOTests)
+add_subdirectory(OcvProcessTests)
+add_subdirectory(WorkflowTests)

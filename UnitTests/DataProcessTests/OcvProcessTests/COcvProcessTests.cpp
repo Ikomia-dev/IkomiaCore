@@ -367,7 +367,7 @@ void COcvProcessTests::runVideo(const std::string algoName, const WorkflowTaskPa
     auto factory = m_processRegister.getProcessFactory();
     auto processPtr = factory.createObject(algoName, std::move(paramPtr));
     QVERIFY(processPtr != nullptr);
-    processPtr->setInput(m_videoInputPtr, inputIndex, true);
+    processPtr->setInput(m_videoInputPtr, inputIndex);
 
     if(graphicsInputIndex != -1)
     {

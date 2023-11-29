@@ -1,5 +1,5 @@
-#include <QtTest>
 #include "CIOTests.h"
+#include <QTest>
 #include "UnitTestUtils.hpp"
 #include "IO/CObjectDetectionIO.h"
 #include "IO/CInstanceSegIO.h"
@@ -514,18 +514,18 @@ void CIOTests::instanceSegIOFromJson()
     io.fromJson(jsonStr);
 
     QVERIFY(io.isDataAvailable());
-    QVERIFY(io.getInstanceCount() == 3);
+    QVERIFY(io.getObjectCount() == 3);
     QVERIFY(io.getMaskImageIO() != nullptr);
     QVERIFY(io.getGraphicsIO() != nullptr);
     QVERIFY(io.getBlobMeasureIO() != nullptr);
     QVERIFY(io.getMergeMask().empty() == false);
 
-    auto instances = io.getInstances();
-    QVERIFY(instances.size() == io.getInstanceCount());
+    auto instances = io.getObjects();
+    QVERIFY(instances.size() == io.getObjectCount());
 
     for (size_t i=0; i<instances.size(); ++i)
     {
-        auto inst = io.getInstance(i);
+        auto inst = io.getObject(i);
         QVERIFY(inst.m_box.size() == 4);
         QVERIFY(inst.m_label.empty() == false);
         QVERIFY(inst.m_confidence > 0);
@@ -572,7 +572,7 @@ void CIOTests::fillInstanceSegIO(CInstanceSegIO &io)
     cv::Mat roiBinImg1(binImg1, rc1);
     cv::Mat roiMask1(mask1, rc1);
     roiBinImg1.copyTo(roiMask1);
-    io.addInstance(0, CInstanceSegmentation::ObjectType::THING, 0, "Object1", 0.85, rc1.x, rc1.y, rc1.width, rc1.height, mask1, {255,0,0});
+    io.addObject(0, CInstanceSegmentation::ObjectType::THING, 0, "Object1", 0.85, rc1.x, rc1.y, rc1.width, rc1.height, mask1, {255,0,0});
 
     cv::Rect rc2(200, 100, 75, 150);
     cv::Mat mask2(srcImg.rows, srcImg.cols, CV_8UC1, cv::Scalar(0));
@@ -580,7 +580,7 @@ void CIOTests::fillInstanceSegIO(CInstanceSegIO &io)
     cv::Mat roiBinImg2(binImg2, rc2);
     cv::Mat roiMask2(mask2, rc2);
     roiBinImg2.copyTo(roiMask2);
-    io.addInstance(1, CInstanceSegmentation::ObjectType::THING, 1, "Object2", 0.60, rc2.x, rc2.y, rc2.width, rc2.height, mask2, {0,255,0});
+    io.addObject(1, CInstanceSegmentation::ObjectType::THING, 1, "Object2", 0.60, rc2.x, rc2.y, rc2.width, rc2.height, mask2, {0,255,0});
 
     cv::Rect rc3(150, 250, 150, 80);
     cv::Mat mask3(srcImg.rows, srcImg.cols, CV_8UC1, cv::Scalar(0));
@@ -588,7 +588,7 @@ void CIOTests::fillInstanceSegIO(CInstanceSegIO &io)
     cv::Mat roiBinImg3(binImg3, rc3);
     cv::Mat roiMask3(mask3, rc3);
     roiBinImg3.copyTo(roiMask3);
-    io.addInstance(2, CInstanceSegmentation::ObjectType::THING, 0, "Object3", 0.45, rc3.x, rc3.y, rc3.width, rc3.height, mask3, {255,0,0});
+    io.addObject(2, CInstanceSegmentation::ObjectType::THING, 0, "Object3", 0.45, rc3.x, rc3.y, rc3.width, rc3.height, mask3, {255,0,0});
 }
 
 QTEST_GUILESS_MAIN(CIOTests)

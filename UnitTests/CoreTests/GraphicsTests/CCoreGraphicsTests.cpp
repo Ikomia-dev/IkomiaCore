@@ -85,7 +85,7 @@ QList<QGraphicsItem*> CCoreGraphicsTests::createGraphicsScene()
     return items;
 }
 
-bool CCoreGraphicsTests::colorMatch(const QColor &qcolor, const std::vector<int> &ccolor) const
+bool CCoreGraphicsTests::colorMatch(const QColor &qcolor, const std::vector<uchar> &ccolor) const
 {
     return (qcolor.red() == ccolor[0] && qcolor.green() == ccolor[1] && qcolor.blue() == ccolor[2]);
 }

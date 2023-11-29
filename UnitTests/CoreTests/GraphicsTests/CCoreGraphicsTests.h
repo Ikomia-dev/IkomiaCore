@@ -16,7 +16,7 @@ class CCoreGraphicsTests : public QObject
     private:
 
         QList<QGraphicsItem*>   createGraphicsScene();
-        bool                    colorMatch(const QColor& qcolor, const std::vector<int>& ccolor) const;
+        bool                    colorMatch(const QColor& qcolor, const std::vector<uchar> &ccolor) const;
 
     private slots:
 
