@@ -495,6 +495,8 @@ void CGraphicsRectangle::switchHitVertex(bool bHorizontal, bool bVertical)
 void CGraphicsRectangle::copy(const CGraphicsRectangle &rectangle)
 {
     setRect(rectangle.rect());
+    setAcceptHoverEvents(rectangle.acceptHoverEvents());
+    setFlags(rectangle.flags());
     setPen(rectangle.pen());
     setBrush(rectangle.brush());
     setCategory(rectangle.getCategory());

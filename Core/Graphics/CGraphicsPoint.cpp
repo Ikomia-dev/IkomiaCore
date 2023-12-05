@@ -291,6 +291,8 @@ void CGraphicsPoint::updateCursor(const QPointF &pos)
 void CGraphicsPoint::copy(const CGraphicsPoint &point)
 {
     setRect(point.rect());
+    setAcceptHoverEvents(point.acceptHoverEvents());
+    setFlags(point.flags());
     setPen(point.pen());
     setBrush(point.brush());
     setCategory(point.getCategory());
