@@ -5,6 +5,8 @@ add_compile_definitions(
 
 set(IK_CPU OFF)
 set(CENTOS7 OFF)
+set(IKOMIA_TESTS OFF)
+set(IKOMIA_TESTS_CL OFF)
 set(PYTHON_VERSION_DOT 3.7)
 set(PYTHON_VERSION_DOT_M 3.7m)
 set(PYTHON_VERSION_NO_DOT 37)

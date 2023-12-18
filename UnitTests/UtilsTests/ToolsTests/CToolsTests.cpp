@@ -96,6 +96,7 @@ void CToolsTests::geometryFunctions()
 
 void CToolsTests::fileFunctions()
 {
+    // TODO: avoid using local files
     const std::string pathTest = "/home/user/images/image.png";
 
     std::string ext = Utils::File::extension(pathTest);

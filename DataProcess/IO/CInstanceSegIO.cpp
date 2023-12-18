@@ -170,7 +170,7 @@ std::vector<std::string> CInstanceSegIO::getClassNames() const
     for (size_t i=0; i<count; ++i)
     {
         int index = m_instances[i].m_classIndex;
-        if (index >= count)
+        if (index >= names.size())
             names.resize(index + 1);
 
         names[index] = m_instances[i].m_label;

@@ -1,0 +1,2 @@
+add_subdirectory(DatabaseTests)
+add_subdirectory(ToolsTests)

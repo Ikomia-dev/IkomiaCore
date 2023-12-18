@@ -23,6 +23,9 @@ void CObjectDetectionTask::addObject(int id, int classIndex, double confidence, 
     if (objDetIOPtr == nullptr)
         throw CException(CoreExCode::NULL_POINTER, "Invalid object detection output", __func__, __FILE__, __LINE__);
 
+    if (m_classNames.size() != m_classColors.size())
+        throw CException(CoreExCode::INVALID_SIZE, "Size mismatch, color and label lists must have the same size", __func__, __FILE__, __LINE__);
+
     if (classIndex >= m_classNames.size())
         throw CException(CoreExCode::INVALID_SIZE, "Invalid class index, index overflows class names list", __func__, __FILE__, __LINE__);
 
@@ -37,6 +40,9 @@ void CObjectDetectionTask::addObject(int id, int classIndex, double confidence, 
     auto objDetIOPtr = std::dynamic_pointer_cast<CObjectDetectionIO>(getOutput(1));
     if (objDetIOPtr == nullptr)
         throw CException(CoreExCode::NULL_POINTER, "Invalid object detection output", __func__, __FILE__, __LINE__);
+
+    if (m_classNames.size() != m_classColors.size())
+        throw CException(CoreExCode::INVALID_SIZE, "Size mismatch, color and label lists must have the same size", __func__, __FILE__, __LINE__);
 
     if (classIndex >= m_classNames.size())
         throw CException(CoreExCode::INVALID_SIZE, "Invalid class index, index overflows class names list", __func__, __FILE__, __LINE__);
@@ -89,6 +95,7 @@ void CObjectDetectionTask::generateRandomColors()
 {
     std::srand(RANDOM_COLOR_SEED);
     double factor = 255.0 / (double)RAND_MAX;
+    m_classColors.clear();
 
     for (size_t i=0; i<m_classNames.size(); ++i)
     {
@@ -121,14 +128,14 @@ void CObjectDetectionTask::readClassNames(const std::string &path)
     }
     file.close();
 
-    if (m_classColors.empty())
+    if (m_classNames.size() != m_classColors.size())
         generateRandomColors();
 }
 
 void CObjectDetectionTask::setNames(const std::vector<std::string> &names)
 {
     m_classNames = names;
-    if (m_classColors.empty())
+    if (m_classNames.size() != m_classColors.size())
         generateRandomColors();
 }
 

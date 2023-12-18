@@ -1,0 +1,3 @@
+add_subdirectory(DataInfoTests)
+add_subdirectory(DataStructureTests)
+add_subdirectory(GraphicsTests)

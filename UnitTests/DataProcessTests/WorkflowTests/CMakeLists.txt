@@ -1,76 +1,74 @@
-add_library(ikDataIO SHARED
-    ../Core/Data/CvMatNumpyArrayConverter.cpp
-    ../Core/Data/CvMatNumpyArrayConverter.h
-    CDataIO.hpp
-    CDataImageIO.cpp
-    CDataImageIO.h
-    CDataVideoBuffer.cpp
-    CDataVideoBuffer.h
-    CDataVideoIO.cpp
-    CDataVideoIO.h
-    CDicomImageIO.cpp
-    CDicomImageIO.h
-    CNumpyImageIO.cpp
-    CNumpyImageIO.h
-    COpencvImageIO.cpp
-    COpencvImageIO.h
-    COpencvVideoIO.cpp
-    COpencvVideoIO.h
-    CVirtualImageIO.cpp
-    CVirtualImageIO.h
-    CVirtualVideoIO.cpp
-    CVirtualVideoIO.h
-    DataIOGlobal.hpp
-    DataIOTools.hpp
+add_executable(WorkflowTests WIN32
+    CWorkflowTests.cpp
+    CWorkflowTests.h
 )
 
-set_target_properties(ikDataIO PROPERTIES VERSION ${IKOMIA_VERSION} SOVERSION ${IKOMIA_VERSION})
-
-target_compile_definitions(ikDataIO PRIVATE
-    DATAIO_LIBRARY
+target_include_directories(WorkflowTests PRIVATE
+    ../../../Core
+    ../../../DataIO
+    ../../../DataProcess
+    ../../../Utils
 )
 
-target_compile_features(ikDataIO PRIVATE cxx_std_14)
+target_compile_features(WorkflowTests PRIVATE cxx_std_14)
 
-target_include_directories(ikDataIO PRIVATE
-    ../Core
-    ../Utils
-)
-
-target_link_libraries(ikDataIO PRIVATE
+target_link_libraries(WorkflowTests PRIVATE
     Qt::Concurrent
     Qt::Core
     Qt::Gui
     Qt::Sql
+    Qt::Test
     Qt::Widgets
     Python3::Python
     Boost::system
     Boost::filesystem
     ${BOOST_PYTHON_TARGET}
     OpenMP::OpenMP_CXX
+    # OpenCV
+    opencv_bgsegm
+    opencv_bioinspired
     opencv_core
+    opencv_dnn
+    opencv_face
+    opencv_features2d
+    opencv_fuzzy
+    opencv_hfs
+    opencv_highgui
     opencv_imgcodecs
     opencv_imgproc
-    opencv_videoio
+    opencv_objdetect
+    opencv_optflow
+    opencv_photo
+    opencv_saliency
+    opencv_superres
+    opencv_text
+    opencv_tracking
+    opencv_video
+    opencv_ximgproc
+    opencv_xphoto
+    gmic
+    # GDCM
+    gdcmMSFF
+    gdcmDICT
+    gdcmIOD
+    gdcmDSED
+    gdcmCommon
+    gdcmjpeg8
+    gdcmjpeg12
+    gdcmjpeg16
+    gdcmopenjp2
+    gdcmcharls
+    gdcmuuid
+    gdcmexpat
+    # Ikomia
     ikUtils
     ikCore
+    ikDataIO
+    ikDataProcess
 )
 
 if(UNIX)
-    target_link_libraries(ikDataIO PRIVATE
-        # GDCM
-        gdcmMSFF
-        gdcmDICT
-        gdcmIOD
-        gdcmDSED
-        gdcmCommon
-        gdcmjpeg8
-        gdcmjpeg12
-        gdcmjpeg16
-        gdcmopenjp2
-        gdcmcharls
-        gdcmuuid
-        gdcmexpat
+    target_link_libraries(WorkflowTests PRIVATE
         # VTK
         vtkalglib-${VTK_MAJOR_MINOR_VERSION}
         vtkCommonColor-${VTK_MAJOR_MINOR_VERSION}
@@ -127,20 +125,7 @@ if(UNIX)
 endif()
 
 if(WIN32)
-    target_link_libraries(ikDataIO PRIVATE
-        # GDCM
-        gdcmMSFF
-        gdcmDICT
-        gdcmIOD
-        gdcmDSED
-        gdcmCommon
-        gdcmjpeg8
-        gdcmjpeg12
-        gdcmjpeg16
-        gdcmopenjp2
-        gdcmcharls
-        gdcmuuid
-        gdcmexpat
+    target_link_libraries(WorkflowTests PRIVATE
         # VTK
         vtkalglib
         vtkCommonColor
@@ -196,12 +181,7 @@ if(WIN32)
     )
 endif()
 
-# Translations
-qt5_create_translation(QM_FILE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}/Translations/utils_fr.ts)
-
-install(TARGETS ikDataIO
-    LIBRARY DESTINATION ${CMAKE_INSTALL_IKOMIA_LIB}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_IKOMIA_LIB}
-    FRAMEWORK DESTINATION ${CMAKE_INSTALL_IKOMIA_LIB}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_IKOMIA_LIB}
+install(TARGETS WorkflowTests
+    BUNDLE DESTINATION .
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
