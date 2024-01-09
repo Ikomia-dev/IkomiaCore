@@ -99,7 +99,7 @@ set(IkomiaCore_UNDERSCORE_VERSION
 configure_package_config_file(
     IkomiaCoreConfig.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/IkomiaCoreConfig.cmake
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/IkomiaCore-${IKOMIA_VERSION}
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/IkomiaCore
     PATH_VARS IKOMIA_CORE_DIR CMAKE_INSTALL_PREFIX CMAKE_INSTALL_IKOMIA_INCLUDE CMAKE_INSTALL_IKOMIA_LIB
 )
 
@@ -114,5 +114,5 @@ install(
         ${CMAKE_CURRENT_BINARY_DIR}/IkomiaCoreConfig.cmake
         ${CMAKE_CURRENT_BINARY_DIR}/IkomiaCoreConfigVersion.cmake
     DESTINATION
-        ${CMAKE_INSTALL_LIBDIR}/cmake/IkomiaCore-${IKOMIA_VERSION}
+        ${CMAKE_INSTALL_LIBDIR}/cmake/IkomiaCore
 )
