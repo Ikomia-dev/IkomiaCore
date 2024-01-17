@@ -55,6 +55,7 @@ else()
 endif()
 
 # VTK
+find_package(GDCM ${GDCM_VERSION} REQUIRED)
 find_package(VTK ${VTK_MAJOR_MINOR_VERSION} REQUIRED)
 
 include(Common.cmake)
