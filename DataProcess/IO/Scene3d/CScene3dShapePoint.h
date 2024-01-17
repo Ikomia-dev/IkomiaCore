@@ -24,7 +24,7 @@
 
 #include <memory>
 #include <QJsonObject>
-
+#include "DataProcessGlobal.hpp"
 #include "CScene3dColor.h"
 #include "CScene3dCoord.h"
 #include "CScene3dObject.h"
@@ -43,7 +43,7 @@ using CScene3dShapePointPtr = std::shared_ptr<CScene3dShapePoint>;
  * This point is defined by its position, a RGB color and a size. Currently,
  * a point is represented by a full circle.
  */
-class CScene3dShapePoint : public CScene3dObject
+class DATAPROCESSSHARED_EXPORT CScene3dShapePoint : public CScene3dObject
 {
 public:
     /**

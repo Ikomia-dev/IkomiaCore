@@ -24,7 +24,7 @@
 
 #include <memory>
 #include <QJsonObject>
-
+#include "DataProcessGlobal.hpp"
 #include "CScene3dColor.h"
 #include "CScene3dCoord.h"
 #include "CScene3dObject.h"
@@ -42,7 +42,7 @@ using CScene3dShapeCirclePtr = std::shared_ptr<CScene3dShapeCircle>;
  * @brief The CScene3dShapeCircle class represents a circle into the 3D scene.
  * This circle is defined by the position of its center, a RGB color and a radius.
  */
-class CScene3dShapeCircle : public CScene3dObject
+class DATAPROCESSSHARED_EXPORT CScene3dShapeCircle : public CScene3dObject
 {
 public:
     /**

@@ -22,6 +22,7 @@
 #ifndef CSCENE3DCOORD_H
 #define CSCENE3DCOORD_H
 
+#include "DataProcessGlobal.hpp"
 #include <QJsonObject>
 
 
@@ -45,7 +46,7 @@ enum class CScene3dCoordSystem : unsigned char {
  * @brief The CScene3dCoord class represents a 3D coordinate (x1, x2, x3).
  * A coordinate system is associated to this coordinate.
  */
-class CScene3dCoord
+class DATAPROCESSSHARED_EXPORT CScene3dCoord
 {
 public:
     /**

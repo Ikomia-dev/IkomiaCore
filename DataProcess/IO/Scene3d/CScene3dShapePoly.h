@@ -26,7 +26,7 @@
 #include <tuple>
 #include <vector>
 #include <QJsonObject>
-
+#include "DataProcessGlobal.hpp"
 #include "CScene3dColor.h"
 #include "CScene3dCoord.h"
 #include "CScene3dObject.h"
@@ -50,7 +50,7 @@ using CScene3dShapePolyPtr = std::shared_ptr<CScene3dShapePoly>;
  * This polygon is defined by a list of points (position + color) and the
  * size of the line connecting these points.
  */
-class CScene3dShapePoly : public CScene3dObject
+class DATAPROCESSSHARED_EXPORT CScene3dShapePoly : public CScene3dObject
 {
 public:
     /**

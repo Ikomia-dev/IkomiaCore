@@ -24,6 +24,7 @@
 
 #include <memory>
 #include <QJsonObject>
+#include "DataProcessGlobal.hpp"
 
 
 /**
@@ -32,7 +33,7 @@
  * or polygons. It cannot be instantiated: derived class must be used instead.
  * Example of derived class: CScene3dImage2d, CScene3dShapePoint, CScene3dShapeCircle, CScene3dShapePoly...
  */
-class CScene3dObject
+class DATAPROCESSSHARED_EXPORT CScene3dObject
 {
 public:
     /**

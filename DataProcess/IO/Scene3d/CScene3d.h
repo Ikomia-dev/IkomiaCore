@@ -25,7 +25,7 @@
 #include <string>
 #include <vector>
 #include <QJsonObject>
-
+#include "DataProcessGlobal.hpp"
 #include "CScene3dCoord.h"
 #include "CScene3dLayer.h"
 
@@ -40,7 +40,7 @@
  * points expressed in the 2D image coordinates. No visual representation is
  * made by this class.
  */
-class CScene3d
+class DATAPROCESSSHARED_EXPORT CScene3d
 {
 public:
     /**

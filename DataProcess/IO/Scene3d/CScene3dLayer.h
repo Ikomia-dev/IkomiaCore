@@ -24,7 +24,7 @@
 
 #include <vector>
 #include <QJsonObject>
-
+#include "DataProcessGlobal.hpp"
 #include "CScene3dObject.h"
 
 
@@ -32,7 +32,7 @@
  * @brief The CScene3dLayer class represents a layer inside a 3D scene. Multiple layers
  * can be put inside this scene. Each layer can contain multiple objects (images, points, circles, polygons...).
  */
-class CScene3dLayer
+class DATAPROCESSSHARED_EXPORT CScene3dLayer
 {
 public:
     /**

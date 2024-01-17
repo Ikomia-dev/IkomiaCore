@@ -24,7 +24,7 @@
 
 #include <memory>
 #include <QJsonObject>
-
+#include "DataProcessGlobal.hpp"
 #include "Data/CMat.hpp"
 #include "CScene3dObject.h"
 
@@ -41,7 +41,7 @@ using CScene3dImage2dPtr = std::shared_ptr<CScene3dImage2d>;
  * @brief The CScene3dImage2d class represents a 2D image inside the 3D scene.
  * This image is always oriented along the (x,y) axis.
  */
-class CScene3dImage2d : public CScene3dObject
+class DATAPROCESSSHARED_EXPORT CScene3dImage2d : public CScene3dObject
 {
 
 public:

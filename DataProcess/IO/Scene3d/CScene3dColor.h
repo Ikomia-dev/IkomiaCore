@@ -23,6 +23,7 @@
 #define CSCENE3DCOLOR_H
 
 #include <QJsonObject>
+#include "DataProcessGlobal.hpp"
 
 
 /**
@@ -31,7 +32,7 @@
  * the objects. The three components Red, Green and Blue (RGB) are store
  * with real values.These values must be defined inside the interval [0.0, 1.0].
  */
-class CScene3dColor
+class DATAPROCESSSHARED_EXPORT CScene3dColor
 {
 public:
     /**
