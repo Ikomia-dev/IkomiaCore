@@ -225,8 +225,14 @@ namespace Ikomia
                 std::string decoded = base64_decode_fast(b64ImgStr.c_str(), b64ImgStr.size());
                 std::vector<uchar> data(decoded.begin(), decoded.end());
                 cv::Mat img = cv::imdecode(CMat(data), cv::IMREAD_UNCHANGED);
-                // cv::imdecode return BGR array
-                cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
+
+                // cv::imdecode return BGR array for color images
+                int c = img.channels();
+                if (c == 3)
+                    cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
+                else if (c == 4)
+                    cv::cvtColor(img, img, cv::COLOR_BGRA2RGBA);
+
                 return img;
             }
         }
