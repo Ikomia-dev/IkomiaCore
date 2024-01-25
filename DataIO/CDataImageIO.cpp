@@ -147,6 +147,8 @@ void CDataImageIO::allocateDataIOPtr(const std::string &fileName)
             m_pImgIO = std::make_unique<CDicomImageIO>(fileName);
         else if(extension == ".npz")
             m_pImgIO = std::make_unique<CNumpyImageIO>(fileName);
+        else
+            throw CException(CoreExCode::INVALID_FILE, "Image IO error: unhandled image file format", __func__, __FILE__, __LINE__);
     }
 }
 
