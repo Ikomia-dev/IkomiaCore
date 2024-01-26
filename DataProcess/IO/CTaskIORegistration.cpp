@@ -30,6 +30,7 @@
 #include "CInstanceSegIO.h"
 #include "CSemanticSegIO.h"
 #include "CKeypointsIO.h"
+#include "CDatasetIO.h"
 
 CTaskIORegistration::CTaskIORegistration()
 {
@@ -75,4 +76,5 @@ void CTaskIORegistration::registerCore()
     registerIO(std::make_shared<CInstanceSegIOFactory>());
     registerIO(std::make_shared<CSemanticSegIOFactory>());
     registerIO(std::make_shared<CKeypointsIOFactory>());
+    registerIO(std::make_shared<CDatasetIOFactory>());
 }

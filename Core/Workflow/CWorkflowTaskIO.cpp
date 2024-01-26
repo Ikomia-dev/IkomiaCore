@@ -345,6 +345,9 @@ std::string CWorkflowTaskIO::getClassName(IODataType ioDataType)
         case IODataType::TEXT:
             return "CTextIO";
 
+        case IODataType::DNN_DATASET:
+            return "CDatasetIO";
+
         default: return "";
     }
 }
