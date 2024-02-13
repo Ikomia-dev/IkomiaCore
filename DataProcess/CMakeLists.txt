@@ -71,6 +71,8 @@ add_library(ikDataProcess SHARED
     IO/Scene3d/CScene3dShapePoint.h
     IO/Scene3d/CScene3dShapePoly.cpp
     IO/Scene3d/CScene3dShapePoly.h
+    IO/Scene3d/CScene3dVectorField.cpp
+    IO/Scene3d/CScene3dVectorField.h
     Process/Core/CBinaryToGraphics.cpp
     Process/Core/CBinaryToGraphics.h
     Process/Core/CBlobMeasure.cpp
@@ -513,6 +515,8 @@ set(PUBLIC_HEADERS_IO_SCENE_3D
     IO/Scene3d/CScene3dShapeCircle.h
     IO/Scene3d/CScene3dShapePoint.h
     IO/Scene3d/CScene3dShapePoly.h
+    IO/Scene3d/CScene3dVectorField.cpp
+    IO/Scene3d/CScene3dVectorField.h
 )
 
 set(PUBLIC_HEADERS_PROCESS
