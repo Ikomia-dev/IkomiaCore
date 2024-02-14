@@ -989,13 +989,15 @@ void CWorkflowTask::saveOutputs(const std::string& baseName) const
 QJsonObject CWorkflowTask::toJson() const
 {
     QJsonObject obj;
+
+    // Name
     obj["name"] = QString::fromStdString(m_name);
 
     // Associated parameters
     QJsonArray jsonParams;
     auto paramMap = m_pParam->getParamMap();
 
-    for(auto it=paramMap.begin(); it!=paramMap.end(); ++it)
+    for (auto it=paramMap.begin(); it!=paramMap.end(); ++it)
     {
         QJsonObject jsonParam;
         jsonParam["name"] = QString::fromStdString(it->first);
@@ -1003,6 +1005,27 @@ QJsonObject CWorkflowTask::toJson() const
         jsonParams.append(jsonParam);
     }
     obj["parameters"] = jsonParams;
+
+    // Inputs type
+    QJsonArray jsonInputs;
+    for (size_t i=0; i<m_originalInputTypes.size(); ++i)
+    {
+        QJsonObject input;
+        input["name"] = QString::fromStdString(Utils::Workflow::getIODataEnumName(m_originalInputTypes[i]));
+        jsonInputs.append(input);
+    }
+    obj["inputs"] = jsonInputs;
+
+    // Outputs type
+    QJsonArray jsonOutputs;
+    for (size_t i=0; i<m_outputs.size(); ++i)
+    {
+        QJsonObject output;
+        output["name"] = QString::fromStdString(Utils::Workflow::getIODataEnumName(m_outputs[i]->getDataType()));
+        jsonOutputs.append(output);
+    }
+    obj["outputs"] = jsonOutputs;
+
     return obj;
 }
 
