@@ -187,30 +187,41 @@ namespace Ikomia
                     return std::string();
 
                 CMat img8bits;
+                int c = image.channels();
+
                 if (image.depth() != CV_8U)
                 {
                     CDataConversion::to8Bits(image, img8bits);
-                    if(image.channels() > 1)
+                    if (c == 3)
                         cv::cvtColor(img8bits, img8bits, cv::COLOR_RGB2BGR);
+                    else if (c == 4)
+                        cv::cvtColor(img8bits, img8bits, cv::COLOR_RGBA2BGRA);
                 }
                 else
                 {
-                    if(image.channels() > 1)
+                    if(c == 3)
                         cv::cvtColor(image, img8bits, cv::COLOR_RGB2BGR);
+                    else if (c == 4)
+                        cv::cvtColor(image, img8bits, cv::COLOR_RGBA2BGRA);
                     else
                         img8bits = image;
                 }
 
+                // Force PNG format if image contains alpha channel
                 std::string format = ".jpg";
-                auto it = std::find(options.begin(), options.end(), "image_format");
-
-                if (it != options.end())
+                if (c == 4)
+                    format = ".png";
+                else
                 {
-                    size_t index = it - options.begin() + 1;
-                    if (index < options.size())
+                    auto it = std::find(options.begin(), options.end(), "image_format");
+                    if (it != options.end())
                     {
-                        if (options[index] == "png")
-                            format = ".png";
+                        size_t index = it - options.begin() + 1;
+                        if (index < options.size())
+                        {
+                            if (options[index] == "png")
+                                format = ".png";
+                        }
                     }
                 }
 
