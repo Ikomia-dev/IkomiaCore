@@ -33,6 +33,7 @@
 #include "Workflow/CWorkflowTask.h"
 #include "Workflow/CWorkflowEdge.hpp"
 #include "Workflow/CWorkflowTaskWidget.h"
+#include "Workflow/CWorkflowParam.h"
 #include "IO/CGraphicsInput.h"
 #include "CRunTaskManager.h"
 
@@ -82,6 +83,8 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
 {
     public:
 
+        using ExposedParams = std::map<std::string, CWorkflowParam>;
+
         //Constructors
         CWorkflow();
         CWorkflow(const std::string& name);
@@ -115,6 +118,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         void                            setCfgEntry(const std::string& key, const std::string& value);
         void                            setConfig(const MapString& conf);
         void                            setAutoSave(bool bEnable);
+        void                            setExposedParameter(const std::string& name, const std::string& value);
 
         //Getters
         std::string                     getDescription() const;
@@ -155,6 +159,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         std::vector<std::string>        getRequiredTasks(const std::string& path);
         MapString                       getConfig() const;
         std::string                     getLastRunFolder() const;
+        ExposedParams                   getExposedParameters() const;
 
         bool                            isRoot(const WorkflowVertex& id) const;
         bool                            isModified() const;
@@ -218,6 +223,9 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         void                            workflowStarted() override;
         void                            workflowFinished() override;
 
+        void                            addParameter(const std::string& name, const std::string& description, const WorkflowVertex& taskId, const std::string& targetParamName);
+        void                            removeParameter(const std::string& name);
+
         // Tells compiler (clang) we want all getProgressSteps functions
         using CWorkflowTask::getProgressSteps;
 
@@ -274,24 +282,26 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
 
     private:
 
-        std::mutex              m_mutex;
-        uint                    m_hashValue = 0;
-        std::string             m_description;
-        std::string             m_keywords;
-        std::string             m_compositeInputName;
-        std::string             m_startDate;
-        std::string             m_folder;
-        WorkflowGraph           m_graph;
-        WorkflowVertex          m_root;
-        WorkflowVertex          m_lastTaskAdded;
-        WorkflowVertex          m_activeTask;
-        WorkflowVertex          m_runningTask;
-        std::vector<bool>       m_inputBatchState;
-        std::atomic<bool>       m_bStopped{false};
-        CIkomiaRegistry*        m_pRegistry = nullptr;
-        GraphicsContextPtr      m_graphicsContextPtr = nullptr;
-        CRunTaskManager         m_runMgr;
-        MapString               m_cfg;
+        std::mutex                  m_mutex;
+        uint                        m_hashValue = 0;
+        std::string                 m_description;
+        std::string                 m_keywords;
+        std::string                 m_compositeInputName;
+        std::string                 m_startDate;
+        std::string                 m_folder;
+        WorkflowGraph               m_graph;
+        WorkflowVertex              m_root;
+        WorkflowVertex              m_lastTaskAdded;
+        WorkflowVertex              m_activeTask;
+        WorkflowVertex              m_runningTask;
+        std::vector<bool>           m_inputBatchState;
+        std::atomic<bool>           m_bStopped{false};
+        CIkomiaRegistry*            m_pRegistry = nullptr;
+        GraphicsContextPtr          m_graphicsContextPtr = nullptr;
+        CRunTaskManager             m_runMgr;
+        MapString                   m_cfg;
+        // List of task parameters to be exposed at workflow level
+        ExposedParams               m_exposedParams;
 };
 
 //---------------------------//

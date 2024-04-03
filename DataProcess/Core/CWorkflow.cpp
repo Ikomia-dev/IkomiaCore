@@ -339,6 +339,23 @@ void CWorkflow::setAutoSave(bool bEnable)
     }
 }
 
+void CWorkflow::setExposedParameter(const std::string &name, const std::string &value)
+{
+    auto it = m_exposedParams.find(name);
+    if (it != m_exposedParams.end())
+    {
+        auto taskId = reinterpret_cast<WorkflowVertex>(it->second.getTaskId());
+        auto taskPtr = getTask(taskId);
+
+        if (taskPtr)
+        {
+            UMapString taskParam;
+            taskParam.insert(std::make_pair(it->second.getTaskParamName(), value));
+            taskPtr->setParamValues(taskParam);
+        }
+    }
+}
+
 /***********/
 /* GETTERS */
 /***********/
@@ -901,6 +918,11 @@ std::string CWorkflow::getLastRunFolder() const
     return m_folder;
 }
 
+CWorkflow::ExposedParams CWorkflow::getExposedParameters() const
+{
+    return m_exposedParams;
+}
+
 bool CWorkflow::isRoot(const WorkflowVertex &id) const
 {
     return id == m_root;
@@ -1212,6 +1234,7 @@ void CWorkflow::clear()
 {
     std::lock_guard<std::mutex> lock(m_mutex);
     m_graph.clear();
+    m_exposedParams.clear();
 }
 
 void CWorkflow::clearInputs()
@@ -1917,7 +1940,7 @@ void CWorkflow::saveJSON(const std::string& path)
     int id = 0;
     std::unordered_map<WorkflowVertex, int> mapVertexToId;
     QJsonObject jsonWorkflow;
-    QJsonArray jsonTasks, jsonEdges;
+    QJsonArray jsonTasks, jsonEdges, jsonParams;
 
     // API
     QJsonObject apiInfo;
@@ -1984,6 +2007,24 @@ void CWorkflow::saveJSON(const std::string& path)
         jsonEdges.append(jsonEdge);
     }
     jsonWorkflow["connections"] = jsonEdges;
+
+    // Exposed parameters
+    for (auto const& param: m_exposedParams)
+    {
+        auto taskVertex = reinterpret_cast<WorkflowVertex>(param.second.getTaskId());
+        auto itTaskId = mapVertexToId.find(taskVertex);
+
+        if (itTaskId != mapVertexToId.end())
+        {
+            QJsonObject jsonParam;
+            jsonParam["name"] = QString::fromStdString(param.second.getName());
+            jsonParam["description"] = QString::fromStdString(param.second.getDescription());
+            jsonParam["task_id"] = itTaskId->second;
+            jsonParam["task_param_name"] = QString::fromStdString(param.second.getTaskParamName());
+            jsonParams.append(jsonParam);
+        }
+    }
+    jsonWorkflow["exposed_parameters"] = jsonParams;
 
     QJsonDocument jsonDoc(jsonWorkflow);
     jsonFile.write(jsonDoc.toJson());
@@ -2066,6 +2107,20 @@ void CWorkflow::loadJSON(const std::string &path)
             targetTaskId = itTarget->second;
 
         connect(srcTaskId, jsonEdge["source_index"].toInt(), targetTaskId, jsonEdge["target_index"].toInt());
+    }
+
+    // Load exposed parameters
+    QJsonArray jsonParams = jsonWorkflow["exposed_parameters"].toArray();
+    for (int i=0; i<jsonParams.size(); ++i)
+    {
+        QJsonObject jsonParam = jsonParams[i].toObject();
+        std::string name = jsonParam["name"].toString().toStdString();
+        std::string description = jsonParam["description"].toString().toStdString();
+        std::string task_param_name = jsonParam["task_param_name"].toString().toStdString();
+
+        auto itTarget = mapIdToVertexId.find(jsonParam["task_id"].toInt());
+        if(itTarget != mapIdToVertexId.end())
+            addParameter(name, description, itTarget->second, task_param_name);
     }
 }
 
@@ -2183,6 +2238,32 @@ void CWorkflow::workflowFinished()
         }
     });
     boost::depth_first_search(m_graph, boost::visitor(visitor).vertex_index_map(propMapIndex));
+}
+
+//------------------------------------------------//
+//- Workflow parameter = exposed task parameters -//
+//------------------------------------------------//
+void CWorkflow::addParameter(const std::string &name, const std::string &description, const WorkflowVertex &taskId, const std::string &targetParamName)
+{
+    std::string paramName = name;
+    if (name.empty())
+        paramName = targetParamName;
+
+    // Check name unicity
+    auto it = m_exposedParams.find(paramName);
+    if (it != m_exposedParams.end())
+        throw CException(CoreExCode::INVALID_USAGE, "Workflow parameter name must be unique", __func__, __FILE__, __LINE__);
+
+    // Expose task parameter at workflow level
+    CWorkflowParam param(paramName, description, reinterpret_cast<std::uintptr_t>(taskId), targetParamName);
+    m_exposedParams.insert(std::make_pair(paramName, param));
+}
+
+void CWorkflow::removeParameter(const std::string &name)
+{
+    auto it = m_exposedParams.find(name);
+    if (it != m_exposedParams.end())
+        m_exposedParams.erase(it);
 }
 
 //---------------------------//

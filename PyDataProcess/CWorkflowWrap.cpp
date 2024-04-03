@@ -46,64 +46,64 @@ std::string CWorkflowWrap::default_repr() const
     }
 }
 
-intptr_t CWorkflowWrap::getRootID()
+uintptr_t CWorkflowWrap::getRootID()
 {
-    return reinterpret_cast<std::intptr_t>(getRootId());
+    return reinterpret_cast<std::uintptr_t>(getRootId());
 }
 
-std::vector<std::intptr_t> CWorkflowWrap::getTaskIDs()
+std::vector<std::uintptr_t> CWorkflowWrap::getTaskIDs()
 {
-    std::vector<std::intptr_t> nodes;
+    std::vector<std::uintptr_t> nodes;
     auto vertices = getVertices();
 
     for(auto it=vertices.first; it!=vertices.second; ++it)
-        nodes.push_back(reinterpret_cast<std::intptr_t>(*it));
+        nodes.push_back(reinterpret_cast<std::uintptr_t>(*it));
 
     return nodes;
 }
 
-intptr_t CWorkflowWrap::getLastTaskID()
+uintptr_t CWorkflowWrap::getLastTaskID()
 {
-    return reinterpret_cast<std::intptr_t>(getLastTaskId());
+    return reinterpret_cast<std::uintptr_t>(getLastTaskId());
 }
 
-WorkflowTaskPtr CWorkflowWrap::getTask(intptr_t id)
+WorkflowTaskPtr CWorkflowWrap::getTask(uintptr_t id)
 {
     WorkflowVertex vertex = reinterpret_cast<WorkflowVertex>(id);
     return CWorkflow::getTask(vertex);
 }
 
-double CWorkflowWrap::getElapsedTimeTo(intptr_t id)
+double CWorkflowWrap::getElapsedTimeTo(uintptr_t id)
 {
     WorkflowVertex vertex = reinterpret_cast<WorkflowVertex>(id);
     return CWorkflow::getElapsedTimeTo(vertex);
 }
 
-std::vector<intptr_t> CWorkflowWrap::getParents(intptr_t id)
+std::vector<uintptr_t> CWorkflowWrap::getParents(uintptr_t id)
 {
     WorkflowVertex vertex = reinterpret_cast<WorkflowVertex>(id);
     auto vertices = CWorkflow::getParents(vertex);
 
-    std::vector<intptr_t> parents;
+    std::vector<uintptr_t> parents;
     for(size_t i=0; i<vertices.size(); ++i)
-        parents.push_back(reinterpret_cast<std::intptr_t>(vertices[i]));
+        parents.push_back(reinterpret_cast<std::uintptr_t>(vertices[i]));
 
     return parents;
 }
 
-std::vector<intptr_t> CWorkflowWrap::getChildren(intptr_t id)
+std::vector<uintptr_t> CWorkflowWrap::getChildren(uintptr_t id)
 {
     WorkflowVertex vertex = reinterpret_cast<WorkflowVertex>(id);
     auto vertices = CWorkflow::getChilds(vertex);
 
-    std::vector<intptr_t> childs;
+    std::vector<uintptr_t> childs;
     for(size_t i=0; i<vertices.size(); ++i)
-        childs.push_back(reinterpret_cast<std::intptr_t>(vertices[i]));
+        childs.push_back(reinterpret_cast<std::uintptr_t>(vertices[i]));
 
     return childs;
 }
 
-std::vector<size_t> CWorkflowWrap::getInEdges(intptr_t id)
+std::vector<size_t> CWorkflowWrap::getInEdges(uintptr_t id)
 {
     WorkflowVertex vertex = reinterpret_cast<WorkflowVertex>(id);
     auto edgeRange = CWorkflow::getInEdges(vertex);
@@ -118,7 +118,7 @@ std::vector<size_t> CWorkflowWrap::getInEdges(intptr_t id)
     return edges;
 }
 
-std::vector<size_t> CWorkflowWrap::getOutEdges(intptr_t id)
+std::vector<size_t> CWorkflowWrap::getOutEdges(uintptr_t id)
 {
     WorkflowVertex vertex = reinterpret_cast<WorkflowVertex>(id);
     auto edgeRange = CWorkflow::getOutEdges(vertex);
@@ -145,37 +145,37 @@ tuple CWorkflowWrap::getEdgeInfo(size_t id)
         return make_tuple(-1, -1);
 }
 
-intptr_t CWorkflowWrap::getEdgeSource(size_t id)
+uintptr_t CWorkflowWrap::getEdgeSource(size_t id)
 {
     auto retPair = getEdgeDescriptor(id);
     if(retPair.first)
     {
         auto v = CWorkflow::getEdgeSource(retPair.second);
-        return reinterpret_cast<intptr_t>(v);
+        return reinterpret_cast<uintptr_t>(v);
     }
     else
         return 0;
 }
 
-intptr_t CWorkflowWrap::getEdgeTarget(size_t id)
+uintptr_t CWorkflowWrap::getEdgeTarget(size_t id)
 {
     auto retPair = getEdgeDescriptor(id);
     if(retPair.first)
     {
         auto v = CWorkflow::getEdgeTarget(retPair.second);
-        return reinterpret_cast<intptr_t>(v);
+        return reinterpret_cast<uintptr_t>(v);
     }
     else
         return 0;
 }
 
-intptr_t CWorkflowWrap::addTaskWrap(const WorkflowTaskPtr &taskPtr)
+uintptr_t CWorkflowWrap::addTaskWrap(const WorkflowTaskPtr &taskPtr)
 {
     auto vertex = addTask(taskPtr);
-    return reinterpret_cast<std::intptr_t>(vertex);
+    return reinterpret_cast<std::uintptr_t>(vertex);
 }
 
-void CWorkflowWrap::connectWrap(const std::intptr_t &src, const std::intptr_t &target, int srcIndex, int targetIndex)
+void CWorkflowWrap::connectWrap(const std::uintptr_t &src, const std::uintptr_t &target, int srcIndex, int targetIndex)
 {
     auto srcVertex = reinterpret_cast<WorkflowVertex>(src);
     auto targetVertex = reinterpret_cast<WorkflowVertex>(target);
@@ -194,7 +194,7 @@ void CWorkflowWrap::connectWrap(const std::intptr_t &src, const std::intptr_t &t
     }
 }
 
-void CWorkflowWrap::deleteTaskWrap(intptr_t id)
+void CWorkflowWrap::deleteTaskWrap(uintptr_t id)
 {
     auto v = reinterpret_cast<WorkflowVertex>(id);
 
