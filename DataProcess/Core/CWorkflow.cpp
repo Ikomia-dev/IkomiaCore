@@ -354,6 +354,11 @@ void CWorkflow::setExposedParameter(const std::string &name, const std::string &
             taskPtr->setParamValues(taskParam);
         }
     }
+    else
+    {
+        std::string msg = "Parameter " + name + " not found";
+        throw CException(CoreExCode::NOT_FOUND, msg, __func__, __FILE__, __LINE__);
+    }
 }
 
 /***********/
@@ -2257,7 +2262,10 @@ void CWorkflow::addParameter(const std::string &name, const std::string &descrip
     // Check name unicity
     auto it = m_exposedParams.find(paramName);
     if (it != m_exposedParams.end())
-        throw CException(CoreExCode::INVALID_USAGE, "Workflow parameter name must be unique", __func__, __FILE__, __LINE__);
+    {
+        std::string msg = "Duplicate name: " + paramName + ". Workflow parameter name must be unique.";
+        throw CException(CoreExCode::INVALID_USAGE, msg, __func__, __FILE__, __LINE__);
+    }
 
     // Expose task parameter at workflow level
     CWorkflowParam param(paramName, description, reinterpret_cast<std::uintptr_t>(taskId), targetParamName);
