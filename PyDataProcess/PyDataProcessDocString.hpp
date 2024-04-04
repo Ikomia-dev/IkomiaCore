@@ -2285,6 +2285,12 @@ constexpr auto _wfSetCfgEntryDocString =
         "   key (str): parameter name\n\n"
         "   value (str): parameter value. You have to take care of string conversion.\n\n";
 
+constexpr auto _wfSetExposedParamDocString =
+    "Set workflow parameter. Actually, workflow parameter is just task parameter exposed at workflow level.\n\n"
+    "Args:\n\n"
+    "   name (str): workflow parameter name. It could be different from the source task parameter.\n\n"
+    "   value (str): parameter value.\n\n";
+
 constexpr auto _wfGetTaskCountDocString =
         "Get the number of tasks in the workflow.\n\n"
         "Returns:\n\n"
@@ -2404,6 +2410,11 @@ constexpr auto _wfGetLastRunFolder =
         "It will be used only if auto-save mode is enabled and a timestamp is automatically added. The complete name is returned by this method.\n\n"
         "Returns:\n\n"
         "   str: output folder path (with timestamp added)\n\n";
+
+constexpr auto _wfGetExposedParamsDocString =
+    "Get list of available workflow parameters. For each parameter, parameter name and value are provided.\n\n"
+    "Returns:\n\n"
+    "   parameters (dict): list of name-value pairs.\n\n";
 
 constexpr auto _wfAddInputDocString =
         "Add global input to the workflow.\n\n"

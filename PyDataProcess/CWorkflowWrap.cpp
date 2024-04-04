@@ -169,6 +169,21 @@ uintptr_t CWorkflowWrap::getEdgeTarget(size_t id)
         return 0;
 }
 
+UMapString CWorkflowWrap::getExposedParameters()
+{
+    UMapString params;
+    CWorkflow::ExposedParams exposedParams = CWorkflow::getExposedParameters();
+
+    for (auto it=exposedParams.begin(); it!=exposedParams.end(); ++it)
+    {
+        WorkflowTaskPtr task = getTask(it->second.getTaskId());
+        UMapString taskParams = task->getParamValues();
+        std::string value = taskParams[it->second.getTaskParamName()];
+        params.insert(std::make_pair(it->first, value));
+    }
+    return params;
+}
+
 uintptr_t CWorkflowWrap::addTaskWrap(const WorkflowTaskPtr &taskPtr)
 {
     auto vertex = addTask(taskPtr);
