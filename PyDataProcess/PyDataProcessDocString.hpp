@@ -2415,6 +2415,14 @@ constexpr auto _wfAddTaskDocString =
         "Args:\n\n"
         "   task (:py:class:`~ikomia.core.pycore.CWorkflowTask` or derived)\n\n";
 
+constexpr auto _wfAddParameter =
+    "Add a workflow parameter from an existing task parameter. It's a convenient way to expose meaningfull parameters at workflow level.\n\n"
+    "Args:\n\n"
+    "   name (str): name for the workflow parameter, must be unique\n\n"
+    "   description (str): small description about the parameter\n\n"
+    "   task_id (int): task identifier of the parameter to expose\n\n"
+    "   target_param_name (str): name of the source task parameter\n\n";
+
 constexpr auto _wfConnectDocString =
         "Connect tasks.\n\n"
         "Args:\n\n"
@@ -2436,6 +2444,9 @@ constexpr auto _wfClearOutputDataDocString =
 
 constexpr auto _wfClearDocString =
         "Remove all tasks and connections from the workflow. The workflow is thus empty after that.\n\n";
+
+constexpr auto _wfClearExposedParamsDocString =
+    "Remove all exposed parameters of the workflow.";
 
 constexpr auto _wfDeleteTaskDocString =
         "Remove the given task from the workflow. The identifier becomes invalid after this operation.\n\n"

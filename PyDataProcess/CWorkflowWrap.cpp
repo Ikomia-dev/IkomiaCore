@@ -175,6 +175,12 @@ uintptr_t CWorkflowWrap::addTaskWrap(const WorkflowTaskPtr &taskPtr)
     return reinterpret_cast<std::uintptr_t>(vertex);
 }
 
+void CWorkflowWrap::addParameter(const std::string &name, const std::string &description, const uintptr_t &taskId, const std::string &targetParamName)
+{
+    auto id = reinterpret_cast<WorkflowVertex>(taskId);
+    CWorkflow::addParameter(name, description, id, targetParamName);
+}
+
 void CWorkflowWrap::connectWrap(const std::uintptr_t &src, const std::uintptr_t &target, int srcIndex, int targetIndex)
 {
     auto srcVertex = reinterpret_cast<WorkflowVertex>(src);

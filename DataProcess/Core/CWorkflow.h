@@ -191,6 +191,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         void                            clear();
         void                            clearInputs() override;
         void                            clearAllOutputData();
+        void                            clearExposedParameters();
 
         void                            run() override;
         void                            runFrom(const WorkflowVertex& id);

@@ -1260,6 +1260,11 @@ void CWorkflow::clearAllOutputData()
     }
 }
 
+void CWorkflow::clearExposedParameters()
+{
+    m_exposedParams.clear();
+}
+
 void CWorkflow::clearOutputDataFrom(const WorkflowVertex &id)
 {
     auto vertexList = getAllChilds(id);

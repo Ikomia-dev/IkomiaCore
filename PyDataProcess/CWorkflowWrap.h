@@ -52,6 +52,7 @@ class CWorkflowWrap: public CWorkflow, public wrapper<CWorkflow>
         std::uintptr_t              getEdgeTarget(size_t id);
 
         std::uintptr_t              addTaskWrap(const WorkflowTaskPtr &taskPtr);
+        void                        addParameter(const std::string& name, const std::string& description, const std::uintptr_t& taskId, const std::string& targetParamName);
 
         void                        connectWrap(const std::uintptr_t& src, const std::uintptr_t& target, int srcIndex, int targetIndex);
 
