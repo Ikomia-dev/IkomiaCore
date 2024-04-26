@@ -928,6 +928,75 @@ CWorkflow::ExposedParams CWorkflow::getExposedParameters() const
     return m_exposedParams;
 }
 
+size_t CWorkflow::getOutputCount() const
+{
+    return m_exposedOutputs.size();
+}
+
+WorkflowTaskIOPtr CWorkflow::getOutput(size_t index) const
+{
+    auto taskId = reinterpret_cast<WorkflowVertex>(m_exposedOutputs[index].getTaskId());
+    auto taskPtr = getTask(taskId);
+    if (taskPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Task not found for the given output", __func__, __FILE__, __LINE__);
+
+    return taskPtr->getOutput(m_exposedOutputs[index].getTaskOutputIndex());
+}
+
+InputOutputVect CWorkflow::getOutputs() const
+{
+    InputOutputVect outputs;
+    for (size_t i=0; i<m_exposedOutputs.size(); ++i)
+    {
+        auto outputPtr = getOutput(i);
+        if (outputPtr)
+            outputs.push_back(outputPtr);
+    }
+    return outputs;
+}
+
+IODataType CWorkflow::getOutputDataType(size_t index) const
+{
+    auto taskId = reinterpret_cast<WorkflowVertex>(m_exposedOutputs[index].getTaskId());
+    auto taskPtr = getTask(taskId);
+    if (taskPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Task not found for the given output", __func__, __FILE__, __LINE__);
+
+    return taskPtr->getOutputDataType(m_exposedOutputs[index].getTaskOutputIndex());
+}
+
+bool CWorkflow::hasOutput(const IODataType &type) const
+{
+    for (size_t i=0; i<m_exposedOutputs.size(); ++i)
+    {
+        auto taskId = reinterpret_cast<WorkflowVertex>(m_exposedOutputs[i].getTaskId());
+        auto taskPtr = getTask(taskId);
+        if (taskPtr == nullptr)
+            throw CException(CoreExCode::NULL_POINTER, "Task not found for the given output", __func__, __FILE__, __LINE__);
+
+        IODataType dataType = taskPtr->getOutputDataType(m_exposedOutputs[i].getTaskOutputIndex());
+        if (dataType == type)
+            return true;
+    }
+    return false;
+}
+
+bool CWorkflow::hasOutputData() const
+{
+    if (m_exposedOutputs.size() == 0)
+        return false;
+
+    for (size_t i=0; i<m_exposedOutputs.size(); ++i)
+    {
+        auto outputPtr = getOutput(i);
+        if (!outputPtr)
+            return false;
+        if (!outputPtr->isDataAvailable())
+            return false;
+    }
+    return true;
+}
+
 bool CWorkflow::isRoot(const WorkflowVertex &id) const
 {
     return id == m_root;
@@ -2270,6 +2339,15 @@ void CWorkflow::addParameter(const std::string &name, const std::string &descrip
     // Expose task parameter at workflow level
     CWorkflowParam param(paramName, description, reinterpret_cast<std::uintptr_t>(taskId), targetParamName);
     m_exposedParams.insert(std::make_pair(paramName, param));
+}
+
+//-----------------------------------------//
+//- Workflow output = exposed task output -//
+//-----------------------------------------//
+void CWorkflow::addOutput(const std::string &description, const WorkflowVertex &taskId, int &targetOutputIndex)
+{
+    auto id = reinterpret_cast<std::uintptr_t>(taskId);
+    m_exposedOutputs.push_back(CWorkflowOutput(description, id, targetOutputIndex));
 }
 
 void CWorkflow::removeParameter(const std::string &name)

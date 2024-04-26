@@ -34,6 +34,7 @@
 #include "Workflow/CWorkflowEdge.hpp"
 #include "Workflow/CWorkflowTaskWidget.h"
 #include "Workflow/CWorkflowParam.h"
+#include "Workflow/CWorkflowOutput.h"
 #include "IO/CGraphicsInput.h"
 #include "CRunTaskManager.h"
 
@@ -160,6 +161,13 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         MapString                       getConfig() const;
         std::string                     getLastRunFolder() const;
         ExposedParams                   getExposedParameters() const;
+        size_t                          getOutputCount() const override;
+        WorkflowTaskIOPtr               getOutput(size_t index) const;
+        InputOutputVect                 getOutputs() const;
+        IODataType                      getOutputDataType(size_t index) const;
+
+        bool                            hasOutput(const IODataType& type) const override;
+        bool                            hasOutputData() const;
 
         bool                            isRoot(const WorkflowVertex& id) const;
         bool                            isModified() const;
@@ -170,12 +178,14 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         bool                            isLeafTask(const WorkflowVertex& id) const;
         bool                            isBatchMode() const;
 
-        //Methods
         void                            addInput(const WorkflowTaskIOPtr& pInput) override;
         void                            addInput(const WorkflowTaskIOPtr&& pInput) override;
         void                            addInputs(const InputOutputVect &inputs) override;
+        void                            addParameter(const std::string& name, const std::string& description, const WorkflowVertex& taskId, const std::string& targetParamName);
+        void                            addOutput(const std::string& description, const WorkflowVertex& taskId, int &targetOutputIndex);
 
         void                            removeInput(size_t index) override;
+        void                            removeParameter(const std::string& name);
 
         WorkflowVertex                  addTask(const WorkflowTaskPtr& pNewTask);
 
@@ -223,9 +233,6 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
 
         void                            workflowStarted() override;
         void                            workflowFinished() override;
-
-        void                            addParameter(const std::string& name, const std::string& description, const WorkflowVertex& taskId, const std::string& targetParamName);
-        void                            removeParameter(const std::string& name);
 
         // Tells compiler (clang) we want all getProgressSteps functions
         using CWorkflowTask::getProgressSteps;
@@ -283,26 +290,28 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
 
     private:
 
-        std::mutex                  m_mutex;
-        uint                        m_hashValue = 0;
-        std::string                 m_description;
-        std::string                 m_keywords;
-        std::string                 m_compositeInputName;
-        std::string                 m_startDate;
-        std::string                 m_folder;
-        WorkflowGraph               m_graph;
-        WorkflowVertex              m_root;
-        WorkflowVertex              m_lastTaskAdded;
-        WorkflowVertex              m_activeTask;
-        WorkflowVertex              m_runningTask;
-        std::vector<bool>           m_inputBatchState;
-        std::atomic<bool>           m_bStopped{false};
-        CIkomiaRegistry*            m_pRegistry = nullptr;
-        GraphicsContextPtr          m_graphicsContextPtr = nullptr;
-        CRunTaskManager             m_runMgr;
-        MapString                   m_cfg;
+        std::mutex                      m_mutex;
+        uint                            m_hashValue = 0;
+        std::string                     m_description;
+        std::string                     m_keywords;
+        std::string                     m_compositeInputName;
+        std::string                     m_startDate;
+        std::string                     m_folder;
+        WorkflowGraph                   m_graph;
+        WorkflowVertex                  m_root;
+        WorkflowVertex                  m_lastTaskAdded;
+        WorkflowVertex                  m_activeTask;
+        WorkflowVertex                  m_runningTask;
+        std::vector<bool>               m_inputBatchState;
+        std::atomic<bool>               m_bStopped{false};
+        CIkomiaRegistry*                m_pRegistry = nullptr;
+        GraphicsContextPtr              m_graphicsContextPtr = nullptr;
+        CRunTaskManager                 m_runMgr;
+        MapString                       m_cfg;
         // List of task parameters to be exposed at workflow level
-        ExposedParams               m_exposedParams;
+        ExposedParams                   m_exposedParams;
+        // List of task outputs to be exposed at workflow level
+        std::vector<CWorkflowOutput>    m_exposedOutputs;
 };
 
 //---------------------------//

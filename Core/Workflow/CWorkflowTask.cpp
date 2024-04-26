@@ -669,15 +669,16 @@ bool CWorkflowTask::hasOutput(const std::set<IODataType> &types) const
 
 bool CWorkflowTask::hasOutputData() const
 {
-    bool hasData = false;
-    if(m_outputs.size() > 0)
+    if(m_outputs.size() == 0)
+        return false;
+
+    // Check if all output have available data
+    for(size_t i=0; i<m_outputs.size(); ++i)
     {
-        // Check if all output have available data
-        hasData = m_outputs[0]->isDataAvailable();
-        for(size_t i=1; i<m_outputs.size(); ++i)
-            hasData &= m_outputs[i]->isDataAvailable();
+        if (!m_outputs[i]->isDataAvailable())
+            return false;
     }
-    return hasData;
+    return true;
 }
 
 bool CWorkflowTask::hasInput(const IODataType& type) const

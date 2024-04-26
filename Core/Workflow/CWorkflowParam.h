@@ -9,8 +9,6 @@ class CWorkflowParam
 {
     public:
 
-        using TargetParam = std::tuple<std::uintptr_t, std::string>;
-
         CWorkflowParam();
         CWorkflowParam(const std::string& name, const std::string& description);
         CWorkflowParam(const std::string& name, const std::string& description, const std::uintptr_t& taskId, const std::string& taskParamName);
