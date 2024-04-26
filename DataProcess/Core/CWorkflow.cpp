@@ -2377,6 +2377,16 @@ void CWorkflow::addParameter(const std::string &name, const std::string &descrip
 //-----------------------------------------//
 void CWorkflow::addOutput(const std::string &description, const WorkflowVertex &taskId, int taskOutputIndex)
 {
+    auto taskPtr = getTask(taskId);
+    if (!taskPtr)
+        throw CException(CoreExCode::INVALID_USAGE, "Failed to add workflow output: invalid task id.", __func__, __FILE__, __LINE__);
+
+    if (taskOutputIndex >= taskPtr->getOutputCount())
+        throw CException(CoreExCode::INVALID_USAGE, "Failed to add workflow output: task output index overflows.", __func__, __FILE__, __LINE__);
+
+    auto output = taskPtr->getOutput(taskOutputIndex);
+    // Override output description
+    output->setDescription(description);
     auto id = reinterpret_cast<std::uintptr_t>(taskId);
     m_exposedOutputs.push_back(CWorkflowOutput(description, id, taskOutputIndex));
 }
