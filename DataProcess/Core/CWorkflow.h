@@ -162,12 +162,12 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         std::string                     getLastRunFolder() const;
         ExposedParams                   getExposedParameters() const;
         size_t                          getOutputCount() const override;
-        WorkflowTaskIOPtr               getOutput(size_t index) const;
-        InputOutputVect                 getOutputs() const;
-        IODataType                      getOutputDataType(size_t index) const;
+        WorkflowTaskIOPtr               getOutput(size_t index) const override;
+        InputOutputVect                 getOutputs() const override;
+        IODataType                      getOutputDataType(size_t index) const override;
 
         bool                            hasOutput(const IODataType& type) const override;
-        bool                            hasOutputData() const;
+        bool                            hasOutputData() const override;
 
         bool                            isRoot(const WorkflowVertex& id) const;
         bool                            isModified() const;
@@ -182,7 +182,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         void                            addInput(const WorkflowTaskIOPtr&& pInput) override;
         void                            addInputs(const InputOutputVect &inputs) override;
         void                            addParameter(const std::string& name, const std::string& description, const WorkflowVertex& taskId, const std::string& targetParamName);
-        void                            addOutput(const std::string& description, const WorkflowVertex& taskId, int &targetOutputIndex);
+        void                            addOutput(const std::string& description, const WorkflowVertex& taskId, int taskOutputIndex);
 
         void                            removeInput(size_t index) override;
         void                            removeParameter(const std::string& name);
@@ -200,6 +200,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
 
         void                            clear();
         void                            clearInputs() override;
+        void                            clearOutputs() override;
         void                            clearAllOutputData();
         void                            clearExposedParameters();
 

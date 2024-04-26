@@ -1323,6 +1323,11 @@ void CWorkflow::clearInputs()
     }
 }
 
+void CWorkflow::clearOutputs()
+{
+    m_exposedOutputs.clear();
+}
+
 void CWorkflow::clearAllOutputData()
 {
     auto vertexRangeIt = boost::vertices(m_graph);
@@ -2019,7 +2024,7 @@ void CWorkflow::saveJSON(const std::string& path)
     int id = 0;
     std::unordered_map<WorkflowVertex, int> mapVertexToId;
     QJsonObject jsonWorkflow;
-    QJsonArray jsonTasks, jsonEdges, jsonParams;
+    QJsonArray jsonTasks, jsonEdges, jsonParams, jsonOutputs;
 
     // API
     QJsonObject apiInfo;
@@ -2090,20 +2095,32 @@ void CWorkflow::saveJSON(const std::string& path)
     // Exposed parameters
     for (auto const& param: m_exposedParams)
     {
+        QJsonObject jsonParam = param.second.toJson();
         auto taskVertex = reinterpret_cast<WorkflowVertex>(param.second.getTaskId());
         auto itTaskId = mapVertexToId.find(taskVertex);
 
         if (itTaskId != mapVertexToId.end())
         {
-            QJsonObject jsonParam;
-            jsonParam["name"] = QString::fromStdString(param.second.getName());
-            jsonParam["description"] = QString::fromStdString(param.second.getDescription());
             jsonParam["task_id"] = itTaskId->second;
-            jsonParam["task_param_name"] = QString::fromStdString(param.second.getTaskParamName());
             jsonParams.append(jsonParam);
         }
     }
     jsonWorkflow["exposed_parameters"] = jsonParams;
+
+    // Exposed outputs
+    for (auto const& output: m_exposedOutputs)
+    {
+        QJsonObject jsonOutput = output.toJson();
+        auto taskVertex = reinterpret_cast<WorkflowVertex>(output.getTaskId());
+        auto itTaskId = mapVertexToId.find(taskVertex);
+
+        if (itTaskId != mapVertexToId.end())
+        {
+            jsonOutput["task_id"] = itTaskId->second;
+            jsonOutputs.append(jsonOutput);
+        }
+    }
+    jsonWorkflow["exposed_outputs"] = jsonOutputs;
 
     QJsonDocument jsonDoc(jsonWorkflow);
     jsonFile.write(jsonDoc.toJson());
@@ -2193,13 +2210,27 @@ void CWorkflow::loadJSON(const std::string &path)
     for (int i=0; i<jsonParams.size(); ++i)
     {
         QJsonObject jsonParam = jsonParams[i].toObject();
-        std::string name = jsonParam["name"].toString().toStdString();
-        std::string description = jsonParam["description"].toString().toStdString();
-        std::string task_param_name = jsonParam["task_param_name"].toString().toStdString();
-
         auto itTarget = mapIdToVertexId.find(jsonParam["task_id"].toInt());
         if(itTarget != mapIdToVertexId.end())
-            addParameter(name, description, itTarget->second, task_param_name);
+        {
+            CWorkflowParam param;
+            param.fromJson(jsonParam, reinterpret_cast<std::uintptr_t>(itTarget->second));
+            addParameter(param.getName(), param.getDescription(), itTarget->second, param.getTaskParamName());
+        }
+    }
+
+    // Load exposed outputs
+    QJsonArray jsonOutputs = jsonWorkflow["exposed_outputs"].toArray();
+    for (int i=0; i<jsonOutputs.size(); ++i)
+    {
+        QJsonObject jsonOutput = jsonOutputs[i].toObject();
+        auto itTarget = mapIdToVertexId.find(jsonOutput["task_id"].toInt());
+        if(itTarget != mapIdToVertexId.end())
+        {
+            CWorkflowOutput output;
+            output.fromJson(jsonOutput, reinterpret_cast<std::uintptr_t>(itTarget->second));
+            addOutput(output.getDescription(), itTarget->second, output.getTaskOutputIndex());
+        }
     }
 }
 
@@ -2344,10 +2375,10 @@ void CWorkflow::addParameter(const std::string &name, const std::string &descrip
 //-----------------------------------------//
 //- Workflow output = exposed task output -//
 //-----------------------------------------//
-void CWorkflow::addOutput(const std::string &description, const WorkflowVertex &taskId, int &targetOutputIndex)
+void CWorkflow::addOutput(const std::string &description, const WorkflowVertex &taskId, int taskOutputIndex)
 {
     auto id = reinterpret_cast<std::uintptr_t>(taskId);
-    m_exposedOutputs.push_back(CWorkflowOutput(description, id, targetOutputIndex));
+    m_exposedOutputs.push_back(CWorkflowOutput(description, id, taskOutputIndex));
 }
 
 void CWorkflow::removeParameter(const std::string &name)

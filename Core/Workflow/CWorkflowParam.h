@@ -3,6 +3,7 @@
 
 #include <string>
 #include <cstdint>
+#include <QJsonObject>
 
 
 class CWorkflowParam
@@ -23,6 +24,9 @@ class CWorkflowParam
         std::string     getDescription() const;
         std::string     getTaskParamName() const;
         std::uintptr_t  getTaskId() const;
+
+        QJsonObject     toJson() const;
+        void            fromJson(const QJsonObject& param, std::uintptr_t taskId);
 
     private:
 

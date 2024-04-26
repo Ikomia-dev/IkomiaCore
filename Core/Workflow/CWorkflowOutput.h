@@ -3,6 +3,7 @@
 
 #include <string>
 #include <cstdint>
+#include <QJsonObject>
 #include "Main/CoreDefine.hpp"
 #include "Workflow/CWorkflowTaskIO.h"
 
@@ -22,6 +23,9 @@ class CWorkflowOutput
         std::string         getDescription() const;
         std::uintptr_t      getTaskId() const;
         int                 getTaskOutputIndex() const;
+
+        QJsonObject         toJson() const;
+        void                fromJson(const QJsonObject& output, const std::uintptr_t& taskId);
 
     private:
 
