@@ -2416,6 +2416,31 @@ constexpr auto _wfGetExposedParamsDocString =
     "Returns:\n\n"
     "   parameters (dict): list of name-value pairs.\n\n";
 
+constexpr auto _getOutputDocString =
+    "Get output at position index.\n\n"
+    "Args:\n\n"
+    "   index (int): zero-based output index\n\n"
+    "Returns:\n\n"
+    "   :py:class:`~ikomia.core.pycore.CWorkflowTaskIO` based object: output object\n\n";
+
+constexpr auto _getOutputCountDocString =
+    "Get the number of outputs.\n\n"
+    "Returns:\n\n"
+    "   int: outputs count\n\n";
+
+constexpr auto _getOutputDataTypeDocString =
+    "Get output data type at position index. "
+    "This data type can differ from the original type because it can change at runtime according to the data source.\n\n"
+    "Args:\n\n"
+    "   index (int): zero-based output index\n\n"
+    "Returns:\n\n"
+    "   :py:class:`~ikomia.core.pycore.IODataType`: output data type\n\n";
+
+constexpr auto _getOutputsDocString =
+    "Get the whole list of outputs. Workflow outputs are actually outputs of task exposed at workflow level.\n\n"
+    "Returns:\n\n"
+    "   list of :py:class:`~ikomia.core.pycore.CWorkflowTaskIO` based objects: output objects\n\n";
+
 constexpr auto _wfAddInputDocString =
         "Add global input to the workflow.\n\n"
         "Args:\n\n"
@@ -2426,13 +2451,20 @@ constexpr auto _wfAddTaskDocString =
         "Args:\n\n"
         "   task (:py:class:`~ikomia.core.pycore.CWorkflowTask` or derived)\n\n";
 
-constexpr auto _wfAddParameter =
+constexpr auto _wfAddParameterDocString =
     "Add a workflow parameter from an existing task parameter. It's a convenient way to expose meaningfull parameters at workflow level.\n\n"
     "Args:\n\n"
     "   name (str): name for the workflow parameter, must be unique\n\n"
     "   description (str): small description about the parameter\n\n"
     "   task_id (int): task identifier of the parameter to expose\n\n"
     "   target_param_name (str): name of the source task parameter\n\n";
+
+constexpr auto _wfAddOutputDocString =
+    "Add a workflow output from an existing task output. It's a convenient way to expose meaningfull outputs at workflow level.\n\n"
+    "Args:\n\n"
+    "   description (str): small description about the output\n\n"
+    "   task_id (int): task identifier of the output to expose\n\n"
+    "   task_output_index (str): index of task output\n\n";
 
 constexpr auto _wfConnectDocString =
         "Connect tasks.\n\n"
@@ -2458,6 +2490,9 @@ constexpr auto _wfClearDocString =
 
 constexpr auto _wfClearExposedParamsDocString =
     "Remove all exposed parameters of the workflow.";
+
+constexpr auto _wfClearOutputsDocString =
+    "Remove all exposed outputs of the workflow";
 
 constexpr auto _wfDeleteTaskDocString =
         "Remove the given task from the workflow. The identifier becomes invalid after this operation.\n\n"

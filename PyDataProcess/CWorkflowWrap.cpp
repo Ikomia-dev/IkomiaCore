@@ -196,6 +196,12 @@ void CWorkflowWrap::addParameter(const std::string &name, const std::string &des
     CWorkflow::addParameter(name, description, id, targetParamName);
 }
 
+void CWorkflowWrap::addOutput(const std::string &description, const uintptr_t &taskId, int taskOutputIndex)
+{
+    auto id = reinterpret_cast<WorkflowVertex>(taskId);
+    CWorkflow::addOutput(description, id, taskOutputIndex);
+}
+
 void CWorkflowWrap::connectWrap(const std::uintptr_t &src, const std::uintptr_t &target, int srcIndex, int targetIndex)
 {
     auto srcVertex = reinterpret_cast<WorkflowVertex>(src);
