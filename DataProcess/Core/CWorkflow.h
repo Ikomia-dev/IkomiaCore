@@ -120,6 +120,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         void                            setConfig(const MapString& conf);
         void                            setAutoSave(bool bEnable);
         void                            setExposedParameter(const std::string& name, const std::string& value);
+        void                            setExposedOutputDescription(const WorkflowVertex& id, int outputIndex, const std::string& description);
 
         //Getters
         std::string                     getDescription() const;
@@ -164,6 +165,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         size_t                          getOutputCount() const override;
         WorkflowTaskIOPtr               getOutput(size_t index) const override;
         InputOutputVect                 getOutputs() const override;
+        std::vector<CWorkflowOutput>    getExposedOutputs() const;
         IODataType                      getOutputDataType(size_t index) const override;
 
         bool                            hasOutput(const IODataType& type) const override;
@@ -185,6 +187,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         void                            addOutput(const std::string& description, const WorkflowVertex& taskId, int taskOutputIndex);
 
         void                            removeInput(size_t index) override;
+        void                            removeOutput(const WorkflowVertex& taskId, int outputIndex);
         void                            removeParameter(const std::string& name);
 
         WorkflowVertex                  addTask(const WorkflowTaskPtr& pNewTask);

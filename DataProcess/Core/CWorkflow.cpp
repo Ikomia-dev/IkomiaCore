@@ -361,6 +361,22 @@ void CWorkflow::setExposedParameter(const std::string &name, const std::string &
     }
 }
 
+void CWorkflow::setExposedOutputDescription(const WorkflowVertex &id, int outputIndex, const std::string &description)
+{
+    for (size_t i=0; i<m_exposedOutputs.size(); ++i)
+    {
+        auto taskId = reinterpret_cast<WorkflowVertex>(m_exposedOutputs[i].getTaskId());
+        if (taskId == id && m_exposedOutputs[i].getTaskOutputIndex() == outputIndex)
+        {
+            WorkflowTaskPtr taskPtr = getTask(id);
+            WorkflowTaskIOPtr output = taskPtr->getOutput(outputIndex);
+            output->setDescription(description);
+            m_exposedOutputs[i].setDescription(description);
+            return;
+        }
+    }
+}
+
 /***********/
 /* GETTERS */
 /***********/
@@ -955,6 +971,11 @@ InputOutputVect CWorkflow::getOutputs() const
     return outputs;
 }
 
+std::vector<CWorkflowOutput> CWorkflow::getExposedOutputs() const
+{
+    return m_exposedOutputs;
+}
+
 IODataType CWorkflow::getOutputDataType(size_t index) const
 {
     auto taskId = reinterpret_cast<WorkflowVertex>(m_exposedOutputs[index].getTaskId());
@@ -1119,6 +1140,19 @@ void CWorkflow::removeInput(size_t index)
     pRootTask->removeInput(index);
     pRootTask->removeOutput(index);
     decrementOutEdgesSrcIndex(m_root, index);
+}
+
+void CWorkflow::removeOutput(const WorkflowVertex &taskId, int outputIndex)
+{
+    for (auto it=m_exposedOutputs.begin(); it!=m_exposedOutputs.end(); ++it)
+    {
+        auto id = reinterpret_cast<WorkflowVertex>(it->getTaskId());
+        if (id == taskId && outputIndex == it->getTaskOutputIndex())
+        {
+            m_exposedOutputs.erase(it);
+            return;
+        }
+    }
 }
 
 WorkflowVertex CWorkflow::addTask(const WorkflowTaskPtr& pNewTask)
@@ -2386,7 +2420,9 @@ void CWorkflow::addOutput(const std::string &description, const WorkflowVertex &
 
     auto output = taskPtr->getOutput(taskOutputIndex);
     // Override output description
-    output->setDescription(description);
+    if (description.empty() == false)
+        output->setDescription(description);
+
     auto id = reinterpret_cast<std::uintptr_t>(taskId);
     m_exposedOutputs.push_back(CWorkflowOutput(description, id, taskOutputIndex));
 }
