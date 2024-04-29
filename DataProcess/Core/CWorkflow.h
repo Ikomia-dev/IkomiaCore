@@ -183,12 +183,12 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         void                            addInput(const WorkflowTaskIOPtr& pInput) override;
         void                            addInput(const WorkflowTaskIOPtr&& pInput) override;
         void                            addInputs(const InputOutputVect &inputs) override;
-        void                            addParameter(const std::string& name, const std::string& description, const WorkflowVertex& taskId, const std::string& targetParamName);
+        void                            addExposedParameter(const std::string& name, const std::string& description, const WorkflowVertex& taskId, const std::string& targetParamName);
         void                            addOutput(const std::string& description, const WorkflowVertex& taskId, int taskOutputIndex);
 
         void                            removeInput(size_t index) override;
         void                            removeOutput(const WorkflowVertex& taskId, int outputIndex);
-        void                            removeParameter(const std::string& name);
+        void                            removeExposedParameter(const std::string& name);
 
         WorkflowVertex                  addTask(const WorkflowTaskPtr& pNewTask);
 

@@ -53,7 +53,7 @@ class CWorkflowWrap: public CWorkflow, public wrapper<CWorkflow>
         UMapString                  getExposedParameters();
 
         std::uintptr_t              addTaskWrap(const WorkflowTaskPtr &taskPtr);
-        void                        addParameter(const std::string& name, const std::string& description, const std::uintptr_t& taskId, const std::string& targetParamName);
+        void                        addExposedParameter(const std::string& name, const std::string& description, const std::uintptr_t& taskId, const std::string& targetParamName);
         void                        addOutput(const std::string &description, const std::uintptr_t& taskId, int taskOutputIndex);
 
         void                        connectWrap(const std::uintptr_t& src, const std::uintptr_t& target, int srcIndex, int targetIndex);

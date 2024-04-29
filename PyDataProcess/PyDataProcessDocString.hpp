@@ -2451,7 +2451,7 @@ constexpr auto _wfAddTaskDocString =
         "Args:\n\n"
         "   task (:py:class:`~ikomia.core.pycore.CWorkflowTask` or derived)\n\n";
 
-constexpr auto _wfAddParameterDocString =
+constexpr auto _wfAddExposedParameterDocString =
     "Add a workflow parameter from an existing task parameter. It's a convenient way to expose meaningfull parameters at workflow level.\n\n"
     "Args:\n\n"
     "   name (str): name for the workflow parameter, must be unique\n\n"

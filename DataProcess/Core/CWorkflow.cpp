@@ -2250,7 +2250,7 @@ void CWorkflow::loadJSON(const std::string &path)
         {
             CWorkflowParam param;
             param.fromJson(jsonParam, reinterpret_cast<std::uintptr_t>(itTarget->second));
-            addParameter(param.getName(), param.getDescription(), itTarget->second, param.getTaskParamName());
+            addExposedParameter(param.getName(), param.getDescription(), itTarget->second, param.getTaskParamName());
         }
     }
 
@@ -2388,7 +2388,7 @@ void CWorkflow::workflowFinished()
 //------------------------------------------------//
 //- Workflow parameter = exposed task parameters -//
 //------------------------------------------------//
-void CWorkflow::addParameter(const std::string &name, const std::string &description, const WorkflowVertex &taskId, const std::string &targetParamName)
+void CWorkflow::addExposedParameter(const std::string &name, const std::string &description, const WorkflowVertex &taskId, const std::string &targetParamName)
 {
     std::string paramName = name;
     if (name.empty())
@@ -2428,7 +2428,7 @@ void CWorkflow::addOutput(const std::string &description, const WorkflowVertex &
     m_exposedOutputs.push_back(CWorkflowOutput(description, id, taskOutputIndex));
 }
 
-void CWorkflow::removeParameter(const std::string &name)
+void CWorkflow::removeExposedParameter(const std::string &name)
 {
     auto it = m_exposedParams.find(name);
     if (it != m_exposedParams.end())
