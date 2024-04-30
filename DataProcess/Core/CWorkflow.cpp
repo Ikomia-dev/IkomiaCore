@@ -2063,7 +2063,7 @@ void CWorkflow::saveJSON(const std::string& path)
     // API
     QJsonObject apiInfo;
     apiInfo["version"] = QString::fromStdString(Utils::IkomiaApp::getCurrentVersionName());
-    apiInfo["python_version"] = QString::fromStdString(Utils::Python::getVersion());
+    apiInfo["python_version"] = QString::fromStdString(Utils::Python::getVersion("major.minor"));
     jsonWorkflow["api"] = apiInfo;
 
     // Metadata
