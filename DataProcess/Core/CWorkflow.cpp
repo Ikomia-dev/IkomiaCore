@@ -1359,6 +1359,7 @@ void CWorkflow::clearInputs()
 
 void CWorkflow::clearOutputs()
 {
+    CWorkflowTask::clearOutputs();
     m_exposedOutputs.clear();
 }
 
@@ -1411,7 +1412,6 @@ void CWorkflow::run()
         throw CException(CoreExCode::INVALID_SIZE, "Empty workflow, no task to run", __func__, __FILE__, __LINE__);
 
     //Traverse graph and run each task
-    clearOutputs();
     clearAllOutputData();
     checkOrphans();
     auto tasks = getForwardPassTasks(m_root);
@@ -1442,7 +1442,6 @@ void CWorkflow::runFrom(const WorkflowVertex &id)
 
     //Traverse graph and run each task
     Utils::print("Workflow started", QtMsgType::QtDebugMsg);
-    clearOutputs();
     runTasks(tasks);
     emit m_signalHandler->doFinishWorkflow();
 }
