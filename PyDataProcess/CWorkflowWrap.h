@@ -38,24 +38,27 @@ class CWorkflowWrap: public CWorkflow, public wrapper<CWorkflow>
         std::string                 repr() const override;
         std::string                 default_repr() const;
 
-        std::intptr_t               getRootID();
-        std::vector<std::intptr_t>  getTaskIDs();
-        std::intptr_t               getLastTaskID();
-        WorkflowTaskPtr             getTask(std::intptr_t id);
-        double                      getElapsedTimeTo(std::intptr_t id);
-        std::vector<std::intptr_t>  getParents(std::intptr_t id);
-        std::vector<std::intptr_t>  getChildren(std::intptr_t id);
-        std::vector<size_t>         getInEdges(std::intptr_t id);
-        std::vector<size_t>         getOutEdges(std::intptr_t id);
+        std::uintptr_t              getRootID();
+        std::vector<std::uintptr_t> getTaskIDs();
+        std::uintptr_t              getLastTaskID();
+        WorkflowTaskPtr             getTask(std::uintptr_t id);
+        double                      getElapsedTimeTo(std::uintptr_t id);
+        std::vector<std::uintptr_t> getParents(std::uintptr_t id);
+        std::vector<std::uintptr_t> getChildren(std::uintptr_t id);
+        std::vector<size_t>         getInEdges(std::uintptr_t id);
+        std::vector<size_t>         getOutEdges(std::uintptr_t id);
         boost::python::tuple        getEdgeInfo(size_t id);
-        std::intptr_t               getEdgeSource(size_t id);
-        std::intptr_t               getEdgeTarget(size_t id);
+        std::uintptr_t              getEdgeSource(size_t id);
+        std::uintptr_t              getEdgeTarget(size_t id);
+        UMapString                  getExposedParameters();
 
-        std::intptr_t               addTaskWrap(const WorkflowTaskPtr &taskPtr);
+        std::uintptr_t              addTaskWrap(const WorkflowTaskPtr &taskPtr);
+        void                        addExposedParameter(const std::string& name, const std::string& description, const std::uintptr_t& taskId, const std::string& targetParamName);
+        void                        addOutput(const std::string &description, const std::uintptr_t& taskId, int taskOutputIndex);
 
-        void                        connectWrap(const std::intptr_t& src, const std::intptr_t& target, int srcIndex, int targetIndex);
+        void                        connectWrap(const std::uintptr_t& src, const std::uintptr_t& target, int srcIndex, int targetIndex);
 
-        void                        deleteTaskWrap(std::intptr_t id);
+        void                        deleteTaskWrap(std::uintptr_t id);
         void                        deleteEdgeWrap(size_t id);
 
         void                        run() override;
