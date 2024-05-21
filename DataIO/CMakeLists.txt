@@ -139,7 +139,6 @@ if(WIN32)
         gdcmjpeg16
         gdcmopenjp2
         gdcmcharls
-        gdcmuuid
         gdcmexpat
         # VTK
         vtkalglib

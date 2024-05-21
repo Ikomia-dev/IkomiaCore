@@ -4,9 +4,10 @@
 #include <string>
 #include <cstdint>
 #include <QJsonObject>
+#include "Main/CoreGlobal.hpp"
 
 
-class CWorkflowParam
+class CORESHARED_EXPORT CWorkflowParam
 {
     public:
 

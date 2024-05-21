@@ -4,11 +4,12 @@
 #include <string>
 #include <cstdint>
 #include <QJsonObject>
+#include "Main/CoreGlobal.hpp"
 #include "Main/CoreDefine.hpp"
 #include "Workflow/CWorkflowTaskIO.h"
 
 
-class CWorkflowOutput
+class CORESHARED_EXPORT CWorkflowOutput
 {
     public:
 
