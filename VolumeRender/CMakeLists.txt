@@ -40,6 +40,11 @@ target_include_directories(ikVolumeRender PRIVATE
     ../Utils
 )
 
+target_link_directories(ikVolumeRender PRIVATE
+    # OpenCL
+    "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v${CUDA_VERSION}/lib/x64"
+)
+
 target_link_libraries(ikVolumeRender PRIVATE
     Qt::Concurrent
     Qt::Core
