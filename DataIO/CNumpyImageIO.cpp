@@ -141,9 +141,7 @@ void CNumpyImageIO::loadNumpyArray()
         BoostNumpyArrayToCvMatConverter();
 
         str path(m_fileName);
-        object ikomiaModule = import("ikomia");
-        object utilsModule = ikomiaModule.attr("utils");
-        object dataModule = utilsModule.attr("data");
+        object dataModule = import("ikomia.utils.data");
         object numpyImg = dataModule.attr("NumpyImage")(path, "arr_0");
 
         // Set dim order, should be manage dynamically
