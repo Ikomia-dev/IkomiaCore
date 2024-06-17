@@ -74,11 +74,29 @@ std::string CIkomiaRegistry::getPluginsDirectory() const
 
 std::string CIkomiaRegistry::getPluginDirectory(const std::string &name) const
 {
-    auto info = getAlgorithmInfo(name);
-    if (info.m_language == ApiLanguage::PYTHON)
-        return m_pluginsDir + "/Python/" + name;
-    else
-        return m_pluginsDir + "/C++/" + name;
+    try
+    {
+        auto info = getAlgorithmInfo(name);
+        if (info.m_language == ApiLanguage::PYTHON)
+            return m_pluginsDir + "/Python/" + name;
+        else
+            return m_pluginsDir + "/C++/" + name;
+    }
+    catch(CException)
+    {
+        // Algorithm not loaded
+        // Check if algorithm directory exists
+        std::string pluginDir = m_pluginsDir + "/Python/" + name;
+        if (Utils::File::isFileExist(pluginDir))
+            return pluginDir;
+        else
+        {
+            pluginDir = m_pluginsDir + "/C++/" + name;
+            if (Utils::File::isFileExist(pluginDir))
+                return pluginDir;
+        }
+    }
+    return "";
 }
 
 CTaskInfo CIkomiaRegistry::getAlgorithmInfo(const std::string &name) const
@@ -108,7 +126,26 @@ bool CIkomiaRegistry::isAllLoaded() const
 
 WorkflowTaskPtr CIkomiaRegistry::createInstance(const std::string &processName)
 {
-    return m_processRegistrator.createProcessObject(processName, nullptr);
+    WorkflowTaskPtr taskPtr = m_processRegistrator.createProcessObject(processName, nullptr);
+    if (taskPtr == nullptr)
+    {
+        // Lazy loading
+        std::string pluginDir = getPluginDirectory(processName);
+        if (pluginDir.empty() == false)
+        {
+            try
+            {
+                loadPlugin(pluginDir);
+                taskPtr = m_processRegistrator.createProcessObject(processName, nullptr);
+            }
+            catch (CException& e)
+            {
+                std::string msg = std::string("Failed to lazy load algorithm while creating instance:") + e.what();
+                Utils::print(msg, QtMsgType::QtWarningMsg);
+            }
+        }
+    }
+    return taskPtr;
 }
 
 WorkflowTaskPtr CIkomiaRegistry::createInstance(const std::string &processName, const WorkflowTaskParamPtr &paramPtr)
@@ -430,4 +467,17 @@ void CIkomiaRegistry::clear()
 {
     m_processRegistrator.reset();
     m_ioRegistrator.reset();
+}
+
+void CIkomiaRegistry::loadPlugin(const std::string &directory)
+{
+    std::string pythonDir = "/Python/";
+    if (directory.find(pythonDir) != std::string::npos)
+        loadPythonPlugin(directory);
+    else
+    {
+        std::string cppDir = "/C++/";
+        if (directory.find(cppDir) != std::string::npos)
+            loadCppPlugin(directory);
+    }
 }
