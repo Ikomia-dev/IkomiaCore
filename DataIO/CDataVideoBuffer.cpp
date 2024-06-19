@@ -888,10 +888,16 @@ void CDataVideoBuffer::init()
             m_type = ID_STREAM;
         else
         {
-            if(m_path.find("http://") != std::string::npos)
+            if (m_path.find("http://") != std::string::npos ||
+                m_path.find("https://") != std::string::npos ||
+                m_path.find("rtsp://") != std::string::npos)
+            {
                 m_type = IP_STREAM;
-            else if(m_path.find("%") != std::string::npos)
+            }
+            else if (m_path.find("%") != std::string::npos)
+            {
                 m_type = IMAGE_SEQUENCE;
+            }
             else
             {
                 boost::filesystem::path p(m_path);

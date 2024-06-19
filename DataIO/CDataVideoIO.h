@@ -70,6 +70,7 @@ class DATAIOSHARED_EXPORT CDataVideoIO
         static bool                     isVideoFormat(const std::string& extension, bool bVideoOnly);
         static bool                     isImageFormat(const std::string& extension);
         static bool                     isSameImageSequence(const std::string& fileRenamed, const std::string& fileName);
+        static bool                     isCameraStream(const std::string& streamName, const std::string& extension);
 
         static std::pair<std::string, int>  getImageSequenceInfo(const std::string& fileName);
 
