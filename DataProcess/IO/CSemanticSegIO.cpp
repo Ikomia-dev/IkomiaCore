@@ -285,6 +285,9 @@ void CSemanticSegIO::computePolygons()
     if (semanticMask.data == nullptr)
         return;
 
+    if (m_colors.size() == 0)
+        generateRandomColors();
+
     CMat binaryMask;
     CColor emptyBrush = {255, 0, 0, 0};
 
@@ -298,6 +301,9 @@ void CSemanticSegIO::computePolygons()
 
             for (size_t j=0; j<graphics.size(); ++j)
             {
+                if (i < m_classes.size() && m_classes[i].empty() == false)
+                    graphics[j]->setCategory(m_classes[i]);
+
                 GraphicsItem type = graphics[j]->getType();
                 if (type == GraphicsItem::POLYGON || type == GraphicsItem::COMPLEX_POLYGON)
                     m_graphicsIOPtr->addItem(graphics[j]);
@@ -406,9 +412,13 @@ void CSemanticSegIO::generateLegend()
             cv::Vec3b color = {m_colors[colorIndices[i]][0], m_colors[colorIndices[i]][1], m_colors[colorIndices[i]][2]};
             cv::Rect colorFrameRect = cv::Rect(offsetX, offsetY + (i * (rectHeight + interline)), rectWidth, rectHeight);
             cv::rectangle(legend, colorFrameRect, color, -1);
+
             // Class name
-            cv::Point textOrigin(3 * offsetX + rectWidth, offsetY + (i * (rectHeight + interline)) + (rectHeight / 2));
-            cv::putText(legend, m_classes[colorIndices[i]], textOrigin, font, fontScale, {0, 0, 0}, thickness);
+            if (colorIndices[i] < m_classes.size())
+            {
+                cv::Point textOrigin(3 * offsetX + rectWidth, offsetY + (i * (rectHeight + interline)) + (rectHeight / 2));
+                cv::putText(legend, m_classes[colorIndices[i]], textOrigin, font, fontScale, {0, 0, 0}, thickness);
+            }
         }
     }
     m_imgLegendIOPtr->setImage(legend);
@@ -416,10 +426,16 @@ void CSemanticSegIO::generateLegend()
 
 void CSemanticSegIO::generateRandomColors()
 {
+    int nbColors;
     std::srand(RANDOM_COLOR_SEED);
     double factor = 255.0 / (double)RAND_MAX;
 
-    for (size_t i=0; i<m_classes.size(); ++i)
+    if (m_classes.size() > 0)
+        nbColors = m_classes.size();
+    else
+        nbColors = 256;
+
+    for (int i=0; i<nbColors; ++i)
     {
         CColor color = {
             (uchar)((double)std::rand() * factor),
