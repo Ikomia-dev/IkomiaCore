@@ -366,7 +366,6 @@ void CIkomiaRegistry::loadPythonPlugin(const std::string &directory)
                     auto taskFactoryPtr = plugin->getProcessFactory();
                     taskFactoryPtr->getInfo().m_bInternal = false;
                     taskFactoryPtr->getInfo().setLanguage(ApiLanguage::PYTHON);
-                    taskFactoryPtr->getInfo().m_os = OSType::ALL;
                     // Check compatibility -> throw if incompatible
                     checkCompatibility(taskFactoryPtr->getInfo());
 
