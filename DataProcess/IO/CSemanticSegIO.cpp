@@ -129,7 +129,7 @@ CMat CSemanticSegIO::getImageWithGraphics(const CMat &image) const
 
 CMat CSemanticSegIO::getImageWithMask(const CMat &image) const
 {
-    CMat colormap = Utils::Image::createColorMap(m_colors, true);
+    CMat colormap = Utils::Image::createColorMap(m_colors, false);
     return Utils::Image::mergeColorMask(image, getMask(), colormap, 0.7, false);
 }
 
