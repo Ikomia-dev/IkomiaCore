@@ -426,6 +426,12 @@ constexpr auto _removeOutputDocString =
         "Args:\n\n"
         "   index (int): zero-based output index\n\n";
 
+constexpr auto _clearInputsDocString =
+    "Remove all task inputs.\n\n";
+
+constexpr auto _clearOutputsDocString =
+    "Remove all task outputs.\n\n";
+
 constexpr auto _runDocString =
         "Run the task. It's where the main process of the task has to be implemented. "
         "In this base class, the method just forwards the inputs to outputs. It has to be overriden in derived class.\n\n";

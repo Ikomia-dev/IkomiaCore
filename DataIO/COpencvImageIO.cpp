@@ -38,8 +38,12 @@ VectorString COpencvImageIO::fileNames(const SubsetBounds &bounds)
 CMat COpencvImageIO::read()
 {
     CMat img = cv::imread(m_fileName, cv::IMREAD_UNCHANGED);
-    if(img.channels() > 1)
+    int c = img.channels();
+
+    if (c == 3)
         cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
+    else if (c == 4)
+        cv::cvtColor(img, img, cv::COLOR_BGRA2RGBA);
 
     return img;
 }
@@ -47,10 +51,7 @@ CMat COpencvImageIO::read()
 CMat COpencvImageIO::read(const SubsetBounds &subset)
 {
     cv::Rect roi;
-    CMat img = cv::imread(m_fileName, cv::IMREAD_UNCHANGED);
-
-    if(img.channels() > 1)
-        cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
+    CMat img = read();
 
     for(size_t i=0; i<subset.size(); ++i)
     {

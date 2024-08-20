@@ -67,4 +67,21 @@ class DATAPROCESSSHARED_EXPORT CDatasetIO: public CWorkflowTaskIO
         static std::set<std::string>    m_formats;
 };
 
+
+class DATAPROCESSSHARED_EXPORT CDatasetIOFactory: public CWorkflowTaskIOFactory
+{
+    public:
+
+        CDatasetIOFactory()
+        {
+            m_name = "CDatasetIO";
+        }
+
+        virtual WorkflowTaskIOPtr   create(IODataType dataType)
+        {
+            Q_UNUSED(dataType);
+            return std::make_shared<CDatasetIO>();
+        }
+};
+
 #endif // CDATASETIO_H

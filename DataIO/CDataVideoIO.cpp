@@ -133,7 +133,7 @@ void CDataVideoIO::stopWrite(int timeout)
 
 void CDataVideoIO::stopRead()
 {
-    if(m_pVideoIO)
+    if (m_pVideoIO)
         m_pVideoIO->stopRead();
     else
         throw CException(CoreExCode::NULL_POINTER, "Stop read error: invalid DataImageIO object", __func__, __FILE__, __LINE__);
@@ -193,29 +193,38 @@ bool CDataVideoIO::isSameImageSequence(const std::string& fileRenamed, const std
         return fileRenamed == fileName;
 }
 
+bool CDataVideoIO::isCameraStream(const std::string& streamName, const std::string& extension)
+{
+    if (streamName.find("http://") != std::string::npos ||
+        streamName.find("https://") != std::string::npos ||
+        streamName.find("rtsp://") != std::string::npos)
+    {
+        return true;
+    }
+
+    if (extension.empty())
+        return true;
+
+    return false;
+}
+
 void CDataVideoIO::allocateDataIOPtr(const std::string &fileName)
 {
-    std::string extension = Utils::File::extension(fileName);
-
-    if(isImageFormat(extension))
-    {
-        auto ret = getImageSequenceInfo(fileName);
-        m_pVideoIO = std::make_unique<COpencvVideoIO>(ret.first, ret.second);
-    }
-    else
-        m_pVideoIO = std::make_unique<COpencvVideoIO>(fileName);
+    m_pVideoIO = _allocateDataIOPtr(fileName);
 }
 
 CDataVideoIO::CVideoIOPtr CDataVideoIO::_allocateDataIOPtr(const std::string &fileName)
 {
     std::string extension = Utils::File::extension(fileName);
-    if(isImageFormat(extension))
+    if (isImageFormat(extension))
     {
         auto ret = getImageSequenceInfo(fileName);
         return std::make_unique<COpencvVideoIO>(ret.first, ret.second);
     }
-    else
+    else if (isVideoFormat(extension, true) || isCameraStream(fileName, extension))
         return std::make_unique<COpencvVideoIO>(fileName);
+    else
+        throw CException(CoreExCode::INVALID_FILE, "Video IO error: unhandled video file format", __func__, __FILE__, __LINE__);
 }
 
 bool CDataVideoIO::isImageFormat(const std::string &extension)

@@ -62,6 +62,10 @@ add_library(ikCore SHARED
     Workflow/CWorkflowTaskParam.h
     Workflow/CWorkflowTaskWidget.cpp
     Workflow/CWorkflowTaskWidget.h
+    Workflow/CWorkflowParam.h
+    Workflow/CWorkflowParam.cpp
+    Workflow/CWorkflowOutput.h
+    Workflow/CWorkflowOutput.cpp
 )
 
 set_target_properties(ikCore PROPERTIES VERSION ${IKOMIA_VERSION} SOVERSION ${IKOMIA_VERSION})

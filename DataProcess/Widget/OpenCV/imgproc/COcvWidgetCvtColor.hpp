@@ -66,6 +66,8 @@ class COcvWidgetCvtColor : public CWorkflowTaskWidget
             m_pCombo->addItem("Lab2RGB", cv::COLOR_Lab2RGB);
             m_pCombo->addItem("RGB2Luv", cv::COLOR_RGB2Luv);
             m_pCombo->addItem("Luv2RGB", cv::COLOR_Luv2RGB);
+            m_pCombo->addItem("RGBA2RGB", cv::COLOR_RGBA2RGB);
+            m_pCombo->addItem("RGB2RGBA", cv::COLOR_RGB2RGBA);
             m_pCombo->setCurrentIndex(m_pCombo->findData(m_pParam->m_code));
 
             m_pLayout->addWidget(pLabel, 0, 0);

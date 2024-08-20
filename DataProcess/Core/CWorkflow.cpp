@@ -340,6 +340,44 @@ void CWorkflow::setAutoSave(bool bEnable)
     }
 }
 
+void CWorkflow::setExposedParameter(const std::string &name, const std::string &value)
+{
+    auto it = m_exposedParams.find(name);
+    if (it != m_exposedParams.end())
+    {
+        auto taskId = reinterpret_cast<WorkflowVertex>(it->second.getTaskId());
+        auto taskPtr = getTask(taskId);
+
+        if (taskPtr)
+        {
+            UMapString taskParam;
+            taskParam.insert(std::make_pair(it->second.getTaskParamName(), value));
+            taskPtr->setParamValues(taskParam);
+        }
+    }
+    else
+    {
+        std::string msg = "Parameter " + name + " not found";
+        throw CException(CoreExCode::NOT_FOUND, msg, __func__, __FILE__, __LINE__);
+    }
+}
+
+void CWorkflow::setExposedOutputDescription(const WorkflowVertex &id, int outputIndex, const std::string &description)
+{
+    for (size_t i=0; i<m_exposedOutputs.size(); ++i)
+    {
+        auto taskId = reinterpret_cast<WorkflowVertex>(m_exposedOutputs[i].getTaskId());
+        if (taskId == id && m_exposedOutputs[i].getTaskOutputIndex() == outputIndex)
+        {
+            WorkflowTaskPtr taskPtr = getTask(id);
+            WorkflowTaskIOPtr output = taskPtr->getOutput(outputIndex);
+            output->setDescription(description);
+            m_exposedOutputs[i].setDescription(description);
+            return;
+        }
+    }
+}
+
 /***********/
 /* GETTERS */
 /***********/
@@ -902,6 +940,85 @@ std::string CWorkflow::getLastRunFolder() const
     return m_folder;
 }
 
+CWorkflow::ExposedParams CWorkflow::getExposedParameters() const
+{
+    return m_exposedParams;
+}
+
+size_t CWorkflow::getOutputCount() const
+{
+    return m_exposedOutputs.size();
+}
+
+WorkflowTaskIOPtr CWorkflow::getOutput(size_t index) const
+{
+    auto taskId = reinterpret_cast<WorkflowVertex>(m_exposedOutputs[index].getTaskId());
+    auto taskPtr = getTask(taskId);
+    if (taskPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Task not found for the given output", __func__, __FILE__, __LINE__);
+
+    return taskPtr->getOutput(m_exposedOutputs[index].getTaskOutputIndex());
+}
+
+InputOutputVect CWorkflow::getOutputs() const
+{
+    InputOutputVect outputs;
+    for (size_t i=0; i<m_exposedOutputs.size(); ++i)
+    {
+        auto outputPtr = getOutput(i);
+        if (outputPtr)
+            outputs.push_back(outputPtr);
+    }
+    return outputs;
+}
+
+std::vector<CWorkflowOutput> CWorkflow::getExposedOutputs() const
+{
+    return m_exposedOutputs;
+}
+
+IODataType CWorkflow::getOutputDataType(size_t index) const
+{
+    auto taskId = reinterpret_cast<WorkflowVertex>(m_exposedOutputs[index].getTaskId());
+    auto taskPtr = getTask(taskId);
+    if (taskPtr == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Task not found for the given output", __func__, __FILE__, __LINE__);
+
+    return taskPtr->getOutputDataType(m_exposedOutputs[index].getTaskOutputIndex());
+}
+
+bool CWorkflow::hasOutput(const IODataType &type) const
+{
+    for (size_t i=0; i<m_exposedOutputs.size(); ++i)
+    {
+        auto taskId = reinterpret_cast<WorkflowVertex>(m_exposedOutputs[i].getTaskId());
+        auto taskPtr = getTask(taskId);
+        if (taskPtr == nullptr)
+            throw CException(CoreExCode::NULL_POINTER, "Task not found for the given output", __func__, __FILE__, __LINE__);
+
+        IODataType dataType = taskPtr->getOutputDataType(m_exposedOutputs[i].getTaskOutputIndex());
+        if (dataType == type)
+            return true;
+    }
+    return false;
+}
+
+bool CWorkflow::hasOutputData() const
+{
+    if (m_exposedOutputs.size() == 0)
+        return false;
+
+    for (size_t i=0; i<m_exposedOutputs.size(); ++i)
+    {
+        auto outputPtr = getOutput(i);
+        if (!outputPtr)
+            return false;
+        if (!outputPtr->isDataAvailable())
+            return false;
+    }
+    return true;
+}
+
 bool CWorkflow::isRoot(const WorkflowVertex &id) const
 {
     return id == m_root;
@@ -1024,6 +1141,19 @@ void CWorkflow::removeInput(size_t index)
     pRootTask->removeInput(index);
     pRootTask->removeOutput(index);
     decrementOutEdgesSrcIndex(m_root, index);
+}
+
+void CWorkflow::removeOutput(const WorkflowVertex &taskId, int outputIndex)
+{
+    for (auto it=m_exposedOutputs.begin(); it!=m_exposedOutputs.end(); ++it)
+    {
+        auto id = reinterpret_cast<WorkflowVertex>(it->getTaskId());
+        if (id == taskId && outputIndex == it->getTaskOutputIndex())
+        {
+            m_exposedOutputs.erase(it);
+            return;
+        }
+    }
 }
 
 WorkflowVertex CWorkflow::addTask(const WorkflowTaskPtr& pNewTask)
@@ -1213,6 +1343,7 @@ void CWorkflow::clear()
 {
     std::lock_guard<std::mutex> lock(m_mutex);
     m_graph.clear();
+    m_exposedParams.clear();
 }
 
 void CWorkflow::clearInputs()
@@ -1227,6 +1358,12 @@ void CWorkflow::clearInputs()
     }
 }
 
+void CWorkflow::clearOutputs()
+{
+    CWorkflowTask::clearOutputs();
+    m_exposedOutputs.clear();
+}
+
 void CWorkflow::clearAllOutputData()
 {
     auto vertexRangeIt = boost::vertices(m_graph);
@@ -1236,6 +1373,11 @@ void CWorkflow::clearAllOutputData()
         if(*it != m_root && taskPtr)
             taskPtr->clearOutputData();
     }
+}
+
+void CWorkflow::clearExposedParameters()
+{
+    m_exposedParams.clear();
 }
 
 void CWorkflow::clearOutputDataFrom(const WorkflowVertex &id)
@@ -1271,7 +1413,6 @@ void CWorkflow::run()
         throw CException(CoreExCode::INVALID_SIZE, "Empty workflow, no task to run", __func__, __FILE__, __LINE__);
 
     //Traverse graph and run each task
-    clearOutputs();
     clearAllOutputData();
     checkOrphans();
     auto tasks = getForwardPassTasks(m_root);
@@ -1302,7 +1443,6 @@ void CWorkflow::runFrom(const WorkflowVertex &id)
 
     //Traverse graph and run each task
     Utils::print("Workflow started", QtMsgType::QtDebugMsg);
-    clearOutputs();
     runTasks(tasks);
     emit m_signalHandler->doFinishWorkflow();
 }
@@ -1918,11 +2058,12 @@ void CWorkflow::saveJSON(const std::string& path)
     int id = 0;
     std::unordered_map<WorkflowVertex, int> mapVertexToId;
     QJsonObject jsonWorkflow;
-    QJsonArray jsonTasks, jsonEdges;
+    QJsonArray jsonTasks, jsonEdges, jsonParams, jsonOutputs;
 
     // API
     QJsonObject apiInfo;
     apiInfo["version"] = QString::fromStdString(Utils::IkomiaApp::getCurrentVersionName());
+    apiInfo["python_version"] = QString::fromStdString(Utils::Python::getVersion("major.minor"));
     jsonWorkflow["api"] = apiInfo;
 
     // Metadata
@@ -1985,6 +2126,36 @@ void CWorkflow::saveJSON(const std::string& path)
         jsonEdges.append(jsonEdge);
     }
     jsonWorkflow["connections"] = jsonEdges;
+
+    // Exposed parameters
+    for (auto const& param: m_exposedParams)
+    {
+        QJsonObject jsonParam = param.second.toJson();
+        auto taskVertex = reinterpret_cast<WorkflowVertex>(param.second.getTaskId());
+        auto itTaskId = mapVertexToId.find(taskVertex);
+
+        if (itTaskId != mapVertexToId.end())
+        {
+            jsonParam["task_id"] = itTaskId->second;
+            jsonParams.append(jsonParam);
+        }
+    }
+    jsonWorkflow["exposed_parameters"] = jsonParams;
+
+    // Exposed outputs
+    for (auto const& output: m_exposedOutputs)
+    {
+        QJsonObject jsonOutput = output.toJson();
+        auto taskVertex = reinterpret_cast<WorkflowVertex>(output.getTaskId());
+        auto itTaskId = mapVertexToId.find(taskVertex);
+
+        if (itTaskId != mapVertexToId.end())
+        {
+            jsonOutput["task_id"] = itTaskId->second;
+            jsonOutputs.append(jsonOutput);
+        }
+    }
+    jsonWorkflow["exposed_outputs"] = jsonOutputs;
 
     QJsonDocument jsonDoc(jsonWorkflow);
     jsonFile.write(jsonDoc.toJson());
@@ -2067,6 +2238,34 @@ void CWorkflow::loadJSON(const std::string &path)
             targetTaskId = itTarget->second;
 
         connect(srcTaskId, jsonEdge["source_index"].toInt(), targetTaskId, jsonEdge["target_index"].toInt());
+    }
+
+    // Load exposed parameters
+    QJsonArray jsonParams = jsonWorkflow["exposed_parameters"].toArray();
+    for (int i=0; i<jsonParams.size(); ++i)
+    {
+        QJsonObject jsonParam = jsonParams[i].toObject();
+        auto itTarget = mapIdToVertexId.find(jsonParam["task_id"].toInt());
+        if(itTarget != mapIdToVertexId.end())
+        {
+            CWorkflowParam param;
+            param.fromJson(jsonParam, reinterpret_cast<std::uintptr_t>(itTarget->second));
+            addExposedParameter(param.getName(), param.getDescription(), itTarget->second, param.getTaskParamName());
+        }
+    }
+
+    // Load exposed outputs
+    QJsonArray jsonOutputs = jsonWorkflow["exposed_outputs"].toArray();
+    for (int i=0; i<jsonOutputs.size(); ++i)
+    {
+        QJsonObject jsonOutput = jsonOutputs[i].toObject();
+        auto itTarget = mapIdToVertexId.find(jsonOutput["task_id"].toInt());
+        if(itTarget != mapIdToVertexId.end())
+        {
+            CWorkflowOutput output;
+            output.fromJson(jsonOutput, reinterpret_cast<std::uintptr_t>(itTarget->second));
+            addOutput(output.getDescription(), itTarget->second, output.getTaskOutputIndex());
+        }
     }
 }
 
@@ -2184,6 +2383,56 @@ void CWorkflow::workflowFinished()
         }
     });
     boost::depth_first_search(m_graph, boost::visitor(visitor).vertex_index_map(propMapIndex));
+}
+
+//------------------------------------------------//
+//- Workflow parameter = exposed task parameters -//
+//------------------------------------------------//
+void CWorkflow::addExposedParameter(const std::string &name, const std::string &description, const WorkflowVertex &taskId, const std::string &targetParamName)
+{
+    std::string paramName = name;
+    if (name.empty())
+        paramName = targetParamName;
+
+    // Check name unicity
+    auto it = m_exposedParams.find(paramName);
+    if (it != m_exposedParams.end())
+    {
+        std::string msg = "Duplicate name: " + paramName + ". Workflow parameter name must be unique.";
+        throw CException(CoreExCode::INVALID_USAGE, msg, __func__, __FILE__, __LINE__);
+    }
+
+    // Expose task parameter at workflow level
+    CWorkflowParam param(paramName, description, reinterpret_cast<std::uintptr_t>(taskId), targetParamName);
+    m_exposedParams.insert(std::make_pair(paramName, param));
+}
+
+//-----------------------------------------//
+//- Workflow output = exposed task output -//
+//-----------------------------------------//
+void CWorkflow::addOutput(const std::string &description, const WorkflowVertex &taskId, int taskOutputIndex)
+{
+    auto taskPtr = getTask(taskId);
+    if (!taskPtr)
+        throw CException(CoreExCode::INVALID_USAGE, "Failed to add workflow output: invalid task id.", __func__, __FILE__, __LINE__);
+
+    if (taskOutputIndex >= taskPtr->getOutputCount())
+        throw CException(CoreExCode::INVALID_USAGE, "Failed to add workflow output: task output index overflows.", __func__, __FILE__, __LINE__);
+
+    auto output = taskPtr->getOutput(taskOutputIndex);
+    // Override output description
+    if (description.empty() == false)
+        output->setDescription(description);
+
+    auto id = reinterpret_cast<std::uintptr_t>(taskId);
+    m_exposedOutputs.push_back(CWorkflowOutput(description, id, taskOutputIndex));
+}
+
+void CWorkflow::removeExposedParameter(const std::string &name)
+{
+    auto it = m_exposedParams.find(name);
+    if (it != m_exposedParams.end())
+        m_exposedParams.erase(it);
 }
 
 //---------------------------//

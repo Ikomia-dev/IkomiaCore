@@ -309,12 +309,12 @@ class CORESHARED_EXPORT CWorkflowTask
          * @brief Gets the number of outputs (even if pointer is null).
          * @return Outputs count.
          */
-        size_t                      getOutputCount() const;
+        virtual size_t              getOutputCount() const;
         /**
          * @brief Gets the whole list of outputs.
          * @return Vector of CWorkflowTaskIO based shared pointer.
          */
-        InputOutputVect             getOutputs() const;
+        virtual InputOutputVect     getOutputs() const;
         /**
          * @brief Gets the list of outputs of the given data type.
          * @param types: set of IO types to return.
@@ -326,13 +326,13 @@ class CORESHARED_EXPORT CWorkflowTask
          * @param index: zero-based index.
          * @return CWorkflowTaskIO based shared pointer.
          */
-        WorkflowTaskIOPtr           getOutput(size_t index) const;
+        virtual WorkflowTaskIOPtr   getOutput(size_t index) const;
         /**
          * @brief Gets data type of output at position index.
          * @param index: zero-based index.
          * @return data type ::IODataType.
          */
-        IODataType                  getOutputDataType(size_t index) const;
+        virtual IODataType          getOutputDataType(size_t index) const;
         /**
          * @brief Get output folder.
          * @return full path to the output folder.
@@ -437,7 +437,7 @@ class CORESHARED_EXPORT CWorkflowTask
          * @param type: see IODataType.
          * @return True if it has an output of the given data type, False otherwise.
          */
-        bool                        hasOutput(const IODataType& type) const;
+        virtual bool                hasOutput(const IODataType& type) const;
         /**
          * @brief Checks if the task has output of the given data types.
          * @param types: set of IO data types (see IODataType).
@@ -449,7 +449,7 @@ class CORESHARED_EXPORT CWorkflowTask
          * Output data are filled after a successful run of the task.
          * @return True if at least one output has valid data, False otherwise.
          */
-        bool                        hasOutputData() const;
+        virtual bool                hasOutputData() const;
 
         /**
          * @brief Checks if the task has input of the given data type.

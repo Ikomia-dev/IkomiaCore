@@ -488,9 +488,11 @@ void CInstanceSegIO::fromJsonInternal(const QJsonDocument &doc)
         double y = box["y"].toDouble();
         double w = box["width"].toDouble();
         double h = box["height"].toDouble();
-        auto mask = Utils::Image::fromJson(obj["mask"].toString().toStdString());
-        cv::cvtColor(mask, mask, cv::COLOR_RGB2GRAY);
         CColor color = Utils::Graphics::colorFromJson(obj["color"].toObject());
+
+        auto mask = Utils::Image::fromJson(obj["mask"].toString().toStdString());
+        if (mask.channels() > 1)
+            cv::cvtColor(mask, mask, cv::COLOR_RGB2GRAY);
 
         if (!bInit)
         {

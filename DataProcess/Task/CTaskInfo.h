@@ -124,7 +124,7 @@ class DATAPROCESSSHARED_EXPORT CTaskInfo
         std::string m_journal;                      /**< Journal of the article */
         int         m_year = -1;                    /**< Year of the article or the algorithme */
         std::string m_version = "1.0.0";            /**< Version of the implementation */
-        std::string m_minIkomiaVersion = "0.10.0";   /**< Minimum version of the Ikomia Core & API */
+        std::string m_minIkomiaVersion = "0.11.1";   /**< Minimum version of the Ikomia Core & API */
         std::string m_maxIkomiaVersion;             /**< Maximum version of the Ikomia Core & API */
         std::string m_minPythonVersion = "3.7";     /**< Minimum compatible Python version */
         std::string m_maxPythonVersion = "3.11";    /**< Maximum compatible Python version */
@@ -134,7 +134,7 @@ class DATAPROCESSSHARED_EXPORT CTaskInfo
         std::string m_createdDate;
         std::string m_modifiedDate;
         ApiLanguage m_language = ApiLanguage::CPP;  /**< Programming language */
-        OSType      m_os = OSType::LINUX;           /**< Compatible operating system */
+        OSType      m_os = OSType::ALL;             /**< Compatible operating system */
         AlgoType    m_algoType = AlgoType::OTHER;   /**< Type of algorithm */
         std::string m_algoTasks;                    /**< Type of tasks adressed: CLASSIFICATION, OBJECT_DETECTION... */
 };

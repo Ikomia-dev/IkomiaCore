@@ -352,6 +352,9 @@ std::string CWorkflowTaskIO::getClassName(IODataType ioDataType)
         case IODataType::SCENE_3D:
             return "CScene3dIO";
 
+        case IODataType::DNN_DATASET:
+            return "CDatasetIO";
+
         default: return "";
     }
 }

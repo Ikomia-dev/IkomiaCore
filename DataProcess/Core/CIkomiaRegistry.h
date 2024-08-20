@@ -63,6 +63,7 @@ class DATAPROCESSSHARED_EXPORT CIkomiaRegistry
 
     private:
 
+        void                        loadPlugin(const std::string& directory);
         void                        _loadCppPlugin(const QString &fileName);
 
         void                        checkCompatibility(const CTaskInfo &info);

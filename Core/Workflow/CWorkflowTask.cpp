@@ -671,15 +671,16 @@ bool CWorkflowTask::hasOutput(const std::set<IODataType> &types) const
 
 bool CWorkflowTask::hasOutputData() const
 {
-    bool hasData = false;
-    if(m_outputs.size() > 0)
+    if(m_outputs.size() == 0)
+        return false;
+
+    // Check if all output have available data
+    for(size_t i=0; i<m_outputs.size(); ++i)
     {
-        // Check if all output have available data
-        hasData = m_outputs[0]->isDataAvailable();
-        for(size_t i=1; i<m_outputs.size(); ++i)
-            hasData &= m_outputs[i]->isDataAvailable();
+        if (!m_outputs[i]->isDataAvailable())
+            return false;
     }
-    return hasData;
+    return true;
 }
 
 bool CWorkflowTask::hasInput(const IODataType& type) const
@@ -991,13 +992,15 @@ void CWorkflowTask::saveOutputs(const std::string& baseName) const
 QJsonObject CWorkflowTask::toJson() const
 {
     QJsonObject obj;
+
+    // Name
     obj["name"] = QString::fromStdString(m_name);
 
     // Associated parameters
     QJsonArray jsonParams;
     auto paramMap = m_pParam->getParamMap();
 
-    for(auto it=paramMap.begin(); it!=paramMap.end(); ++it)
+    for (auto it=paramMap.begin(); it!=paramMap.end(); ++it)
     {
         QJsonObject jsonParam;
         jsonParam["name"] = QString::fromStdString(it->first);
@@ -1005,6 +1008,27 @@ QJsonObject CWorkflowTask::toJson() const
         jsonParams.append(jsonParam);
     }
     obj["parameters"] = jsonParams;
+
+    // Inputs type
+    QJsonArray jsonInputs;
+    for (size_t i=0; i<m_originalInputTypes.size(); ++i)
+    {
+        QJsonObject input;
+        input["name"] = QString::fromStdString(Utils::Workflow::getIODataEnumName(m_originalInputTypes[i]));
+        jsonInputs.append(input);
+    }
+    obj["inputs"] = jsonInputs;
+
+    // Outputs type
+    QJsonArray jsonOutputs;
+    for (size_t i=0; i<m_outputs.size(); ++i)
+    {
+        QJsonObject output;
+        output["name"] = QString::fromStdString(Utils::Workflow::getIODataEnumName(m_outputs[i]->getDataType()));
+        jsonOutputs.append(output);
+    }
+    obj["outputs"] = jsonOutputs;
+
     return obj;
 }
 

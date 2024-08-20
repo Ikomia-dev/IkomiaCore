@@ -128,7 +128,7 @@ namespace Ikomia
         {
             using namespace boost::python;
 
-            inline std::string  getVersion()
+            inline std::string  getVersion(const std::string& shape="major.minor.patch")
             {
                 CPyEnsureGIL gil;
                 object main_module = import("__main__");
@@ -141,12 +141,24 @@ namespace Ikomia
                 );
                 exec(code, main_namespace, main_namespace);
                 object bpMajor = main_namespace["major"];
-                object bpMinor = main_namespace["minor"];
-                object bpPatch = main_namespace["patch"];
                 int major = extract<int>(bpMajor);
-                int minor = extract<int>(bpMinor);
-                int patch = extract<int>(bpPatch);
-                return std::to_string(major) + "." + std::to_string(minor) + "." + std::to_string(patch);
+
+                if (shape == "major")
+                    return std::to_string(major);
+                else
+                {
+                    object bpMinor = main_namespace["minor"];
+                    int minor = extract<int>(bpMinor);
+
+                    if(shape == "major.minor")
+                        return std::to_string(major) + "." + std::to_string(minor);
+                    else
+                    {
+                        object bpPatch = main_namespace["patch"];
+                        int patch = extract<int>(bpPatch);
+                        return std::to_string(major) + "." + std::to_string(minor) + "." + std::to_string(patch);
+                    }
+                }
             }
             inline std::string  getMinSupportedVersion()
             {
@@ -517,11 +529,11 @@ namespace Ikomia
             }
             inline std::string  getCurrentVersionNumber()
             {
-                return "0.10.0";
+                return "0.11.1";
             }
             inline std::string  getCurrentVersionName()
             {
-                return "0.10.0";
+                return "0.11.1";
             }
             inline std::string  getIkomiaLibFolder()
             {
@@ -1285,7 +1297,7 @@ namespace Ikomia
             }
             inline PluginState  getCppApiState(const std::string& minVersion, const std::string& maxVersion)
             {
-                const std::set<std::string> breakChanges = {"0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0", "0.6.1", "0.7.0", "0.8.0", "0.8.1", "0.9.0", "0.9.1", "0.10.0"};
+                const std::set<std::string> breakChanges = {"0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0", "0.6.1", "0.7.0", "0.8.0", "0.8.1", "0.9.0", "0.9.1", "0.10.0", "0.11.0"};
                 CSemanticVersion algoMinVersion(minVersion);
 
                 for(auto it=breakChanges.begin(); it!=breakChanges.end(); ++it)
@@ -1342,7 +1354,7 @@ namespace Ikomia
             }
             inline std::string  getCurrentApiVersion()
             {
-                return "0.10.0";
+                return "0.11.1";
             }
             inline std::string  getModelHubUrl()
             {
