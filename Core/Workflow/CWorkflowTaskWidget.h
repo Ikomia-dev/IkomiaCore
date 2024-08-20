@@ -60,6 +60,7 @@ class CORESHARED_EXPORT CWorkflowTaskWidget : public QWidget
     public slots:
 
         virtual void    onApply() = 0;
+        virtual void    onParametersChanged();
 
     signals:
 

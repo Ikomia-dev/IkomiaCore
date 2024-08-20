@@ -351,3 +351,8 @@ void CSemanticSegTaskWrap::emitOutputChanged()
     emit m_signalHandler->doOutputChanged();
 }
 
+void CSemanticSegTaskWrap::emitParametersChanged()
+{
+    emit m_signalHandler->doParametersChanged();
+}
+

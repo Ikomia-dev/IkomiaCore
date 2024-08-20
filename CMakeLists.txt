@@ -76,3 +76,44 @@ add_subdirectory(PyCore)
 add_subdirectory(PyUtils)
 add_subdirectory(PyDataProcess)
 add_subdirectory(UnitTests)
+
+
+
+###############################################
+##                                           ##
+##     Generation of the package's files     ##
+##                                           ##
+###############################################
+
+include(CMakePackageConfigHelpers)
+
+set(IKOMIA_CORE_DIR
+    ${CMAKE_CURRENT_LIST_DIR}
+    CACHE PATH "Location of root directory"
+)
+
+set(IkomiaCore_UNDERSCORE_VERSION
+    ${IkomiaCore_VERSION_MAJOR}_${IkomiaCore_VERSION_MINOR}_${IkomiaCore_VERSION_PATCH}
+    CACHE STRING "Version of the project where dots are replaced by underscore (X.X.X -> 'X_X_X')"
+)
+
+configure_package_config_file(
+    IkomiaCoreConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/IkomiaCoreConfig.cmake
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/IkomiaCore
+    PATH_VARS IKOMIA_CORE_DIR CMAKE_INSTALL_PREFIX CMAKE_INSTALL_IKOMIA_INCLUDE CMAKE_INSTALL_IKOMIA_LIB
+)
+
+write_basic_package_version_file(
+    IkomiaCoreConfigVersion.cmake
+    VERSION ${IKOMIA_VERSION}
+    COMPATIBILITY AnyNewerVersion
+)
+
+install(
+    FILES
+        ${CMAKE_CURRENT_BINARY_DIR}/IkomiaCoreConfig.cmake
+        ${CMAKE_CURRENT_BINARY_DIR}/IkomiaCoreConfigVersion.cmake
+    DESTINATION
+        ${CMAKE_INSTALL_LIBDIR}/cmake/IkomiaCore
+)

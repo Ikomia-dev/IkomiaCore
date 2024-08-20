@@ -414,6 +414,8 @@ int CGraphicsPolygon::hitVertex(const QPointF &pos)
 void CGraphicsPolygon::copy(const CGraphicsPolygon &poly)
 {
     setPolygon(poly.polygon());
+    setAcceptHoverEvents(poly.acceptHoverEvents());
+    setFlags(poly.flags());
     setPen(poly.pen());
     setBrush(poly.brush());
     setCategory(poly.getCategory());

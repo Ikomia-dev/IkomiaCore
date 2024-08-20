@@ -117,7 +117,7 @@ class DATAPROCESSSHARED_EXPORT CImageIO : public CWorkflowTaskIO
          * @details Image data structure can be 2D or 3D. This methods sets the index of the current 2D plane from a 3D volume.
          * @param index: index of the 2D plane.
          */
-        void            setCurrentImage(size_t index);
+        void            setCurrentImageIndex(size_t index);
         /**
          * @brief Sets the associated overlay mask.
          * @details Ikomia software is able to display overlay mask on top of image.
@@ -150,6 +150,11 @@ class DATAPROCESSSHARED_EXPORT CImageIO : public CWorkflowTaskIO
          * @return CMat object for C++ and Numpy array for Python. 2D only.
          */
         virtual CMat    getImage();
+        /**
+         * @brief Gets the static channel count information.
+         * @return Channel count.
+         */
+        size_t          getCurrentImageIndex() const;
         /**
          * @brief Gets the 2D image data with graphics items from the given input/output.
          * @details Returned image is 2D only. In case of 3D volume, the current image index is used to get the desired 2D plane (see setCurrentImage()).

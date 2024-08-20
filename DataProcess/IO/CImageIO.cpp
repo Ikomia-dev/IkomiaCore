@@ -159,7 +159,7 @@ void CImageIO::setChannelCount(size_t nb)
     m_channelCount = nb;
 }
 
-void CImageIO::setCurrentImage(size_t index)
+void CImageIO::setCurrentImageIndex(size_t index)
 {
     m_currentIndex = index;
 }
@@ -191,7 +191,7 @@ CDataInfoPtr CImageIO::getDataInfo()
 
 CMat CImageIO::getImage()
 {
-    if( m_dataType == IODataType::IMAGE ||
+    if (m_dataType == IODataType::IMAGE ||
         m_dataType == IODataType::IMAGE_BINARY ||
         m_dataType == IODataType::IMAGE_LABEL ||
         m_dataType == IODataType::VIDEO ||
@@ -202,7 +202,9 @@ CMat CImageIO::getImage()
     {
         return m_image;
     }
-    else if(m_dataType == IODataType::VOLUME || m_dataType == IODataType::VOLUME_BINARY)
+    else if (m_dataType == IODataType::VOLUME ||
+               m_dataType == IODataType::VOLUME_BINARY ||
+               m_dataType == IODataType::POSITION)
     {
         if(m_currentIndex < m_image.getNbStacks())
             return m_image.getPlane(m_currentIndex);
@@ -210,6 +212,11 @@ CMat CImageIO::getImage()
             return m_image.getPlane(0);
     }
     return CMat();
+}
+
+size_t CImageIO::getCurrentImageIndex() const
+{
+    return m_currentIndex;
 }
 
 CMat CImageIO::getImageWithGraphics(const WorkflowTaskIOPtr &io)
@@ -258,7 +265,8 @@ size_t CImageIO::getUnitElementCount() const
         return 1;
     }
     else if(m_dataType == IODataType::VOLUME ||
-            m_dataType == IODataType::VOLUME_BINARY)
+            m_dataType == IODataType::VOLUME_BINARY ||
+            m_dataType == IODataType::POSITION)
     {
         return m_image.getNbStacks();
     }
@@ -286,6 +294,7 @@ bool CImageIO::isDataAvailable() const
         m_dataType == IODataType::IMAGE_LABEL ||
         m_dataType == IODataType::VOLUME ||
         m_dataType == IODataType::VOLUME_BINARY ||
+        m_dataType == IODataType::POSITION ||
         m_dataType == IODataType::VIDEO ||
         m_dataType == IODataType::VIDEO_BINARY ||
         m_dataType == IODataType::VIDEO_LABEL ||

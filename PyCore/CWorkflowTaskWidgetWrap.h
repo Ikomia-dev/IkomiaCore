@@ -41,6 +41,9 @@ class CWorkflowTaskWidgetWrap : public CWorkflowTaskWidget, public wrapper<CWork
         void            emitSetGraphicsCategory(const std::string& category);
 
         void            onApply();
+
+        void            onParametersChanged();
+        void            default_onParametersModified();
 };
 
 #endif // CWORKFLOWTASKWIDGETWRAP_H

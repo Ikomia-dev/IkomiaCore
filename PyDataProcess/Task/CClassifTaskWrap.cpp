@@ -350,3 +350,8 @@ void CClassifTaskWrap::emitOutputChanged()
 {
     emit m_signalHandler->doOutputChanged();
 }
+
+void CClassifTaskWrap::emitParametersChanged()
+{
+    emit m_signalHandler->doParametersChanged();
+}

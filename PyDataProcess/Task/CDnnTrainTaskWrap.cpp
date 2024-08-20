@@ -282,3 +282,8 @@ void CDnnTrainTaskWrap::emitOutputChanged()
 {
     emit m_signalHandler->doOutputChanged();
 }
+
+void CDnnTrainTaskWrap::emitParametersChanged()
+{
+    emit m_signalHandler->doParametersChanged();
+}

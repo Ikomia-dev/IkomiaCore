@@ -52,6 +52,9 @@ class UTILSSHARED_EXPORT CColorPushButton : public QPushButton
 
         QColor  m_color = Qt::red;
         QString m_title;
+        const QString m_styleSheet = "QPushButton { background: %1; border: none; } "
+                                     "QPushButton:hover {border: 2px solid %2; } "
+                                     "QPushButton:!enabled { background: transparent; border: 2px solid %2; }";
 };
 
 #endif // CCOLORPUSHBUTTON_H

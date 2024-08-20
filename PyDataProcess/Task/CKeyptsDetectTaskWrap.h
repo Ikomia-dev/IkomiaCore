@@ -52,6 +52,7 @@ class CKeyptsDetectTaskWrap: public CKeypointDetectionTask, public wrapper<CKeyp
         void            emitStepProgress();
         void            emitGraphicsContextChanged();
         void            emitOutputChanged();
+        void            emitParametersChanged();
 };
 
 #endif // CKEYPTSDETECTTASKWRAP_H

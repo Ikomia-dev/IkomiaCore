@@ -77,6 +77,7 @@ class CVideoTrackingTaskWrap : public CVideoTrackingTask, public wrapper<CVideoT
         void    emitStepProgress();
         void    emitGraphicsContextChanged();
         void    emitOutputChanged();
+        void    emitParametersChanged();
 };
 
 #endif // CVIDEOTRACKINGTASKWRAP_H

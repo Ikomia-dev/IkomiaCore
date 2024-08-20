@@ -487,6 +487,8 @@ void CGraphicsEllipse::switchHitVertex(bool bHorizontal, bool bVertical)
 void CGraphicsEllipse::copy(const CGraphicsEllipse &ellipse)
 {
     setRect(ellipse.rect());
+    setAcceptHoverEvents(ellipse.acceptHoverEvents());
+    setFlags(ellipse.flags());
     setPen(ellipse.pen());
     setBrush(ellipse.brush());
     setCategory(ellipse.getCategory());

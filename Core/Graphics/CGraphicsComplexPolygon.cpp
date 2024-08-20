@@ -413,6 +413,8 @@ void CGraphicsComplexPolygon::copy(const CGraphicsComplexPolygon &polygon)
     //Inner polygons
     setInnerPolygons(polygon.getInnerPolygons(), false);
 
+    setAcceptHoverEvents(polygon.acceptHoverEvents());
+    setFlags(polygon.flags());
     setPen(polygon.pen());
     setBrush(polygon.brush());
     setCategory(polygon.getCategory());

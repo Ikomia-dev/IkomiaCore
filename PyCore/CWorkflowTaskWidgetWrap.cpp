@@ -43,6 +43,35 @@ void CWorkflowTaskWidgetWrap::onApply()
     }
 }
 
+void CWorkflowTaskWidgetWrap::onParametersChanged()
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override onParamsModifiedOver = this->get_override("on_parameters_changed"))
+            onParamsModifiedOver();
+        else
+            CWorkflowTaskWidget::onParametersChanged();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CWorkflowTaskWidgetWrap::default_onParametersModified()
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->CWorkflowTaskWidget::onParametersChanged();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 void CWorkflowTaskWidgetWrap::setLayout(long long layoutPtr)
 {
     CPyEnsureGIL gil;

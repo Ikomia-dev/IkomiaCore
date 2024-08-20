@@ -393,4 +393,5 @@ void CGraphicsText::copy(const CGraphicsText &text)
     setDefaultTextColor(text.defaultTextColor());
     setPlainText(text.toPlainText());
     setFont(text.font());
+    setFlags(text.flags());
 }

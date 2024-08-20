@@ -1,3 +1,9 @@
+# Eclipse IDE
+.project
+.cproject
+.settings/
+
+# IkomiaCore / IkomiaStudio
 .idea
 IkomiaCore.pro.user
 LocalSettings.pri

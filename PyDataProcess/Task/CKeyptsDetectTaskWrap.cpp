@@ -350,3 +350,8 @@ void CKeyptsDetectTaskWrap::emitOutputChanged()
 {
     emit m_signalHandler->doOutputChanged();
 }
+
+void CKeyptsDetectTaskWrap::emitParametersChanged()
+{
+    emit m_signalHandler->doParametersChanged();
+}

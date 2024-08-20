@@ -306,7 +306,10 @@ void CSemanticSegIO::computePolygons()
 
                 GraphicsItem type = graphics[j]->getType();
                 if (type == GraphicsItem::POLYGON || type == GraphicsItem::COMPLEX_POLYGON)
+                {
+                    graphics[j]->setCategory(m_classes[i]);
                     m_graphicsIOPtr->addItem(graphics[j]);
+                }
             }
         }
     }

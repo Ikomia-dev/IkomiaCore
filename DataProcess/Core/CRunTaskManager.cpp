@@ -101,7 +101,7 @@ void CRunTaskManager::runImageProcess2D(const WorkflowTaskPtr &taskPtr)
         {
             //Set the current image from the 3D input to process
             for(size_t j=0; j<imageInputs.size(); ++j)
-                std::static_pointer_cast<CImageIO>(imageInputs[j])->setCurrentImage(i);
+                std::static_pointer_cast<CImageIO>(imageInputs[j])->setCurrentImageIndex(i);
 
             //Run process
             taskPtr->run();

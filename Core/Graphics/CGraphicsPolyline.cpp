@@ -426,6 +426,8 @@ void CGraphicsPolyline::copy(const CGraphicsPolyline &polyline)
     path.addPolygon(m_polygon);
     setPath(path);
 
+    setAcceptHoverEvents(polyline.acceptHoverEvents());
+    setFlags(polyline.flags());
     setPen(polyline.pen());
     setCategory(polyline.getCategory());
     setParentItem(polyline.parentItem());
