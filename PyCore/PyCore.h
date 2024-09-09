@@ -49,6 +49,12 @@ inline PyObject * managingPyObject(T *p)
     return typename manage_new_object::apply<T *>::type()(p);
 }
 
+template<class T>
+inline PyObject * managingPyObject(T& p)
+{
+    return typename copy_non_const_reference::apply<T&>::type()(p);
+}
+
 template<class Copyable>
 object generic_copy(object copyable)
 {
@@ -65,6 +71,23 @@ object generic_deepcopy(object copyable, dict memo)
     object deepcopy = copyMod.attr("deepcopy");
     Copyable *newCopyable(new Copyable(extract<const Copyable&>(copyable)));
     object result(detail::new_reference(managingPyObject(newCopyable)));
+
+    // HACK: copyableId shall be the same as the result of id(copyable) in Python -
+    // please tell me that there is a better way! (and which ;-p)
+    std::uintptr_t copyableId = reinterpret_cast<std::uintptr_t>(copyable.ptr());
+    memo[copyableId] = result;
+
+    extract<dict>(result.attr("__dict__"))().update(deepcopy(extract<dict>(copyable.attr("__dict__"))(), memo));
+    return result;
+}
+
+template<class Copyable>
+object generic_shared_ptr_deepcopy(object copyable, dict memo)
+{
+    object copyMod = import("copy");
+    object deepcopy = copyMod.attr("deepcopy");
+    auto newBaseObj = std::make_shared<Copyable>(extract<const Copyable&>(copyable));
+    object result(detail::new_reference(managingPyObject(newBaseObj)));
 
     // HACK: copyableId shall be the same as the result of id(copyable) in Python -
     // please tell me that there is a better way! (and which ;-p)
