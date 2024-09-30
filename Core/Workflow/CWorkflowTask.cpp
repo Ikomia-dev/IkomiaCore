@@ -397,6 +397,11 @@ void CWorkflowTask::setAutoSave(bool bEnable)
         m_outputs[i]->setAutoSave(bEnable);
 }
 
+void CWorkflowTask::setEnabled(bool bEnable)
+{
+    m_bEnabled = bEnable;
+}
+
 CWorkflowTask::Type CWorkflowTask::getType() const
 {
     return m_type;
@@ -646,6 +651,11 @@ bool CWorkflowTask::isAutoSave() const
             return true;
     }
     return false;
+}
+
+bool CWorkflowTask::isEnabled() const
+{
+    return m_bEnabled;
 }
 
 bool CWorkflowTask::hasOutput(const IODataType &type) const

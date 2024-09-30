@@ -449,6 +449,11 @@ constexpr auto _setActiveDocString =
         "Args:\n\n"
         "   is_active (bool): True or False\n\n";
 
+constexpr auto _setEnabledDocString =
+    "Enable/disable task for running.\n\n"
+    "Args:\n\n"
+    "   is_enable (bool): True or False\n\n";
+
 constexpr auto _setAutoSaveDocString =
         "Enable/disable auto-save mode. When this mode is enabled, task outputs are automatically save to disk when the run() function "
         "is executed. Save formats are already defined for all builtin I/O objects. For custom I/O object, one must implement "

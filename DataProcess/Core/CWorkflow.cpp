@@ -378,6 +378,12 @@ void CWorkflow::setExposedOutputDescription(const WorkflowVertex &id, int output
     }
 }
 
+void CWorkflow::setTaskEnabled(const WorkflowVertex &id, bool bEnable)
+{
+    WorkflowTaskPtr taskPtr = getTask(id);
+    taskPtr->setEnabled(bEnable);
+}
+
 /***********/
 /* GETTERS */
 /***********/
@@ -733,14 +739,18 @@ std::vector<WorkflowVertex> CWorkflow::getForwardPassTasks(const WorkflowVertex 
     }
 
     for(size_t i=0; i<childs.size(); ++i)
-        candidates.push_back(childs[i]);
+    {
+        WorkflowTaskPtr childTaskPtr = m_graph[childs[i]];
+        if (childTaskPtr->isEnabled())
+            candidates.push_back(childs[i]);
+    }
 
     while(candidates.size() > 0)
     {
         auto candidate = candidates.front();
         candidates.pop_front();
         WorkflowTaskPtr taskPtr = m_graph[candidate];
-        bool bValidTask = (!taskPtr->isSelfInput() || (taskPtr->isSelfInput() && !taskPtr->hasOutputData()));
+        bool bValidTask = (taskPtr->isEnabled() && (!taskPtr->isSelfInput() || (taskPtr->isSelfInput() && !taskPtr->hasOutputData())));
         auto parents = getParents(candidate);
         bool bValidParents = true;
 
@@ -762,7 +772,11 @@ std::vector<WorkflowVertex> CWorkflow::getForwardPassTasks(const WorkflowVertex 
             {
                 auto it = std::find(tasks.begin(), tasks.end(), neededParents[i]);
                 if(it == tasks.end())
-                    tasks.push_back(neededParents[i]);
+                {
+                    WorkflowTaskPtr parentTaskPtr = m_graph[neededParents[i]];
+                    if (parentTaskPtr->isEnabled())
+                        tasks.push_back(neededParents[i]);
+                }
             }
 
             //Add candidate task
@@ -785,7 +799,11 @@ std::vector<WorkflowVertex> CWorkflow::getForwardPassTasks(const WorkflowVertex 
             {
                 auto it = std::find(candidates.begin(), candidates.end(), childs[i]);
                 if(it == candidates.end())
-                    candidates.push_back(childs[i]);
+                {
+                    WorkflowTaskPtr childTaskPtr = m_graph[childs[i]];
+                    if (childTaskPtr->isEnabled())
+                        candidates.push_back(childs[i]);
+                }
             }
         }
     }

@@ -121,6 +121,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         void                            setAutoSave(bool bEnable);
         void                            setExposedParameter(const std::string& name, const std::string& value);
         void                            setExposedOutputDescription(const WorkflowVertex& id, int outputIndex, const std::string& description);
+        void                            setTaskEnabled(const WorkflowVertex& id, bool bEnable);
 
         //Getters
         std::string                     getDescription() const;

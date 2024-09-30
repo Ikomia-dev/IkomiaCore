@@ -247,6 +247,11 @@ class CORESHARED_EXPORT CWorkflowTask
          * @param bEnable: True or False.
          */
         void                        setAutoSave(bool bEnable);
+        /**
+         * @brief Enable/disable task for running.
+         * @param bEnable: True or False.
+         */
+        void                        setEnabled(bool bEnable);
 
         //Getters
         /**
@@ -431,6 +436,11 @@ class CORESHARED_EXPORT CWorkflowTask
          * @return  True or False.
          */
         bool                        isAutoSave() const;
+        /**
+         * @brief Check if the task is enabled for running.
+         * @return  True or False.
+         */
+        bool                        isEnabled() const;
 
         /**
          * @brief Checks if the task has output of the given data type.
@@ -679,6 +689,7 @@ class CORESHARED_EXPORT CWorkflowTask
         std::atomic<bool>                   m_bRunning{false};
         std::atomic<bool>                   m_bStop{false};
         bool                                m_bActive = false;
+        bool                                m_bEnabled = true;
         GraphicsContextPtr                  m_graphicsContextPtr = nullptr;
         ViewPropertiesIO                    m_inputViewProps;
         ViewPropertiesIO                    m_outputViewProps;
