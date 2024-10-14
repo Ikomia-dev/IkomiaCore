@@ -40,7 +40,7 @@ using CScene3dVectorFieldPtr = std::shared_ptr<CScene3dVectorField>;
 /**
  * @brief The CScene3dVectorField class represents a
  */
-class CScene3dVectorField : public CScene3dObject
+class DATAPROCESSSHARED_EXPORT CScene3dVectorField : public CScene3dObject
 {
 
 public:
