@@ -37,7 +37,7 @@ VectorString COpencvImageIO::fileNames(const SubsetBounds &bounds)
 
 CMat COpencvImageIO::read()
 {
-    CMat img = cv::imread(m_fileName, cv::IMREAD_UNCHANGED);
+    CMat img = cv::imread(m_fileName, cv::IMREAD_UNCHANGED ^ cv::IMREAD_IGNORE_ORIENTATION);
     int c = img.channels();
 
     if (c == 3)
@@ -130,7 +130,7 @@ Dimensions COpencvImageIO::dimensions(const SubsetBounds &bounds)
 
 CDataInfoPtr COpencvImageIO::dataInfo()
 {
-    cv::Mat img = cv::imread(m_fileName, cv::IMREAD_UNCHANGED);
+    cv::Mat img = cv::imread(m_fileName, cv::IMREAD_UNCHANGED ^ cv::IMREAD_IGNORE_ORIENTATION);
     auto pInfo = std::make_shared<CDataImageInfo>();
     pInfo->setFileName(m_fileName);
     pInfo->setCvType(img.type());
