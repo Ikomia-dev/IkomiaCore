@@ -1297,7 +1297,7 @@ namespace Ikomia
             }
             inline PluginState  getCppApiState(const std::string& minVersion, const std::string& maxVersion)
             {
-                const std::set<std::string> breakChanges = {"0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0", "0.6.1", "0.7.0", "0.8.0", "0.8.1", "0.9.0", "0.9.1", "0.10.0", "0.11.0"};
+                const std::set<std::string> breakChanges = {"0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0", "0.6.1", "0.7.0", "0.8.0", "0.8.1", "0.9.0", "0.9.1", "0.10.0", "0.11.0", "0.11.1"};
                 CSemanticVersion algoMinVersion(minVersion);
 
                 for(auto it=breakChanges.begin(); it!=breakChanges.end(); ++it)
