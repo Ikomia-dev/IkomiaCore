@@ -97,6 +97,7 @@ QJsonObject CObjectKeypoints::toJson() const
         pt["index"] = m_keypts[i].first;
         pt["x"] = m_keypts[i].second.m_x;
         pt["y"] = m_keypts[i].second.m_y;
+        pt["z"] = m_keypts[i].second.m_z;
         pts.append(pt);
     }
     obj["points"] = pts;
@@ -128,7 +129,9 @@ std::ostream& operator<<(std::ostream& os, const CObjectKeypoints& obj)
     os << "Keypoints: [";
     for (size_t i=0; i<obj.m_keypts.size(); ++i)
     {
-        os << std::to_string(obj.m_keypts[i].first) << ": " << "(" << std::to_string(obj.m_keypts[i].second.m_x) << "," << std::to_string(obj.m_keypts[i].second.m_y) << ")";
+        CPointF pt = obj.m_keypts[i].second;
+        os << std::to_string(obj.m_keypts[i].first) << ": " << "(" << std::to_string(pt.m_x) << "," << std::to_string(pt.m_y) << "," << std::to_string(pt.m_z) << ")";
+
         if (i < obj.m_keypts.size() - 1)
             os << ", ";
     }
@@ -341,6 +344,7 @@ void CKeypointsIO::addObject(int id, const std::string &label, double confidence
         keyptsInfo.push_back(keypts[i].first);
         keyptsInfo.push_back(keypts[i].second.m_x);
         keyptsInfo.push_back(keypts[i].second.m_y);
+        keyptsInfo.push_back(keypts[i].second.m_z);
     }
 
     objRes.emplace_back(CObjectMeasure(CMeasure(CMeasure::CUSTOM, QObject::tr("Identifier").toStdString()), id, graphicsObj->getId(), label));
@@ -567,7 +571,7 @@ void CKeypointsIO::fromJsonInternal(const QJsonDocument &doc)
         for (int i=0; i<jsonPts.size(); ++i)
         {
             QJsonObject pt = jsonPts[i].toObject();
-            keypts.push_back(std::make_pair(pt["index"].toInt(), CPointF(pt["x"].toDouble(), pt["y"].toDouble())));
+            keypts.push_back(std::make_pair(pt["index"].toInt(), CPointF(pt["x"].toDouble(), pt["y"].toDouble(), pt["z"].toDouble())));
         }
 
         addObject(id, label, confidence, x, y, width, height, keypts, color);

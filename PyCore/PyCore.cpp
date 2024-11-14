@@ -62,8 +62,10 @@ void exposeCPoint(const std::string& className)
 {
     class_<CPoint<T>>(className.c_str(), "Generic 2D point class.", init<>("Default constructor"))
         .def(init<T, T>(_ctorCPointDocString, args("self", "x", "y")))
+        .def(init<T, T, T>(_ctorCPointDocString, args("self", "x", "y", "z")))
         .add_property("x", &CPoint<T>::getX, &CPoint<T>::setX, "x-coordinate")
         .add_property("y", &CPoint<T>::getY, &CPoint<T>::setY, "y-coordinate")
+        .add_property("z", &CPoint<T>::getZ, &CPoint<T>::setZ, "z-coordinate")
     ;
 }
 

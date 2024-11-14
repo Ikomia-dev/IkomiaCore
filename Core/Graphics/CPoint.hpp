@@ -27,23 +27,31 @@ class CPoint
 
         CPoint()
         {
-            m_x = T();
-            m_y = T();
         }
         CPoint(T x, T y)
         {
             m_x = x;
             m_y = y;
         }
+        CPoint(const T& x, const T& y, const T& z)
+        {
+            m_x = x;
+            m_y = y;
+            m_z = z;
+        }
 
-        void setX(T x)
+        void setX(const T& x)
         {
             m_x = x;
         }
 
-        void setY(T y)
+        void setY(const T& y)
         {
             m_y = y;
+        }
+        void setZ(const T& z)
+        {
+            m_z = z;
         }
 
         T   getX() const
@@ -55,11 +63,16 @@ class CPoint
         {
             return m_y;
         }
+        T   getZ() const
+        {
+            return m_z;
+        }
 
     public:
 
         T m_x;
         T m_y;
+        T m_z;
 };
 
 using CPointI = CPoint<int>;
