@@ -2,7 +2,7 @@
 #define CINSTANCESEGFILTER_H
 
 #include "Task/CInstanceSegTask.h"
-#include "Task/CTaskFactory.hpp"
+#include "Core/CTaskFactory.hpp"
 #include "Workflow/CWorkflowTaskWidget.h"
 #include "Core/CWidgetFactory.hpp"
 

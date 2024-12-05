@@ -59,16 +59,16 @@ class CTaskFactory
         void                    setInfo(const CTaskInfo& info){ m_info = info; }
 
         /**
+         * @brief Pure virtual method to create new process task instance with default parameters.
+         * @return CWorkflowTask based shared pointer.
+         */
+        virtual WorkflowTaskPtr create() = 0;
+        /**
          * @brief Pure virtual method to create new process task instance with the given parameters.
          * @param pParam: CWorkflowTaskParam based shared pointer.
          * @return CWorkflowTask based shared pointer.
          */
         virtual WorkflowTaskPtr create(const WorkflowTaskParamPtr& pParam) = 0;
-        /**
-         * @brief Pure virtual method to create new process task instance with default parameters.
-         * @return CWorkflowTask based shared pointer.
-         */
-        virtual WorkflowTaskPtr create() = 0;
 
     protected:
 

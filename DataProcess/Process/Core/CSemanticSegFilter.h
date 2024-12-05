@@ -2,7 +2,7 @@
 #define CSEMANTICSEGFILTER_H
 
 #include "Task/CSemanticSegTask.h"
-#include "Task/CTaskFactory.hpp"
+#include "Core/CTaskFactory.hpp"
 #include "Workflow/CWorkflowTaskWidget.h"
 #include "Core/CWidgetFactory.hpp"
 

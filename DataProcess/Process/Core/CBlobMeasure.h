@@ -22,7 +22,7 @@
 #ifndef CBLOBMEASURE_HPP
 #define CBLOBMEASURE_HPP
 
-#include "Task/CTaskFactory.hpp"
+#include "Core/CTaskFactory.hpp"
 #include "Task/C2dImageTask.h"
 #include "IO/CVideoIO.h"
 #include "IO/CBlobMeasureIO.h"
