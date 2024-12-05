@@ -47,6 +47,18 @@ uint CWorkflowTaskParam::getHashValue() const
     return qHashRange(values.begin(), values.end());
 }
 
+void CWorkflowTaskParam::merge(const UMapString& newValues)
+{
+    // Allow partial update
+    UMapString params = getParamMap();
+    for (auto it=newValues.begin(); it!=newValues.end(); ++it)
+    {
+        if (params.find(it->first) != params.end())
+            params[it->first] = it->second;
+    }
+    setParamMap(params);
+}
+
 std::ostream& operator<<(std::ostream& os, const CWorkflowTaskParam& param)
 {
     param.to_ostream(os);
