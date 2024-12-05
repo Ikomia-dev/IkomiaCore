@@ -40,35 +40,61 @@ CProcessRegistration::~CProcessRegistration()
 }
 
 void CProcessRegistration::registerProcess(const std::shared_ptr<CTaskFactory>& pProcessFactory,
-                                           const std::shared_ptr<CWidgetFactory>& pWidgetFactory)
+                                           const std::shared_ptr<CWidgetFactory>& pWidgetFactory,
+                                           const std::shared_ptr<CTaskParamFactory> &pTaskParamFactory)
 {
     assert(pProcessFactory);
 
-    auto name = pProcessFactory->getInfo().getName();
+    // Register process factory
+    std::string name = pProcessFactory->getInfo().getName();
     if(m_processFactory.isCreatorExists(name) == true)
     {
         m_processFactory.unregisterCreator(name);
         m_processFactory.remove(name);
-        m_widgetFactory.unregisterCreator(name);
-        m_widgetFactory.remove(name);
     }
 
     m_processFactory.getList().push_back(pProcessFactory);
-    //Passage par lambda -> pFactory par valeur pour assurer la portée du pointeur
     auto pProcessFunc = [pProcessFactory](const WorkflowTaskParamPtr& param)
     {
+        //Passage par lambda -> pFactory par valeur pour assurer la portée du pointeur
         return pProcessFactory->create(param);
     };
     m_processFactory.registerCreator(pProcessFactory->getInfo().m_name, pProcessFunc);
 
+    // Register widget factory
     if(pWidgetFactory)
     {
+        name = pWidgetFactory->getName();
+        if(m_widgetFactory.isCreatorExists(name) == true)
+        {
+            m_widgetFactory.unregisterCreator(name);
+            m_widgetFactory.remove(name);
+        }
+
         m_widgetFactory.getList().push_back(pWidgetFactory);
         auto pWidgetFunc = [pWidgetFactory](const WorkflowTaskParamPtr& param)
         {
             return pWidgetFactory->create(param);
         };
-        m_widgetFactory.registerCreator(pWidgetFactory->getName(), pWidgetFunc);
+        m_widgetFactory.registerCreator(name, pWidgetFunc);
+    }
+
+    // Register param factory
+    if (pTaskParamFactory)
+    {
+        name = pTaskParamFactory->getName();
+        if(m_paramFactory.isCreatorExists(name) == true)
+        {
+            m_paramFactory.unregisterCreator(name);
+            m_paramFactory.remove(name);
+        }
+
+        m_paramFactory.getList().push_back(pTaskParamFactory);
+        auto pParamFunc = [pTaskParamFactory]()
+        {
+            return pTaskParamFactory->create();
+        };
+        m_paramFactory.registerCreator(name, pParamFunc);
     }
 
     //Pour mémoire
@@ -81,6 +107,7 @@ void CProcessRegistration::unregisterProcess(const std::string &name)
 {
     m_processFactory.remove(name);
     m_widgetFactory.remove(name);
+    m_paramFactory.remove(name);
 }
 
 WorkflowTaskPtr CProcessRegistration::createProcessObject(const std::string &name, const WorkflowTaskParamPtr &paramPtr)
@@ -111,10 +138,25 @@ WorkflowTaskWidgetPtr CProcessRegistration::createWidgetObject(const std::string
     return widgetPtr;
 }
 
+WorkflowTaskParamPtr CProcessRegistration::createParamObject(const std::string &name)
+{
+    WorkflowTaskParamPtr paramPtr = nullptr;
+    try
+    {
+        paramPtr = m_paramFactory.createObject(name);
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException());
+    }
+    return paramPtr;
+}
+
 void CProcessRegistration::reset()
 {
     m_processFactory.getList().clear();
     m_widgetFactory.getList().clear();
+    m_paramFactory.getList().clear();
     registerCore();
     registerOpenCV();
     registerGmic();
@@ -233,7 +275,7 @@ void CProcessRegistration::registerCvImgproc()
 {
     registerProcess(std::make_shared<COcvAdaptiveThresholdFactory>(), std::make_shared<COcvWidgetAdaptiveThresholdFactory>());
     registerProcess(std::make_shared<COcvBilateralFactory>(), std::make_shared<COcvWidgetBilateralFactory>());
-    registerProcess(std::make_shared<COcvBlurFactory>(), std::make_shared<COcvWidgetBlurFactory>());
+    registerProcess(std::make_shared<COcvBlurFactory>(), std::make_shared<COcvWidgetBlurFactory>(), std::make_shared<COcvBlurParamFactory>());
     registerProcess(std::make_shared<COcvBoxFilterFactory>(), std::make_shared<COcvWidgetBoxFilterFactory>());
     registerProcess(std::make_shared<COcvCalcHistFactory>(), std::make_shared<COcvWidgetCalcHistFactory>());
     registerProcess(std::make_shared<COcvCannyFactory>(), std::make_shared<COcvWidgetCannyFactory>());

@@ -23,7 +23,7 @@
 #define CTASKFACTORYWRAP_H
 
 #include "PyDataProcessGlobal.h"
-#include "Task/CTaskFactory.hpp"
+#include "Core/CTaskFactory.hpp"
 
 class CTaskFactoryWrap: public CTaskFactory, public wrapper<CTaskFactory>
 {

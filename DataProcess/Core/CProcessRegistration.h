@@ -23,8 +23,9 @@
 #define CPROCESSREGISTRATION_H
 
 #include "DataProcessGlobal.hpp"
-#include "Task/CTaskFactory.hpp"
+#include "Core/CTaskFactory.hpp"
 #include "Core/CWidgetFactory.hpp"
+#include "Core/CTaskParamFactory.hpp"
 
 class DATAPROCESSSHARED_EXPORT CProcessRegistration
 {
@@ -39,12 +40,14 @@ class DATAPROCESSSHARED_EXPORT CProcessRegistration
         CTaskInfo                       getProcessInfo(const std::string& name) const;
 
         void                            registerProcess(const std::shared_ptr<CTaskFactory>& pProcessFactory,
-                                                        const std::shared_ptr<CWidgetFactory> &pWidgetFactory);
+                                                        const std::shared_ptr<CWidgetFactory> &pWidgetFactory,
+                                                        const std::shared_ptr<CTaskParamFactory>& pTaskParamFactory = nullptr);
 
         void                            unregisterProcess(const std::string& name);
 
         WorkflowTaskPtr                 createProcessObject(const std::string& name, const WorkflowTaskParamPtr& paramPtr);
         WorkflowTaskWidgetPtr           createWidgetObject(const std::string& name, const WorkflowTaskParamPtr& paramPtr);
+        WorkflowTaskParamPtr            createParamObject(const std::string& name);
 
         void                            reset();
 
@@ -76,6 +79,7 @@ class DATAPROCESSSHARED_EXPORT CProcessRegistration
 
         CTaskAbstractFactory            m_processFactory;
         CWidgetAbstractFactory          m_widgetFactory;
+        CTaskParamAbstractFactory       m_paramFactory;
 };
 
 #endif // CPROCESSREGISTRATION_H

@@ -231,6 +231,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
     class_<CPluginProcessInterfaceWrap, boost::noncopyable>("CPluginProcessInterface", _pluginInterfaceDocString)
         .def("get_process_factory", pure_virtual(&CPluginProcessInterface::getProcessFactory), _getProcessFactoryDocString, args("self"))
         .def("get_widget_factory", pure_virtual(&CPluginProcessInterface::getWidgetFactory), _getWidgetFactoryDocString, args("self"))
+        .def("get_param_factory", pure_virtual(&CPluginProcessInterface::getParamFactory), _getParamFactoryDocString, args("self"))
     ;
 
     //--------------------------//
@@ -1068,6 +1069,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
     //---------------------------//
     WorkflowTaskPtr (CIkomiaRegistry::*createInstance1)(const std::string&) = &CIkomiaRegistry::createInstance;
     WorkflowTaskPtr (CIkomiaRegistry::*createInstance2)(const std::string&, const WorkflowTaskParamPtr&) = &CIkomiaRegistry::createInstance;
+    WorkflowTaskPtr (CIkomiaRegistry::*createInstance3)(const std::string&, const UMapString&) = &CIkomiaRegistry::createInstance;
 
     class_<CIkomiaRegistryWrap, std::shared_ptr<CIkomiaRegistryWrap>, boost::noncopyable>("CIkomiaRegistry", _ikomiaRegistryDocString)
         .def(init<>("Default constructor", args("self")))
@@ -1078,6 +1080,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("is_all_loaded", &CIkomiaRegistry::isAllLoaded, _isAllLoadedDocString, args("self"))
         .def("create_instance", createInstance1, _createInstance1DocString, args("self", "name"))
         .def("create_instance", createInstance2, _createInstance2DocString, args("self", "name", "parameters"))
+        .def("create_instance", createInstance3, _createInstance3DocString, args("self", "name", "parameters"))
         .def("register_task", &CIkomiaRegistry::registerTask, _registerTaskDocString, args("self", "factory"))
         .def("register_io", &CIkomiaRegistry::registerIO, _registerIODocString, args("self", "factory"))
         .def("load_algorithms", &CIkomiaRegistry::loadPlugins, _loadPluginsDocString, args("self"))

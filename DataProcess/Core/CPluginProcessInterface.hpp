@@ -20,8 +20,9 @@
 #ifndef CPROCESSWIDGETINTERFACE_HPP
 #define CPROCESSWIDGETINTERFACE_HPP
 
-#include "Task/CTaskFactory.hpp"
+#include "Core/CTaskFactory.hpp"
 #include "Core/CWidgetFactory.hpp"
+#include "Core/CTaskParamFactory.hpp"
 
 /**
  * @ingroup groupDataProcess
@@ -39,12 +40,21 @@ class CPluginProcessInterface
          * @brief Pure virtual method that gets the process task factory.
          * @return CTaskFactory based shared pointer.
          */
-        virtual std::shared_ptr<CTaskFactory>        getProcessFactory() = 0;
+        virtual std::shared_ptr<CTaskFactory>   getProcessFactory() = 0;
         /**
          * @brief Pure virtual method that gets the process widget factory.
          * @return CWidgetFactory based shared pointer.
          */
-        virtual std::shared_ptr<CWidgetFactory>         getWidgetFactory() = 0;
+        virtual std::shared_ptr<CWidgetFactory> getWidgetFactory() = 0;
+        /**
+         * @brief Virtual method that gets the process parameters factory.
+         * @brief Optional since the feature is introduced from 0.13.0.
+         * @return CTaskParamFactory based shared pointer.
+         */
+        virtual std::shared_ptr<CTaskParamFactory> getParamFactory()
+        {
+            return nullptr;
+        }
 };
 
 #define ProcessPlugin_iid  "ikomia.plugin.process"
