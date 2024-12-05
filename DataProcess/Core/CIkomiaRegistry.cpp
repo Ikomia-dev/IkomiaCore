@@ -157,13 +157,18 @@ WorkflowTaskPtr CIkomiaRegistry::createInstance(const std::string &processName, 
 {
     auto paramPtr = m_processRegistrator.createParamObject(processName);
     if (paramPtr)
+    {
         paramPtr->merge(paramValues);
+        return m_processRegistrator.createProcessObject(processName, paramPtr);
+    }
     else
     {
-        std::string msg = processName + " does not implement parameter factory class. Given parameters will be ignored.";
+        auto taskPtr = m_processRegistrator.createProcessObject(processName, paramPtr);
+        taskPtr->setParamValues(paramValues);
+        std::string msg = processName + " does not implement parameter factory class. Given parameters will be set after constructor.";
         Utils::print(msg, QtMsgType::QtWarningMsg);
+        return taskPtr;
     }
-    return m_processRegistrator.createProcessObject(processName, paramPtr);
 }
 
 WorkflowTaskWidgetPtr CIkomiaRegistry::createWidgetInstance(const std::string &processName, const WorkflowTaskParamPtr &paramPtr)

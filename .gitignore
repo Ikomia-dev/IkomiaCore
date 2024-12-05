@@ -9,6 +9,7 @@ IkomiaCore.pro.user
 LocalSettings.pri
 LocalSettings.cmake
 CMakeLists.txt.user
+CMakeLists.txt.user.*
 Build
 Doc/API/html
 Doc/API/latex
