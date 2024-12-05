@@ -60,6 +60,21 @@ class COcvBlurParam: public CWorkflowTaskParam
         int         m_borderType = cv::BORDER_DEFAULT;
 };
 
+class COcvBlurParamFactory: public CTaskParamFactory
+{
+    public:
+
+        COcvBlurParamFactory()
+        {
+            m_name = "ocv_blur";
+        }
+
+        WorkflowTaskParamPtr create()
+        {
+            return std::make_shared<COcvBlurParam>();
+        }
+};
+
 //--------------------//
 //----- COcvBlur -----//
 //--------------------//
