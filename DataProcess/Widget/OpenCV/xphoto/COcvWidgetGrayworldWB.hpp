@@ -33,7 +33,7 @@ class COcvWidgetGrayworldWB : public CWorkflowTaskWidget
         {
             init();
         }
-        COcvWidgetGrayworldWB(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetGrayworldWB(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvGrayworldWBParam>(pParam);
             init();
@@ -75,7 +75,7 @@ class COcvWidgetGrayworldWBFactory : public CWidgetFactory
             m_name = "ocv_grayworld_wb";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetGrayworldWB>(pParam);
         }

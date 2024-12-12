@@ -36,7 +36,7 @@ class COcvWidgetDeepFlow : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetDeepFlow(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetDeepFlow(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvDeepFlowParam>(pParam);
             init();
@@ -73,7 +73,7 @@ class COcvWidgetDeepFlowFactory : public CWidgetFactory
             m_name = "ocv_deepflow";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetDeepFlow>(pParam);
         }

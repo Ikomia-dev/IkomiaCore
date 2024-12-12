@@ -32,7 +32,7 @@ class COcvWidgetBckgndSubLsbp : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetBckgndSubLsbp(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetBckgndSubLsbp(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvBckgndSubLsbpParam>(pParam);
             init();
@@ -109,7 +109,7 @@ class COcvWidgetBckgndSubLsbpFactory : public CWidgetFactory
             m_name = "ocv_bck_substractor_lspb";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetBckgndSubLsbp>(pParam);
         }

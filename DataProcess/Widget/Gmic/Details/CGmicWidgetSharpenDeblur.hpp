@@ -32,7 +32,7 @@ class CGmicWidgetSharpenDeblur : public CWorkflowTaskWidget
             init();
         }
 
-        CGmicWidgetSharpenDeblur(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        CGmicWidgetSharpenDeblur(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<CGmicSharpenDeblurParam>(pParam);
             init();
@@ -97,7 +97,7 @@ class CGmicWidgetSharpenDeblurFactory : public CWidgetFactory
             m_name = "gmic_sharpen_deblur";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<CGmicWidgetSharpenDeblur>(pParam);
         }

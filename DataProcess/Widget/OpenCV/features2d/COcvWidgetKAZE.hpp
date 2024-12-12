@@ -36,7 +36,7 @@ class COcvWidgetKAZE : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetKAZE(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetKAZE(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvKAZEParam>(pParam);
             init();
@@ -117,7 +117,7 @@ class COcvWidgetKAZEFactory : public CWidgetFactory
             m_name = "ocv_kaze";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetKAZE>(pParam);
         }

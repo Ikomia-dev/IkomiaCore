@@ -297,12 +297,10 @@ BOOST_PYTHON_MODULE(pycore)
     //----- CWorkflowTaskParam -----//
     //------------------------------//
     class_<CWorkflowTaskParamWrap, std::shared_ptr<CWorkflowTaskParamWrap>>("CWorkflowTaskParam", _WorkflowTaskParamDocString)
-        .enable_pickling()
         .def(init<>("Default constructor", args("self")))
         .def(init<const CWorkflowTaskParam&>("Copy constructor", args("self")))
         .def(self_ns::str(self_ns::self))
-        .def("__copy__", &generic_copy<CWorkflowTaskParamWrap>)
-        .def("__deepcopy__", &generic_shared_ptr_deepcopy<CWorkflowTaskParamWrap>)
+        .def_pickle(TaskParamPickleSuite())
         .def("set_values", &CWorkflowTaskParam::setParamMap, &CWorkflowTaskParamWrap::default_setParamMap, _setParamMapDocString, args("self", "params"))
         .def("get_values", &CWorkflowTaskParam::getParamMap, &CWorkflowTaskParamWrap::default_getParamMap, _getParamMapDocString, args("self"))
         .def("get_hash_value", &CWorkflowTaskParam::getHashValue, &CWorkflowTaskParamWrap::default_getHashValue, _getHashValueDocString, args("self"))

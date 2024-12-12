@@ -31,7 +31,7 @@ class COcvWidgetGraphSegmentation : public CWorkflowTaskWidget
         {
             init();
         }
-        COcvWidgetGraphSegmentation(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetGraphSegmentation(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvGraphSegmentationParam>(pParam);
             init();
@@ -74,7 +74,7 @@ class COcvWidgetGraphSegmentationFactory : public CWidgetFactory
             m_name = "ocv_graph_segmentation";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetGraphSegmentation>(pParam);
         }

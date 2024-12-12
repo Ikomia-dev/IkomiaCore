@@ -35,7 +35,7 @@ class COcvWidgetQRCodeDetector : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetQRCodeDetector(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetQRCodeDetector(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvQRCodeDetectorParam>(pParam);
             init();
@@ -75,7 +75,7 @@ class COcvWidgetQRCodeDetectorFactory : public CWidgetFactory
             m_name = "ocv_qrcode_detector";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetQRCodeDetector>(pParam);
         }

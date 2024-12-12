@@ -32,7 +32,7 @@ class CGmicWidgetAutoBalance : public CWorkflowTaskWidget
             init();
         }
 
-        CGmicWidgetAutoBalance(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        CGmicWidgetAutoBalance(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<CGmicAutoBalanceParam>(pParam);
             init();
@@ -90,7 +90,7 @@ class CGmicWidgetAutoBalanceFactory : public CWidgetFactory
             m_name = "gmic_auto_balance";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<CGmicWidgetAutoBalance>(pParam);
         }

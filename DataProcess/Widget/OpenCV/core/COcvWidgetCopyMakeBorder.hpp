@@ -32,7 +32,7 @@ class COcvWidgetCopyMakeBorder : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetCopyMakeBorder(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetCopyMakeBorder(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvCopyMakeBorderParam>(pParam);
             init();
@@ -91,7 +91,7 @@ class COcvWidgetCopyMakeBorderFactory : public CWidgetFactory
             m_name = "ocv_copy_make_border";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetCopyMakeBorder>(pParam);
         }

@@ -32,7 +32,7 @@ class COcvWidgetBckgndSubCnt : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetBckgndSubCnt(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetBckgndSubCnt(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvBckgndSubCntParam>(pParam);
             init();
@@ -98,7 +98,7 @@ class COcvWidgetBckgndSubCntFactory : public CWidgetFactory
             m_name = "ocv_bck_substractor_cnt";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetBckgndSubCnt>(pParam);
         }

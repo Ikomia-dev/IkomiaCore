@@ -32,7 +32,7 @@ class CGmicWidgetDoG : public CWorkflowTaskWidget
             init();
         }
 
-        CGmicWidgetDoG(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        CGmicWidgetDoG(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<CGmicDoGParam>(pParam);
             init();
@@ -81,7 +81,7 @@ class CGmicWidgetDoGFactory : public CWidgetFactory
             m_name = "gmic_diff_of_gaussians";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<CGmicWidgetDoG>(pParam);
         }

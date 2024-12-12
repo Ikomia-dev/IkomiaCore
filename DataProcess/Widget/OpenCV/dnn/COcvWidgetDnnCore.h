@@ -30,7 +30,7 @@ class DATAPROCESSSHARED_EXPORT COcvWidgetDnnCore : public CWorkflowTaskWidget
     public:
 
         COcvWidgetDnnCore(QWidget *parent = Q_NULLPTR);
-        COcvWidgetDnnCore(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR);
+        COcvWidgetDnnCore(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR);
 
     protected:
 

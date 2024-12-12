@@ -33,7 +33,7 @@ class COcvWidgetFlip : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetFlip(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetFlip(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvFlipParam>(pParam);
             init();
@@ -101,7 +101,7 @@ class COcvWidgetFlipFactory : public CWidgetFactory
             m_name = "ocv_flip";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetFlip>(pParam);
         }

@@ -2,7 +2,7 @@
 #define COBJDETECTFILTER_H
 
 #include "Task/CObjectDetectionTask.h"
-#include "Task/CTaskFactory.hpp"
+#include "Core/CTaskFactory.hpp"
 #include "Workflow/CWorkflowTaskWidget.h"
 #include "Core/CWidgetFactory.hpp"
 
@@ -70,7 +70,7 @@ class CWidgetObjDetectFilter : public CWorkflowTaskWidget
     public:
 
         CWidgetObjDetectFilter(QWidget *parent = Q_NULLPTR);
-        CWidgetObjDetectFilter(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR);
+        CWidgetObjDetectFilter(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR);
 
     protected:
 
@@ -95,7 +95,7 @@ class CWidgetObjDetectFilterFactory : public CWidgetFactory
         CWidgetObjDetectFilterFactory();
         ~CWidgetObjDetectFilterFactory() = default;
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam);
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam);
 };
 
 #endif // COBJDETECTFILTER_H

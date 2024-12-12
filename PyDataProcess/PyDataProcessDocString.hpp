@@ -67,6 +67,24 @@ constexpr auto _create2DocString =
         "Returns:\n\n"
         "   :py:class:`~ikomia.core.pycore.CWorkflowTask` based object: task instance\n\n";
 
+//-----------------------------//
+//----- CTaskParamFactory -----//
+//-----------------------------//
+constexpr auto _taskParamFactoryDocString =
+    "Abstract class defining the core structure of the parameters factory. "
+    "The system extensibility for the task library is based on the factory design pattern. "
+    "Each task could implement a parameter factory class derived from this class. "
+    "Then the system is able to instantiate dynamically a task with given parameters.\n\n";
+
+constexpr auto _taskParamFactoryNameDocString =
+    "Name of the associated task. This name must be the same of the one set in the task class.\n\n";
+
+constexpr auto _createTaskParamDocString =
+    "Pure virtual method to create new task parameter instance. "
+    "Should be implemented.\n\n"
+    "Returns:\n\n"
+    "   :py:class:`~ikomia.core.pycore.CWorkflowTaskParam` based object: task parameter instance\n\n";
+
 //--------------------------//
 //----- CWidgetFactory -----//
 //--------------------------//
@@ -108,6 +126,12 @@ constexpr auto _getWidgetFactoryDocString =
         "Must be implemented.\n\n"
         "Returns:\n\n"
         "   factory: :py:class:`CWidgetFactory` based object\n\n";
+
+constexpr auto _getParamFactoryDocString =
+    "Pure virtual method that returns instance of a task parameters factory object. "
+    "Must be implemented.\n\n"
+    "Returns:\n\n"
+    "   factory: :py:class:`CTaskParamFactory` based object\n\n";
 
 //--------------------------//
 //----- CObjectMeasure -----//
@@ -2190,6 +2214,16 @@ constexpr auto _createInstance2DocString =
         "   parameters object(:py:class:`~ikomia.core.pycore.CWorkflowTaskParam`): associated parameters\n\n"
         "Returns:\n\n"
         "   :py:class:`~ikomia.core.pycore.CWorkflowTask` or derived: algorithm instance\n\n";
+
+constexpr auto _createInstance3DocString =
+    "Instanciate algorithm of the Ikomia registry from its name with the given parameters.\n"
+    "The full list of available algorithms can be retrieved using "
+    ":py:meth:`~ikomia.dataprocess.pydataprocess.CIkomiaRegistry.get_algorithms`.\n\n"
+    "Args:\n\n"
+    "   algorithm name(str): unique name\n\n"
+    "   parameters object(dict): associated parameters\n\n"
+    "Returns:\n\n"
+    "   :py:class:`~ikomia.core.pycore.CWorkflowTask` or derived: algorithm instance\n\n";
 
 constexpr auto _registerTaskDocString =
         "Add new algorithm factory to Ikomia registry.\n"

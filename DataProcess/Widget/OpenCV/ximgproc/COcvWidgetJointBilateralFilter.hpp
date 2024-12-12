@@ -31,7 +31,7 @@ class COcvWidgetJointBilateralFilter : public CWorkflowTaskWidget
         {
             init();
         }
-        COcvWidgetJointBilateralFilter(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetJointBilateralFilter(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvJointBilateralFilterParam>(pParam);
             init();
@@ -87,7 +87,7 @@ class COcvWidgetJointBilateralFilterFactory : public CWidgetFactory
             m_name = "ocv_joint_bilateral_filter";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetJointBilateralFilter>(pParam);
         }

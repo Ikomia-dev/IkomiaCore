@@ -38,7 +38,7 @@ class COcvWidgetHfsSegment : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetHfsSegment(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetHfsSegment(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvHfsSegmentParam>(pParam);
             init();
@@ -150,7 +150,7 @@ class COcvWidgetHfsSegmentFactory : public CWidgetFactory
             m_name = "ocv_hierarchical_feature_selection";
         }
 
-        virtual WorkflowTaskWidgetPtr create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_unique<COcvWidgetHfsSegment>(pParam);
         }

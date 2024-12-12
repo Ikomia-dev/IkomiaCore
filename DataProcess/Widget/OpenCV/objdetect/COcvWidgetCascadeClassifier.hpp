@@ -35,7 +35,7 @@ class COcvWidgetCascadeClassifier : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetCascadeClassifier(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetCascadeClassifier(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvCascadeClassifierParam>(pParam);
             init();
@@ -127,7 +127,7 @@ class COcvWidgetCascadeClassifierFactory : public CWidgetFactory
             m_name = "ocv_cascade_classifier";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetCascadeClassifier>(pParam);
         }

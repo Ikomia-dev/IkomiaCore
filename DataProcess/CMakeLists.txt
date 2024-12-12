@@ -12,6 +12,8 @@ add_library(ikDataProcess SHARED
     Core/CPluginTools.h
     Core/CRunTaskManager.cpp
     Core/CRunTaskManager.h
+    Core/CTaskFactory.hpp
+    Core/CTaskParamFactory.hpp
     Core/CWidgetFactory.hpp
     Core/CWorkflow.cpp
     Core/CWorkflow.h
@@ -286,7 +288,6 @@ add_library(ikDataProcess SHARED
     Task/CObjectDetectionTask.h
     Task/CSemanticSegTask.cpp
     Task/CSemanticSegTask.h
-    Task/CTaskFactory.hpp
     Task/CTaskInfo.cpp
     Task/CTaskInfo.h
     Task/CVideoOFTask.cpp
@@ -483,6 +484,8 @@ set(PUBLIC_HEADERS
 
 set(PUBLIC_HEADERS_CORE
     Core/CPluginProcessInterface.hpp
+    Core/CTaskFactory.hpp
+    Core/CTaskParamFactory.hpp
     Core/CWorkflow.h
     Core/CWidgetFactory.hpp
     Core/CRunTaskManager.h
@@ -524,7 +527,6 @@ set(PUBLIC_HEADERS_PROCESS
 )
 
 set(PUBLIC_HEADERS_TASK
-    Task/CTaskFactory.hpp
     Task/C2dImageInteractiveTask.h
     Task/C2dImageTask.h
     Task/CVideoTask.h

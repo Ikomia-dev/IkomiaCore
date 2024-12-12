@@ -36,7 +36,7 @@ class COcvWidgetDISOF : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetDISOF(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetDISOF(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvDISOFParam>(pParam);
             init();
@@ -80,7 +80,7 @@ class COcvWidgetDISOFFactory : public CWidgetFactory
             m_name = "ocv_dis_flow";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetDISOF>(pParam);
         }

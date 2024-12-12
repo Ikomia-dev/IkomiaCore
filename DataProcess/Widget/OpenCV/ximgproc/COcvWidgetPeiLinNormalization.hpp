@@ -30,7 +30,7 @@ class COcvWidgetPeiLinNormalization : public CWorkflowTaskWidget
         {
             init();
         }
-        COcvWidgetPeiLinNormalization(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetPeiLinNormalization(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvPeiLinNormalizationParam>(pParam);
             init();
@@ -78,7 +78,7 @@ class COcvWidgetPeiLinNormalizationFactory : public CWidgetFactory
             m_name = "ocv_pei_lin_normalization";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetPeiLinNormalization>(pParam);
         }

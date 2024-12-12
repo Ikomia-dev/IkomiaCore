@@ -22,7 +22,7 @@
 #ifndef CBINARYTOGRAPHICS_H
 #define CBINARYTOGRAPHICS_H
 
-#include "Task/CTaskFactory.hpp"
+#include "Core/CTaskFactory.hpp"
 #include "Task/C2dImageTask.h"
 
 //----------------------------------//

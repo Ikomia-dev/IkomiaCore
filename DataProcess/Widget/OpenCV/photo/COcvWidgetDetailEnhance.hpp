@@ -35,7 +35,7 @@ class COcvWidgetDetailEnhance : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetDetailEnhance(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetDetailEnhance(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvDetailEnhanceParam>(pParam);
             init();
@@ -91,7 +91,7 @@ class COcvWidgetDetailEnhanceFactory : public CWidgetFactory
             m_name = "ocv_detail_enhance_filter";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetDetailEnhance>(pParam);
         }

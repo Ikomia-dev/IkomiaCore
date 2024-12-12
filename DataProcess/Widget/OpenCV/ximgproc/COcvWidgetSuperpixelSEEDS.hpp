@@ -36,7 +36,7 @@ class COcvWidgetSuperpixelSEEDS : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetSuperpixelSEEDS(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetSuperpixelSEEDS(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvSuperpixelSEEDSParam>(pParam);
             init();
@@ -85,7 +85,7 @@ class COcvWidgetSuperpixelSEEDSFactory : public CWidgetFactory
             m_name = "ocv_superpixel_seeds";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetSuperpixelSEEDS>(pParam);
         }

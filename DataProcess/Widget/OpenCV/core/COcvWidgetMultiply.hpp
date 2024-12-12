@@ -33,7 +33,7 @@ class COcvWidgetMultiply : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetMultiply(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetMultiply(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvMultiplyParam>(pParam);
             init();
@@ -79,7 +79,7 @@ class COcvWidgetMultiplyFactory : public CWidgetFactory
             m_name = "ocv_multiply";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetMultiply>(pParam);
         }

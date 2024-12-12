@@ -22,7 +22,7 @@
 #ifndef CGRAPHICSTOBINARY_H
 #define CGRAPHICSTOBINARY_H
 
-#include "Task/CTaskFactory.hpp"
+#include "Core/CTaskFactory.hpp"
 #include "Task/C2dImageTask.h"
 
 //----------------------------------//

@@ -37,7 +37,7 @@ class COcvWidgetDistanceTransform : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetDistanceTransform(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetDistanceTransform(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvDistanceTransformParam>(pParam);
             init();
@@ -121,7 +121,7 @@ class COcvWidgetDistanceTransformFactory : public CWidgetFactory
             m_name = "ocv_distance_transform";
         }
 
-        virtual WorkflowTaskWidgetPtr create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_unique<COcvWidgetDistanceTransform>(pParam);
         }

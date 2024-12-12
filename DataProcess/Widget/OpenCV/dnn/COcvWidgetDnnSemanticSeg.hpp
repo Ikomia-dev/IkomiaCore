@@ -31,7 +31,7 @@ class COcvWidgetDnnSemanticSeg: public COcvWidgetDnnProcess
         {
             init();
         }
-        COcvWidgetDnnSemanticSeg(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : COcvWidgetDnnProcess(pParam, parent)
+        COcvWidgetDnnSemanticSeg(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : COcvWidgetDnnProcess(pParam, parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvDnnSemanticSegParam>(pParam);
             init();
@@ -102,7 +102,7 @@ class COcvWidgetDnnSegmentationFactory : public CWidgetFactory
             m_name = "ocv_dnn_semantic_segmentation";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetDnnSemanticSeg>(pParam);
         }

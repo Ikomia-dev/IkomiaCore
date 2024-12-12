@@ -36,7 +36,7 @@ class COcvWidgetDualTVL1OF : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetDualTVL1OF(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetDualTVL1OF(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvDualTVL1OFParam>(pParam);
             init();
@@ -107,7 +107,7 @@ class COcvWidgetDualTVL1OFFactory : public CWidgetFactory
             m_name = "ocv_dual_tvl1_flow";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetDualTVL1OF>(pParam);
         }

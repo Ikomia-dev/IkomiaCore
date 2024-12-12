@@ -33,7 +33,7 @@ class COcvWidgetAdd : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetAdd(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetAdd(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvAddParam>(pParam);
             init();
@@ -76,7 +76,7 @@ class COcvWidgetAddFactory : public CWidgetFactory
             m_name = "ocv_add";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetAdd>(pParam);
         }

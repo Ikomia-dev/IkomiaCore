@@ -30,7 +30,7 @@ class COcvWidgetSaliencySpectralResidual : public CWidgetApplyOnly
         {
         }
 
-        COcvWidgetSaliencySpectralResidual(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
+        COcvWidgetSaliencySpectralResidual(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
         {
         }
 };
@@ -44,7 +44,7 @@ class COcvWidgetSaliencySpectralResidualFactory : public CWidgetFactory
             m_name = "ocv_static_saliency_spectral_residual";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetSaliencySpectralResidual>(pParam);
         }

@@ -33,7 +33,7 @@ class COcvWidgetBFMatcher : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetBFMatcher(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetBFMatcher(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvBFMatcherParam>(pParam);
             init();
@@ -84,7 +84,7 @@ class COcvWidgetBFMatcherFactory : public CWidgetFactory
             m_name = "ocv_bf_matcher";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetBFMatcher>(pParam);
         }

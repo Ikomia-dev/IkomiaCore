@@ -42,6 +42,7 @@ class CORESHARED_EXPORT CWorkflowTaskParam
         * @brief Default constructor
         */
         CWorkflowTaskParam();
+        CWorkflowTaskParam(const UMapString& cfg);
         virtual ~CWorkflowTaskParam() = default;
 
         /**
@@ -60,6 +61,8 @@ class CORESHARED_EXPORT CWorkflowTaskParam
          * The system uses this method de determine if process configuration has changed.
          */
         virtual uint        getHashValue() const;
+
+        void                merge(const UMapString &newValues);
 
         friend CORESHARED_EXPORT std::ostream& operator<<(std::ostream& os, const CWorkflowTaskParam& param);
 

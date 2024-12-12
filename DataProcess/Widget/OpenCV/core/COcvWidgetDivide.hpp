@@ -33,7 +33,7 @@ class COcvWidgetDivide : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetDivide(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetDivide(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvDivideParam>(pParam);
             init();
@@ -79,7 +79,7 @@ class COcvWidgetDivideFactory : public CWidgetFactory
             m_name = "ocv_divide";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetDivide>(pParam);
         }

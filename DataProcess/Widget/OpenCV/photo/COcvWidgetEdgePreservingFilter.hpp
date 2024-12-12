@@ -32,7 +32,7 @@ class COcvWidgetEdgePreservingFilter : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetEdgePreservingFilter(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetEdgePreservingFilter(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvEdgePreservingFilterParam>(pParam);
             init();
@@ -96,7 +96,7 @@ class COcvWidgetEdgePreservingFilterFactory : public CWidgetFactory
             m_name = "ocv_detail_enhance_filter";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetEdgePreservingFilter>(pParam);
         }

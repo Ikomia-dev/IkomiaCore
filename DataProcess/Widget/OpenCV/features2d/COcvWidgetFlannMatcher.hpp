@@ -33,7 +33,7 @@ class COcvWidgetFlannMatcher : public CWidgetApplyOnly
         {
         }
 
-        COcvWidgetFlannMatcher(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
+        COcvWidgetFlannMatcher(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
         {
         }
 
@@ -51,7 +51,7 @@ class COcvWidgetFlannMatcherFactory : public CWidgetFactory
             m_name = "ocv_flann_based_matcher";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetFlannMatcher>(pParam);
         }

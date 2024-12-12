@@ -36,7 +36,7 @@ class COcvWidgetPCAOF : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetPCAOF(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetPCAOF(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvPCAOFParam>(pParam);
             init();
@@ -93,7 +93,7 @@ class COcvWidgetPCAOFFactory : public CWidgetFactory
             m_name = "ocv_pca_flow";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetPCAOF>(pParam);
         }

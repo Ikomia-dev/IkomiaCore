@@ -32,7 +32,7 @@ class COcvWidgetSelectiveSearchSegmentation : public CWorkflowTaskWidget
             init();
             initConnections();
         }
-        COcvWidgetSelectiveSearchSegmentation(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetSelectiveSearchSegmentation(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvSelectiveSearchSegmentationParam>(pParam);
             init();
@@ -229,7 +229,7 @@ class COcvWidgetSelectiveSearchSegmentationFactory : public CWidgetFactory
             m_name = "ocv_selective_search_segmentation";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetSelectiveSearchSegmentation>(pParam);
         }

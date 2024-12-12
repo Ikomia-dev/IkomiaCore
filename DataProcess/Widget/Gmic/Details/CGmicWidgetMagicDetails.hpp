@@ -32,7 +32,7 @@ class CGmicWidgetMagicDetails : public CWorkflowTaskWidget
             init();
         }
 
-        CGmicWidgetMagicDetails(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        CGmicWidgetMagicDetails(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<CGmicMagicDetailsParam>(pParam);
             init();
@@ -89,7 +89,7 @@ class CGmicWidgetMagicDetailsFactory : public CWidgetFactory
             m_name = "gmic_magic_details";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<CGmicWidgetMagicDetails>(pParam);
         }

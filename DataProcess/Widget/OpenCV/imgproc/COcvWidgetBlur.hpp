@@ -18,7 +18,7 @@ class COcvWidgetBlur : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetBlur(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetBlur(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvBlurParam>(pParam);
             init();
@@ -70,7 +70,7 @@ class COcvWidgetBlurFactory : public CWidgetFactory
             m_name = "ocv_blur";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetBlur>(pParam);
         }

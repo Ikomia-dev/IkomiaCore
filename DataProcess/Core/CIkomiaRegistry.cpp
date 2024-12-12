@@ -58,7 +58,7 @@ void CIkomiaRegistry::setPluginsDirectory(const std::string &dir)
 std::vector<std::string> CIkomiaRegistry::getAlgorithms() const
 {
     std::vector<std::string> names;
-    auto factory = m_processRegistrator.getProcessFactory();
+    auto factory = m_processRegistrator.getTaskFactory();
     auto taskFactories = factory.getList();
 
     for(auto&& factoryPtr : taskFactories)
@@ -124,19 +124,19 @@ bool CIkomiaRegistry::isAllLoaded() const
     return m_bAllLoaded;
 }
 
-WorkflowTaskPtr CIkomiaRegistry::createInstance(const std::string &processName)
+WorkflowTaskPtr CIkomiaRegistry::createInstance(const std::string &taskName)
 {
-    WorkflowTaskPtr taskPtr = m_processRegistrator.createProcessObject(processName, nullptr);
+    WorkflowTaskPtr taskPtr = m_processRegistrator.createProcessObject(taskName, nullptr);
     if (taskPtr == nullptr)
     {
         // Lazy loading
-        std::string pluginDir = getPluginDirectory(processName);
+        std::string pluginDir = getPluginDirectory(taskName);
         if (pluginDir.empty() == false)
         {
             try
             {
                 loadPlugin(pluginDir);
-                taskPtr = m_processRegistrator.createProcessObject(processName, nullptr);
+                taskPtr = m_processRegistrator.createProcessObject(taskName, nullptr);
             }
             catch (CException& e)
             {
@@ -148,24 +148,42 @@ WorkflowTaskPtr CIkomiaRegistry::createInstance(const std::string &processName)
     return taskPtr;
 }
 
-WorkflowTaskPtr CIkomiaRegistry::createInstance(const std::string &processName, const WorkflowTaskParamPtr &paramPtr)
+WorkflowTaskPtr CIkomiaRegistry::createInstance(const std::string &taskName, const WorkflowTaskParamPtr &paramPtr)
 {
-    return m_processRegistrator.createProcessObject(processName, paramPtr);
+    return m_processRegistrator.createProcessObject(taskName, paramPtr);
 }
 
-WorkflowTaskWidgetPtr CIkomiaRegistry::createWidgetInstance(const std::string &processName, const WorkflowTaskParamPtr &paramPtr)
+WorkflowTaskPtr CIkomiaRegistry::createInstance(const std::string &taskName, const UMapString &paramValues)
 {
-    return m_processRegistrator.createWidgetObject(processName, paramPtr);
+    auto paramPtr = m_processRegistrator.createParamObject(taskName);
+    if (paramPtr)
+    {
+        paramPtr->merge(paramValues);
+        return m_processRegistrator.createProcessObject(taskName, paramPtr);
+    }
+    else
+    {
+        auto taskPtr = m_processRegistrator.createProcessObject(taskName, paramPtr);
+        taskPtr->setParamValues(paramValues);
+        std::string msg = taskName + " does not implement parameter factory class. Given parameters will be set after constructor.";
+        Utils::print(msg, QtMsgType::QtWarningMsg);
+        return taskPtr;
+    }
 }
 
-void CIkomiaRegistry::registerTask(const TaskFactoryPtr &factoryPtr)
+WorkflowTaskWidgetPtr CIkomiaRegistry::createWidgetInstance(const std::string &taskName, const WorkflowTaskParamPtr &paramPtr)
 {
-    m_processRegistrator.registerProcess(factoryPtr, nullptr);
+    return m_processRegistrator.createWidgetObject(taskName, paramPtr);
 }
 
-void CIkomiaRegistry::registerTaskAndWidget(const TaskFactoryPtr &factoryPtr, WidgetFactoryPtr &widgetFactoryPtr)
+void CIkomiaRegistry::registerTask(const TaskFactoryPtr &taskFactoryPtr, const TaskParamFactoryPtr& paramFactoryPtr)
 {
-    m_processRegistrator.registerProcess(factoryPtr, widgetFactoryPtr);
+    m_processRegistrator.registerProcess(taskFactoryPtr, nullptr, paramFactoryPtr);
+}
+
+void CIkomiaRegistry::registerTaskAndWidget(const TaskFactoryPtr &taskFactoryPtr, WidgetFactoryPtr &widgetFactoryPtr, const TaskParamFactoryPtr& paramFactoryPtr)
+{
+    m_processRegistrator.registerProcess(taskFactoryPtr, widgetFactoryPtr, paramFactoryPtr);
 }
 
 void CIkomiaRegistry::registerIO(const TaskIOFactoryPtr &factoryPtr)
@@ -280,6 +298,9 @@ void CIkomiaRegistry::_loadCppPlugin(const QString &fileName)
     // Check compatibility -> throw if incompatible
     checkCompatibility(taskFactoryPtr->getInfo());
 
+    // Task parameters factory -> could be absent, introduced in 0.13.0
+    auto paramFactoryPtr = pPlugin->getParamFactory();
+
     auto widgetFactoryPtr = pPlugin->getWidgetFactory();
     if(widgetFactoryPtr == nullptr)
     {
@@ -288,7 +309,7 @@ void CIkomiaRegistry::_loadCppPlugin(const QString &fileName)
         throw CException(CoreExCode::INVALID_FILE, msg, __func__, __FILE__, __LINE__);
     }
 
-    m_processRegistrator.registerProcess(taskFactoryPtr, widgetFactoryPtr);
+    m_processRegistrator.registerProcess(taskFactoryPtr, widgetFactoryPtr, paramFactoryPtr);
     Utils::print(QString("Algorithm %1 is loaded.").arg(fileName).toStdString(), QtDebugMsg);
 }
 
@@ -355,7 +376,7 @@ void CIkomiaRegistry::loadPythonPlugin(const std::string &directory)
                 pluginName = pluginDirName;
                 boost::python::object mainModule = loadPythonMainModule(directory, pluginName.toStdString());
 
-                //Instantiate plugin factory
+                //Instantiate plugin factories
                 auto pluginFactoryName = boost::python::str("IkomiaPlugin");
                 boost::python::object pyFactory = mainModule.attr(pluginFactoryName)();
                 boost::python::extract<CPluginProcessInterface*> exFactory(pyFactory);
@@ -369,15 +390,18 @@ void CIkomiaRegistry::loadPythonPlugin(const std::string &directory)
                     // Check compatibility -> throw if incompatible
                     checkCompatibility(taskFactoryPtr->getInfo());
 
+                    // Task parameters factory -> could be absent, introduced in 0.13.0
+                    TaskParamFactoryPtr paramFactoryPtr = plugin->getParamFactory();
+
                     // Plugin registration
                     if (Utils::IkomiaApp::isAppStarted())
                     {
                         auto widgetFactoryPtr = plugin->getWidgetFactory();
-                        registerTaskAndWidget(taskFactoryPtr, widgetFactoryPtr);
+                        registerTaskAndWidget(taskFactoryPtr, widgetFactoryPtr, paramFactoryPtr);
                     }
                     else
                     {
-                        registerTask(taskFactoryPtr);
+                        registerTask(taskFactoryPtr, paramFactoryPtr);
                     }
                     Utils::print(QString("Algorithm %1 is loaded.").arg(fileName).toStdString(), QtDebugMsg);
                 }

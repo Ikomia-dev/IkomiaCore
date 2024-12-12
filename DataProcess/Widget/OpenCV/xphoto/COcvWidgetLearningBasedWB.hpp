@@ -33,7 +33,7 @@ class COcvWidgetLearningBasedWB : public CWorkflowTaskWidget
         {
             init();
         }
-        COcvWidgetLearningBasedWB(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetLearningBasedWB(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvLearningBasedWBParam>(pParam);
             init();
@@ -76,7 +76,7 @@ class COcvWidgetLearningBasedWBFactory : public CWidgetFactory
             m_name = "ocv_learning_based_wb";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetLearningBasedWB>(pParam);
         }

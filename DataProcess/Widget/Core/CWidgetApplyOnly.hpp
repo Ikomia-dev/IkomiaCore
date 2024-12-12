@@ -30,7 +30,7 @@ class CWidgetApplyOnly : public CWorkflowTaskWidget
         {
             init();
         }
-        CWidgetApplyOnly(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        CWidgetApplyOnly(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = pParam;
             init();

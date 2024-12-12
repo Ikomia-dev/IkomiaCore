@@ -30,7 +30,7 @@ class COcvWidgetInpaintX : public CWidgetApplyOnly
         COcvWidgetInpaintX(QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(parent)
         {
         }
-        COcvWidgetInpaintX(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
+        COcvWidgetInpaintX(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
         {
         }
 };
@@ -44,7 +44,7 @@ class COcvWidgetInpaintXFactory : public CWidgetFactory
             m_name = "ocv_xphoto_inpaint";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetInpaintX>(pParam);
         }

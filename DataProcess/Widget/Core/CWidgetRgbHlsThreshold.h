@@ -33,7 +33,7 @@ class CWidgetRgbHlsThreshold : public CWorkflowTaskWidget
     public:
 
         CWidgetRgbHlsThreshold(QWidget *parent = Q_NULLPTR);
-        CWidgetRgbHlsThreshold(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR);
+        CWidgetRgbHlsThreshold(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR);
 
     protected:
 
@@ -56,7 +56,7 @@ class CWidgetRgbHlsThresholdFactory : public CWidgetFactory
         CWidgetRgbHlsThresholdFactory();
         ~CWidgetRgbHlsThresholdFactory() {}
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam);
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam);
 };
 
 #endif // CWIDGETRGBHLSTHRESHOLD_H

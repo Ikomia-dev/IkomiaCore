@@ -32,7 +32,7 @@ class COcvWidgetRotate : public CWorkflowTaskWidget
         {
             init();
         }
-        COcvWidgetRotate(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetRotate(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvRotateParam>(pParam);
             init();
@@ -77,7 +77,7 @@ class COcvWidgetRotateFactory : public CWidgetFactory
             m_name = "ocv_rotate";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetRotate>(pParam);
         }

@@ -37,7 +37,7 @@ class COcvWidgetDftInv : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetDftInv(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetDftInv(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvDftInvParam>(pParam);
             init();
@@ -84,7 +84,7 @@ class COcvWidgetDftInvFactory : public CWidgetFactory
             m_name = "ocv_dft_inverse";
         }
 
-        virtual WorkflowTaskWidgetPtr create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_unique<COcvWidgetDftInv>(pParam);
         }

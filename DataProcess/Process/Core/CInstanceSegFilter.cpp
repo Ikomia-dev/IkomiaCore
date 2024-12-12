@@ -155,7 +155,7 @@ CWidgetInstanceSegFilter::CWidgetInstanceSegFilter(QWidget *parent): CWorkflowTa
     init();
 }
 
-CWidgetInstanceSegFilter::CWidgetInstanceSegFilter(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent)
+CWidgetInstanceSegFilter::CWidgetInstanceSegFilter(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent)
     : CWorkflowTaskWidget(parent)
 {
     m_pParam = std::dynamic_pointer_cast<CInstanceSegFilterParam>(pParam);
@@ -186,7 +186,7 @@ CWidgetInstanceSegFilterFactory::CWidgetInstanceSegFilterFactory()
     m_name = "ik_instance_segmentation_filter";
 }
 
-WorkflowTaskWidgetPtr CWidgetInstanceSegFilterFactory::create(std::shared_ptr<CWorkflowTaskParam> pParam)
+WorkflowTaskWidgetPtr CWidgetInstanceSegFilterFactory::create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
 {
     return std::make_shared<CWidgetInstanceSegFilter>(pParam);
 }

@@ -33,7 +33,7 @@ class COcvWidgetMagnitude : public CWidgetApplyOnly
         {
         }
 
-        COcvWidgetMagnitude(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
+        COcvWidgetMagnitude(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
         {
         }
 
@@ -51,7 +51,7 @@ class COcvWidgetMagnitudeFactory : public CWidgetFactory
             m_name = "ocv_magnitude";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetMagnitude>(pParam);
         }

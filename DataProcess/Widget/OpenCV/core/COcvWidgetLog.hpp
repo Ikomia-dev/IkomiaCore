@@ -30,7 +30,7 @@ class COcvWidgetLog : public CWidgetApplyOnly
         COcvWidgetLog(QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(parent)
         {
         }
-        COcvWidgetLog(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
+        COcvWidgetLog(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
         {
         }
 };
@@ -44,7 +44,7 @@ class COcvWidgetLogFactory : public CWidgetFactory
             m_name = "ocv_log";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetLog>(pParam);
         }

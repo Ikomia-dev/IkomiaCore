@@ -347,13 +347,7 @@ void CWorkflowTask::setParamValues(const UMapString &paramMap)
     if(m_pParam)
     {
         // Allow partial update
-        UMapString params = m_pParam->getParamMap();
-        for (auto it=paramMap.begin(); it!=paramMap.end(); ++it)
-        {
-            if (params.find(it->first) != params.end())
-                params[it->first] = it->second;
-        }
-        m_pParam->setParamMap(params);
+        m_pParam->merge(paramMap);
         parametersModified();
         emit m_signalHandler->doParametersChanged();
     }

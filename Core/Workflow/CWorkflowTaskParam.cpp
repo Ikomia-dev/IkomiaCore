@@ -20,9 +20,15 @@
 #include "CWorkflowTaskParam.h"
 #include <QHash>
 #include <ostream>
+#include "UtilsTools.hpp"
 
 CWorkflowTaskParam::CWorkflowTaskParam()
 {
+}
+
+CWorkflowTaskParam::CWorkflowTaskParam(const UMapString &cfg)
+{
+    m_cfg = cfg;
 }
 
 void CWorkflowTaskParam::setParamMap(const UMapString &paramMap)
@@ -45,6 +51,18 @@ uint CWorkflowTaskParam::getHashValue() const
         values.push_back(QString::fromStdString(it->second));
 
     return qHashRange(values.begin(), values.end());
+}
+
+void CWorkflowTaskParam::merge(const UMapString& newValues)
+{
+    // Allow partial update
+    UMapString params = getParamMap();
+    for (auto it=newValues.begin(); it!=newValues.end(); ++it)
+    {
+        if (params.find(it->first) != params.end())
+            params[it->first] = it->second;
+    }
+    setParamMap(params);
 }
 
 std::ostream& operator<<(std::ostream& os, const CWorkflowTaskParam& param)
