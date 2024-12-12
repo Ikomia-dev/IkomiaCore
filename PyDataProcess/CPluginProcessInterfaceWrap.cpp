@@ -50,7 +50,23 @@ std::shared_ptr<CTaskParamFactory> CPluginProcessInterfaceWrap::getParamFactory(
     CPyEnsureGIL gil;
     try
     {
-        return this->get_override("get_widget_factory")();
+        if(override getParamFactoryOver = this->get_override("get_param_factory"))
+            return getParamFactoryOver();
+
+        return this->CPluginProcessInterface::getParamFactory();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+std::shared_ptr<CTaskParamFactory> CPluginProcessInterfaceWrap::default_getParamFactory()
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        return this->CPluginProcessInterface::getParamFactory();
     }
     catch(boost::python::error_already_set&)
     {

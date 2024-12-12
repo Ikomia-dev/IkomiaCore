@@ -20,9 +20,15 @@
 #include "CWorkflowTaskParam.h"
 #include <QHash>
 #include <ostream>
+#include "UtilsTools.hpp"
 
 CWorkflowTaskParam::CWorkflowTaskParam()
 {
+}
+
+CWorkflowTaskParam::CWorkflowTaskParam(const UMapString &cfg)
+{
+    m_cfg = cfg;
 }
 
 void CWorkflowTaskParam::setParamMap(const UMapString &paramMap)

@@ -34,32 +34,34 @@ CProcessRegistration::CProcessRegistration()
 
 CProcessRegistration::~CProcessRegistration()
 {
+    // Explicit destruction in case of multi-threading context with Python
     CPyEnsureGIL gil;
     m_processFactory.clear();
     m_widgetFactory.clear();
+    m_paramFactory.clear();
 }
 
-void CProcessRegistration::registerProcess(const std::shared_ptr<CTaskFactory>& pProcessFactory,
+void CProcessRegistration::registerProcess(const std::shared_ptr<CTaskFactory>& pTaskFactory,
                                            const std::shared_ptr<CWidgetFactory>& pWidgetFactory,
-                                           const std::shared_ptr<CTaskParamFactory> &pTaskParamFactory)
+                                           const std::shared_ptr<CTaskParamFactory>& pTaskParamFactory)
 {
-    assert(pProcessFactory);
+    assert(pTaskFactory);
 
     // Register process factory
-    std::string name = pProcessFactory->getInfo().getName();
+    std::string name = pTaskFactory->getInfo().getName();
     if(m_processFactory.isCreatorExists(name) == true)
     {
         m_processFactory.unregisterCreator(name);
         m_processFactory.remove(name);
     }
 
-    m_processFactory.getList().push_back(pProcessFactory);
-    auto pProcessFunc = [pProcessFactory](const WorkflowTaskParamPtr& param)
+    m_processFactory.getList().push_back(pTaskFactory);
+    auto pProcessFunc = [pTaskFactory](const WorkflowTaskParamPtr& param)
     {
         //Passage par lambda -> pFactory par valeur pour assurer la portée du pointeur
-        return pProcessFactory->create(param);
+        return pTaskFactory->create(param);
     };
-    m_processFactory.registerCreator(pProcessFactory->getInfo().m_name, pProcessFunc);
+    m_processFactory.registerCreator(pTaskFactory->getInfo().m_name, pProcessFunc);
 
     // Register widget factory
     if(pWidgetFactory)
@@ -448,7 +450,7 @@ void CProcessRegistration::registerCvText()
     registerProcess(std::make_shared<COcvOCRTesseractFactory>(), std::make_shared<COcvWidgetOCRTesseractFactory>());
 }
 
-const CTaskAbstractFactory& CProcessRegistration::getProcessFactory() const
+const CTaskAbstractFactory& CProcessRegistration::getTaskFactory() const
 {
     CPyEnsureGIL gil;
     return m_processFactory;
@@ -464,6 +466,24 @@ const CWidgetAbstractFactory& CProcessRegistration::getWidgetFactory() const
 {
     CPyEnsureGIL gil;
     return m_widgetFactory;
+}
+
+WidgetFactoryPtr CProcessRegistration::getWidgetFactory(const std::string &name) const
+{
+    CPyEnsureGIL gil;
+    return m_widgetFactory.getFactory(name);
+}
+
+const CTaskParamAbstractFactory &CProcessRegistration::getTaskParamFactory() const
+{
+    CPyEnsureGIL gil;
+    return m_paramFactory;
+}
+
+TaskParamFactoryPtr CProcessRegistration::getTaskParamFactory(const std::string &name) const
+{
+    CPyEnsureGIL gil;
+    return m_paramFactory.getFactory(name);
 }
 
 CTaskInfo CProcessRegistration::getProcessInfo(const std::string &name) const

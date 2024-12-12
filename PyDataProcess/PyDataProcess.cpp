@@ -24,6 +24,7 @@
 #include "MapConverter.hpp"
 #include "PyDataProcessDocString.hpp"
 #include "Task/CTaskFactoryWrap.h"
+#include "Task/CTaskParamFactoryWrap.h"
 #include "Task/C2dImageTaskWrap.h"
 #include "Task/C2dImageInteractiveTaskWrap.h"
 #include "Task/CVideoTaskWrap.h"
@@ -130,6 +131,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
 
     //Register smart pointers
     register_ptr_to_python<std::shared_ptr<CTaskFactory>>();
+    register_ptr_to_python<std::shared_ptr<CTaskParamFactory>>();
     register_ptr_to_python<std::shared_ptr<CWidgetFactory>>();
     register_ptr_to_python<std::shared_ptr<CGraphicsInput>>();
     register_ptr_to_python<std::shared_ptr<CGraphicsOutput>>();
@@ -217,6 +219,14 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("create", pure_virtual(create_param), _create2DocString, args("self", "param"))
     ;
 
+    //-----------------------------//
+    //----- CTaskParamFactory -----//
+    //-----------------------------//
+    class_<CTaskParamFactoryWrap, std::shared_ptr<CTaskParamFactoryWrap>, boost::noncopyable>("CTaskParamFactory", _taskParamFactoryDocString)
+        .add_property("name", &CTaskParamFactory::getName, &CTaskParamFactory::setName, _taskParamFactoryNameDocString)
+        .def("create", pure_virtual(&CTaskParamFactory::create), _createTaskParamDocString, args("self"))
+    ;
+
     //--------------------------//
     //----- CWidgetFactory -----//
     //--------------------------//
@@ -231,7 +241,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
     class_<CPluginProcessInterfaceWrap, boost::noncopyable>("CPluginProcessInterface", _pluginInterfaceDocString)
         .def("get_process_factory", pure_virtual(&CPluginProcessInterface::getProcessFactory), _getProcessFactoryDocString, args("self"))
         .def("get_widget_factory", pure_virtual(&CPluginProcessInterface::getWidgetFactory), _getWidgetFactoryDocString, args("self"))
-        .def("get_param_factory", pure_virtual(&CPluginProcessInterface::getParamFactory), _getParamFactoryDocString, args("self"))
+        .def("get_param_factory", &CPluginProcessInterface::getParamFactory, &CPluginProcessInterfaceWrap::default_getParamFactory, _getParamFactoryDocString, args("self"))
     ;
 
     //--------------------------//

@@ -58,7 +58,7 @@ void CIkomiaRegistry::setPluginsDirectory(const std::string &dir)
 std::vector<std::string> CIkomiaRegistry::getAlgorithms() const
 {
     std::vector<std::string> names;
-    auto factory = m_processRegistrator.getProcessFactory();
+    auto factory = m_processRegistrator.getTaskFactory();
     auto taskFactories = factory.getList();
 
     for(auto&& factoryPtr : taskFactories)
@@ -124,19 +124,19 @@ bool CIkomiaRegistry::isAllLoaded() const
     return m_bAllLoaded;
 }
 
-WorkflowTaskPtr CIkomiaRegistry::createInstance(const std::string &processName)
+WorkflowTaskPtr CIkomiaRegistry::createInstance(const std::string &taskName)
 {
-    WorkflowTaskPtr taskPtr = m_processRegistrator.createProcessObject(processName, nullptr);
+    WorkflowTaskPtr taskPtr = m_processRegistrator.createProcessObject(taskName, nullptr);
     if (taskPtr == nullptr)
     {
         // Lazy loading
-        std::string pluginDir = getPluginDirectory(processName);
+        std::string pluginDir = getPluginDirectory(taskName);
         if (pluginDir.empty() == false)
         {
             try
             {
                 loadPlugin(pluginDir);
-                taskPtr = m_processRegistrator.createProcessObject(processName, nullptr);
+                taskPtr = m_processRegistrator.createProcessObject(taskName, nullptr);
             }
             catch (CException& e)
             {
@@ -148,32 +148,32 @@ WorkflowTaskPtr CIkomiaRegistry::createInstance(const std::string &processName)
     return taskPtr;
 }
 
-WorkflowTaskPtr CIkomiaRegistry::createInstance(const std::string &processName, const WorkflowTaskParamPtr &paramPtr)
+WorkflowTaskPtr CIkomiaRegistry::createInstance(const std::string &taskName, const WorkflowTaskParamPtr &paramPtr)
 {
-    return m_processRegistrator.createProcessObject(processName, paramPtr);
+    return m_processRegistrator.createProcessObject(taskName, paramPtr);
 }
 
-WorkflowTaskPtr CIkomiaRegistry::createInstance(const std::string &processName, const UMapString &paramValues)
+WorkflowTaskPtr CIkomiaRegistry::createInstance(const std::string &taskName, const UMapString &paramValues)
 {
-    auto paramPtr = m_processRegistrator.createParamObject(processName);
+    auto paramPtr = m_processRegistrator.createParamObject(taskName);
     if (paramPtr)
     {
         paramPtr->merge(paramValues);
-        return m_processRegistrator.createProcessObject(processName, paramPtr);
+        return m_processRegistrator.createProcessObject(taskName, paramPtr);
     }
     else
     {
-        auto taskPtr = m_processRegistrator.createProcessObject(processName, paramPtr);
+        auto taskPtr = m_processRegistrator.createProcessObject(taskName, paramPtr);
         taskPtr->setParamValues(paramValues);
-        std::string msg = processName + " does not implement parameter factory class. Given parameters will be set after constructor.";
+        std::string msg = taskName + " does not implement parameter factory class. Given parameters will be set after constructor.";
         Utils::print(msg, QtMsgType::QtWarningMsg);
         return taskPtr;
     }
 }
 
-WorkflowTaskWidgetPtr CIkomiaRegistry::createWidgetInstance(const std::string &processName, const WorkflowTaskParamPtr &paramPtr)
+WorkflowTaskWidgetPtr CIkomiaRegistry::createWidgetInstance(const std::string &taskName, const WorkflowTaskParamPtr &paramPtr)
 {
-    return m_processRegistrator.createWidgetObject(processName, paramPtr);
+    return m_processRegistrator.createWidgetObject(taskName, paramPtr);
 }
 
 void CIkomiaRegistry::registerTask(const TaskFactoryPtr &taskFactoryPtr, const TaskParamFactoryPtr& paramFactoryPtr)
@@ -391,15 +391,7 @@ void CIkomiaRegistry::loadPythonPlugin(const std::string &directory)
                     checkCompatibility(taskFactoryPtr->getInfo());
 
                     // Task parameters factory -> could be absent, introduced in 0.13.0
-                    TaskParamFactoryPtr paramFactoryPtr = nullptr;
-                    try
-                    {
-                        paramFactoryPtr = plugin->getParamFactory();
-                    }
-                    catch(CException& e)
-                    {
-                        Utils::print(e.getMessage(), QtDebugMsg);
-                    }
+                    TaskParamFactoryPtr paramFactoryPtr = plugin->getParamFactory();
 
                     // Plugin registration
                     if (Utils::IkomiaApp::isAppStarted())

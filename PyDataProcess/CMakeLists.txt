@@ -55,6 +55,8 @@ add_library(pydataprocess SHARED
     Task/CKeyptsDetectTaskWrap.h
     Task/CTaskFactoryWrap.cpp
     Task/CTaskFactoryWrap.h
+    Task/CTaskParamFactoryWrap.h
+    Task/CTaskParamFactoryWrap.cpp
     Task/CVideoOFTaskWrap.cpp
     Task/CVideoOFTaskWrap.h
     Task/CVideoTaskWrap.cpp

@@ -43,6 +43,10 @@ class CTaskParamFactory
         {
             return m_name;
         }
+        void                            setName(const std::string& name)
+        {
+            m_name = name;
+        }
 
         virtual WorkflowTaskParamPtr    create() = 0;
 

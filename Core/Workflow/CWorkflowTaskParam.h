@@ -42,6 +42,7 @@ class CORESHARED_EXPORT CWorkflowTaskParam
         * @brief Default constructor
         */
         CWorkflowTaskParam();
+        CWorkflowTaskParam(const UMapString& cfg);
         virtual ~CWorkflowTaskParam() = default;
 
         /**

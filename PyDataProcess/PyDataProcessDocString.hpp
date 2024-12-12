@@ -67,6 +67,24 @@ constexpr auto _create2DocString =
         "Returns:\n\n"
         "   :py:class:`~ikomia.core.pycore.CWorkflowTask` based object: task instance\n\n";
 
+//-----------------------------//
+//----- CTaskParamFactory -----//
+//-----------------------------//
+constexpr auto _taskParamFactoryDocString =
+    "Abstract class defining the core structure of the parameters factory. "
+    "The system extensibility for the task library is based on the factory design pattern. "
+    "Each task could implement a parameter factory class derived from this class. "
+    "Then the system is able to instantiate dynamically a task with given parameters.\n\n";
+
+constexpr auto _taskParamFactoryNameDocString =
+    "Name of the associated task. This name must be the same of the one set in the task class.\n\n";
+
+constexpr auto _createTaskParamDocString =
+    "Pure virtual method to create new task parameter instance. "
+    "Should be implemented.\n\n"
+    "Returns:\n\n"
+    "   :py:class:`~ikomia.core.pycore.CWorkflowTaskParam` based object: task parameter instance\n\n";
+
 //--------------------------//
 //----- CWidgetFactory -----//
 //--------------------------//

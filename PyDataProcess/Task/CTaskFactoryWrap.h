@@ -31,8 +31,8 @@ class CTaskFactoryWrap: public CTaskFactory, public wrapper<CTaskFactory>
 
         ~CTaskFactoryWrap() = default;
 
-        virtual WorkflowTaskPtr create() override;
-        virtual WorkflowTaskPtr create(const WorkflowTaskParamPtr& pParam) override;
+        WorkflowTaskPtr create() override;
+        WorkflowTaskPtr create(const WorkflowTaskParamPtr& pParam) override;
 };
 
 #endif // CTASKFACTORYWRAP_H

@@ -34,52 +34,55 @@ class DATAPROCESSSHARED_EXPORT CProcessRegistration
         CProcessRegistration();
         ~CProcessRegistration();
 
-        const CTaskAbstractFactory&     getProcessFactory() const;
-        TaskFactoryPtr                  getTaskFactory(const std::string& name) const;
-        const CWidgetAbstractFactory&   getWidgetFactory() const;
-        CTaskInfo                       getProcessInfo(const std::string& name) const;
+        const CTaskAbstractFactory&         getTaskFactory() const;
+        TaskFactoryPtr                      getTaskFactory(const std::string& name) const;
+        const CWidgetAbstractFactory&       getWidgetFactory() const;
+        WidgetFactoryPtr                    getWidgetFactory(const std::string& name) const;
+        const CTaskParamAbstractFactory&    getTaskParamFactory() const;
+        TaskParamFactoryPtr                 getTaskParamFactory(const std::string& name) const;
+        CTaskInfo                           getProcessInfo(const std::string& name) const;
 
-        void                            registerProcess(const std::shared_ptr<CTaskFactory>& pProcessFactory,
-                                                        const std::shared_ptr<CWidgetFactory> &pWidgetFactory,
-                                                        const std::shared_ptr<CTaskParamFactory>& pTaskParamFactory = nullptr);
+        void                                registerProcess(const std::shared_ptr<CTaskFactory>& pTaskFactory,
+                                                            const std::shared_ptr<CWidgetFactory> &pWidgetFactory,
+                                                            const std::shared_ptr<CTaskParamFactory>& pTaskParamFactory = nullptr);
 
-        void                            unregisterProcess(const std::string& name);
+        void                                unregisterProcess(const std::string& name);
 
-        WorkflowTaskPtr                 createProcessObject(const std::string& name, const WorkflowTaskParamPtr& paramPtr);
-        WorkflowTaskWidgetPtr           createWidgetObject(const std::string& name, const WorkflowTaskParamPtr& paramPtr);
-        WorkflowTaskParamPtr            createParamObject(const std::string& name);
+        WorkflowTaskPtr                     createProcessObject(const std::string& name, const WorkflowTaskParamPtr& paramPtr);
+        WorkflowTaskWidgetPtr               createWidgetObject(const std::string& name, const WorkflowTaskParamPtr& paramPtr);
+        WorkflowTaskParamPtr                createParamObject(const std::string& name);
 
-        void                            reset();
+        void                                reset();
 
     private:
 
-        void                            registerCore();
-        void                            registerOpenCV();
-        void                            registerGmic();
+        void                                registerCore();
+        void                                registerOpenCV();
+        void                                registerGmic();
 
         // Opencv
-        void                            registerCvCore();
-        void                            registerCvDnn();
-        void                            registerCvFeatures2d();
-        void                            registerCvImgproc();
-        void                            registerCvPhoto();
-        void                            registerCvTracking();
-        void                            registerCvVideo();
-        void                            registerCvBgsegm();
-        void                            registerCvXimgproc();
-        void                            registerCvXphoto();
-        void                            registerCvOptflow();
-        void                            registerCvBioinspired();
-        void                            registerCvSaliency();
-        void                            registerCvSuperres();
-        void                            registerCvObjdetect();
-        void                            registerCvText();
+        void                                registerCvCore();
+        void                                registerCvDnn();
+        void                                registerCvFeatures2d();
+        void                                registerCvImgproc();
+        void                                registerCvPhoto();
+        void                                registerCvTracking();
+        void                                registerCvVideo();
+        void                                registerCvBgsegm();
+        void                                registerCvXimgproc();
+        void                                registerCvXphoto();
+        void                                registerCvOptflow();
+        void                                registerCvBioinspired();
+        void                                registerCvSaliency();
+        void                                registerCvSuperres();
+        void                                registerCvObjdetect();
+        void                                registerCvText();
 
     private:
 
-        CTaskAbstractFactory            m_processFactory;
-        CWidgetAbstractFactory          m_widgetFactory;
-        CTaskParamAbstractFactory       m_paramFactory;
+        CTaskAbstractFactory        m_processFactory;
+        CWidgetAbstractFactory      m_widgetFactory;
+        CTaskParamAbstractFactory   m_paramFactory;
 };
 
 #endif // CPROCESSREGISTRATION_H
