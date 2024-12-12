@@ -32,14 +32,54 @@ class CWorkflowTaskParamWrap : public CWorkflowTaskParam, public wrapper<CWorkfl
         CWorkflowTaskParamWrap();
         CWorkflowTaskParamWrap(const CWorkflowTaskParam& param);
 
-        virtual void        setParamMap(const UMapString &paramMap);
-        void                default_setParamMap(const UMapString& paramMap);
+        void        setParamMap(const UMapString &paramMap) override;
+        void        default_setParamMap(const UMapString& paramMap);
 
-        virtual UMapString  getParamMap() const;
-        UMapString          default_getParamMap() const;
+        UMapString  getParamMap() const override;
+        UMapString  default_getParamMap() const;
 
-        virtual uint        getHashValue() const;
-        uint                default_getHashValue() const;
+        uint        getHashValue() const override;
+        uint        default_getHashValue() const;
+};
+
+
+// Reference: https://github.com/boostorg/python/blob/4fc3afa3ac1a1edb61a92fccd31d305ba38213f8/test/pickle3.cpp#L4
+// Doc: https://www.boost.org/doc/libs/1_87_0/libs/python/doc/html/reference/topics/pickle_support.html
+struct TaskParamPickleSuite: pickle_suite
+{
+    static tuple getinitargs(const CWorkflowTaskParamWrap& param)
+    {
+        Q_UNUSED(param)
+        return boost::python::make_tuple();
+    }
+
+    static tuple getstate(object paramObj)
+    {
+        CWorkflowTaskParamWrap& param = extract<CWorkflowTaskParamWrap&>(paramObj)();
+        return boost::python::make_tuple(paramObj.attr("__dict__"), param.m_cfg);
+    }
+
+    static void setstate(object paramObj, tuple state)
+    {
+        if (len(state) != 2)
+        {
+            PyErr_SetObject(PyExc_ValueError, ("expected 2-item tuple in call to __setstate__; got %s"% state).ptr());
+            throw_error_already_set();
+        }
+
+        // restore the object's __dict__
+        dict d = extract<dict>(paramObj.attr("__dict__"))();
+        d.update(state[0]);
+
+        // restore the internal state of the C++ object
+        CWorkflowTaskParamWrap& param = extract<CWorkflowTaskParamWrap&>(paramObj)();
+        param.m_cfg = extract<UMapString>(state[1]);
+    }
+
+    static bool getstate_manages_dict()
+    {
+        return true;
+    }
 };
 
 #endif // CWORKFLOWTASKPARAMWRAP_H

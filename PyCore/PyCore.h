@@ -28,9 +28,6 @@ using namespace boost::python;
 
 
 //Special call policy that increases the reference count of the object being constructed
-//Needed for our CWorkflowTaskWidget based objects that can be extended in Python
-//Solve the issue of reference count for std::shared_ptr return from extended python class
-//and lead to segmentation fault caused by double delete
 template <class Base = default_call_policies>
 struct incref_return_value_policy : Base
 {
@@ -46,13 +43,7 @@ struct incref_return_value_policy : Base
 template<class T>
 inline PyObject * managingPyObject(T *p)
 {
-    return typename manage_new_object::apply<T *>::type()(p);
-}
-
-template<class T>
-inline PyObject * managingPyObject(T& p)
-{
-    return typename copy_non_const_reference::apply<T&>::type()(p);
+    return typename manage_new_object::apply<T*>::type()(p);
 }
 
 template<class Copyable>
@@ -71,23 +62,6 @@ object generic_deepcopy(object copyable, dict memo)
     object deepcopy = copyMod.attr("deepcopy");
     Copyable *newCopyable(new Copyable(extract<const Copyable&>(copyable)));
     object result(detail::new_reference(managingPyObject(newCopyable)));
-
-    // HACK: copyableId shall be the same as the result of id(copyable) in Python -
-    // please tell me that there is a better way! (and which ;-p)
-    std::uintptr_t copyableId = reinterpret_cast<std::uintptr_t>(copyable.ptr());
-    memo[copyableId] = result;
-
-    extract<dict>(result.attr("__dict__"))().update(deepcopy(extract<dict>(copyable.attr("__dict__"))(), memo));
-    return result;
-}
-
-template<class Copyable>
-object generic_shared_ptr_deepcopy(object copyable, dict memo)
-{
-    object copyMod = import("copy");
-    object deepcopy = copyMod.attr("deepcopy");
-    auto newBaseObj = std::make_shared<Copyable>(extract<const Copyable&>(copyable));
-    object result(detail::new_reference(managingPyObject(newBaseObj)));
 
     // HACK: copyableId shall be the same as the result of id(copyable) in Python -
     // please tell me that there is a better way! (and which ;-p)

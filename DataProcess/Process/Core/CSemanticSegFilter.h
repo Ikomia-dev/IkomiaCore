@@ -66,7 +66,7 @@ class CWidgetSemanticSegFilter : public CWorkflowTaskWidget
     public:
 
         CWidgetSemanticSegFilter(QWidget *parent = Q_NULLPTR);
-        CWidgetSemanticSegFilter(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR);
+        CWidgetSemanticSegFilter(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR);
 
     protected:
 
@@ -91,7 +91,7 @@ class CWidgetSemanticSegFilterFactory : public CWidgetFactory
         CWidgetSemanticSegFilterFactory();
         ~CWidgetSemanticSegFilterFactory() = default;
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam);
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam);
 };
 
 #endif // CSEMANTICSEGFILTER_H
