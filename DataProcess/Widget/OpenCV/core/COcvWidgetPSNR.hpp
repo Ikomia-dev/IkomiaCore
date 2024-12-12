@@ -30,7 +30,7 @@ class COcvWidgetPSNR : public CWidgetApplyOnly
         COcvWidgetPSNR(QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(parent)
         {
         }
-        COcvWidgetPSNR(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
+        COcvWidgetPSNR(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
         {
         }
 };
@@ -44,7 +44,7 @@ class COcvWidgetPSNRFactory : public CWidgetFactory
             m_name = "ocv_psnr";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetPSNR>(pParam);
         }

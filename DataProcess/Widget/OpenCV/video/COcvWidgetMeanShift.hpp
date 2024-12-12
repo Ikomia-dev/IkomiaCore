@@ -31,7 +31,7 @@ class COcvWidgetMeanShift : public CWidgetApplyOnly
         {
         }
 
-        COcvWidgetMeanShift(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(parent)
+        COcvWidgetMeanShift(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvMeanShiftParam>(pParam);
         }
@@ -50,7 +50,7 @@ class COcvWidgetMeanShiftFactory : public CWidgetFactory
             m_name = "ocv_mean_shift";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetMeanShift>(pParam);
         }

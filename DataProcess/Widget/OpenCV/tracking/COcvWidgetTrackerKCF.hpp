@@ -30,7 +30,7 @@ class COcvWidgetTrackerKCF : public CWidgetApplyOnly
         {
         }
 
-        COcvWidgetTrackerKCF(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
+        COcvWidgetTrackerKCF(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
         {
         }
 
@@ -48,7 +48,7 @@ class COcvWidgetTrackerKCFFactory : public CWidgetFactory
             m_name = "ocv_tracker_kcf";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetTrackerKCF>(pParam);
         }

@@ -31,7 +31,7 @@ class COcvWidgetCamShift : public CWidgetApplyOnly
         {
         }
 
-        COcvWidgetCamShift(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(parent)
+        COcvWidgetCamShift(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvCamShiftParam>(pParam);
         }
@@ -50,7 +50,7 @@ class COcvWidgetCamShiftFactory : public CWidgetFactory
             m_name = "ocv_cam_shift";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetCamShift>(pParam);
         }

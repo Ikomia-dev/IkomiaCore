@@ -35,7 +35,7 @@ class COcvWidgetRidgeFilter : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetRidgeFilter(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetRidgeFilter(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvRidgeFilterParam>(pParam);
             init();
@@ -121,7 +121,7 @@ class COcvWidgetRidgeFilterFactory : public CWidgetFactory
             m_name = "ocv_ridge_filter";
         }
 
-        virtual WorkflowTaskWidgetPtr create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetRidgeFilter>(pParam);
         }

@@ -24,7 +24,7 @@ CWidgetBlobMeasure::CWidgetBlobMeasure(QWidget *parent) : CWorkflowTaskWidget(pa
     init();
 }
 
-CWidgetBlobMeasure::CWidgetBlobMeasure(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent) : CWorkflowTaskWidget(parent)
+CWidgetBlobMeasure::CWidgetBlobMeasure(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent) : CWorkflowTaskWidget(parent)
 {
     m_pParam = std::dynamic_pointer_cast<CBlobMeasureParam>(pParam);
     init();

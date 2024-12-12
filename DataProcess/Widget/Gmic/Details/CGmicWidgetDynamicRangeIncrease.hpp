@@ -32,7 +32,7 @@ class CGmicWidgetDynamicRangeIncrease : public CWorkflowTaskWidget
             init();
         }
 
-        CGmicWidgetDynamicRangeIncrease(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        CGmicWidgetDynamicRangeIncrease(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<CGmicDynamicRangeIncreaseParam>(pParam);
             init();
@@ -87,7 +87,7 @@ class CGmicWidgetDynamicRangeIncreaseFactory : public CWidgetFactory
             m_name = "gmic_dynamic_range_increase";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<CGmicWidgetDynamicRangeIncrease>(pParam);
         }

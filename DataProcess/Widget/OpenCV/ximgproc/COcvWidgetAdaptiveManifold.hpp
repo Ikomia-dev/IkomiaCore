@@ -36,7 +36,7 @@ class COcvWidgetAdaptiveManifold : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetAdaptiveManifold(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetAdaptiveManifold(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvAdaptiveManifoldParam>(pParam);
             init();
@@ -118,7 +118,7 @@ class COcvWidgetAdaptiveManifoldFactory : public CWidgetFactory
             m_name = "ocv_adaptive_manifold_filter";
         }
 
-        virtual WorkflowTaskWidgetPtr create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetAdaptiveManifold>(pParam);
         }

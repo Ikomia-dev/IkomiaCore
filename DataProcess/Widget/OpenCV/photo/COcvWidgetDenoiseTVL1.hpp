@@ -31,7 +31,7 @@ class COcvWidgetDenoiseTVL1 : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetDenoiseTVL1(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetDenoiseTVL1(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvDenoiseTVL1Param>(pParam);
             init();
@@ -71,7 +71,7 @@ class COcvWidgetDenoiseTVL1Factory : public CWidgetFactory
             m_name = "ocv_denoise_tvl1";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetDenoiseTVL1>(pParam);
         }

@@ -66,7 +66,7 @@ class CWidgetFactory
          * @param pParam: CWorkflowTaskParam based shared pointer.
          * @return CWorkflowTaskWidget based shared pointer.
          */
-        virtual WorkflowTaskWidgetPtr   create(const WorkflowTaskParamPtr pParam) = 0;
+        virtual WorkflowTaskWidgetPtr   create(const WorkflowTaskParamPtr& pParam) = 0;
 
     protected:
 
@@ -84,6 +84,18 @@ class CWidgetAbstractFactory: public CAbstractFactory<std::string, WorkflowTaskW
         WidgetFactories&    getList()
         {
             return m_factories;
+        }
+
+        WidgetFactoryPtr    getFactory(const std::string& name) const
+        {
+            auto it = std::find_if(m_factories.begin(),
+                                   m_factories.end(),
+                                   [&name](const WidgetFactoryPtr& factoryPtr){ return factoryPtr->getName() == name;});
+
+            if (it == m_factories.end())
+                return nullptr;
+            else
+                return *it;
         }
 
         void                remove(const std::string& name)

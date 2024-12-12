@@ -32,7 +32,7 @@ class CGmicWidgetConstrainedSharpen : public CWorkflowTaskWidget
             init();
         }
 
-        CGmicWidgetConstrainedSharpen(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        CGmicWidgetConstrainedSharpen(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<CGmicConstrainedSharpenParam>(pParam);
             init();
@@ -97,7 +97,7 @@ class CGmicWidgetConstrainedSharpenFactory : public CWidgetFactory
             m_name = "gmic_constrained_sharpen";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<CGmicWidgetConstrainedSharpen>(pParam);
         }

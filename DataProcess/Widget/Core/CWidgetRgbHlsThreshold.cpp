@@ -27,7 +27,7 @@ CWidgetRgbHlsThreshold::CWidgetRgbHlsThreshold(QWidget *parent) : CWorkflowTaskW
     init();
 }
 
-CWidgetRgbHlsThreshold::CWidgetRgbHlsThreshold(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent) : CWorkflowTaskWidget(parent)
+CWidgetRgbHlsThreshold::CWidgetRgbHlsThreshold(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent) : CWorkflowTaskWidget(parent)
 {
     m_pParam = std::dynamic_pointer_cast<CRgbHlsThresholdParam>(pParam);
     init();
@@ -59,7 +59,7 @@ CWidgetRgbHlsThresholdFactory::CWidgetRgbHlsThresholdFactory()
     m_name = "ik_segmentation_rgbhls";
 }
 
-WorkflowTaskWidgetPtr CWidgetRgbHlsThresholdFactory::create(std::shared_ptr<CWorkflowTaskParam> pParam)
+WorkflowTaskWidgetPtr CWidgetRgbHlsThresholdFactory::create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
 {
     return std::make_shared<CWidgetRgbHlsThreshold>(pParam);
 }

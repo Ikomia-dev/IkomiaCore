@@ -32,7 +32,7 @@ class CWidgetCut : public CWorkflowTaskWidget
             init();
         }
 
-        CWidgetCut(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        CWidgetCut(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<CCutParam>(pParam);
             init();
@@ -69,7 +69,7 @@ class CWidgetCutFactory : public CWidgetFactory
             m_name = "ik_blob_cut";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<CWidgetCut>(pParam);
         }

@@ -31,7 +31,7 @@ class COcvWidgetWatershed : public CWidgetApplyOnly
         {
         }
 
-        COcvWidgetWatershed(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
+        COcvWidgetWatershed(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
         {
         }
 };
@@ -45,7 +45,7 @@ class COcvWidgetWatershedFactory : public CWidgetFactory
             m_name = "ocv_watershed";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetWatershed>(pParam);
         }

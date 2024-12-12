@@ -32,7 +32,7 @@ class COcvWidgetSuperResBTVL1 : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetSuperResBTVL1(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetSuperResBTVL1(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvSuperResBTVL1Param>(pParam);
             init();
@@ -102,7 +102,7 @@ class COcvWidgetSuperResBTVL1Factory : public CWidgetFactory
             m_name = "ocv_super_resolution_btvl1";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetSuperResBTVL1>(pParam);
         }

@@ -154,7 +154,7 @@ CWidgetSemanticSegFilter::CWidgetSemanticSegFilter(QWidget *parent): CWorkflowTa
     init();
 }
 
-CWidgetSemanticSegFilter::CWidgetSemanticSegFilter(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent)
+CWidgetSemanticSegFilter::CWidgetSemanticSegFilter(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent)
     : CWorkflowTaskWidget(parent)
 {
     m_pParam = std::dynamic_pointer_cast<CSemanticSegFilterParam>(pParam);
@@ -183,7 +183,7 @@ CWidgetSemanticSegFilterFactory::CWidgetSemanticSegFilterFactory()
     m_name = "ik_semantic_segmentation_filter";
 }
 
-WorkflowTaskWidgetPtr CWidgetSemanticSegFilterFactory::create(std::shared_ptr<CWorkflowTaskParam> pParam)
+WorkflowTaskWidgetPtr CWidgetSemanticSegFilterFactory::create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
 {
     return std::make_shared<CWidgetSemanticSegFilter>(pParam);
 }

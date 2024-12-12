@@ -31,7 +31,7 @@ class COcvWidgetFastNlMeansMulti : public CWorkflowTaskWidget
         {
             init();
         }
-        COcvWidgetFastNlMeansMulti(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetFastNlMeansMulti(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvFastNlMeansMultiParam>(pParam);
             init();
@@ -105,7 +105,7 @@ class COcvWidgetFastNlMeansMultiFactory : public CWidgetFactory
             m_name = "ocv_non_local_means_multi_filter";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetFastNlMeansMulti>(pParam);
         }

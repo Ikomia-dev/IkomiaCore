@@ -34,7 +34,7 @@ class COcvWidgetInpaintFuzzy : public CWorkflowTaskWidget
         {
             init();
         }
-        COcvWidgetInpaintFuzzy(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetInpaintFuzzy(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvInpaintFuzzyParam>(pParam);;
             init();
@@ -102,7 +102,7 @@ class COcvWidgetInpaintFuzzyFactory : public CWidgetFactory
             m_name = "ocv_inpaint_fuzzy";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetInpaintFuzzy>(pParam);
         }

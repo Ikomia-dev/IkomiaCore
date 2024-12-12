@@ -30,7 +30,7 @@ class COcvWidgetAbsdiff : public CWidgetApplyOnly
         {
         }
 
-        COcvWidgetAbsdiff(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
+        COcvWidgetAbsdiff(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
         {
         }
 };
@@ -44,7 +44,7 @@ class COcvWidgetAbsdiffFactory : public CWidgetFactory
             m_name = "ocv_abs_diff";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetAbsdiff>(pParam);
         }

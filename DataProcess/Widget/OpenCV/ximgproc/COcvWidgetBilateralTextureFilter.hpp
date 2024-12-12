@@ -33,7 +33,7 @@ class COcvWidgetBilateralTextureFilter : public CWorkflowTaskWidget
         {
             init();
         }
-        COcvWidgetBilateralTextureFilter(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetBilateralTextureFilter(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvBilateralTextureFilterParam>(pParam);
             init();
@@ -106,7 +106,7 @@ class COcvWidgetBilateralTextureFilterFactory : public CWidgetFactory
             m_name = "ocv_bilateral_texture_filter";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetBilateralTextureFilter>(pParam);
         }

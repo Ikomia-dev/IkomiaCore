@@ -25,7 +25,7 @@ COcvWidgetDnnCore::COcvWidgetDnnCore(QWidget *parent) : CWorkflowTaskWidget(pare
     initConnections();
 }
 
-COcvWidgetDnnCore::COcvWidgetDnnCore(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent) : CWorkflowTaskWidget(parent)
+COcvWidgetDnnCore::COcvWidgetDnnCore(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent) : CWorkflowTaskWidget(parent)
 {
     m_pParam = std::dynamic_pointer_cast<COcvDnnCoreParam>(pParam);
     init();

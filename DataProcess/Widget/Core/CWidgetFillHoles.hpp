@@ -31,7 +31,7 @@ class CWidgetFillHoles : public CWidgetApplyOnly
         {
         }
 
-        CWidgetFillHoles(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
+        CWidgetFillHoles(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
         {
         }
 };
@@ -45,7 +45,7 @@ class CWidgetFillHolesFactory : public CWidgetFactory
             m_name = "ik_fill_holes";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<CWidgetFillHoles>(pParam);
         }

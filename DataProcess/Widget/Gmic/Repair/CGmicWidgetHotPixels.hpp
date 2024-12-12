@@ -32,7 +32,7 @@ class CGmicWidgetHotPixels : public CWorkflowTaskWidget
             init();
         }
 
-        CGmicWidgetHotPixels(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        CGmicWidgetHotPixels(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<CGmicHotPixelsParam>(pParam);
             init();
@@ -72,7 +72,7 @@ class CGmicWidgetHotPixelsFactory : public CWidgetFactory
             m_name = "gmic_hot_pixels";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<CGmicWidgetHotPixels>(pParam);
         }

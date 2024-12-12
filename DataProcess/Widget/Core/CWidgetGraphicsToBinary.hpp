@@ -31,7 +31,7 @@ class CWidgetGraphicsToBinary : public CWorkflowTaskWidget
             init();
         }
 
-        CWidgetGraphicsToBinary(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        CWidgetGraphicsToBinary(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<CGraphicsToBinaryParam>(pParam);
             init();
@@ -81,7 +81,7 @@ class CWidgetGraphicsToBinaryFactory : public CWidgetFactory
             m_name = "ik_graphics_to_binary";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<CWidgetGraphicsToBinary>(pParam);
         }

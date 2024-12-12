@@ -32,7 +32,7 @@ class CGmicWidgetInpaint : public CWorkflowTaskWidget
             init();
         }
 
-        CGmicWidgetInpaint(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        CGmicWidgetInpaint(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<CGmicInpaintParam>(pParam);
             init();
@@ -93,7 +93,7 @@ class CGmicWidgetInpaintFactory : public CWidgetFactory
             m_name = "gmic_patch_based_inpaint";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<CGmicWidgetInpaint>(pParam);
         }

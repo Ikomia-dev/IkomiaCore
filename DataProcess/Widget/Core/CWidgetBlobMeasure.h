@@ -33,7 +33,7 @@ class CWidgetBlobMeasure : public CWorkflowTaskWidget
     public:
 
         CWidgetBlobMeasure(QWidget *parent = Q_NULLPTR);
-        CWidgetBlobMeasure(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR);
+        CWidgetBlobMeasure(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR);
 
     public slots:
 
@@ -67,7 +67,7 @@ class CWidgetBlobMeasureFactory : public CWidgetFactory
         }
         ~CWidgetBlobMeasureFactory() {}
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<CWidgetBlobMeasure>(pParam);
         }

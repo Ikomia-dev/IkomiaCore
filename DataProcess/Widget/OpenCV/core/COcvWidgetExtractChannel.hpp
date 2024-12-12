@@ -32,7 +32,7 @@ class COcvWidgetExtractChannel : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetExtractChannel(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetExtractChannel(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvExtractChannelParam>(pParam);
             init();
@@ -69,7 +69,7 @@ class COcvWidgetExtractChannelFactory : public CWidgetFactory
             m_name = "ocv_extract_channel";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetExtractChannel>(pParam);
         }

@@ -32,7 +32,7 @@ class CGmicWidgetSharpenGradient : public CWorkflowTaskWidget
             init();
         }
 
-        CGmicWidgetSharpenGradient(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        CGmicWidgetSharpenGradient(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<CGmicSharpenGradientParam>(pParam);
             init();
@@ -79,7 +79,7 @@ class CGmicWidgetSharpenGradientFactory : public CWidgetFactory
             m_name = "gmic_sharpen_gradient";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<CGmicWidgetSharpenGradient>(pParam);
         }

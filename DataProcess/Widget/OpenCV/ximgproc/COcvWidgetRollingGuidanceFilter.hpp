@@ -33,7 +33,7 @@ class COcvWidgetRollingGuidanceFilter : public CWorkflowTaskWidget
         {
             init();
         }
-        COcvWidgetRollingGuidanceFilter(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetRollingGuidanceFilter(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvRollingGuidanceFilterParam>(pParam);
             init();
@@ -106,7 +106,7 @@ class COcvWidgetRollingGuidanceFilterFactory : public CWidgetFactory
             m_name = "ocv_rolling_guidance_filter";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetRollingGuidanceFilter>(pParam);
         }

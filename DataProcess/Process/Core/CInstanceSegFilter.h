@@ -67,7 +67,7 @@ class CWidgetInstanceSegFilter : public CWorkflowTaskWidget
     public:
 
         CWidgetInstanceSegFilter(QWidget *parent = Q_NULLPTR);
-        CWidgetInstanceSegFilter(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR);
+        CWidgetInstanceSegFilter(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR);
 
     protected:
 
@@ -92,7 +92,7 @@ class CWidgetInstanceSegFilterFactory : public CWidgetFactory
         CWidgetInstanceSegFilterFactory();
         ~CWidgetInstanceSegFilterFactory() = default;
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam);
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam);
 };
 
 #endif // CINSTANCESEGFILTER_H

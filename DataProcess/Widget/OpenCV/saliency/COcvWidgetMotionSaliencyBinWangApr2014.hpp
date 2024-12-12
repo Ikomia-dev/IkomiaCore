@@ -30,7 +30,7 @@ class COcvWidgetMotionSaliencyBinWangApr2014 : public CWidgetApplyOnly
         {
         }
 
-        COcvWidgetMotionSaliencyBinWangApr2014(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
+        COcvWidgetMotionSaliencyBinWangApr2014(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWidgetApplyOnly(pParam, parent)
         {
         }
 };
@@ -44,7 +44,7 @@ class COcvWidgetMotionSaliencyBinWangApr2014Factory : public CWidgetFactory
             m_name = "ocv_motion_saliency_bin_wang";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetMotionSaliencyBinWangApr2014>(pParam);
         }

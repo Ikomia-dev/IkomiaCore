@@ -33,7 +33,7 @@ class COcvWidgetAdaptiveThreshold : public CWorkflowTaskWidget
         {
             init();
         }
-        COcvWidgetAdaptiveThreshold(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetAdaptiveThreshold(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvAdaptiveThresholdParam>(pParam);
             init();
@@ -114,7 +114,7 @@ class COcvWidgetAdaptiveThresholdFactory : public CWidgetFactory
             m_name = "ocv_adaptive_threshold";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetAdaptiveThreshold>(pParam);
         }

@@ -36,7 +36,7 @@ class COcvWidgetGFTT : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetGFTT(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetGFTT(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvGFTTParam>(pParam);
             init();
@@ -88,7 +88,7 @@ class COcvWidgetGFTTFactory : public CWidgetFactory
             m_name = "ocv_gftt_detector";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetGFTT>(pParam);
         }

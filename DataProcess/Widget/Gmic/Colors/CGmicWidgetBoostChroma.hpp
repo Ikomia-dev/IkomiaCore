@@ -32,7 +32,7 @@ class CGmicWidgetBoostChroma : public CWorkflowTaskWidget
             init();
         }
 
-        CGmicWidgetBoostChroma(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        CGmicWidgetBoostChroma(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<CGmicBoostChromaParam>(pParam);
             init();
@@ -76,7 +76,7 @@ class CGmicWidgetBoostChromaFactory : public CWidgetFactory
             m_name = "gmic_boost_chromaticity";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<CGmicWidgetBoostChroma>(pParam);
         }

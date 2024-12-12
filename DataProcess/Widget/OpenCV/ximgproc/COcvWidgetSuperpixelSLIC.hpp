@@ -36,7 +36,7 @@ class COcvWidgetSuperpixelSLIC : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetSuperpixelSLIC(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetSuperpixelSLIC(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvSuperpixelSLICParam>(pParam);
             init();
@@ -86,7 +86,7 @@ class COcvWidgetSuperpixelSLICFactory : public CWidgetFactory
             m_name = "ocv_superpixel_slic";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetSuperpixelSLIC>(pParam);
         }

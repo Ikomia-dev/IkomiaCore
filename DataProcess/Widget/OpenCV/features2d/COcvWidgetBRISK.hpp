@@ -36,7 +36,7 @@ class COcvWidgetBRISK : public CWorkflowTaskWidget
             init();
         }
 
-        COcvWidgetBRISK(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        COcvWidgetBRISK(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<COcvBRISKParam>(pParam);
             init();
@@ -101,7 +101,7 @@ class COcvWidgetBRISKFactory : public CWidgetFactory
             m_name = "ocv_brisk";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<COcvWidgetBRISK>(pParam);
         }

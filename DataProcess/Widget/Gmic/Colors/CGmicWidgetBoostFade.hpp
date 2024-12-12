@@ -32,7 +32,7 @@ class CGmicWidgetBoostFade : public CWorkflowTaskWidget
             init();
         }
 
-        CGmicWidgetBoostFade(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
+        CGmicWidgetBoostFade(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent = Q_NULLPTR) : CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<CGmicBoostFadeParam>(pParam);
             init();
@@ -74,7 +74,7 @@ class CGmicWidgetBoostFadeFactory : public CWidgetFactory
             m_name = "gmic_boost_fade";
         }
 
-        virtual WorkflowTaskWidgetPtr   create(std::shared_ptr<CWorkflowTaskParam> pParam)
+        virtual WorkflowTaskWidgetPtr   create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
         {
             return std::make_shared<CGmicWidgetBoostFade>(pParam);
         }

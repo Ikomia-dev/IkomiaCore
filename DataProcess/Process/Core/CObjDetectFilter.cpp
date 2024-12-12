@@ -162,7 +162,7 @@ CWidgetObjDetectFilter::CWidgetObjDetectFilter(QWidget *parent): CWorkflowTaskWi
     init();
 }
 
-CWidgetObjDetectFilter::CWidgetObjDetectFilter(std::shared_ptr<CWorkflowTaskParam> pParam, QWidget *parent)
+CWidgetObjDetectFilter::CWidgetObjDetectFilter(const std::shared_ptr<CWorkflowTaskParam>& pParam, QWidget *parent)
     : CWorkflowTaskWidget(parent)
 {
     m_pParam = std::dynamic_pointer_cast<CObjDetectFilterParam>(pParam);
@@ -193,7 +193,7 @@ CWidgetObjDetectFilterFactory::CWidgetObjDetectFilterFactory()
     m_name = "ik_object_detection_filter";
 }
 
-WorkflowTaskWidgetPtr CWidgetObjDetectFilterFactory::create(std::shared_ptr<CWorkflowTaskParam> pParam)
+WorkflowTaskWidgetPtr CWidgetObjDetectFilterFactory::create(const std::shared_ptr<CWorkflowTaskParam>& pParam)
 {
     return std::make_shared<CWidgetObjDetectFilter>(pParam);
 }
