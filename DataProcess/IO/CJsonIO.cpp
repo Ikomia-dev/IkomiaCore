@@ -100,20 +100,26 @@ void CJsonIO::setData(const QJsonDocument &doc)
 
 void CJsonIO::load(const std::string &path)
 {
-    throw CException(
-        CoreExCode::NOT_IMPLEMENTED,
-        "Not implemented yet...",
-        __func__, __FILE__, __LINE__
-    );
+    auto extension = Utils::File::extension(path);
+    if (extension != ".json")
+        throw CException(CoreExCode::NOT_IMPLEMENTED, "Invalid file format, please use .json files.", __func__, __FILE__, __LINE__);
+
+    QFile jsonFile(QString::fromStdString(path));
+    if(!jsonFile.open(QFile::ReadOnly | QFile::Text))
+        throw CException(CoreExCode::INVALID_FILE, "Couldn't read file:" + path, __func__, __FILE__, __LINE__);
+
+    m_rootJSON = QJsonDocument::fromJson(jsonFile.readAll());
+    if(m_rootJSON.isNull() || m_rootJSON.isEmpty())
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading JSON I/O: invalid JSON structure", __func__, __FILE__, __LINE__);
 }
 
 void CJsonIO::save(const std::string &path)
 {
-    throw CException(
-        CoreExCode::NOT_IMPLEMENTED,
-        "Not implemented yet...",
-        __func__, __FILE__, __LINE__
-    );
+    QFile jsonFile(QString::fromStdString(path));
+    if(!jsonFile.open(QFile::WriteOnly | QFile::Text))
+        throw CException(CoreExCode::INVALID_FILE, "Couldn't write file:" + path, __func__, __FILE__, __LINE__);
+
+    jsonFile.write(m_rootJSON.toJson(QJsonDocument::Compact));
 }
 
 // FIXME : this method is set for compatibility with the 'doDisplayText' signal
