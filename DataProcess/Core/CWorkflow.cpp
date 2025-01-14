@@ -1492,7 +1492,7 @@ void CWorkflow::runLastTask()
 void CWorkflow::runTasks(const std::vector<WorkflowVertex>& taskToExecute)
 {
     updateCompositeInputName();
-    m_folder = getOutputFolder() + m_startDate;
+    m_folder = Utils::File::makePath(getOutputFolder(), m_startDate);
 
     if (std::stoi(m_cfg["WholeVideo"]))
         runTasksVideo(taskToExecute);
@@ -1593,6 +1593,7 @@ void CWorkflow::runTasksVideo(const std::vector<WorkflowVertex> &taskToExecute)
     //Wait for read/write video threads to finish
     stopVideoRead(videoInputs);
     stopVideoWrite(videoOutputs, std::stoi(m_cfg["VideoWriteTimeout"]));
+    finalizeVideoRun(taskToExecute);
 }
 
 void CWorkflow::stopVideoRead(const InputOutputVect& ioVect)
@@ -1628,7 +1629,7 @@ void CWorkflow::runTask(const WorkflowVertex& id)
         }
 
         // Update output folder
-        taskPtr->setOutputFolder(m_folder + "/" + taskPtr->getName() + "/");
+        taskPtr->setOutputFolder(Utils::File::makePath(m_folder, taskPtr->getName()));
         // Run task
         setRunningTask(id);
         m_runMgr.run(taskPtr, m_compositeInputName);
@@ -2038,6 +2039,15 @@ void CWorkflow::updateCompositeInputName()
             m_compositeInputName += "-";
 
         m_compositeInputName += it->second;
+    }
+}
+
+void CWorkflow::finalizeVideoRun(const std::vector<WorkflowVertex> &taskToExecute)
+{
+    for(auto vertexIt=taskToExecute.begin(); vertexIt!=taskToExecute.end(); ++vertexIt)
+    {
+        WorkflowTaskPtr taskPtr = m_graph[*vertexIt];
+        m_runMgr.aggregateOutputs(taskPtr);
     }
 }
 

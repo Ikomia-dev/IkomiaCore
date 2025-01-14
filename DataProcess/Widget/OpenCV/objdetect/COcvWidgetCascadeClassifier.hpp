@@ -20,11 +20,11 @@
 #ifndef COCVWIDGETCASCADECLASSIFIER_HPP
 #define COCVWIDGETCASCADECLASSIFIER_HPP
 
-#include "Process/OpenCV/objdetect//COcvCascadeClassifier.hpp"
 #include <QDir>
 #include <QCheckBox>
 #include <QGroupBox>
 #include <QVBoxLayout>
+#include "Process/OpenCV/objdetect/COcvCascadeClassifier.hpp"
 
 class COcvWidgetCascadeClassifier : public CWorkflowTaskWidget
 {

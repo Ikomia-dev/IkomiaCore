@@ -63,7 +63,28 @@ void CRunTaskManager::stop(const WorkflowTaskPtr &taskPtr)
 {
     m_bStop = true;
     if(taskPtr)
-        taskPtr->stop();
+            taskPtr->stop();
+}
+
+void CRunTaskManager::aggregateOutputs(const WorkflowTaskPtr &taskPtr)
+{
+    const std::set<IODataType> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
+    auto outputs = taskPtr->getOutputs();
+
+    for (size_t i=0; i<outputs.size(); ++i)
+    {
+        auto outType = outputs[i]->getDataType();
+        auto it = videoTypes.find(outType);
+
+        if (it == videoTypes.end())
+        {
+            // Non-video output
+            std::string dataFolder = Utils::File::makePath(taskPtr->getOutputFolder(), outputs[i]->getName() + "_" + std::to_string(i));
+            std::string savePath =  dataFolder + ".json";
+            aggregateOutput(dataFolder, savePath);
+            boost::filesystem::remove_all(dataFolder);
+        }
+    }
 }
 
 void CRunTaskManager::runImageProcess2D(const WorkflowTaskPtr &taskPtr)
@@ -160,23 +181,81 @@ void CRunTaskManager::manageOutputs(const WorkflowTaskPtr &taskPtr, const std::s
     if (taskPtr->isAutoSave())
     {
         if (std::stoi(m_pCfg->at("WholeVideo")))
-            saveVideoOutputs(taskPtr, inputName);
+            saveWholeVideoOutputs(taskPtr, inputName);
         else
             taskPtr->saveOutputs(Utils::File::getAvailablePath(inputName));
     }
 }
 
-void CRunTaskManager::saveVideoOutputs(const WorkflowTaskPtr &taskPtr, const std::string& inputName)
+void CRunTaskManager::aggregateOutput(const std::string &dataFolder, const std::string &savePath)
 {
-    assert(m_pCfg);
-    bool bImageSequence = false;
-    bool bEmbedGraphics = std::stoi(m_pCfg->at("GraphicsEmbedded"));
+    int frameIndex = 0;
+    QJsonArray frameOutputs;
+    QDir dataDir(QString::fromStdString(dataFolder));
+    dataDir.setNameFilters({"*.json"});
+
+    foreach (QString fileName, dataDir.entryList(QDir::Files, QDir::Name))
+    {
+        QFile jsonFile(dataDir.absoluteFilePath(fileName));
+        if (!jsonFile.open(QFile::ReadOnly | QFile::Text))
+            continue;
+
+        QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonFile.readAll()));
+        if (jsonDoc.isNull() || jsonDoc.isEmpty())
+            continue;
+
+        QJsonObject frameResult;
+        frameResult[QString::number(frameIndex)] = jsonDoc.object();
+        frameOutputs.append(frameResult);
+        frameIndex++;
+    }
+
+    QFile resultsFile(QString::fromStdString(savePath));
+    if(!resultsFile.open(QFile::WriteOnly | QFile::Text))
+        throw CException(CoreExCode::INVALID_FILE, "Couldn't write file:" + savePath, __func__, __FILE__, __LINE__);
+
+    QJsonDocument jsonDoc(frameOutputs);
+    resultsFile.write(jsonDoc.toJson(QJsonDocument::Compact));
+}
+
+void CRunTaskManager::saveWholeVideoOutputs(const WorkflowTaskPtr &taskPtr, const std::string& inputName)
+{
     const std::set<IODataType> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
 
     //Get video inputs
     auto videoInputs = taskPtr->getInputs(videoTypes);
     if(videoInputs.size() == 0)
         return;
+
+    auto outputs = taskPtr->getOutputs();
+    for (size_t i=0; i<outputs.size(); ++i)
+    {
+        auto outType = outputs[i]->getDataType();
+        auto it = videoTypes.find(outType);
+
+        // Non-video output
+        if (it == videoTypes.end())
+            saveNonVideoOutputs(taskPtr, outputs[i], i, videoInputs);
+    }
+
+    saveVideoOutputs(taskPtr, videoInputs, inputName);
+}
+
+void CRunTaskManager::saveNonVideoOutputs(const WorkflowTaskPtr &taskPtr, const WorkflowTaskIOPtr& output, int index, const InputOutputVect& videoInputs)
+{    
+    auto infoPtr = std::static_pointer_cast<CDataVideoInfo>(videoInputs[0]->getDataInfo());
+    std::string outFolder = Utils::File::makePath(taskPtr->getOutputFolder(), output->getName() + "_" + std::to_string(index));
+    Utils::File::createDirectory(outFolder);
+    std::string outPath = Utils::File::makePath(outFolder, Utils::String::makeNumberString(infoPtr->m_currentPos, 6) + ".json");
+    output->save(outPath);
+}
+
+void CRunTaskManager::saveVideoOutputs(const WorkflowTaskPtr &taskPtr, const InputOutputVect& videoInputs, const std::string& inputName)
+{
+    assert(m_pCfg);
+    bool bImageSequence = false;
+    bool bEmbedGraphics = std::stoi(m_pCfg->at("GraphicsEmbedded"));
+    const std::set<IODataType> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
 
     //Get video outputs
     auto videoOutputs = taskPtr->getOutputs(videoTypes);
@@ -202,9 +281,9 @@ void CRunTaskManager::saveVideoOutputs(const WorkflowTaskPtr &taskPtr, const std
         std::string extension = Utils::Data::getFileFormatExtension(outputPtr->getSaveFormat());
 
         if(bImageSequence)
-            outPath = taskPtr->getOutputFolder() + inputName + "_" + std::to_string(i+1) + "_%04d.png";
+            outPath = Utils::File::makePath(taskPtr->getOutputFolder(), inputName + "_" + std::to_string(i+1) + "_%04d.png");
         else
-            outPath = taskPtr->getOutputFolder() + inputName + "_" + std::to_string(i+1) + extension;
+            outPath = Utils::File::makePath(taskPtr->getOutputFolder(), inputName + "_" + std::to_string(i+1) + extension);
 
         outputPtr->setVideoPath(outPath);
     }
