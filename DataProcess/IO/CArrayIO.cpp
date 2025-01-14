@@ -21,7 +21,7 @@
 #include "Data/CDataArrayInfo.h"
 #include <QObject>
 
-CArrayIO::CArrayIO() : CWorkflowTaskIO(IODataType::ARRAY, "CArrayIO")
+CArrayIO::CArrayIO() : CWorkflowTaskIO(IODataType::ARRAY, "ArrayIO")
 {
     m_description = QObject::tr("Generic multi-dimensional array.").toStdString();
 }

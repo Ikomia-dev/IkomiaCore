@@ -27,7 +27,7 @@
 
 
 CJsonIO::CJsonIO() :
-    CJsonIO(QJsonDocument(), "CJsonIO")
+    CJsonIO(QJsonDocument(), "JsonIO")
 { }
 
 CJsonIO::CJsonIO(const std::string &name) :

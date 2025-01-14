@@ -110,7 +110,7 @@ void CObjectMeasure::fromJson(const QJsonObject &obj)
 //--------------------------------//
 //----- class CBlobMeasureIO -----//
 //--------------------------------//
-CBlobMeasureIO::CBlobMeasureIO() : CWorkflowTaskIO(IODataType::BLOB_VALUES, "CBlobMeasureIO")
+CBlobMeasureIO::CBlobMeasureIO() : CWorkflowTaskIO(IODataType::BLOB_VALUES, "BlobMeasureIO")
 {
     m_description = QObject::tr("Predefined measures computed from connected components (Surface, perimeter...).").toStdString();
     m_saveFormat = DataFileFormat::CSV;

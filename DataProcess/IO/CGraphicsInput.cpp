@@ -30,7 +30,7 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 
-CGraphicsInput::CGraphicsInput() : CWorkflowTaskIO(IODataType::INPUT_GRAPHICS, "CGraphicsInput")
+CGraphicsInput::CGraphicsInput() : CWorkflowTaskIO(IODataType::INPUT_GRAPHICS, "GraphicsInput")
 {
     m_description = QObject::tr("Graphics items organized in layer.\n"
                                 "Represent shapes and types of objects in image.\n"

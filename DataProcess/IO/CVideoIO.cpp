@@ -24,19 +24,19 @@
 #include "Main/CoreTools.hpp"
 #include "Data/CDataConversion.h"
 
-CVideoIO::CVideoIO() : CImageIO(IODataType::VIDEO, "CVideoIO")
+CVideoIO::CVideoIO() : CImageIO(IODataType::VIDEO, "VideoIO")
 {
     m_description = QObject::tr("Video with read/write capabilities.").toStdString();
     m_saveFormat = DataFileFormat::AVI;
 }
 
-CVideoIO::CVideoIO(IODataType data) : CImageIO(data, "CVideoIO")
+CVideoIO::CVideoIO(IODataType data) : CImageIO(data, "VideoIO")
 {
     m_description = QObject::tr("Video with read/write capabilities.").toStdString();
     m_saveFormat = DataFileFormat::AVI;
 }
 
-CVideoIO::CVideoIO(IODataType data, const CMat &image) : CImageIO(data, image, "CVideoIO")
+CVideoIO::CVideoIO(IODataType data, const CMat &image) : CImageIO(data, image, "VideoIO")
 {
     m_description = QObject::tr("Video with read/write capabilities.").toStdString();
     m_saveFormat = DataFileFormat::AVI;
