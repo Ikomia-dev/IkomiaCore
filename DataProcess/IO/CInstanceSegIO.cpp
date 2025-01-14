@@ -392,7 +392,7 @@ void CInstanceSegIO::save(const std::string &path)
         throw CException(CoreExCode::INVALID_FILE, "Couldn't write file:" + path, __func__, __FILE__, __LINE__);
 
     QJsonDocument jsonDoc(toJsonInternal({"image_format", "png"}));
-    jsonFile.write(jsonDoc.toJson());
+    jsonFile.write(jsonDoc.toJson(QJsonDocument::Compact));
 }
 
 std::string CInstanceSegIO::toJson() const

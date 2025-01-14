@@ -319,7 +319,7 @@ void CGraphicsOutput::save(const std::string &path)
         throw CException(CoreExCode::INVALID_FILE, "Couldn't write file:" + path, __func__, __FILE__, __LINE__);
 
     QJsonDocument jsonDoc(toJsonInternal());
-    jsonFile.write(jsonDoc.toJson());
+    jsonFile.write(jsonDoc.toJson(QJsonDocument::Compact));
 }
 
 void CGraphicsOutput::load(const std::string &path)
