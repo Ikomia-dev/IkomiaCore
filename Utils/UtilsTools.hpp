@@ -800,6 +800,12 @@ namespace Ikomia
                 std::transform(lower.begin(), lower.end(), lower.begin(), [](unsigned char c){ return std::tolower(c); });
                 return lower;
             }
+            inline std::string makeNumberString(int number, int nbLeadingZero)
+            {
+                std::ostringstream os;
+                os << std::setfill('0') << std::setw(nbLeadingZero) << number;
+                return os.str();
+            }
         }
 
         namespace Database
@@ -979,6 +985,18 @@ namespace Ikomia
                 return ext;
             }
 
+            template<typename... Args>
+            std::string makePath(const std::string& base, Args...args)
+            {
+                std::vector<std::string> parts = {{args...}};
+                boost::filesystem::path path = base;
+
+                for (size_t i=0; i<parts.size(); ++i)
+                    path /= parts[i];
+
+                return path.string();
+            }
+
             inline std::string getAvailablePath(const std::string& originalPath)
             {
                 std::string path = originalPath;
@@ -990,7 +1008,7 @@ namespace Ikomia
                 int i = 1;
                 while(boost::filesystem::exists(path) == true)
                 {
-                    path = folder + "/" + fileName + std::to_string(i) + ext;
+                    path = makePath(folder, fileName + std::to_string(i) + ext);
                     ++i;
                 }
                 return path;
@@ -1035,7 +1053,7 @@ namespace Ikomia
                     auto digits = match.captured(2).toInt();
                     auto extension = match.captured(3).toStdString();
                     boost::format fmt = boost::format("%1%%2%%3%") % name % boost::io::group(std::setw(digits), std::setfill('0'), index) % extension;
-                    path = parent + "/" + fmt.str();
+                    path = makePath(parent, fmt.str());
                 }
 
                 /*const std::regex regex(R"((.+)%[0-9]*([0-9]+)d(\.[0-9a-z]+))");

@@ -93,7 +93,7 @@ void COpencvImageIO::write(const CMat &image)
             for(size_t i=0; i<image.getNbStacks(); ++i)
             {
                 std::string strNumber = std::to_string(i);
-                std::string path = folder + "/" + baseName + std::string(4 - strNumber.length(), '0') + strNumber + extension;
+                std::string path = Utils::File::makePath(folder, baseName + std::string(4 - strNumber.length(), '0') + strNumber + extension);
                 writeSingle(path, image.getPlane(i));
             }
         }

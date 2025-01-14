@@ -285,7 +285,7 @@ std::pair<std::string, int> CDataVideoIO::getImageSequenceInfo(const std::string
     Utils::String::replace(filenameStr, digit, pattern);
 
     std::pair<std::string,int> ret;
-    ret.first = fullpath.parent_path().string() + "/" + filenameStr;
+    ret.first = Utils::File::makePath(fullpath.parent_path().string(), filenameStr);
     ret.second = filenames.size();
     return ret;
 }
