@@ -83,7 +83,7 @@ std::ostream& operator<<(std::ostream& os, const CObjectDetection& obj)
 //------------------------------//
 //----- CObjectDetectionIO -----//
 //------------------------------//
-CObjectDetectionIO::CObjectDetectionIO() : CWorkflowTaskIO(IODataType::OBJECT_DETECTION, "CObjectDetectionIO")
+CObjectDetectionIO::CObjectDetectionIO() : CWorkflowTaskIO(IODataType::OBJECT_DETECTION, "ObjectDetectionIO")
 {
     m_description = QObject::tr("Object detection data: label, confidence, box and color.").toStdString();
     m_saveFormat = DataFileFormat::JSON;

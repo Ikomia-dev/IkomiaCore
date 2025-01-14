@@ -4,7 +4,7 @@
 #include "DataProcessTools.hpp"
 #include "CInstanceSegIO.h"
 
-CSemanticSegIO::CSemanticSegIO() : CWorkflowTaskIO(IODataType::SEMANTIC_SEGMENTATION, "CSemanticSegIO")
+CSemanticSegIO::CSemanticSegIO() : CWorkflowTaskIO(IODataType::SEMANTIC_SEGMENTATION, "SemanticSegIO")
 {
     m_description = QObject::tr("Semantic segmentation data: mask and class names.").toStdString();
     m_saveFormat = DataFileFormat::JSON;

@@ -220,7 +220,7 @@ std::ostream& operator<<(std::ostream& os, const CKeypointLink& link)
 //----- CKeypointsIO -----//
 //------------------------//
 
-CKeypointsIO::CKeypointsIO(): CWorkflowTaskIO(IODataType::KEYPOINTS, "CKeypointsIO")
+CKeypointsIO::CKeypointsIO(): CWorkflowTaskIO(IODataType::KEYPOINTS, "KeypointsIO")
 {
     m_description = QObject::tr("Keypoints detection data: object, label, confidence, box, keypoints data.").toStdString();
     m_saveFormat = DataFileFormat::JSON;
@@ -498,7 +498,7 @@ void CKeypointsIO::save(const std::string &path)
         throw CException(CoreExCode::INVALID_FILE, "Couldn't write file:" + path, __func__, __FILE__, __LINE__);
 
     QJsonDocument jsonDoc(toJsonInternal());
-    jsonFile.write(jsonDoc.toJson());
+    jsonFile.write(jsonDoc.toJson(QJsonDocument::Compact));
 }
 
 std::string CKeypointsIO::toJson() const

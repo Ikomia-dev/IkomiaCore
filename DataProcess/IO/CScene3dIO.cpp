@@ -33,7 +33,7 @@
 
 
 CScene3dIO::CScene3dIO() :
-    CWorkflowTaskIO(IODataType::SCENE_3D, "CScene3dIO")
+    CWorkflowTaskIO(IODataType::SCENE_3D, "Scene3dIO")
 {
     // Data will be saved in JSON format
     setSaveFormat(DataFileFormat::JSON);

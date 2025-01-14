@@ -60,7 +60,7 @@ class CNumericIOBase: public CWorkflowTaskIO
         using StringVector = std::vector<std::string>;
         using VectorOfStringVector = std::vector<std::vector<std::string>>;
 
-        CNumericIOBase(): CWorkflowTaskIO(IODataType::NUMERIC_VALUES, "CNumericIO")
+        CNumericIOBase(): CWorkflowTaskIO(IODataType::NUMERIC_VALUES, "NumericIO")
         {
         }
         CNumericIOBase(const std::string& name): CWorkflowTaskIO(IODataType::NUMERIC_VALUES, name)

@@ -28,21 +28,21 @@
 
 using CImageDataIO = CDataIO<CDataImageIO, CMat>;
 
-CImageIO::CImageIO() : CWorkflowTaskIO(IODataType::IMAGE, "CImageIO")
+CImageIO::CImageIO() : CWorkflowTaskIO(IODataType::IMAGE, "ImageIO")
 {
     m_description = QObject::tr("2D or 3D images.\n"
                                 "Can be single frame from video or camera stream.").toStdString();
     m_saveFormat = DataFileFormat::PNG;
 }
 
-CImageIO::CImageIO(IODataType data) : CWorkflowTaskIO(data, "CImageIO")
+CImageIO::CImageIO(IODataType data) : CWorkflowTaskIO(data, "ImageIO")
 {
     m_description = QObject::tr("2D or 3D images.\n"
                                 "Can be single frame from video or camera stream.").toStdString();
     m_saveFormat = DataFileFormat::PNG;
 }
 
-CImageIO::CImageIO(IODataType data, const CMat &image) : CWorkflowTaskIO(data, "CImageIO")
+CImageIO::CImageIO(IODataType data, const CMat &image) : CWorkflowTaskIO(data, "ImageIO")
 {
     m_description = QObject::tr("2D or 3D images.\n"
                                 "Can be single frame from video or camera stream.").toStdString();

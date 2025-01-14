@@ -33,20 +33,20 @@ std::string Utils::CPluginTools::getDirectory(const std::string& name, int langu
 {
     std::string directory;
     if(language == ApiLanguage::CPP)
-        directory = Utils::Plugin::getCppPath() + "/" + Utils::String::httpFormat(name);
+        directory = Utils::File::makePath(Utils::Plugin::getCppPath(), Utils::String::httpFormat(name));
     else
-        directory = Utils::Plugin::getPythonPath() + "/" + Utils::String::httpFormat(name);
+        directory = Utils::File::makePath(Utils::Plugin::getPythonPath(), Utils::String::httpFormat(name));
 
     return directory;
 }
 
 std::string Utils::CPluginTools::getDirectory(const std::string &name)
 {
-    std::string directory = Utils::Plugin::getPythonPath() + "/" + Utils::String::httpFormat(name);
+    std::string directory = Utils::File::makePath(Utils::Plugin::getPythonPath(), Utils::String::httpFormat(name));
     if (Utils::File::isFileExist(directory))
         return directory;
 
-    directory = Utils::Plugin::getCppPath() + "/" + Utils::String::httpFormat(name);
+    directory = Utils::File::makePath(Utils::Plugin::getCppPath(), Utils::String::httpFormat(name));
     if (Utils::File::isFileExist(directory))
         return directory;
 

@@ -115,7 +115,7 @@ std::ostream& operator<<(std::ostream& os, const CTextField& field)
 //-------------------//
 //----- CTextIO -----//
 //-------------------//
-CTextIO::CTextIO() : CWorkflowTaskIO(IODataType::TEXT, "CTextIO")
+CTextIO::CTextIO() : CWorkflowTaskIO(IODataType::TEXT, "TextIO")
 {
     m_description = QObject::tr("Text detection data: label, text, confidence, polygon and color.").toStdString();
     m_saveFormat = DataFileFormat::JSON;

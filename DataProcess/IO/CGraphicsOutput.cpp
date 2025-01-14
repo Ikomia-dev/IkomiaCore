@@ -32,7 +32,7 @@
 #include "Graphics/CGraphicsRegistration.h"
 #include "CGraphicsInput.h"
 
-CGraphicsOutput::CGraphicsOutput() : CWorkflowTaskIO(IODataType::OUTPUT_GRAPHICS, "CGraphicsOutput")
+CGraphicsOutput::CGraphicsOutput() : CWorkflowTaskIO(IODataType::OUTPUT_GRAPHICS, "GraphicsOutput")
 {
     m_description = QObject::tr("Graphics items organized in layer.\n"
                                 "Represent shapes and types of objects extracted from image.").toStdString();

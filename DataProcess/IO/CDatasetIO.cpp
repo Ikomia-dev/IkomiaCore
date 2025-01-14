@@ -3,7 +3,7 @@
 
 std::set<std::string> CDatasetIO::m_formats = { "other" };
 
-CDatasetIO::CDatasetIO() : CWorkflowTaskIO(IODataType::DNN_DATASET, "CDatasetIO")
+CDatasetIO::CDatasetIO() : CWorkflowTaskIO(IODataType::DNN_DATASET, "DatasetIO")
 {
     m_srcFormat = "other";
     m_description = QObject::tr("Annotated image dataset in Ikomia format (for Deep Learning).").toStdString();

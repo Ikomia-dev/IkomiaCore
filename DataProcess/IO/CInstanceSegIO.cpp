@@ -92,7 +92,7 @@ std::ostream& operator<<(std::ostream& os, const CInstanceSegmentation& obj)
 //--------------------------//
 //----- CInstanceSegIO -----//
 //--------------------------//
-CInstanceSegIO::CInstanceSegIO() : CWorkflowTaskIO(IODataType::INSTANCE_SEGMENTATION, "CInstanceSegIO")
+CInstanceSegIO::CInstanceSegIO() : CWorkflowTaskIO(IODataType::INSTANCE_SEGMENTATION, "InstanceSegIO")
 {
     m_description = QObject::tr("Instance segmentation data: label, confidence, box, mask and color.").toStdString();
     m_saveFormat = DataFileFormat::JSON;

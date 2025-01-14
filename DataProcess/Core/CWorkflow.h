@@ -289,6 +289,8 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
 
         void                            updateCompositeInputName();
 
+        void                            finalizeVideoRun(const std::vector<WorkflowVertex>& taskToExecute);
+
         void                            saveJSON(const std::string& path);
 
         void                            loadJSON(const std::string& path);

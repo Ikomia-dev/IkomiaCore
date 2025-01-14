@@ -21,13 +21,13 @@
 #include <QPainter>
 #include "Main/CoreTools.hpp"
 
-CWidgetOutput::CWidgetOutput() : CWorkflowTaskIO(IODataType::WIDGET)
+CWidgetOutput::CWidgetOutput() : CWorkflowTaskIO(IODataType::WIDGET, "WidgetOutput")
 {
     m_description = QObject::tr("Generic widget for custom display.\nAny Qt-based window (ex: Matplotlib canvas).").toStdString();
     m_saveFormat = DataFileFormat::JPG;
 }
 
-CWidgetOutput::CWidgetOutput(IODataType data) : CWorkflowTaskIO(data, "CWidgetOutput")
+CWidgetOutput::CWidgetOutput(IODataType data) : CWorkflowTaskIO(data, "WidgetOutput")
 {
     m_description = QObject::tr("Generic widget for custom display.\nAny Qt-based window (ex: Matplotlib canvas).").toStdString();
     m_saveFormat = DataFileFormat::JPG;
