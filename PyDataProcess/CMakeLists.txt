@@ -150,7 +150,7 @@ if(UNIX)
     )
 endif()
 
-if(NOT IK_CPU)
+if(NOT OPENCV_CPU)
     target_link_libraries(pydataprocess PRIVATE
         opencv_cudawarping
     )

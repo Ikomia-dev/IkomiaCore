@@ -31,10 +31,10 @@ find_package(OpenMP)
 
 # OpenCV
 if(WIN32)
-    if(${IK_CPU})
-        set(OpenCV_DIR "C:/Program Files/OpenCV/cpu/x64/vc${MSVC_VERSION}/lib")
-    else()
+    if(${OPENCV_GPU})
         set(OpenCV_DIR "C:/Program Files/OpenCV/cuda/x64/vc${MSVC_VERSION}/lib")
+    else()
+        set(OpenCV_DIR "C:/Program Files/OpenCV/cpu/x64/vc${MSVC_VERSION}/lib")
     endif()
 endif()
 
@@ -67,7 +67,7 @@ add_subdirectory(DataManagement)
 add_subdirectory(DataProcess)
 add_subdirectory(DataPlot)
 
-if(NOT ${IK_CPU})
+if(${IK_VOLUME_RENDER})
     add_subdirectory(VolumeRender)
 endif()
 

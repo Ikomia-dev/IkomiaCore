@@ -626,7 +626,7 @@ if(UNIX)
     )
 endif()
 
-if(NOT IK_CPU)
+if(OPENCV_GPU)
     target_link_libraries(ikDataProcess PRIVATE
         opencv_cudawarping
     )
