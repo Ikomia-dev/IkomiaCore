@@ -26,7 +26,10 @@
 
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #define PY_ARRAY_UNIQUE_SYMBOL IKOMIA_ARRAY_API
+
+#undef slots
 #include <numpy/ndarrayobject.h>
+#define slots
 
 //Numpy initialization
 static bool init_numpy()
