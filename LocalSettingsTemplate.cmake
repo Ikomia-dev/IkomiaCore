@@ -5,7 +5,7 @@ add_compile_definitions(
 
 set(OPENCV_GPU ON)
 set(IK_VOLUME_RENDER ON)
-set(CENTOS7 OFF)
+set(PRODUCTION OFF)
 set(IKOMIA_TESTS OFF)
 set(IKOMIA_TESTS_CL OFF)
 set(PYTHON_VERSION_DOT 3.11)

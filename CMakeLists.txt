@@ -20,7 +20,7 @@ include(LocalSettings.cmake)
 find_package(Qt5 REQUIRED COMPONENTS Core Concurrent Gui Network OpenGL Sql Test Widgets LinguistTools)
 
 # Python
-if(CENTOS7)
+if(PRODUCTION)
     set(Python3_DIR "/work/shared/local")
 endif()
 
@@ -45,7 +45,7 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 
-if(CENTOS7)
+if(PRODUCTION)
     set(BUILD_SHARED_LIBS ON)
     set(BOOST_PYTHON_TARGET Boost::python)
     find_package(Boost REQUIRED COMPONENTS system filesystem python)

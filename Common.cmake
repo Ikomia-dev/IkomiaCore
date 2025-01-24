@@ -34,7 +34,7 @@ if(WIN32)
     )
 endif()
 
-if(UNIX AND NOT CENTOS7)
+if(UNIX AND NOT PRODUCTION)
     include_directories(
         # VTK
         /usr/local/include/vtk-${VTK_MAJOR_MINOR_VERSION}
@@ -43,7 +43,7 @@ if(UNIX AND NOT CENTOS7)
     )
 endif()
 
-if(UNIX AND CENTOS7)
+if(UNIX AND PRODUCTION)
     include_directories(
         # Global include
         /work/shared/local/include
@@ -59,7 +59,7 @@ link_directories(
     ${CMAKE_CURRENT_LIST_DIR}/Build/lib
 )
 
-if(UNIX AND CENTOS7)
+if(UNIX AND PRODUCTION)
     link_directories(
         /work/shared/local/lib
         /work/shared/local/lib64
