@@ -26,10 +26,11 @@ CConvertIO::CConvertIO()
 ImageIOPtr CConvertIO::convertToImageIO(const WorkflowTaskIOPtr &ioFrom)
 {
     auto dataType = CConvertIO::getTargetImageType(ioFrom->getDataType());
-    if(dataType != IODataType::NONE)
+    if (dataType != IODataType::NONE)
     {
         auto imgIOPtr = std::make_shared<CImageIO>();
         imgIOPtr->CWorkflowTaskIO::operator=(*ioFrom);
+        imgIOPtr->setName("ImageIO");
         imgIOPtr->setDataType(dataType);
         imgIOPtr->setSaveFormat(DataFileFormat::PNG);
         return imgIOPtr;
@@ -40,12 +41,13 @@ ImageIOPtr CConvertIO::convertToImageIO(const WorkflowTaskIOPtr &ioFrom)
 VideoIOPtr CConvertIO::convertToVideoIO(const WorkflowTaskIOPtr &ioFrom)
 {
     auto dataType = CConvertIO::getTargetVideoType(ioFrom->getDataType());
-    if(dataType != IODataType::NONE)
+    if (dataType != IODataType::NONE)
     {
         auto videoIOPtr = std::make_shared<CVideoIO>();
         videoIOPtr->CWorkflowTaskIO::operator=(*ioFrom);
+        videoIOPtr->setName("VideoIO");
         videoIOPtr->setDataType(dataType);
-        videoIOPtr->setSaveFormat(DataFileFormat::AVI);
+        videoIOPtr->setSaveFormat(DataFileFormat::MPEG);
         return videoIOPtr;
     }
     return nullptr;
@@ -54,12 +56,13 @@ VideoIOPtr CConvertIO::convertToVideoIO(const WorkflowTaskIOPtr &ioFrom)
 VideoIOPtr CConvertIO::convertToStreamIO(const WorkflowTaskIOPtr &ioFrom)
 {
     auto dataType = CConvertIO::getTargetStreamType(ioFrom->getDataType());
-    if(dataType != IODataType::NONE)
+    if (dataType != IODataType::NONE)
     {
         auto videoIOPtr = std::make_shared<CVideoIO>();
         videoIOPtr->CWorkflowTaskIO::operator=(*ioFrom);
+        videoIOPtr->setName("VideoIO");
         videoIOPtr->setDataType(dataType);
-        videoIOPtr->setSaveFormat(DataFileFormat::AVI);
+        videoIOPtr->setSaveFormat(DataFileFormat::MPEG);
         return videoIOPtr;
     }
     return nullptr;
@@ -68,10 +71,11 @@ VideoIOPtr CConvertIO::convertToStreamIO(const WorkflowTaskIOPtr &ioFrom)
 ImageIOPtr CConvertIO::convertToVolumeIO(const WorkflowTaskIOPtr &ioFrom)
 {
     auto dataType = CConvertIO::getTargetVolumeType(ioFrom->getDataType());
-    if(dataType != IODataType::NONE)
+    if (dataType != IODataType::NONE)
     {
         auto volumeIOPtr = std::make_shared<CImageIO>();
         volumeIOPtr->CWorkflowTaskIO::operator=(*ioFrom);
+        volumeIOPtr->setName("ImageIO");
         volumeIOPtr->setDataType(dataType);
         volumeIOPtr->setSaveFormat(DataFileFormat::PNG);
         return volumeIOPtr;
