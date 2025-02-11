@@ -55,24 +55,6 @@
 #include "CIkomiaRegistryWrap.h"
 #include "CWorkflowWrap.h"
 
-#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
-#define PY_ARRAY_UNIQUE_SYMBOL IKOMIA_ARRAY_API
-
-#undef slots
-#include <numpy/ndarrayobject.h>
-#define slots
-
-//Numpy initialization
-static bool init_numpy()
-{
-    import_array();
-
-    if(PyArray_API == NULL)
-        return false;
-    else
-        return true;
-}
-
 void translateCException(const CException& e)
 {
     PyErr_SetString(PyExc_RuntimeError, e.what());
@@ -130,7 +112,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
     scope().attr("__doc__") = _moduleDocString;
 
     //Numpy initialization
-    init_numpy();
+    CvMatNumpyArrayConverter::init_numpy();
 
     //Register smart pointers
     register_ptr_to_python<std::shared_ptr<CTaskFactory>>();

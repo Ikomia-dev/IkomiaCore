@@ -42,24 +42,6 @@
 #include "MapConverter.hpp"
 #include "PairConverter.hpp"
 
-#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
-#define PY_ARRAY_UNIQUE_SYMBOL IKOMIA_ARRAY_API
-
-#undef slots
-#include <numpy/ndarrayobject.h>
-#define slots
-
-//Numpy initialization
-static bool init_numpy()
-{
-    import_array();
-
-    if(PyArray_API == NULL)
-        return false;
-    else
-        return true;
-}
-
 template<typename T>
 void exposeCPoint(const std::string& className)
 {
@@ -86,7 +68,7 @@ BOOST_PYTHON_MODULE(pycore)
     scope().attr("__doc__") = _moduleDocString;
 
     // Numpy initialization
-    init_numpy();
+    CvMatNumpyArrayConverter::init_numpy();
 
     // CMat <-> Numpy NdArray converters
     to_python_converter<CMat, BoostCvMatToNumpyArrayConverter>();
@@ -360,6 +342,7 @@ BOOST_PYTHON_MODULE(pycore)
         .add_property("displayable", &CWorkflowTaskIO::isDisplayable, &CWorkflowTaskIO::setDisplayable, "Displayable status (Ikomia Studio)")
         .add_property("auto_save", &CWorkflowTaskIO::isAutoSave, &CWorkflowTaskIO::setAutoSave, "Auto-save status")
         .def_readonly("source_file_path", &CWorkflowTaskIO::getSourceFilePath, "Path to the source file used as workflow input (if any)")
+        .def_readonly("file_path", &CWorkflowTaskIO::getSavePath, "Path where the output is saved.")
         .def(self_ns::str(self_ns::self))
         .def("__repr__", &CWorkflowTaskIO::repr)
         .def("get_unit_element_count", &CWorkflowTaskIO::getUnitElementCount, &CWorkflowTaskIOWrap::default_getUnitElementCount, _getUnitElementCountDocString, args("self"))

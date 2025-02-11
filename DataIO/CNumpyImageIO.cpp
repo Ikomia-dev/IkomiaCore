@@ -21,28 +21,10 @@
 #include "Data/CDataImageInfo.h"
 #include "Data/CvMatNumpyArrayConverter.h"
 
-#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
-#define PY_ARRAY_UNIQUE_SYMBOL IKOMIA_ARRAY_API
-
-#undef slots
-#include <numpy/ndarrayobject.h>
-#define slots
-
 using namespace boost::python;
-
-static bool initNumpy()
-{
-    import_array();
-
-    if(PyArray_API == NULL)
-        return false;
-    else
-        return true;
-}
 
 CNumpyImageIO::CNumpyImageIO(const std::string &fileName) : CVirtualImageIO(fileName)
 {
-    //initNumpy();
     loadNumpyArray();
 }
 

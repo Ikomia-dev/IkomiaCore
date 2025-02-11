@@ -29,13 +29,40 @@
 #include "Data/CMat.hpp"
 #include "PythonThread.hpp"
 
+//---------------------------//
+//----- Numpy allocator -----//
+//---------------------------//
+class CNumpyAllocator : public cv::MatAllocator
+{
+    public:
+
+        CNumpyAllocator();
+        ~CNumpyAllocator();
+
+        cv::UMatData*   allocate(PyObject* o, int dims, const int* sizes, int type, size_t* step) const;
+        cv::UMatData*   allocate(int dims0, const int* sizes, int type, void* data, size_t* step, cv::AccessFlag flags, cv::UMatUsageFlags usageFlags) const;
+        bool            allocate(cv::UMatData* u, cv::AccessFlag accessFlags, cv::UMatUsageFlags usageFlags) const;
+        void            deallocate(cv::UMatData* u) const;
+
+    public:
+
+        const MatAllocator* m_stdAllocator;
+};
+
+inline CNumpyAllocator& GetNumpyAllocator()
+{
+    static CNumpyAllocator gNumpyAllocator;
+    return gNumpyAllocator;
+}
+
 //-----------------------------------------------//
 //----- Numpy NdArray <-> cv::Mat converter -----//
 //-----------------------------------------------//
 struct CvMatNumpyArrayConverter
 {
-    static cv::Mat		toMat(PyObject* pyObj);
-    static PyObject*	toNDArray(const cv::Mat& cvMat);
+    static bool                 init_numpy();
+    static cv::Mat              toMat(PyObject* pyObj);
+    static PyObject*            toNDArray(const cv::Mat& cvMat);
 };
 
 //----------------------------//
