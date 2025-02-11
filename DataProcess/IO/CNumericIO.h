@@ -373,11 +373,15 @@ class CNumericIO : public CNumericIOBase
 
         void                        save(const std::string& path) override
         {
-            auto extension = Utils::File::extension(path);
-            if(extension != ".csv")
-                throw CException(CoreExCode::NOT_IMPLEMENTED, "Export format not available yet", __func__, __FILE__, __LINE__);
+            CWorkflowTaskIO::save(path);
 
-            saveCSV(path);
+            auto extension = Utils::File::extension(path);
+            if (extension == ".csv")
+                saveCSV(path);
+            else if (extension == ".json")
+                saveJSON(path);
+            else
+                throw CException(CoreExCode::NOT_IMPLEMENTED, "Export format not available yet", __func__, __FILE__, __LINE__);
         }
 
         void                        load(const std::string& path) override
@@ -394,26 +398,13 @@ class CNumericIO : public CNumericIOBase
             std::vector<std::string> options = {"json_format", "compact"};
             return toJson(options);
         }
-
         std::string                 toJson(const std::vector<std::string> &options) const override
         {
-            QJsonObject root;
-            toJsonCommon(root);
-
-            QJsonArray values;
-            for (size_t i=0; i<m_values.size(); ++i)
-            {
-                QJsonArray colValues;
-                for (size_t j=0; j<m_values[i].size(); ++j)
-                    colValues.append(QString::fromStdString(Utils::to_string(m_values[i][j])));
-
-                values.append(colValues);
-            }
-            root["values"] = values;
-
+            QJsonObject root = toJsonInternal();
             QJsonDocument doc(root);
             return toFormattedJson(doc, options);
         }
+
         void                        fromJson(const std::string &jsonStr) override
         {
             Q_UNUSED(jsonStr);
@@ -448,6 +439,24 @@ class CNumericIO : public CNumericIOBase
             }
             root["valueLabels"] = valueLabels;
         }
+        QJsonObject                 toJsonInternal() const
+        {
+            QJsonObject root;
+            toJsonCommon(root);
+
+            QJsonArray values;
+            for (size_t i=0; i<m_values.size(); ++i)
+            {
+                QJsonArray colValues;
+                for (size_t j=0; j<m_values[i].size(); ++j)
+                    colValues.append(QString::fromStdString(Utils::to_string(m_values[i][j])));
+
+                values.append(colValues);
+            }
+            root["values"] = values;
+            return root;
+        }
+
         void                        fromJsonCommon(const QJsonObject& root)
         {
             m_outputType = static_cast<NumericOutputType>(root["outputType"].toInt());
@@ -539,6 +548,15 @@ class CNumericIO : public CNumericIOBase
             }
             file.close();
         }
+        void                        saveJSON(const std::string& path) const
+        {
+            QFile jsonFile(QString::fromStdString(path));
+            if(!jsonFile.open(QFile::WriteOnly | QFile::Text))
+                throw CException(CoreExCode::INVALID_FILE, "Couldn't write file:" + path, __func__, __FILE__, __LINE__);
+
+            QJsonDocument doc(toJsonInternal());
+            jsonFile.write(doc.toJson(QJsonDocument::Compact));
+        }
 
         void                        loadCSV(const std::string& path)
         {
@@ -570,10 +588,7 @@ template <>
 DATAPROCESSSHARED_EXPORT void CNumericIO<int>::loadCSV(const std::string &path);
 
 template <>
-DATAPROCESSSHARED_EXPORT std::string CNumericIO<std::string>::toJson() const;
-
-template <>
-DATAPROCESSSHARED_EXPORT std::string CNumericIO<std::string>::toJson(const std::vector<std::string> &options) const;
+DATAPROCESSSHARED_EXPORT QJsonObject CNumericIO<std::string>::toJsonInternal() const;
 
 template <>
 DATAPROCESSSHARED_EXPORT void CNumericIO<std::string>::fromJson(const std::string &jsonStr);

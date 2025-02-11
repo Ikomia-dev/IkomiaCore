@@ -326,20 +326,18 @@ void CBlobMeasureIO::loadCSV(const std::string &path)
 
 void CBlobMeasureIO::save(const std::string &path)
 {
+    CWorkflowTaskIO::save(path);
     auto extension = Utils::File::extension(path);
-    if(extension == ".csv")
+
+    if (extension == ".csv")
         saveCSV(path);
+    else if (extension == ".json")
+        saveJSON(path);
     else
         throw CException(CoreExCode::NOT_IMPLEMENTED, "Export format not available yet", __func__, __FILE__, __LINE__);
 }
 
-std::string CBlobMeasureIO::toJson() const
-{
-    std::vector<std::string> options = {"json_format", "compact"};
-    return toJson(options);
-}
-
-std::string CBlobMeasureIO::toJson(const std::vector<std::string> &options) const
+QJsonObject CBlobMeasureIO::toJsonInternal() const
 {
     QJsonArray objects;
     for (size_t i=0; i<m_measures.size(); ++i)
@@ -355,7 +353,18 @@ std::string CBlobMeasureIO::toJson(const std::vector<std::string> &options) cons
 
     QJsonObject root;
     root["objects"] = objects;
-    QJsonDocument doc(root);
+    return root;
+}
+
+std::string CBlobMeasureIO::toJson() const
+{
+    std::vector<std::string> options = {"json_format", "compact"};
+    return toJson(options);
+}
+
+std::string CBlobMeasureIO::toJson(const std::vector<std::string> &options) const
+{
+    QJsonDocument doc(toJsonInternal());
     return toFormattedJson(doc, options);
 }
 
@@ -433,6 +442,16 @@ void CBlobMeasureIO::saveCSV(const std::string &path) const
         file << "\n";
     }
     file.close();
+}
+
+void CBlobMeasureIO::saveJSON(const std::string &path) const
+{
+    QFile jsonFile(QString::fromStdString(path));
+    if(!jsonFile.open(QFile::WriteOnly | QFile::Text))
+        throw CException(CoreExCode::INVALID_FILE, "Couldn't write file:" + path, __func__, __FILE__, __LINE__);
+
+    QJsonDocument jsonDoc(toJsonInternal());
+    jsonFile.write(jsonDoc.toJson(QJsonDocument::Compact));
 }
 
 std::shared_ptr<CBlobMeasureIO> CBlobMeasureIO::clone() const

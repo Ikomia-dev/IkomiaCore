@@ -103,7 +103,10 @@ class DATAPROCESSSHARED_EXPORT CBlobMeasureIO : public CWorkflowTaskIO
 
         void                    loadCSV(const std::string& path);
 
+        QJsonObject             toJsonInternal() const;
+
         void                    saveCSV(const std::string &path) const;
+        void                    saveJSON(const std::string& path) const;
 
         virtual std::shared_ptr<CWorkflowTaskIO> cloneImp() const override;
 
