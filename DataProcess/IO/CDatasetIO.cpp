@@ -85,8 +85,10 @@ void CDatasetIO::clearData()
 
 void CDatasetIO::save(const std::string &path)
 {
+    CWorkflowTaskIO::save(path);
+
     if(m_json.isNull())
-        return;
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Unable to save empty dataset");
 
     QFile jsonFile(QString::fromStdString(path));
     if(jsonFile.open(QFile::WriteOnly | QFile::Text))
