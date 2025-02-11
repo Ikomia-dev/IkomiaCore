@@ -82,6 +82,7 @@ void CRunTaskManager::aggregateOutputs(const WorkflowTaskPtr &taskPtr)
             std::string dataFolder = Utils::File::makePath(taskPtr->getOutputFolder(), outputs[i]->getName() + "_" + std::to_string(i));
             std::string savePath =  dataFolder + ".json";
             aggregateOutput(dataFolder, savePath);
+            outputs[i]->setSavePath(savePath);
             boost::filesystem::remove_all(dataFolder);
         }
     }

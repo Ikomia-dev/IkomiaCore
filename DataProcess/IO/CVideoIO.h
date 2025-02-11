@@ -232,6 +232,8 @@ class DATAPROCESSSHARED_EXPORT CVideoIO : public CImageIO
 
     private:
 
+        void                init();
+
         virtual std::shared_ptr<CWorkflowTaskIO>    cloneImp() const override;
 
     private:

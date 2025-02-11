@@ -348,6 +348,8 @@ void CGraphicsInput::load(const std::string &path)
 
 void CGraphicsInput::save(const std::string &path)
 {
+    CWorkflowTaskIO::save(path);
+
     auto extension = Utils::File::extension(path);
     if (extension != ".json")
         throw CException(CoreExCode::NOT_IMPLEMENTED, "File format not available yet, please use .json files.", __func__, __FILE__, __LINE__);

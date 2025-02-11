@@ -391,7 +391,7 @@ void CImageIO::save()
         m_dataType == IODataType::VIDEO_LABEL)
     {
         // For videos, output files are generated while processing.
-        // We juste have to remove file from temporary list to avoid deletion.
+        // We just have to remove file from temporary list to avoid deletion.
         m_tempFiles.clear();
     }
     else
@@ -400,6 +400,7 @@ void CImageIO::save()
 
 void CImageIO::save(const std::string &path)
 {
+    CWorkflowTaskIO::save(path);
     CDataImageIO io(path);
     io.write(m_image);
 }

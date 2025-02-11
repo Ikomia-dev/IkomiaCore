@@ -382,6 +382,8 @@ void CTextIO::load(const std::string &path)
 
 void CTextIO::save(const std::string &path)
 {
+    CWorkflowTaskIO::save(path);
+
     QFile jsonFile(QString::fromStdString(path));
     if(!jsonFile.open(QFile::WriteOnly | QFile::Text))
         throw CException(CoreExCode::INVALID_FILE, "Couldn't write file:" + path, __func__, __FILE__, __LINE__);

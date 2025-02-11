@@ -40,8 +40,7 @@ CWorkflowTaskIO::CWorkflowTaskIO(const CWorkflowTaskIO& io)
 {
     m_name = io.m_name;
     m_description = io.m_description;
-    m_saveFolder = io.m_saveFolder;
-    m_saveBaseName = io.m_saveBaseName;
+    m_savePath = io.m_savePath;
     m_dataType = io.m_dataType;
     m_saveFormat = io.m_saveFormat;
     m_dimCount = io.m_dimCount;
@@ -54,8 +53,7 @@ CWorkflowTaskIO::CWorkflowTaskIO(const CWorkflowTaskIO&& io)
 {
     m_name = std::move(io.m_name);
     m_description = std::move(io.m_description);
-    m_saveFolder = std::move(io.m_saveFolder);
-    m_saveBaseName = std::move(io.m_saveBaseName);
+    m_savePath = std::move(io.m_savePath);
     m_dataType = std::move(io.m_dataType);
     m_saveFormat = std::move(io.m_saveFormat);
     m_dimCount = std::move(io.m_dimCount);
@@ -68,8 +66,7 @@ CWorkflowTaskIO &CWorkflowTaskIO::operator=(const CWorkflowTaskIO &io)
 {
     m_name = io.m_name;
     m_description = io.m_description;
-    m_saveFolder = io.m_saveFolder;
-    m_saveBaseName = io.m_saveBaseName;
+    m_savePath = io.m_savePath;
     m_dataType = io.m_dataType;
     m_saveFormat = io.m_saveFormat;
     m_dimCount = io.m_dimCount;
@@ -83,8 +80,7 @@ CWorkflowTaskIO &CWorkflowTaskIO::operator=(const CWorkflowTaskIO&& io)
 {
     m_name = std::move(io.m_name);
     m_description = std::move(io.m_description);
-    m_saveFolder = std::move(io.m_saveFolder);
-    m_saveBaseName = std::move(io.m_saveBaseName);
+    m_savePath = std::move(io.m_savePath);
     m_dataType = std::move(io.m_dataType);
     m_saveFormat = std::move(io.m_saveFormat);
     m_dimCount = std::move(io.m_dimCount);
@@ -145,7 +141,7 @@ std::vector<DataFileFormat> CWorkflowTaskIO::getPossibleSaveFormats() const
 
 std::string CWorkflowTaskIO::getSavePath() const
 {
-    return m_saveFolder + m_saveBaseName + Utils::Data::getFileFormatExtension(m_saveFormat);
+    return m_savePath;
 }
 
 size_t CWorkflowTaskIO::getDimensionCount() const
@@ -214,8 +210,12 @@ void CWorkflowTaskIO::setDimensionCount(size_t nb)
 
 void CWorkflowTaskIO::setSaveInfo(const std::string &folder, const std::string &baseName)
 {
-    m_saveFolder = folder;
-    m_saveBaseName = baseName;
+    m_savePath = folder + baseName + Utils::Data::getFileFormatExtension(m_saveFormat);
+}
+
+void CWorkflowTaskIO::setSavePath(const std::string &path)
+{
+    m_savePath = path;
 }
 
 void CWorkflowTaskIO::setDescription(const std::string &description)
@@ -271,13 +271,12 @@ void CWorkflowTaskIO::load(const std::string &path)
 
 void CWorkflowTaskIO::save()
 {
-    std::string path = m_saveFolder + m_saveBaseName + Utils::Data::getFileFormatExtension(m_saveFormat);
-    save(path);
+    save(m_savePath);
 }
 
 void CWorkflowTaskIO::save(const std::string &path)
 {
-    Q_UNUSED(path);
+    setSavePath(path);
 }
 
 std::string CWorkflowTaskIO::getClassName(IODataType ioDataType)
@@ -413,7 +412,7 @@ void CWorkflowTaskIO::to_ostream(std::ostream &os) const
     os << "-\t" << "I/O: " << m_name << std::endl;
     os << "-----------------------------------" << std::endl;
     os << "Description: " << m_description << std::endl;
-    os << "Save folder: " << m_saveFolder << std::endl;
+    os << "Save path: " << m_savePath << std::endl;
     os << "Auto-save: " << m_bAutoSave << std::endl;
     os << "Data type: " << Utils::Workflow::getIODataName(m_dataType).toStdString() << std::endl;
     os << "Save format: " << Utils::Data::getFileFormatExtension(m_saveFormat) << std::endl;

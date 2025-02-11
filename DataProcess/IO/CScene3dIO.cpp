@@ -49,12 +49,14 @@ CScene3dIO::CScene3dIO(const std::string &name) :
 CScene3dIO::CScene3dIO(const CScene3dIO &io) :
     CWorkflowTaskIO(io),
     m_scene3d(io.getScene3d())
-{ }
+{
+}
 
 CScene3dIO::CScene3dIO(const CScene3dIO &&io) :
     CWorkflowTaskIO(io),
     m_scene3d(io.getScene3d())
-{ }
+{
+}
 
 CScene3dIO& CScene3dIO::operator = (const CScene3dIO &io)
 {
@@ -115,6 +117,8 @@ void CScene3dIO::save()
 
 void CScene3dIO::save(const std::string &path)
 {
+    CWorkflowTaskIO::save(path);
+
     QFile jsonFile(QString::fromStdString(path));
     if(!jsonFile.open(QFile::WriteOnly | QFile::Text))
         throw CException(CoreExCode::INVALID_FILE, "Couldn't write file:" + path, __func__, __FILE__, __LINE__);

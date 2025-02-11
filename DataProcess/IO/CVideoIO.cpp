@@ -26,38 +26,32 @@
 
 CVideoIO::CVideoIO() : CImageIO(IODataType::VIDEO, "VideoIO")
 {
-    m_description = QObject::tr("Video with read/write capabilities.").toStdString();
-    m_saveFormat = DataFileFormat::AVI;
+    init();
 }
 
 CVideoIO::CVideoIO(IODataType data) : CImageIO(data, "VideoIO")
 {
-    m_description = QObject::tr("Video with read/write capabilities.").toStdString();
-    m_saveFormat = DataFileFormat::AVI;
+   init();
 }
 
 CVideoIO::CVideoIO(IODataType data, const CMat &image) : CImageIO(data, image, "VideoIO")
 {
-    m_description = QObject::tr("Video with read/write capabilities.").toStdString();
-    m_saveFormat = DataFileFormat::AVI;
+    init();
 }
 
 CVideoIO::CVideoIO(IODataType data, const CMat& image, const std::string& name) : CImageIO(data, image, name)
 {
-    m_description = QObject::tr("Video with read/write capabilities.").toStdString();
-    m_saveFormat = DataFileFormat::AVI;
+    init();
 }
 
 CVideoIO::CVideoIO(IODataType data, const std::string &name): CImageIO(data, name)
 {
-    m_description = QObject::tr("Video with read/write capabilities.").toStdString();
-    m_saveFormat = DataFileFormat::AVI;
+    init();
 }
 
 CVideoIO::CVideoIO(IODataType data, const std::string &name, const std::string &path): CImageIO(data, name)
 {
-    m_description = QObject::tr("Video with read/write capabilities.").toStdString();
-    m_saveFormat = DataFileFormat::AVI;
+    init();
     setVideoPath(path);
 }
 
@@ -100,6 +94,12 @@ CVideoIO &CVideoIO::operator=(const CVideoIO&& io)
     return *this;
 }
 
+void CVideoIO::init()
+{
+    m_description = QObject::tr("Video with read/write capabilities.").toStdString();
+    m_saveFormat = DataFileFormat::MPEG;
+}
+
 void CVideoIO::setVideoPath(const std::string& path)
 {
     if (m_pVideoBuffer && m_pVideoBuffer->getCurrentPath() == path)
@@ -117,6 +117,7 @@ void CVideoIO::setVideoPath(const std::string& path)
         auto ret = CDataVideoIO::getImageSequenceInfo(path);
         m_pVideoBuffer = std::make_unique<CDataVideoBuffer>(ret.first, ret.second);
     }
+    m_savePath = path;
 }
 
 void CVideoIO::setVideoPos(size_t pos)
@@ -297,7 +298,7 @@ CDataInfoPtr CVideoIO::getDataInfo()
 
 std::vector<DataFileFormat> CVideoIO::getPossibleSaveFormats() const
 {
-    std::vector<DataFileFormat> formats = { DataFileFormat::AVI, DataFileFormat::MPEG };
+    std::vector<DataFileFormat> formats = { DataFileFormat::MPEG, DataFileFormat::AVI };
     return formats;
 }
 

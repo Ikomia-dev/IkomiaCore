@@ -73,6 +73,8 @@ void CWidgetOutput::clearData()
 
 void CWidgetOutput::save(const std::string &path)
 {
+    CWorkflowTaskIO::save(path);
+
     if(!m_pWidget)
         return;
 

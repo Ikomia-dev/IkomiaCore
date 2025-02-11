@@ -197,6 +197,8 @@ class CORESHARED_EXPORT CWorkflowTaskIO
          * @param baseName : base file name which will be completed with custom data (extension, numbering...)
          */
         void                setSaveInfo(const std::string& folder, const std::string& baseName);
+
+        void                setSavePath(const std::string& path);
         /**
          * @brief Sets the input/output description.
          * @param description as std::string.
@@ -305,8 +307,7 @@ class CORESHARED_EXPORT CWorkflowTaskIO
     protected:
 
         std::string             m_name = "";
-        std::string             m_saveFolder;
-        std::string             m_saveBaseName;
+        std::string             m_savePath;
         std::string             m_description;
         IODataType              m_dataType = IODataType::NONE;
         DataFileFormat          m_saveFormat = DataFileFormat::NONE;

@@ -123,7 +123,7 @@ VectorPairString CDataInfo::getStringList() const
 
 void CDataInfo::to_ostream(std::ostream &os) const
 {
-    os << "File name: " << m_fileName << std::endl;
+    os << "Source filename: " << m_fileName << std::endl;
 
     if(!m_metadata.empty())
     {

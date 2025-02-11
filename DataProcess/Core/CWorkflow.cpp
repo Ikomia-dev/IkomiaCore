@@ -970,6 +970,9 @@ size_t CWorkflow::getOutputCount() const
 
 WorkflowTaskIOPtr CWorkflow::getOutput(size_t index) const
 {
+    if (index >= m_exposedOutputs.size())
+        return nullptr;
+
     auto taskId = reinterpret_cast<WorkflowVertex>(m_exposedOutputs[index].getTaskId());
     auto taskPtr = getTask(taskId);
     if (taskPtr == nullptr)
@@ -1579,8 +1582,8 @@ void CWorkflow::runTasksVideo(const std::vector<WorkflowVertex> &taskToExecute)
                 auto inputPtr = std::static_pointer_cast<CVideoIO>(videoInputs[j]);
                 inputPtr->setFrameToRead(i);
             }
-            runTasksSimple(taskToExecute);
             clearOutputData(taskToExecute);
+            runTasksSimple(taskToExecute);
         }
     }
     catch(std::exception& e)
