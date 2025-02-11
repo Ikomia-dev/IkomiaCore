@@ -56,6 +56,9 @@ void CDataVideoBuffer::initFourccList()
         cv::VideoWriter::fourcc('X','2','6','4'),
         cv::VideoWriter::fourcc('W','M','V','P'),
         cv::VideoWriter::fourcc('A','V','C','1'),
+        cv::VideoWriter::fourcc('V','P','9','0'),
+        cv::VideoWriter::fourcc('V','P','8','0'),
+        cv::VideoWriter::fourcc('A','V','C','1'),
         cv::VideoWriter::fourcc('H','2','6','3'),
         cv::VideoWriter::fourcc('X','2','6','3'),
         cv::VideoWriter::fourcc('D','I','V','X'),
@@ -70,12 +73,14 @@ void CDataVideoBuffer::initFourccList()
     m_fourccNames[m_orderedFourccList[3]] = "X264";
     m_fourccNames[m_orderedFourccList[4]] = "WMVP";
     m_fourccNames[m_orderedFourccList[5]] = "AVC1";
-    m_fourccNames[m_orderedFourccList[6]] = "H263";
-    m_fourccNames[m_orderedFourccList[7]] = "X263";
-    m_fourccNames[m_orderedFourccList[8]] = "DIVX";
-    m_fourccNames[m_orderedFourccList[9]] = "XVID";
-    m_fourccNames[m_orderedFourccList[10]] = "MP4V";
-    m_fourccNames[m_orderedFourccList[11]] = "FMP4";
+    m_fourccNames[m_orderedFourccList[6]] = "VP90";
+    m_fourccNames[m_orderedFourccList[7]] = "VP80";
+    m_fourccNames[m_orderedFourccList[8]] = "H263";
+    m_fourccNames[m_orderedFourccList[9]] = "X263";
+    m_fourccNames[m_orderedFourccList[10]] = "DIVX";
+    m_fourccNames[m_orderedFourccList[11]] = "XVID";
+    m_fourccNames[m_orderedFourccList[12]] = "MP4V";
+    m_fourccNames[m_orderedFourccList[13]] = "FMP4";
 }
 
 void CDataVideoBuffer::close()

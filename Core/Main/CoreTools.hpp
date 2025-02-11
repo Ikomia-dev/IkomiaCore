@@ -173,6 +173,8 @@ namespace Ikomia
                     case DataFileFormat::WEBP: return ".webp";
                     case DataFileFormat::AVI: return ".avi";
                     case DataFileFormat::MPEG: return ".mp4";
+                    case DataFileFormat::MKV: return ".mkv";
+                    case DataFileFormat::WEBM: return ".webm";
                 }
                 return "";
             }

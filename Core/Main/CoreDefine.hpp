@@ -126,7 +126,7 @@ namespace Ikomia
     {
         NONE, TXT, JSON, XML, YAML, CSV,
         BMP, JPG, JP2, PNG, TIF, WEBP,
-        AVI, MPEG
+        AVI, MPEG, MKV, WEBM
     };
 
     enum class AlgoType : int

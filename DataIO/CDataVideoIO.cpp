@@ -174,7 +174,7 @@ Dimensions CDataVideoIO::dimensions(const std::string &fileName)
 
 bool CDataVideoIO::isVideoFormat(const std::string &extension, bool bVideoOnly)
 {
-    bool bIsVideo = (extension == ".avi" || extension == ".mp4" || extension == ".webm" || extension == ".ts" || extension == ".mxf" || extension == ".mxg");
+    bool bIsVideo = (extension == ".avi" || extension == ".mp4" || extension == ".webm" || extension == ".mkv" || extension == ".ts" || extension == ".mxf" || extension == ".mxg");
     if(bVideoOnly)
         return bIsVideo;
     else
