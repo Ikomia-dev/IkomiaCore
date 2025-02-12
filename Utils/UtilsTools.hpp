@@ -131,34 +131,25 @@ namespace Ikomia
             inline std::string  getVersion(const std::string& shape="major.minor.patch")
             {
                 CPyEnsureGIL gil;
-                object main_module = import("__main__");
-                object main_namespace = main_module.attr("__dict__");
-
-                str code
-                (
-                    "import sys\n\n"
-                    "major, minor, patch, _, _ = sys.version_info\n"
-                );
-                exec(code, main_namespace, main_namespace);
-                object bpMajor = main_namespace["major"];
-                int major = extract<int>(bpMajor);
+                std::string version = "";
+                auto pyVersion = import("sys").attr("version_info");
+                tuple versionTuple = extract<tuple>(pyVersion);
+                int major = extract<int>(versionTuple[0]);
 
                 if (shape == "major")
-                    return std::to_string(major);
+                    version = std::to_string(major);
                 else
                 {
-                    object bpMinor = main_namespace["minor"];
-                    int minor = extract<int>(bpMinor);
-
+                    int minor = extract<int>(versionTuple[1]);
                     if(shape == "major.minor")
-                        return std::to_string(major) + "." + std::to_string(minor);
+                        version = std::to_string(major) + "." + std::to_string(minor);
                     else
                     {
-                        object bpPatch = main_namespace["patch"];
-                        int patch = extract<int>(bpPatch);
-                        return std::to_string(major) + "." + std::to_string(minor) + "." + std::to_string(patch);
+                        int patch = extract<int>(versionTuple[2]);
+                        version = std::to_string(major) + "." + std::to_string(minor) + "." + std::to_string(patch);
                     }
                 }
+                return version;
             }
             inline std::string  getMinSupportedVersion()
             {
