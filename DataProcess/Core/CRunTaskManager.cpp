@@ -73,17 +73,20 @@ void CRunTaskManager::aggregateOutputs(const WorkflowTaskPtr &taskPtr)
 
     for (size_t i=0; i<outputs.size(); ++i)
     {
-        auto outType = outputs[i]->getDataType();
-        auto it = videoTypes.find(outType);
-
-        if (it == videoTypes.end())
+        if (outputs[i]->isAutoSave())
         {
-            // Non-video output
-            std::string dataFolder = Utils::File::makePath(taskPtr->getOutputFolder(), outputs[i]->getName() + "_" + std::to_string(i));
-            std::string savePath =  dataFolder + ".json";
-            aggregateOutput(dataFolder, savePath);
-            outputs[i]->setSavePath(savePath);
-            boost::filesystem::remove_all(dataFolder);
+            auto outType = outputs[i]->getDataType();
+            auto it = videoTypes.find(outType);
+
+            if (it == videoTypes.end())
+            {
+                // Non-video output
+                std::string dataFolder = Utils::File::makePath(taskPtr->getOutputFolder(), outputs[i]->getName() + "_" + std::to_string(i));
+                std::string savePath =  dataFolder + ".json";
+                aggregateOutput(dataFolder, savePath);
+                outputs[i]->setSavePath(savePath);
+                boost::filesystem::remove_all(dataFolder);
+            }
         }
     }
 }
