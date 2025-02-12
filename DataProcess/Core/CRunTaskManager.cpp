@@ -205,9 +205,7 @@ void CRunTaskManager::aggregateOutput(const std::string &dataFolder, const std::
         if (jsonDoc.isNull() || jsonDoc.isEmpty())
             continue;
 
-        QJsonObject frameResult;
-        frameResult[QString::number(frameIndex)] = jsonDoc.object();
-        frameOutputs.append(frameResult);
+        frameOutputs.append(jsonDoc.object());
         frameIndex++;
     }
 
