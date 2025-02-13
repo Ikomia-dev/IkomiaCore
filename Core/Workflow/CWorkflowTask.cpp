@@ -166,6 +166,11 @@ std::string CWorkflowTask::repr() const
     return s.str();
 }
 
+void CWorkflowTask::initLongProcess()
+{
+    m_bInitLongProcess = true;
+}
+
 std::string CWorkflowTask::generateUUID() const
 {
     boost::uuids::uuid uuid = boost::uuids::random_generator()();
@@ -928,6 +933,10 @@ void CWorkflowTask::beginTaskRun()
 
     //Notify current task name
     emit m_signalHandler->doSetMessage(QString::fromStdString(m_name));
+
+    //Start time-consuming init
+    if (!m_bInitLongProcess)
+        initLongProcess();
 
     //Start timing
     m_timer.start();

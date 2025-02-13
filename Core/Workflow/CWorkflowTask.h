@@ -152,6 +152,15 @@ class CORESHARED_EXPORT CWorkflowTask
 
         virtual std::string         repr() const;
 
+        /**
+         * @brief Performs heavy initialization of the task.
+         * This method can be overriden to put custom initialization steps.
+         * It is well suited for models donwloading, models loading or models compiling.
+         * The function will be automatically called in beginTaskRun if it has not been called before.
+         * Don't forget to call the base class method.
+         */
+        virtual void                initLongProcess();
+
         //Setters
         /**
          * @brief Sets the data type for the input at position index.
@@ -690,6 +699,7 @@ class CORESHARED_EXPORT CWorkflowTask
         std::atomic<bool>                   m_bStop{false};
         bool                                m_bActive = false;
         bool                                m_bEnabled = true;
+        bool                                m_bInitLongProcess = false;
         GraphicsContextPtr                  m_graphicsContextPtr = nullptr;
         ViewPropertiesIO                    m_inputViewProps;
         ViewPropertiesIO                    m_outputViewProps;

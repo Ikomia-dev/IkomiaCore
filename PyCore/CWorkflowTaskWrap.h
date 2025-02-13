@@ -39,6 +39,9 @@ class CWorkflowTaskWrap : public CWorkflowTask, public wrapper<CWorkflowTask>
 
         ~CWorkflowTaskWrap() = default;
 
+        void        initLongProcess() override;
+        void        default_initLongProcess();
+
         void        setInputDataType(const IODataType& dataType, size_t index = 0) override;
         void        default_setInputDataType(const IODataType& dataType, size_t index = 0);
 

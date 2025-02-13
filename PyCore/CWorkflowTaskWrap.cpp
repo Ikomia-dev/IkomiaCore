@@ -35,6 +35,35 @@ CWorkflowTaskWrap::CWorkflowTaskWrap(const CWorkflowTask &task) : CWorkflowTask(
 {
 }
 
+void CWorkflowTaskWrap::initLongProcess()
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override initOver = this->get_override("init_long_process"))
+            initOver();
+        else
+            CWorkflowTask::initLongProcess();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CWorkflowTaskWrap::default_initLongProcess()
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->CWorkflowTask::initLongProcess();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 void CWorkflowTaskWrap::setInputDataType(const IODataType &dataType, size_t index)
 {
     CPyEnsureGIL gil;
