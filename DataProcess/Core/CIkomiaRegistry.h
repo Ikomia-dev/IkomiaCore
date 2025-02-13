@@ -56,7 +56,6 @@ class DATAPROCESSSHARED_EXPORT CIkomiaRegistry
         void                        loadCppPlugin(const std::string &directory);
         void                        loadPythonPlugins();
         void                        loadPythonPlugin(const std::string &directory);
-        boost::python::object       loadPythonMainModule(const std::string& folder, const std::string& name);
 
         static std::vector<std::string> getBlackListedPackages();
 
@@ -66,7 +65,9 @@ class DATAPROCESSSHARED_EXPORT CIkomiaRegistry
 
         void                        loadPlugin(const std::string& directory);
         void                        _loadCppPlugin(const QString &fileName);
+        boost::python::object       loadPythonMainModule(const std::string& folder, const std::string& name);
 
+        void                        unloadPythonMainModel(const std::string& folder, const std::string& name);
         void                        checkCompatibility(const CTaskInfo &info);
 
     private:
