@@ -524,7 +524,7 @@ namespace Ikomia
             }
             inline std::string  getCurrentVersionName()
             {
-                return "0.13.0";
+                return "0.14.0";
             }
             inline std::string  getIkomiaLibFolder()
             {
@@ -1306,7 +1306,7 @@ namespace Ikomia
             }
             inline PluginState  getCppApiState(const std::string& minVersion, const std::string& maxVersion)
             {
-                const std::set<std::string> breakChanges = {"0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0", "0.6.1", "0.7.0", "0.8.0", "0.8.1", "0.9.0", "0.9.1", "0.10.0", "0.11.0", "0.11.1", "0.13.0"};
+                const std::set<std::string> breakChanges = {"0.3.0", "0.4.0", "0.4.1", "0.5.0", "0.6.0", "0.6.1", "0.7.0", "0.8.0", "0.8.1", "0.9.0", "0.9.1", "0.10.0", "0.11.0", "0.11.1", "0.13.0", "0.14.0"};
                 CSemanticVersion algoMinVersion(minVersion);
 
                 for(auto it=breakChanges.begin(); it!=breakChanges.end(); ++it)
@@ -1363,7 +1363,7 @@ namespace Ikomia
             }
             inline std::string  getCurrentApiVersion()
             {
-                return "0.13.0";
+                return "0.14.0";
             }
             inline std::string  getModelHubUrl()
             {

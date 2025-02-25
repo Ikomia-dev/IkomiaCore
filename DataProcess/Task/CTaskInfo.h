@@ -124,7 +124,7 @@ class DATAPROCESSSHARED_EXPORT CTaskInfo
         std::string m_journal;                      /**< Journal of the article */
         int         m_year = -1;                    /**< Year of the article or the algorithme */
         std::string m_version = "1.0.0";            /**< Version of the implementation */
-        std::string m_minIkomiaVersion = "0.13.0";   /**< Minimum version of the Ikomia Core & API */
+        std::string m_minIkomiaVersion = "0.14.0";   /**< Minimum version of the Ikomia Core & API */
         std::string m_maxIkomiaVersion;             /**< Maximum version of the Ikomia Core & API */
         std::string m_minPythonVersion = "3.8";     /**< Minimum compatible Python version */
         std::string m_maxPythonVersion = "3.11";    /**< Maximum compatible Python version */
