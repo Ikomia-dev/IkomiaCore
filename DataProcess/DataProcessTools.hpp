@@ -235,7 +235,11 @@ namespace Ikomia
             {
                 std::string decoded = base64_decode_fast(b64ImgStr.c_str(), b64ImgStr.size());
                 std::vector<uchar> data(decoded.begin(), decoded.end());
-                cv::Mat img = cv::imdecode(CMat(data), cv::IMREAD_UNCHANGED ^ cv::IMREAD_IGNORE_ORIENTATION);
+                // The flags parameter of the imread function is set as IMREAD_COLOR | IMREAD_ANYCOLOR | IMREAD_ANYDEPTH.
+                // Using this combination is an undocumented trick to load images similarly to the IMREAD_UNCHANGED flag,
+                // preserving the alpha channel (if present) while also applying the orientation.
+                // https://github.com/opencv/opencv/pull/26181
+                cv::Mat img = cv::imdecode(CMat(data), cv::IMREAD_COLOR | cv::IMREAD_ANYCOLOR | cv::IMREAD_ANYDEPTH);
 
                 // cv::imdecode return BGR array for color images
                 int c = img.channels();

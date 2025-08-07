@@ -37,7 +37,11 @@ VectorString COpencvImageIO::fileNames(const SubsetBounds &bounds)
 
 CMat COpencvImageIO::read()
 {
-    CMat img = cv::imread(m_fileName, cv::IMREAD_UNCHANGED ^ cv::IMREAD_IGNORE_ORIENTATION);
+    // The flags parameter of the imread function is set as IMREAD_COLOR | IMREAD_ANYCOLOR | IMREAD_ANYDEPTH.
+    // Using this combination is an undocumented trick to load images similarly to the IMREAD_UNCHANGED flag,
+    // preserving the alpha channel (if present) while also applying the orientation.
+    // https://github.com/opencv/opencv/pull/26181
+    CMat img = cv::imread(m_fileName, cv::IMREAD_COLOR | cv::IMREAD_ANYCOLOR | cv::IMREAD_ANYDEPTH);
     int c = img.channels();
 
     if (c == 3)
@@ -130,7 +134,7 @@ Dimensions COpencvImageIO::dimensions(const SubsetBounds &bounds)
 
 CDataInfoPtr COpencvImageIO::dataInfo()
 {
-    cv::Mat img = cv::imread(m_fileName, cv::IMREAD_UNCHANGED ^ cv::IMREAD_IGNORE_ORIENTATION);
+    cv::Mat img = cv::imread(m_fileName, cv::IMREAD_COLOR | cv::IMREAD_ANYCOLOR | cv::IMREAD_ANYDEPTH);
     auto pInfo = std::make_shared<CDataImageInfo>();
     pInfo->setFileName(m_fileName);
     pInfo->setCvType(img.type());
