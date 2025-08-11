@@ -276,7 +276,7 @@ vtkSmartPointer<vtkImageData> CDicomImageIO::vtkImgData(const SubsetBounds &boun
                 //Get all file names for the first serie
                 vtkStringArray* files = m_pDicomSorter->GetFileNamesForSeries(firstSerie);
                 //Set the first image path to the reader
-                pReader->SetFileName(files->GetValue(0));
+                pReader->SetFileName(files->GetValue(0).c_str());
             }
             else
             {
@@ -285,7 +285,7 @@ vtkSmartPointer<vtkImageData> CDicomImageIO::vtkImgData(const SubsetBounds &boun
                 //Get all file names for given serie
                 vtkStringArray* files = m_pDicomSorter->GetFileNamesForSeries(firstSerie + static_cast<int>(Utils::Data::getDimensionBounds(bounds, DataDimension::SERIE).first));
                 //Set the given image path to the reader
-                pReader->SetFileName(files->GetValue(Utils::Data::getDimensionBounds(bounds, DataDimension::IMAGE).first));
+                pReader->SetFileName(files->GetValue(Utils::Data::getDimensionBounds(bounds, DataDimension::IMAGE).first).c_str());
             }
             pReader->Update();
             pImgData = pReader->GetOutput();
@@ -323,7 +323,7 @@ vtkSmartPointer<vtkDICOMMetaData> CDicomImageIO::vtkMetadata(const SubsetBounds 
                 //Get all file names for the first serie
                 vtkStringArray* files = m_pDicomSorter->GetFileNamesForSeries(firstSerie);
                 //Set the first image path to the reader
-                pReader->SetFileName(files->GetValue(0));
+                pReader->SetFileName(files->GetValue(0).c_str());
             }
             else
             {
@@ -332,7 +332,7 @@ vtkSmartPointer<vtkDICOMMetaData> CDicomImageIO::vtkMetadata(const SubsetBounds 
                 //Get all file names for given serie
                 vtkStringArray* files = m_pDicomSorter->GetFileNamesForSeries(firstSerie + static_cast<int>(Utils::Data::getDimensionBounds(bounds, DataDimension::SERIE).first));
                 //Set the given image path to the reader
-                pReader->SetFileName(files->GetValue(Utils::Data::getDimensionBounds(bounds, DataDimension::IMAGE).first));
+                pReader->SetFileName(files->GetValue(Utils::Data::getDimensionBounds(bounds, DataDimension::IMAGE).first).c_str());
             }
             pReader->Update();
             pMetadata = pReader->GetMetaData();

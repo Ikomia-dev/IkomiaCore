@@ -72,7 +72,6 @@ if(UNIX)
         gdcmuuid
         gdcmexpat
         # VTK
-        vtkalglib-${VTK_MAJOR_MINOR_VERSION}
         vtkCommonColor-${VTK_MAJOR_MINOR_VERSION}
         vtkCommonComputationalGeometry-${VTK_MAJOR_MINOR_VERSION}
         vtkCommonCore-${VTK_MAJOR_MINOR_VERSION}
@@ -95,7 +94,6 @@ if(UNIX)
         vtkFiltersSources-${VTK_MAJOR_MINOR_VERSION}
         vtkFiltersStatistics-${VTK_MAJOR_MINOR_VERSION}
         vtkfreetype-${VTK_MAJOR_MINOR_VERSION}
-        vtkglew-${VTK_MAJOR_MINOR_VERSION}
         vtkImagingColor-${VTK_MAJOR_MINOR_VERSION}
         vtkImagingCore-${VTK_MAJOR_MINOR_VERSION}
         vtkImagingFourier-${VTK_MAJOR_MINOR_VERSION}
