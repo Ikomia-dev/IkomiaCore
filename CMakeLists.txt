@@ -54,9 +54,15 @@ else()
     find_package(Boost REQUIRED COMPONENTS system filesystem python${PYTHON_VERSION_NO_DOT})
 endif()
 
-# VTK
+# GDCM
 find_package(GDCM ${GDCM_VERSION} REQUIRED)
-find_package(VTK ${VTK_MAJOR_MINOR_VERSION} REQUIRED)
+
+# VTK
+find_package(VTK ${VTK_MAJOR_MINOR_VERSION} REQUIRED COMPONENTS
+    CommonCore
+    DICOM
+    DICOMParser
+)
 
 include(Common.cmake)
 
