@@ -59,9 +59,55 @@ find_package(GDCM ${GDCM_VERSION} REQUIRED)
 
 # VTK
 find_package(VTK ${VTK_MAJOR_MINOR_VERSION} REQUIRED COMPONENTS
+    CommonColor
+    CommonComputationalGeometry
     CommonCore
+    CommonDataModel
+    CommonExecutionModel
+    CommonMath
+    CommonMisc
+    CommonSystem
+    CommonTransforms
     DICOM
     DICOMParser
+    expat
+    FiltersCore
+    FiltersExtraction
+    FiltersGeneral
+    FiltersGeometry
+    FiltersHybrid
+    FiltersImaging
+    FiltersModeling
+    FiltersSources
+    FiltersStatistics
+    freetype
+    ImagingColor
+    ImagingCore
+    ImagingFourier
+    ImagingGeneral
+    ImagingHybrid
+    ImagingMath
+    ImagingSources
+    InteractionImage
+    InteractionStyle
+    InteractionWidgets
+    IOCore
+    IOImage
+    IOSQL
+    IOXML
+    IOXMLParser
+    lz4
+    metaio
+    RenderingAnnotation
+    RenderingContext2D
+    RenderingCore
+    RenderingFreeType
+    RenderingImage
+    RenderingOpenGL2
+    RenderingVolume
+    sqlite
+    vtksys
+    ViewsCore
 )
 
 include(Common.cmake)
