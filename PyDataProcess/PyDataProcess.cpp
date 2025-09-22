@@ -158,6 +158,17 @@ BOOST_PYTHON_MODULE(pydataprocess)
     //Register exceptions
     register_exception_translator<CException>(&translateCException);
 
+    //-------------------------------//
+    //----- CTaskHardwareConfig -----//
+    //-------------------------------//
+    class_<CTaskHardwareConfig>("CTaskHardwareConfig", "Algorithm minimum hardware configuration", init<>("Default constructor"))
+        .add_property("min_cpu", &CTaskHardwareConfig::getMinCPU, &CTaskHardwareConfig::setMinCPU, "Minimum CPU count")
+        .add_property("min_ram", &CTaskHardwareConfig::getMinRAM, &CTaskHardwareConfig::setMinRAM, "Minimum RAM in GB")
+        .add_property("gpu_required", &CTaskHardwareConfig::isGPURequired, &CTaskHardwareConfig::setGPURequired, "GPU required")
+        .add_property("min_vram", &CTaskHardwareConfig::getMinVRAM, &CTaskHardwareConfig::setMinVRAM, "Minimum VRAM in GB")
+        .def(self_ns::str(self_ns::self))
+    ;
+
     //---------------------//
     //----- CTaskInfo -----//
     //---------------------//
@@ -187,6 +198,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .add_property("algo_type", &CTaskInfo::getAlgoType, &CTaskInfo::setAlgoType, "Algorithm type: train, inference, dataset...")
         .add_property("algo_tasks", &CTaskInfo::getAlgoTasks, &CTaskInfo::setAlgoTasks, "Algorithm tasks: classification, object detection, segmentation...")
         .add_property("internal", &CTaskInfo::isInternal, "Indicate a built-in algorithm.")
+        .add_property("hardware_config", make_function(&CTaskInfo::getHardwareConfig, return_internal_reference<>()), &CTaskInfo::setHardwareConfig, "Minimum hardware configuration for deployment.")
         .def(self_ns::str(self_ns::self))
     ;
 

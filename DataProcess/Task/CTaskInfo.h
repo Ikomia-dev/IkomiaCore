@@ -26,6 +26,7 @@
 #include "DataProcessGlobal.hpp"
 #include "UtilsDefine.hpp"
 #include "Main/CoreDefine.hpp"
+#include "CTaskHardwareConfig.h"
 
 using namespace Ikomia;
 
@@ -44,30 +45,31 @@ class DATAPROCESSSHARED_EXPORT CTaskInfo
          */
         CTaskInfo();
 
-        std::string getName() const;
-        std::string getPath() const;
-        std::string getShortDescription() const;
-        std::string getDescription() const;
-        std::string getDocumentationLink() const;
-        std::string getIconPath() const;
-        std::string getKeywords() const;
-        std::string getAuthors() const;
-        std::string getArticle() const;
-        std::string getArticleUrl() const;
-        std::string getJournal() const;
-        std::string getVersion() const;
-        std::string getMinIkomiaVersion() const;
-        std::string getMaxIkomiaVersion() const;
-        std::string getMinPythonVersion() const;
-        std::string getMaxPythonVersion() const;
-        std::string getLicense() const;
-        std::string getRepository() const;
-        std::string getOriginalRepository() const;
-        int         getYear() const;
-        ApiLanguage getLanguage() const;
-        OSType      getOS() const;
-        AlgoType    getAlgoType() const;
-        std::string getAlgoTasks() const;
+        std::string             getName() const;
+        std::string             getPath() const;
+        std::string             getShortDescription() const;
+        std::string             getDescription() const;
+        std::string             getDocumentationLink() const;
+        std::string             getIconPath() const;
+        std::string             getKeywords() const;
+        std::string             getAuthors() const;
+        std::string             getArticle() const;
+        std::string             getArticleUrl() const;
+        std::string             getJournal() const;
+        std::string             getVersion() const;
+        std::string             getMinIkomiaVersion() const;
+        std::string             getMaxIkomiaVersion() const;
+        std::string             getMinPythonVersion() const;
+        std::string             getMaxPythonVersion() const;
+        std::string             getLicense() const;
+        std::string             getRepository() const;
+        std::string             getOriginalRepository() const;
+        int                     getYear() const;
+        ApiLanguage             getLanguage() const;
+        OSType                  getOS() const;
+        AlgoType                getAlgoType() const;
+        std::string             getAlgoTasks() const;
+        CTaskHardwareConfig&    getHardwareConfig();
 
         /** @cond INTERNAL */
         bool        isInternal() const;
@@ -97,6 +99,7 @@ class DATAPROCESSSHARED_EXPORT CTaskInfo
         void        setOS(const OSType& os);
         void        setAlgoType(const AlgoType& type);
         void        setAlgoTasks(const std::string& tasks);
+        void        setHardwareConfig(const CTaskHardwareConfig& config);
 
         friend DATAPROCESSSHARED_EXPORT std::ostream& operator<<(std::ostream& os, const CTaskInfo& info);
 
@@ -111,32 +114,34 @@ class DATAPROCESSSHARED_EXPORT CTaskInfo
         bool        m_bInternal = true;
         /** @endcond */
 
-        std::string m_name;                         /**< Process task name. Must be unique */
-        std::string m_path;                         /**< Path in the system tree structure of the process library */
-        std::string m_shortDescription;             /**< Short description of the process */
-        std::string m_description;                  /**< Full description of the process - deprecated */
-        std::string m_docLink;                      /**< Internet link to an associated documentation page */
-        std::string m_iconPath;                     /**< File path to a custom icon */
-        std::string m_keywords;                     /**< Keywords associated with the process: useful for search engine */
-        std::string m_authors;                      /**< Authors of the process */
-        std::string m_article;                      /**< Associated research article */
-        std::string m_articleUrl;                   /**< Url of artivle */
-        std::string m_journal;                      /**< Journal of the article */
-        int         m_year = -1;                    /**< Year of the article or the algorithme */
-        std::string m_version = "1.0.0";            /**< Version of the implementation */
-        std::string m_minIkomiaVersion = "0.15.0";   /**< Minimum version of the Ikomia Core & API */
-        std::string m_maxIkomiaVersion;             /**< Maximum version of the Ikomia Core & API */
-        std::string m_minPythonVersion = "3.8";     /**< Minimum compatible Python version */
-        std::string m_maxPythonVersion = "3.11";    /**< Maximum compatible Python version */
-        std::string m_license;                      /**< Algorithm licence */
-        std::string m_repo;                         /**< Implementation repository */
-        std::string m_originalRepo;                 /**< Original repository */
-        std::string m_createdDate;
-        std::string m_modifiedDate;
-        ApiLanguage m_language = ApiLanguage::CPP;  /**< Programming language */
-        OSType      m_os = OSType::ALL;             /**< Compatible operating system */
-        AlgoType    m_algoType = AlgoType::OTHER;   /**< Type of algorithm */
-        std::string m_algoTasks;                    /**< Type of tasks adressed: CLASSIFICATION, OBJECT_DETECTION... */
+        std::string         m_name;                         /**< Process task name. Must be unique */
+        std::string         m_path;                         /**< Path in the system tree structure of the process library */
+        std::string         m_shortDescription;             /**< Short description of the process */
+        std::string         m_description;                  /**< Full description of the process - deprecated */
+        std::string         m_docLink;                      /**< Internet link to an associated documentation page */
+        std::string         m_iconPath;                     /**< File path to a custom icon */
+        std::string         m_keywords;                     /**< Keywords associated with the process: useful for search engine */
+        std::string         m_authors;                      /**< Authors of the process */
+        std::string         m_article;                      /**< Associated research article */
+        std::string         m_articleUrl;                   /**< Url of artivle */
+        std::string         m_journal;                      /**< Journal of the article */
+        int                 m_year = -1;                    /**< Year of the article or the algorithme */
+        std::string         m_version = "1.0.0";            /**< Version of the implementation */
+        std::string         m_minIkomiaVersion = "0.15.0";   /**< Minimum version of the Ikomia Core & API */
+        std::string         m_maxIkomiaVersion;             /**< Maximum version of the Ikomia Core & API */
+        std::string         m_minPythonVersion = "3.8";     /**< Minimum compatible Python version */
+        std::string         m_maxPythonVersion = "3.11";    /**< Maximum compatible Python version */
+        std::string         m_license;                      /**< Algorithm licence */
+        std::string         m_repo;                         /**< Implementation repository */
+        std::string         m_originalRepo;                 /**< Original repository */
+        std::string         m_createdDate;
+        std::string         m_modifiedDate;
+        ApiLanguage         m_language = ApiLanguage::CPP;  /**< Programming language */
+        OSType              m_os = OSType::ALL;             /**< Compatible operating system */
+        AlgoType            m_algoType = AlgoType::OTHER;   /**< Type of algorithm */
+        std::string         m_algoTasks;                    /**< Type of tasks adressed: CLASSIFICATION, OBJECT_DETECTION... */
+        CTaskHardwareConfig m_minHardwareConfig;    /**< Minimum hardware configuration for deployment */
+
 };
 
 #endif // CTASKINFO_H

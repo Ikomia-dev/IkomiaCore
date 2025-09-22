@@ -146,6 +146,11 @@ std::string CTaskInfo::getAlgoTasks() const
     return m_algoTasks;
 }
 
+CTaskHardwareConfig &CTaskInfo::getHardwareConfig()
+{
+    return m_minHardwareConfig;
+}
+
 bool CTaskInfo::isInternal() const
 {
     return m_bInternal;
@@ -272,6 +277,11 @@ void CTaskInfo::setAlgoTasks(const std::string &tasks)
     m_algoTasks = tasks;
 }
 
+void CTaskInfo::setHardwareConfig(const CTaskHardwareConfig &config)
+{
+    m_minHardwareConfig = config;
+}
+
 std::ostream& operator<<(std::ostream& os, const CTaskInfo& info)
 {
     info.to_ostream(os);
@@ -302,4 +312,5 @@ void CTaskInfo::to_ostream(std::ostream &os) const
     std::string language = m_language == ApiLanguage::CPP ? "C++" : "Python";
     os << "Language: " << language << std::endl;
     os << "OS: " << Utils::OS::getName(m_os) << std::endl;
+    os << "Hardware configuration: " << m_minHardwareConfig << std::endl;
 }

@@ -296,6 +296,8 @@ add_library(ikDataProcess SHARED
     Task/CVideoTask.h
     Task/CVideoTrackingTask.cpp
     Task/CVideoTrackingTask.h
+    Task/CTaskHardwareConfig.h
+    Task/CTaskHardwareConfig.cpp
     Widget/Core/CWidgetApplyOnly.hpp
     Widget/Core/CWidgetBinaryToGraphics.hpp
     Widget/Core/CWidgetBlobMeasure.cpp
