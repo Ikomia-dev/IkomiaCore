@@ -2478,6 +2478,11 @@ constexpr auto _getOutputDataTypeDocString =
     "Returns:\n\n"
     "   :py:class:`~ikomia.core.pycore.IODataType`: output data type\n\n";
 
+constexpr auto _getMinHardwareConfigDocString =
+    "Get the minimum hardware configuration to execute the workflow.\n\n"
+    "Returns:\n\n"
+        ":py:class:`~ikomia.dataprocess.pydataprocess.CHardwareConfig`: hardware configuration\n\n";
+
 constexpr auto _getOutputsDocString =
     "Get the whole list of outputs. Workflow outputs are actually outputs of task exposed at workflow level.\n\n"
     "Returns:\n\n"

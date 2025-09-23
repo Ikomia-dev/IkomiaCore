@@ -1,14 +1,14 @@
-#ifndef CTASKHARDWARECONFIG_H
-#define CTASKHARDWARECONFIG_H
+#ifndef CHARDWARECONFIG_H
+#define CHARDWARECONFIG_H
 
 #include "DataProcessGlobal.hpp"
 
 
-class DATAPROCESSSHARED_EXPORT CTaskHardwareConfig
+class DATAPROCESSSHARED_EXPORT CHardwareConfig
 {
     public:
 
-        CTaskHardwareConfig();
+        CHardwareConfig();
 
         int     getMinCPU() const;
         int     getMinRAM() const;
@@ -24,7 +24,7 @@ class DATAPROCESSSHARED_EXPORT CTaskHardwareConfig
 
         virtual void to_ostream(std::ostream& os) const;
 
-        friend DATAPROCESSSHARED_EXPORT std::ostream& operator<<(std::ostream& os, const CTaskHardwareConfig& config);
+        friend DATAPROCESSSHARED_EXPORT std::ostream& operator<<(std::ostream& os, const CHardwareConfig& config);
 
     public:
 
@@ -35,7 +35,7 @@ class DATAPROCESSSHARED_EXPORT CTaskHardwareConfig
         // GPU required
         bool    m_bRequiredGPU = false;
         // Min VRAM in GB
-        int     m_minVRAM = 8;
+        int     m_minVRAM = 0;
 };
 
-#endif // CTASKHARDWARECONFIG_H
+#endif // CHARDWARECONFIG_H

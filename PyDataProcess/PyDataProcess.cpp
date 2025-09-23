@@ -158,14 +158,14 @@ BOOST_PYTHON_MODULE(pydataprocess)
     //Register exceptions
     register_exception_translator<CException>(&translateCException);
 
-    //-------------------------------//
-    //----- CTaskHardwareConfig -----//
-    //-------------------------------//
-    class_<CTaskHardwareConfig>("CTaskHardwareConfig", "Algorithm minimum hardware configuration", init<>("Default constructor"))
-        .add_property("min_cpu", &CTaskHardwareConfig::getMinCPU, &CTaskHardwareConfig::setMinCPU, "Minimum CPU count")
-        .add_property("min_ram", &CTaskHardwareConfig::getMinRAM, &CTaskHardwareConfig::setMinRAM, "Minimum RAM in GB")
-        .add_property("gpu_required", &CTaskHardwareConfig::isGPURequired, &CTaskHardwareConfig::setGPURequired, "GPU required")
-        .add_property("min_vram", &CTaskHardwareConfig::getMinVRAM, &CTaskHardwareConfig::setMinVRAM, "Minimum VRAM in GB")
+    //---------------------------//
+    //----- CHardwareConfig -----//
+    //---------------------------//
+    class_<CHardwareConfig>("CHardwareConfig", "Hardware configuration (CPU, RAM and GPU)", init<>("Default constructor"))
+        .add_property("min_cpu", &CHardwareConfig::getMinCPU, &CHardwareConfig::setMinCPU, "Minimum CPU count")
+        .add_property("min_ram", &CHardwareConfig::getMinRAM, &CHardwareConfig::setMinRAM, "Minimum RAM in GB")
+        .add_property("gpu_required", &CHardwareConfig::isGPURequired, &CHardwareConfig::setGPURequired, "GPU required")
+        .add_property("min_vram", &CHardwareConfig::getMinVRAM, &CHardwareConfig::setMinVRAM, "Minimum VRAM in GB")
         .def(self_ns::str(self_ns::self))
     ;
 
@@ -1136,13 +1136,15 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("get_root_target_types", &CWorkflow::getRootTargetTypes, _wfGetRootTargetTypesDocString, args("self"))
         .def("get_total_elapsed_time", &CWorkflow::getTotalElapsedTime, _wfGetTotalElapsedTimeDocString, args("self"))
         .def("get_elapsed_time_to", &CWorkflowWrap::getElapsedTimeTo, _wfGetElapsedTimeToDocString, args("self", "task_id"))
-        .def("get_required_tasks", &CWorkflow::getRequiredTasks, _wfGetRequiredTasks, args("self", "path"))
+        .def("get_required_tasks", &CWorkflow::getRequiredTasks, _wfGetRequiredTasks, args("path"))
+        .staticmethod("get_required_tasks")
         .def("get_last_run_folder", &CWorkflow::getLastRunFolder, _wfGetLastRunFolder, args("self"))
         .def("get_exposed_parameters", &CWorkflowWrap::getExposedParameters, _wfGetExposedParamsDocString, args("self"))
         .def("get_output_count", &CWorkflow::getOutputCount, _getOutputCountDocString, args("self"))
         .def("get_outputs", &CWorkflow::getOutputs, _getOutputsDocString, args("self"))
         .def("get_output", &CWorkflow::getOutput, _getOutputDocString, args("self", "index"))
         .def("get_output_data_type", &CWorkflow::getOutputDataType, _getOutputDataTypeDocString, args("self", "index"))
+        .def("get_min_hardware_config", &CWorkflow::getMinHardwareConfig, _getMinHardwareConfigDocString, args("self"))
         .def("add_input", addInputRef, _wfAddInputDocString, args("self", "input"))
         .def("add_task", &CWorkflowWrap::addTaskWrap, _wfAddTaskDocString, args("self", "task"))
         .def("add_exposed_parameter", &CWorkflowWrap::addExposedParameter, _wfAddExposedParameterDocString, args("self", "name", "description", "task_id", "target_param_name"))

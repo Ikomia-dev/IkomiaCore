@@ -30,6 +30,7 @@
 
 #include <iostream>
 #include "DataProcessGlobal.hpp"
+#include "Core/CHardwareConfig.h"
 #include "Workflow/CWorkflowTask.h"
 #include "Workflow/CWorkflowEdge.hpp"
 #include "Workflow/CWorkflowTaskWidget.h"
@@ -159,7 +160,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         double                          getTotalElapsedTime() const;
         CDataInfoPtr                    getIOInfo(const WorkflowVertex& id, size_t index, bool bInput);
         std::vector<IODataType>         getRootTargetTypes() const;
-        std::vector<std::string>        getRequiredTasks(const std::string& path);
+        static std::vector<std::string> getRequiredTasks(const std::string& path);
         MapString                       getConfig() const;
         std::string                     getLastRunFolder() const;
         ExposedParams                   getExposedParameters() const;
@@ -168,6 +169,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         InputOutputVect                 getOutputs() const override;
         std::vector<CWorkflowOutput>    getExposedOutputs() const;
         IODataType                      getOutputDataType(size_t index) const override;
+        CHardwareConfig                 getMinHardwareConfig() const;
 
         bool                            hasOutput(const IODataType& type) const override;
         bool                            hasOutputData() const override;

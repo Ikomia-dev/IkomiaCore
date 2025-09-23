@@ -17,6 +17,8 @@ add_library(ikDataProcess SHARED
     Core/CWidgetFactory.hpp
     Core/CWorkflow.cpp
     Core/CWorkflow.h
+    Core/CHardwareConfig.h
+    Core/CHardwareConfig.cpp
     IO/CArrayIO.cpp
     IO/CArrayIO.h
     IO/CBlobMeasureIO.cpp
@@ -296,8 +298,6 @@ add_library(ikDataProcess SHARED
     Task/CVideoTask.h
     Task/CVideoTrackingTask.cpp
     Task/CVideoTrackingTask.h
-    Task/CTaskHardwareConfig.h
-    Task/CTaskHardwareConfig.cpp
     Widget/Core/CWidgetApplyOnly.hpp
     Widget/Core/CWidgetBinaryToGraphics.hpp
     Widget/Core/CWidgetBlobMeasure.cpp

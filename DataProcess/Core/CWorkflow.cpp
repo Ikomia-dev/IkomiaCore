@@ -1008,6 +1008,30 @@ IODataType CWorkflow::getOutputDataType(size_t index) const
     return taskPtr->getOutputDataType(m_exposedOutputs[index].getTaskOutputIndex());
 }
 
+CHardwareConfig CWorkflow::getMinHardwareConfig() const
+{
+    if (m_pRegistry == nullptr)
+        throw CException(CoreExCode::NULL_POINTER, "Invalid Ikomia algorithm registry", __func__, __FILE__, __LINE__);
+
+    CHardwareConfig minHardwareConfig;
+    auto vertexRangeIt = boost::vertices(m_graph);
+
+    for (auto it=vertexRangeIt.first; it!=vertexRangeIt.second; ++it)
+    {
+        WorkflowTaskPtr taskPtr = getTask(*it);
+        if (taskPtr)
+        {
+            CTaskInfo info = m_pRegistry->getAlgorithmInfo(taskPtr->getName());
+            CHardwareConfig& config = info.getHardwareConfig();
+            minHardwareConfig.m_minCPU = std::max(minHardwareConfig.m_minCPU, config.m_minCPU);
+            minHardwareConfig.m_minRAM = std::max(minHardwareConfig.m_minRAM, config.m_minRAM);
+            minHardwareConfig.m_bRequiredGPU = minHardwareConfig.m_bRequiredGPU || config.m_bRequiredGPU;
+            minHardwareConfig.m_minVRAM = std::max(minHardwareConfig.m_minVRAM, config.m_minVRAM);
+        }
+    }
+    return minHardwareConfig;
+}
+
 bool CWorkflow::hasOutput(const IODataType &type) const
 {
     for (size_t i=0; i<m_exposedOutputs.size(); ++i)

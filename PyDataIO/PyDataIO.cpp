@@ -52,7 +52,8 @@ BOOST_PYTHON_MODULE(pydataio)
     class_<CDataImageIO, boost::noncopyable>("CDataImageIO", _dataImageIODocString, init<const std::string&>(_ctorDataImageIO))
         .def("read", read_img, _readDataImageDocString, args("self"))
         .def("write", &CDataImageIO::write, _writeDataImageDocString, args("self"))
-        .def("is_image_format", &CDataImageIO::isImageFormat, _isImageFormatDocString, args("extension")).staticmethod("is_image_format")
+        .def("is_image_format", &CDataImageIO::isImageFormat, _isImageFormatDocString, args("extension"))
+        .staticmethod("is_image_format")
     ;
 
     //------------------------//
@@ -70,6 +71,7 @@ BOOST_PYTHON_MODULE(pydataio)
         .def("stop_read", &CDataVideoIO::stopRead, _stopReadDocString, args("self"))
         .def("stop_write", &CDataVideoIO::stopWrite, _stopWriteDocString, args("self", "timeout"))
         .def("wait_write_finished", &CDataVideoIO::waitWriteFinished, _waitWriteFinishedDocString, args("self", "timeout"))
-        .def("is_video_format", &CDataVideoIO::isVideoFormat, _isVideoFormatDocString, args("extension", "video_only")).staticmethod("is_video_format")
+        .def("is_video_format", &CDataVideoIO::isVideoFormat, _isVideoFormatDocString, args("extension", "video_only"))
+        .staticmethod("is_video_format")
     ;
 }

@@ -26,7 +26,7 @@
 #include "DataProcessGlobal.hpp"
 #include "UtilsDefine.hpp"
 #include "Main/CoreDefine.hpp"
-#include "CTaskHardwareConfig.h"
+#include "Core/CHardwareConfig.h"
 
 using namespace Ikomia;
 
@@ -45,31 +45,31 @@ class DATAPROCESSSHARED_EXPORT CTaskInfo
          */
         CTaskInfo();
 
-        std::string             getName() const;
-        std::string             getPath() const;
-        std::string             getShortDescription() const;
-        std::string             getDescription() const;
-        std::string             getDocumentationLink() const;
-        std::string             getIconPath() const;
-        std::string             getKeywords() const;
-        std::string             getAuthors() const;
-        std::string             getArticle() const;
-        std::string             getArticleUrl() const;
-        std::string             getJournal() const;
-        std::string             getVersion() const;
-        std::string             getMinIkomiaVersion() const;
-        std::string             getMaxIkomiaVersion() const;
-        std::string             getMinPythonVersion() const;
-        std::string             getMaxPythonVersion() const;
-        std::string             getLicense() const;
-        std::string             getRepository() const;
-        std::string             getOriginalRepository() const;
-        int                     getYear() const;
-        ApiLanguage             getLanguage() const;
-        OSType                  getOS() const;
-        AlgoType                getAlgoType() const;
-        std::string             getAlgoTasks() const;
-        CTaskHardwareConfig&    getHardwareConfig();
+        std::string         getName() const;
+        std::string         getPath() const;
+        std::string         getShortDescription() const;
+        std::string         getDescription() const;
+        std::string         getDocumentationLink() const;
+        std::string         getIconPath() const;
+        std::string         getKeywords() const;
+        std::string         getAuthors() const;
+        std::string         getArticle() const;
+        std::string         getArticleUrl() const;
+        std::string         getJournal() const;
+        std::string         getVersion() const;
+        std::string         getMinIkomiaVersion() const;
+        std::string         getMaxIkomiaVersion() const;
+        std::string         getMinPythonVersion() const;
+        std::string         getMaxPythonVersion() const;
+        std::string         getLicense() const;
+        std::string         getRepository() const;
+        std::string         getOriginalRepository() const;
+        int                 getYear() const;
+        ApiLanguage         getLanguage() const;
+        OSType              getOS() const;
+        AlgoType            getAlgoType() const;
+        std::string         getAlgoTasks() const;
+        CHardwareConfig&    getHardwareConfig();
 
         /** @cond INTERNAL */
         bool        isInternal() const;
@@ -99,7 +99,7 @@ class DATAPROCESSSHARED_EXPORT CTaskInfo
         void        setOS(const OSType& os);
         void        setAlgoType(const AlgoType& type);
         void        setAlgoTasks(const std::string& tasks);
-        void        setHardwareConfig(const CTaskHardwareConfig& config);
+        void        setHardwareConfig(const CHardwareConfig& config);
 
         friend DATAPROCESSSHARED_EXPORT std::ostream& operator<<(std::ostream& os, const CTaskInfo& info);
 
@@ -140,7 +140,7 @@ class DATAPROCESSSHARED_EXPORT CTaskInfo
         OSType              m_os = OSType::ALL;             /**< Compatible operating system */
         AlgoType            m_algoType = AlgoType::OTHER;   /**< Type of algorithm */
         std::string         m_algoTasks;                    /**< Type of tasks adressed: CLASSIFICATION, OBJECT_DETECTION... */
-        CTaskHardwareConfig m_minHardwareConfig;    /**< Minimum hardware configuration for deployment */
+        CHardwareConfig     m_minHardwareConfig;    /**< Minimum hardware configuration for deployment */
 
 };
 

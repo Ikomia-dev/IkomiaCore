@@ -146,7 +146,7 @@ std::string CTaskInfo::getAlgoTasks() const
     return m_algoTasks;
 }
 
-CTaskHardwareConfig &CTaskInfo::getHardwareConfig()
+CHardwareConfig &CTaskInfo::getHardwareConfig()
 {
     return m_minHardwareConfig;
 }
@@ -277,7 +277,7 @@ void CTaskInfo::setAlgoTasks(const std::string &tasks)
     m_algoTasks = tasks;
 }
 
-void CTaskInfo::setHardwareConfig(const CTaskHardwareConfig &config)
+void CTaskInfo::setHardwareConfig(const CHardwareConfig &config)
 {
     m_minHardwareConfig = config;
 }
