@@ -1585,6 +1585,12 @@ constexpr auto _ctor3ImageProcess2dDocString =
         "   name (str): task name, must be unique\n\n"
         "   has_graphics_input (bool): True, the task manage graphics input. False, the task does not have any graphics input\n\n";
 
+constexpr auto _initLongProcessDocString =
+    "Performs heavy initialization of the task. This method can be overriden to put custom initialization steps. "
+    "It is well suited for models downloading, models loading or models compiling. "
+    "The function will be automatically called in beginTaskRun() if it has not been called before. "
+    "Don't forget to call the base class method.\n\n";
+
 constexpr auto _setActiveDocString =
         "See :py:meth:`~ikomia.core.pycore.CWorkflowTask.set_active`.\n\n";
 

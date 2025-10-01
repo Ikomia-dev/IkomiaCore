@@ -71,6 +71,35 @@ std::string C2dImageTaskWrap::default_repr() const
     }
 }
 
+void C2dImageTaskWrap::initLongProcess()
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override initOver = this->get_override("init_long_process"))
+            initOver();
+        else
+            C2dImageTask::initLongProcess();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void C2dImageTaskWrap::default_initLongProcess()
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->C2dImageTask::initLongProcess();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 size_t C2dImageTaskWrap::getProgressSteps()
 {
     CPyEnsureGIL gil;

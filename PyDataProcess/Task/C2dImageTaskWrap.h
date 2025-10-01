@@ -44,6 +44,9 @@ class C2dImageTaskWrap : public C2dImageTask, public wrapper<C2dImageTask>
         std::string     repr() const override;
         std::string     default_repr() const;
 
+        void            initLongProcess() override;
+        void            default_initLongProcess();
+
         size_t          getProgressSteps() override;
         size_t          default_getProgressSteps();
 
