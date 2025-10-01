@@ -520,7 +520,7 @@ namespace Ikomia
             }
             inline std::string  getCurrentVersionNumber()
             {
-                return "0.13.0";
+                return "0.15.0";
             }
             inline std::string  getCurrentVersionName()
             {
