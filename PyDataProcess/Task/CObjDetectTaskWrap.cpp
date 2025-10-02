@@ -49,7 +49,7 @@ void CObjDetectTaskWrap::initLongProcess()
         if(override initOver = this->get_override("init_long_process"))
             initOver();
         else
-            CObjDetectTaskWrap::initLongProcess();
+            CObjectDetectionTask::initLongProcess();
     }
     catch(boost::python::error_already_set&)
     {
@@ -62,7 +62,7 @@ void CObjDetectTaskWrap::default_initLongProcess()
     CPyEnsureGIL gil;
     try
     {
-        this->CObjDetectTaskWrap::initLongProcess();
+        this->CObjectDetectionTask::initLongProcess();
     }
     catch(boost::python::error_already_set&)
     {

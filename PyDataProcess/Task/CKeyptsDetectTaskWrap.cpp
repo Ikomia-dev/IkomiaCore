@@ -49,7 +49,7 @@ void CKeyptsDetectTaskWrap::initLongProcess()
         if(override initOver = this->get_override("init_long_process"))
             initOver();
         else
-            CKeyptsDetectTaskWrap::initLongProcess();
+            CKeypointDetectionTask::initLongProcess();
     }
     catch(boost::python::error_already_set&)
     {
@@ -62,7 +62,7 @@ void CKeyptsDetectTaskWrap::default_initLongProcess()
     CPyEnsureGIL gil;
     try
     {
-        this->CKeyptsDetectTaskWrap::initLongProcess();
+        this->CKeypointDetectionTask::initLongProcess();
     }
     catch(boost::python::error_already_set&)
     {

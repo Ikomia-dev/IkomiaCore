@@ -49,7 +49,7 @@ void CSemanticSegTaskWrap::initLongProcess()
         if(override initOver = this->get_override("init_long_process"))
             initOver();
         else
-            CSemanticSegTaskWrap::initLongProcess();
+            CSemanticSegTask::initLongProcess();
     }
     catch(boost::python::error_already_set&)
     {
@@ -62,7 +62,7 @@ void CSemanticSegTaskWrap::default_initLongProcess()
     CPyEnsureGIL gil;
     try
     {
-        this->CSemanticSegTaskWrap::initLongProcess();
+        this->CSemanticSegTask::initLongProcess();
     }
     catch(boost::python::error_already_set&)
     {

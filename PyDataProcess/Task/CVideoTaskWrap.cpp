@@ -71,7 +71,7 @@ void CVideoTaskWrap::initLongProcess()
         if(override initOver = this->get_override("init_long_process"))
             initOver();
         else
-            CVideoTaskWrap::initLongProcess();
+            CVideoTask::initLongProcess();
     }
     catch(boost::python::error_already_set&)
     {
@@ -84,7 +84,7 @@ void CVideoTaskWrap::default_initLongProcess()
     CPyEnsureGIL gil;
     try
     {
-        this->CVideoTaskWrap::initLongProcess();
+        this->CVideoTask::initLongProcess();
     }
     catch(boost::python::error_already_set&)
     {

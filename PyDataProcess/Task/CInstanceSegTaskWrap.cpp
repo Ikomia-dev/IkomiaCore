@@ -49,7 +49,7 @@ void CInstanceSegTaskWrap::initLongProcess()
         if(override initOver = this->get_override("init_long_process"))
             initOver();
         else
-            CInstanceSegTaskWrap::initLongProcess();
+            CInstanceSegTask::initLongProcess();
     }
     catch(boost::python::error_already_set&)
     {
@@ -62,7 +62,7 @@ void CInstanceSegTaskWrap::default_initLongProcess()
     CPyEnsureGIL gil;
     try
     {
-        this->CInstanceSegTaskWrap::initLongProcess();
+        this->CInstanceSegTask::initLongProcess();
     }
     catch(boost::python::error_already_set&)
     {

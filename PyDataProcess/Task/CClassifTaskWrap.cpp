@@ -49,7 +49,7 @@ void CClassifTaskWrap::initLongProcess()
         if(override initOver = this->get_override("init_long_process"))
             initOver();
         else
-            CClassifTaskWrap::initLongProcess();
+            CClassificationTask::initLongProcess();
     }
     catch(boost::python::error_already_set&)
     {
@@ -62,7 +62,7 @@ void CClassifTaskWrap::default_initLongProcess()
     CPyEnsureGIL gil;
     try
     {
-        this->CClassifTaskWrap::initLongProcess();
+        this->CClassificationTask::initLongProcess();
     }
     catch(boost::python::error_already_set&)
     {
