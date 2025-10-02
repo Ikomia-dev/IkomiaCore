@@ -41,6 +41,35 @@ std::string CKeyptsDetectTaskWrap::default_repr() const
     }
 }
 
+void CKeyptsDetectTaskWrap::initLongProcess()
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override initOver = this->get_override("init_long_process"))
+            initOver();
+        else
+            CKeyptsDetectTaskWrap::initLongProcess();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CKeyptsDetectTaskWrap::default_initLongProcess()
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->CKeyptsDetectTaskWrap::initLongProcess();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 size_t CKeyptsDetectTaskWrap::getProgressSteps()
 {
     CPyEnsureGIL gil;

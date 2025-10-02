@@ -63,6 +63,35 @@ std::string CVideoTaskWrap::default_repr() const
     }
 }
 
+void CVideoTaskWrap::initLongProcess()
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override initOver = this->get_override("init_long_process"))
+            initOver();
+        else
+            CVideoTaskWrap::initLongProcess();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CVideoTaskWrap::default_initLongProcess()
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->CVideoTaskWrap::initLongProcess();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 size_t CVideoTaskWrap::getProgressSteps()
 {
     CPyEnsureGIL gil;

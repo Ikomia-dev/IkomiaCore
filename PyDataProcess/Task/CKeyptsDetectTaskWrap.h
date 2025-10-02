@@ -18,6 +18,9 @@ class CKeyptsDetectTaskWrap: public CKeypointDetectionTask, public wrapper<CKeyp
         std::string     repr() const override;
         std::string     default_repr() const;
 
+        void            initLongProcess() override;
+        void            default_initLongProcess();
+
         size_t          getProgressSteps() override;
         size_t          default_getProgressSteps();
 

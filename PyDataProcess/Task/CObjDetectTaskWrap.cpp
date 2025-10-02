@@ -41,6 +41,35 @@ std::string CObjDetectTaskWrap::default_repr() const
     }
 }
 
+void CObjDetectTaskWrap::initLongProcess()
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        if(override initOver = this->get_override("init_long_process"))
+            initOver();
+        else
+            CObjDetectTaskWrap::initLongProcess();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
+void CObjDetectTaskWrap::default_initLongProcess()
+{
+    CPyEnsureGIL gil;
+    try
+    {
+        this->CObjDetectTaskWrap::initLongProcess();
+    }
+    catch(boost::python::error_already_set&)
+    {
+        throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
+    }
+}
+
 size_t CObjDetectTaskWrap::getProgressSteps()
 {
     CPyEnsureGIL gil;
