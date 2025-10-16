@@ -45,6 +45,16 @@ void CHardwareConfig::setMinVRAM(int amount)
     m_minVRAM = amount;
 }
 
+QJsonObject CHardwareConfig::toJson() const
+{
+    QJsonObject jsonHwConfig;
+    jsonHwConfig["min_cpu"] = m_minCPU;
+    jsonHwConfig["min_ram"] = m_minRAM;
+    jsonHwConfig["is_gpu_required"] = m_bRequiredGPU;
+    jsonHwConfig["min_vram"] = m_minVRAM;
+    return jsonHwConfig;
+}
+
 void CHardwareConfig::to_ostream(std::ostream &os) const
 {
     os << "Mininum CPU count: " << m_minCPU << std::endl;

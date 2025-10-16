@@ -1018,15 +1018,18 @@ CHardwareConfig CWorkflow::getMinHardwareConfig() const
 
     for (auto it=vertexRangeIt.first; it!=vertexRangeIt.second; ++it)
     {
-        WorkflowTaskPtr taskPtr = getTask(*it);
-        if (taskPtr)
+        if (isRoot(*it) == false)
         {
-            CTaskInfo info = m_pRegistry->getAlgorithmInfo(taskPtr->getName());
-            CHardwareConfig& config = info.getHardwareConfig();
-            minHardwareConfig.m_minCPU = std::max(minHardwareConfig.m_minCPU, config.m_minCPU);
-            minHardwareConfig.m_minRAM = std::max(minHardwareConfig.m_minRAM, config.m_minRAM);
-            minHardwareConfig.m_bRequiredGPU = minHardwareConfig.m_bRequiredGPU || config.m_bRequiredGPU;
-            minHardwareConfig.m_minVRAM = std::max(minHardwareConfig.m_minVRAM, config.m_minVRAM);
+            WorkflowTaskPtr taskPtr = getTask(*it);
+            if (taskPtr)
+            {
+                CTaskInfo info = m_pRegistry->getAlgorithmInfo(taskPtr->getName());
+                CHardwareConfig& config = info.getHardwareConfig();
+                minHardwareConfig.m_minCPU = std::max(minHardwareConfig.m_minCPU, config.m_minCPU);
+                minHardwareConfig.m_minRAM = std::max(minHardwareConfig.m_minRAM, config.m_minRAM);
+                minHardwareConfig.m_bRequiredGPU = minHardwareConfig.m_bRequiredGPU || config.m_bRequiredGPU;
+                minHardwareConfig.m_minVRAM = std::max(minHardwareConfig.m_minVRAM, config.m_minVRAM);
+            }
         }
     }
     return minHardwareConfig;
@@ -2211,6 +2214,10 @@ void CWorkflow::saveJSON(const std::string& path)
         }
     }
     jsonWorkflow["exposed_outputs"] = jsonOutputs;
+
+    // Minimum harware config
+    CHardwareConfig hwConfig = getMinHardwareConfig();
+    jsonWorkflow["hardware_config"] = hwConfig.toJson();
 
     QJsonDocument jsonDoc(jsonWorkflow);
     jsonFile.write(jsonDoc.toJson());

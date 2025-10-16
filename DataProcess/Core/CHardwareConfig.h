@@ -1,6 +1,7 @@
 #ifndef CHARDWARECONFIG_H
 #define CHARDWARECONFIG_H
 
+#include <QJsonObject>
 #include "DataProcessGlobal.hpp"
 
 
@@ -19,6 +20,8 @@ class DATAPROCESSSHARED_EXPORT CHardwareConfig
         void    setMinRAM(int amount);
         void    setGPURequired(bool required);
         void    setMinVRAM(int amount);
+
+        QJsonObject toJson() const;
 
     protected:
 
