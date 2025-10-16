@@ -240,7 +240,7 @@ QJsonObject CGraphicsJSON::toJsonObject(const CColor &color)
     obj["r"] = color[0];
     obj["g"] = color[1];
     obj["b"] = color[2];
-    obj["a"] = color[3];
+    obj["a"] = color.size() == 4 ? color[3] : 255;
     return obj;
 }
 
