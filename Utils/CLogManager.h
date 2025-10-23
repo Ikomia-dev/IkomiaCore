@@ -25,7 +25,6 @@
 #include <QObject>
 #include <QFile>
 #include <QFileSystemWatcher>
-#include <QtMsgHandler>
 #include <functional>
 #include <QLoggingCategory>
 #include <mutex>

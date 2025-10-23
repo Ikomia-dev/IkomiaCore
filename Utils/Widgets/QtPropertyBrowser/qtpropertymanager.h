@@ -42,6 +42,7 @@
 #define QTPROPERTYMANAGER_H
 
 #include "qtpropertybrowser.h"
+#include <QRegularExpression>
 
 #if QT_VERSION >= 0x040400
 QT_BEGIN_NAMESPACE
@@ -178,14 +179,14 @@ public:
     ~QtStringPropertyManager();
 
     QString value(const QtProperty *property) const;
-    QRegExp regExp(const QtProperty *property) const;
+    QRegularExpression regExp(const QtProperty *property) const;
 
 public slots:
     void setValue(QtProperty *property, const QString &val);
-    void setRegExp(QtProperty *property, const QRegExp &regExp);
+    void setRegExp(QtProperty *property, const QRegularExpression &regExp);
 signals:
     void valueChanged(QtProperty *property, const QString &val);
-    void regExpChanged(QtProperty *property, const QRegExp &regExp);
+    void regExpChanged(QtProperty *property, const QRegularExpression &regExp);
 protected:
     QString valueText(const QtProperty *property) const;
     virtual void initializeProperty(QtProperty *property);
