@@ -20,6 +20,7 @@
 #include "CWorkflowTaskWidget.h"
 #include "PythonThread.hpp"
 
+
 CWorkflowTaskWidget::CWorkflowTaskWidget(QWidget *parent) : QWidget(parent)
 {
     // Internal grid layout -> for internal process or C++ plugin
