@@ -29,12 +29,12 @@ target_compile_features(ikDataPlot PRIVATE cxx_std_14)
 
 target_include_directories(ikDataPlot PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/../Utils
-    ${CMAKE_CURRENT_LIST_DIR}/../../qwt/src
+    ${CMAKE_CURRENT_LIST_DIR}/../../deps/qwt/src
 )
 
 target_link_directories(ikDataPlot PRIVATE
     # Qwt
-    ${CMAKE_CURRENT_LIST_DIR}/../../qwt/build/lib
+    ${CMAKE_CURRENT_LIST_DIR}/../../deps/qwt/build/lib
 )
 
 target_link_libraries(ikDataPlot PRIVATE
