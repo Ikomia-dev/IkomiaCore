@@ -17,7 +17,7 @@ include(Versions.cmake)
 include(LocalSettings.cmake)
 
 # Qt
-find_package(Qt5 REQUIRED COMPONENTS Core Concurrent Gui Network OpenGL Sql Test Widgets LinguistTools)
+find_package(Qt6 REQUIRED COMPONENTS Core Concurrent Gui Network OpenGL Sql Test Widgets LinguistTools)
 
 # Python
 if(PRODUCTION)
@@ -43,10 +43,10 @@ find_package(OpenCV ${OPENCV_VERSION} REQUIRED)
 # Boost
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
+set(BUILD_SHARED_LIBS ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 
 if(PRODUCTION)
-    set(BUILD_SHARED_LIBS ON)
     set(BOOST_PYTHON_TARGET Boost::python)
     find_package(Boost REQUIRED COMPONENTS system filesystem python)
 else()

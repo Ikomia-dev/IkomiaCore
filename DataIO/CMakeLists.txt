@@ -67,7 +67,7 @@ if(UNIX)
         gdcmjpeg8
         gdcmjpeg12
         gdcmjpeg16
-        gdcmopenjp2
+        # gdcmopenjp2
         gdcmcharls
         gdcmuuid
         gdcmexpat
@@ -147,7 +147,7 @@ if(WIN32)
 endif()
 
 # Translations
-qt5_create_translation(QM_FILE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}/Translations/utils_fr.ts)
+qt6_create_translation(QM_FILE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}/Translations/utils_fr.ts)
 
 install(TARGETS ikDataIO
     LIBRARY DESTINATION ${CMAKE_INSTALL_IKOMIA_LIB}

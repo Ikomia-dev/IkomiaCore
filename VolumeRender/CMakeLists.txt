@@ -70,11 +70,11 @@ if(WIN32)
 endif()
 
 # Translations
-qt5_create_translation(QM_FILE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}/Translations/volumerender_fr.ts)
+qt6_create_translation(QM_FILE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}/Translations/volumerender_fr.ts)
 
 # Resources
 set(RESOURCES "")
-qt5_add_resources(RESOURCES VolumeRender.qrc)
+qt6_add_resources(RESOURCES VolumeRender.qrc)
 target_sources(ikVolumeRender PRIVATE ${RESOURCES})
 
 install(TARGETS ikVolumeRender
