@@ -9,7 +9,7 @@ target_link_libraries(DataSamples PRIVATE
 
 # Resources
 set(RESOURCES "")
-qt5_add_resources(RESOURCES samples.qrc)
+qt6_add_resources(RESOURCES samples.qrc)
 target_sources(DataSamples PRIVATE ${RESOURCES})
 
 install(TARGETS DataSamples

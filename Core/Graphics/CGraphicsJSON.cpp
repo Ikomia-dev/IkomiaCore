@@ -54,7 +54,7 @@ QByteArray CGraphicsJSON::getBinaryData(const CGraphicsPoint *pItem)
     json["category"] = pItem->getCategory();
 
     QJsonDocument doc(json);
-    return doc.toBinaryData();
+    return doc.toJson(QJsonDocument::JsonFormat::Compact);
 }
 
 QByteArray CGraphicsJSON::getBinaryData(const CGraphicsEllipse *pItem)
@@ -71,7 +71,7 @@ QByteArray CGraphicsJSON::getBinaryData(const CGraphicsEllipse *pItem)
     json["category"] = pItem->getCategory();
 
     QJsonDocument doc(json);
-    return doc.toBinaryData();
+    return doc.toJson(QJsonDocument::JsonFormat::Compact);
 }
 
 QByteArray CGraphicsJSON::getBinaryData(const CGraphicsRectangle *pItem)
@@ -88,7 +88,7 @@ QByteArray CGraphicsJSON::getBinaryData(const CGraphicsRectangle *pItem)
     json["category"] = pItem->getCategory();
 
     QJsonDocument doc(json);
-    return doc.toBinaryData();
+    return doc.toJson(QJsonDocument::JsonFormat::Compact);
 }
 
 QByteArray CGraphicsJSON::getBinaryData(const CGraphicsPolygon *pItem)
@@ -112,7 +112,7 @@ QByteArray CGraphicsJSON::getBinaryData(const CGraphicsPolygon *pItem)
     json["category"] = pItem->getCategory();
 
     QJsonDocument doc(json);
-    return doc.toBinaryData();
+    return doc.toJson(QJsonDocument::JsonFormat::Compact);
 }
 
 QByteArray CGraphicsJSON::getBinaryData(const CGraphicsPolyline *pItem)
@@ -135,7 +135,7 @@ QByteArray CGraphicsJSON::getBinaryData(const CGraphicsPolyline *pItem)
     json["category"] = pItem->getCategory();
 
     QJsonDocument doc(json);
-    return doc.toBinaryData();
+    return doc.toJson(QJsonDocument::JsonFormat::Compact);
 }
 
 QByteArray CGraphicsJSON::getBinaryData(const CGraphicsComplexPolygon *pItem)
@@ -176,7 +176,7 @@ QByteArray CGraphicsJSON::getBinaryData(const CGraphicsComplexPolygon *pItem)
     json["category"] = pItem->getCategory();
 
     QJsonDocument doc(json);
-    return doc.toBinaryData();
+    return doc.toJson(QJsonDocument::JsonFormat::Compact);
 }
 
 QByteArray CGraphicsJSON::getBinaryData(const CGraphicsText *pItem)
@@ -191,7 +191,7 @@ QByteArray CGraphicsJSON::getBinaryData(const CGraphicsText *pItem)
     json["font"] = toJsonObject(pItem->font());
 
     QJsonDocument doc(json);
-    return doc.toBinaryData();
+    return doc.toJson(QJsonDocument::JsonFormat::Compact);
 }
 
 QJsonObject CGraphicsJSON::toJsonObject(const QPen &pen)
@@ -321,7 +321,7 @@ void CGraphicsJSON::buildObject(CGraphicsPoint *pItem, QByteArray data)
         throw CException(CoreExCode::NULL_POINTER, QObject::tr("Graphics object can't be created from empty data").toStdString(), __func__, __FILE__, __LINE__);
 
     //Retrieve JSON document and object
-    QJsonDocument doc = QJsonDocument::fromBinaryData(data);
+    QJsonDocument doc = QJsonDocument::fromJson(data);
     if(doc.isNull())
         throw CException(CoreExCode::INVALID_JSON_FORMAT, "Invalid JSON data for point", __func__, __FILE__, __LINE__);
 
@@ -355,7 +355,7 @@ void CGraphicsJSON::buildObject(CGraphicsEllipse *pItem, QByteArray data)
         throw CException(CoreExCode::NULL_POINTER, QObject::tr("Graphics object can't be created from empty data").toStdString(), __func__, __FILE__, __LINE__);
 
     //Retrieve JSON document and object
-    QJsonDocument doc = QJsonDocument::fromBinaryData(data);
+    QJsonDocument doc = QJsonDocument::fromJson(data);
     if(doc.isNull())
         throw CException(CoreExCode::INVALID_JSON_FORMAT, "Invalid JSON data for ellipse", __func__, __FILE__, __LINE__);
 
@@ -389,7 +389,7 @@ void CGraphicsJSON::buildObject(CGraphicsRectangle *pItem, QByteArray data)
         throw CException(CoreExCode::NULL_POINTER, QObject::tr("Graphics object can't be created from empty data").toStdString(), __func__, __FILE__, __LINE__);
 
     //Retrieve JSON document and object
-    QJsonDocument doc = QJsonDocument::fromBinaryData(data);
+    QJsonDocument doc = QJsonDocument::fromJson(data);
     if(doc.isNull())
         throw CException(CoreExCode::INVALID_JSON_FORMAT, "Invalid JSON data for rectangle", __func__, __FILE__, __LINE__);
 
@@ -423,7 +423,7 @@ void CGraphicsJSON::buildObject(CGraphicsPolygon *pItem, QByteArray data)
         throw CException(CoreExCode::NULL_POINTER, QObject::tr("Graphics object can't be created from empty data").toStdString(), __func__, __FILE__, __LINE__);
 
     //Retrieve JSON document and object
-    QJsonDocument doc = QJsonDocument::fromBinaryData(data);
+    QJsonDocument doc = QJsonDocument::fromJson(data);
     if(doc.isNull())
         throw CException(CoreExCode::INVALID_JSON_FORMAT, "Invalid JSON data for polygon", __func__, __FILE__, __LINE__);
 
@@ -462,7 +462,7 @@ void CGraphicsJSON::buildObject(CGraphicsPolyline *pItem, QByteArray data)
         throw CException(CoreExCode::NULL_POINTER, QObject::tr("Graphics object can't be created from empty data").toStdString(), __func__, __FILE__, __LINE__);
 
     //Retrieve JSON document and object
-    QJsonDocument doc = QJsonDocument::fromBinaryData(data);
+    QJsonDocument doc = QJsonDocument::fromJson(data);
     if(doc.isNull())
         throw CException(CoreExCode::INVALID_JSON_FORMAT, "Invalid JSON data for polyline", __func__, __FILE__, __LINE__);
 
@@ -501,7 +501,7 @@ void CGraphicsJSON::buildObject(CGraphicsComplexPolygon *pItem, QByteArray data)
         throw CException(CoreExCode::NULL_POINTER, QObject::tr("Graphics object can't be created from empty data").toStdString(), __func__, __FILE__, __LINE__);
 
     //Retrieve JSON document and object
-    QJsonDocument doc = QJsonDocument::fromBinaryData(data);
+    QJsonDocument doc = QJsonDocument::fromJson(data);
     if(doc.isNull())
         throw CException(CoreExCode::INVALID_JSON_FORMAT, "Invalid JSON data for complex polygon", __func__, __FILE__, __LINE__);
 
@@ -554,7 +554,7 @@ void CGraphicsJSON::buildObject(CGraphicsComplexPolygon *pItem, QByteArray data)
 void CGraphicsJSON::buildObject(CGraphicsText *pItem, QByteArray data)
 {
     //Retrieve JSON document and object
-    QJsonDocument doc = QJsonDocument::fromBinaryData(data);
+    QJsonDocument doc = QJsonDocument::fromJson(data);
     if(doc.isNull())
         throw CException(CoreExCode::INVALID_JSON_FORMAT, "Invalid JSON data for polyline", __func__, __FILE__, __LINE__);
 
@@ -606,7 +606,7 @@ void CGraphicsJSON::buildObject(QFont &font, const QJsonObject &json)
 {
     font.setFamily(json["family"].toString());
     font.setPointSize(json["pointSize"].toInt());
-    font.setWeight(json["weight"].toInt());
+    font.setWeight(static_cast<QFont::Weight>(json["weight"].toInt()));
     font.setBold(json["bold"].toBool());
     font.setItalic(json["italic"].toBool());
     font.setUnderline(json["underline"].toBool());

@@ -641,7 +641,7 @@ if(WIN32)
 endif()
 
 # Translations
-qt5_create_translation(QM_FILE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}/Translations/dataprocess_fr.ts)
+qt6_create_translation(QM_FILE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}/Translations/dataprocess_fr.ts)
 
 install(TARGETS ikDataProcess
     LIBRARY DESTINATION ${CMAKE_INSTALL_IKOMIA_LIB}

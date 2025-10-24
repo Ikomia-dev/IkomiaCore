@@ -19,6 +19,7 @@
 
 #include "CMemoryInfo.h"
 #include <QProcess>
+#include <QRegularExpression>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -135,12 +136,14 @@ void CMemoryInfo::getAppleMemoryInfo()
 
 unsigned long long CMemoryInfo::getNumberFromQString(const QString &xString)
 {
-  QRegExp xRegExp("(-?\\d+(?:[\\.,]\\d+(?:e\\d+)?)?)");
-  xRegExp.indexIn(xString);
-  QStringList xList = xRegExp.capturedTexts();
-  if (true == xList.empty())
-  {
-    return 0.0;
-  }
-  return xList.begin()->toULongLong();
+    QRegularExpression xRegExp(R"((-?\d+(?:[.,]\d+(?:e\d+)?)?))");
+    QRegularExpressionMatch match = xRegExp.match(xString);
+
+    if (!match.hasMatch())
+        return 0.0;
+
+    // captured(0) gives the full match, equivalent to capturedTexts().first()
+    QString matchedText = match.captured(0);
+    return matchedText.toULongLong();
+
 }
