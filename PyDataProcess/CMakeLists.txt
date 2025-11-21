@@ -71,6 +71,7 @@ add_library(pydataprocess SHARED
     Task/CSemanticSegTaskWrap.h
     Task/CInstanceSegTaskWrap.cpp
     Task/CInstanceSegTaskWrap.h
+    IO/CTextStreamIOWrap.h IO/CTextStreamIOWrap.cpp
 )
 
 set_target_properties(pydataprocess PROPERTIES

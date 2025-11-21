@@ -52,6 +52,7 @@
 #include "IO/CSemanticSegIOWrap.h"
 #include "IO/CTextIOWrap.h"
 #include "IO/CKeyptsIOWrap.h"
+#include "IO/CTextStreamIOWrap.h"
 #include "CIkomiaRegistryWrap.h"
 #include "CWorkflowWrap.h"
 
@@ -729,6 +730,31 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("to_json", textToJsonNoOpt, &CTextIOWrap::default_toJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
         .def("to_json", textToJson, &CTextIOWrap::default_toJson, _objDetectToJsonDocString, args("self", "options"))
         .def("from_json", &CTextIO::fromJson, &CTextIOWrap::default_fromJson, _objDetectFromJsonDocString, args("self", "json_str"))
+    ;
+
+    //-------------------------//
+    //----- CTextStreamIO -----//
+    //-------------------------//
+    std::string (CTextStreamIOWrap::*textStreamToJsonNoOpt)() const = &CTextStreamIOWrap::toJson;
+    std::string (CTextStreamIOWrap::*texStreamToJson)(const std::vector<std::string>&) const = &CTextStreamIOWrap::toJson;
+
+    class_<CTextStreamIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CTextStreamIOWrap>, boost::noncopyable>("CTextStreamIO", _textStreamDocString)
+        .def(init<>("Default constructor", args("self")))
+        .def(init<int>("Constructor with text max size", args("self")))
+        .def("__repr__", &CTextStreamIOWrap::repr)
+        .def("feed", &CTextStreamIOWrap::feed, _textStreamFeedDocString, args("self", "text_chunk"))
+        .def("read_next", &CTextStreamIOWrap::readNext, _textStreamReadDocString, args("self", "min_text_size", "timeout", "handler"))
+        .def("read_full", &CTextStreamIOWrap::readFull, _textStreamReadFullDocString, args("self"))
+        .def("close", &CTextStreamIOWrap::close, _textStreamCloseDocString, args("self"))
+        .def("is_feed_finished", &CTextStreamIOWrap::isFeedFinished, _textStreamIsFeedFinishedDocString, args("self"))
+        .def("is_read_finished", &CTextStreamIOWrap::isReadFinished, _textStreamIsReadFinishedDocString, args("self"))
+        .def("is_data_available", &CTextStreamIOWrap::isDataAvailable, &CTextStreamIOWrap::default_isDataAvailable, _isDataAvailableDerivedDocString, args("self"))
+        .def("clear_data", &CTextStreamIOWrap::clearData, &CTextStreamIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
+        .def("load", &CTextStreamIOWrap::load, &CTextStreamIOWrap::default_load, _textStreamLoadDocString, args("self", "path"))
+        .def("save", &CTextStreamIOWrap::save, &CTextStreamIOWrap::default_save, _textStreamSaveDocString, args("self", "path"))
+        .def("to_json", textStreamToJsonNoOpt, &CTextStreamIOWrap::default_toJsonNoOpt, _textStreamToJsonNoOptDocString, args("self"))
+        .def("to_json", texStreamToJson, &CTextStreamIOWrap::default_toJson, _textStreamToJsonDocString, args("self", "options"))
+        .def("from_json", &CTextStreamIOWrap::fromJson, &CTextStreamIOWrap::default_fromJson, _textStreamFromJsonDocString, args("self", "json_str"))
     ;
 
     //------------------------//

@@ -1555,6 +1555,29 @@ constexpr auto _textSaveDocString =
         "Args:\n\n"
         "   path (str): path to JSON file\n\n";
 
+
+//-------------------------//
+//----- CTextStreamIO -----//
+//-------------------------//
+constexpr auto _textStreamDocString =
+    "Handle text streaming (in and out) asynchronously. You can feed and read text at the same time. "
+    "Based on C++ implementation, async is possible through Python callback read function.\n\n";
+
+constexpr auto _textStreamFeedDocString =
+    "Feed text content. The maximum buffer size can be set in ctor. Default is 100MB.\n\n"
+    "";
+constexpr auto _textStreamReadDocString = "";
+constexpr auto _textStreamReadFullDocString = "";
+constexpr auto _textStreamCloseDocString = "";
+constexpr auto _textStreamIsFeedFinishedDocString = "";
+constexpr auto _textStreamIsReadFinishedDocString = "";
+constexpr auto _textStreamLoadDocString = "";
+constexpr auto _textStreamSaveDocString = "";
+constexpr auto _textStreamToJsonNoOptDocString = "";
+constexpr auto _textStreamToJsonDocString = "";
+constexpr auto _textStreamFromJsonDocString = "";
+
+
 //------------------------//
 //----- C2dImageTask -----//
 //------------------------//
