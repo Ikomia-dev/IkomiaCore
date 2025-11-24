@@ -42,6 +42,8 @@ class DATAPROCESSSHARED_EXPORT CTextStreamIO: public CWorkflowTaskIO
         // -------------------------------------------------------
         void                        readNextAsync(int minBytes, int timeout, Handler handler);
         std::future<std::string>    readNextAsync(int minBytes, int timeout);
+        void                        readFullAsync(int timeout, Handler handler);
+        std::future<std::string>    readFullAsync(int timeout);
         std::string                 readFull() const;
 
         void                        close();
@@ -59,6 +61,7 @@ class DATAPROCESSSHARED_EXPORT CTextStreamIO: public CWorkflowTaskIO
 
         std::string                 extract(std::size_t n);
         void                        notifyWaiters();
+        void                        notifyWaitersFull();
         void                        sendData(Handler handler, const std::string &data, const boost::system::error_code &err);
         QJsonObject                 toJsonInternal() const;
         void                        fromJsonInternal(const QJsonDocument& doc);
@@ -82,6 +85,7 @@ class DATAPROCESSSHARED_EXPORT CTextStreamIO: public CWorkflowTaskIO
         std::string                 m_buffer;
         std::string                 m_fullText;
         std::deque<WaitRequest>     m_waiters;
+        std::vector<WaitRequest>    m_waitersFull;
         std::mutex                  m_mutex;
 };
 

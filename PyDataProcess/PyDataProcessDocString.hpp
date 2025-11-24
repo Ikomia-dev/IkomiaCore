@@ -1573,6 +1573,12 @@ constexpr auto _textStreamReadFullDocString =
     "Returns:\n\n"
     "   full text (str)\n\n";
 
+constexpr auto _textStreamReadFullAsyncDocString =
+    "Read full text content asynchronously. The given callback will be called as soon as the full content is available.\n\n"
+    "Args:\n\n"
+    "   timeout (int): timeout in seconds\n\n"
+    "   handler (python): Python function as callback\n\n";
+
 constexpr auto _textStreamCloseDocString =
     "Close the stream I/O for feeding.\n\n";
 

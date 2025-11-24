@@ -124,6 +124,36 @@ void CTextStreamIOWrap::readNextAsync(int minBytes, int timeout, boost::python::
     stream().readNextAsync(minBytes, timeout, handler);
 }
 
+void CTextStreamIOWrap::readFullAsync(int timeout, api::object py_callback)
+{
+    // Keep Python callback alive
+    auto py_cb = std::make_shared<boost::python::object>(py_callback);
+
+    // Keep "this" alive as long as async op is alive
+    auto self = shared_from_this();
+
+    CTextStreamIO::Handler handler = [self, py_cb](const std::string &data, const boost::system::error_code &ec)
+    {
+        // Acquire GIL safely
+        CPyEnsureGIL gil;
+
+        try
+        {
+            if (ec == boost::system::errc::timed_out)
+                (*py_cb)(boost::python::object());   // pass None
+            else
+                (*py_cb)(data);
+        }
+        catch (const boost::python::error_already_set &)
+        {
+            Utils::print(Utils::Python::handlePythonException(), QtCriticalMsg);
+        }
+    };
+
+    // Register async read
+    stream().readFullAsync(timeout, handler);
+}
+
 std::string CTextStreamIOWrap::readFull()
 {
     CPyEnsureGIL gil;

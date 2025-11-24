@@ -119,6 +119,64 @@ std::future<std::string> CTextStreamIO::readNextAsync(int n, int timeout)
     return promise->get_future();
 }
 
+void CTextStreamIO::readFullAsync(int timeout, Handler handler)
+{
+    std::lock_guard<std::mutex> lock(m_mutex);
+    auto timeoutChrono = std::chrono::seconds(timeout);
+
+    // Immediate completion if feed operation is finished
+    if (m_bFeedFinished)
+    {
+        boost::system::error_code ec(static_cast<int>(boost::system::errc::success), boost::system::generic_category());
+        m_buffer.clear();
+        sendData(handler, m_fullText, ec);
+        return;
+    }
+
+    // Otherwise, enqueue a pending read
+    WaitRequest w;
+    w.id = m_nextId++;
+    w.handler = handler;
+
+    if (timeoutChrono.count() > 0)
+    {
+        w.timer = std::make_shared<boost::asio::steady_timer>(m_io);
+        w.timer->expires_after(timeoutChrono);
+        w.timer->async_wait([this, w](auto ec){
+            if (ec == boost::asio::error::operation_aborted)
+                return;
+
+            std::lock_guard<std::mutex> lock(m_mutex);
+            // remove from waiters if still pending
+            auto it = std::find_if(m_waiters.begin(), m_waiters.end(), [w](auto& wr){
+                return wr.id == w.id;
+            });
+
+            if (it != m_waiters.end())
+            {
+                m_waiters.erase(it);
+                boost::system::error_code ec(static_cast<int>(boost::system::errc::timed_out), boost::system::generic_category());
+                sendData(w.handler, "", ec);
+            }
+        });
+    }
+    m_waitersFull.push_back(std::move(w));
+}
+
+std::future<std::string> CTextStreamIO::readFullAsync(int timeout)
+{
+    auto promise = std::make_shared<std::promise<std::string>>();
+
+    readFullAsync(timeout, [this, promise](const std::string& text, const boost::system::error_code& ec){
+        if (ec == boost::system::errc::timed_out)
+            promise->set_exception(std::make_exception_ptr(std::runtime_error("timeout")));
+        else
+            promise->set_value(text);
+    });
+
+    return promise->get_future();
+}
+
 std::string CTextStreamIO::readFull() const
 {
     return m_fullText;
@@ -129,10 +187,13 @@ void CTextStreamIO::close()
     std::lock_guard<std::mutex> lock(m_mutex);
     m_bFeedFinished = true;
     notifyWaiters();
+    notifyWaitersFull();
 }
 
 void CTextStreamIO::clearData()
 {
+    m_waiters.clear();
+    m_waitersFull.clear();
     m_buffer.clear();
     m_fullText.clear();
 }
@@ -168,6 +229,22 @@ void CTextStreamIO::notifyWaiters()
         boost::system::error_code ec(static_cast<int>(boost::system::errc::success), boost::system::generic_category());
         sendData(w.handler, chunk, ec);
     }
+}
+
+void CTextStreamIO::notifyWaitersFull()
+{
+    for (size_t i=0; i<m_waitersFull.size(); ++i)
+    {
+        auto& w = m_waitersFull[i];
+
+        // Cancel timeout timer if exists
+        if (w.timer)
+            w.timer->cancel();
+
+        boost::system::error_code ec(static_cast<int>(boost::system::errc::success), boost::system::generic_category());
+        sendData(w.handler, m_fullText, ec);
+    }
+    m_waitersFull.clear();
 }
 
 void CTextStreamIO::sendData(Handler handler, const std::string& data, const boost::system::error_code& ec)
