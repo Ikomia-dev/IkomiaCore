@@ -96,8 +96,8 @@ void exposeNumericIO(const std::string& className)
         .def("copy_static_data", &CNumericIO<Type>::copyStaticData, &CNumericIOWrap<Type>::default_copyStaticData, _copyStaticDataDerivedDocString, args("self", "io"))
         .def("load", &CNumericIO<Type>::load, &CNumericIOWrap<Type>::default_load, _numericIOLoadDocString, args("self", "path"))
         .def("save", saveNumeric, &CNumericIOWrap<Type>::default_save, _numericIOSaveDocString, args("self", "path"))
-        .def("to_json", numIOToJsonNoOpt, &CNumericIOWrap<Type>::default_toJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
-        .def("to_json", numIOToJson, &CNumericIOWrap<Type>::default_toJson, _blobIOToJsonDocString, args("self", "options"))
+        .def("to_json", numIOToJsonNoOpt, &CNumericIOWrap<Type>::default_toJsonNoOpt, _toJsonNoOptDocString, args("self"))
+        .def("to_json", numIOToJson, &CNumericIOWrap<Type>::default_toJson, _toJsonDocString, args("self", "options"))
         .def("from_json", &CNumericIO<Type>::fromJson, &CNumericIOWrap<Type>::default_fromJson, _imageIOFromJsonIDocString, args("self", "jsonStr"))
     ;
 
@@ -275,8 +275,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("clear_data", &CBlobMeasureIO::clearData, _clearDataDerivedDocString, args("self"))
         .def("load", &CBlobMeasureIO::load, _blobMeasureIOLoadDocString, args("self", "path"))
         .def("save", saveBlob, _blobMeasureIOSaveDocString, args("self", "path"))
-        .def("to_json", blobIOToJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
-        .def("to_json", blobIOToJson, _blobIOToJsonDocString, args("self", "options"))
+        .def("to_json", blobIOToJsonNoOpt, _toJsonNoOptDocString, args("self"))
+        .def("to_json", blobIOToJson, _toJsonDocString, args("self", "options"))
         .def("from_json", &CBlobMeasureIO::fromJson, _imageIOFromJsonIDocString, args("self", "jsonStr"))
     ;
 
@@ -298,8 +298,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("clear_data", &CGraphicsInput::clearData, &CGraphicsInputWrap::default_clearData, _clearGraphicsDataDocString, args("self"))
         .def("load", &CGraphicsInput::load, &CGraphicsInputWrap::default_load, _graphicsInputLoadDocString, args("self", "path"))
         .def("save", saveGraphicsIn, &CGraphicsInputWrap::default_save, _graphicsInputSaveDocString, args("self", "path"))
-        .def("to_json", graphicsInToJsonNoOpt, &CGraphicsInputWrap::default_toJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
-        .def("to_json", graphicsInToJson, &CGraphicsInputWrap::default_toJson, _blobIOToJsonDocString, args("self", "options"))
+        .def("to_json", graphicsInToJsonNoOpt, &CGraphicsInputWrap::default_toJsonNoOpt, _toJsonNoOptDocString, args("self"))
+        .def("to_json", graphicsInToJson, &CGraphicsInputWrap::default_toJson, _toJsonDocString, args("self", "options"))
         .def("from_json", &CGraphicsInput::fromJson, &CGraphicsInputWrap::default_fromJson, _imageIOFromJsonIDocString, args("self", "jsonStr"))
     ;
 
@@ -353,8 +353,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("clear_data", &CGraphicsOutput::clearData, &CGraphicsOutputWrap::default_clearData, _clearGraphicsDataDocString, args("self"))
         .def("load", &CGraphicsOutput::load, &CGraphicsOutputWrap::default_load, _graphicsOutputLoadDocString, args("self", "path"))
         .def("save", saveGraphicsOut, &CGraphicsOutputWrap::default_save, _graphicsOutputSaveDocString, args("self", "path"))
-        .def("to_json", graphicsOutToJsonNoOpt, &CGraphicsOutputWrap::default_toJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
-        .def("to_json", graphicsOutToJson, &CGraphicsOutputWrap::default_toJson, _blobIOToJsonDocString, args("self", "options"))
+        .def("to_json", graphicsOutToJsonNoOpt, &CGraphicsOutputWrap::default_toJsonNoOpt, _toJsonNoOptDocString, args("self"))
+        .def("to_json", graphicsOutToJson, &CGraphicsOutputWrap::default_toJson, _toJsonDocString, args("self", "options"))
         .def("from_json", &CGraphicsOutput::fromJson, &CGraphicsOutputWrap::default_fromJson, _imageIOFromJsonIDocString, args("self", "jsonStr"))
     ;
 
@@ -507,7 +507,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("clear_data", &CDatasetIO::clearData, &CDatasetIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
         .def("save", &CDatasetIO::save, &CDatasetIOWrap::default_save, _saveDocStr)
         .def("load", &CDatasetIO::load, &CDatasetIOWrap::default_load, _loadDocStr)
-        .def("to_json", datasetToJsonNoOpt, &CDatasetIOWrap::default_toJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
+        .def("to_json", datasetToJsonNoOpt, &CDatasetIOWrap::default_toJsonNoOpt, _toJsonNoOptDocString, args("self"))
         .def("to_json", datasetToJson, &CDatasetIOWrap::default_toJson, _datasetIOToJsonDocStr, args("self", "options"))
         .def("from_json", &CDatasetIO::fromJson, &CDatasetIOWrap::default_fromJson, _datasetIOFromJsonDocStr, args("self", "json_str"))
     ;
@@ -563,9 +563,9 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("clear_data", &CObjectDetectionIO::clearData, &CObjectDetectionIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
         .def("load", &CObjectDetectionIO::load, &CObjectDetectionIOWrap::default_load, _objDetectLoadDocString, args("self", "path"))
         .def("save", &CObjectDetectionIO::save, &CObjectDetectionIOWrap::default_save, _objDetectSaveDocString, args("self", "path"))
-        .def("to_json", objDetectToJsonNoOpt, &CObjectDetectionIOWrap::default_toJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
-        .def("to_json", objDetectToJson, &CObjectDetectionIOWrap::default_toJson, _objDetectToJsonDocString, args("self", "options"))
-        .def("from_json", &CObjectDetectionIO::fromJson, &CObjectDetectionIOWrap::default_fromJson, _objDetectFromJsonDocString, args("self", "json_str"))
+        .def("to_json", objDetectToJsonNoOpt, &CObjectDetectionIOWrap::default_toJsonNoOpt, _toJsonNoOptDocString, args("self"))
+        .def("to_json", objDetectToJson, &CObjectDetectionIOWrap::default_toJson, _toJsonDocString, args("self", "options"))
+        .def("from_json", &CObjectDetectionIO::fromJson, &CObjectDetectionIOWrap::default_fromJson, _fromJsonDocString, args("self", "json_str"))
     ;
 
     //-----------------------------------//
@@ -607,7 +607,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("save", &CInstanceSegIO::save, &CInstanceSegIOWrap::default_save, _instanceSegSaveDocString, args("self", "path"))
         .def("to_json", instSegToJsonNoOpt, &CInstanceSegIOWrap::default_toJsonNoOpt, _imageIOToJsonNoOptDocString, args("self"))
         .def("to_json", instSegToJson, &CInstanceSegIOWrap::default_toJson, _instanceSegToJsonDocString, args("self", "options"))
-        .def("from_json", &CInstanceSegIO::fromJson, &CInstanceSegIOWrap::default_fromJson, _instanceSegFromJsonDocString, args("self", "json_str"))
+        .def("from_json", &CInstanceSegIO::fromJson, &CInstanceSegIOWrap::default_fromJson, _fromJsonDocString, args("self", "json_str"))
     ;
 
     //--------------------------//
@@ -634,7 +634,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("save", &CSemanticSegIO::save, &CSemanticSegIOWrap::default_save, _instanceSegSaveDocString, args("self", "path"))
         .def("to_json", semSegToJsonNoOpt, &CSemanticSegIOWrap::default_toJsonNoOpt, _imageIOToJsonNoOptDocString, args("self"))
         .def("to_json", semSegToJson, &CSemanticSegIOWrap::default_toJson, _instanceSegToJsonDocString, args("self", "options"))
-        .def("from_json", &CSemanticSegIO::fromJson, &CSemanticSegIOWrap::default_fromJson, _instanceSegFromJsonDocString, args("self", "jsonStr"))
+        .def("from_json", &CSemanticSegIO::fromJson, &CSemanticSegIOWrap::default_fromJson, _fromJsonDocString, args("self", "jsonStr"))
     ;
 
     //------------------------//
@@ -685,9 +685,9 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("set_keypoint_links", &CKeypointsIO::setKeypointLinks, _setKeyptLinksDocString, args("self", "links"))
         .def("load", &CKeypointsIO::load, &CKeyptsIOWrap::default_load, _keyptsLoadDocString, args("self", "path"))
         .def("save", &CKeypointsIO::save, &CKeyptsIOWrap::default_save, _keyptsSaveDocString, args("self", "path"))
-        .def("to_json", keyptsToJsonNoOpt, &CKeyptsIOWrap::default_toJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
-        .def("to_json", keyptsToJson, &CKeyptsIOWrap::default_toJson, _objDetectToJsonDocString, args("self", "options"))
-        .def("from_json", &CKeypointsIO::fromJson, &CKeyptsIOWrap::default_fromJson, _objDetectFromJsonDocString, args("self", "json_str"))
+        .def("to_json", keyptsToJsonNoOpt, &CKeyptsIOWrap::default_toJsonNoOpt, _toJsonNoOptDocString, args("self"))
+        .def("to_json", keyptsToJson, &CKeyptsIOWrap::default_toJson, _toJsonDocString, args("self", "options"))
+        .def("from_json", &CKeypointsIO::fromJson, &CKeyptsIOWrap::default_fromJson, _fromJsonDocString, args("self", "json_str"))
     ;
 
     //-------------------//
@@ -727,9 +727,9 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("clear_data", &CTextIO::clearData, &CTextIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
         .def("load", &CTextIO::load, &CTextIOWrap::default_load, _textLoadDocString, args("self", "path"))
         .def("save", &CTextIO::save, &CTextIOWrap::default_save, _textSaveDocString, args("self", "path"))
-        .def("to_json", textToJsonNoOpt, &CTextIOWrap::default_toJsonNoOpt, _blobIOToJsonNoOptDocString, args("self"))
-        .def("to_json", textToJson, &CTextIOWrap::default_toJson, _objDetectToJsonDocString, args("self", "options"))
-        .def("from_json", &CTextIO::fromJson, &CTextIOWrap::default_fromJson, _objDetectFromJsonDocString, args("self", "json_str"))
+        .def("to_json", textToJsonNoOpt, &CTextIOWrap::default_toJsonNoOpt, _toJsonNoOptDocString, args("self"))
+        .def("to_json", textToJson, &CTextIOWrap::default_toJson, _toJsonDocString, args("self", "options"))
+        .def("from_json", &CTextIO::fromJson, &CTextIOWrap::default_fromJson, _fromJsonDocString, args("self", "json_str"))
     ;
 
     //-------------------------//
@@ -743,7 +743,7 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def(init<int>("Constructor with text max size", args("self")))
         .def("__repr__", &CTextStreamIOWrap::repr)
         .def("feed", &CTextStreamIOWrap::feed, _textStreamFeedDocString, args("self", "text_chunk"))
-        .def("read_next_async", &CTextStreamIOWrap::readNextAsync, _textStreamReadDocString, args("self", "min_text_size", "timeout", "handler"))
+        .def("read_next_async", &CTextStreamIOWrap::readNextAsync, _textStreamReadAsyncDocString, args("self", "min_text_size", "timeout", "handler"))
         .def("read_full", &CTextStreamIOWrap::readFull, _textStreamReadFullDocString, args("self"))
         .def("close", &CTextStreamIOWrap::close, _textStreamCloseDocString, args("self"))
         .def("is_feed_finished", &CTextStreamIOWrap::isFeedFinished, _textStreamIsFeedFinishedDocString, args("self"))
@@ -752,9 +752,9 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("clear_data", &CTextStreamIOWrap::clearData, &CTextStreamIOWrap::default_clearData, _clearDataDerivedDocString, args("self"))
         .def("load", &CTextStreamIOWrap::load, &CTextStreamIOWrap::default_load, _textStreamLoadDocString, args("self", "path"))
         .def("save", &CTextStreamIOWrap::save, &CTextStreamIOWrap::default_save, _textStreamSaveDocString, args("self", "path"))
-        .def("to_json", textStreamToJsonNoOpt, &CTextStreamIOWrap::default_toJsonNoOpt, _textStreamToJsonNoOptDocString, args("self"))
-        .def("to_json", texStreamToJson, &CTextStreamIOWrap::default_toJson, _textStreamToJsonDocString, args("self", "options"))
-        .def("from_json", &CTextStreamIOWrap::fromJson, &CTextStreamIOWrap::default_fromJson, _textStreamFromJsonDocString, args("self", "json_str"))
+        .def("to_json", textStreamToJsonNoOpt, &CTextStreamIOWrap::default_toJsonNoOpt, _toJsonNoOptDocString, args("self"))
+        .def("to_json", texStreamToJson, &CTextStreamIOWrap::default_toJson, _toJsonDocString, args("self", "options"))
+        .def("from_json", &CTextStreamIOWrap::fromJson, &CTextStreamIOWrap::default_fromJson, _fromJsonDocString, args("self", "json_str"))
     ;
 
     //------------------------//
