@@ -60,7 +60,7 @@ void CTextStreamIO::feed(const std::string& chunk)
 // -------------------------------------------------------
 // Async chunk read with optional timeout
 // -------------------------------------------------------
-void CTextStreamIO::readNext(int minBytes, int timeout, Handler handler)
+void CTextStreamIO::readNextAsync(int minBytes, int timeout, Handler handler)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
     auto timeoutChrono = std::chrono::seconds(timeout);
@@ -105,11 +105,11 @@ void CTextStreamIO::readNext(int minBytes, int timeout, Handler handler)
 }
 
 // Future-based version
-std::future<std::string> CTextStreamIO::readNext(int n, int timeout)
+std::future<std::string> CTextStreamIO::readNextAsync(int n, int timeout)
 {
     auto promise = std::make_shared<std::promise<std::string>>();
 
-    readNext(n, timeout, [this, promise](const std::string& text, const boost::system::error_code& ec){
+    readNextAsync(n, timeout, [this, promise](const std::string& text, const boost::system::error_code& ec){
         if (ec == boost::system::errc::timed_out)
             promise->set_exception(std::make_exception_ptr(std::runtime_error("timeout")));
         else

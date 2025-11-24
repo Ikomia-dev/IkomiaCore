@@ -49,7 +49,7 @@ class CTextStreamIOWrap: public CPyTextStreamIO, public wrapper<CPyTextStreamIO>
 
         void        feed(const std::string& chunk);
 
-        void        readNext(int minBytes, int timeout, api::object py_callback);
+        void        readNextAsync(int minBytes, int timeout, api::object py_callback);
         std::string readFull();
         
         void        close();

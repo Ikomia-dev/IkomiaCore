@@ -40,8 +40,8 @@ class DATAPROCESSSHARED_EXPORT CTextStreamIO: public CWorkflowTaskIO
         // -------------------------------------------------------
         // Async chunk read with optional timeout
         // -------------------------------------------------------
-        void                        readNext(int minBytes, int timeout, Handler handler);
-        std::future<std::string>    readNext(int minBytes, int timeout);
+        void                        readNextAsync(int minBytes, int timeout, Handler handler);
+        std::future<std::string>    readNextAsync(int minBytes, int timeout);
         std::string                 readFull() const;
 
         void                        close();

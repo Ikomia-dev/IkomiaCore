@@ -94,7 +94,7 @@ void CTextStreamIOWrap::feed(const std::string &chunk)
     stream().feed(chunk);
 }
 
-void CTextStreamIOWrap::readNext(int minBytes, int timeout, boost::python::object py_callback)
+void CTextStreamIOWrap::readNextAsync(int minBytes, int timeout, boost::python::object py_callback)
 {
     // Keep Python callback alive
     auto py_cb = std::make_shared<boost::python::object>(py_callback);
@@ -121,7 +121,7 @@ void CTextStreamIOWrap::readNext(int minBytes, int timeout, boost::python::objec
     };
 
     // Register async read
-    stream().readNext(minBytes, timeout, handler);
+    stream().readNextAsync(minBytes, timeout, handler);
 }
 
 std::string CTextStreamIOWrap::readFull()
