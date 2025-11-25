@@ -589,12 +589,12 @@ class CTreeDbManager
     protected:
 
         // Pure virtual methods that must be reimplemented
-        virtual void            fillModel(QSqlQuery query) = 0;
+        virtual void            fillModel(QSqlQuery& query) = 0;
         virtual void            fillDatabase(itemType root) = 0;
 
         // Template methods
         template<typename T, typename Loader>
-        auto                    loadCustomTreeItem(QSqlQuery q)
+        auto                    loadCustomTreeItem(QSqlQuery& q)
         {
             assert(m_pModel != nullptr);
             Loader loader;
@@ -615,12 +615,12 @@ class CTreeDbManager
         }
 
         // Functions for standard item
-        virtual QStandardItem*  loadStandardTreeItem(QSqlQuery q)
+        virtual QStandardItem*  loadStandardTreeItem(QSqlQuery& q)
         {
             QString nodeName = q.record().value("nodeName").toString();
             return new QStandardItem(nodeName);
         }
-        void                    addStandardTreeItem(QSqlQuery q)
+        void                    addStandardTreeItem(const QSqlQuery& q)
         {
             int nodeLevel = q.record().value("nodeLevel").toInt();
             int nodeId = q.record().value("nodeId").toInt();

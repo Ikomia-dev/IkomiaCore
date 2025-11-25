@@ -825,7 +825,7 @@ namespace Ikomia
                 return db;
             }
 
-            inline int getQuerySize(QSqlQuery q)
+            inline int getQuerySize(QSqlQuery& q)
             {
                 int initialPos = q.at();
                 int size = 0;
