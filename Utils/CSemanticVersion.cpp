@@ -18,7 +18,7 @@ CSemanticVersion::CSemanticVersion(const std::string &version)
 
 bool CSemanticVersion::operator<(const CSemanticVersion &rhs) const
 {
-    size_t nbParts = std::min(m_versionParts.size(), rhs.m_versionParts.size());
+    size_t nbParts = std::min(m_versionParts.size(), rhs.m_versionParts.size()) - 1;
     return std::lexicographical_compare(m_versionParts.begin(), m_versionParts.begin() + nbParts, rhs.m_versionParts.begin(), rhs.m_versionParts.begin() + nbParts);
 }
 
