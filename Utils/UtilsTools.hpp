@@ -153,11 +153,11 @@ namespace Ikomia
             }
             inline std::string  getMinSupportedVersion()
             {
-                return "3.7.0";
+                return "3.9.0";
             }
             inline std::string  getMaxSupportedVersion()
             {
-                return "3.10.0";
+                return "3.12.0";
             }
             inline std::string  getExceptionType(PyObject *pType)
             {
