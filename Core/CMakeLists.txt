@@ -19,6 +19,8 @@ add_library(ikCore SHARED
     Data/CMeasure.cpp
     Data/CMeasure.h
     Data/CndArray.hpp
+    Data/CvMatNumpyArrayConverter.h
+    Data/CvMatNumpyArrayConverter.cpp
     Graphics/CGraphicsComplexPolygon.cpp
     Graphics/CGraphicsComplexPolygon.h
     Graphics/CGraphicsContext.cpp
