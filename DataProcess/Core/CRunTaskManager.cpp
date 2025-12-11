@@ -44,6 +44,7 @@ void CRunTaskManager::run(const WorkflowTaskPtr &pTask, const std::string inputN
     {
         case CWorkflowTask::Type::GENERIC:
         case CWorkflowTask::Type::DNN_TRAIN:
+        default:
             pTask->run();
             break;
         case CWorkflowTask::Type::IMAGE_PROCESS_2D:

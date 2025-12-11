@@ -90,20 +90,20 @@ class CORESHARED_EXPORT CWorkflowTask
          * @enum Type
          * @brief The Type enum defines the data types for which a process is dedicated.
          */
-        enum class Type : size_t
+        enum class Type : int
         {
-            GENERIC,            /**< Generic process */
-            IMAGE_PROCESS_2D,   /**< Process or task dedicated to standard image (2D) */
-            IMAGE_PROCESS_3D,   /**< Process or task dedicated to volume */
-            VIDEO,              /**< Process or task dedicated to video */
-            DNN_TRAIN           /**< Process or task dedicated to DNN training */
+            GENERIC = 0,            /**< Generic process */
+            IMAGE_PROCESS_2D = 1,   /**< Process or task dedicated to standard image (2D) */
+            IMAGE_PROCESS_3D = 2,   /**< Process or task dedicated to volume */
+            VIDEO = 3,              /**< Process or task dedicated to video */
+            DNN_TRAIN = 4           /**< Process or task dedicated to DNN training */
         };
 
         /**
          * @enum State
          * @brief The State enum defines the execution states of a process.
          */
-        enum class State : size_t
+        enum class State : int
         {
             UNDONE,     /**< Not executed */
             VALIDATE,   /**< Execution succeed */
@@ -114,7 +114,7 @@ class CORESHARED_EXPORT CWorkflowTask
          * @enum ActionFlag
          * @brief The ActionFlag enum defines specific behaviors or actions that can be enable/disable for a process.
          */
-        enum class ActionFlag : size_t
+        enum class ActionFlag : int
         {
             APPLY_VOLUME,       /**< Action to execute a task dedicated to standard image to a volume */
             OUTPUT_AUTO_EXPORT  /**< Action to export automatically task outputs */
@@ -261,6 +261,8 @@ class CORESHARED_EXPORT CWorkflowTask
          * @param bEnable: True or False.
          */
         void                        setEnabled(bool bEnable);
+
+        void                        setType(Type type);
 
         //Getters
         /**
