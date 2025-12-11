@@ -63,6 +63,10 @@ class CWorkflowTaskWrap : public CWorkflowTask, public wrapper<CWorkflowTask>
         void        setActive(bool bActive) override;
         void        default_setActive(bool bActive);
 
+        void        setType(int type);
+
+        int         getType() const;
+
         size_t      getProgressSteps() override;
         size_t      default_getProgressSteps();
 
