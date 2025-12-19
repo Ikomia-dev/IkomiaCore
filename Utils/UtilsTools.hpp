@@ -1495,7 +1495,7 @@ namespace Ikomia
                         break;
 
                     case QtFatalMsg:
-                        qFatal().noquote() << msg;
+                        qFatal(msg.toUtf8().constData());
                         break;
 
                     default:
