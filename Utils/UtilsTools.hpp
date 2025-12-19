@@ -1495,7 +1495,7 @@ namespace Ikomia
                         break;
 
                     case QtFatalMsg:
-                        qFatal(msg.toUtf8().constData());
+                        qFatal("%s", msg.toUtf8().constData());
                         break;
 
                     default:
@@ -1553,7 +1553,7 @@ namespace Ikomia
                         break;
 
                     case QtFatalMsg:
-                        qFatal(QString::fromStdString(msg).toUtf8().constData());
+                        qFatal("%s", QString::fromStdString(msg).toUtf8().constData());
                         break;
 
                     default:
