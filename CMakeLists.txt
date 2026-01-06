@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.22)
 set(IKOMIA_VERSION 0.15.0)
 project(IkomiaCore VERSION ${IKOMIA_VERSION} LANGUAGES CXX)
 
