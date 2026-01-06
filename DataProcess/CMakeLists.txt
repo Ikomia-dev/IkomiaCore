@@ -568,7 +568,7 @@ target_include_directories(ikDataProcess PRIVATE
     ../DataIO
     ../Utils
     # GMIC
-    ${CMAKE_CURRENT_LIST_DIR}/../../gmic/src
+    ${CMAKE_CURRENT_LIST_DIR}/../../deps/gmic/src
 )
 
 target_link_libraries(ikDataProcess PRIVATE

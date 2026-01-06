@@ -120,6 +120,7 @@ add_subdirectory(DataProcess)
 add_subdirectory(DataPlot)
 
 if(${IK_VOLUME_RENDER})
+    find_package(OpenGL REQUIRED)
     add_subdirectory(VolumeRender)
 endif()
 

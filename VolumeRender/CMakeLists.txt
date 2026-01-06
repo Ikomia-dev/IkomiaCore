@@ -52,6 +52,7 @@ target_link_libraries(ikVolumeRender PRIVATE
     Qt::OpenGL
     Qt::Sql
     Qt::Widgets
+    OpenGL::GL
     OpenMP::OpenMP_CXX
     Python3::Python
     ${BOOST_PYTHON_TARGET}
