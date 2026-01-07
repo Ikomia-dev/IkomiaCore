@@ -1,5 +1,5 @@
 if(IKOMIA_TESTS)
-    find_package(Qt5 REQUIRED COMPONENTS Test)
+    find_package(Qt6 REQUIRED COMPONENTS Test)
 
     add_subdirectory(DataIOTests)
     add_subdirectory(CoreTests)
