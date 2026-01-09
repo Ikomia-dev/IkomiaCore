@@ -568,7 +568,7 @@ target_include_directories(ikDataProcess PRIVATE
     ../DataIO
     ../Utils
     # GMIC
-    ${CMAKE_CURRENT_LIST_DIR}/../../gmic/src
+    ${CMAKE_CURRENT_LIST_DIR}/../../deps/gmic/src
 )
 
 target_link_libraries(ikDataProcess PRIVATE
@@ -578,7 +578,6 @@ target_link_libraries(ikDataProcess PRIVATE
     Qt::Sql
     Qt::Widgets
     Python3::Python
-    Boost::system
     Boost::filesystem
     ${BOOST_PYTHON_TARGET}
     OpenMP::OpenMP_CXX
@@ -641,7 +640,7 @@ if(WIN32)
 endif()
 
 # Translations
-qt5_create_translation(QM_FILE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}/Translations/dataprocess_fr.ts)
+qt6_create_translation(QM_FILE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}/Translations/dataprocess_fr.ts)
 
 install(TARGETS ikDataProcess
     LIBRARY DESTINATION ${CMAKE_INSTALL_IKOMIA_LIB}

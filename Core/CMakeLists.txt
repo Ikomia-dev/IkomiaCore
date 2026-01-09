@@ -134,7 +134,6 @@ target_link_libraries(ikCore PRIVATE
     Qt::Sql
     Qt::Widgets
     Python3::Python
-    Boost::system
     Boost::filesystem
     ${BOOST_PYTHON_TARGET}
     OpenMP::OpenMP_CXX
@@ -158,7 +157,7 @@ if(WIN32)
 endif()
 
 # Translations
-qt5_create_translation(QM_FILE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}/Translations/core_fr.ts)
+qt6_create_translation(QM_FILE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}/Translations/core_fr.ts)
 
 install(TARGETS ikCore
     LIBRARY DESTINATION ${CMAKE_INSTALL_IKOMIA_LIB}

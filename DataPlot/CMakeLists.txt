@@ -29,12 +29,12 @@ target_compile_features(ikDataPlot PRIVATE cxx_std_14)
 
 target_include_directories(ikDataPlot PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/../Utils
-    ${CMAKE_CURRENT_LIST_DIR}/../../qwt/src
+    ${CMAKE_CURRENT_LIST_DIR}/../../deps/qwt/src
 )
 
 target_link_directories(ikDataPlot PRIVATE
     # Qwt
-    ${CMAKE_CURRENT_LIST_DIR}/../../qwt/build/lib
+    ${CMAKE_CURRENT_LIST_DIR}/../../deps/qwt/build/lib
 )
 
 target_link_libraries(ikDataPlot PRIVATE
@@ -50,7 +50,7 @@ target_link_libraries(ikDataPlot PRIVATE
 )
 
 # Translations
-qt5_create_translation(QM_FILE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}/Translations/dataplot_fr.ts)
+qt6_create_translation(QM_FILE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}/Translations/dataplot_fr.ts)
 
 install(TARGETS ikDataPlot
     LIBRARY DESTINATION ${CMAKE_INSTALL_IKOMIA_LIB}

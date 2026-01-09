@@ -262,7 +262,7 @@ void QtBoolEdit::mousePressEvent(QMouseEvent *event)
 void QtBoolEdit::paintEvent(QPaintEvent *)
 {
     QStyleOption opt;
-    opt.init(this);
+    opt.initFrom(this);
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }
@@ -274,7 +274,7 @@ QtKeySequenceEdit::QtKeySequenceEdit(QWidget *parent)
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->addWidget(m_lineEdit);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     m_lineEdit->installEventFilter(this);
     m_lineEdit->setReadOnly(true);
     m_lineEdit->setFocusProxy(this);
@@ -332,20 +332,24 @@ void QtKeySequenceEdit::handleKeyEvent(QKeyEvent *e)
         return;
 
     nextKey |= translateModifiers(e->modifiers(), e->text());
-    int k0 = m_keySequence[0];
-    int k1 = m_keySequence[1];
-    int k2 = m_keySequence[2];
-    int k3 = m_keySequence[3];
+    QKeyCombination none = QKeyCombination();
+    QKeyCombination k0 = m_keySequence[0];
+    QKeyCombination k1 = m_keySequence[1];
+    QKeyCombination k2 = m_keySequence[2];
+    QKeyCombination k3 = m_keySequence[3];
+
     switch (m_num) {
-        case 0: k0 = nextKey; k1 = 0; k2 = 0; k3 = 0; break;
-        case 1: k1 = nextKey; k2 = 0; k3 = 0; break;
-        case 2: k2 = nextKey; k3 = 0; break;
-        case 3: k3 = nextKey; break;
+        case 0: k0 = QKeyCombination::fromCombined(nextKey); k1 = none; k2 = none; k3 = none; break;
+        case 1: k1 = QKeyCombination::fromCombined(nextKey); k2 = none; k3 = none; break;
+        case 2: k2 = QKeyCombination::fromCombined(nextKey); k3 = none; break;
+        case 3: k3 = QKeyCombination::fromCombined(nextKey); break;
         default: break;
     }
+
     ++m_num;
     if (m_num > 3)
         m_num = 0;
+
     m_keySequence = QKeySequence(k0, k1, k2, k3);
     m_lineEdit->setText(m_keySequence.toString(QKeySequence::NativeText));
     e->accept();
@@ -408,7 +412,7 @@ void QtKeySequenceEdit::keyReleaseEvent(QKeyEvent *e)
 void QtKeySequenceEdit::paintEvent(QPaintEvent *)
 {
     QStyleOption opt;
-    opt.init(this);
+    opt.initFrom(this);
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }

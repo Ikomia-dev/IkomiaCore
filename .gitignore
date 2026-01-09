@@ -11,6 +11,7 @@ LocalSettings.cmake
 CMakeLists.txt.user
 CMakeLists.txt.user.*
 Build
+build
 Doc/API/html
 Doc/API/latex
 Doc/Internal/html

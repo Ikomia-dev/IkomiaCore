@@ -82,7 +82,7 @@ void CMultiBarPlot::addSerie(QVector<double> serie, const QStringList& titles)
     assert(titles.size()<=serie.size());
 
     m_series += serie;
-    m_maxBar = std::max(m_maxBar, serie.size());
+    m_maxBar = std::max(m_maxBar, (int)serie.size());
 
     if(titles.isEmpty() && m_serieTitles.isEmpty())
     {

@@ -44,7 +44,6 @@ target_link_libraries(ikDataIO PRIVATE
     Qt::Sql
     Qt::Widgets
     Python3::Python
-    Boost::system
     Boost::filesystem
     ${BOOST_PYTHON_TARGET}
     OpenMP::OpenMP_CXX
@@ -67,7 +66,7 @@ if(UNIX)
         gdcmjpeg8
         gdcmjpeg12
         gdcmjpeg16
-        gdcmopenjp2
+        # gdcmopenjp2
         gdcmcharls
         gdcmuuid
         gdcmexpat
@@ -87,67 +86,16 @@ if(WIN32)
         gdcmjpeg8
         gdcmjpeg12
         gdcmjpeg16
-        gdcmopenjp2
+        # gdcmopenjp2
         gdcmcharls
         gdcmexpat
         # VTK
         ${VTK_LIBRARIES}
-        # vtkalglib
-        # vtkCommonColor
-        # vtkCommonComputationalGeometry
-        # vtkCommonCore
-        # vtkCommonDataModel
-        # vtkCommonExecutionModel
-        # vtkCommonMath
-        # vtkCommonMisc
-        # vtkCommonSystem
-        # vtkCommonTransforms
-        # vtkDICOM
-        # vtkDICOMParser
-        # vtkexpat
-        # vtkFiltersCore
-        # vtkFiltersExtraction
-        # vtkFiltersGeneral
-        # vtkFiltersGeometry
-        # vtkFiltersHybrid
-        # vtkFiltersImaging
-        # vtkFiltersModeling
-        # vtkFiltersSources
-        # vtkFiltersStatistics
-        # vtkfreetype
-        # vtkglew
-        # vtkImagingColor
-        # vtkImagingCore
-        # vtkImagingFourier
-        # vtkImagingGeneral
-        # vtkImagingHybrid
-        # vtkImagingMath
-        # vtkImagingSources
-        # vtkInteractionImage
-        # vtkInteractionStyle
-        # vtkInteractionWidgets
-        # vtkIOCore
-        # vtkIOImage
-        # vtkIOSQL
-        # vtkIOXML
-        # vtkIOXMLParser
-        # vtklz4
-        # vtkmetaio
-        # vtkRenderingAnnotation
-        # vtkRenderingContext2D
-        # vtkRenderingCore
-        # vtkRenderingFreeType
-        # vtkRenderingImage
-        # vtkRenderingOpenGL2
-        # vtkRenderingVolume
-        # vtksqlite
-        # vtksys
-        # vtkViewsCore
     )
 endif()
 
 # Translations
-qt5_create_translation(QM_FILE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}/Translations/utils_fr.ts)
+qt6_create_translation(QM_FILE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}/Translations/utils_fr.ts)
 
 install(TARGETS ikDataIO
     LIBRARY DESTINATION ${CMAKE_INSTALL_IKOMIA_LIB}

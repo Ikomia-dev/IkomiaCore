@@ -31,7 +31,7 @@
  * @brief The CWidgetOutput class defines a widget output for a workflow task.
  * @details This class is designed to handle widget as output of a workflow task.
  * A widget must be a derived object from QWidget od the Qt framework.
- * In Python,it can be either a QWidget based instance from PyQt5 or PySide2 bindings.
+ * In Python,it can be either a QWidget based instance from PyQt6 or PySide2 bindings.
  */
 class DATAPROCESSSHARED_EXPORT CWidgetOutput : public CWorkflowTaskIO
 {
@@ -60,7 +60,7 @@ class DATAPROCESSSHARED_EXPORT CWidgetOutput : public CWorkflowTaskIO
         /**
          * @brief Sets the widget pointer. This class does not take ownership of the pointer.
          * @param pWidget: Qt QWidget based instance.
-         * Python: PyQt5 or PySide2.
+         * Python: PyQt6 or PySide2.
          */
         void        setWidget(QWidget* pWidget);
 
