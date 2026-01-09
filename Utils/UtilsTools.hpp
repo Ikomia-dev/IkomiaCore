@@ -520,11 +520,11 @@ namespace Ikomia
             }
             inline std::string  getCurrentVersionNumber()
             {
-                return "0.15.0";
+                return "0.15.1";
             }
             inline std::string  getCurrentVersionName()
             {
-                return "0.15.0";
+                return "0.15.1";
             }
             inline std::string  getIkomiaLibFolder()
             {
@@ -1365,7 +1365,7 @@ namespace Ikomia
             }
             inline std::string  getCurrentApiVersion()
             {
-                return "0.15.0";
+                return "0.15.1";
             }
             inline std::string  getModelHubUrl()
             {
