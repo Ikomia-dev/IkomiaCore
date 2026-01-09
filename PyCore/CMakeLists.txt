@@ -54,7 +54,6 @@ target_link_libraries(pycore PRIVATE
     Qt::Sql
     Qt::Widgets
     Python3::Python
-    Boost::system
     Boost::filesystem
     ${BOOST_PYTHON_TARGET}
     opencv_core

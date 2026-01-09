@@ -948,7 +948,7 @@ constexpr auto _clearVideoDataDocString =
 constexpr auto _widgetOutputDocString =
         "Define a widget output for a task. "
         "This class is designed to handle widget as output of a workflow task. "
-        "A widget must be a derived object from QWidget of the Qt framework (PyQt5 or PySide2).\n"
+        "A widget must be a derived object from QWidget of the Qt framework (PyQt6 or PySide2).\n"
         "Derived from :py:class:`~ikomia.core.pycore.CWorkflowTaskIO`.\n\n";
 
 constexpr auto _ctor1WidgetOutputDocString =

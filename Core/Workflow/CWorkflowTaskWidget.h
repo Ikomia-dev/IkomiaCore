@@ -37,7 +37,7 @@
  * Each process comes with a Qt widget to manage algorithm parameters and user actions. The widget class implementation is mandatory.
  * This class offers some basic tools to build rapidly a functionnal user interface.
  * As it is derived from Qt QWidget, one can easily customize it to fit more complex needs.
- * For Python, use of bindings like PyQt5 or PySide2 are recommended.
+ * For Python, use of bindings like PyQt6 or PySide2 are recommended.
  */
 class CORESHARED_EXPORT CWorkflowTaskWidget : public QWidget
 {

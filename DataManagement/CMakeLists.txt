@@ -39,7 +39,7 @@ target_link_libraries(ikDataManagement PRIVATE
 )
 
 # Translations
-qt5_create_translation(QM_FILE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}/Translations/datamanagement_fr.ts)
+qt6_create_translation(QM_FILE ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_LIST_DIR}/Translations/datamanagement_fr.ts)
 
 install(TARGETS ikDataManagement
     LIBRARY DESTINATION ${CMAKE_INSTALL_IKOMIA_LIB}

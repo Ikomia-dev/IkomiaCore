@@ -41,6 +41,7 @@ constexpr auto CL_GL_SHARING_EXT = "cl_APPLE_gl_sharing";
 constexpr auto CL_GL_SHARING_EXT = "cl_khr_gl_sharing";
 // Windows Implementation
 #elif defined(_WIN32) || defined(__CYGWIN__)
+#include <windows.h>
 #include <GL/gl.h>
 #include <direct.h>
 constexpr auto CL_GL_SHARING_EXT = "cl_khr_gl_sharing";

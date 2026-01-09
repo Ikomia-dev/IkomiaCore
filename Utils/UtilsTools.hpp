@@ -153,11 +153,11 @@ namespace Ikomia
             }
             inline std::string  getMinSupportedVersion()
             {
-                return "3.7.0";
+                return "3.9.0";
             }
             inline std::string  getMaxSupportedVersion()
             {
-                return "3.10.0";
+                return "3.12.0";
             }
             inline std::string  getExceptionType(PyObject *pType)
             {
@@ -520,11 +520,11 @@ namespace Ikomia
             }
             inline std::string  getCurrentVersionNumber()
             {
-                return "0.15.0";
+                return "0.15.1";
             }
             inline std::string  getCurrentVersionName()
             {
-                return "0.15.0";
+                return "0.15.1";
             }
             inline std::string  getIkomiaLibFolder()
             {
@@ -597,6 +597,8 @@ namespace Ikomia
                     case OSType::ALL:
                         osName = "ALL";
                         break;
+                    case OSType::UNDEFINED:
+                        osName = "";
                 }
                 return osName;
             }
@@ -823,7 +825,7 @@ namespace Ikomia
                 return db;
             }
 
-            inline int getQuerySize(QSqlQuery q)
+            inline int getQuerySize(QSqlQuery& q)
             {
                 int initialPos = q.at();
                 int size = 0;
@@ -849,7 +851,7 @@ namespace Ikomia
                 txtKey.replace("?", "");
                 txtKey.replace("!", "");
 
-                QRegExp rx("[, ]"); // match a comma or a space
+                QRegularExpression rx("[, ]"); // match a comma or a space
                 QStringList list = txtKey.split(rx, Qt::SkipEmptyParts);
 
                 if (list.size() == 0)
@@ -1363,7 +1365,7 @@ namespace Ikomia
             }
             inline std::string  getCurrentApiVersion()
             {
-                return "0.15.0";
+                return "0.15.1";
             }
             inline std::string  getModelHubUrl()
             {
@@ -1493,7 +1495,7 @@ namespace Ikomia
                         break;
 
                     case QtFatalMsg:
-                        qFatal(msg.toLatin1().constData());
+                        qFatal("%s", msg.toUtf8().constData());
                         break;
 
                     default:
@@ -1551,7 +1553,7 @@ namespace Ikomia
                         break;
 
                     case QtFatalMsg:
-                        qFatal(msg.c_str());
+                        qFatal("%s", QString::fromStdString(msg).toUtf8().constData());
                         break;
 
                     default:
