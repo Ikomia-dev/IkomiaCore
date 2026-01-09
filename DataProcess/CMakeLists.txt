@@ -578,7 +578,6 @@ target_link_libraries(ikDataProcess PRIVATE
     Qt::Sql
     Qt::Widgets
     Python3::Python
-    Boost::system
     Boost::filesystem
     ${BOOST_PYTHON_TARGET}
     OpenMP::OpenMP_CXX

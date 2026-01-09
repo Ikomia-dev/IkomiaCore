@@ -51,7 +51,7 @@ if(PRODUCTION)
     find_package(Boost REQUIRED COMPONENTS system filesystem python)
 else()
     set(BOOST_PYTHON_TARGET Boost::python${PYTHON_VERSION_NO_DOT})
-    find_package(Boost REQUIRED COMPONENTS system filesystem python${PYTHON_VERSION_NO_DOT})
+    find_package(Boost REQUIRED COMPONENTS filesystem python${PYTHON_VERSION_NO_DOT})
 endif()
 
 # GDCM

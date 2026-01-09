@@ -104,7 +104,6 @@ target_link_libraries(pydataprocess PRIVATE
     Qt::Sql
     Qt::Widgets
     Python3::Python
-    Boost::system
     Boost::filesystem
     ${BOOST_PYTHON_TARGET}
     opencv_bgsegm
