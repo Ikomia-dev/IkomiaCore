@@ -1556,16 +1556,15 @@ constexpr auto _textStreamDocString =
 constexpr auto _textStreamFeedDocString =
     "Feed text content. The maximum buffer size can be set in ctor. Default is 100MB.\n\n"
     "Args:\n\n"
-    "   text_chunk (str): input text chunk";
+    "   text_chunk (str): input text chunk";    
 
-constexpr auto _textStreamReadAsyncDocString =
-    "Read text content asynchronously. The given callback will be called as soon as text chunks arrive.\n"
+constexpr auto _textStreamReadNextDocString =
+    "Read next text chunk.\n"
     "Methods like :py:class:`~ikomia.dataprocess.pydataprocess.CTextStreamIO.is_feed_finished` or "
     ":py:class:`~ikomia.dataprocess.pydataprocess.CTextStreamIO.is_read_finished` can be useful to know text content state.\n\n"
     "Args:\n\n"
     "   min_text_size (int): minimum string size before callback is called\n\n"
-    "   timeout (int): timeout in seconds\n\n"
-    "   handler (python): Python function as callback\n\n";
+    "   timeout (int): timeout in seconds\n\n";
 
 constexpr auto _textStreamReadFullDocString =
     "Read the full text content. Must be called if :py:class:`~ikomia.dataprocess.pydataprocess.CTextStreamIO.is_feed_finished` "
@@ -1581,6 +1580,9 @@ constexpr auto _textStreamReadFullAsyncDocString =
 
 constexpr auto _textStreamCloseDocString =
     "Close the stream I/O for feeding.\n\n";
+
+constexpr auto _textStreamShutdownDocString =
+    "Shutdown asynchronous context.\n\n";
 
 constexpr auto _textStreamIsFeedFinishedDocString =
     "Return feed operation status.\n\n"

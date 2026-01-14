@@ -1,4 +1,7 @@
 #include "CTextStreamIOWrap.h"
+#include <atomic>
+#include <thread>
+#include <chrono>
 
 
 //--------------------------------------------------------
@@ -6,18 +9,47 @@
 //--------------------------------------------------------
 CPyTextStreamIO::CPyTextStreamIO(int maxBufferSize):
     m_workGuard(boost::asio::make_work_guard(m_io)),
-    m_stream(m_io, maxBufferSize),
-    m_thread([this](){ m_io.run(); })
+    m_stream(m_io, maxBufferSize)
 {
+    m_ioThread = std::thread([this](){ m_io.run(); });
+    m_queueThread = std::thread([this](){ this->queueProcessingLoop(); });
 }
 
 CPyTextStreamIO::~CPyTextStreamIO()
 {
+    // First, close the stream to signal no more data will be fed
+    // This will notify any waiting async operations to complete
+    m_stream.close();
+    // Now clear all data to break reference cycles
+    m_stream.shutdown();
+
+    m_bStopQueueThread = true;
+    m_queueCv.notify_all();
+
+    if (m_queueThread.joinable())
+        m_queueThread.join();
+
+    m_stream.shutdown();
     m_workGuard.reset();
     m_io.stop();
 
-    if (m_thread.joinable())
-        m_thread.join();
+    if (m_ioThread.joinable())
+        m_ioThread.join();
+}
+
+bool CPyTextStreamIO::isFeedFinished() const
+{
+    return m_stream.isFeedFinished();
+}
+
+bool CPyTextStreamIO::isReadFinished() const
+{
+    return m_chunkQueue.empty() && m_stream.isReadFinished();
+}
+
+void CPyTextStreamIO::feed(const std::string &chunk)
+{
+    m_stream.feed(chunk);
 }
 
 CTextStreamIO& CPyTextStreamIO::stream()
@@ -30,6 +62,85 @@ const CTextStreamIO& CPyTextStreamIO::stream() const
     return m_stream;
 }
 
+std::string CPyTextStreamIO::readNext(float timeout)
+{
+    std::unique_lock<std::mutex> lock(m_queueMutex);
+
+    // Otherwise, wait for data or timeout
+    if (timeout > 0)
+    {
+        m_queueCv.wait_for(
+                    lock,
+                    std::chrono::milliseconds(int(timeout*1000)),
+                    [this]() { return !m_chunkQueue.empty() || m_bStopQueueThread; }
+        );
+    }
+    else
+    {
+        m_queueCv.wait(
+                    lock,
+                    [this]() { return !m_chunkQueue.empty() || m_bStopQueueThread; }
+        );
+    }
+
+    // Timeout or stopped
+    if (m_chunkQueue.empty())
+        return "";
+
+    std::string chunk = std::move(m_chunkQueue.front());
+    m_chunkQueue.pop_front();
+    return chunk;
+}
+
+void CPyTextStreamIO::setMinBytes(int minBytes)
+{
+    std::lock_guard<std::mutex> lock(m_queueMutex);
+    m_minBytes = minBytes;
+}
+
+void CPyTextStreamIO::queueProcessingLoop()
+{
+    while (!m_bStopQueueThread)
+    {
+        // Schedule async read
+        stream().readNextAsync(
+            m_minBytes,
+            0,
+            [this](const std::string& data, const boost::system::error_code& ec)
+            {
+                if (m_bStopQueueThread || ec || data.empty())
+                    return;
+
+                {
+                    std::lock_guard<std::mutex> lock(m_queueMutex);
+                    m_chunkQueue.push_back(data);
+                }
+                m_queueCv.notify_one();
+            }
+        );
+
+        // Wait a short time to avoid spinning
+        std::this_thread::yield;
+    }
+}
+
+std::string CPyTextStreamIO::readFull()
+{
+    std::string text = m_stream.readFull();
+    std::lock_guard<std::mutex> lock(m_queueMutex);
+    m_chunkQueue.clear();
+    return text;
+}
+
+void CPyTextStreamIO::close()
+{
+    m_stream.close();
+}
+
+void CPyTextStreamIO::shutdown()
+{
+    m_stream.shutdown();
+}
 
 //------------------------------------------------
 //- Python binding wrapper to handle polymorphism
@@ -44,7 +155,6 @@ CTextStreamIOWrap::CTextStreamIOWrap(int maxBufferSize): CPyTextStreamIO(maxBuff
 
 std::string CTextStreamIOWrap::repr() const
 {
-    CPyEnsureGIL gil;
     return stream().repr();
 }
 
@@ -66,7 +176,6 @@ bool CTextStreamIOWrap::isDataAvailable() const
 
 bool CTextStreamIOWrap::default_isDataAvailable() const
 {
-    CPyEnsureGIL gil;
     try
     {
         return stream().isDataAvailable();
@@ -77,93 +186,10 @@ bool CTextStreamIOWrap::default_isDataAvailable() const
     }
 }
 
-bool CTextStreamIOWrap::isFeedFinished() const
+std::string CTextStreamIOWrap::readNext(int minBytes, float timeout)
 {
-    CPyEnsureGIL gil;
-    return stream().isFeedFinished();
-}
-
-bool CTextStreamIOWrap::isReadFinished() const
-{
-    CPyEnsureGIL gil;
-    return stream().isReadFinished();
-}
-
-void CTextStreamIOWrap::feed(const std::string &chunk)
-{
-    stream().feed(chunk);
-}
-
-void CTextStreamIOWrap::readNextAsync(int minBytes, int timeout, boost::python::object py_callback)
-{
-    // Keep Python callback alive
-    auto py_cb = std::make_shared<boost::python::object>(py_callback);
-
-    // Keep "this" alive as long as async op is alive
-    auto self = shared_from_this();
-
-    CTextStreamIO::Handler handler = [self, py_cb](const std::string &data, const boost::system::error_code &ec)
-    {
-        // Acquire GIL safely
-        CPyEnsureGIL gil;
-
-        try
-        {
-            if (ec == boost::system::errc::timed_out)
-                (*py_cb)(boost::python::object());   // pass None
-            else
-                (*py_cb)(data);
-        }
-        catch (const boost::python::error_already_set &)
-        {
-            Utils::print(Utils::Python::handlePythonException(), QtCriticalMsg);
-        }
-    };
-
-    // Register async read
-    stream().readNextAsync(minBytes, timeout, handler);
-}
-
-void CTextStreamIOWrap::readFullAsync(int timeout, api::object py_callback)
-{
-    // Keep Python callback alive
-    auto py_cb = std::make_shared<boost::python::object>(py_callback);
-
-    // Keep "this" alive as long as async op is alive
-    auto self = shared_from_this();
-
-    CTextStreamIO::Handler handler = [self, py_cb](const std::string &data, const boost::system::error_code &ec)
-    {
-        // Acquire GIL safely
-        CPyEnsureGIL gil;
-
-        try
-        {
-            if (ec == boost::system::errc::timed_out)
-                (*py_cb)(boost::python::object());   // pass None
-            else
-                (*py_cb)(data);
-        }
-        catch (const boost::python::error_already_set &)
-        {
-            Utils::print(Utils::Python::handlePythonException(), QtCriticalMsg);
-        }
-    };
-
-    // Register async read
-    stream().readFullAsync(timeout, handler);
-}
-
-std::string CTextStreamIOWrap::readFull()
-{
-    CPyEnsureGIL gil;
-    return stream().readFull();
-}
-
-void CTextStreamIOWrap::close()
-{
-    CPyEnsureGIL gil;
-    stream().close();
+    setMinBytes(minBytes);
+    return CPyTextStreamIO::readNext(timeout);
 }
 
 void CTextStreamIOWrap::clearData()
@@ -184,7 +210,6 @@ void CTextStreamIOWrap::clearData()
 
 void CTextStreamIOWrap::default_clearData()
 {
-    CPyEnsureGIL gil;
     try
     {
         stream().clearData();
@@ -213,7 +238,6 @@ void CTextStreamIOWrap::load(const std::string &path)
 
 void CTextStreamIOWrap::default_load(const std::string &path)
 {
-    CPyEnsureGIL gil;
     try
     {
         stream().load(path);
@@ -242,7 +266,6 @@ void CTextStreamIOWrap::save(const std::string &path)
 
 void CTextStreamIOWrap::default_save(const std::string &path)
 {
-    CPyEnsureGIL gil;
     try
     {
         stream().save(path);
@@ -268,7 +291,6 @@ std::string CTextStreamIOWrap::toJson() const
 
 std::string CTextStreamIOWrap::default_toJsonNoOpt() const
 {
-    CPyEnsureGIL gil;
     try
     {
         return stream().toJson();
@@ -297,7 +319,6 @@ std::string CTextStreamIOWrap::toJson(const std::vector<std::string> &options) c
 
 std::string CTextStreamIOWrap::default_toJson(const std::vector<std::string> &options) const
 {
-    CPyEnsureGIL gil;
     try
     {
         return stream().toJson(options);
@@ -326,7 +347,6 @@ void CTextStreamIOWrap::fromJson(const std::string &jsonStr)
 
 void CTextStreamIOWrap::default_fromJson(const std::string &jsonStr)
 {
-    CPyEnsureGIL gil;
     try
     {
         stream().fromJson(jsonStr);
