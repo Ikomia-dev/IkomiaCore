@@ -4,10 +4,21 @@
 
 
 CTextStreamIO::CTextStreamIO(boost::asio::io_context &io, int maxBufferSize)
-    : m_io(io), m_maxBufferSize(maxBufferSize), m_timer(io)
+    : CWorkflowTaskIO(IODataType::TEXT, "TextStreamIO"), m_io(io), m_maxBufferSize(maxBufferSize), m_timer(io)
 {
     m_description = QObject::tr("Text I/O with streaming capabilities (in and out).").toStdString();
     m_saveFormat = DataFileFormat::JSON;
+}
+
+CTextStreamIO::~CTextStreamIO()
+{
+    // Notify any waiting threads that the object is being destroyed
+    // This prevents potential deadlocks if readFull() is waiting when the object is destroyed
+    {
+        //std::lock_guard<std::mutex> lock(m_mutex);
+        m_bFeedFinished = true; // Ensure feed is marked as finished
+    }
+    m_feedFinishedCv.notify_all();
 }
 
 std::string CTextStreamIO::repr() const
@@ -60,10 +71,10 @@ void CTextStreamIO::feed(const std::string& chunk)
 // -------------------------------------------------------
 // Async chunk read with optional timeout
 // -------------------------------------------------------
-void CTextStreamIO::readNextAsync(int minBytes, int timeout, Handler handler)
+void CTextStreamIO::readNextAsync(int minBytes, float timeout, Handler handler)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
-    auto timeoutChrono = std::chrono::seconds(timeout);
+    auto timeoutChrono = std::chrono::milliseconds(int(timeout * 1000));
 
     // Immediate completion if enough data
     if (m_buffer.size() >= minBytes || m_bFeedFinished)
@@ -105,24 +116,27 @@ void CTextStreamIO::readNextAsync(int minBytes, int timeout, Handler handler)
 }
 
 // Future-based version
-std::future<std::string> CTextStreamIO::readNextAsync(int n, int timeout)
+std::future<std::string> CTextStreamIO::readNextAsync(int n, float timeout)
 {
     auto promise = std::make_shared<std::promise<std::string>>();
-
-    readNextAsync(n, timeout, [this, promise](const std::string& text, const boost::system::error_code& ec){
-        if (ec == boost::system::errc::timed_out)
-            promise->set_exception(std::make_exception_ptr(std::runtime_error("timeout")));
-        else
-            promise->set_value(text);
-    });
-
+    readNextAsync(
+                n,
+                timeout,
+                [this, promise](const std::string& text, const boost::system::error_code& ec)
+                {
+                    if (ec == boost::system::errc::timed_out)
+                        promise->set_exception(std::make_exception_ptr(std::runtime_error("timeout")));
+                    else
+                        promise->set_value(text);
+                }
+    );
     return promise->get_future();
 }
 
-void CTextStreamIO::readFullAsync(int timeout, Handler handler)
+void CTextStreamIO::readFullAsync(float timeout, Handler handler)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
-    auto timeoutChrono = std::chrono::seconds(timeout);
+    auto timeoutChrono = std::chrono::milliseconds(int(timeout*1000));
 
     // Immediate completion if feed operation is finished
     if (m_bFeedFinished)
@@ -163,22 +177,37 @@ void CTextStreamIO::readFullAsync(int timeout, Handler handler)
     m_waitersFull.push_back(std::move(w));
 }
 
-std::future<std::string> CTextStreamIO::readFullAsync(int timeout)
+std::future<std::string> CTextStreamIO::readFullAsync(float timeout)
 {
     auto promise = std::make_shared<std::promise<std::string>>();
 
-    readFullAsync(timeout, [this, promise](const std::string& text, const boost::system::error_code& ec){
-        if (ec == boost::system::errc::timed_out)
-            promise->set_exception(std::make_exception_ptr(std::runtime_error("timeout")));
-        else
-            promise->set_value(text);
-    });
-
+    readFullAsync(
+                timeout,
+                [this, promise](const std::string& text, const boost::system::error_code& ec)
+                {
+                    if (ec == boost::system::errc::timed_out)
+                        promise->set_exception(std::make_exception_ptr(std::runtime_error("timeout")));
+                    else
+                        promise->set_value(text);
+                }
+    );
     return promise->get_future();
 }
 
-std::string CTextStreamIO::readFull() const
+std::string CTextStreamIO::readFull()
 {
+    std::unique_lock<std::mutex> lock(m_mutex);
+    
+    // Wait until feed is finished
+    if (!m_bFeedFinished)
+    {
+        m_feedFinishedCv.wait(
+                    lock,
+                    [this]() { return m_bFeedFinished.load(); }
+        );
+    }
+
+    m_bReadFinished = true;
     return m_fullText;
 }
 
@@ -188,12 +217,37 @@ void CTextStreamIO::close()
     m_bFeedFinished = true;
     notifyWaiters();
     notifyWaitersFull();
+    // Notify any waiting readFull() calls that feed is finished
+    m_feedFinishedCv.notify_all();
+    std::cout << "Feed finished" << std::endl;
+}
+
+void CTextStreamIO::shutdown()
+{
+    close();
+
+    std::lock_guard<std::mutex> lock(m_mutex);
+
+    for (auto& w : m_waiters)
+    {
+        if (w.timer)
+            w.timer->cancel();
+    }
+
+    for (auto& w : m_waitersFull)
+    {
+        if (w.timer)
+            w.timer->cancel();
+    }
+
+    m_waiters.clear();
+    m_waitersFull.clear();
+    m_bReadFinished = true;
 }
 
 void CTextStreamIO::clearData()
 {
-    m_waiters.clear();
-    m_waitersFull.clear();
+    std::lock_guard<std::mutex> lock(m_mutex);
     m_buffer.clear();
     m_fullText.clear();
 }

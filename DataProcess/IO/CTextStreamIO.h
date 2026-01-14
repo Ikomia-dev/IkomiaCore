@@ -8,6 +8,7 @@
 #include <string>
 #include <functional>
 #include <chrono>
+#include <condition_variable>
 
 #include "DataProcessGlobal.hpp"
 #include "Workflow/CWorkflowTaskIO.h"
@@ -22,7 +23,7 @@ class DATAPROCESSSHARED_EXPORT CTextStreamIO: public CWorkflowTaskIO
         explicit CTextStreamIO(boost::asio::io_context& io, int maxBufferSize = 1e8);
         CTextStreamIO(const CTextStreamIO&) = delete;
 
-        ~CTextStreamIO() = default;
+        ~CTextStreamIO();
 
         CTextStreamIO& operator=(const CTextStreamIO& io) = delete;
 
@@ -40,13 +41,15 @@ class DATAPROCESSSHARED_EXPORT CTextStreamIO: public CWorkflowTaskIO
         // -------------------------------------------------------
         // Async chunk read with optional timeout
         // -------------------------------------------------------
-        void                        readNextAsync(int minBytes, int timeout, Handler handler);
-        std::future<std::string>    readNextAsync(int minBytes, int timeout);
-        void                        readFullAsync(int timeout, Handler handler);
-        std::future<std::string>    readFullAsync(int timeout);
-        std::string                 readFull() const;
+        void                        readNextAsync(int minBytes, float timeout, Handler handler);
+        std::future<std::string>    readNextAsync(int minBytes, float timeout);
+        void                        readFullAsync(float timeout, Handler handler);
+        std::future<std::string>    readFullAsync(float timeout);
+        std::string                 readFull();
 
         void                        close();
+
+        void                        shutdown();
 
         void                        clearData() override;
 
@@ -79,14 +82,15 @@ class DATAPROCESSSHARED_EXPORT CTextStreamIO: public CWorkflowTaskIO
         boost::asio::io_context&    m_io;
         std::size_t                 m_nextId = 0;
         int                         m_maxBufferSize;
-        bool                        m_bFeedFinished = false;
-        bool                        m_bReadFinished = false;
+        std::atomic_bool            m_bFeedFinished = false;
+        std::atomic_bool            m_bReadFinished = false;
         boost::asio::steady_timer   m_timer;
         std::string                 m_buffer;
         std::string                 m_fullText;
         std::deque<WaitRequest>     m_waiters;
         std::vector<WaitRequest>    m_waitersFull;
         std::mutex                  m_mutex;
+        std::condition_variable     m_feedFinishedCv;
 };
 
 #endif // CTEXTSTREAMIO_H
