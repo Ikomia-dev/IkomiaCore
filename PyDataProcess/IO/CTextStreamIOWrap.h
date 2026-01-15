@@ -30,15 +30,14 @@ class CPyTextStreamIO: public CWorkflowTaskIO
 
         void                    close();
 
+        void                    clearData() override;
+
         void                    shutdown();
-
-    protected:
-
-        void                    setMinBytes(int minBytes);
 
     private:
 
-        void                    queueProcessingLoop();
+        void                    startQueueProcessing();
+        void                    scheduleNextRead();
 
     private:
 
@@ -46,12 +45,11 @@ class CPyTextStreamIO: public CWorkflowTaskIO
         boost::asio::executor_work_guard<boost::asio::io_context::executor_type> m_workGuard;
         CTextStreamIO           m_stream;
         std::thread             m_ioThread;
-        std::thread             m_queueThread;
         std::mutex              m_queueMutex;
         std::deque<std::string> m_chunkQueue;
         std::condition_variable m_queueCv;
-        std::atomic_bool        m_bStopQueueThread = false;
-        std::atomic_int         m_minBytes = 1;
+        std::atomic_bool        m_bQueueThreadActive{false};
+        std::atomic_bool        m_bStopQueueProcess{false};
 };
 
 
@@ -70,8 +68,6 @@ class CTextStreamIOWrap: public CPyTextStreamIO, public wrapper<CPyTextStreamIO>
 
         bool        isDataAvailable() const override;
         bool        default_isDataAvailable() const;
-
-        std::string readNext(int minBytes, float timeout);
 
         void        clearData() override;
         void        default_clearData();

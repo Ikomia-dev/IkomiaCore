@@ -1563,7 +1563,6 @@ constexpr auto _textStreamReadNextDocString =
     "Methods like :py:class:`~ikomia.dataprocess.pydataprocess.CTextStreamIO.is_feed_finished` or "
     ":py:class:`~ikomia.dataprocess.pydataprocess.CTextStreamIO.is_read_finished` can be useful to know text content state.\n\n"
     "Args:\n\n"
-    "   min_text_size (int): minimum string size before callback is called\n\n"
     "   timeout (int): timeout in seconds\n\n";
 
 constexpr auto _textStreamReadFullDocString =

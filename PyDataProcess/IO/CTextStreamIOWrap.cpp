@@ -12,7 +12,6 @@ CPyTextStreamIO::CPyTextStreamIO(int maxBufferSize):
     m_stream(m_io, maxBufferSize)
 {
     m_ioThread = std::thread([this](){ m_io.run(); });
-    m_queueThread = std::thread([this](){ this->queueProcessingLoop(); });
 }
 
 CPyTextStreamIO::~CPyTextStreamIO()
@@ -23,13 +22,8 @@ CPyTextStreamIO::~CPyTextStreamIO()
     // Now clear all data to break reference cycles
     m_stream.shutdown();
 
-    m_bStopQueueThread = true;
+    m_bStopQueueProcess = true;
     m_queueCv.notify_all();
-
-    if (m_queueThread.joinable())
-        m_queueThread.join();
-
-    m_stream.shutdown();
     m_workGuard.reset();
     m_io.stop();
 
@@ -64,6 +58,9 @@ const CTextStreamIO& CPyTextStreamIO::stream() const
 
 std::string CPyTextStreamIO::readNext(float timeout)
 {
+    if (!m_bQueueThreadActive)
+        startQueueProcessing();
+
     std::unique_lock<std::mutex> lock(m_queueMutex);
 
     // Otherwise, wait for data or timeout
@@ -72,14 +69,14 @@ std::string CPyTextStreamIO::readNext(float timeout)
         m_queueCv.wait_for(
                     lock,
                     std::chrono::milliseconds(int(timeout*1000)),
-                    [this]() { return !m_chunkQueue.empty() || m_bStopQueueThread; }
+                    [this]() { return !m_chunkQueue.empty() || m_bStopQueueProcess; }
         );
     }
     else
     {
         m_queueCv.wait(
                     lock,
-                    [this]() { return !m_chunkQueue.empty() || m_bStopQueueThread; }
+                    [this]() { return !m_chunkQueue.empty() || m_bStopQueueProcess; }
         );
     }
 
@@ -92,44 +89,58 @@ std::string CPyTextStreamIO::readNext(float timeout)
     return chunk;
 }
 
-void CPyTextStreamIO::setMinBytes(int minBytes)
+void CPyTextStreamIO::startQueueProcessing()
 {
-    std::lock_guard<std::mutex> lock(m_queueMutex);
-    m_minBytes = minBytes;
+    m_bStopQueueProcess = false;
+    m_bQueueThreadActive = true;
+
+    boost::asio::post(m_io, [this]() {
+        scheduleNextRead();
+    });
 }
 
-void CPyTextStreamIO::queueProcessingLoop()
+void CPyTextStreamIO::scheduleNextRead()
 {
-    while (!m_bStopQueueThread)
+    // Fast exit if stopping
+    if (m_bStopQueueProcess)
     {
-        // Schedule async read
-        stream().readNextAsync(
-            m_minBytes,
-            0,
-            [this](const std::string& data, const boost::system::error_code& ec)
-            {
-                if (m_bStopQueueThread || ec || data.empty())
-                    return;
+        m_bQueueThreadActive = false;
+        return;
+    }
 
+    m_stream.readNextAsync(
+        1,
+        0,
+        [this](const std::string& data, const boost::system::error_code& ec)
+        {
+            // Check stop / error first
+            if (m_bStopQueueProcess || ec)
+            {
+                m_bQueueThreadActive = false;
+                return;
+            }
+
+            if (!data.empty())
+            {
                 {
                     std::lock_guard<std::mutex> lock(m_queueMutex);
                     m_chunkQueue.push_back(data);
                 }
                 m_queueCv.notify_one();
             }
-        );
 
-        // Wait a short time to avoid spinning
-        std::this_thread::yield;
-    }
+            // Chain the next async read
+            if (!m_stream.isReadFinished())
+                scheduleNextRead();
+            else
+                m_bQueueThreadActive = false;
+        }
+    );
 }
 
 std::string CPyTextStreamIO::readFull()
 {
-    std::string text = m_stream.readFull();
-    std::lock_guard<std::mutex> lock(m_queueMutex);
-    m_chunkQueue.clear();
-    return text;
+    return m_stream.readFull();
 }
 
 void CPyTextStreamIO::close()
@@ -137,8 +148,16 @@ void CPyTextStreamIO::close()
     m_stream.close();
 }
 
+void CPyTextStreamIO::clearData()
+{
+    stream().clearData();
+    std::unique_lock<std::mutex> lock(m_queueMutex);
+    m_chunkQueue.clear();
+}
+
 void CPyTextStreamIO::shutdown()
 {
+    m_bStopQueueProcess = true;
     m_stream.shutdown();
 }
 
@@ -186,12 +205,6 @@ bool CTextStreamIOWrap::default_isDataAvailable() const
     }
 }
 
-std::string CTextStreamIOWrap::readNext(int minBytes, float timeout)
-{
-    setMinBytes(minBytes);
-    return CPyTextStreamIO::readNext(timeout);
-}
-
 void CTextStreamIOWrap::clearData()
 {
     CPyEnsureGIL gil;
@@ -200,7 +213,7 @@ void CTextStreamIOWrap::clearData()
         if(override clearDataOver = this->get_override("clear_data"))
             clearDataOver();
         else
-            stream().clearData();
+            CPyTextStreamIO::clearData();
     }
     catch(boost::python::error_already_set&)
     {
@@ -212,7 +225,7 @@ void CTextStreamIOWrap::default_clearData()
 {
     try
     {
-        stream().clearData();
+        CPyTextStreamIO::clearData();
     }
     catch(boost::python::error_already_set&)
     {

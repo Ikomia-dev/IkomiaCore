@@ -80,7 +80,8 @@ void CTextStreamIO::readNextAsync(int minBytes, float timeout, Handler handler)
     if (m_buffer.size() >= minBytes || m_bFeedFinished)
     {
         boost::system::error_code ec(static_cast<int>(boost::system::errc::success), boost::system::generic_category());
-        sendData(handler, extract(m_buffer.size()), ec);
+        std::string chunk = extract(m_buffer.size());
+        sendData(handler, chunk, ec);
         return;
     }
 
@@ -219,7 +220,6 @@ void CTextStreamIO::close()
     notifyWaitersFull();
     // Notify any waiting readFull() calls that feed is finished
     m_feedFinishedCv.notify_all();
-    std::cout << "Feed finished" << std::endl;
 }
 
 void CTextStreamIO::shutdown()
@@ -242,7 +242,6 @@ void CTextStreamIO::shutdown()
 
     m_waiters.clear();
     m_waitersFull.clear();
-    m_bReadFinished = true;
 }
 
 void CTextStreamIO::clearData()
@@ -250,6 +249,8 @@ void CTextStreamIO::clearData()
     std::lock_guard<std::mutex> lock(m_mutex);
     m_buffer.clear();
     m_fullText.clear();
+    m_bFeedFinished = false;
+    m_bReadFinished = false;
 }
 
 std::string CTextStreamIO::extract(std::size_t n)
@@ -265,12 +266,11 @@ std::string CTextStreamIO::extract(std::size_t n)
 
 void CTextStreamIO::notifyWaiters()
 {
-    for (;;)
+    while (!m_waiters.empty())
     {
-        if (m_waiters.empty())
-            return;
-
         auto& w = m_waiters.front();
+
+        // Not enough data yet and feeding not finished → stop processing
         if (m_buffer.size() < w.minBytes && m_bFeedFinished == false)
             return;
 
@@ -304,10 +304,10 @@ void CTextStreamIO::notifyWaitersFull()
 void CTextStreamIO::sendData(Handler handler, const std::string& data, const boost::system::error_code& ec)
 {
     boost::asio::post(m_io, [this, handler, data, ec](){
-        handler(data, ec);
-
         if (m_buffer.empty() && m_bFeedFinished)
             m_bReadFinished = true;
+
+        handler(data, ec);
     });
 }
 

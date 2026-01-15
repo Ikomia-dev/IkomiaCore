@@ -82,8 +82,8 @@ class DATAPROCESSSHARED_EXPORT CTextStreamIO: public CWorkflowTaskIO
         boost::asio::io_context&    m_io;
         std::size_t                 m_nextId = 0;
         int                         m_maxBufferSize;
-        std::atomic_bool            m_bFeedFinished = false;
-        std::atomic_bool            m_bReadFinished = false;
+        std::atomic_bool            m_bFeedFinished{false};
+        std::atomic_bool            m_bReadFinished{false};
         boost::asio::steady_timer   m_timer;
         std::string                 m_buffer;
         std::string                 m_fullText;
