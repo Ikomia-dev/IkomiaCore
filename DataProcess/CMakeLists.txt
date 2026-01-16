@@ -476,6 +476,7 @@ add_library(ikDataProcess SHARED
     Widget/OpenCV/xphoto/COcvWidgetLearningBasedWB.hpp
     Widget/OpenCV/xphoto/COcvWidgetSimpleWB.hpp
     Widget/OpenCV/xphoto/COcvWidgetTonemapDurand.hpp
+    IO/CTextStreamIO.h IO/CTextStreamIO.cpp
 )
 
 set_target_properties(ikDataProcess PROPERTIES VERSION ${IKOMIA_VERSION} SOVERSION ${IKOMIA_VERSION})

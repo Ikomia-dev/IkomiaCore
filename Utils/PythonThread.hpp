@@ -33,12 +33,12 @@ class CPyAllowThreads
 {
     public:
 
-        CPyAllowThreads() : _state(PyEval_SaveThread()){}
-        ~CPyAllowThreads(){ PyEval_RestoreThread(_state); }
+        CPyAllowThreads() : m_state(PyEval_SaveThread()){}
+        ~CPyAllowThreads(){ PyEval_RestoreThread(m_state); }
 
     private:
 
-        PyThreadState* _state;
+        PyThreadState* m_state;
 };
 
 class CPyEnsureGIL
@@ -48,17 +48,21 @@ class CPyEnsureGIL
         CPyEnsureGIL()
         {
             if (Py_IsInitialized())
-                _state = PyGILState_Ensure();
+            {
+                m_state = PyGILState_Ensure();
+                m_acquired = true;
+            }
         }
         ~CPyEnsureGIL()
         {
-            if (Py_IsInitialized())
-                PyGILState_Release(_state);
+            if (m_acquired)
+                PyGILState_Release(m_state);
         }
 
     private:
 
-        PyGILState_STATE _state;
+        PyGILState_STATE    m_state;
+        bool                m_acquired = false;
 };
 
 ///@endcond
