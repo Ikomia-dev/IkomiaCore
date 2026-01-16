@@ -401,6 +401,11 @@ void CWorkflowTask::setEnabled(bool bEnable)
     m_bEnabled = bEnable;
 }
 
+void CWorkflowTask::setType(Type type)
+{
+    m_type = type;
+}
+
 CWorkflowTask::Type CWorkflowTask::getType() const
 {
     return m_type;

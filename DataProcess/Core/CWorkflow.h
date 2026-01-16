@@ -235,6 +235,8 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
 
         void                            load(const std::string& path);
 
+        std::string                     toJson() const;
+
         void                            notifyGraphicsChanged();
         void                            notifyVideoStart(int frameCount) override;
 
@@ -296,6 +298,8 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         void                            saveJSON(const std::string& path);
 
         void                            loadJSON(const std::string& path);
+
+        QJsonObject                     toJsonInternal() const;
 
     private:
 
