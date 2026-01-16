@@ -14,10 +14,8 @@ CTextStreamIO::~CTextStreamIO()
 {
     // Notify any waiting threads that the object is being destroyed
     // This prevents potential deadlocks if readFull() is waiting when the object is destroyed
-    {
-        //std::lock_guard<std::mutex> lock(m_mutex);
-        m_bFeedFinished = true; // Ensure feed is marked as finished
-    }
+    // Ensure feed is marked as finished
+    m_bFeedFinished = true;
     m_feedFinishedCv.notify_all();
 }
 
@@ -260,7 +258,7 @@ std::string CTextStreamIO::extract(std::size_t n)
 
     std::size_t take = std::min(n, m_buffer.size());
     std::string out = m_buffer.substr(0, take);
-    m_buffer.erase(0, n);
+    m_buffer.erase(0, take);
     return out;
 }
 
