@@ -597,6 +597,8 @@ namespace Ikomia
                     case OSType::ALL:
                         osName = "ALL";
                         break;
+                    case OSType::UNDEFINED:
+                        osName = "";
                 }
                 return osName;
             }
@@ -823,7 +825,7 @@ namespace Ikomia
                 return db;
             }
 
-            inline int getQuerySize(QSqlQuery q)
+            inline int getQuerySize(QSqlQuery& q)
             {
                 int initialPos = q.at();
                 int size = 0;
@@ -849,7 +851,7 @@ namespace Ikomia
                 txtKey.replace("?", "");
                 txtKey.replace("!", "");
 
-                QRegExp rx("[, ]"); // match a comma or a space
+                QRegularExpression rx("[, ]"); // match a comma or a space
                 QStringList list = txtKey.split(rx, Qt::SkipEmptyParts);
 
                 if (list.size() == 0)
@@ -1493,7 +1495,7 @@ namespace Ikomia
                         break;
 
                     case QtFatalMsg:
-                        qFatal(msg.toLatin1().constData());
+                        qFatal("%s", msg.toUtf8().constData());
                         break;
 
                     default:
@@ -1551,7 +1553,7 @@ namespace Ikomia
                         break;
 
                     case QtFatalMsg:
-                        qFatal(msg.c_str());
+                        qFatal("%s", QString::fromStdString(msg).toUtf8().constData());
                         break;
 
                     default:

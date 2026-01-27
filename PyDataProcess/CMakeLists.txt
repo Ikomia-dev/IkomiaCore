@@ -71,6 +71,7 @@ add_library(pydataprocess SHARED
     Task/CSemanticSegTaskWrap.h
     Task/CInstanceSegTaskWrap.cpp
     Task/CInstanceSegTaskWrap.h
+    IO/CTextStreamIOWrap.h IO/CTextStreamIOWrap.cpp
 )
 
 set_target_properties(pydataprocess PROPERTIES
@@ -104,7 +105,6 @@ target_link_libraries(pydataprocess PRIVATE
     Qt::Sql
     Qt::Widgets
     Python3::Python
-    Boost::system
     Boost::filesystem
     ${BOOST_PYTHON_TARGET}
     opencv_bgsegm

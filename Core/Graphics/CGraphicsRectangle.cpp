@@ -373,7 +373,16 @@ ProxyGraphicsItemPtr CGraphicsRectangle::createProxyGraphicsItem() const
 
 void CGraphicsRectangle::buildFromJsonData(CGraphicsJSON &jsonMgr, QByteArray data)
 {
-    jsonMgr.buildObject(this, data);
+    try
+    {
+        jsonMgr.buildObject(this, data);
+    }
+    catch (const CException&)
+    {
+        // Possible root cause: porting from Qt5 to Qt6 leads to unpossible binary serialization of JSON.
+        // There is no way to solve this.
+        Utils::print("Unable to load JSON binary Data, rectangle can't be created.", QtMsgType::QtWarningMsg);
+    }
 }
 
 void CGraphicsRectangle::insertToImage(CMat &image, CGraphicsConversion &filler, bool bForceFill, bool bBinary) const

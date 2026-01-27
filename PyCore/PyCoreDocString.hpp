@@ -680,7 +680,7 @@ constexpr auto _WorkflowTaskWidget =
         "The widget class implementation is mandatory for Ikomia STUDIO. "
         "This class offers some basic tools to rapidly build a functionnal user interface. "
         "As it is derived from Qt QWidget, one can easily customize it to fit more complex needs. U"
-        "se of bindings like PyQt5 or PySide2 are recommended.\n\n";
+        "se of bindings like PyQt6 or PySide2 are recommended.\n\n";
 
 constexpr auto _setLayoutDocString =
         "Set the main layout of the widget. "

@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.16)
-set(IKOMIA_VERSION 0.15.1)
+cmake_minimum_required(VERSION 3.22)
+set(IKOMIA_VERSION 0.16.0)
 project(IkomiaCore VERSION ${IKOMIA_VERSION} LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -17,7 +17,7 @@ include(Versions.cmake)
 include(LocalSettings.cmake)
 
 # Qt
-find_package(Qt5 REQUIRED COMPONENTS Core Concurrent Gui Network OpenGL Sql Test Widgets LinguistTools)
+find_package(Qt6 REQUIRED COMPONENTS Core Concurrent Gui Network OpenGL Sql Test Widgets LinguistTools)
 
 # Python
 if(PRODUCTION)
@@ -43,15 +43,15 @@ find_package(OpenCV ${OPENCV_VERSION} REQUIRED)
 # Boost
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
+set(BUILD_SHARED_LIBS ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 
 if(PRODUCTION)
-    set(BUILD_SHARED_LIBS ON)
     set(BOOST_PYTHON_TARGET Boost::python)
     find_package(Boost REQUIRED COMPONENTS system filesystem python)
 else()
     set(BOOST_PYTHON_TARGET Boost::python${PYTHON_VERSION_NO_DOT})
-    find_package(Boost REQUIRED COMPONENTS system filesystem python${PYTHON_VERSION_NO_DOT})
+    find_package(Boost REQUIRED COMPONENTS filesystem python${PYTHON_VERSION_NO_DOT})
 endif()
 
 # GDCM
@@ -120,6 +120,7 @@ add_subdirectory(DataProcess)
 add_subdirectory(DataPlot)
 
 if(${IK_VOLUME_RENDER})
+    find_package(OpenGL REQUIRED)
     add_subdirectory(VolumeRender)
 endif()
 

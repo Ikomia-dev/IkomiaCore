@@ -21,10 +21,10 @@
 #define COREDEFINE_HPP
 
 #include <vector>
-#include <set>
 #include <map>
 #include <unordered_map>
 #include <QString>
+#include <QMetaType>
 #include "Graphics/CPoint.hpp"
 
 #define RANDOM_COLOR_SEED 5
@@ -35,7 +35,7 @@ namespace Ikomia
      * @brief
      *
      */
-    enum class DataDimension : size_t
+    enum class DataDimension : int
     {
         NONE,
         X,
@@ -54,7 +54,7 @@ namespace Ikomia
      * @enum Data
      * @brief Input/output data types
      */
-    enum class IODataType : size_t
+    enum class IODataType : int
     {
         IMAGE,                  /**< Image data type */
         VIDEO,                  /**< Video from file (AVI, MPEG...) */
@@ -92,7 +92,7 @@ namespace Ikomia
     };
 
     // Enum class mandatory to avoir name conflict on Windows...
-    enum class GraphicsItem : size_t
+    enum class GraphicsItem : int
     {
         LAYER,
         POINT,
@@ -108,7 +108,7 @@ namespace Ikomia
      * @enum GraphicsShape
      * @brief Graphics item shape values
      */
-    enum class GraphicsShape : size_t
+    enum class GraphicsShape : int
     {
         SELECTION,          /**< Rectangle selection area */
         POINT,              /**< Point item */
@@ -122,7 +122,7 @@ namespace Ikomia
         TEXT                /**< Text item */
     };
 
-    enum class DataFileFormat : size_t
+    enum class DataFileFormat : int
     {
         NONE, TXT, JSON, XML, YAML, CSV,
         BMP, JPG, JP2, PNG, TIF, WEBP,

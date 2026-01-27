@@ -162,6 +162,29 @@ constexpr auto _ctor2ObjMeasureDocString =
 constexpr auto _getMeasureInfoDocString =
         "Get measure information (identifier + name). See :py:class:`~ikomia.core.pycore.CMeasure`.\n\n";
 
+
+//----------------------------------//
+//----- Generic I/O docstrings -----//
+//----------------------------------//
+constexpr auto _toJsonNoOptDocString =
+    "Return input/output data in JSON formatted string (compact mode).\n\n"
+    "Returns:\n\n"
+    "   string: JSON formatted string\n\n";
+
+constexpr auto _toJsonDocString =
+    "Return input/output data in JSON formatted string. JSON format options can be set, possible values are:\n\n"
+    "- ['json_format', 'compact'] (**default**)\n"
+    "- ['json_format', 'indented']\n\n"
+    "Args:\n\n"
+    "   list of str: format-specific options encoded as pairs [option_name, option_value]\n\n"
+    "Returns:\n\n"
+    "   string: JSON formatted string\n\n";
+
+constexpr auto _fromJsonDocString =
+    "Set input/output data from JSON formatted string.\n\n"
+    "Args:\n\n"
+    "   str: data as JSON formatted string\n\n";
+
 //--------------------------//
 //----- CBlobMeasureIO -----//
 //--------------------------//
@@ -214,20 +237,6 @@ constexpr auto _blobMeasureIOSaveDocString =
         "Save blob measure I/O data to file. The file must be in CSV format.\n\n"
         "Args:\n\n"
         "   path (str)\n\n";
-
-constexpr auto _blobIOToJsonNoOptDocString =
-        "Return input/output data in JSON formatted string (compact mode).\n\n"
-        "Returns:\n\n"
-        "   string: JSON formatted string\n\n";
-
-constexpr auto _blobIOToJsonDocString =
-        "Return input/output data in JSON formatted string. JSON format option can be set, possible values are:\n\n"
-        "- ['json_format', 'compact'] (**default**)\n"
-        "- ['json_format', 'indented']\n\n"
-        "Args:\n\n"
-        "   list of str: format-specific options encoded as pairs [option_name, option_value]\n\n"
-        "Returns:\n\n"
-        "   string: JSON formatted string\n\n";
 
 //----------------------//
 //----- CNumericIO -----//
@@ -939,7 +948,7 @@ constexpr auto _clearVideoDataDocString =
 constexpr auto _widgetOutputDocString =
         "Define a widget output for a task. "
         "This class is designed to handle widget as output of a workflow task. "
-        "A widget must be a derived object from QWidget of the Qt framework (PyQt5 or PySide2).\n"
+        "A widget must be a derived object from QWidget of the Qt framework (PyQt6 or PySide2).\n"
         "Derived from :py:class:`~ikomia.core.pycore.CWorkflowTaskIO`.\n\n";
 
 constexpr auto _ctor1WidgetOutputDocString =
@@ -1220,20 +1229,6 @@ constexpr auto _objDetectSaveDocString =
         "Args:\n\n"
         "   path (str): path to JSON file\n\n";
 
-constexpr auto _objDetectToJsonDocString =
-        "Return input/output data in JSON formatted string. JSON format options can be set, possible values are:\n\n"
-        "- ['json_format', 'compact'] (**default**)\n"
-        "- ['json_format', 'indented']\n\n"
-        "Args:\n\n"
-        "   list of str: format-specific options encoded as pairs [option_name, option_value]\n\n"
-        "Returns:\n\n"
-        "   string: JSON formatted string\n\n";
-
-constexpr auto _objDetectFromJsonDocString =
-        "Set input/output data from JSON formatted string.\n\n"
-        "Args:\n\n"
-        "   str: data as JSON formatted string\n\n";
-
 //--------------------------//
 //----- CInstanceSegIO -----//
 //--------------------------//
@@ -1317,11 +1312,6 @@ constexpr auto _instanceSegToJsonDocString =
         "   list of str: format-specific options encoded as pairs [option_name, option_value]\n\n"
         "Returns:\n\n"
         "   string: JSON formatted string\n\n";
-
-constexpr auto _instanceSegFromJsonDocString =
-        "Set input/output data from JSON formatted string.\n\n"
-        "Args:\n\n"
-        "   str: data as JSON formatted string\n\n";
 
 //--------------------------//
 //----- CSemanticSegIO -----//
@@ -1554,6 +1544,64 @@ constexpr auto _textSaveDocString =
         "Save text field detection input/output to JSON file.\n\n"
         "Args:\n\n"
         "   path (str): path to JSON file\n\n";
+
+
+//-------------------------//
+//----- CTextStreamIO -----//
+//-------------------------//
+constexpr auto _textStreamDocString =
+    "Handle text streaming (in and out) asynchronously. You can feed and read text at the same time. "
+    "Based on C++ implementation, async is possible through Python callback read function.\n\n";
+
+constexpr auto _textStreamFeedDocString =
+    "Feed text content. The maximum buffer size can be set in ctor. Default is 100MB.\n\n"
+    "Args:\n\n"
+    "   text_chunk (str): input text chunk";    
+
+constexpr auto _textStreamReadNextDocString =
+    "Read next text chunk.\n"
+    "Methods like :py:class:`~ikomia.dataprocess.pydataprocess.CTextStreamIO.is_feed_finished` or "
+    ":py:class:`~ikomia.dataprocess.pydataprocess.CTextStreamIO.is_read_finished` can be useful to know text content state.\n\n"
+    "Args:\n\n"
+    "   timeout (int): timeout in seconds\n\n";
+
+constexpr auto _textStreamReadFullDocString =
+    "Read the full text content. Must be called if :py:class:`~ikomia.dataprocess.pydataprocess.CTextStreamIO.is_feed_finished` "
+    "returns True to have the complete text.\n\n"
+    "Returns:\n\n"
+    "   full text (str)\n\n";
+
+constexpr auto _textStreamReadFullAsyncDocString =
+    "Read full text content asynchronously. The given callback will be called as soon as the full content is available.\n\n"
+    "Args:\n\n"
+    "   timeout (int): timeout in seconds\n\n"
+    "   handler (python): Python function as callback\n\n";
+
+constexpr auto _textStreamCloseDocString =
+    "Close the stream I/O for feeding.\n\n";
+
+constexpr auto _textStreamShutdownDocString =
+    "Shutdown asynchronous context.\n\n";
+
+constexpr auto _textStreamIsFeedFinishedDocString =
+    "Return feed operation status.\n\n"
+    "Returns:\n\n"
+    "   bool: True if stream I/O is closed for feeding, False otherwise.\n\n";
+
+constexpr auto _textStreamIsReadFinishedDocString =
+    "Return read operation status.\n\n"
+    "Returns:"
+    "   bool: True is all content is read, False otherwise\n\n";
+
+constexpr auto _textStreamLoadDocString =
+    "Load text stream input/output from JSON file.\n\n"
+    "Args:\n\n"
+    "   path (str): path to JSON file\n\n";
+
+constexpr auto _textStreamSaveDocString =
+    "Save text stream input/output to JSON file.\n\n"
+    "Args:\n\n"
+    "   path (str): path to JSON file\n\n";
 
 //------------------------//
 //----- C2dImageTask -----//

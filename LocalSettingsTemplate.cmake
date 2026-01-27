@@ -1,9 +1,9 @@
 add_compile_definitions(
-    CUDA12
+    CPU
     PY311
 )
 
-set(OPENCV_GPU ON)
+set(OPENCV_GPU OFF)
 set(IK_VOLUME_RENDER ON)
 set(PRODUCTION OFF)
 set(IKOMIA_TESTS OFF)
@@ -13,8 +13,8 @@ set(PYTHON_VERSION_DOT_M 3.11)
 set(PYTHON_VERSION_NO_DOT 311)
 
 if(WIN32)
-    set(BOOST_VERSION 1_83)
-    set(BOOST_VC_VERSION 142)
-    set(MSVC_VERSION 16)
+    set(BOOST_VERSION 1.88.0)
+    set(BOOST_VC_VERSION 143)
+    set(MSVC_VERSION 17)
     set(CUDA_VERSION 12.1)
 endif()
