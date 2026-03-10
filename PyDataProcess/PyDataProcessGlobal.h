@@ -26,6 +26,11 @@
     #define HAVE_SNPRINTF
 #endif
 
+#ifdef _WIN32
+#include <WinSock2.h>.h>
+#include <windows.h>
+#endif
+
 #include <QtCore/qglobal.h>
 #include "boost/python.hpp"
 #include "PythonThread.hpp"

@@ -23,6 +23,7 @@
 #include <opencv2/opencv.hpp>
 
 #ifdef _WIN32
+#include <WinSock2.h>.h>
 #include <windows.h>
 #endif
 
