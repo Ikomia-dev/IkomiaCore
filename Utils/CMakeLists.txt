@@ -55,6 +55,7 @@ add_library(ikUtils SHARED
     qaesencryption.h
     CSemanticVersion.h
     CSemanticVersion.cpp
+    pch.hpp
 )
 
 set_target_properties(ikUtils PROPERTIES VERSION ${IKOMIA_VERSION} SOVERSION ${IKOMIA_VERSION})
@@ -88,6 +89,10 @@ set(PUBLIC_HEADERS_CONTAINERS
 set(PUBLIC_HEADERS_WIDGETS
     Widgets/CColorPushButton.h
     Widgets/CBrowseFileWidget.h
+)
+
+target_precompile_headers(ikUtils PRIVATE
+    pch.hpp
 )
 
 target_include_directories(ikUtils PRIVATE
