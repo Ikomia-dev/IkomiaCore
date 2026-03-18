@@ -267,6 +267,16 @@ void CWorkflowTaskWrap::default_setActive(bool bActive)
     }
 }
 
+void CWorkflowTaskWrap::setType(int type)
+{
+    CWorkflowTask::setType(static_cast<CWorkflowTask::Type>(type));
+}
+
+int CWorkflowTaskWrap::getType() const
+{
+    return static_cast<int>(CWorkflowTask::getType());
+}
+
 size_t CWorkflowTaskWrap::getProgressSteps()
 {
     CPyEnsureGIL gil;

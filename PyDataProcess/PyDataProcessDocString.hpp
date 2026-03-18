@@ -2640,5 +2640,10 @@ constexpr auto _wfExportGraphvizDocString =
         "Args:\n\n"
         "   path (str): path where the *.dot* file is saved\n\n";
 
+constexpr auto _wfToJsonDocString =
+        "Get workflow definition data into JSON format string.\n\n"
+        "Returns:\n\n"
+        "   JSON data (str)\n\n";
+
 
 #endif // PYDATAPROCESSDOCSTRING_HPP

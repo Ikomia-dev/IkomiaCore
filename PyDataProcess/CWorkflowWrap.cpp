@@ -46,6 +46,16 @@ std::string CWorkflowWrap::default_repr() const
     }
 }
 
+void CWorkflowWrap::setType(int type)
+{
+    CWorkflow::setType(static_cast<CWorkflow::Type>(type));
+}
+
+int CWorkflowWrap::getType() const
+{
+    return static_cast<int>(CWorkflow::getType());
+}
+
 uintptr_t CWorkflowWrap::getRootID()
 {
     return reinterpret_cast<std::uintptr_t>(getRootId());
