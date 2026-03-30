@@ -21,7 +21,7 @@
 #define DATAPROCESS_HPP
 
 #include "Core/CPluginProcessInterface.hpp"
-#include "Core/CProcessRegistration.h"
+#include "Core/CTaskRegistration.h"
 #include "Process/OpenCV/ProcessOcv.hpp"
 #include "Widget/OpenCV/WidgetOcv.hpp"
 

@@ -30,7 +30,6 @@
 #include "Workflow/CWorkflowTaskIO.h"
 
 
-
 /**
  * @ingroup groupDataProcess
  * @brief The CJsonIO class defines an input or output for a workflow task that can be used to store data using the JSON format.
@@ -157,6 +156,7 @@ class DATAPROCESSSHARED_EXPORT CJsonIO: public CWorkflowTaskIO
         QJsonDocument m_rootJSON;
 };
 
+
 using JsonIOPtr = std::shared_ptr<CJsonIO>;
 
 class DATAPROCESSSHARED_EXPORT CJsonIOFactory: public CWorkflowTaskIOFactory
@@ -168,10 +168,15 @@ class DATAPROCESSSHARED_EXPORT CJsonIOFactory: public CWorkflowTaskIOFactory
             m_name = "CJsonIO";
         }
 
-        virtual WorkflowTaskIOPtr create(IODataType dataType)
+        WorkflowTaskIOPtr create(IODataType dataType) override
         {
             Q_UNUSED(dataType);
             return std::make_shared<CJsonIO>();
+        }
+
+        std::vector<IODataType> getValidDataTypes() const override
+        {
+            return { IODataType::JSON };
         }
 };
 

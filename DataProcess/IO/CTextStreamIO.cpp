@@ -3,8 +3,24 @@
 #include "Main/CoreTools.hpp"
 
 
+CTextStreamIO::CTextStreamIO(int maxBufferSize)
+    : CWorkflowTaskIO(IODataType::TEXT_STREAM, "TextStreamIO"),
+      m_ownedIo(std::in_place),
+      m_workGuard(boost::asio::make_work_guard(m_ownedIo->get_executor())),
+      m_ioPtr(&m_ownedIo.value()),
+      m_maxBufferSize(maxBufferSize),
+      m_timer(*m_ioPtr)
+{
+    m_ioThread.emplace([this]{ m_ownedIo->run(); });
+    m_description = QObject::tr("Text I/O with streaming capabilities (in and out).").toStdString();
+    m_saveFormat = DataFileFormat::JSON;
+}
+
 CTextStreamIO::CTextStreamIO(boost::asio::io_context &io, int maxBufferSize)
-    : CWorkflowTaskIO(IODataType::TEXT, "TextStreamIO"), m_io(io), m_maxBufferSize(maxBufferSize), m_timer(io)
+    : CWorkflowTaskIO(IODataType::TEXT_STREAM, "TextStreamIO"),
+      m_ioPtr(&io),
+      m_maxBufferSize(maxBufferSize),
+      m_timer(io)
 {
     m_description = QObject::tr("Text I/O with streaming capabilities (in and out).").toStdString();
     m_saveFormat = DataFileFormat::JSON;
@@ -14,9 +30,16 @@ CTextStreamIO::~CTextStreamIO()
 {
     // Notify any waiting threads that the object is being destroyed
     // This prevents potential deadlocks if readFull() is waiting when the object is destroyed
-    // Ensure feed is marked as finished
     m_bFeedFinished = true;
     m_feedFinishedCv.notify_all();
+
+    // Stop the owned io_context and join its thread (only when we own it)
+    if (m_workGuard)
+        m_workGuard->reset();
+    if (m_ownedIo)
+        m_ownedIo->stop();
+    if (m_ioThread && m_ioThread->joinable())
+        m_ioThread->join();
 }
 
 std::string CTextStreamIO::repr() const
@@ -91,7 +114,7 @@ void CTextStreamIO::readNextAsync(int minBytes, float timeout, Handler handler)
 
     if (timeoutChrono.count() > 0)
     {
-        w.timer = std::make_shared<boost::asio::steady_timer>(m_io);
+        w.timer = std::make_shared<boost::asio::steady_timer>(*m_ioPtr);
         w.timer->expires_after(timeoutChrono);
         w.timer->async_wait([this, w](auto ec){
             if (ec == boost::asio::error::operation_aborted)
@@ -153,7 +176,7 @@ void CTextStreamIO::readFullAsync(float timeout, Handler handler)
 
     if (timeoutChrono.count() > 0)
     {
-        w.timer = std::make_shared<boost::asio::steady_timer>(m_io);
+        w.timer = std::make_shared<boost::asio::steady_timer>(*m_ioPtr);
         w.timer->expires_after(timeoutChrono);
         w.timer->async_wait([this, w](auto ec){
             if (ec == boost::asio::error::operation_aborted)
@@ -301,7 +324,7 @@ void CTextStreamIO::notifyWaitersFull()
 
 void CTextStreamIO::sendData(Handler handler, const std::string& data, const boost::system::error_code& ec)
 {
-    boost::asio::post(m_io, [this, handler, data, ec](){
+    boost::asio::post(*m_ioPtr, [this, handler, data, ec](){
         if (m_buffer.empty() && m_bFeedFinished)
             m_bReadFinished = true;
 

@@ -4,8 +4,8 @@ add_library(ikDataProcess SHARED
     DataProcessTools.hpp
     pch.hpp
     Core/CPluginProcessInterface.hpp
-    Core/CProcessRegistration.cpp
-    Core/CProcessRegistration.h
+    Core/CTaskRegistration.cpp
+    Core/CTaskRegistration.h
     Core/CIkomiaRegistry.cpp
     Core/CIkomiaRegistry.h
     Core/CPluginTools.cpp

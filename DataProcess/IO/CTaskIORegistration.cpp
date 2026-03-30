@@ -31,6 +31,13 @@
 #include "CSemanticSegIO.h"
 #include "CKeypointsIO.h"
 #include "CDatasetIO.h"
+#include "CArrayIO.h"
+#include "CTextIO.h"
+#include "CJsonIO.h"
+#include "CScene3dIO.h"
+#include "CDatasetIO.h"
+#include "CTextStreamIO.h"
+
 
 CTaskIORegistration::CTaskIORegistration()
 {
@@ -50,6 +57,10 @@ const CWorkflowTaskIOAbstractFactory &CTaskIORegistration::getFactory() const
 
 void CTaskIORegistration::registerIO(const TaskIOFactoryPtr &pFactory)
 {
+    std::vector<IODataType> types = pFactory->getValidDataTypes();
+    for(auto&& it=types.begin(); it!=types.end(); ++it)
+        m_typeToClassName.insert(std::make_pair(*it, pFactory->getName()));
+
     m_factory.getList().push_back(pFactory);
     //Passage par lambda -> pFactory par valeur pour assurer la portée du pointeur
     auto pCreatorFunc = [pFactory](IODataType dataType){ return pFactory->create(dataType); };
@@ -60,6 +71,18 @@ void CTaskIORegistration::reset()
 {
     m_factory.getList().clear();
     registerCore();
+}
+
+WorkflowTaskIOPtr CTaskIORegistration::createIOObject(IODataType type)
+{
+    auto it = m_typeToClassName.find(type);
+    if (it == m_typeToClassName.end())
+    {
+        std::string errMsg = "Unable to create object for data type " + Utils::Workflow::getIODataEnumName(type);
+        throw CException(CoreExCode::NOT_FOUND, errMsg);
+    }
+
+    return m_factory.createObject(it->second, std::move(type));
 }
 
 void CTaskIORegistration::registerCore()
@@ -77,4 +100,10 @@ void CTaskIORegistration::registerCore()
     registerIO(std::make_shared<CSemanticSegIOFactory>());
     registerIO(std::make_shared<CKeypointsIOFactory>());
     registerIO(std::make_shared<CDatasetIOFactory>());
+    registerIO(std::make_shared<CArrayIOFactory>());
+    registerIO(std::make_shared<CTextIOFactory>());
+    registerIO(std::make_shared<CJsonIOFactory>());
+    registerIO(std::make_shared<CScene3dIOFactory>());
+    registerIO(std::make_shared<CDatasetIOFactory>());
+    registerIO(std::make_shared<CTextStreamIOFactory>());
 }

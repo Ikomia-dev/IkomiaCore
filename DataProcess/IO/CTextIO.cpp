@@ -242,6 +242,12 @@ bool CTextIO::isComposite() const
     return true;
 }
 
+bool CTextIO::isConnectableTo(IODataType typeTo) const
+{
+    return m_dataType == typeTo ||
+            typeTo == IODataType::INPUT_GRAPHICS || typeTo == IODataType::NUMERIC_VALUES;
+}
+
 void CTextIO::init(const std::string &taskName, int imageIndex)
 {
     clearData();

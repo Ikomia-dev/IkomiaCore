@@ -185,6 +185,11 @@ bool CGraphicsInput::isDataAvailable() const
         return m_items.size() > 0;
 }
 
+bool CGraphicsInput::isConnectableTo(IODataType typeTo) const
+{
+    return m_dataType == typeTo || typeTo == IODataType::OUTPUT_GRAPHICS;
+}
+
 void CGraphicsInput::clearData()
 {
     m_pLayer = nullptr;

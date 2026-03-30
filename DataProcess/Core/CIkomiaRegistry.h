@@ -2,7 +2,7 @@
 #define CIKOMIAREGISTRY_H
 
 #include "DataProcessGlobal.hpp"
-#include "CProcessRegistration.h"
+#include "CTaskRegistration.h"
 #include "IO/CTaskIORegistration.h"
 
 //-------------------------------//
@@ -36,7 +36,7 @@ class DATAPROCESSSHARED_EXPORT CIkomiaRegistry
         std::string                 getPluginsDirectory() const;
         std::string                 getPluginDirectory(const std::string& name) const;
         CTaskInfo                   getAlgorithmInfo(const std::string& name) const;
-        CProcessRegistration*       getTaskRegistrator();
+        CTaskRegistration*          getTaskRegistrator();
         CTaskIORegistration*        getIORegistrator();
         TaskFactoryPtr              getTaskFactory(const std::string& name) const;
 
@@ -72,7 +72,7 @@ class DATAPROCESSSHARED_EXPORT CIkomiaRegistry
 
     private:
 
-        CProcessRegistration            m_processRegistrator;
+        CTaskRegistration               m_taskRegistrator;
         CTaskIORegistration             m_ioRegistrator;
         std::string                     m_pluginsDir;
         QMap<QString, QPluginLoader*>   m_loaders;

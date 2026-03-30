@@ -193,6 +193,14 @@ class DATAPROCESSSHARED_EXPORT CImageIO : public CWorkflowTaskIO
          */
         bool            isOverlayAvailable() const;
         /**
+          * @brief Check whether I/O object is convertible to the given data type.
+          * @return True or False.
+          */
+        bool            isAssignableTo(IODataType typeTo) const override;
+
+        bool            isConnectableTo(IODataType typeTo) const override;
+
+        /**
          * @brief Clears image and overlay mask so that they become empty.
          */
         void            clearData() override;
@@ -249,9 +257,23 @@ class DATAPROCESSSHARED_EXPORT CImageIOFactory: public CWorkflowTaskIOFactory
             m_name = "CImageIO";
         }
 
-        virtual WorkflowTaskIOPtr   create(IODataType dataType)
+        WorkflowTaskIOPtr   create(IODataType dataType) override
         {
             return std::make_shared<CImageIO>(dataType);
+        }
+
+        std::vector<IODataType> getValidDataTypes() const override
+        {
+            return {
+                IODataType::IMAGE,
+                IODataType::IMAGE_BINARY,
+                IODataType::IMAGE_LABEL,
+                IODataType::VOLUME,
+                IODataType::VOLUME_BINARY,
+                IODataType::VOLUME_LABEL,
+                IODataType::POSITION,
+                IODataType::DESCRIPTORS
+            };
         }
 };
 

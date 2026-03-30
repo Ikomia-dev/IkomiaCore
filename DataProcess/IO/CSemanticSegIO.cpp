@@ -182,6 +182,12 @@ bool CSemanticSegIO::isComposite() const
     return true;
 }
 
+bool CSemanticSegIO::isConnectableTo(IODataType typeTo) const
+{
+    return m_dataType == typeTo ||
+            typeTo == IODataType::IMAGE || typeTo == IODataType::IMAGE_BINARY || typeTo == IODataType::IMAGE_LABEL;
+}
+
 void CSemanticSegIO::clearData()
 {
     m_classes.clear();

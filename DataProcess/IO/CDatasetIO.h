@@ -77,10 +77,15 @@ class DATAPROCESSSHARED_EXPORT CDatasetIOFactory: public CWorkflowTaskIOFactory
             m_name = "CDatasetIO";
         }
 
-        virtual WorkflowTaskIOPtr   create(IODataType dataType)
+        WorkflowTaskIOPtr   create(IODataType dataType) override
         {
             Q_UNUSED(dataType);
             return std::make_shared<CDatasetIO>();
+        }
+
+        std::vector<IODataType> getValidDataTypes() const override
+        {
+            return { IODataType::DNN_DATASET };
         }
 };
 

@@ -254,7 +254,7 @@ void CWorkflowTask::setInput(const WorkflowTaskIOPtr &pInput, size_t index)
     if(pInput == nullptr && m_inputs[index] != nullptr)
         m_inputs[index]->clearData();
 
-    if(Utils::Workflow::isConvertibleIO(m_inputs[index], pInput))
+    if (m_inputs[index]->isAssignableTo(pInput->getDataType()))
     {
         //Just share pointer
         CPyEnsureGIL gil;
@@ -903,7 +903,7 @@ void CWorkflowTask::run()
     // Simply forward input to output if possible -> must be reimplemented in child classes
     for (size_t i=0; i<m_inputs.size(); ++i)
     {
-        if (i < m_outputs.size() && Utils::Workflow::isIODataCompatible(m_inputs[i]->getDataType(), m_outputs[i]->getDataType()))
+        if (i < m_outputs.size() && m_inputs[i]->isConnectableTo(m_outputs[i]->getDataType()))
             m_outputs[i] = m_inputs[i];
     }
 }

@@ -354,54 +354,54 @@ namespace Ikomia
                 switch(dataType)
                 {
                     case IODataType::NONE:
-                        return QObject::tr("none");
+                        return QObject::tr("None");
                     case IODataType::IMAGE:
-                        return QObject::tr("image");
+                        return QObject::tr("Image");
                     case IODataType::IMAGE_BINARY:
-                        return QObject::tr("binary image");
+                        return QObject::tr("Binary image");
                     case IODataType::IMAGE_LABEL:
-                        return QObject::tr("label image");
+                        return QObject::tr("Label image");
                     case IODataType::VOLUME:
-                        return QObject::tr("volume");
+                        return QObject::tr("Volume");
                     case IODataType::VOLUME_BINARY:
-                        return QObject::tr("binary volume");
+                        return QObject::tr("Binary volume");
                     case IODataType::VOLUME_LABEL:
-                        return QObject::tr("label volume");
+                        return QObject::tr("Label volume");
                     case IODataType::POSITION:
-                        return QObject::tr("position image sequence");
+                        return QObject::tr("Position image sequence");
                     case IODataType::INPUT_GRAPHICS:
                     case IODataType::OUTPUT_GRAPHICS:
-                        return QObject::tr("graphics");
+                        return QObject::tr("Graphics");
                     case IODataType::BLOB_VALUES:
-                        return QObject::tr("blob values");
+                        return QObject::tr("Blob values");
                     case IODataType::NUMERIC_VALUES:
-                        return QObject::tr("numeric values");
+                        return QObject::tr("Numeric values");
                     case IODataType::VIDEO:
-                        return QObject::tr("video");
+                        return QObject::tr("Video");
                     case IODataType::VIDEO_BINARY:
-                        return QObject::tr("binary video");
+                        return QObject::tr("Binary video");
                     case IODataType::VIDEO_LABEL:
-                        return QObject::tr("label Video");
+                        return QObject::tr("Label Video");
                     case IODataType::LIVE_STREAM:
-                        return QObject::tr("live stream");
+                        return QObject::tr("Live stream");
                     case IODataType::LIVE_STREAM_BINARY:
-                        return QObject::tr("binary live stream");
+                        return QObject::tr("Binary live stream");
                     case IODataType::LIVE_STREAM_LABEL:
-                        return QObject::tr("label live stream");
+                        return QObject::tr("Label live stream");
                     case IODataType::WIDGET:
-                        return QObject::tr("custom result view");
+                        return QObject::tr("Custom result view");
                     case IODataType::DESCRIPTORS:
-                        return QObject::tr("descriptors");
+                        return QObject::tr("Descriptors");
                     case IODataType::PROJECT_FOLDER:
-                        return QObject::tr("folder");
+                        return QObject::tr("Folder");
                     case IODataType::FOLDER_PATH:
-                        return QObject::tr("folder path");
+                        return QObject::tr("Folder path");
                     case IODataType::FILE_PATH:
-                        return QObject::tr("file path");
+                        return QObject::tr("File path");
                     case IODataType::DNN_DATASET:
-                        return QObject::tr("deep learning dataset");
+                        return QObject::tr("Deep learning dataset");
                     case IODataType::ARRAY:
-                        return QObject::tr("multi-dimensional array");
+                        return QObject::tr("Multi-dimensional array");
                     case IODataType::DATA_DICT:
                         return QObject::tr("Generic Python dict");
                     case IODataType::OBJECT_DETECTION:
@@ -495,161 +495,6 @@ namespace Ikomia
                         return "IODataType.SCENE_3D";
                 }
                 return "";
-            }
-
-            inline bool     isConvertibleIO(WorkflowTaskIOPtr from, WorkflowTaskIOPtr to)
-            {
-                if(from == nullptr || to == nullptr)
-                    return true;
-
-                auto nameFrom = CWorkflowTaskIO::getClassName(from->getDataType());
-                auto nameTo = CWorkflowTaskIO::getClassName(to->getDataType());
-
-                return (nameFrom == nameTo ||
-                        (nameFrom == "CImageIO" && nameTo == "CVideoIO") ||
-                        (nameFrom == "CVideoIO" && nameTo == "CImageIO") ||
-                        (nameFrom == "CImageIO" && nameTo == "CPathIO") ||
-                        (nameFrom == "CVideoIO" && nameTo == "CPathIO"));
-            }
-
-            /**
-             * @brief Checks if two data types can be connected.
-             * @param srcData: source data type ::IODataType.
-             * @param targetData: target data type ::IODataType.
-             * @return True if connection is possible, False otherwise.
-             */
-            inline bool     isIODataCompatible(const IODataType &srcData, const IODataType &targetData)
-            {
-                if(srcData == IODataType::NONE || targetData == IODataType::NONE)
-                    return false;
-                else if(srcData == targetData)
-                    return true;
-                else if(srcData == IODataType::INPUT_GRAPHICS)
-                    return targetData == IODataType::OUTPUT_GRAPHICS;
-                else if(srcData == IODataType::OUTPUT_GRAPHICS)
-                    return targetData == IODataType::INPUT_GRAPHICS;
-                else if (srcData == IODataType::OBJECT_DETECTION)
-                    return targetData == IODataType::INPUT_GRAPHICS || targetData == IODataType::BLOB_VALUES;
-                else if (srcData == IODataType::KEYPOINTS)
-                {
-                    return targetData == IODataType::INPUT_GRAPHICS ||
-                            targetData == IODataType::BLOB_VALUES ||
-                            targetData == IODataType::NUMERIC_VALUES;
-                }
-                else if (srcData == IODataType::TEXT)
-                {
-                    return targetData == IODataType::INPUT_GRAPHICS ||
-                            targetData == IODataType::NUMERIC_VALUES;
-                }
-                else if (srcData == IODataType::INSTANCE_SEGMENTATION)
-                {
-                    return targetData == IODataType::INPUT_GRAPHICS ||
-                            targetData == IODataType::BLOB_VALUES ||
-                            targetData == IODataType::OBJECT_DETECTION ||
-                            targetData == IODataType::SEMANTIC_SEGMENTATION ||
-                            targetData == IODataType::IMAGE ||
-                            targetData == IODataType::IMAGE_LABEL ||
-                            targetData == IODataType::IMAGE_BINARY;
-                }
-                else if (srcData == IODataType::SEMANTIC_SEGMENTATION)
-                {
-                    return  targetData == IODataType::IMAGE ||
-                            targetData == IODataType::IMAGE_LABEL ||
-                            targetData == IODataType::IMAGE_BINARY;
-                }
-                else if(srcData == IODataType::IMAGE_BINARY)
-                {
-                    return (targetData == IODataType::IMAGE ||
-                            targetData == IODataType::IMAGE_LABEL);
-                }
-                else if(srcData == IODataType::IMAGE_LABEL)
-                {
-                    return targetData == IODataType::IMAGE;
-                }
-                else if(srcData == IODataType::VOLUME)
-                {
-                    return targetData == IODataType::IMAGE;
-                }
-                else if(srcData == IODataType::VOLUME_BINARY)
-                {
-                    return (targetData == IODataType::VOLUME ||
-                            targetData == IODataType::VOLUME_LABEL ||
-                            targetData == IODataType::IMAGE ||
-                            targetData ==  IODataType::IMAGE_BINARY ||
-                            targetData ==  IODataType::IMAGE_LABEL);
-                }
-                else if(srcData == IODataType::VOLUME_LABEL)
-                {
-                    return (targetData == IODataType::IMAGE ||
-                            targetData == IODataType::IMAGE_LABEL);
-                }
-                else if(srcData == IODataType::POSITION)
-                {
-                    return targetData == IODataType::IMAGE;
-                }
-                else if(srcData == IODataType::VIDEO)
-                {
-                    return targetData == IODataType::IMAGE;
-                }
-                else if(srcData == IODataType::VIDEO_BINARY)
-                {
-                    return (targetData == IODataType::VIDEO ||
-                            targetData == IODataType::VIDEO_LABEL ||
-                            targetData == IODataType::IMAGE ||
-                            targetData == IODataType::IMAGE_BINARY ||
-                            targetData == IODataType::IMAGE_LABEL);
-                }
-                else if(srcData == IODataType::VIDEO_LABEL)
-                {
-                    return (targetData == IODataType::VIDEO ||
-                            targetData == IODataType::IMAGE ||
-                            targetData == IODataType::IMAGE_LABEL);
-                }
-                else if(srcData == IODataType::LIVE_STREAM)
-                {
-                    return (targetData == IODataType::IMAGE ||
-                            targetData == IODataType::VIDEO);
-                }
-                else if(srcData == IODataType::LIVE_STREAM_BINARY)
-                {
-                    return targetData == IODataType::LIVE_STREAM ||
-                            targetData == IODataType::LIVE_STREAM_LABEL ||
-                            targetData == IODataType::IMAGE ||
-                            targetData == IODataType::IMAGE_BINARY ||
-                            targetData == IODataType::IMAGE_LABEL ||
-                            targetData == IODataType::VIDEO ||
-                            targetData == IODataType::VIDEO_BINARY ||
-                            targetData == IODataType::VIDEO_LABEL;
-                }
-                else if(srcData == IODataType::LIVE_STREAM_LABEL)
-                {
-                    return (targetData == IODataType::LIVE_STREAM ||
-                            targetData == IODataType::VIDEO ||
-                            targetData == IODataType::VIDEO_LABEL ||
-                            targetData == IODataType::IMAGE ||
-                            targetData == IODataType::IMAGE_LABEL);
-                }
-                else if(srcData == IODataType::PROJECT_FOLDER)
-                {
-                    return targetData == IODataType::IMAGE ||
-                            targetData == IODataType::IMAGE_BINARY ||
-                            targetData == IODataType::IMAGE_LABEL ||
-                            targetData == IODataType::VIDEO ||
-                            targetData == IODataType::VIDEO_BINARY ||
-                            targetData == IODataType::VIDEO_LABEL ||
-                            targetData == IODataType::PROJECT_FOLDER ||
-                            targetData == IODataType::FOLDER_PATH;
-                }
-                else if (srcData == IODataType::JSON)
-                {
-                    return targetData == IODataType::JSON;
-                }
-                else if (srcData == IODataType::SCENE_3D)
-                {
-                    return targetData == IODataType::SCENE_3D;
-                }
-                else
-                    return false;
             }
         }
 

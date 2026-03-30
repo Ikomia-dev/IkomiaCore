@@ -30,6 +30,7 @@
 #include "Data/CMat.hpp"
 #include <QJsonDocument>
 
+
 /**
  * @ingroup groupCore
  * @brief
@@ -173,6 +174,16 @@ class CORESHARED_EXPORT CWorkflowTaskIO
           * @return True or False.
           */
         bool                isDisplayable() const;
+        /**
+          * @brief Check whether I/O object is assignale to I/O object of the given data type.
+          * @return True or False.
+          */
+        virtual bool        isAssignableTo(IODataType typeTo) const;
+        /**
+          * @brief Check whether I/O object is connectable to a target I/O object of the given data type.
+          * @return True or False.
+          */
+        virtual bool        isConnectableTo(IODataType typeTo) const;
 
         //Setters
         /**
@@ -327,6 +338,7 @@ using InputOutputVect = std::vector<std::shared_ptr<CWorkflowTaskIO>>;
 using InputOutputSet = std::set<std::shared_ptr<CWorkflowTaskIO>>;
 using TaskIOLockerUPtr = std::unique_ptr<CObjectLocker<CWorkflowTaskIO>>;
 
+
 class CWorkflowTaskIOFactory
 {
     public:
@@ -343,6 +355,11 @@ class CWorkflowTaskIOFactory
             return m_name;
         }
 
+        virtual std::vector<IODataType> getValidDataTypes() const
+        {
+            return {};
+        }
+
         void                        setName(const std::string& name)
         {
             m_name = name;
@@ -355,6 +372,7 @@ class CWorkflowTaskIOFactory
 
 using TaskIOFactoryPtr = std::shared_ptr<CWorkflowTaskIOFactory>;
 using WorkflowTaskIOFactories = std::vector<TaskIOFactoryPtr>;
+
 
 //----- Process abstract factory -----//
 class CWorkflowTaskIOAbstractFactory: public CAbstractFactory<std::string, WorkflowTaskIOPtr, IODataType>

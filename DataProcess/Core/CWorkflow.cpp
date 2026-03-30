@@ -1724,7 +1724,7 @@ void CWorkflow::analyzeTaskIO(const WorkflowVertex &id)
             auto srcIndex = pEdge->getSourceIndex();
             auto targetIndex = pEdge->getTargetIndex();
 
-            if(srcIndex >= srcTaskPtr->getOutputCount())
+            if (srcIndex >= srcTaskPtr->getOutputCount())
             {
                 //Invalid connection -> input does not exist, we have to reset input
                 resetTaskInput(taskPtr, targetIndex);
@@ -1745,8 +1745,10 @@ void CWorkflow::analyzeTaskIO(const WorkflowVertex &id)
             else
             {
                 //Forward output
-                taskPtr->setInput(srcTaskPtr->getOutput(srcIndex), targetIndex);
-                if(Utils::Workflow::isIODataCompatible(srcTaskPtr->getOutputDataType(srcIndex), taskPtr->getInputDataType(targetIndex)) == false)
+                auto outputPtr = srcTaskPtr->getOutput(srcIndex);
+                taskPtr->setInput(outputPtr, targetIndex);
+
+                if (outputPtr->isConnectableTo(taskPtr->getInputDataType(targetIndex)) == false)
                 {
                     //Invalid connection -> type mismatch, we have to reset input
                     resetTaskInput(taskPtr, targetIndex);
@@ -1815,7 +1817,7 @@ bool CWorkflow::checkConnection(const WorkflowVertex &src, size_t srcIndex, cons
     if(targetIndex >= pTargetTask->getInputCount())
         return false;
 
-    return Utils::Workflow::isIODataCompatible(pSrcTask->getOutputDataType(srcIndex), pTargetTask->getOriginalInputDataType(targetIndex));
+    return pSrcTask->getOutput(srcIndex)->isConnectableTo(pTargetTask->getOriginalInputDataType(targetIndex));
 }
 
 void CWorkflow::checkBatchModeState()
@@ -1961,8 +1963,7 @@ std::vector<std::pair<size_t, size_t>> CWorkflow::findConnectionPorts(const Work
             //Find candidates source ports
             for(size_t j=0; j<srcTaskPtr->getOutputCount(); ++j)
             {
-                auto srcDataType = srcTaskPtr->getOutputDataType(j);
-                if(Utils::Workflow::isIODataCompatible(srcDataType, targetDataType))
+                if (srcTaskPtr->getOutput(j)->isConnectableTo(targetDataType))
                     candidates.push_back(j);
             }
 
@@ -2007,8 +2008,7 @@ void CWorkflow::resetTaskInput(WorkflowTaskPtr &taskPtr, size_t index)
     if (m_pRegistry)
     {
         auto dataType = taskPtr->getOriginalInputDataType(index);
-        auto factory = m_pRegistry->getIORegistrator()->getFactory();
-        auto taskIOPtr = factory.createObject(CWorkflowTaskIO::getClassName(dataType), std::move(dataType));
+        auto taskIOPtr = m_pRegistry->getIORegistrator()->createIOObject(dataType);
 
         if(taskIOPtr)
             taskPtr->resetInput(index, taskIOPtr);
@@ -2342,7 +2342,7 @@ QJsonObject CWorkflow::toJsonInternal() const
     }
     jsonWorkflow["exposed_outputs"] = jsonOutputs;
 
-    // Minimum harware config
+    // Minimum hardware config
     CHardwareConfig hwConfig = getMinHardwareConfig();
     jsonWorkflow["hardware_config"] = hwConfig.toJson();
 

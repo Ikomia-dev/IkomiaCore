@@ -324,6 +324,7 @@ BOOST_PYTHON_MODULE(pycore)
         .value("SEMANTIC_SEGMENTATION", IODataType::SEMANTIC_SEGMENTATION)
         .value("KEYPOINTS", IODataType::KEYPOINTS)
         .value("TEXT", IODataType::TEXT)
+        .value("TEXT_STREAM", IODataType::TEXT_STREAM)
     ;
 
     void (CWorkflowTaskIOWrap::*ioSave)(const std::string&) = &CWorkflowTaskIOWrap::save;
@@ -362,6 +363,7 @@ BOOST_PYTHON_MODULE(pycore)
     //----- CWorkflowTaskIOFactory -----//
     //----------------------------------//
     class_<CTaskIOFactoryWrap, std::shared_ptr<CTaskIOFactoryWrap>, boost::noncopyable>("CWorkflowTaskIOFactory", _ioFactoryDocString)
+        .def("get_valid_data_types", pure_virtual(&CTaskIOFactoryWrap::getValidDataTypes))
         .def("create", pure_virtual(&CTaskIOFactoryWrap::create), _ioFactoryCreateDocString, args("self", "datatype"))
     ;
 

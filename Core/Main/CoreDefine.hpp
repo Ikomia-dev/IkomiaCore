@@ -56,39 +56,40 @@ namespace Ikomia
      */
     enum class IODataType : int
     {
-        IMAGE,                  /**< Image data type */
-        VIDEO,                  /**< Video from file (AVI, MPEG...) */
-        VOLUME,                 /**< Volume data type */
-        LIVE_STREAM,            /**< Video from stream (camera) */
-        INPUT_GRAPHICS,         /**< Graphics data type: graphics layer with graphics items (ellipse, rectangle, text...) */
-        OUTPUT_GRAPHICS,        /**< Graphics data type: graphics layer with graphics items (ellipse, rectangle, text...) */
-        BLOB_VALUES,            /**< Numeric values from measure (surface, diameter...) computed on connected component */
-        NUMERIC_VALUES,         /**< Generic numeric values */
-        DESCRIPTORS,            /**< Image descriptors (used for classification, registration...) */
-        WIDGET,                 /**< User-defined widget */
-        PROJECT_FOLDER,         /**< Ikomia project folder: may contain various data type */
-        FOLDER_PATH,            /**< Folder path */
-        FILE_PATH,              /**< File path */
-        DNN_DATASET,            /**< Dataset used for deep learning, composed with image and annotations */
-        VOLUME_BINARY,          /**< Binary volume data type: 8bits single channel */
-        VOLUME_LABEL,           /**< Label volume data type: single channel, 1 graylevel per connected component */
-        IMAGE_BINARY,           /**< Binary image data type: 8bits single channel */
-        IMAGE_LABEL,            /**< Label image data type: single channel, 1 graylevel per connected component */
-        VIDEO_BINARY,           /**< Binary video from file (AVI, MPEG...): 8bits single channel */
-        VIDEO_LABEL,            /**< Label video from file (AVI, MPEG...): single channel, 1 graylevel per connected component */
-        LIVE_STREAM_BINARY,     /**< Binary video from stream (camera): 8bits single channel */
-        LIVE_STREAM_LABEL,      /**< Label video from stream (camera): single channel, 1 graylevel per connected component */
-        ARRAY,                  /**< Multi-dimensional array */
-        DATA_DICT,              /**< Python-based IO where data are stored as dict */
-        OBJECT_DETECTION,       /**< I/O for object detection management */
-        INSTANCE_SEGMENTATION,  /**< I/O for instance segmentation management */
-        SEMANTIC_SEGMENTATION,  /**< I/O for semantic segmentation management */
-        KEYPOINTS,              /**< I/O for keypoints management */
-        TEXT,                   /**< I/O for text fields management */
-        POSITION,               /**< Position image sequence */
-        JSON,                   /**< JSON data */
-        SCENE_3D,               /**< I/O for 3d scenes (made up of images, shapes, vector fields, plots, text...) */
-        NONE                    /**< Unknown data type */
+        NONE = 0,                   /**< Unknown data type */
+        IMAGE = 1,                  /**< Image data type */
+        IMAGE_BINARY = 2,           /**< Binary image data type: 8bits single channel */
+        IMAGE_LABEL = 3,            /**< Label image data type: single channel, 1 graylevel per connected component */
+        VIDEO = 4,                  /**< Video from file (AVI, MPEG...) */
+        VIDEO_BINARY = 5,           /**< Binary video from file (AVI, MPEG...): 8bits single channel */
+        VIDEO_LABEL = 6,            /**< Label video from file (AVI, MPEG...): single channel, 1 graylevel per connected component */
+        VOLUME = 7,                 /**< Volume data type */
+        VOLUME_BINARY = 8,          /**< Binary volume data type: 8bits single channel */
+        VOLUME_LABEL = 9,           /**< Label volume data type: single channel, 1 graylevel per connected component */
+        LIVE_STREAM = 10,           /**< Video from stream (camera) */
+        LIVE_STREAM_BINARY = 11,    /**< Binary video from stream (camera): 8bits single channel */
+        LIVE_STREAM_LABEL = 12,     /**< Label video from stream (camera): single channel, 1 graylevel per connected component */
+        INPUT_GRAPHICS = 13,        /**< Graphics data type: graphics layer with graphics items (ellipse, rectangle, text...) */
+        OUTPUT_GRAPHICS = 14,       /**< Graphics data type: graphics layer with graphics items (ellipse, rectangle, text...) */
+        BLOB_VALUES = 15,           /**< Numeric values from measure (surface, diameter...) computed on connected component */
+        NUMERIC_VALUES = 16,        /**< Generic numeric values */
+        DESCRIPTORS = 17,           /**< Image descriptors (used for classification, registration...) */
+        WIDGET = 18,                /**< User-defined widget */
+        PROJECT_FOLDER = 19,        /**< Ikomia project folder: may contain various data type */
+        FOLDER_PATH = 20,           /**< Folder path */
+        FILE_PATH = 21,             /**< File path */
+        DNN_DATASET = 22,           /**< Dataset used for deep learning, composed with image and annotations */
+        ARRAY = 23,                 /**< Multi-dimensional array */
+        DATA_DICT = 24,             /**< Python-based IO where data are stored as dict */
+        OBJECT_DETECTION = 25,      /**< I/O for object detection management */
+        INSTANCE_SEGMENTATION = 26, /**< I/O for instance segmentation management */
+        SEMANTIC_SEGMENTATION = 27, /**< I/O for semantic segmentation management */
+        KEYPOINTS = 28,             /**< I/O for keypoints management */
+        TEXT = 29,                  /**< I/O for text fields management */
+        TEXT_STREAM = 30,           /**< I/O for text stream management */
+        POSITION = 31,              /**< Position image sequence */
+        JSON = 32,                  /**< JSON data */
+        SCENE_3D = 33               /**< I/O for 3d scenes (made up of images, shapes, vector fields, plots, text...) */
     };
 
     // Enum class mandatory to avoir name conflict on Windows...

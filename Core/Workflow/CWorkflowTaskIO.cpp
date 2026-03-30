@@ -188,6 +188,18 @@ bool CWorkflowTaskIO::isDisplayable() const
     return m_bDisplayable;
 }
 
+bool CWorkflowTaskIO::isAssignableTo(IODataType typeTo) const
+{
+    // Only same data type
+    return m_dataType == typeTo;
+}
+
+bool CWorkflowTaskIO::isConnectableTo(IODataType typeTo) const
+{
+    // Only same data type
+    return m_dataType == typeTo;
+}
+
 bool CWorkflowTaskIO::isComposite() const
 {
     return false;
@@ -277,85 +289,6 @@ void CWorkflowTaskIO::save()
 void CWorkflowTaskIO::save(const std::string &path)
 {
     setSavePath(path);
-}
-
-std::string CWorkflowTaskIO::getClassName(IODataType ioDataType)
-{
-    switch(ioDataType)
-    {
-        case IODataType::NONE:
-            return "";
-
-        case IODataType::IMAGE:
-        case IODataType::IMAGE_BINARY:
-        case IODataType::IMAGE_LABEL:
-        case IODataType::VOLUME:
-        case IODataType::VOLUME_BINARY:
-        case IODataType::VOLUME_LABEL:
-        case IODataType::POSITION:
-        case IODataType::DESCRIPTORS:
-            return "CImageIO";
-
-        case IODataType::VIDEO:
-        case IODataType::VIDEO_BINARY:
-        case IODataType::VIDEO_LABEL:
-        case IODataType::LIVE_STREAM:
-        case IODataType::LIVE_STREAM_BINARY:
-        case IODataType::LIVE_STREAM_LABEL:
-            return "CVideoIO";
-
-        case IODataType::INPUT_GRAPHICS:
-            return "CGraphicsInput";
-
-        case IODataType::OUTPUT_GRAPHICS:
-            return "CGraphicsOutput";
-
-        case IODataType::BLOB_VALUES:
-            return "CBlobMeasureIO";
-
-        case IODataType::NUMERIC_VALUES:
-            return "CNumericIO";
-
-        case IODataType::WIDGET:
-            return "CWidgetOutput";
-
-        case IODataType::PROJECT_FOLDER:
-        case IODataType::FOLDER_PATH:
-        case IODataType::FILE_PATH:
-            return "CPathIO";
-
-        case IODataType::ARRAY:
-            return "CArrayIO";
-
-        case IODataType::DATA_DICT:
-            return "CWorkflowTaskIO";
-
-        case IODataType::OBJECT_DETECTION:
-            return "CObjectDetectionIO";
-
-        case IODataType::INSTANCE_SEGMENTATION:
-            return "CInstanceSegIO";
-
-        case IODataType::SEMANTIC_SEGMENTATION:
-            return "CSemanticSegIO";
-
-        case IODataType::KEYPOINTS:
-            return "CKeypointsIO";
-
-        case IODataType::TEXT:
-            return "CTextIO";
-
-        case IODataType::JSON:
-            return "CJsonIO";
-
-        case IODataType::SCENE_3D:
-            return "CScene3dIO";
-
-        case IODataType::DNN_DATASET:
-            return "CDatasetIO";
-
-        default: return "";
-    }
 }
 
 std::string CWorkflowTaskIO::toJson() const

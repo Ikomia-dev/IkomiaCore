@@ -19,20 +19,20 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef CPROCESSREGISTRATION_H
-#define CPROCESSREGISTRATION_H
+#ifndef CTASKREGISTRATION_H
+#define CTASKREGISTRATION_H
 
 #include "DataProcessGlobal.hpp"
 #include "Core/CTaskFactory.hpp"
 #include "Core/CWidgetFactory.hpp"
 #include "Core/CTaskParamFactory.hpp"
 
-class DATAPROCESSSHARED_EXPORT CProcessRegistration
+class DATAPROCESSSHARED_EXPORT CTaskRegistration
 {
     public:
 
-        CProcessRegistration();
-        ~CProcessRegistration();
+        CTaskRegistration();
+        ~CTaskRegistration();
 
         const CTaskAbstractFactory&         getTaskFactory() const;
         TaskFactoryPtr                      getTaskFactory(const std::string& name) const;
@@ -40,15 +40,15 @@ class DATAPROCESSSHARED_EXPORT CProcessRegistration
         WidgetFactoryPtr                    getWidgetFactory(const std::string& name) const;
         const CTaskParamAbstractFactory&    getTaskParamFactory() const;
         TaskParamFactoryPtr                 getTaskParamFactory(const std::string& name) const;
-        CTaskInfo                           getProcessInfo(const std::string& name) const;
+        CTaskInfo                           getTaskInfo(const std::string& name) const;
 
-        void                                registerProcess(const std::shared_ptr<CTaskFactory>& pTaskFactory,
+        void                                registerTask(const std::shared_ptr<CTaskFactory>& pTaskFactory,
                                                             const std::shared_ptr<CWidgetFactory> &pWidgetFactory,
                                                             const std::shared_ptr<CTaskParamFactory>& pTaskParamFactory = nullptr);
 
-        void                                unregisterProcess(const std::string& name);
+        void                                unregisterTask(const std::string& name);
 
-        WorkflowTaskPtr                     createProcessObject(const std::string& name, const WorkflowTaskParamPtr& paramPtr);
+        WorkflowTaskPtr                     createTaskObject(const std::string& name, const WorkflowTaskParamPtr& paramPtr);
         WorkflowTaskWidgetPtr               createWidgetObject(const std::string& name, const WorkflowTaskParamPtr& paramPtr);
         WorkflowTaskParamPtr                createParamObject(const std::string& name);
 
@@ -80,9 +80,9 @@ class DATAPROCESSSHARED_EXPORT CProcessRegistration
 
     private:
 
-        CTaskAbstractFactory        m_processFactory;
+        CTaskAbstractFactory        m_taskFactory;
         CWidgetAbstractFactory      m_widgetFactory;
         CTaskParamAbstractFactory   m_paramFactory;
 };
 
-#endif // CPROCESSREGISTRATION_H
+#endif // CTASKREGISTRATION_H

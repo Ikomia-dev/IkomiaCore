@@ -109,9 +109,14 @@ class DATAPROCESSSHARED_EXPORT CWidgetOutputFactory: public CWorkflowTaskIOFacto
             m_name = "CWidgetOutput";
         }
 
-        virtual WorkflowTaskIOPtr   create(IODataType dataType)
+        WorkflowTaskIOPtr   create(IODataType dataType) override
         {
             return std::make_shared<CWidgetOutput>(dataType);
+        }
+
+        std::vector<IODataType> getValidDataTypes() const override
+        {
+            return { IODataType::WIDGET };
         }
 };
 

@@ -5,10 +5,12 @@
 #include <boost/thread/future.hpp>
 #include <deque>
 #include <mutex>
+#include <optional>
 #include <string>
 #include <functional>
 #include <chrono>
 #include <condition_variable>
+#include <thread>
 
 #include "DataProcessGlobal.hpp"
 #include "Workflow/CWorkflowTaskIO.h"
@@ -20,6 +22,7 @@ class DATAPROCESSSHARED_EXPORT CTextStreamIO: public CWorkflowTaskIO
 
         using Handler = std::function<void(const std::string&, const boost::system::error_code&)>;
 
+        explicit CTextStreamIO(int maxBufferSize = 1e8);
         explicit CTextStreamIO(boost::asio::io_context& io, int maxBufferSize = 1e8);
         CTextStreamIO(const CTextStreamIO&) = delete;
 
@@ -79,7 +82,12 @@ class DATAPROCESSSHARED_EXPORT CTextStreamIO: public CWorkflowTaskIO
             std::shared_ptr<boost::asio::steady_timer> timer; // optional timeout
         };
 
-        boost::asio::io_context&    m_io;
+        // Owned io_context (only when constructed without an external one)
+        std::optional<boost::asio::io_context>                                                    m_ownedIo;
+        std::optional<boost::asio::executor_work_guard<boost::asio::io_context::executor_type>>   m_workGuard;
+        std::optional<std::thread>                                                                m_ioThread;
+        boost::asio::io_context*    m_ioPtr;    // always valid; points to m_ownedIo or external io
+
         std::size_t                 m_nextId = 0;
         int                         m_maxBufferSize;
         std::atomic_bool            m_bFeedFinished{false};
@@ -91,6 +99,28 @@ class DATAPROCESSSHARED_EXPORT CTextStreamIO: public CWorkflowTaskIO
         std::vector<WaitRequest>    m_waitersFull;
         std::mutex                  m_mutex;
         std::condition_variable     m_feedFinishedCv;
+};
+
+
+class DATAPROCESSSHARED_EXPORT CTextStreamIOFactory: public CWorkflowTaskIOFactory
+{
+    public:
+
+        CTextStreamIOFactory()
+        {
+            m_name = "CTextStreamIO";
+        }
+
+        WorkflowTaskIOPtr   create(IODataType dataType) override
+        {
+            Q_UNUSED(dataType);
+            return std::make_shared<CTextStreamIO>();
+        }
+
+        std::vector<IODataType> getValidDataTypes() const override
+        {
+            return { IODataType::TEXT_STREAM };
+        }
 };
 
 #endif // CTEXTSTREAMIO_H
