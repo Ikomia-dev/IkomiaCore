@@ -56,40 +56,41 @@ namespace Ikomia
      */
     enum class IODataType : int
     {
-        NONE = 0,                   /**< Unknown data type */
-        IMAGE = 1,                  /**< Image data type */
-        IMAGE_BINARY = 2,           /**< Binary image data type: 8bits single channel */
-        IMAGE_LABEL = 3,            /**< Label image data type: single channel, 1 graylevel per connected component */
-        VIDEO = 4,                  /**< Video from file (AVI, MPEG...) */
-        VIDEO_BINARY = 5,           /**< Binary video from file (AVI, MPEG...): 8bits single channel */
-        VIDEO_LABEL = 6,            /**< Label video from file (AVI, MPEG...): single channel, 1 graylevel per connected component */
-        VOLUME = 7,                 /**< Volume data type */
-        VOLUME_BINARY = 8,          /**< Binary volume data type: 8bits single channel */
-        VOLUME_LABEL = 9,           /**< Label volume data type: single channel, 1 graylevel per connected component */
-        LIVE_STREAM = 10,           /**< Video from stream (camera) */
-        LIVE_STREAM_BINARY = 11,    /**< Binary video from stream (camera): 8bits single channel */
-        LIVE_STREAM_LABEL = 12,     /**< Label video from stream (camera): single channel, 1 graylevel per connected component */
-        INPUT_GRAPHICS = 13,        /**< Graphics data type: graphics layer with graphics items (ellipse, rectangle, text...) */
-        OUTPUT_GRAPHICS = 14,       /**< Graphics data type: graphics layer with graphics items (ellipse, rectangle, text...) */
-        BLOB_VALUES = 15,           /**< Numeric values from measure (surface, diameter...) computed on connected component */
-        NUMERIC_VALUES = 16,        /**< Generic numeric values */
-        DESCRIPTORS = 17,           /**< Image descriptors (used for classification, registration...) */
-        WIDGET = 18,                /**< User-defined widget */
-        PROJECT_FOLDER = 19,        /**< Ikomia project folder: may contain various data type */
-        FOLDER_PATH = 20,           /**< Folder path */
-        FILE_PATH = 21,             /**< File path */
-        DNN_DATASET = 22,           /**< Dataset used for deep learning, composed with image and annotations */
-        ARRAY = 23,                 /**< Multi-dimensional array */
-        DATA_DICT = 24,             /**< Python-based IO where data are stored as dict */
-        OBJECT_DETECTION = 25,      /**< I/O for object detection management */
-        INSTANCE_SEGMENTATION = 26, /**< I/O for instance segmentation management */
-        SEMANTIC_SEGMENTATION = 27, /**< I/O for semantic segmentation management */
-        KEYPOINTS = 28,             /**< I/O for keypoints management */
-        TEXT = 29,                  /**< I/O for text fields management */
-        TEXT_STREAM = 30,           /**< I/O for text stream management */
-        POSITION = 31,              /**< Position image sequence */
-        JSON = 32,                  /**< JSON data */
-        SCENE_3D = 33               /**< I/O for 3d scenes (made up of images, shapes, vector fields, plots, text...) */
+        IMAGE = 0,                  /**< Image data type */
+        IMAGE_BINARY = 16,          /**< Binary image data type: 8bits single channel */
+        IMAGE_LABEL = 17,           /**< Label image data type: single channel, 1 graylevel per connected component */
+        VIDEO = 1,                  /**< Video from file (AVI, MPEG...) */
+        VIDEO_BINARY = 18,          /**< Binary video from file (AVI, MPEG...): 8bits single channel */
+        VIDEO_LABEL = 19,           /**< Label video from file (AVI, MPEG...): single channel, 1 graylevel per connected component */
+        VOLUME = 2,                 /**< Volume data type */
+        VOLUME_BINARY = 14,         /**< Binary volume data type: 8bits single channel */
+        VOLUME_LABEL = 15,          /**< Label volume data type: single channel, 1 graylevel per connected component */
+        LIVE_STREAM = 3,            /**< Video from stream (camera) */
+        LIVE_STREAM_BINARY = 20,    /**< Binary video from stream (camera): 8bits single channel */
+        LIVE_STREAM_LABEL = 21,     /**< Label video from stream (camera): single channel, 1 graylevel per connected component */
+        INPUT_GRAPHICS = 4,         /**< Graphics data type: graphics layer with graphics items (ellipse, rectangle, text...) */
+        OUTPUT_GRAPHICS = 5,        /**< Graphics data type: graphics layer with graphics items (ellipse, rectangle, text...) */
+        BLOB_VALUES = 6,            /**< Numeric values from measure (surface, diameter...) computed on connected component */
+        NUMERIC_VALUES = 7,         /**< Generic numeric values */
+        DESCRIPTORS = 8,            /**< Image descriptors (used for classification, registration...) */
+        WIDGET = 9,                 /**< User-defined widget */
+        PROJECT_FOLDER = 10,        /**< Ikomia project folder: may contain various data type */
+        FOLDER_PATH = 11,           /**< Folder path */
+        FILE_PATH = 12,             /**< File path */
+        DNN_DATASET = 13,           /**< Dataset used for deep learning, composed with image and annotations */
+        ARRAY = 22,                 /**< Multi-dimensional array */
+        DATA_DICT = 23,             /**< Python-based IO where data are stored as dict */
+        OBJECT_DETECTION = 24,      /**< I/O for object detection management */
+        INSTANCE_SEGMENTATION = 25, /**< I/O for instance segmentation management */
+        SEMANTIC_SEGMENTATION = 26, /**< I/O for semantic segmentation management */
+        KEYPOINTS = 27,             /**< I/O for keypoints management */
+        TEXT = 28,                  /**< I/O for text fields management */
+        TEXT_STREAM = 33,           /**< I/O for text stream management */
+        POSITION = 29,              /**< Position image sequence */
+        JSON = 30,                  /**< JSON data */
+        SCENE_3D = 31,              /**< I/O for 3d scenes (made up of images, shapes, vector fields, plots, text...) */
+        NONE = 32                   /**< Unknown data type */
+        // NEXT VALUE = 34
     };
 
     // Enum class mandatory to avoir name conflict on Windows...
