@@ -207,6 +207,11 @@ bool CObjectDetectionIO::isComposite() const
     return true;
 }
 
+bool CObjectDetectionIO::isConnectableTo(IODataType typeTo) const
+{
+    return m_dataType == typeTo || typeTo == IODataType::INPUT_GRAPHICS || typeTo == IODataType::BLOB_VALUES;
+}
+
 void CObjectDetectionIO::init(const std::string &taskName, int imageIndex)
 {
     clearData();

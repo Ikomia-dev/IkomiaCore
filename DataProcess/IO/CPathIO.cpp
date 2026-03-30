@@ -101,6 +101,21 @@ bool CPathIO::isDataAvailable() const
     return boost::filesystem::exists(boostPath);
 }
 
+bool CPathIO::isConnectableTo(IODataType typeTo) const
+{
+    if (m_dataType == typeTo)
+        return true;
+
+    if (m_dataType == IODataType::PROJECT_FOLDER)
+    {
+        return typeTo == IODataType::IMAGE || typeTo == IODataType::IMAGE_BINARY || typeTo == IODataType::IMAGE_LABEL ||
+                typeTo == IODataType::VIDEO || typeTo == IODataType::VIDEO_BINARY || typeTo == IODataType::VIDEO_LABEL ||
+                typeTo == IODataType::PROJECT_FOLDER || typeTo == IODataType::FOLDER_PATH;
+    }
+
+    return false;
+}
+
 void CPathIO::clearData()
 {
     m_path.clear();

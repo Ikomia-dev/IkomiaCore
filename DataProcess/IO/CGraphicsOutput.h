@@ -65,6 +65,7 @@ class DATAPROCESSSHARED_EXPORT CGraphicsOutput : public CWorkflowTaskIO
         CMat                                getImageWithMaskAndGraphics(const CMat &image) const override;
 
         bool                        isDataAvailable() const override;
+        bool                        isConnectableTo(IODataType typeTo) const override;
 
         CGraphicsLayer*             createLayer(const GraphicsContextPtr &globalContext);
 
@@ -121,10 +122,15 @@ class DATAPROCESSSHARED_EXPORT CGraphicsOutputFactory: public CWorkflowTaskIOFac
             m_name = "CGraphicsOutput";
         }
 
-        virtual WorkflowTaskIOPtr   create(IODataType dataType)
+        WorkflowTaskIOPtr   create(IODataType dataType) override
         {
             Q_UNUSED(dataType);
             return std::make_shared<CGraphicsOutput>();
+        }
+
+        std::vector<IODataType> getValidDataTypes() const override
+        {
+            return { IODataType::OUTPUT_GRAPHICS };
         }
 };
 

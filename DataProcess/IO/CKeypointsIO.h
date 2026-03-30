@@ -122,6 +122,7 @@ class DATAPROCESSSHARED_EXPORT CKeypointsIO: public CWorkflowTaskIO
 
         bool                            isComposite() const override;
         bool                            isDataAvailable() const override;
+        bool                            isConnectableTo(IODataType typeTo) const override;
 
         void                            load(const std::string &path) override;
         void                            save(const std::string &path) override;
@@ -163,10 +164,15 @@ class DATAPROCESSSHARED_EXPORT CKeypointsIOFactory: public CWorkflowTaskIOFactor
             m_name = "CKeypointsIO";
         }
 
-        virtual WorkflowTaskIOPtr   create(IODataType dataType)
+        WorkflowTaskIOPtr   create(IODataType dataType) override
         {
             Q_UNUSED(dataType);
             return std::make_shared<CKeypointsIO>();
+        }
+
+        std::vector<IODataType> getValidDataTypes() const override
+        {
+            return { IODataType::KEYPOINTS };
         }
 };
 

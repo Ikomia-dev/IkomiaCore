@@ -145,6 +145,11 @@ bool CGraphicsOutput::isDataAvailable() const
     return m_items.size() > 0;
 }
 
+bool CGraphicsOutput::isConnectableTo(IODataType typeTo) const
+{
+    return m_dataType == typeTo || typeTo == IODataType::INPUT_GRAPHICS;
+}
+
 CGraphicsLayer *CGraphicsOutput::createLayer(const GraphicsContextPtr &globalContext)
 {
     return Utils::Graphics::createLayer(QString::fromStdString(m_name), m_items, globalContext);

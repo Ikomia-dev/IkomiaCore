@@ -272,6 +272,14 @@ bool CInstanceSegIO::isComposite() const
     return true;
 }
 
+bool CInstanceSegIO::isConnectableTo(IODataType typeTo) const
+{
+    return m_dataType == typeTo ||
+            typeTo == IODataType::INPUT_GRAPHICS || typeTo == IODataType::BLOB_VALUES ||
+            typeTo == IODataType::OBJECT_DETECTION || typeTo == IODataType::SEMANTIC_SEGMENTATION ||
+            typeTo == IODataType::IMAGE || typeTo == IODataType::IMAGE_BINARY || typeTo == IODataType::IMAGE_LABEL;
+}
+
 void CInstanceSegIO::init(const std::string &taskName, int refImageIndex, int imageWidth, int imageHeight)
 {
     clearData();

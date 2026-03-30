@@ -42,6 +42,7 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
 
         bool                            isDataAvailable() const override;
         bool                            isComposite() const override;
+        bool                            isConnectableTo(IODataType typeTo) const override;
 
         void                            clearData() override;
 
@@ -91,10 +92,15 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIOFactory: public CWorkflowTaskIOFact
             m_name = "CSemanticSegIO";
         }
 
-        virtual WorkflowTaskIOPtr   create(IODataType dataType)
+        WorkflowTaskIOPtr   create(IODataType dataType) override
         {
             Q_UNUSED(dataType);
             return std::make_shared<CSemanticSegIO>();
+        }
+
+        std::vector<IODataType> getValidDataTypes() const override
+        {
+            return { IODataType::SEMANTIC_SEGMENTATION };
         }
 };
 

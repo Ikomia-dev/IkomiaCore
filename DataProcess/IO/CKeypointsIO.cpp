@@ -474,6 +474,12 @@ bool CKeypointsIO::isDataAvailable() const
     return m_objects.size() > 0;
 }
 
+bool CKeypointsIO::isConnectableTo(IODataType typeTo) const
+{
+    return m_dataType == typeTo ||
+            typeTo == IODataType::INPUT_GRAPHICS || typeTo == IODataType::BLOB_VALUES || typeTo == IODataType::NUMERIC_VALUES;
+}
+
 void CKeypointsIO::load(const std::string &path)
 {
     auto extension = Utils::File::extension(path);

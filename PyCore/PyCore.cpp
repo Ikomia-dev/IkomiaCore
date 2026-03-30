@@ -324,6 +324,7 @@ BOOST_PYTHON_MODULE(pycore)
         .value("SEMANTIC_SEGMENTATION", IODataType::SEMANTIC_SEGMENTATION)
         .value("KEYPOINTS", IODataType::KEYPOINTS)
         .value("TEXT", IODataType::TEXT)
+        .value("TEXT_STREAM", IODataType::TEXT_STREAM)
     ;
 
     void (CWorkflowTaskIOWrap::*ioSave)(const std::string&) = &CWorkflowTaskIOWrap::save;
@@ -362,6 +363,7 @@ BOOST_PYTHON_MODULE(pycore)
     //----- CWorkflowTaskIOFactory -----//
     //----------------------------------//
     class_<CTaskIOFactoryWrap, std::shared_ptr<CTaskIOFactoryWrap>, boost::noncopyable>("CWorkflowTaskIOFactory", _ioFactoryDocString)
+        .def("get_valid_data_types", pure_virtual(&CTaskIOFactoryWrap::getValidDataTypes))
         .def("create", pure_virtual(&CTaskIOFactoryWrap::create), _ioFactoryCreateDocString, args("self", "datatype"))
     ;
 
@@ -398,7 +400,7 @@ BOOST_PYTHON_MODULE(pycore)
         .def(init<>("Default constructor", args("self")))
         .def(init<const std::string&>(_ctorWorkflowTaskDocString, args("self", "name")))
         .def(init<const CWorkflowTask&>("Copy constructor"))
-        .add_property("type", &CWorkflowTask::getType, "Main purpose or data type on which the task is dedicated to.")
+        .add_property("type", &CWorkflowTaskWrap::getType, &CWorkflowTaskWrap::setType, "Main purpose or data type on which the task is dedicated to.")
         .add_property("uuid", &CWorkflowTask::getUUID, "Task unique identifier")
         .add_property("name", &CWorkflowTask::getName, &CWorkflowTask::setName, "Task name (must be unique)")
         .add_property("output_folder", &CWorkflowTask::getOutputFolder, &CWorkflowTask::setOutputFolder, "Output folder when auto-save mode is enabled. Default is the current user home folder.")

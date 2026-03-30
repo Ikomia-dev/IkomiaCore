@@ -127,6 +127,7 @@ class DATAPROCESSSHARED_EXPORT CScene3dIO : public CWorkflowTaskIO
         CScene3d m_scene3d;
 };
 
+
 using CScene3dIOPtr = std::shared_ptr<CScene3dIO>;
 
 class DATAPROCESSSHARED_EXPORT CScene3dIOFactory: public CWorkflowTaskIOFactory
@@ -137,10 +138,15 @@ class DATAPROCESSSHARED_EXPORT CScene3dIOFactory: public CWorkflowTaskIOFactory
             m_name = "CScene3dIO";
         }
 
-        virtual WorkflowTaskIOPtr create(IODataType dataType)
+        WorkflowTaskIOPtr create(IODataType dataType) override
         {
             Q_UNUSED(dataType);
             return std::make_shared<CScene3dIO>();
+        }
+
+        std::vector<IODataType> getValidDataTypes() const override
+        {
+            return { IODataType::SCENE_3D };
         }
 };
 

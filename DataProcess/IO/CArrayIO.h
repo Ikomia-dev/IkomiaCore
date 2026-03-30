@@ -130,10 +130,15 @@ class DATAPROCESSSHARED_EXPORT CArrayIOFactory: public CWorkflowTaskIOFactory
             m_name = "CArrayIO";
         }
 
-        virtual WorkflowTaskIOPtr   create(IODataType dataType)
+        WorkflowTaskIOPtr   create(IODataType dataType) override
         {
             Q_UNUSED(dataType);
             return std::make_shared<CArrayIO>();
+        }
+
+        std::vector<IODataType> getValidDataTypes() const override
+        {
+            return { IODataType::ARRAY };
         }
 };
 

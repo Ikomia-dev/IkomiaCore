@@ -38,6 +38,9 @@ class CWorkflowWrap: public CWorkflow, public wrapper<CWorkflow>
         std::string                 repr() const override;
         std::string                 default_repr() const;
 
+        void                        setType(int type);
+
+        int                         getType() const;
         std::uintptr_t              getRootID();
         std::vector<std::uintptr_t> getTaskIDs();
         std::uintptr_t              getLastTaskID();

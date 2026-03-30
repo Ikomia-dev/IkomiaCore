@@ -92,11 +92,11 @@ class CORESHARED_EXPORT CWorkflowTask
          */
         enum class Type : int
         {
-            GENERIC,            /**< Generic process */
-            IMAGE_PROCESS_2D,   /**< Process or task dedicated to standard image (2D) */
-            IMAGE_PROCESS_3D,   /**< Process or task dedicated to volume */
-            VIDEO,              /**< Process or task dedicated to video */
-            DNN_TRAIN           /**< Process or task dedicated to DNN training */
+            GENERIC = 0,            /**< Generic process */
+            IMAGE_PROCESS_2D = 1,   /**< Process or task dedicated to standard image (2D) */
+            IMAGE_PROCESS_3D = 2,   /**< Process or task dedicated to volume */
+            VIDEO = 3,              /**< Process or task dedicated to video */
+            DNN_TRAIN = 4           /**< Process or task dedicated to DNN training */
         };
 
         /**
@@ -261,6 +261,8 @@ class CORESHARED_EXPORT CWorkflowTask
          * @param bEnable: True or False.
          */
         void                        setEnabled(bool bEnable);
+
+        void                        setType(Type type);
 
         //Getters
         /**

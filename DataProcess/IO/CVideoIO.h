@@ -175,6 +175,13 @@ class DATAPROCESSSHARED_EXPORT CVideoIO : public CImageIO
          * @return True if there is some valid data, False otherwise.
          */
         bool                isDataAvailable() const override;
+        /**
+          * @brief Check whether I/O object is convertible to the given data type.
+          * @return True or False.
+          */
+        bool                isAssignableTo(IODataType typeTo) const override;
+        bool                isConnectableTo(IODataType typeTo) const override;
+
         bool                isReadStarted() const;
         bool                isWriteStarted() const;
         /**
@@ -255,9 +262,21 @@ class DATAPROCESSSHARED_EXPORT CVideoIOFactory: public CImageIOFactory
             m_name = "CVideoIO";
         }
 
-        virtual WorkflowTaskIOPtr   create(IODataType dataType)
+        WorkflowTaskIOPtr   create(IODataType dataType) override
         {
             return std::make_shared<CVideoIO>(dataType);
+        }
+
+        std::vector<IODataType> getValidDataTypes() const override
+        {
+            return {
+                IODataType::VIDEO,
+                IODataType::VIDEO_BINARY,
+                IODataType::VIDEO_LABEL,
+                IODataType::LIVE_STREAM,
+                IODataType::LIVE_STREAM_BINARY,
+                IODataType::LIVE_STREAM_LABEL
+            };
         }
 };
 

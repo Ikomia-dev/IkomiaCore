@@ -80,6 +80,7 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegIO: public CWorkflowTaskIO
 
         bool                                isDataAvailable() const override;
         bool                                isComposite() const override;
+        bool                                isConnectableTo(IODataType typeTo) const override;
 
         void                                init(const std::string& taskName, int refImageIndex, int imageWidth, int imageHeight);
 
@@ -124,10 +125,15 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegIOFactory: public CWorkflowTaskIOFact
             m_name = "CInstanceSegIO";
         }
 
-        virtual WorkflowTaskIOPtr   create(IODataType dataType)
+        WorkflowTaskIOPtr   create(IODataType dataType) override
         {
             Q_UNUSED(dataType);
             return std::make_shared<CInstanceSegIO>();
+        }
+
+        std::vector<IODataType> getValidDataTypes() const override
+        {
+            return { IODataType::INSTANCE_SEGMENTATION };
         }
 };
 

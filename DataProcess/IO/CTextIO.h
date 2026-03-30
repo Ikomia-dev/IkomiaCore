@@ -43,6 +43,7 @@ class DATAPROCESSSHARED_EXPORT CTextField
         CColor      m_color = {255, 0, 0};
 };
 
+
 //-------------------//
 //----- CTextIO -----//
 //-------------------//
@@ -75,6 +76,7 @@ class DATAPROCESSSHARED_EXPORT CTextIO: public CWorkflowTaskIO
 
         bool                        isDataAvailable() const override;
         bool                        isComposite() const override;
+        bool                        isConnectableTo(IODataType typeTo) const override;
 
         void                        init(const std::string& taskName, int imageIndex);
         void                        finalize();
@@ -108,6 +110,28 @@ class DATAPROCESSSHARED_EXPORT CTextIO: public CWorkflowTaskIO
         std::vector<CTextField>     m_fields;
         GraphicsOutputPtr           m_graphicsIOPtr = nullptr;
         DataStringIOPtr             m_textDataIOPtr = nullptr;
+};
+
+
+class DATAPROCESSSHARED_EXPORT CTextIOFactory: public CWorkflowTaskIOFactory
+{
+    public:
+
+        CTextIOFactory()
+        {
+            m_name = "CTextIO";
+        }
+
+        WorkflowTaskIOPtr   create(IODataType dataType) override
+        {
+            Q_UNUSED(dataType);
+            return std::make_shared<CTextIO>();
+        }
+
+        std::vector<IODataType> getValidDataTypes() const override
+        {
+            return { IODataType::TEXT };
+        }
 };
 
 #endif // CTEXTIO_H

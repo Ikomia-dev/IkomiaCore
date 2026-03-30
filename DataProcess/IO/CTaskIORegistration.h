@@ -38,13 +38,16 @@ class DATAPROCESSSHARED_EXPORT CTaskIORegistration
 
         void                                    reset();
 
+        WorkflowTaskIOPtr                       createIOObject(IODataType type);
+
     private:
 
         void                                    registerCore();
 
     private:
 
-        CWorkflowTaskIOAbstractFactory  m_factory;
+        CWorkflowTaskIOAbstractFactory          m_factory;
+        std::map<IODataType, std::string>       m_typeToClassName;
 };
 
 #endif // CTASKIOREGISTRATION_H

@@ -70,6 +70,7 @@ class DATAPROCESSSHARED_EXPORT CObjectDetectionIO: public CWorkflowTaskIO
 
         bool                                isDataAvailable() const override;
         bool                                isComposite() const override;
+        bool                                isConnectableTo(IODataType typeTo) const override;
 
         void                                init(const std::string& taskName, int imageIndex);
 
@@ -118,10 +119,15 @@ class DATAPROCESSSHARED_EXPORT CObjectDetectionIOFactory: public CWorkflowTaskIO
             m_name = "CObjectDetectionIO";
         }
 
-        virtual WorkflowTaskIOPtr   create(IODataType dataType)
+        WorkflowTaskIOPtr   create(IODataType dataType) override
         {
             Q_UNUSED(dataType);
             return std::make_shared<CObjectDetectionIO>();
+        }
+
+        std::vector<IODataType> getValidDataTypes() const override
+        {
+            return { IODataType::OBJECT_DETECTION };
         }
 };
 

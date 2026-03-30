@@ -311,6 +311,57 @@ bool CVideoIO::isDataAvailable() const
     return bRet;
 }
 
+bool CVideoIO::isAssignableTo(IODataType typeTo) const
+{
+    return m_dataType == typeTo ||
+            typeTo == IODataType::IMAGE || typeTo == IODataType::IMAGE_BINARY || typeTo == IODataType::IMAGE_LABEL ||
+            typeTo == IODataType::FILE_PATH || typeTo == IODataType::FOLDER_PATH || typeTo == IODataType::PROJECT_FOLDER;
+}
+
+bool CVideoIO::isConnectableTo(IODataType typeTo) const
+{
+    if (m_dataType == typeTo)
+        return true;
+
+    if (m_dataType == IODataType::VIDEO)
+    {
+        return typeTo == IODataType::IMAGE;
+    }
+
+    if (m_dataType == IODataType::VIDEO_BINARY)
+    {
+        return typeTo == IODataType::VIDEO || typeTo == IODataType::VIDEO_LABEL ||
+                typeTo == IODataType::IMAGE || typeTo == IODataType::IMAGE_BINARY || typeTo == IODataType::IMAGE_LABEL;
+    }
+
+    if (m_dataType == IODataType::VIDEO_LABEL)
+    {
+        return typeTo == IODataType::VIDEO ||
+                typeTo == IODataType::IMAGE || typeTo == IODataType::IMAGE_LABEL;
+    }
+
+    if (m_dataType == IODataType::LIVE_STREAM)
+    {
+        return typeTo == IODataType::IMAGE || typeTo == IODataType::VIDEO;
+    }
+
+    if (m_dataType == IODataType::LIVE_STREAM_BINARY)
+    {
+        return typeTo == IODataType::LIVE_STREAM || typeTo == IODataType::LIVE_STREAM_LABEL ||
+                typeTo == IODataType::IMAGE || typeTo == IODataType::IMAGE_BINARY || typeTo == IODataType::IMAGE_LABEL ||
+                typeTo == IODataType::VIDEO || typeTo == IODataType::VIDEO_BINARY || typeTo == IODataType::VIDEO_LABEL;
+    }
+
+    if (m_dataType == IODataType::LIVE_STREAM_LABEL)
+    {
+        return typeTo == IODataType::LIVE_STREAM ||
+                typeTo == IODataType::VIDEO || typeTo == IODataType::VIDEO_LABEL ||
+                typeTo == IODataType::IMAGE || typeTo == IODataType::IMAGE_LABEL;
+    }
+
+    return false;
+}
+
 bool CVideoIO::isReadStarted() const
 {
     if(m_pVideoBuffer)

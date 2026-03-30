@@ -48,6 +48,7 @@ class DATAPROCESSSHARED_EXPORT CPathIO : public CWorkflowTaskIO
         std::string getPath() const;
 
         bool        isDataAvailable() const override;
+        bool        isConnectableTo(IODataType typeTo) const override;
 
         void        clearData() override;
 
@@ -71,9 +72,18 @@ class DATAPROCESSSHARED_EXPORT CPathIOFactory: public CWorkflowTaskIOFactory
             m_name = "CPathIO";
         }
 
-        virtual WorkflowTaskIOPtr   create(IODataType dataType)
+        WorkflowTaskIOPtr   create(IODataType dataType) override
         {
             return std::make_shared<CPathIO>(dataType, m_name);
+        }
+
+        std::vector<IODataType> getValidDataTypes() const override
+        {
+            return {
+                IODataType::PROJECT_FOLDER,
+                IODataType::FOLDER_PATH,
+                IODataType::FILE_PATH
+            };
         }
 };
 

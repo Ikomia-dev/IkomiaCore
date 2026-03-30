@@ -311,6 +311,52 @@ bool CImageIO::isOverlayAvailable() const
     return m_overlayMask.empty() == false;
 }
 
+bool CImageIO::isAssignableTo(IODataType typeTo) const
+{
+    return m_dataType == typeTo ||
+            typeTo == IODataType::VIDEO || typeTo == IODataType::VIDEO_BINARY || typeTo == IODataType::VIDEO_LABEL ||
+            typeTo == IODataType::FILE_PATH || typeTo == IODataType::FOLDER_PATH || typeTo == IODataType::PROJECT_FOLDER;
+}
+
+bool CImageIO::isConnectableTo(IODataType typeTo) const
+{
+    if (m_dataType == typeTo)
+        return true;
+
+    if (m_dataType == IODataType::IMAGE_BINARY)
+    {
+        return typeTo == IODataType::IMAGE || typeTo == IODataType::IMAGE_LABEL;
+    }
+
+    if (m_dataType == IODataType::IMAGE_LABEL)
+    {
+        return typeTo == IODataType::IMAGE;
+    }
+
+    if (m_dataType == IODataType::VOLUME)
+    {
+        return typeTo == IODataType::IMAGE;
+    }
+
+    if (m_dataType == IODataType::VOLUME_BINARY)
+    {
+        return typeTo == IODataType::VOLUME || typeTo == IODataType::VOLUME_LABEL ||
+                typeTo == IODataType::IMAGE || typeTo == IODataType::IMAGE_BINARY || typeTo == IODataType::IMAGE_LABEL;
+    }
+
+    if (m_dataType == IODataType::VOLUME_LABEL)
+    {
+        return typeTo == IODataType::IMAGE || typeTo == IODataType::IMAGE_LABEL;
+    }
+
+    if (m_dataType == IODataType::POSITION)
+    {
+        return typeTo == IODataType::IMAGE;
+    }
+
+    return false;
+}
+
 void CImageIO::clearData()
 {
     m_image.release();
