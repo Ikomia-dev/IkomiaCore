@@ -121,7 +121,7 @@ target_compile_definitions(ikCore PRIVATE
     CORE_LIBRARY
 )
 
-target_compile_features(ikCore PRIVATE cxx_std_14)
+target_compile_features(ikCore PRIVATE cxx_std_17)
 
 target_include_directories(ikCore PRIVATE
     ../Utils

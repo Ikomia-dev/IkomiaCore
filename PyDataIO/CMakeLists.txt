@@ -23,7 +23,7 @@ target_compile_definitions(pydataio PRIVATE
     PYDATAIO_LIBRARY
 )
 
-target_compile_features(pydataio PRIVATE cxx_std_14)
+target_compile_features(pydataio PRIVATE cxx_std_17)
 
 target_include_directories(pydataio PRIVATE
     ../Core

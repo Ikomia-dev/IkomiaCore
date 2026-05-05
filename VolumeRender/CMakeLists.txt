@@ -33,7 +33,7 @@ target_compile_definitions(ikVolumeRender PRIVATE
     VOLUMERENDER_LIBRARY
 )
 
-target_compile_features(ikVolumeRender PRIVATE cxx_std_14)
+target_compile_features(ikVolumeRender PRIVATE cxx_std_17)
 
 target_include_directories(ikVolumeRender PRIVATE
     ../Core

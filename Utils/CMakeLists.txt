@@ -56,6 +56,7 @@ add_library(ikUtils SHARED
     CSemanticVersion.h
     CSemanticVersion.cpp
     pch.hpp
+    CExtensibleEnum.hpp
 )
 
 set_target_properties(ikUtils PROPERTIES VERSION ${IKOMIA_VERSION} SOVERSION ${IKOMIA_VERSION})
@@ -105,7 +106,7 @@ target_compile_definitions(ikUtils PRIVATE
     UTILS_LIBRARY
 )
 
-target_compile_features(ikUtils PRIVATE cxx_std_14)
+target_compile_features(ikUtils PRIVATE cxx_std_17)
 
 target_link_libraries(ikUtils PRIVATE
     Qt::Core

@@ -40,7 +40,7 @@ target_compile_definitions(pycore PRIVATE
     PYCORE_LIBRARY
 )
 
-target_compile_features(pycore PRIVATE cxx_std_14)
+target_compile_features(pycore PRIVATE cxx_std_17)
 
 target_include_directories(pycore PRIVATE
     ../Core

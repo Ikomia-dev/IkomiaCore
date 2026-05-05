@@ -21,7 +21,7 @@ target_compile_definitions(pyutils PRIVATE
     PYUTILS_LIBRARY
 )
 
-target_compile_features(pyutils PRIVATE cxx_std_14)
+target_compile_features(pyutils PRIVATE cxx_std_17)
 
 target_include_directories(pyutils PRIVATE
     ../Utils

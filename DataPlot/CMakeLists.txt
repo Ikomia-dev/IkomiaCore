@@ -25,7 +25,7 @@ target_compile_definitions(ikDataPlot PRIVATE
     QWT_DLL
 )
 
-target_compile_features(ikDataPlot PRIVATE cxx_std_14)
+target_compile_features(ikDataPlot PRIVATE cxx_std_17)
 
 target_include_directories(ikDataPlot PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/../Utils

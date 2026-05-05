@@ -13,7 +13,7 @@ target_compile_definitions(ikDataManagement PRIVATE
     DATAMANAGEMENT_LIBRARY
 )
 
-target_compile_features(ikDataManagement PRIVATE cxx_std_14)
+target_compile_features(ikDataManagement PRIVATE cxx_std_17)
 
 target_include_directories(ikDataManagement PRIVATE
     ../Core

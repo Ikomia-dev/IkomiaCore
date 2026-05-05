@@ -562,7 +562,7 @@ target_compile_definitions(ikDataProcess PRIVATE
     DATAPROCESS_LIBRARY
 )
 
-target_compile_features(ikDataProcess PRIVATE cxx_std_14)
+target_compile_features(ikDataProcess PRIVATE cxx_std_17)
 
 target_include_directories(ikDataProcess PRIVATE
     ../Core
