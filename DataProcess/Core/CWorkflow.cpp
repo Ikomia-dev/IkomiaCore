@@ -892,10 +892,10 @@ CDataInfoPtr CWorkflow::getIOInfo(const WorkflowVertex &id, size_t index, bool b
     return nullptr;
 }
 
-std::vector<IODataType> CWorkflow::getRootTargetTypes() const
+std::vector<IODataTypeEx> CWorkflow::getRootTargetTypes() const
 {
     std::set<int> srcIndices;
-    std::vector<IODataType> types;
+    std::vector<IODataTypeEx> types;
     auto outEdges = boost::out_edges(m_root, m_graph);
 
     for(auto it=outEdges.first; it!=outEdges.second; ++it)
@@ -903,7 +903,7 @@ std::vector<IODataType> CWorkflow::getRootTargetTypes() const
         WorkflowVertex target = boost::target(*it, m_graph);
         WorkflowTaskPtr targetTask = m_graph[target];
         WorkflowEdgePtr edge = m_graph[*it];
-        IODataType type = targetTask->getOriginalInputDataType(edge->getTargetIndex());
+        IODataTypeEx type = targetTask->getOriginalInputDataType(edge->getTargetIndex());
         int srcIndex = edge->getSourceIndex();
 
         auto itIndex = srcIndices.find(srcIndex);
@@ -998,7 +998,7 @@ std::vector<CWorkflowOutput> CWorkflow::getExposedOutputs() const
     return m_exposedOutputs;
 }
 
-IODataType CWorkflow::getOutputDataType(size_t index) const
+IODataTypeEx CWorkflow::getOutputDataType(size_t index) const
 {
     auto taskId = reinterpret_cast<WorkflowVertex>(m_exposedOutputs[index].getTaskId());
     auto taskPtr = getTask(taskId);
@@ -1035,7 +1035,7 @@ CHardwareConfig CWorkflow::getMinHardwareConfig() const
     return minHardwareConfig;
 }
 
-bool CWorkflow::hasOutput(const IODataType &type) const
+bool CWorkflow::hasOutput(const IODataTypeEx &type) const
 {
     for (size_t i=0; i<m_exposedOutputs.size(); ++i)
     {
@@ -1044,7 +1044,7 @@ bool CWorkflow::hasOutput(const IODataType &type) const
         if (taskPtr == nullptr)
             throw CException(CoreExCode::NULL_POINTER, "Task not found for the given output", __func__, __FILE__, __LINE__);
 
-        IODataType dataType = taskPtr->getOutputDataType(m_exposedOutputs[i].getTaskOutputIndex());
+        IODataTypeEx dataType = taskPtr->getOutputDataType(m_exposedOutputs[i].getTaskOutputIndex());
         if (dataType == type)
             return true;
     }
@@ -1298,10 +1298,10 @@ WorkflowEdge CWorkflow::connect(const WorkflowVertex &src, size_t srcIndex, cons
             QString errorMsg = QObject::tr("Invalid connection between output #%1 of %2 (%3) and input #%4 of %5 (%6)")
                                         .arg(srcIndex+1)
                                         .arg(QString::fromStdString(srcTaskPtr->getName()))
-                                        .arg(Utils::Workflow::getIODataName(srcTaskPtr->getOutputDataType(srcIndex)))
+                                        .arg(srcTaskPtr->getOutputDataType(srcIndex).displayName())
                                         .arg(targetIndex+1)
                                         .arg(QString::fromStdString(targetTaskPtr->getName()))
-                                        .arg(Utils::Workflow::getIODataName(targetTaskPtr->getInputDataType(targetIndex)));
+                                        .arg(targetTaskPtr->getInputDataType(targetIndex).displayName());
             throw CException(CoreExCode::INVALID_PARAMETER, errorMsg.toStdString(), __func__, __FILE__, __LINE__);
         }
 
@@ -1562,7 +1562,7 @@ void CWorkflow::runTasksSimple(const std::vector<WorkflowVertex> &taskToExecute)
 void CWorkflow::runTasksVideo(const std::vector<WorkflowVertex> &taskToExecute)
 {
     InputOutputVect videoInputs, videoOutputs;
-    const std::set<IODataType> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
+    const std::set<IODataTypeEx> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
 
     //Get video inputs
     auto inputs = getInputs();
@@ -1755,8 +1755,8 @@ void CWorkflow::analyzeTaskIO(const WorkflowVertex &id)
                     //Notify view to update task status to error
                     QString errorMsg = QObject::tr("Data type mismatch on input #%1 between type %2 and type %3")
                                                     .arg(pEdge->getTargetIndex()+1)
-                                                    .arg(Utils::Workflow::getIODataName(srcTaskPtr->getOutputDataType(pEdge->getSourceIndex())))
-                                                    .arg(Utils::Workflow::getIODataName(taskPtr->getInputDataType(pEdge->getTargetIndex())));
+                                                    .arg(srcTaskPtr->getOutputDataType(pEdge->getSourceIndex()).displayName())
+                                                    .arg(taskPtr->getInputDataType(pEdge->getTargetIndex()).displayName());
                     emit pSignalHandler->doSetTaskState(id, CWorkflowTask::State::_ERROR, errorMsg);
                 }
                 it++;

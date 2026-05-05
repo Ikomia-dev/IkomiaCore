@@ -224,7 +224,7 @@ void CWorkflowTask::to_ostream(std::ostream &os) const
     os << "###################################" << std::endl;
 }
 
-void CWorkflowTask::setInputDataType(const IODataType &dataType, size_t index)
+void CWorkflowTask::setInputDataType(const IODataTypeEx &dataType, size_t index)
 {
     if(index < m_inputs.size())
         m_inputs[index]->setDataType(dataType);
@@ -305,7 +305,7 @@ void CWorkflowTask::setInputs(const InputOutputVect &inputs)
     updateStaticOutputs();
 }
 
-void CWorkflowTask::setOutputDataType(const IODataType &dataType, size_t index)
+void CWorkflowTask::setOutputDataType(const IODataTypeEx &dataType, size_t index)
 {
     if(index < m_outputs.size())
         m_outputs[index]->setDataType(dataType);
@@ -442,7 +442,7 @@ InputOutputVect CWorkflowTask::getInputs() const
     return m_inputs;
 }
 
-InputOutputVect CWorkflowTask::getInputs(const std::set<IODataType> &types) const
+InputOutputVect CWorkflowTask::getInputs(const std::set<IODataTypeEx> &types) const
 {
     InputOutputVect inputs;
 
@@ -471,7 +471,7 @@ WorkflowTaskIOPtr CWorkflowTask::getInput(size_t index) const
         return nullptr;
 }
 
-IODataType CWorkflowTask::getInputDataType(size_t index) const
+IODataTypeEx CWorkflowTask::getInputDataType(size_t index) const
 {
     if(index < m_inputs.size() && m_inputs[index] != nullptr)
         return m_inputs[index]->getDataType();
@@ -479,7 +479,7 @@ IODataType CWorkflowTask::getInputDataType(size_t index) const
         return IODataType::NONE;
 }
 
-IODataType CWorkflowTask::getOriginalInputDataType(size_t index) const
+IODataTypeEx CWorkflowTask::getOriginalInputDataType(size_t index) const
 {
     if(index < m_originalInputTypes.size())
         return m_originalInputTypes[index];
@@ -497,7 +497,7 @@ InputOutputVect CWorkflowTask::getOutputs() const
     return m_outputs;
 }
 
-InputOutputVect CWorkflowTask::getOutputs(const std::set<IODataType> &dataTypes) const
+InputOutputVect CWorkflowTask::getOutputs(const std::set<IODataTypeEx> &dataTypes) const
 {
     InputOutputVect outputs;
     for (size_t i=0; i<m_outputs.size(); ++i)
@@ -522,7 +522,7 @@ WorkflowTaskIOPtr CWorkflowTask::getOutput(size_t index) const
         return nullptr;
 }
 
-IODataType CWorkflowTask::getOutputDataType(size_t index) const
+IODataTypeEx CWorkflowTask::getOutputDataType(size_t index) const
 {
     if(index < m_outputs.size())
         return m_outputs[index]->getDataType();
@@ -571,7 +571,7 @@ VectorPairString CWorkflowTask::getCustomInfo() const
     return m_customInfo;
 }
 
-WorkflowTaskIOPtr CWorkflowTask::getOutputFromType(const IODataType &type, size_t index) const
+WorkflowTaskIOPtr CWorkflowTask::getOutputFromType(const IODataTypeEx &type, size_t index) const
 {
     int currentIndex = 0;
     for(size_t i=0; i<m_outputs.size(); ++i)
@@ -662,7 +662,7 @@ bool CWorkflowTask::isEnabled() const
     return m_bEnabled;
 }
 
-bool CWorkflowTask::hasOutput(const IODataType &type) const
+bool CWorkflowTask::hasOutput(const IODataTypeEx &type) const
 {
     for(size_t i=0; i<m_outputs.size(); ++i)
     {
@@ -672,7 +672,7 @@ bool CWorkflowTask::hasOutput(const IODataType &type) const
     return false;
 }
 
-bool CWorkflowTask::hasOutput(const std::set<IODataType> &types) const
+bool CWorkflowTask::hasOutput(const std::set<IODataTypeEx> &types) const
 {
     for(size_t i=0; i<m_outputs.size(); ++i)
     {
@@ -707,7 +707,7 @@ bool CWorkflowTask::hasInput(const IODataType& type) const
     return false;
 }
 
-bool CWorkflowTask::hasInput(const std::set<IODataType> &types) const
+bool CWorkflowTask::hasInput(const std::set<IODataTypeEx> &types) const
 {
     for(size_t i=0; i<m_inputs.size(); ++i)
     {
@@ -1032,7 +1032,7 @@ QJsonObject CWorkflowTask::toJson() const
     for (size_t i=0; i<m_originalInputTypes.size(); ++i)
     {
         QJsonObject input;
-        input["name"] = QString::fromStdString(Utils::Workflow::getIODataEnumName(m_originalInputTypes[i]));
+        input["name"] = QString::fromStdString(m_originalInputTypes[i].typeName());
         jsonInputs.append(input);
     }
     obj["inputs"] = jsonInputs;
@@ -1042,7 +1042,7 @@ QJsonObject CWorkflowTask::toJson() const
     for (size_t i=0; i<m_outputs.size(); ++i)
     {
         QJsonObject output;
-        output["name"] = QString::fromStdString(Utils::Workflow::getIODataEnumName(m_outputs[i]->getDataType()));
+        output["name"] = QString::fromStdString(m_outputs[i]->getDataType().typeName());
         jsonOutputs.append(output);
     }
     obj["outputs"] = jsonOutputs;

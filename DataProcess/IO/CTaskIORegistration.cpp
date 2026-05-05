@@ -57,13 +57,13 @@ const CWorkflowTaskIOAbstractFactory &CTaskIORegistration::getFactory() const
 
 void CTaskIORegistration::registerIO(const TaskIOFactoryPtr &pFactory)
 {
-    std::vector<IODataType> types = pFactory->getValidDataTypes();
+    std::vector<IODataTypeEx> types = pFactory->getValidDataTypes();
     for(auto&& it=types.begin(); it!=types.end(); ++it)
         m_typeToClassName.insert(std::make_pair(*it, pFactory->getName()));
 
     m_factory.getList().push_back(pFactory);
     //Passage par lambda -> pFactory par valeur pour assurer la portée du pointeur
-    auto pCreatorFunc = [pFactory](IODataType dataType){ return pFactory->create(dataType); };
+    auto pCreatorFunc = [pFactory](IODataTypeEx dataType){ return pFactory->create(dataType); };
     m_factory.registerCreator(pFactory->getName(), pCreatorFunc);
 }
 
@@ -73,12 +73,12 @@ void CTaskIORegistration::reset()
     registerCore();
 }
 
-WorkflowTaskIOPtr CTaskIORegistration::createIOObject(IODataType type)
+WorkflowTaskIOPtr CTaskIORegistration::createIOObject(IODataTypeEx type)
 {
     auto it = m_typeToClassName.find(type);
     if (it == m_typeToClassName.end())
     {
-        std::string errMsg = "Unable to create object for data type " + Utils::Workflow::getIODataEnumName(type);
+        std::string errMsg = "Unable to create object for data type " + type.typeName();
         throw CException(CoreExCode::NOT_FOUND, errMsg);
     }
 

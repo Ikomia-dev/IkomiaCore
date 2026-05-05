@@ -609,13 +609,13 @@ class DATAPROCESSSHARED_EXPORT CNumericIOFactory: public CWorkflowTaskIOFactory
             m_name = "CNumericIO";
         }
 
-        WorkflowTaskIOPtr   create(IODataType dataType) override
+        WorkflowTaskIOPtr   create(IODataTypeEx dataType) override
         {
             Q_UNUSED(dataType);
             return std::make_shared<CNumericIO<double>>();
         }
 
-        std::vector<IODataType> getValidDataTypes() const override
+        std::vector<IODataTypeEx> getValidDataTypes() const override
         {
             return { IODataType::NUMERIC_VALUES };
         }

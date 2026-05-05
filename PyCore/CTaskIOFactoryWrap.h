@@ -11,9 +11,9 @@ class CTaskIOFactoryWrap: public CWorkflowTaskIOFactory, public wrapper<CWorkflo
 
         ~CTaskIOFactoryWrap() = default;
 
-        std::vector<IODataType> getValidDataTypes() const override;
+        std::vector<IODataTypeEx>   getValidDataTypes() const override;
 
-        WorkflowTaskIOPtr       create(IODataType dataType) override;
+        WorkflowTaskIOPtr           create(IODataTypeEx dataType) override;
 };
 
 #endif // CTASKIOFACTORYWRAP_H

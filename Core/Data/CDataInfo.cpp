@@ -21,12 +21,12 @@
 #include <QObject>
 #include "Main/CoreTools.hpp"
 
-CDataInfo::CDataInfo(IODataType type)
+CDataInfo::CDataInfo(IODataTypeEx type)
 {
     m_type = type;
 }
 
-CDataInfo::CDataInfo(IODataType type, const std::string& fileName)
+CDataInfo::CDataInfo(IODataTypeEx type, const std::string& fileName)
 {
     m_type = type;
     m_fileName = fileName;
@@ -87,7 +87,7 @@ std::string CDataInfo::getFileName() const
     return m_fileName;
 }
 
-IODataType CDataInfo::getType() const
+IODataTypeEx CDataInfo::getType() const
 {
     return m_type;
 }

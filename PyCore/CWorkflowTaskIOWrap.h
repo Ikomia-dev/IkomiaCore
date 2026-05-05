@@ -30,15 +30,15 @@ class CWorkflowTaskIOWrap : public CWorkflowTaskIO, public wrapper<CWorkflowTask
     public:
 
         CWorkflowTaskIOWrap();
-        CWorkflowTaskIOWrap(IODataType dataType);
-        CWorkflowTaskIOWrap(IODataType dataType, const std::string& name);
+        CWorkflowTaskIOWrap(IODataTypeEx dataType);
+        CWorkflowTaskIOWrap(IODataTypeEx dataType, const std::string& name);
         CWorkflowTaskIOWrap(const CWorkflowTaskIO& io);
 
         size_t      getUnitElementCount() const override;
         size_t      default_getUnitElementCount() const;
 
-        InputOutputVect getSubIOList(const std::set<IODataType> &dataTypes) const override;
-        InputOutputVect default_getSubIOList(const std::set<IODataType> &dataTypes) const;
+        InputOutputVect getSubIOList(const std::set<IODataTypeEx> &dataTypes) const override;
+        InputOutputVect default_getSubIOList(const std::set<IODataTypeEx> &dataTypes) const;
 
         bool        isDataAvailable() const override;
         bool        default_isDataAvailable() const;

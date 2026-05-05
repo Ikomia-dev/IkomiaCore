@@ -70,13 +70,13 @@ class DATAPROCESSSHARED_EXPORT CTextIO: public CWorkflowTaskIO
         CDataInfoPtr                getDataInfo() override;
         GraphicsOutputPtr           getGraphicsIO() const;
         DataStringIOPtr             getDataStringIO();
-        InputOutputVect             getSubIOList(const std::set<IODataType> &dataTypes) const override;
+        InputOutputVect             getSubIOList(const std::set<IODataTypeEx> &dataTypes) const override;
         CMat                        getImageWithGraphics(const CMat &image) const override;
         CMat                        getImageWithMaskAndGraphics(const CMat &image) const override;
 
         bool                        isDataAvailable() const override;
         bool                        isComposite() const override;
-        bool                        isConnectableTo(IODataType typeTo) const override;
+        bool                        isConnectableTo(IODataTypeEx typeTo) const override;
 
         void                        init(const std::string& taskName, int imageIndex);
         void                        finalize();
@@ -122,13 +122,13 @@ class DATAPROCESSSHARED_EXPORT CTextIOFactory: public CWorkflowTaskIOFactory
             m_name = "CTextIO";
         }
 
-        WorkflowTaskIOPtr   create(IODataType dataType) override
+        WorkflowTaskIOPtr   create(IODataTypeEx dataType) override
         {
             Q_UNUSED(dataType);
             return std::make_shared<CTextIO>();
         }
 
-        std::vector<IODataType> getValidDataTypes() const override
+        std::vector<IODataTypeEx> getValidDataTypes() const override
         {
             return { IODataType::TEXT };
         }

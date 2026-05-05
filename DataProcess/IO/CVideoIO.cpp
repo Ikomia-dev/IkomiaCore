@@ -29,27 +29,27 @@ CVideoIO::CVideoIO() : CImageIO(IODataType::VIDEO, "VideoIO")
     init();
 }
 
-CVideoIO::CVideoIO(IODataType data) : CImageIO(data, "VideoIO")
+CVideoIO::CVideoIO(IODataTypeEx dataType) : CImageIO(dataType, "VideoIO")
 {
    init();
 }
 
-CVideoIO::CVideoIO(IODataType data, const CMat &image) : CImageIO(data, image, "VideoIO")
+CVideoIO::CVideoIO(IODataTypeEx dataType, const CMat &image) : CImageIO(dataType, image, "VideoIO")
 {
     init();
 }
 
-CVideoIO::CVideoIO(IODataType data, const CMat& image, const std::string& name) : CImageIO(data, image, name)
+CVideoIO::CVideoIO(IODataTypeEx dataType, const CMat& image, const std::string& name) : CImageIO(dataType, image, name)
 {
     init();
 }
 
-CVideoIO::CVideoIO(IODataType data, const std::string &name): CImageIO(data, name)
+CVideoIO::CVideoIO(IODataTypeEx dataType, const std::string &name): CImageIO(dataType, name)
 {
     init();
 }
 
-CVideoIO::CVideoIO(IODataType data, const std::string &name, const std::string &path): CImageIO(data, name)
+CVideoIO::CVideoIO(IODataTypeEx dataType, const std::string &name, const std::string &path): CImageIO(dataType, name)
 {
     init();
     setVideoPath(path);
@@ -79,9 +79,9 @@ std::string CVideoIO::repr() const
 {
     std::stringstream s;
     if (m_pVideoBuffer && !m_pVideoBuffer->getCurrentPath().empty())
-        s << "CVideoIO(" << Utils::Workflow::getIODataEnumName(m_dataType) << ", " << m_name << ", " << m_pVideoBuffer->getCurrentPath() << ")";
+        s << "CVideoIO(" << m_dataType.typeName() << ", " << m_name << ", " << m_pVideoBuffer->getCurrentPath() << ")";
     else
-        s << "CVideoIO(" << Utils::Workflow::getIODataEnumName(m_dataType) << ", " << m_name <<  ")";
+        s << "CVideoIO(" << m_dataType.typeName() << ", " << m_name <<  ")";
 
     return s.str();
 }
@@ -311,14 +311,14 @@ bool CVideoIO::isDataAvailable() const
     return bRet;
 }
 
-bool CVideoIO::isAssignableTo(IODataType typeTo) const
+bool CVideoIO::isAssignableTo(IODataTypeEx typeTo) const
 {
     return m_dataType == typeTo ||
             typeTo == IODataType::IMAGE || typeTo == IODataType::IMAGE_BINARY || typeTo == IODataType::IMAGE_LABEL ||
             typeTo == IODataType::FILE_PATH || typeTo == IODataType::FOLDER_PATH || typeTo == IODataType::PROJECT_FOLDER;
 }
 
-bool CVideoIO::isConnectableTo(IODataType typeTo) const
+bool CVideoIO::isConnectableTo(IODataTypeEx typeTo) const
 {
     if (m_dataType == typeTo)
         return true;

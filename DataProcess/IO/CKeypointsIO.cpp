@@ -424,7 +424,7 @@ std::vector<std::string> CKeypointsIO::getKeypointNames() const
     return m_keyptsNames;
 }
 
-InputOutputVect CKeypointsIO::getSubIOList(const std::set<IODataType> &dataTypes) const
+InputOutputVect CKeypointsIO::getSubIOList(const std::set<IODataTypeEx> &dataTypes) const
 {
     InputOutputVect ioList;
 
@@ -474,7 +474,7 @@ bool CKeypointsIO::isDataAvailable() const
     return m_objects.size() > 0;
 }
 
-bool CKeypointsIO::isConnectableTo(IODataType typeTo) const
+bool CKeypointsIO::isConnectableTo(IODataTypeEx typeTo) const
 {
     return m_dataType == typeTo ||
             typeTo == IODataType::INPUT_GRAPHICS || typeTo == IODataType::BLOB_VALUES || typeTo == IODataType::NUMERIC_VALUES;

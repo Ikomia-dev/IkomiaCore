@@ -31,17 +31,17 @@ class CConvertIO
 
         CConvertIO();
 
-        static ImageIOPtr    convertToImageIO(const WorkflowTaskIOPtr& ioFrom);
-        static VideoIOPtr    convertToVideoIO(const WorkflowTaskIOPtr& ioFrom);
-        static VideoIOPtr    convertToStreamIO(const WorkflowTaskIOPtr& ioFrom);
-        static ImageIOPtr    convertToVolumeIO(const WorkflowTaskIOPtr& ioFrom);
+        static ImageIOPtr   convertToImageIO(const WorkflowTaskIOPtr& ioFrom);
+        static VideoIOPtr   convertToVideoIO(const WorkflowTaskIOPtr& ioFrom);
+        static VideoIOPtr   convertToStreamIO(const WorkflowTaskIOPtr& ioFrom);
+        static ImageIOPtr   convertToVolumeIO(const WorkflowTaskIOPtr& ioFrom);
 
     private:
 
-        static IODataType   getTargetImageType(IODataType srcType);
-        static IODataType   getTargetVideoType(IODataType srcType);
-        static IODataType   getTargetStreamType(IODataType srcType);
-        static IODataType   getTargetVolumeType(IODataType srcType);
+        static IODataTypeEx getTargetImageType(IODataTypeEx srcType);
+        static IODataTypeEx getTargetVideoType(IODataTypeEx srcType);
+        static IODataTypeEx getTargetStreamType(IODataTypeEx srcType);
+        static IODataTypeEx getTargetVolumeType(IODataTypeEx srcType);
 };
 
 #endif // CCONVERTIO_H

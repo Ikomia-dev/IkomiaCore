@@ -64,7 +64,7 @@ void CWorkflowTaskWrap::default_initLongProcess()
     }
 }
 
-void CWorkflowTaskWrap::setInputDataType(const IODataType &dataType, size_t index)
+void CWorkflowTaskWrap::setInputDataType(const IODataTypeEx &dataType, size_t index)
 {
     CPyEnsureGIL gil;
     try
@@ -80,7 +80,7 @@ void CWorkflowTaskWrap::setInputDataType(const IODataType &dataType, size_t inde
     }
 }
 
-void CWorkflowTaskWrap::default_setInputDataType(const IODataType &dataType, size_t index)
+void CWorkflowTaskWrap::default_setInputDataType(const IODataTypeEx &dataType, size_t index)
 {
     CPyEnsureGIL gil;
     try
@@ -151,7 +151,7 @@ void CWorkflowTaskWrap::default_setInputs(const InputOutputVect &inputs)
     }
 }
 
-void CWorkflowTaskWrap::setOutputDataType(const IODataType &dataType, size_t index)
+void CWorkflowTaskWrap::setOutputDataType(const IODataTypeEx &dataType, size_t index)
 {
     CPyEnsureGIL gil;
     try
@@ -167,7 +167,7 @@ void CWorkflowTaskWrap::setOutputDataType(const IODataType &dataType, size_t ind
     }
 }
 
-void CWorkflowTaskWrap::default_setOutputDataType(const IODataType &dataType, size_t index)
+void CWorkflowTaskWrap::default_setOutputDataType(const IODataTypeEx &dataType, size_t index)
 {
     CPyEnsureGIL gil;
     try

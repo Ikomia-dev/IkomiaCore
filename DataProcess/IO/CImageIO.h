@@ -49,35 +49,35 @@ class DATAPROCESSSHARED_EXPORT CImageIO : public CWorkflowTaskIO
         CImageIO();
         /**
          * @brief Constructs a CImageIO instance with the given image output type.
-         * @param data: see ::IODataType for details.
+         * @param dataType: see ::IODataType for details.
          */
-        CImageIO(IODataType data);
+        CImageIO(IODataTypeEx dataType);
         /**
          * @brief Constructs a CImageIO instance with the given image output type and the name.
-         * @param data: see ::IODataType for details.
+         * @param dataType: see ::IODataType for details.
          * @param image: CMat object for C++ and Numpy array for Python.
          */
-        CImageIO(IODataType data, const CMat& image);
+        CImageIO(IODataTypeEx dataType, const CMat& image);
         /**
          * @brief Constructs a CImageIO instance with the given image output type and the given image.
-         * @param data: see ::IODataType for details.
+         * @param dataType: see ::IODataType for details.
          * @param image: CMat object for C++ and Numpy array for Python.
          * @param name: input or output name.
          */
-        CImageIO(IODataType data, const CMat& image, const std::string& name);
+        CImageIO(IODataTypeEx dataType, const CMat& image, const std::string& name);
         /**
          * @brief Constructs a CImageIO instance with the given image output type and the name.
-         * @param data: see ::IODataType for details.
+         * @param dataType: see ::IODataType for details.
          * @param name: input or output name.
          */
-        CImageIO(IODataType data, const std::string& name);
+        CImageIO(IODataTypeEx dataType, const std::string& name);
         /**
          * @brief Constructs a CImageIO instance with the given image output type and the image path.
-         * @param data: see ::IODataType for details.
+         * @param dataType: see ::IODataType for details.
          * @param name: input or output name.
          * @param path: path to image file.
          */
-        CImageIO(IODataType data, const std::string& name, const std::string& path);
+        CImageIO(IODataTypeEx dataType, const std::string& name, const std::string& path);
         /**
          * @brief Copy constructor.
          */
@@ -196,9 +196,9 @@ class DATAPROCESSSHARED_EXPORT CImageIO : public CWorkflowTaskIO
           * @brief Check whether I/O object is convertible to the given data type.
           * @return True or False.
           */
-        bool            isAssignableTo(IODataType typeTo) const override;
+        bool            isAssignableTo(IODataTypeEx typeTo) const override;
 
-        bool            isConnectableTo(IODataType typeTo) const override;
+        bool            isConnectableTo(IODataTypeEx typeTo) const override;
 
         /**
          * @brief Clears image and overlay mask so that they become empty.
@@ -257,12 +257,12 @@ class DATAPROCESSSHARED_EXPORT CImageIOFactory: public CWorkflowTaskIOFactory
             m_name = "CImageIO";
         }
 
-        WorkflowTaskIOPtr   create(IODataType dataType) override
+        WorkflowTaskIOPtr   create(IODataTypeEx dataType) override
         {
             return std::make_shared<CImageIO>(dataType);
         }
 
-        std::vector<IODataType> getValidDataTypes() const override
+        std::vector<IODataTypeEx> getValidDataTypes() const override
         {
             return {
                 IODataType::IMAGE,

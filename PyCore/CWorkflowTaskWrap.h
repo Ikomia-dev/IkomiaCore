@@ -42,8 +42,8 @@ class CWorkflowTaskWrap : public CWorkflowTask, public wrapper<CWorkflowTask>
         void        initLongProcess() override;
         void        default_initLongProcess();
 
-        void        setInputDataType(const IODataType& dataType, size_t index = 0) override;
-        void        default_setInputDataType(const IODataType& dataType, size_t index = 0);
+        void        setInputDataType(const IODataTypeEx& dataType, size_t index = 0) override;
+        void        default_setInputDataType(const IODataTypeEx& dataType, size_t index = 0);
 
         void        setInput(const WorkflowTaskIOPtr& pInput, size_t index = 0) override;
         void        default_setInput(const WorkflowTaskIOPtr& pInput, size_t index = 0);
@@ -51,8 +51,8 @@ class CWorkflowTaskWrap : public CWorkflowTask, public wrapper<CWorkflowTask>
         void        setInputs(const InputOutputVect& inputs) override;
         void        default_setInputs(const InputOutputVect& inputs);
 
-        void        setOutputDataType(const IODataType& dataType, size_t index = 0) override;
-        void        default_setOutputDataType(const IODataType& dataType, size_t index = 0);
+        void        setOutputDataType(const IODataTypeEx& dataType, size_t index = 0) override;
+        void        default_setOutputDataType(const IODataTypeEx& dataType, size_t index = 0);
 
         void        setOutput(const WorkflowTaskIOPtr& pOutput, size_t index = 0) override;
         void        default_setOutput(const WorkflowTaskIOPtr& pOutput, size_t index = 0);

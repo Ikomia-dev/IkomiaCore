@@ -1,7 +1,7 @@
 #include "CTaskIOFactoryWrap.h"
 
 
-std::vector<IODataType> CTaskIOFactoryWrap::getValidDataTypes() const
+std::vector<IODataTypeEx> CTaskIOFactoryWrap::getValidDataTypes() const
 {
     CPyEnsureGIL gil;
     try
@@ -14,7 +14,7 @@ std::vector<IODataType> CTaskIOFactoryWrap::getValidDataTypes() const
     }
 }
 
-WorkflowTaskIOPtr CTaskIOFactoryWrap::create(IODataType dataType)
+WorkflowTaskIOPtr CTaskIOFactoryWrap::create(IODataTypeEx dataType)
 {
     CPyEnsureGIL gil;
     try

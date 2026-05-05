@@ -69,7 +69,7 @@ void CRunTaskManager::stop(const WorkflowTaskPtr &taskPtr)
 
 void CRunTaskManager::aggregateOutputs(const WorkflowTaskPtr &taskPtr)
 {
-    const std::set<IODataType> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
+    const std::set<IODataTypeEx> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
     auto outputs = taskPtr->getOutputs();
 
     for (size_t i=0; i<outputs.size(); ++i)
@@ -98,7 +98,7 @@ void CRunTaskManager::runImageProcess2D(const WorkflowTaskPtr &taskPtr)
     //Access through CObjectLocker<CWorkflowTaskIO> ioLock(*ioPtr);
     //auto inputLocks = taskPtr->createInputScopedLocks();
     //auto outputLocks = taskPtr->createOutputScopedLocks();
-    const std::set<IODataType> volumeTypes = {IODataType::VOLUME, IODataType::VOLUME_LABEL, IODataType::VOLUME_BINARY};
+    const std::set<IODataTypeEx> volumeTypes = {IODataType::VOLUME, IODataType::VOLUME_LABEL, IODataType::VOLUME_BINARY};
     bool batchMode = std::stoi(m_pCfg->at("BatchMode"));
 
     if(taskPtr->hasInput(volumeTypes) &&
@@ -166,7 +166,7 @@ void CRunTaskManager::runImageProcess2D(const WorkflowTaskPtr &taskPtr)
 
 void CRunTaskManager::runVideoProcess(const WorkflowTaskPtr& taskPtr)
 {
-    const std::set<IODataType> videoTypes = {
+    const std::set<IODataTypeEx> videoTypes = {
         IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY,
         IODataType::LIVE_STREAM, IODataType::LIVE_STREAM_LABEL, IODataType::LIVE_STREAM_BINARY
     };
@@ -223,7 +223,7 @@ void CRunTaskManager::aggregateOutput(const std::string &dataFolder, const std::
 
 void CRunTaskManager::saveWholeVideoOutputs(const WorkflowTaskPtr &taskPtr, const std::string& inputName)
 {
-    const std::set<IODataType> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
+    const std::set<IODataTypeEx> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
 
     //Get video inputs
     auto videoInputs = taskPtr->getInputs(videoTypes);
@@ -258,7 +258,7 @@ void CRunTaskManager::saveVideoOutputs(const WorkflowTaskPtr &taskPtr, const Inp
     assert(m_pCfg);
     bool bImageSequence = false;
     bool bEmbedGraphics = std::stoi(m_pCfg->at("GraphicsEmbedded"));
-    const std::set<IODataType> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
+    const std::set<IODataTypeEx> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
 
     //Get video outputs
     auto videoOutputs = taskPtr->getOutputs(videoTypes);

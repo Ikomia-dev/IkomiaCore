@@ -145,7 +145,7 @@ bool CGraphicsOutput::isDataAvailable() const
     return m_items.size() > 0;
 }
 
-bool CGraphicsOutput::isConnectableTo(IODataType typeTo) const
+bool CGraphicsOutput::isConnectableTo(IODataTypeEx typeTo) const
 {
     return m_dataType == typeTo || typeTo == IODataType::INPUT_GRAPHICS;
 }

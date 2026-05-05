@@ -42,6 +42,7 @@
 #include "MapConverter.hpp"
 #include "PairConverter.hpp"
 
+
 template<typename T>
 void exposeCPoint(const std::string& className)
 {
@@ -54,10 +55,39 @@ void exposeCPoint(const std::string& className)
     ;
 }
 
+
+template<typename E>
+void exposeExtensibleEnum(const char* name)
+{
+    using EE = CExtensibleEnum<E>;
+
+    class_<EE>(name, "Generic extensible enum", init<int>())
+        .def(init<E>())
+        .def("id", &EE::id)
+        .def("type_name", &EE::typeName)
+        .def("display_name", &EE::displayName)
+        .def("is_base", &EE::isBaseValue)
+        .def("as_base_enum", &EE::asBaseEnum)
+        .def("register", &EE::registerExtended)
+        .staticmethod("register")
+        .def("__eq__", &EE::operator==)
+        .def("__ne__", &EE::operator!=)
+        .def("__lt__", &EE::operator<)
+        .def("__hash__", +[](const EE& v) { return v.id(); })
+        .def("__repr__", &EE::displayName)
+        .def("__str__", &EE::typeName)
+    ;
+
+    // Register implicit conversion E -> ExtensibleEnum<E>
+    implicitly_convertible<E, EE>();
+}
+
+
 void translateCException(const CException& e)
 {
     PyErr_SetString(PyExc_RuntimeError, e.what());
 }
+
 
 BOOST_PYTHON_MODULE(pycore)
 {
@@ -102,6 +132,7 @@ BOOST_PYTHON_MODULE(pycore)
     registerStdVector<std::shared_ptr<CWorkflowTask>>();
     registerStdVector<CMeasure>();
     registerStdVector<IODataType>();
+    registerStdVector<IODataTypeEx>();
     registerStdVector<std::pair<int, int>>();
     registerStdVector<std::pair<std::string, std::string>>();
     registerStdVector<std::pair<int, CPointF>>();
@@ -327,14 +358,16 @@ BOOST_PYTHON_MODULE(pycore)
         .value("TEXT_STREAM", IODataType::TEXT_STREAM)
     ;
 
+    exposeExtensibleEnum<IODataType>("IODataTypeEx");
+
     void (CWorkflowTaskIOWrap::*ioSave)(const std::string&) = &CWorkflowTaskIOWrap::save;
     std::string (CWorkflowTaskIO::*toJsonNoOpt)() const = &CWorkflowTaskIO::toJson;
     std::string (CWorkflowTaskIO::*toJson)(const std::vector<std::string>&) const = &CWorkflowTaskIO::toJson;
 
     class_<CWorkflowTaskIOWrap, std::shared_ptr<CWorkflowTaskIOWrap>>("CWorkflowTaskIO", _WorkflowTaskIODocString)
         .def(init<>("Default constructor", args("self")))
-        .def(init<IODataType>(_ctor1WorkflowTaskIODocString, args("self", "data_type")))
-        .def(init<IODataType, const std::string&>(_ctor2WorkflowTaskIODocString, args("self", "data_type", "name")))
+        .def(init<IODataTypeEx>(_ctor1WorkflowTaskIODocString, args("self", "data_type")))
+        .def(init<IODataTypeEx, const std::string&>(_ctor2WorkflowTaskIODocString, args("self", "data_type", "name")))
         .def(init<const CWorkflowTaskIO&>("Copy constructor"))
         .add_property("name", &CWorkflowTaskIO::getName, &CWorkflowTaskIO::setName, "I/O name")
         .add_property("data_type", &CWorkflowTaskIO::getDataType, &CWorkflowTaskIO::setDataType, "I/O data type")
@@ -370,7 +403,7 @@ BOOST_PYTHON_MODULE(pycore)
     //-------------------------//
     //----- CWorkflowTask -----//
     //-------------------------//
-    enum_<CWorkflowTask::Type>("TaskType", "Enum - List of available process or task types")
+    enum_<CWorkflowTask::Type>("TaskType", "Enum - List of available task types")
         .value("GENERIC", CWorkflowTask::Type::GENERIC)
         .value("IMAGE_PROCESS_2D", CWorkflowTask::Type::IMAGE_PROCESS_2D)
         .value("IMAGE_PROCESS_3D", CWorkflowTask::Type::IMAGE_PROCESS_3D)

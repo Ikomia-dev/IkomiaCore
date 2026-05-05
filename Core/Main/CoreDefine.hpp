@@ -26,8 +26,11 @@
 #include <QString>
 #include <QMetaType>
 #include "Graphics/CPoint.hpp"
+#include "CExtensibleEnum.hpp"
+
 
 #define RANDOM_COLOR_SEED 5
+
 
 namespace Ikomia
 {
@@ -92,6 +95,49 @@ namespace Ikomia
         NONE = 32                   /**< Unknown data type */
         // NEXT VALUE = 34
     };
+
+    template<>
+    struct EnumTraits<IODataType> {
+        static constexpr std::initializer_list<std::tuple<IODataType, const char*, const char*>> values = {
+            { IODataType::IMAGE, "IODataType.IMAGE", "Image" },
+            { IODataType::IMAGE_BINARY, "IODataType.IMAGE_BINARY", "Binary image" },
+            { IODataType::IMAGE_LABEL, "IODataType.IMAGE_LABEL", "Label image" },
+            { IODataType::VIDEO, "IODataType.VIDEO", "Video" },
+            { IODataType::VIDEO_BINARY, "IODataType.VIDEO_BINARY", "Binary video" },
+            { IODataType::VIDEO_LABEL, "IODataType.VIDEO_LABEL", "Label video" },
+            { IODataType::VOLUME, "IODataType.VOLUME", "Volume" },
+            { IODataType::VOLUME_BINARY, "IODataType.VOLUME_BINARY", "Binary volume" },
+            { IODataType::VOLUME_LABEL, "IODataType.VOLUME_LABEL", "Label volume" },
+            { IODataType::LIVE_STREAM, "IODataType.LIVE_STREAM", "Live stream" },
+            { IODataType::LIVE_STREAM_BINARY, "IODataType.LIVE_STREAM_BINARY", "Binary live stream" },
+            { IODataType::LIVE_STREAM_LABEL, "IODataType.LIVE_STREAM_LABEL", "Label live stream" },
+            { IODataType::INPUT_GRAPHICS, "IODataType.INPUT_GRAPHICS", "Input graphics" },
+            { IODataType::OUTPUT_GRAPHICS, "IODataType.OUTPUT_GRAPHICS", "Output graphics" },
+            { IODataType::BLOB_VALUES, "IODataType.BLOB_VALUES", "Blob values" },
+            { IODataType::NUMERIC_VALUES, "IODataType.NUMERIC_VALUES", "Numeric values" },
+            { IODataType::DESCRIPTORS, "IODataType.DESCRIPTORS", "Descriptors" },
+            { IODataType::WIDGET, "IODataType.WIDGET", "Widget" },
+            { IODataType::PROJECT_FOLDER, "IODataType.PROJECT_FOLDER", "Project folder" },
+            { IODataType::FOLDER_PATH, "IODataType.FOLDER_PATH", "Folder path" },
+            { IODataType::FILE_PATH, "IODataType.FILE_PATH", "File path" },
+            { IODataType::DNN_DATASET, "IODataType.DNN_DATASET", "Deep learning dataset" },
+            { IODataType::ARRAY, "IODataType.ARRAY", "Multi-dimensional array" },
+            { IODataType::DATA_DICT, "IODataType.DATA_DICT", "Generic Python dict" },
+            { IODataType::OBJECT_DETECTION, "IODataType.OBJECT_DETECTION", "Object detection" },
+            { IODataType::INSTANCE_SEGMENTATION, "IODataType.INSTANCE_SEGMENTATION", "Instance segmentation" },
+            { IODataType::SEMANTIC_SEGMENTATION, "IODataType.SEMANTIC_SEGMENTATION", "Semantic segmentation" },
+            { IODataType::KEYPOINTS, "IODataType.KEYPOINTS", "Keypoints detection" },
+            { IODataType::TEXT, "IODataType.TEXT", "Text detection" },
+            { IODataType::TEXT_STREAM, "IODataType.TEXT_STREAM", "Text stream" },
+            { IODataType::POSITION, "IODataType.POSITION", "Position image sequence" },
+            { IODataType::JSON, "IODataType.JSON", "JSON data" },
+            { IODataType::SCENE_3D, "IODataType.SCENE_3D", "3D scene representation" },
+            { IODataType::NONE, "IODataType.NONE", "" },
+        };
+    };
+
+    using IODataTypeEx = CExtensibleEnum<IODataType>;
+
 
     // Enum class mandatory to avoir name conflict on Windows...
     enum class GraphicsItem : int

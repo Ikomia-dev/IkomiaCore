@@ -23,11 +23,11 @@ CWorkflowTaskIOWrap::CWorkflowTaskIOWrap() : CWorkflowTaskIO()
 {
 }
 
-CWorkflowTaskIOWrap::CWorkflowTaskIOWrap(IODataType dataType) : CWorkflowTaskIO(dataType)
+CWorkflowTaskIOWrap::CWorkflowTaskIOWrap(IODataTypeEx dataType) : CWorkflowTaskIO(dataType)
 {
 }
 
-CWorkflowTaskIOWrap::CWorkflowTaskIOWrap(IODataType dataType, const std::string &name) : CWorkflowTaskIO(dataType, name)
+CWorkflowTaskIOWrap::CWorkflowTaskIOWrap(IODataTypeEx dataType, const std::string &name) : CWorkflowTaskIO(dataType, name)
 {
 }
 
@@ -63,7 +63,7 @@ size_t CWorkflowTaskIOWrap::default_getUnitElementCount() const
     }
 }
 
-InputOutputVect CWorkflowTaskIOWrap::getSubIOList(const std::set<IODataType> &dataTypes) const
+InputOutputVect CWorkflowTaskIOWrap::getSubIOList(const std::set<IODataTypeEx> &dataTypes) const
 {
     CPyEnsureGIL gil;
     try
@@ -78,7 +78,7 @@ InputOutputVect CWorkflowTaskIOWrap::getSubIOList(const std::set<IODataType> &da
     }
 }
 
-InputOutputVect CWorkflowTaskIOWrap::default_getSubIOList(const std::set<IODataType> &dataTypes) const
+InputOutputVect CWorkflowTaskIOWrap::default_getSubIOList(const std::set<IODataTypeEx> &dataTypes) const
 {
     CPyEnsureGIL gil;
     try

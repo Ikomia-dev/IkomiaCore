@@ -44,16 +44,16 @@ class DATAPROCESSSHARED_EXPORT CWidgetOutput : public CWorkflowTaskIO
         /**
          * @brief Constructs a CWidgetOutput instance with the data type.
          * @details By default, the widget data type is ::Data::WIDGET.
-         * @param data: data type.
+         * @param dataType: data type.
          */
-        CWidgetOutput(IODataType data);
+        CWidgetOutput(IODataTypeEx dataType);
         /**
          * @brief Constructs a CWidgetOutput instance with the data type and the name.
          * @details By default, the widget data type is ::Data::WIDGET.
-         * @param data: data type.
+         * @param dataType: data type.
          * @param name: output name.
          */
-        CWidgetOutput(IODataType data, const std::string& name);
+        CWidgetOutput(IODataTypeEx dataType, const std::string& name);
 
         virtual ~CWidgetOutput();
 
@@ -109,12 +109,12 @@ class DATAPROCESSSHARED_EXPORT CWidgetOutputFactory: public CWorkflowTaskIOFacto
             m_name = "CWidgetOutput";
         }
 
-        WorkflowTaskIOPtr   create(IODataType dataType) override
+        WorkflowTaskIOPtr   create(IODataTypeEx dataType) override
         {
             return std::make_shared<CWidgetOutput>(dataType);
         }
 
-        std::vector<IODataType> getValidDataTypes() const override
+        std::vector<IODataTypeEx> getValidDataTypes() const override
         {
             return { IODataType::WIDGET };
         }

@@ -67,7 +67,7 @@ class DATAPROCESSSHARED_EXPORT CGraphicsInput : public CWorkflowTaskIO
 
         bool                isDataAvailable() const override;
 
-        bool                isConnectableTo(IODataType typeTo) const override;
+        bool                isConnectableTo(IODataTypeEx typeTo) const override;
 
         void                clearData() override;
 
@@ -110,13 +110,13 @@ class DATAPROCESSSHARED_EXPORT CGraphicsInputFactory: public CWorkflowTaskIOFact
             m_name = "CGraphicsInput";
         }
 
-        WorkflowTaskIOPtr   create(IODataType dataType) override
+        WorkflowTaskIOPtr   create(IODataTypeEx dataType) override
         {
             Q_UNUSED(dataType);
             return std::make_shared<CGraphicsInput>();
         }
 
-        std::vector<IODataType> getValidDataTypes() const override
+        std::vector<IODataTypeEx> getValidDataTypes() const override
         {
             return {IODataType::INPUT_GRAPHICS};
         }

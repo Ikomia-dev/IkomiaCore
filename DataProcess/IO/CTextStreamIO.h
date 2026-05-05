@@ -111,13 +111,13 @@ class DATAPROCESSSHARED_EXPORT CTextStreamIOFactory: public CWorkflowTaskIOFacto
             m_name = "CTextStreamIO";
         }
 
-        WorkflowTaskIOPtr   create(IODataType dataType) override
+        WorkflowTaskIOPtr   create(IODataTypeEx dataType) override
         {
             Q_UNUSED(dataType);
             return std::make_shared<CTextStreamIO>();
         }
 
-        std::vector<IODataType> getValidDataTypes() const override
+        std::vector<IODataTypeEx> getValidDataTypes() const override
         {
             return { IODataType::TEXT_STREAM };
         }

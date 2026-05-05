@@ -72,7 +72,7 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegIO: public CWorkflowTaskIO
         GraphicsOutputPtr                   getGraphicsIO() const;
         BlobMeasureIOPtr                    getBlobMeasureIO() const;
         CMat                                getMergeMask() const;
-        InputOutputVect                     getSubIOList(const std::set<IODataType> &dataTypes) const override;
+        InputOutputVect                     getSubIOList(const std::set<IODataTypeEx> &dataTypes) const override;
         CMat                                getImageWithGraphics(const CMat &image) const override;
         CMat                                getImageWithMask(const CMat &image) const override;
         CMat                                getImageWithMaskAndGraphics(const CMat &image) const override;
@@ -80,7 +80,7 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegIO: public CWorkflowTaskIO
 
         bool                                isDataAvailable() const override;
         bool                                isComposite() const override;
-        bool                                isConnectableTo(IODataType typeTo) const override;
+        bool                                isConnectableTo(IODataTypeEx typeTo) const override;
 
         void                                init(const std::string& taskName, int refImageIndex, int imageWidth, int imageHeight);
 
@@ -125,13 +125,13 @@ class DATAPROCESSSHARED_EXPORT CInstanceSegIOFactory: public CWorkflowTaskIOFact
             m_name = "CInstanceSegIO";
         }
 
-        WorkflowTaskIOPtr   create(IODataType dataType) override
+        WorkflowTaskIOPtr   create(IODataTypeEx dataType) override
         {
             Q_UNUSED(dataType);
             return std::make_shared<CInstanceSegIO>();
         }
 
-        std::vector<IODataType> getValidDataTypes() const override
+        std::vector<IODataTypeEx> getValidDataTypes() const override
         {
             return { IODataType::INSTANCE_SEGMENTATION };
         }

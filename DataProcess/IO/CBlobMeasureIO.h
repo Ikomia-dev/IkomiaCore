@@ -127,13 +127,13 @@ class DATAPROCESSSHARED_EXPORT CBlobMeasureIOFactory: public CWorkflowTaskIOFact
             m_name = "CBlobMeasureIO";
         }
 
-        WorkflowTaskIOPtr   create(IODataType dataType) override
+        WorkflowTaskIOPtr   create(IODataTypeEx dataType) override
         {
             Q_UNUSED(dataType);
             return std::make_shared<CBlobMeasureIO>();
         }
 
-        std::vector<IODataType> getValidDataTypes() const override
+        std::vector<IODataTypeEx> getValidDataTypes() const override
         {
             return { IODataType::BLOB_VALUES };
         }

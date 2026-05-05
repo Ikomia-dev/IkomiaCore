@@ -83,7 +83,7 @@ ImageIOPtr CConvertIO::convertToVolumeIO(const WorkflowTaskIOPtr &ioFrom)
     return nullptr;
 }
 
-IODataType CConvertIO::getTargetImageType(IODataType srcType)
+IODataTypeEx CConvertIO::getTargetImageType(IODataTypeEx srcType)
 {
     IODataType type = IODataType::NONE;
 
@@ -108,7 +108,7 @@ IODataType CConvertIO::getTargetImageType(IODataType srcType)
     return type;
 }
 
-IODataType CConvertIO::getTargetVideoType(IODataType srcType)
+IODataTypeEx CConvertIO::getTargetVideoType(IODataTypeEx srcType)
 {
     IODataType type = IODataType::NONE;
 
@@ -133,7 +133,7 @@ IODataType CConvertIO::getTargetVideoType(IODataType srcType)
     return type;
 }
 
-IODataType CConvertIO::getTargetStreamType(IODataType srcType)
+IODataTypeEx CConvertIO::getTargetStreamType(IODataTypeEx srcType)
 {
     IODataType type = IODataType::NONE;
 
@@ -158,7 +158,7 @@ IODataType CConvertIO::getTargetStreamType(IODataType srcType)
     return type;
 }
 
-IODataType CConvertIO::getTargetVolumeType(IODataType srcType)
+IODataTypeEx CConvertIO::getTargetVolumeType(IODataTypeEx srcType)
 {
     IODataType type = IODataType::NONE;
 
