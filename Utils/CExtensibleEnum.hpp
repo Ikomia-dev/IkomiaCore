@@ -67,6 +67,15 @@ namespace Ikomia
             bool operator!=(const CExtensibleEnum& o) const { return m_id != o.m_id; }
             bool operator<(const CExtensibleEnum& o)  const { return m_id < o.m_id; }
 
+            // Called only from ensureRegistered() — must use *Storage() accessors exclusively.
+            static void registerBase(int id, const std::string& name, const std::string& displayName)
+            {
+                baseIdsStorage().insert(id);
+                allNamesStorage()[id] = name;
+                allDisplayNamesStorage()[id] = displayName;
+                nameToIdStorage()[name] = id;
+            }
+
             // Register a new extended value — intended to be called from Python
             static CExtensibleEnum registerExtended(const std::string& name, int id, const std::string& displayName)
             {
@@ -75,21 +84,23 @@ namespace Ikomia
 
                 allNames()[id] = name;
                 allDisplayNames()[id] = displayName;
+                nameToId()[name] = id;
                 return CExtensibleEnum(id);
             }
 
-            // Called once at startup to seed the registry from the base enum
-            static void registerBase(int id, const std::string& name, const std::string& displayName)
+            static CExtensibleEnum fromTypeName(const std::string& typeName)
             {
-                baseIdsStorage().insert(id);
-                allNames()[id] = name;
-                allDisplayNames()[id] = displayName;
+                auto it = nameToId().find(typeName);
+                if (it == nameToId().end())
+                    throw std::runtime_error("Unknown type name: " + typeName);
+                return CExtensibleEnum(it->second);
             }
 
         private:
 
             static void ensureRegistered()
             {
+                // Uses only *Storage() accessors — no re-entrancy risk.
                 static bool done = []() {
                     for (auto& [e, name, displayName] : EnumTraits<E>::values)
                         registerBase(static_cast<int>(e), name, displayName);
@@ -100,13 +111,33 @@ namespace Ikomia
                 (void)done;
             }
 
-            // Raw storage — no ensureRegistered() call, safe to use during initialization
+            // Raw storage accessors — no ensureRegistered() call, safe to use during initialization.
+            // registerBase() must use these exclusively to avoid re-entrant static initialization (UB).
             static std::unordered_set<int>& baseIdsStorage()
             {
                 static std::unordered_set<int> instance;
                 return instance;
             }
 
+            static std::unordered_map<int, std::string>& allNamesStorage()
+            {
+                static std::unordered_map<int, std::string> instance;
+                return instance;
+            }
+
+            static std::unordered_map<int, std::string>& allDisplayNamesStorage()
+            {
+                static std::unordered_map<int, std::string> instance;
+                return instance;
+            }
+
+            static std::unordered_map<std::string, int>& nameToIdStorage()
+            {
+                static std::unordered_map<std::string, int> instance;
+                return instance;
+            }
+
+            // Public accessors — trigger lazy registration on first use.
             static std::unordered_set<int>& baseIds()
             {
                 ensureRegistered();
@@ -115,14 +146,20 @@ namespace Ikomia
 
             static std::unordered_map<int, std::string>& allNames()
             {
-                static std::unordered_map<int, std::string> instance;
-                return instance;
+                ensureRegistered();
+                return allNamesStorage();
             }
 
             static std::unordered_map<int, std::string>& allDisplayNames()
             {
-                static std::unordered_map<int, std::string> instance;
-                return instance;
+                ensureRegistered();
+                return allDisplayNamesStorage();
+            }
+
+            static std::unordered_map<std::string, int>& nameToId()
+            {
+                ensureRegistered();
+                return nameToIdStorage();
             }
 
         private:
