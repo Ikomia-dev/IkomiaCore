@@ -151,20 +151,31 @@ void CSemanticSegIO::setMask(const CMat &mask)
 
 void CSemanticSegIO::setClassNames(const std::vector<std::string> &names)
 {
-    if (m_colors.size() != 0 && names.size() != m_colors.size())
-        throw CException(CoreExCode::INVALID_SIZE, "Semantic segmentation output error: there must be the same number of classes and colors.", __func__, __FILE__, __LINE__);
-
     m_classes = names;
-    if (m_colors.empty())
-        generateRandomColors();
+    m_colors.clear();
+    generateRandomColors();
+
+    // Mask already set — recompute derived data
+    if (m_histo.data != nullptr)
+    {
+        computePolygons();
+        generateLegend();
+    }
 }
 
 void CSemanticSegIO::setClassColors(const std::vector<CColor> &colors)
 {
-    if (colors.size() < m_classes.size())
-        throw CException(CoreExCode::INVALID_SIZE, "Colors count must be greater or equal of class names count", __func__, __FILE__, __LINE__);
+    if (colors.size() != m_classes.size())
+        throw CException(CoreExCode::INVALID_SIZE, "Colors count must match class names count. Call setClassNames() first.", __func__, __FILE__, __LINE__);
 
     m_colors = colors;
+
+    // Mask already set — recompute derived data
+    if (m_histo.data != nullptr)
+    {
+        computePolygons();
+        generateLegend();
+    }
 }
 
 void CSemanticSegIO::setReferenceImageIndex(int index)
@@ -292,9 +303,6 @@ void CSemanticSegIO::computePolygons()
     auto semanticMask = m_imgMaskIOPtr->getImage();
     if (semanticMask.data == nullptr)
         return;
-
-    if (m_colors.size() == 0)
-        generateRandomColors();
 
     CMat binaryMask;
     CColor emptyBrush = {255, 0, 0, 0};
@@ -434,14 +442,12 @@ void CSemanticSegIO::generateLegend()
 
 void CSemanticSegIO::generateRandomColors()
 {
-    int nbColors;
+    if (m_classes.empty())
+        return;
+
     std::srand(RANDOM_COLOR_SEED);
     double factor = 255.0 / (double)RAND_MAX;
-
-    if (m_classes.size() > 0)
-        nbColors = m_classes.size();
-    else
-        nbColors = 256;
+    int nbColors = m_classes.size();
 
     for (int i=0; i<nbColors; ++i)
     {
