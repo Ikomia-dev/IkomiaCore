@@ -24,22 +24,18 @@
 //----------------------------//
 //----- CDnnTrainTask -----//
 //----------------------------//
-CDnnTrainTask::CDnnTrainTask() : CWorkflowTask()
+CDnnTrainTask::CDnnTrainTask() : CWorkflowTask(TaskType::DNN_TRAIN)
 {
-    m_type = CWorkflowTask::Type::DNN_TRAIN;
     m_pParam = std::make_shared<CWorkflowTaskParam>();
 }
 
-CDnnTrainTask::CDnnTrainTask(const std::string &name): CWorkflowTask(name)
+CDnnTrainTask::CDnnTrainTask(const std::string &name): CWorkflowTask(TaskType::DNN_TRAIN, name)
 {
-    m_type = CWorkflowTask::Type::DNN_TRAIN;
     m_pParam = std::make_shared<CWorkflowTaskParam>();
 }
 
-CDnnTrainTask::CDnnTrainTask(const std::string &name, const std::shared_ptr<CWorkflowTaskParam> &pParam) : CWorkflowTask(name)
+CDnnTrainTask::CDnnTrainTask(const std::string &name, const std::shared_ptr<CWorkflowTaskParam> &pParam) : CWorkflowTask(TaskType::DNN_TRAIN, name)
 {
-    m_type = CWorkflowTask::Type::DNN_TRAIN;
-
     if(pParam)
         m_pParam = std::make_shared<CWorkflowTaskParam>(*pParam);
     else

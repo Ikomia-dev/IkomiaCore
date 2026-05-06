@@ -68,8 +68,21 @@ CWorkflowTask::CWorkflowTask() : m_signalHandler(std::make_unique<CSignalHandler
     m_uuid = generateUUID();
 }
 
+CWorkflowTask::CWorkflowTask(TaskTypeEx type) : m_signalHandler(std::make_unique<CSignalHandler>())
+{
+    m_type = type;
+    m_uuid = generateUUID();
+}
+
 CWorkflowTask::CWorkflowTask(const std::string &name) : m_signalHandler(std::make_unique<CSignalHandler>())
 {
+    m_name = name;
+    m_uuid = generateUUID();
+}
+
+CWorkflowTask::CWorkflowTask(TaskTypeEx type, const std::string &name) : m_signalHandler(std::make_unique<CSignalHandler>())
+{
+    m_type = type;
     m_name = name;
     m_uuid = generateUUID();
 }
@@ -254,7 +267,7 @@ void CWorkflowTask::setInput(const WorkflowTaskIOPtr &pInput, size_t index)
     if(pInput == nullptr && m_inputs[index] != nullptr)
         m_inputs[index]->clearData();
 
-    if (m_inputs[index]->isAssignableTo(pInput->getDataType()))
+    if (m_inputs[index] == nullptr || m_inputs[index]->isAssignableTo(pInput->getDataType()))
     {
         //Just share pointer
         CPyEnsureGIL gil;
@@ -401,12 +414,12 @@ void CWorkflowTask::setEnabled(bool bEnable)
     m_bEnabled = bEnable;
 }
 
-void CWorkflowTask::setType(Type type)
+void CWorkflowTask::setType(TaskTypeEx type)
 {
     m_type = type;
 }
 
-CWorkflowTask::Type CWorkflowTask::getType() const
+TaskTypeEx CWorkflowTask::getType() const
 {
     return m_type;
 }
@@ -1013,6 +1026,7 @@ QJsonObject CWorkflowTask::toJson() const
 
     // Name
     obj["name"] = QString::fromStdString(m_name);
+    obj["data_type"] = QString::fromStdString(m_type.typeName());
 
     // Associated parameters
     QJsonArray jsonParams;

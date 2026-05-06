@@ -403,13 +403,15 @@ BOOST_PYTHON_MODULE(pycore)
     //-------------------------//
     //----- CWorkflowTask -----//
     //-------------------------//
-    enum_<CWorkflowTask::Type>("TaskType", "Enum - List of available task types")
-        .value("GENERIC", CWorkflowTask::Type::GENERIC)
-        .value("IMAGE_PROCESS_2D", CWorkflowTask::Type::IMAGE_PROCESS_2D)
-        .value("IMAGE_PROCESS_3D", CWorkflowTask::Type::IMAGE_PROCESS_3D)
-        .value("VIDEO", CWorkflowTask::Type::VIDEO)
-        .value("DNN_TRAIN", CWorkflowTask::Type::DNN_TRAIN)
+    enum_<TaskType>("TaskType", "Enum - List of available task types")
+        .value("GENERIC", TaskType::GENERIC)
+        .value("IMAGE_PROCESS_2D", TaskType::IMAGE_PROCESS_2D)
+        .value("IMAGE_PROCESS_3D", TaskType::IMAGE_PROCESS_3D)
+        .value("VIDEO", TaskType::VIDEO)
+        .value("DNN_TRAIN", TaskType::DNN_TRAIN)
     ;
+
+    exposeExtensibleEnum<TaskType>("TaskTypeEx");
 
     enum_<CWorkflowTask::ActionFlag>("ActionFlag", "Enum - List of specific behaviors or actions that can be enabled/disabled for a task")
         .value("APPLY_VOLUME", CWorkflowTask::ActionFlag::APPLY_VOLUME)
@@ -431,12 +433,14 @@ BOOST_PYTHON_MODULE(pycore)
 
     class_<CWorkflowTaskWrap, std::shared_ptr<CWorkflowTaskWrap>>("CWorkflowTask", _WorkflowTaskDocString)
         .def(init<>("Default constructor", args("self")))
+        .def(init<TaskTypeEx>(_ctorWorkflowTaskDocString, args("self", "type")))
         .def(init<const std::string&>(_ctorWorkflowTaskDocString, args("self", "name")))
+        .def(init<TaskTypeEx, const std::string&>(_ctorWorkflowTaskDocString, args("self", "type", "name")))
         .def(init<const CWorkflowTask&>("Copy constructor"))
-        .add_property("type", &CWorkflowTaskWrap::getType, &CWorkflowTaskWrap::setType, "Main purpose or data type on which the task is dedicated to.")
         .add_property("uuid", &CWorkflowTask::getUUID, "Task unique identifier")
         .add_property("name", &CWorkflowTask::getName, &CWorkflowTask::setName, "Task name (must be unique)")
         .add_property("output_folder", &CWorkflowTask::getOutputFolder, &CWorkflowTask::setOutputFolder, "Output folder when auto-save mode is enabled. Default is the current user home folder.")
+        .add_property("type", &CWorkflowTask::getType, &CWorkflowTask::setType, "Process type for which the task is dedicated")
         .def(self_ns::str(self_ns::self))
         .def("__repr__", &CWorkflowTaskWrap::repr)
         .def("init_long_process", &CWorkflowTask::initLongProcess, &CWorkflowTaskWrap::default_initLongProcess, _initLongProcessDocString, args("self"))

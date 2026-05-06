@@ -27,7 +27,7 @@ CWorkflowTaskWrap::CWorkflowTaskWrap() : CWorkflowTask()
 {
 }
 
-CWorkflowTaskWrap::CWorkflowTaskWrap(const std::string &name) : CWorkflowTask(name)
+CWorkflowTaskWrap::CWorkflowTaskWrap(TaskTypeEx dataType, const std::string &name) : CWorkflowTask(dataType, name)
 {
 }
 
@@ -265,16 +265,6 @@ void CWorkflowTaskWrap::default_setActive(bool bActive)
     {
         throw CException(CoreExCode::PYTHON_EXCEPTION, Utils::Python::handlePythonException(), __func__, __FILE__, __LINE__);
     }
-}
-
-void CWorkflowTaskWrap::setType(int type)
-{
-    CWorkflowTask::setType(static_cast<CWorkflowTask::Type>(type));
-}
-
-int CWorkflowTaskWrap::getType() const
-{
-    return static_cast<int>(CWorkflowTask::getType());
 }
 
 size_t CWorkflowTaskWrap::getProgressSteps()

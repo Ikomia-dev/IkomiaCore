@@ -2105,136 +2105,6 @@ std::string CWorkflow::toJson() const
     return doc.toJson(QJsonDocument::Indented).toStdString();
 }
 
-void CWorkflow::saveJSON(const std::string& path)
-{
-    if (m_name.empty() || m_name == "untitled")
-    {
-        // Set name with filename
-        m_name = Utils::File::getFileNameWithoutExtension(path);
-    }
-
-    Utils::File::createDirectory(Utils::File::getParentPath(path));
-    QFile jsonFile(QString::fromStdString(path));
-
-    if(!jsonFile.open(QFile::WriteOnly))
-        throw CException(CoreExCode::INVALID_FILE, "Could not save file: " + path, __func__, __FILE__, __LINE__);
-
-    QJsonObject jsonWorkflow = toJsonInternal();
-    QJsonDocument jsonDoc(jsonWorkflow);
-    jsonFile.write(jsonDoc.toJson());
-}
-
-void CWorkflow::loadJSON(const std::string &path)
-{
-    assert(m_pRegistry);
-    std::unordered_map<int, WorkflowVertex> mapIdToVertexId;
-
-    QFile jsonFile(QString::fromStdString(path));
-    if(!jsonFile.open(QFile::ReadOnly))
-        throw CException(CoreExCode::INVALID_FILE, "Could not load file: " + path, __func__, __FILE__, __LINE__);
-
-    QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonFile.readAll()));
-    if(jsonDoc.isNull() || jsonDoc.isEmpty())
-        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading workflow: invalid JSON structure", __func__, __FILE__, __LINE__);
-
-    QJsonObject jsonWorkflow = jsonDoc.object();
-    if(jsonWorkflow.isEmpty())
-        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading workflow: empty JSON workflow", __func__, __FILE__, __LINE__);
-
-    // Type
-    setType(static_cast<CWorkflow::Type>(jsonWorkflow["type"].toInt()));
-
-    // Metadata
-    QJsonObject jsonMetadata = jsonWorkflow["metadata"].toObject();
-    if(!jsonMetadata.isEmpty())
-    {
-        m_name = jsonMetadata["name"].toString().toStdString();
-        m_description = jsonMetadata["description"].toString().toStdString();
-        m_keywords = jsonMetadata["keywords"].toString().toStdString();
-    }
-
-    // Load tasks
-    QJsonArray jsonTasks = jsonWorkflow["tasks"].toArray();
-    for(int i=0; i<jsonTasks.size(); ++i)
-    {
-        CPyEnsureGIL gil;
-        QJsonObject jsonTask = jsonTasks[i].toObject();
-        QJsonObject jsonTaskData = jsonTask["task_data"].toObject();
-        auto taskPtr = m_pRegistry->createInstance(jsonTaskData["name"].toString().toStdString());
-
-        if(taskPtr == nullptr)
-        {
-            std::string errorMsg = "Algorithm " +  jsonTaskData["name"].toString().toStdString() + " can't be created. Please check installation or Ikomia HUB connection.";
-            throw CException(CoreExCode::CREATE_FAILED, errorMsg, __func__, __FILE__, __LINE__);
-        }
-
-        UMapString paramMap;
-        QJsonArray jsonParams = jsonTaskData["parameters"].toArray();
-
-        if(!jsonParams.empty())
-        {
-            for(int j=0; j<jsonParams.size(); ++j)
-            {
-                QJsonObject jsonParam = jsonParams[j].toObject();
-                paramMap[jsonParam["name"].toString().toStdString()] = jsonParam["value"].toString().toStdString();
-            }
-            taskPtr->setParamValues(paramMap);
-        }
-        auto vertexId = addTask(taskPtr);
-        mapIdToVertexId.insert(std::make_pair(jsonTask["task_id"].toInt(), vertexId));
-    }
-
-    // Load connections
-    QJsonArray jsonEdges = jsonWorkflow["connections"].toArray();
-    for(int i=0; i<jsonEdges.size(); ++i)
-    {
-        QJsonObject jsonEdge = jsonEdges[i].toObject();
-        int srcId = jsonEdge["source_id"].toInt();
-        WorkflowVertex srcTaskId = boost::graph_traits<WorkflowGraph>::null_vertex();
-
-        auto itSrc = mapIdToVertexId.find(srcId);
-        if(itSrc != mapIdToVertexId.end())
-            srcTaskId = itSrc->second;
-
-        int targetId = jsonEdge["target_id"].toInt();
-        WorkflowVertex targetTaskId = boost::graph_traits<WorkflowGraph>::null_vertex();
-
-        auto itTarget = mapIdToVertexId.find(targetId);
-        if(itTarget != mapIdToVertexId.end())
-            targetTaskId = itTarget->second;
-
-        connect(srcTaskId, jsonEdge["source_index"].toInt(), targetTaskId, jsonEdge["target_index"].toInt());
-    }
-
-    // Load exposed parameters
-    QJsonArray jsonParams = jsonWorkflow["exposed_parameters"].toArray();
-    for (int i=0; i<jsonParams.size(); ++i)
-    {
-        QJsonObject jsonParam = jsonParams[i].toObject();
-        auto itTarget = mapIdToVertexId.find(jsonParam["task_id"].toInt());
-        if(itTarget != mapIdToVertexId.end())
-        {
-            CWorkflowParam param;
-            param.fromJson(jsonParam, reinterpret_cast<std::uintptr_t>(itTarget->second));
-            addExposedParameter(param.getName(), param.getDescription(), itTarget->second, param.getTaskParamName());
-        }
-    }
-
-    // Load exposed outputs
-    QJsonArray jsonOutputs = jsonWorkflow["exposed_outputs"].toArray();
-    for (int i=0; i<jsonOutputs.size(); ++i)
-    {
-        QJsonObject jsonOutput = jsonOutputs[i].toObject();
-        auto itTarget = mapIdToVertexId.find(jsonOutput["task_id"].toInt());
-        if(itTarget != mapIdToVertexId.end())
-        {
-            CWorkflowOutput output;
-            output.fromJson(jsonOutput, reinterpret_cast<std::uintptr_t>(itTarget->second));
-            addOutput(output.getDescription(), itTarget->second, output.getTaskOutputIndex());
-        }
-    }
-}
-
 QJsonObject CWorkflow::toJsonInternal() const
 {
     int id = 0;
@@ -2243,7 +2113,7 @@ QJsonObject CWorkflow::toJsonInternal() const
     QJsonArray jsonTasks, jsonEdges, jsonParams, jsonOutputs;
 
     //Type
-    jsonWorkflow["type"] = static_cast<int>(getType());
+    jsonWorkflow["type"] = QString::fromStdString(m_type.typeName());
 
     // API
     QJsonObject apiInfo;
@@ -2347,6 +2217,136 @@ QJsonObject CWorkflow::toJsonInternal() const
     jsonWorkflow["hardware_config"] = hwConfig.toJson();
 
     return jsonWorkflow;
+}
+
+void CWorkflow::saveJSON(const std::string& path)
+{
+    if (m_name.empty() || m_name == "untitled")
+    {
+        // Set name with filename
+        m_name = Utils::File::getFileNameWithoutExtension(path);
+    }
+
+    Utils::File::createDirectory(Utils::File::getParentPath(path));
+    QFile jsonFile(QString::fromStdString(path));
+
+    if(!jsonFile.open(QFile::WriteOnly))
+        throw CException(CoreExCode::INVALID_FILE, "Could not save file: " + path, __func__, __FILE__, __LINE__);
+
+    QJsonObject jsonWorkflow = toJsonInternal();
+    QJsonDocument jsonDoc(jsonWorkflow);
+    jsonFile.write(jsonDoc.toJson());
+}
+
+void CWorkflow::loadJSON(const std::string &path)
+{
+    assert(m_pRegistry);
+    std::unordered_map<int, WorkflowVertex> mapIdToVertexId;
+
+    QFile jsonFile(QString::fromStdString(path));
+    if(!jsonFile.open(QFile::ReadOnly))
+        throw CException(CoreExCode::INVALID_FILE, "Could not load file: " + path, __func__, __FILE__, __LINE__);
+
+    QJsonDocument jsonDoc(QJsonDocument::fromJson(jsonFile.readAll()));
+    if(jsonDoc.isNull() || jsonDoc.isEmpty())
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading workflow: invalid JSON structure", __func__, __FILE__, __LINE__);
+
+    QJsonObject jsonWorkflow = jsonDoc.object();
+    if(jsonWorkflow.isEmpty())
+        throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading workflow: empty JSON workflow", __func__, __FILE__, __LINE__);
+
+    // Type
+    m_type = TaskTypeEx::fromTypeName(jsonWorkflow["type"].toString().toStdString());
+
+    // Metadata
+    QJsonObject jsonMetadata = jsonWorkflow["metadata"].toObject();
+    if(!jsonMetadata.isEmpty())
+    {
+        m_name = jsonMetadata["name"].toString().toStdString();
+        m_description = jsonMetadata["description"].toString().toStdString();
+        m_keywords = jsonMetadata["keywords"].toString().toStdString();
+    }
+
+    // Load tasks
+    QJsonArray jsonTasks = jsonWorkflow["tasks"].toArray();
+    for(int i=0; i<jsonTasks.size(); ++i)
+    {
+        CPyEnsureGIL gil;
+        QJsonObject jsonTask = jsonTasks[i].toObject();
+        QJsonObject jsonTaskData = jsonTask["task_data"].toObject();
+        auto taskPtr = m_pRegistry->createInstance(jsonTaskData["name"].toString().toStdString());
+
+        if(taskPtr == nullptr)
+        {
+            std::string errorMsg = "Algorithm " +  jsonTaskData["name"].toString().toStdString() + " can't be created. Please check installation or Ikomia HUB connection.";
+            throw CException(CoreExCode::CREATE_FAILED, errorMsg, __func__, __FILE__, __LINE__);
+        }
+
+        UMapString paramMap;
+        QJsonArray jsonParams = jsonTaskData["parameters"].toArray();
+
+        if(!jsonParams.empty())
+        {
+            for(int j=0; j<jsonParams.size(); ++j)
+            {
+                QJsonObject jsonParam = jsonParams[j].toObject();
+                paramMap[jsonParam["name"].toString().toStdString()] = jsonParam["value"].toString().toStdString();
+            }
+            taskPtr->setParamValues(paramMap);
+        }
+        auto vertexId = addTask(taskPtr);
+        mapIdToVertexId.insert(std::make_pair(jsonTask["task_id"].toInt(), vertexId));
+    }
+
+    // Load connections
+    QJsonArray jsonEdges = jsonWorkflow["connections"].toArray();
+    for(int i=0; i<jsonEdges.size(); ++i)
+    {
+        QJsonObject jsonEdge = jsonEdges[i].toObject();
+        int srcId = jsonEdge["source_id"].toInt();
+        WorkflowVertex srcTaskId = boost::graph_traits<WorkflowGraph>::null_vertex();
+
+        auto itSrc = mapIdToVertexId.find(srcId);
+        if(itSrc != mapIdToVertexId.end())
+            srcTaskId = itSrc->second;
+
+        int targetId = jsonEdge["target_id"].toInt();
+        WorkflowVertex targetTaskId = boost::graph_traits<WorkflowGraph>::null_vertex();
+
+        auto itTarget = mapIdToVertexId.find(targetId);
+        if(itTarget != mapIdToVertexId.end())
+            targetTaskId = itTarget->second;
+
+        connect(srcTaskId, jsonEdge["source_index"].toInt(), targetTaskId, jsonEdge["target_index"].toInt());
+    }
+
+    // Load exposed parameters
+    QJsonArray jsonParams = jsonWorkflow["exposed_parameters"].toArray();
+    for (int i=0; i<jsonParams.size(); ++i)
+    {
+        QJsonObject jsonParam = jsonParams[i].toObject();
+        auto itTarget = mapIdToVertexId.find(jsonParam["task_id"].toInt());
+        if(itTarget != mapIdToVertexId.end())
+        {
+            CWorkflowParam param;
+            param.fromJson(jsonParam, reinterpret_cast<std::uintptr_t>(itTarget->second));
+            addExposedParameter(param.getName(), param.getDescription(), itTarget->second, param.getTaskParamName());
+        }
+    }
+
+    // Load exposed outputs
+    QJsonArray jsonOutputs = jsonWorkflow["exposed_outputs"].toArray();
+    for (int i=0; i<jsonOutputs.size(); ++i)
+    {
+        QJsonObject jsonOutput = jsonOutputs[i].toObject();
+        auto itTarget = mapIdToVertexId.find(jsonOutput["task_id"].toInt());
+        if(itTarget != mapIdToVertexId.end())
+        {
+            CWorkflowOutput output;
+            output.fromJson(jsonOutput, reinterpret_cast<std::uintptr_t>(itTarget->second));
+            addOutput(output.getDescription(), itTarget->second, output.getTaskOutputIndex());
+        }
+    }
 }
 
 void CWorkflow::manageOutputs(const WorkflowVertex& taskId)

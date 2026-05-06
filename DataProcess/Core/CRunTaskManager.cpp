@@ -40,22 +40,28 @@ void CRunTaskManager::run(const WorkflowTaskPtr &pTask, const std::string inputN
     if(pTask == nullptr)
         throw CException(CoreExCode::NULL_POINTER, QObject::tr("Invalid task").toStdString(), __func__, __FILE__, __LINE__);
 
-    switch(pTask->getType())
+    TaskTypeEx type = pTask->getType();
+    if (!type.isBaseValue())
+        pTask->run();
+    else
     {
-        case CWorkflowTask::Type::GENERIC:
-        case CWorkflowTask::Type::DNN_TRAIN:
-        default:
-            pTask->run();
-            break;
-        case CWorkflowTask::Type::IMAGE_PROCESS_2D:
-            runImageProcess2D(pTask);
-            break;
-        case CWorkflowTask::Type::IMAGE_PROCESS_3D:
-            pTask->run();
-            break;
-        case CWorkflowTask::Type::VIDEO:
-            runVideoProcess(pTask);
-            break;
+        switch(type.asBaseEnum())
+        {
+            case TaskType::GENERIC:
+            case TaskType::DNN_TRAIN:
+            default:
+                pTask->run();
+                break;
+            case TaskType::IMAGE_PROCESS_2D:
+                runImageProcess2D(pTask);
+                break;
+            case TaskType::IMAGE_PROCESS_3D:
+                pTask->run();
+                break;
+            case TaskType::VIDEO:
+                runVideoProcess(pTask);
+                break;
+        }
     }
     manageOutputs(pTask, inputName);
 }

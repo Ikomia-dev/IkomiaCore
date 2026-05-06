@@ -278,6 +278,7 @@ constexpr auto _WorkflowTaskDocString =
 constexpr auto _ctorWorkflowTaskDocString =
         "Construct CWorkflowTask object with the given task name.\n\n"
         "Args:\n\n"
+        "   type (TaskTypeEx): process type on which the task is dedicated\n\n"
         "   name (str): task name, **must be unique**\n\n";
 
 constexpr auto _addInputDocString =

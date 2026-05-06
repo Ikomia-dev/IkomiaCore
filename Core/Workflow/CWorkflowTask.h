@@ -87,19 +87,6 @@ class CORESHARED_EXPORT CWorkflowTask
     public:
 
         /**
-         * @enum Type
-         * @brief The Type enum defines the data types for which a process is dedicated.
-         */
-        enum class Type : int
-        {
-            GENERIC = 0,            /**< Generic process */
-            IMAGE_PROCESS_2D = 1,   /**< Process or task dedicated to standard image (2D) */
-            IMAGE_PROCESS_3D = 2,   /**< Process or task dedicated to volume */
-            VIDEO = 3,              /**< Process or task dedicated to video */
-            DNN_TRAIN = 4           /**< Process or task dedicated to DNN training */
-        };
-
-        /**
          * @enum State
          * @brief The State enum defines the execution states of a process.
          */
@@ -124,10 +111,15 @@ class CORESHARED_EXPORT CWorkflowTask
          * @brief Default constructor.
          */
         CWorkflowTask();
+
+        CWorkflowTask(TaskTypeEx type);
+
+        CWorkflowTask(const std::string& name);
+
         /**
          * @brief Constructor with the given task name.
          */
-        CWorkflowTask(const std::string& name);
+        CWorkflowTask(TaskTypeEx type, const std::string& name);
         /**
          * @brief Copy constructor.
          */
@@ -262,14 +254,14 @@ class CORESHARED_EXPORT CWorkflowTask
          */
         void                        setEnabled(bool bEnable);
 
-        void                        setType(Type type);
+        void                        setType(TaskTypeEx type);
 
         //Getters
         /**
          * @brief Gets the data type for which the task is dedicated.
          * @return Type can be one those values ::Type.
          */
-        Type                        getType() const;
+        TaskTypeEx                  getType() const;
         /**
          * @brief Gets the task uuid.
          * @return UUID of the task.
@@ -687,7 +679,7 @@ class CORESHARED_EXPORT CWorkflowTask
     /** @cond INTERNAL */
     protected:
 
-        Type                                m_type = Type::GENERIC;
+        TaskTypeEx                          m_type = TaskType::GENERIC;
         std::unique_ptr<CSignalHandler>     m_signalHandler;
         std::string                         m_uuid = "";
         std::string                         m_name = "";

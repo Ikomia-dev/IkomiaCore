@@ -138,6 +138,32 @@ namespace Ikomia
 
     using IODataTypeEx = CExtensibleEnum<IODataType>;
 
+    /**
+     * @enum TaskDataType
+     * @brief The TaskDataType enum defines the data types for which a process is dedicated.
+     */
+    enum class TaskType : int
+    {
+        GENERIC = 0,            /**< Generic process */
+        IMAGE_PROCESS_2D = 1,   /**< Process or task dedicated to standard image (2D) */
+        IMAGE_PROCESS_3D = 2,   /**< Process or task dedicated to volume */
+        VIDEO = 3,              /**< Process or task dedicated to video */
+        DNN_TRAIN = 4           /**< Process or task dedicated to DNN training */
+    };
+
+    template<>
+    struct EnumTraits<TaskType> {
+        static constexpr std::initializer_list<std::tuple<TaskType, const char*, const char*>> values = {
+            { TaskType::GENERIC, "TaskType.GENERIC", "Generic processing task" },
+            { TaskType::IMAGE_PROCESS_2D, "TaskType.IMAGE_PROCESS_2D", "2D images processing task" },
+            { TaskType::IMAGE_PROCESS_3D, "TaskType.IMAGE_PROCESS_3D", "3D images processing task" },
+            { TaskType::VIDEO, "TaskType.VIDEO", "videos processing task" },
+            { TaskType::DNN_TRAIN, "TaskType.DNN_TRAIN", "Model training task" },
+        };
+    };
+
+    using TaskTypeEx = CExtensibleEnum<TaskType>;
+
 
     // Enum class mandatory to avoir name conflict on Windows...
     enum class GraphicsItem : int
