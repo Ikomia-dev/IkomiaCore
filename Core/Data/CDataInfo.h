@@ -34,8 +34,8 @@ class CORESHARED_EXPORT CDataInfo
     public:
 
         //Constructors
-        CDataInfo(IODataType type);
-        CDataInfo(IODataType type, const std::string& fileName);
+        CDataInfo(IODataTypeEx type);
+        CDataInfo(IODataTypeEx type, const std::string& fileName);
         CDataInfo(const CDataInfo& data);
         CDataInfo(CDataInfo&& data);
 
@@ -54,7 +54,7 @@ class CORESHARED_EXPORT CDataInfo
 
         //Getters
         std::string                 getFileName() const;
-        IODataType                  getType() const;
+        IODataTypeEx                getType() const;
         int                         getElementSize() const;
         UMapString                  getMetadata() const;
         UMapString&                 metadata();
@@ -66,7 +66,7 @@ class CORESHARED_EXPORT CDataInfo
 
     private:
 
-        IODataType      m_type;
+        IODataTypeEx    m_type;
         std::string     m_fileName;
         UMapString      m_metadata;
         int             m_elementSize = 1;

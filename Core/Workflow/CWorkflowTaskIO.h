@@ -30,6 +30,7 @@
 #include "Data/CMat.hpp"
 #include <QJsonDocument>
 
+
 /**
  * @ingroup groupCore
  * @brief
@@ -45,13 +46,13 @@ class CORESHARED_EXPORT CWorkflowTaskIO
          */
         CWorkflowTaskIO();
         /**
-         * @brief Constructor with the given data type (::IODataType).
+         * @brief Constructor with the given data type (::IODataTypeEx.
          */
-        CWorkflowTaskIO(IODataType dataType);
+        CWorkflowTaskIO(IODataTypeEx dataType);
         /**
-         * @brief Constructor with the given data type (::IODataType) and name.
+         * @brief Constructor with the given data type (::IODataTypeEx) and name.
          */
-        CWorkflowTaskIO(IODataType dataType, const std::string& name);
+        CWorkflowTaskIO(IODataTypeEx dataType, const std::string& name);
         /**
          * @brief Copy constructor.
          */
@@ -92,7 +93,7 @@ class CORESHARED_EXPORT CWorkflowTaskIO
          * @brief Gets input or output data type.
          * @return Data type from enum values (::Data).
          */
-        IODataType          getDataType() const;
+        IODataTypeEx getDataType() const;
         /**
          * @brief Get default export format.
          * @return File format (::DataExportFormat).
@@ -135,7 +136,7 @@ class CORESHARED_EXPORT CWorkflowTaskIO
         /**
          * @brief Gets sub IO objects of given types in case of composite IO
          */
-        virtual std::vector<std::shared_ptr<CWorkflowTaskIO>>   getSubIOList(const std::set<IODataType> &dataTypes) const;
+        virtual std::vector<std::shared_ptr<CWorkflowTaskIO>>   getSubIOList(const std::set<IODataTypeEx> &dataTypes) const;
 
         /**
          * @brief Generate visual image with graphics
@@ -173,13 +174,23 @@ class CORESHARED_EXPORT CWorkflowTaskIO
           * @return True or False.
           */
         bool                isDisplayable() const;
+        /**
+          * @brief Check whether I/O object is assignale to I/O object of the given data type.
+          * @return True or False.
+          */
+        virtual bool        isAssignableTo(IODataTypeEx typeTo) const;
+        /**
+          * @brief Check whether I/O object is connectable to a target I/O object of the given data type.
+          * @return True or False.
+          */
+        virtual bool        isConnectableTo(IODataTypeEx typeTo) const;
 
         //Setters
         /**
          * @brief Sets the data type for input or output.
          * @param type can be one of those ::Data.
          */
-        void                setDataType(IODataType type);
+        void                setDataType(IODataTypeEx type);
         /**
          * @brief Sets the name for input or output.
          * @param name as std::string.
@@ -309,7 +320,7 @@ class CORESHARED_EXPORT CWorkflowTaskIO
         std::string             m_name = "";
         std::string             m_savePath;
         std::string             m_description;
-        IODataType              m_dataType = IODataType::NONE;
+        IODataTypeEx            m_dataType = IODataType::NONE;
         DataFileFormat          m_saveFormat = DataFileFormat::NONE;
         size_t                  m_dimCount = 0;
         CDataInfoPtr            m_infoPtr = nullptr;
@@ -327,13 +338,14 @@ using InputOutputVect = std::vector<std::shared_ptr<CWorkflowTaskIO>>;
 using InputOutputSet = std::set<std::shared_ptr<CWorkflowTaskIO>>;
 using TaskIOLockerUPtr = std::unique_ptr<CObjectLocker<CWorkflowTaskIO>>;
 
+
 class CWorkflowTaskIOFactory
 {
     public:
 
         virtual ~CWorkflowTaskIOFactory(){}
 
-        virtual WorkflowTaskIOPtr   create(IODataType dataType)
+        virtual WorkflowTaskIOPtr   create(IODataTypeEx dataType)
         {
             return std::make_shared<CWorkflowTaskIO>(dataType);
         }
@@ -341,6 +353,11 @@ class CWorkflowTaskIOFactory
         std::string                 getName() const
         {
             return m_name;
+        }
+
+        virtual std::vector<IODataTypeEx> getValidDataTypes() const
+        {
+            return {};
         }
 
         void                        setName(const std::string& name)
@@ -356,8 +373,9 @@ class CWorkflowTaskIOFactory
 using TaskIOFactoryPtr = std::shared_ptr<CWorkflowTaskIOFactory>;
 using WorkflowTaskIOFactories = std::vector<TaskIOFactoryPtr>;
 
+
 //----- Process abstract factory -----//
-class CWorkflowTaskIOAbstractFactory: public CAbstractFactory<std::string, WorkflowTaskIOPtr, IODataType>
+class CWorkflowTaskIOAbstractFactory: public CAbstractFactory<std::string, WorkflowTaskIOPtr, IODataTypeEx>
 {
     public:
 
@@ -368,7 +386,7 @@ class CWorkflowTaskIOAbstractFactory: public CAbstractFactory<std::string, Workf
 
         void                    clear() override
         {
-            CAbstractFactory<std::string, WorkflowTaskIOPtr, IODataType>::clear();
+            CAbstractFactory<std::string, WorkflowTaskIOPtr, IODataTypeEx>::clear();
             m_factories.clear();
         }
 

@@ -114,7 +114,7 @@ class DATAPROCESSSHARED_EXPORT CKeypointsIO: public CWorkflowTaskIO
         std::vector<CObjectKeypoints>   getObjects() const;
         std::vector<CKeypointLink>      getKeypointLinks() const;
         std::vector<std::string>        getKeypointNames() const;
-        InputOutputVect                 getSubIOList(const std::set<IODataType> &dataTypes) const override;
+        InputOutputVect                 getSubIOList(const std::set<IODataTypeEx> &dataTypes) const override;
         CMat                            getImageWithGraphics(const CMat &image) const override;
         CMat                            getImageWithMaskAndGraphics(const CMat &image) const override;
 
@@ -122,6 +122,7 @@ class DATAPROCESSSHARED_EXPORT CKeypointsIO: public CWorkflowTaskIO
 
         bool                            isComposite() const override;
         bool                            isDataAvailable() const override;
+        bool                            isConnectableTo(IODataTypeEx typeTo) const override;
 
         void                            load(const std::string &path) override;
         void                            save(const std::string &path) override;
@@ -163,10 +164,15 @@ class DATAPROCESSSHARED_EXPORT CKeypointsIOFactory: public CWorkflowTaskIOFactor
             m_name = "CKeypointsIO";
         }
 
-        virtual WorkflowTaskIOPtr   create(IODataType dataType)
+        WorkflowTaskIOPtr   create(IODataTypeEx dataType) override
         {
             Q_UNUSED(dataType);
             return std::make_shared<CKeypointsIO>();
+        }
+
+        std::vector<IODataTypeEx> getValidDataTypes() const override
+        {
+            return { IODataType::KEYPOINTS };
         }
 };
 

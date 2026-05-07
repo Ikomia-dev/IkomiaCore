@@ -19,14 +19,14 @@
 
 #include "CVideoTask.h"
 
-CVideoTask::CVideoTask() : C2dImageTask()
+CVideoTask::CVideoTask(): C2dImageTask()
 {
-    m_type = CWorkflowTask::Type::VIDEO;
+    m_type = TaskType::VIDEO;
 }
 
 CVideoTask::CVideoTask(const std::string& name) : C2dImageTask(name)
 {
-    m_type = CWorkflowTask::Type::VIDEO;
+    m_type = TaskType::VIDEO;
 }
 
 std::string CVideoTask::repr() const

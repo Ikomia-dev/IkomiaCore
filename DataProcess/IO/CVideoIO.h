@@ -48,35 +48,35 @@ class DATAPROCESSSHARED_EXPORT CVideoIO : public CImageIO
         CVideoIO();
         /**
          * @brief Constructs a CVideoIO instance with the given video output type.
-         * @param data: see ::IODataType for details.
+         * @param dataType: see ::IODataType for details.
          */
-        CVideoIO(IODataType data);
+        CVideoIO(IODataTypeEx dataType);
         /**
          * @brief Constructs a CVideoIO instance with the given video output type and the given name.
-         * @param data: see ::IODataType for details.
+         * @param dataType: see ::IODataType for details.
          * @param image: CMat object for C++ and Numpy array for Python.
          */
-        CVideoIO(IODataType data, const CMat& image);
+        CVideoIO(IODataTypeEx dataType, const CMat& image);
         /**
          * @brief Constructs a CVideoIO instance with the given video output type, name and the given image.
-         * @param data: see ::IODataType for details.
+         * @param dataType: see ::IODataType for details.
          * @param image: CMat object for C++ and Numpy array for Python.
          * @param name: input or output name.
          */
-        CVideoIO(IODataType data, const CMat& image, const std::string& name);
+        CVideoIO(IODataTypeEx dataType, const CMat& image, const std::string& name);
         /**
          * @brief Constructs a CVideoIO instance with the given image output type and the name.
-         * @param data: see ::IODataType for details.
+         * @param dataType: see ::IODataType for details.
          * @param name: input or output name.
          */
-        CVideoIO(IODataType data, const std::string& name);
+        CVideoIO(IODataTypeEx dataType, const std::string& name);
         /**
          * @brief Constructs a CVideoIO instance with the given image output type and the image path.
-         * @param data: see ::IODataType for details.
+         * @param dataType: see ::IODataType for details.
          * @param name: input or output name.
          * @param path: path to video file.
          */
-        CVideoIO(IODataType data, const std::string& name, const std::string& path);
+        CVideoIO(IODataTypeEx dataType, const std::string& name, const std::string& path);
         /**
          * @brief Copy constructor.
          */
@@ -175,6 +175,13 @@ class DATAPROCESSSHARED_EXPORT CVideoIO : public CImageIO
          * @return True if there is some valid data, False otherwise.
          */
         bool                isDataAvailable() const override;
+        /**
+          * @brief Check whether I/O object is convertible to the given data type.
+          * @return True or False.
+          */
+        bool                isAssignableTo(IODataTypeEx typeTo) const override;
+        bool                isConnectableTo(IODataTypeEx typeTo) const override;
+
         bool                isReadStarted() const;
         bool                isWriteStarted() const;
         /**
@@ -255,9 +262,21 @@ class DATAPROCESSSHARED_EXPORT CVideoIOFactory: public CImageIOFactory
             m_name = "CVideoIO";
         }
 
-        virtual WorkflowTaskIOPtr   create(IODataType dataType)
+        WorkflowTaskIOPtr   create(IODataTypeEx dataType) override
         {
             return std::make_shared<CVideoIO>(dataType);
+        }
+
+        std::vector<IODataTypeEx> getValidDataTypes() const override
+        {
+            return {
+                IODataType::VIDEO,
+                IODataType::VIDEO_BINARY,
+                IODataType::VIDEO_LABEL,
+                IODataType::LIVE_STREAM,
+                IODataType::LIVE_STREAM_BINARY,
+                IODataType::LIVE_STREAM_LABEL
+            };
         }
 };
 

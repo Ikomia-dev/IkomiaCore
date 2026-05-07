@@ -28,20 +28,20 @@ CPathIO::CPathIO() : CWorkflowTaskIO(IODataType::FILE_PATH, "PathIO")
     m_infoPtr = std::make_shared<CDataInfo>(m_dataType, m_path);
 }
 
-CPathIO::CPathIO(IODataType data) : CWorkflowTaskIO(data, "PathIO")
+CPathIO::CPathIO(IODataTypeEx dataType) : CWorkflowTaskIO(dataType, "PathIO")
 {
     m_description = QObject::tr("File system path (file or folder).").toStdString();
     m_infoPtr = std::make_shared<CDataInfo>(m_dataType, m_path);
 }
 
-CPathIO::CPathIO(IODataType data, const std::string &path) : CWorkflowTaskIO(data, "PathIO")
+CPathIO::CPathIO(IODataTypeEx dataType, const std::string &path) : CWorkflowTaskIO(dataType, "PathIO")
 {
     m_description = QObject::tr("File system path (file or folder).").toStdString();
     m_path = path;
     m_infoPtr = std::make_shared<CDataInfo>(m_dataType, m_path);
 }
 
-CPathIO::CPathIO(IODataType data, const std::string &path, const std::string &name) : CWorkflowTaskIO(data, name)
+CPathIO::CPathIO(IODataTypeEx dataType, const std::string &path, const std::string &name) : CWorkflowTaskIO(dataType, name)
 {
     m_description = QObject::tr("File system path (file or folder).").toStdString();
     m_path = path;
@@ -71,7 +71,7 @@ CPathIO &CPathIO::operator=(const CPathIO &in)
 std::string CPathIO::repr() const
 {
     std::stringstream s;
-    s << "CPathIO(" << Utils::Workflow::getIODataEnumName(m_dataType) << ", " << m_path << ", " << m_name <<  ")";
+    s << "CPathIO(" << m_dataType.typeName() << ", " << m_path << ", " << m_name <<  ")";
     return s.str();
 }
 
@@ -99,6 +99,21 @@ bool CPathIO::isDataAvailable() const
 {
     boost::filesystem::path boostPath(m_path);
     return boost::filesystem::exists(boostPath);
+}
+
+bool CPathIO::isConnectableTo(IODataTypeEx typeTo) const
+{
+    if (m_dataType == typeTo)
+        return true;
+
+    if (m_dataType == IODataType::PROJECT_FOLDER)
+    {
+        return typeTo == IODataType::IMAGE || typeTo == IODataType::IMAGE_BINARY || typeTo == IODataType::IMAGE_LABEL ||
+                typeTo == IODataType::VIDEO || typeTo == IODataType::VIDEO_BINARY || typeTo == IODataType::VIDEO_LABEL ||
+                typeTo == IODataType::PROJECT_FOLDER || typeTo == IODataType::FOLDER_PATH;
+    }
+
+    return false;
 }
 
 void CPathIO::clearData()

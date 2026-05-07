@@ -87,19 +87,6 @@ class CORESHARED_EXPORT CWorkflowTask
     public:
 
         /**
-         * @enum Type
-         * @brief The Type enum defines the data types for which a process is dedicated.
-         */
-        enum class Type : int
-        {
-            GENERIC,            /**< Generic process */
-            IMAGE_PROCESS_2D,   /**< Process or task dedicated to standard image (2D) */
-            IMAGE_PROCESS_3D,   /**< Process or task dedicated to volume */
-            VIDEO,              /**< Process or task dedicated to video */
-            DNN_TRAIN           /**< Process or task dedicated to DNN training */
-        };
-
-        /**
          * @enum State
          * @brief The State enum defines the execution states of a process.
          */
@@ -124,10 +111,15 @@ class CORESHARED_EXPORT CWorkflowTask
          * @brief Default constructor.
          */
         CWorkflowTask();
+
+        CWorkflowTask(TaskTypeEx type);
+
+        CWorkflowTask(const std::string& name);
+
         /**
          * @brief Constructor with the given task name.
          */
-        CWorkflowTask(const std::string& name);
+        CWorkflowTask(TaskTypeEx type, const std::string& name);
         /**
          * @brief Copy constructor.
          */
@@ -168,7 +160,7 @@ class CORESHARED_EXPORT CWorkflowTask
          * @param dataType: see ::IODataType for details.
          * @param index: zero-based index of the input.
          */
-        virtual void                setInputDataType(const IODataType& dataType, size_t index = 0);
+        virtual void                setInputDataType(const IODataTypeEx& dataType, size_t index = 0);
         /**
          * @brief Sets input at position index with the given one.
          * * If the input at position index does not exist, the function creates as many generic inputs to reach the number of index+1 and sets the input at position index.
@@ -190,7 +182,7 @@ class CORESHARED_EXPORT CWorkflowTask
          * @param dataType: see ::IODataType for details.
          * @param index: zero-based index of the output.
          */
-        virtual void                setOutputDataType(const IODataType& dataType, size_t index = 0);
+        virtual void                setOutputDataType(const IODataTypeEx &dataType, size_t index = 0);
         /**
          * @brief Sets output at position index with the given one.
          * * If the output at position index does not exist, the function creates as many generic outputs to reach the number of index+1 and sets the output at position index.
@@ -262,12 +254,14 @@ class CORESHARED_EXPORT CWorkflowTask
          */
         void                        setEnabled(bool bEnable);
 
+        void                        setType(TaskTypeEx type);
+
         //Getters
         /**
          * @brief Gets the data type for which the task is dedicated.
          * @return Type can be one those values ::Type.
          */
-        Type                        getType() const;
+        TaskTypeEx                  getType() const;
         /**
          * @brief Gets the task uuid.
          * @return UUID of the task.
@@ -298,7 +292,7 @@ class CORESHARED_EXPORT CWorkflowTask
          * @param types: set of IO types to return.
          * @return Vector of CWorkflowTaskIO based shared pointer.
          */
-        InputOutputVect             getInputs(const std::set<IODataType>& types) const;
+        InputOutputVect             getInputs(const std::set<IODataTypeEx> &types) const;
         /**
          * @brief Gets the input at position index.
          * @param index: zero-based index.
@@ -311,14 +305,14 @@ class CORESHARED_EXPORT CWorkflowTask
          * @param index: zero-based index.
          * @return data type ::IODataType.
          */
-        IODataType                  getInputDataType(size_t index) const;
+        IODataTypeEx                getInputDataType(size_t index) const;
         /**
          * @brief Gets original data type of input at position index as it was defined at design time.
          * It's not dependent on the dynamically defined type of the current data source.
          * @param index: zero-based index.
          * @return
          */
-        IODataType                  getOriginalInputDataType(size_t index) const;
+        IODataTypeEx                 getOriginalInputDataType(size_t index) const;
         /**
          * @brief Gets the number of outputs (even if pointer is null).
          * @return Outputs count.
@@ -334,7 +328,7 @@ class CORESHARED_EXPORT CWorkflowTask
          * @param types: set of IO types to return.
          * @return Vector of CWorkflowTaskIO based shared pointer.
          */
-        InputOutputVect             getOutputs(const std::set<IODataType> &dataTypes) const;
+        InputOutputVect             getOutputs(const std::set<IODataTypeEx> &dataTypes) const;
         /**
          * @brief Gets the output at position index.
          * @param index: zero-based index.
@@ -346,7 +340,7 @@ class CORESHARED_EXPORT CWorkflowTask
          * @param index: zero-based index.
          * @return data type ::IODataType.
          */
-        virtual IODataType          getOutputDataType(size_t index) const;
+        virtual IODataTypeEx        getOutputDataType(size_t index) const;
         /**
          * @brief Get output folder.
          * @return full path to the output folder.
@@ -391,7 +385,7 @@ class CORESHARED_EXPORT CWorkflowTask
          * @param index: relative zero-based index of output in case multiple outputs of the given type exist.
          * @return CWorkflowTaskIO based shared pointer.
          */
-        WorkflowTaskIOPtr           getOutputFromType(const IODataType& type, size_t index=0) const;
+        WorkflowTaskIOPtr           getOutputFromType(const IODataTypeEx &type, size_t index=0) const;
         /**
          * @brief Gets specific behaviors list and their activation state.
          * @return A map containing pairs of std::string where key=::ActionFlag and value=state.
@@ -456,13 +450,13 @@ class CORESHARED_EXPORT CWorkflowTask
          * @param type: see IODataType.
          * @return True if it has an output of the given data type, False otherwise.
          */
-        virtual bool                hasOutput(const IODataType& type) const;
+        virtual bool                hasOutput(const IODataTypeEx& type) const;
         /**
          * @brief Checks if the task has output of the given data types.
          * @param types: set of IO data types (see IODataType).
          * @return True if it has an output of the given data type, False otherwise.
          */
-        bool                        hasOutput(const std::set<IODataType>& types) const;
+        bool                        hasOutput(const std::set<IODataTypeEx> &types) const;
         /**
          * @brief Checks if the task has at least one output with valid data.
          * Output data are filled after a successful run of the task.
@@ -481,7 +475,7 @@ class CORESHARED_EXPORT CWorkflowTask
          * @param types: set of IO data types (see IODataType).
          * @return True if it has an input of the given data type, False otherwise.
          */
-        bool                        hasInput(const std::set<IODataType>& types) const;
+        bool                        hasInput(const std::set<IODataTypeEx>& types) const;
 
         //Methods
         /**
@@ -685,7 +679,7 @@ class CORESHARED_EXPORT CWorkflowTask
     /** @cond INTERNAL */
     protected:
 
-        Type                                m_type = Type::GENERIC;
+        TaskTypeEx                          m_type = TaskType::GENERIC;
         std::unique_ptr<CSignalHandler>     m_signalHandler;
         std::string                         m_uuid = "";
         std::string                         m_name = "";
@@ -708,7 +702,7 @@ class CORESHARED_EXPORT CWorkflowTask
 
         InputOutputVect                     m_inputs;
         InputOutputVect                     m_outputs;
-        std::vector<IODataType>             m_originalInputTypes;
+        std::vector<IODataTypeEx>           m_originalInputTypes;
 };
 
 using WorkflowTaskPtr = std::shared_ptr<CWorkflowTask>;

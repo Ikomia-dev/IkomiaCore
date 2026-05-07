@@ -88,7 +88,7 @@ target_compile_definitions(pydataprocess PRIVATE
     PYDATAPROCESS_LIBRARY
 )
 
-target_compile_features(pydataprocess PRIVATE cxx_std_14)
+target_compile_features(pydataprocess PRIVATE cxx_std_17)
 
 target_include_directories(pydataprocess PRIVATE
     ../Core

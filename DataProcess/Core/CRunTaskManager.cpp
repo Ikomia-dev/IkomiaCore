@@ -40,21 +40,28 @@ void CRunTaskManager::run(const WorkflowTaskPtr &pTask, const std::string inputN
     if(pTask == nullptr)
         throw CException(CoreExCode::NULL_POINTER, QObject::tr("Invalid task").toStdString(), __func__, __FILE__, __LINE__);
 
-    switch(pTask->getType())
+    TaskTypeEx type = pTask->getType();
+    if (!type.isBaseValue())
+        pTask->run();
+    else
     {
-        case CWorkflowTask::Type::GENERIC:
-        case CWorkflowTask::Type::DNN_TRAIN:
-            pTask->run();
-            break;
-        case CWorkflowTask::Type::IMAGE_PROCESS_2D:
-            runImageProcess2D(pTask);
-            break;
-        case CWorkflowTask::Type::IMAGE_PROCESS_3D:
-            pTask->run();
-            break;
-        case CWorkflowTask::Type::VIDEO:
-            runVideoProcess(pTask);
-            break;
+        switch(type.asBaseEnum())
+        {
+            case TaskType::GENERIC:
+            case TaskType::DNN_TRAIN:
+            default:
+                pTask->run();
+                break;
+            case TaskType::IMAGE_PROCESS_2D:
+                runImageProcess2D(pTask);
+                break;
+            case TaskType::IMAGE_PROCESS_3D:
+                pTask->run();
+                break;
+            case TaskType::VIDEO:
+                runVideoProcess(pTask);
+                break;
+        }
     }
     manageOutputs(pTask, inputName);
 }
@@ -68,7 +75,7 @@ void CRunTaskManager::stop(const WorkflowTaskPtr &taskPtr)
 
 void CRunTaskManager::aggregateOutputs(const WorkflowTaskPtr &taskPtr)
 {
-    const std::set<IODataType> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
+    const std::set<IODataTypeEx> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
     auto outputs = taskPtr->getOutputs();
 
     for (size_t i=0; i<outputs.size(); ++i)
@@ -97,7 +104,7 @@ void CRunTaskManager::runImageProcess2D(const WorkflowTaskPtr &taskPtr)
     //Access through CObjectLocker<CWorkflowTaskIO> ioLock(*ioPtr);
     //auto inputLocks = taskPtr->createInputScopedLocks();
     //auto outputLocks = taskPtr->createOutputScopedLocks();
-    const std::set<IODataType> volumeTypes = {IODataType::VOLUME, IODataType::VOLUME_LABEL, IODataType::VOLUME_BINARY};
+    const std::set<IODataTypeEx> volumeTypes = {IODataType::VOLUME, IODataType::VOLUME_LABEL, IODataType::VOLUME_BINARY};
     bool batchMode = std::stoi(m_pCfg->at("BatchMode"));
 
     if(taskPtr->hasInput(volumeTypes) &&
@@ -165,7 +172,7 @@ void CRunTaskManager::runImageProcess2D(const WorkflowTaskPtr &taskPtr)
 
 void CRunTaskManager::runVideoProcess(const WorkflowTaskPtr& taskPtr)
 {
-    const std::set<IODataType> videoTypes = {
+    const std::set<IODataTypeEx> videoTypes = {
         IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY,
         IODataType::LIVE_STREAM, IODataType::LIVE_STREAM_LABEL, IODataType::LIVE_STREAM_BINARY
     };
@@ -222,7 +229,7 @@ void CRunTaskManager::aggregateOutput(const std::string &dataFolder, const std::
 
 void CRunTaskManager::saveWholeVideoOutputs(const WorkflowTaskPtr &taskPtr, const std::string& inputName)
 {
-    const std::set<IODataType> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
+    const std::set<IODataTypeEx> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
 
     //Get video inputs
     auto videoInputs = taskPtr->getInputs(videoTypes);
@@ -257,7 +264,7 @@ void CRunTaskManager::saveVideoOutputs(const WorkflowTaskPtr &taskPtr, const Inp
     assert(m_pCfg);
     bool bImageSequence = false;
     bool bEmbedGraphics = std::stoi(m_pCfg->at("GraphicsEmbedded"));
-    const std::set<IODataType> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
+    const std::set<IODataTypeEx> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
 
     //Get video outputs
     auto videoOutputs = taskPtr->getOutputs(videoTypes);

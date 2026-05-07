@@ -35,25 +35,14 @@ CImageIO::CImageIO() : CWorkflowTaskIO(IODataType::IMAGE, "ImageIO")
     m_saveFormat = DataFileFormat::PNG;
 }
 
-CImageIO::CImageIO(IODataType data) : CWorkflowTaskIO(data, "ImageIO")
+CImageIO::CImageIO(IODataTypeEx dataType) : CWorkflowTaskIO(dataType, "ImageIO")
 {
     m_description = QObject::tr("2D or 3D images.\n"
                                 "Can be single frame from video or camera stream.").toStdString();
     m_saveFormat = DataFileFormat::PNG;
 }
 
-CImageIO::CImageIO(IODataType data, const CMat &image) : CWorkflowTaskIO(data, "ImageIO")
-{
-    m_description = QObject::tr("2D or 3D images.\n"
-                                "Can be single frame from video or camera stream.").toStdString();
-    m_saveFormat = DataFileFormat::PNG;
-    m_image = image;
-    m_dimCount = m_image.dims;
-    m_channelCount = m_image.channels();
-    m_bNewDataInfo = true;
-}
-
-CImageIO::CImageIO(IODataType data, const CMat &image, const std::string& name) : CWorkflowTaskIO(data, name)
+CImageIO::CImageIO(IODataTypeEx dataType, const CMat &image) : CWorkflowTaskIO(dataType, "ImageIO")
 {
     m_description = QObject::tr("2D or 3D images.\n"
                                 "Can be single frame from video or camera stream.").toStdString();
@@ -64,14 +53,25 @@ CImageIO::CImageIO(IODataType data, const CMat &image, const std::string& name) 
     m_bNewDataInfo = true;
 }
 
-CImageIO::CImageIO(IODataType data, const std::string &name) : CWorkflowTaskIO(data, name)
+CImageIO::CImageIO(IODataTypeEx dataType, const CMat &image, const std::string& name) : CWorkflowTaskIO(dataType, name)
+{
+    m_description = QObject::tr("2D or 3D images.\n"
+                                "Can be single frame from video or camera stream.").toStdString();
+    m_saveFormat = DataFileFormat::PNG;
+    m_image = image;
+    m_dimCount = m_image.dims;
+    m_channelCount = m_image.channels();
+    m_bNewDataInfo = true;
+}
+
+CImageIO::CImageIO(IODataTypeEx dataType, const std::string &name) : CWorkflowTaskIO(dataType, name)
 {
     m_description = QObject::tr("2D or 3D images.\n"
                                 "Can be single frame from video or camera stream.").toStdString();
     m_saveFormat = DataFileFormat::PNG;
 }
 
-CImageIO::CImageIO(IODataType data, const std::string& name, const std::string &path) : CWorkflowTaskIO(data, name)
+CImageIO::CImageIO(IODataTypeEx dataType, const std::string& name, const std::string &path) : CWorkflowTaskIO(dataType, name)
 {
     m_description = QObject::tr("2D or 3D images.\n"
                                 "Can be single frame from video or camera stream.").toStdString();
@@ -128,9 +128,9 @@ std::string CImageIO::repr() const
 {
     std::stringstream s;
     if (m_infoPtr && !m_infoPtr->getFileName().empty())
-        s << "CImageIO(" << Utils::Workflow::getIODataEnumName(m_dataType) << ", " << m_name << ", " << m_infoPtr->getFileName() << ")";
+        s << "CImageIO(" << m_dataType.typeName() << ", " << m_name << ", " << m_infoPtr->getFileName() << ")";
     else
-        s << "CImageIO(" << Utils::Workflow::getIODataEnumName(m_dataType) << ", " << m_name << ")";
+        s << "CImageIO(" << m_dataType.typeName() << ", " << m_name << ")";
 
     return s.str();
 }
@@ -309,6 +309,52 @@ bool CImageIO::isDataAvailable() const
 bool CImageIO::isOverlayAvailable() const
 {
     return m_overlayMask.empty() == false;
+}
+
+bool CImageIO::isAssignableTo(IODataTypeEx typeTo) const
+{
+    return m_dataType == typeTo ||
+            typeTo == IODataType::VIDEO || typeTo == IODataType::VIDEO_BINARY || typeTo == IODataType::VIDEO_LABEL ||
+            typeTo == IODataType::FILE_PATH || typeTo == IODataType::FOLDER_PATH || typeTo == IODataType::PROJECT_FOLDER;
+}
+
+bool CImageIO::isConnectableTo(IODataTypeEx typeTo) const
+{
+    if (m_dataType == typeTo)
+        return true;
+
+    if (m_dataType == IODataType::IMAGE_BINARY)
+    {
+        return typeTo == IODataType::IMAGE || typeTo == IODataType::IMAGE_LABEL;
+    }
+
+    if (m_dataType == IODataType::IMAGE_LABEL)
+    {
+        return typeTo == IODataType::IMAGE;
+    }
+
+    if (m_dataType == IODataType::VOLUME)
+    {
+        return typeTo == IODataType::IMAGE;
+    }
+
+    if (m_dataType == IODataType::VOLUME_BINARY)
+    {
+        return typeTo == IODataType::VOLUME || typeTo == IODataType::VOLUME_LABEL ||
+                typeTo == IODataType::IMAGE || typeTo == IODataType::IMAGE_BINARY || typeTo == IODataType::IMAGE_LABEL;
+    }
+
+    if (m_dataType == IODataType::VOLUME_LABEL)
+    {
+        return typeTo == IODataType::IMAGE || typeTo == IODataType::IMAGE_LABEL;
+    }
+
+    if (m_dataType == IODataType::POSITION)
+    {
+        return typeTo == IODataType::IMAGE;
+    }
+
+    return false;
 }
 
 void CImageIO::clearData()

@@ -203,7 +203,7 @@ CTextIO::DataStringIOPtr CTextIO::getDataStringIO()
     return m_textDataIOPtr;
 }
 
-InputOutputVect CTextIO::getSubIOList(const std::set<IODataType> &dataTypes) const
+InputOutputVect CTextIO::getSubIOList(const std::set<IODataTypeEx> &dataTypes) const
 {
     InputOutputVect ioList;
 
@@ -240,6 +240,12 @@ bool CTextIO::isDataAvailable() const
 bool CTextIO::isComposite() const
 {
     return true;
+}
+
+bool CTextIO::isConnectableTo(IODataTypeEx typeTo) const
+{
+    return m_dataType == typeTo ||
+            typeTo == IODataType::INPUT_GRAPHICS || typeTo == IODataType::NUMERIC_VALUES;
 }
 
 void CTextIO::init(const std::string &taskName, int imageIndex)

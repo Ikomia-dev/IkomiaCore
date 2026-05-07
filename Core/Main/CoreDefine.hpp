@@ -26,8 +26,11 @@
 #include <QString>
 #include <QMetaType>
 #include "Graphics/CPoint.hpp"
+#include "CExtensibleEnum.hpp"
+
 
 #define RANDOM_COLOR_SEED 5
+
 
 namespace Ikomia
 {
@@ -56,40 +59,111 @@ namespace Ikomia
      */
     enum class IODataType : int
     {
-        IMAGE,                  /**< Image data type */
-        VIDEO,                  /**< Video from file (AVI, MPEG...) */
-        VOLUME,                 /**< Volume data type */
-        LIVE_STREAM,            /**< Video from stream (camera) */
-        INPUT_GRAPHICS,         /**< Graphics data type: graphics layer with graphics items (ellipse, rectangle, text...) */
-        OUTPUT_GRAPHICS,        /**< Graphics data type: graphics layer with graphics items (ellipse, rectangle, text...) */
-        BLOB_VALUES,            /**< Numeric values from measure (surface, diameter...) computed on connected component */
-        NUMERIC_VALUES,         /**< Generic numeric values */
-        DESCRIPTORS,            /**< Image descriptors (used for classification, registration...) */
-        WIDGET,                 /**< User-defined widget */
-        PROJECT_FOLDER,         /**< Ikomia project folder: may contain various data type */
-        FOLDER_PATH,            /**< Folder path */
-        FILE_PATH,              /**< File path */
-        DNN_DATASET,            /**< Dataset used for deep learning, composed with image and annotations */
-        VOLUME_BINARY,          /**< Binary volume data type: 8bits single channel */
-        VOLUME_LABEL,           /**< Label volume data type: single channel, 1 graylevel per connected component */
-        IMAGE_BINARY,           /**< Binary image data type: 8bits single channel */
-        IMAGE_LABEL,            /**< Label image data type: single channel, 1 graylevel per connected component */
-        VIDEO_BINARY,           /**< Binary video from file (AVI, MPEG...): 8bits single channel */
-        VIDEO_LABEL,            /**< Label video from file (AVI, MPEG...): single channel, 1 graylevel per connected component */
-        LIVE_STREAM_BINARY,     /**< Binary video from stream (camera): 8bits single channel */
-        LIVE_STREAM_LABEL,      /**< Label video from stream (camera): single channel, 1 graylevel per connected component */
-        ARRAY,                  /**< Multi-dimensional array */
-        DATA_DICT,              /**< Python-based IO where data are stored as dict */
-        OBJECT_DETECTION,       /**< I/O for object detection management */
-        INSTANCE_SEGMENTATION,  /**< I/O for instance segmentation management */
-        SEMANTIC_SEGMENTATION,  /**< I/O for semantic segmentation management */
-        KEYPOINTS,              /**< I/O for keypoints management */
-        TEXT,                   /**< I/O for text fields management */
-        POSITION,               /**< Position image sequence */
-        JSON,                   /**< JSON data */
-        SCENE_3D,               /**< I/O for 3d scenes (made up of images, shapes, vector fields, plots, text...) */
-        NONE                    /**< Unknown data type */
+        IMAGE = 0,                  /**< Image data type */
+        IMAGE_BINARY = 16,          /**< Binary image data type: 8bits single channel */
+        IMAGE_LABEL = 17,           /**< Label image data type: single channel, 1 graylevel per connected component */
+        VIDEO = 1,                  /**< Video from file (AVI, MPEG...) */
+        VIDEO_BINARY = 18,          /**< Binary video from file (AVI, MPEG...): 8bits single channel */
+        VIDEO_LABEL = 19,           /**< Label video from file (AVI, MPEG...): single channel, 1 graylevel per connected component */
+        VOLUME = 2,                 /**< Volume data type */
+        VOLUME_BINARY = 14,         /**< Binary volume data type: 8bits single channel */
+        VOLUME_LABEL = 15,          /**< Label volume data type: single channel, 1 graylevel per connected component */
+        LIVE_STREAM = 3,            /**< Video from stream (camera) */
+        LIVE_STREAM_BINARY = 20,    /**< Binary video from stream (camera): 8bits single channel */
+        LIVE_STREAM_LABEL = 21,     /**< Label video from stream (camera): single channel, 1 graylevel per connected component */
+        INPUT_GRAPHICS = 4,         /**< Graphics data type: graphics layer with graphics items (ellipse, rectangle, text...) */
+        OUTPUT_GRAPHICS = 5,        /**< Graphics data type: graphics layer with graphics items (ellipse, rectangle, text...) */
+        BLOB_VALUES = 6,            /**< Numeric values from measure (surface, diameter...) computed on connected component */
+        NUMERIC_VALUES = 7,         /**< Generic numeric values */
+        DESCRIPTORS = 8,            /**< Image descriptors (used for classification, registration...) */
+        WIDGET = 9,                 /**< User-defined widget */
+        PROJECT_FOLDER = 10,        /**< Ikomia project folder: may contain various data type */
+        FOLDER_PATH = 11,           /**< Folder path */
+        FILE_PATH = 12,             /**< File path */
+        DNN_DATASET = 13,           /**< Dataset used for deep learning, composed with image and annotations */
+        ARRAY = 22,                 /**< Multi-dimensional array */
+        DATA_DICT = 23,             /**< Python-based IO where data are stored as dict */
+        OBJECT_DETECTION = 24,      /**< I/O for object detection management */
+        INSTANCE_SEGMENTATION = 25, /**< I/O for instance segmentation management */
+        SEMANTIC_SEGMENTATION = 26, /**< I/O for semantic segmentation management */
+        KEYPOINTS = 27,             /**< I/O for keypoints management */
+        TEXT = 28,                  /**< I/O for text fields management */
+        TEXT_STREAM = 33,           /**< I/O for text stream management */
+        POSITION = 29,              /**< Position image sequence */
+        JSON = 30,                  /**< JSON data */
+        SCENE_3D = 31,              /**< I/O for 3d scenes (made up of images, shapes, vector fields, plots, text...) */
+        NONE = 32                   /**< Unknown data type */
+        // NEXT VALUE = 34
     };
+
+    template<>
+    struct EnumTraits<IODataType> {
+        static constexpr std::initializer_list<std::tuple<IODataType, const char*, const char*>> values = {
+            { IODataType::IMAGE, "IODataType.IMAGE", "Image" },
+            { IODataType::IMAGE_BINARY, "IODataType.IMAGE_BINARY", "Binary image" },
+            { IODataType::IMAGE_LABEL, "IODataType.IMAGE_LABEL", "Label image" },
+            { IODataType::VIDEO, "IODataType.VIDEO", "Video" },
+            { IODataType::VIDEO_BINARY, "IODataType.VIDEO_BINARY", "Binary video" },
+            { IODataType::VIDEO_LABEL, "IODataType.VIDEO_LABEL", "Label video" },
+            { IODataType::VOLUME, "IODataType.VOLUME", "Volume" },
+            { IODataType::VOLUME_BINARY, "IODataType.VOLUME_BINARY", "Binary volume" },
+            { IODataType::VOLUME_LABEL, "IODataType.VOLUME_LABEL", "Label volume" },
+            { IODataType::LIVE_STREAM, "IODataType.LIVE_STREAM", "Live stream" },
+            { IODataType::LIVE_STREAM_BINARY, "IODataType.LIVE_STREAM_BINARY", "Binary live stream" },
+            { IODataType::LIVE_STREAM_LABEL, "IODataType.LIVE_STREAM_LABEL", "Label live stream" },
+            { IODataType::INPUT_GRAPHICS, "IODataType.INPUT_GRAPHICS", "Input graphics" },
+            { IODataType::OUTPUT_GRAPHICS, "IODataType.OUTPUT_GRAPHICS", "Output graphics" },
+            { IODataType::BLOB_VALUES, "IODataType.BLOB_VALUES", "Blob values" },
+            { IODataType::NUMERIC_VALUES, "IODataType.NUMERIC_VALUES", "Numeric values" },
+            { IODataType::DESCRIPTORS, "IODataType.DESCRIPTORS", "Descriptors" },
+            { IODataType::WIDGET, "IODataType.WIDGET", "Widget" },
+            { IODataType::PROJECT_FOLDER, "IODataType.PROJECT_FOLDER", "Project folder" },
+            { IODataType::FOLDER_PATH, "IODataType.FOLDER_PATH", "Folder path" },
+            { IODataType::FILE_PATH, "IODataType.FILE_PATH", "File path" },
+            { IODataType::DNN_DATASET, "IODataType.DNN_DATASET", "Deep learning dataset" },
+            { IODataType::ARRAY, "IODataType.ARRAY", "Multi-dimensional array" },
+            { IODataType::DATA_DICT, "IODataType.DATA_DICT", "Generic Python dict" },
+            { IODataType::OBJECT_DETECTION, "IODataType.OBJECT_DETECTION", "Object detection" },
+            { IODataType::INSTANCE_SEGMENTATION, "IODataType.INSTANCE_SEGMENTATION", "Instance segmentation" },
+            { IODataType::SEMANTIC_SEGMENTATION, "IODataType.SEMANTIC_SEGMENTATION", "Semantic segmentation" },
+            { IODataType::KEYPOINTS, "IODataType.KEYPOINTS", "Keypoints detection" },
+            { IODataType::TEXT, "IODataType.TEXT", "Text detection" },
+            { IODataType::TEXT_STREAM, "IODataType.TEXT_STREAM", "Text stream" },
+            { IODataType::POSITION, "IODataType.POSITION", "Position image sequence" },
+            { IODataType::JSON, "IODataType.JSON", "JSON data" },
+            { IODataType::SCENE_3D, "IODataType.SCENE_3D", "3D scene representation" },
+            { IODataType::NONE, "IODataType.NONE", "" },
+        };
+    };
+
+    using IODataTypeEx = CExtensibleEnum<IODataType>;
+
+    /**
+     * @enum TaskDataType
+     * @brief The TaskDataType enum defines the data types for which a process is dedicated.
+     */
+    enum class TaskType : int
+    {
+        GENERIC = 0,            /**< Generic process */
+        IMAGE_PROCESS_2D = 1,   /**< Process or task dedicated to standard image (2D) */
+        IMAGE_PROCESS_3D = 2,   /**< Process or task dedicated to volume */
+        VIDEO = 3,              /**< Process or task dedicated to video */
+        DNN_TRAIN = 4           /**< Process or task dedicated to DNN training */
+    };
+
+    template<>
+    struct EnumTraits<TaskType> {
+        static constexpr std::initializer_list<std::tuple<TaskType, const char*, const char*>> values = {
+            { TaskType::GENERIC, "TaskType.GENERIC", "Generic processing task" },
+            { TaskType::IMAGE_PROCESS_2D, "TaskType.IMAGE_PROCESS_2D", "2D images processing task" },
+            { TaskType::IMAGE_PROCESS_3D, "TaskType.IMAGE_PROCESS_3D", "3D images processing task" },
+            { TaskType::VIDEO, "TaskType.VIDEO", "videos processing task" },
+            { TaskType::DNN_TRAIN, "TaskType.DNN_TRAIN", "Model training task" },
+        };
+    };
+
+    using TaskTypeEx = CExtensibleEnum<TaskType>;
+
 
     // Enum class mandatory to avoir name conflict on Windows...
     enum class GraphicsItem : int

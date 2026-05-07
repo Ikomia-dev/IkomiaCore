@@ -42,6 +42,7 @@
 #include "MapConverter.hpp"
 #include "PairConverter.hpp"
 
+
 template<typename T>
 void exposeCPoint(const std::string& className)
 {
@@ -54,10 +55,39 @@ void exposeCPoint(const std::string& className)
     ;
 }
 
+
+template<typename E>
+void exposeExtensibleEnum(const char* name)
+{
+    using EE = CExtensibleEnum<E>;
+
+    class_<EE>(name, "Generic extensible enum", init<int>())
+        .def(init<E>())
+        .def("id", &EE::id)
+        .def("type_name", &EE::typeName)
+        .def("display_name", &EE::displayName)
+        .def("is_base", &EE::isBaseValue)
+        .def("as_base_enum", &EE::asBaseEnum)
+        .def("register", &EE::registerExtended)
+        .staticmethod("register")
+        .def("__eq__", &EE::operator==)
+        .def("__ne__", &EE::operator!=)
+        .def("__lt__", &EE::operator<)
+        .def("__hash__", +[](const EE& v) { return v.id(); })
+        .def("__repr__", &EE::displayName)
+        .def("__str__", &EE::typeName)
+    ;
+
+    // Register implicit conversion E -> ExtensibleEnum<E>
+    implicitly_convertible<E, EE>();
+}
+
+
 void translateCException(const CException& e)
 {
     PyErr_SetString(PyExc_RuntimeError, e.what());
 }
+
 
 BOOST_PYTHON_MODULE(pycore)
 {
@@ -102,6 +132,7 @@ BOOST_PYTHON_MODULE(pycore)
     registerStdVector<std::shared_ptr<CWorkflowTask>>();
     registerStdVector<CMeasure>();
     registerStdVector<IODataType>();
+    registerStdVector<IODataTypeEx>();
     registerStdVector<std::pair<int, int>>();
     registerStdVector<std::pair<std::string, std::string>>();
     registerStdVector<std::pair<int, CPointF>>();
@@ -324,7 +355,10 @@ BOOST_PYTHON_MODULE(pycore)
         .value("SEMANTIC_SEGMENTATION", IODataType::SEMANTIC_SEGMENTATION)
         .value("KEYPOINTS", IODataType::KEYPOINTS)
         .value("TEXT", IODataType::TEXT)
+        .value("TEXT_STREAM", IODataType::TEXT_STREAM)
     ;
+
+    exposeExtensibleEnum<IODataType>("IODataTypeEx");
 
     void (CWorkflowTaskIOWrap::*ioSave)(const std::string&) = &CWorkflowTaskIOWrap::save;
     std::string (CWorkflowTaskIO::*toJsonNoOpt)() const = &CWorkflowTaskIO::toJson;
@@ -332,8 +366,8 @@ BOOST_PYTHON_MODULE(pycore)
 
     class_<CWorkflowTaskIOWrap, std::shared_ptr<CWorkflowTaskIOWrap>>("CWorkflowTaskIO", _WorkflowTaskIODocString)
         .def(init<>("Default constructor", args("self")))
-        .def(init<IODataType>(_ctor1WorkflowTaskIODocString, args("self", "data_type")))
-        .def(init<IODataType, const std::string&>(_ctor2WorkflowTaskIODocString, args("self", "data_type", "name")))
+        .def(init<IODataTypeEx>(_ctor1WorkflowTaskIODocString, args("self", "data_type")))
+        .def(init<IODataTypeEx, const std::string&>(_ctor2WorkflowTaskIODocString, args("self", "data_type", "name")))
         .def(init<const CWorkflowTaskIO&>("Copy constructor"))
         .add_property("name", &CWorkflowTaskIO::getName, &CWorkflowTaskIO::setName, "I/O name")
         .add_property("data_type", &CWorkflowTaskIO::getDataType, &CWorkflowTaskIO::setDataType, "I/O data type")
@@ -362,19 +396,22 @@ BOOST_PYTHON_MODULE(pycore)
     //----- CWorkflowTaskIOFactory -----//
     //----------------------------------//
     class_<CTaskIOFactoryWrap, std::shared_ptr<CTaskIOFactoryWrap>, boost::noncopyable>("CWorkflowTaskIOFactory", _ioFactoryDocString)
+        .def("get_valid_data_types", pure_virtual(&CTaskIOFactoryWrap::getValidDataTypes))
         .def("create", pure_virtual(&CTaskIOFactoryWrap::create), _ioFactoryCreateDocString, args("self", "datatype"))
     ;
 
     //-------------------------//
     //----- CWorkflowTask -----//
     //-------------------------//
-    enum_<CWorkflowTask::Type>("TaskType", "Enum - List of available process or task types")
-        .value("GENERIC", CWorkflowTask::Type::GENERIC)
-        .value("IMAGE_PROCESS_2D", CWorkflowTask::Type::IMAGE_PROCESS_2D)
-        .value("IMAGE_PROCESS_3D", CWorkflowTask::Type::IMAGE_PROCESS_3D)
-        .value("VIDEO", CWorkflowTask::Type::VIDEO)
-        .value("DNN_TRAIN", CWorkflowTask::Type::DNN_TRAIN)
+    enum_<TaskType>("TaskType", "Enum - List of available task types")
+        .value("GENERIC", TaskType::GENERIC)
+        .value("IMAGE_PROCESS_2D", TaskType::IMAGE_PROCESS_2D)
+        .value("IMAGE_PROCESS_3D", TaskType::IMAGE_PROCESS_3D)
+        .value("VIDEO", TaskType::VIDEO)
+        .value("DNN_TRAIN", TaskType::DNN_TRAIN)
     ;
+
+    exposeExtensibleEnum<TaskType>("TaskTypeEx");
 
     enum_<CWorkflowTask::ActionFlag>("ActionFlag", "Enum - List of specific behaviors or actions that can be enabled/disabled for a task")
         .value("APPLY_VOLUME", CWorkflowTask::ActionFlag::APPLY_VOLUME)
@@ -396,12 +433,14 @@ BOOST_PYTHON_MODULE(pycore)
 
     class_<CWorkflowTaskWrap, std::shared_ptr<CWorkflowTaskWrap>>("CWorkflowTask", _WorkflowTaskDocString)
         .def(init<>("Default constructor", args("self")))
+        .def(init<TaskTypeEx>(_ctorWorkflowTaskDocString, args("self", "type")))
         .def(init<const std::string&>(_ctorWorkflowTaskDocString, args("self", "name")))
+        .def(init<TaskTypeEx, const std::string&>(_ctorWorkflowTaskDocString, args("self", "type", "name")))
         .def(init<const CWorkflowTask&>("Copy constructor"))
-        .add_property("type", &CWorkflowTask::getType, "Main purpose or data type on which the task is dedicated to.")
         .add_property("uuid", &CWorkflowTask::getUUID, "Task unique identifier")
         .add_property("name", &CWorkflowTask::getName, &CWorkflowTask::setName, "Task name (must be unique)")
         .add_property("output_folder", &CWorkflowTask::getOutputFolder, &CWorkflowTask::setOutputFolder, "Output folder when auto-save mode is enabled. Default is the current user home folder.")
+        .add_property("type", &CWorkflowTask::getType, &CWorkflowTask::setType, "Process type for which the task is dedicated")
         .def(self_ns::str(self_ns::self))
         .def("__repr__", &CWorkflowTaskWrap::repr)
         .def("init_long_process", &CWorkflowTask::initLongProcess, &CWorkflowTaskWrap::default_initLongProcess, _initLongProcessDocString, args("self"))

@@ -115,18 +115,16 @@ void CSemanticSegTask::readClassNames(const std::string &path)
 
 void CSemanticSegTask::setColors(const std::vector<CColor> &colors)
 {
-    if (colors.size() < m_classNames.size())
-        throw CException(CoreExCode::INVALID_SIZE, "Colors count must be greater or equal of class names count", __func__, __FILE__, __LINE__);
+    if (colors.size() != m_classNames.size())
+        throw CException(CoreExCode::INVALID_SIZE, "Colors count must match class names count. Call setNames() or readClassNames() first.", __func__, __FILE__, __LINE__);
 
     m_classColors = colors;
 }
 
 void CSemanticSegTask::setNames(const std::vector<std::string> &names)
 {
-    if (m_classColors.size() != 0 && names.size() != m_classColors.size())
-        throw CException(CoreExCode::INVALID_SIZE, "Semantic segmentation error: there must be the same number of classes and colors.", __func__, __FILE__, __LINE__);
-
     m_classNames = names;
+    m_classColors.clear();
 }
 
 void CSemanticSegTask::setMask(const CMat &mask)

@@ -29,7 +29,7 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
         ImageIOPtr                      getMaskImageIO() const;
         ImageIOPtr                      getLegendImageIO() const;
         GraphicsOutputPtr               getGraphicsIO() const;
-        InputOutputVect                 getSubIOList(const std::set<IODataType> &dataTypes) const override;
+        InputOutputVect                 getSubIOList(const std::set<IODataTypeEx> &dataTypes) const override;
         int                             getReferenceImageIndex() const;
         CMat                            getImageWithGraphics(const CMat &image) const override;
         CMat                            getImageWithMask(const CMat &image) const override;
@@ -42,6 +42,7 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIO: public CWorkflowTaskIO
 
         bool                            isDataAvailable() const override;
         bool                            isComposite() const override;
+        bool                            isConnectableTo(IODataTypeEx typeTo) const override;
 
         void                            clearData() override;
 
@@ -91,10 +92,15 @@ class DATAPROCESSSHARED_EXPORT CSemanticSegIOFactory: public CWorkflowTaskIOFact
             m_name = "CSemanticSegIO";
         }
 
-        virtual WorkflowTaskIOPtr   create(IODataType dataType)
+        WorkflowTaskIOPtr   create(IODataTypeEx dataType) override
         {
             Q_UNUSED(dataType);
             return std::make_shared<CSemanticSegIO>();
+        }
+
+        std::vector<IODataTypeEx> getValidDataTypes() const override
+        {
+            return { IODataType::SEMANTIC_SEGMENTATION };
         }
 };
 

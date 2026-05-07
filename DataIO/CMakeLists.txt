@@ -30,7 +30,7 @@ target_compile_definitions(ikDataIO PRIVATE
     DATAIO_LIBRARY
 )
 
-target_compile_features(ikDataIO PRIVATE cxx_std_14)
+target_compile_features(ikDataIO PRIVATE cxx_std_17)
 
 target_include_directories(ikDataIO PRIVATE
     ../Core

@@ -168,7 +168,7 @@ BlobMeasureIOPtr CObjectDetectionIO::getBlobMeasureIO() const
     return m_blobMeasureIOPtr;
 }
 
-InputOutputVect CObjectDetectionIO::getSubIOList(const std::set<IODataType> &dataTypes) const
+InputOutputVect CObjectDetectionIO::getSubIOList(const std::set<IODataTypeEx> &dataTypes) const
 {
     InputOutputVect ioList;
 
@@ -205,6 +205,11 @@ bool CObjectDetectionIO::isDataAvailable() const
 bool CObjectDetectionIO::isComposite() const
 {
     return true;
+}
+
+bool CObjectDetectionIO::isConnectableTo(IODataTypeEx typeTo) const
+{
+    return m_dataType == typeTo || typeTo == IODataType::INPUT_GRAPHICS || typeTo == IODataType::BLOB_VALUES;
 }
 
 void CObjectDetectionIO::init(const std::string &taskName, int imageIndex)

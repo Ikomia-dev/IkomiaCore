@@ -64,12 +64,13 @@ class DATAPROCESSSHARED_EXPORT CObjectDetectionIO: public CWorkflowTaskIO
         CDataInfoPtr                        getDataInfo() override;
         GraphicsOutputPtr                   getGraphicsIO() const;
         BlobMeasureIOPtr                    getBlobMeasureIO() const;
-        InputOutputVect                     getSubIOList(const std::set<IODataType> &dataTypes) const override;
+        InputOutputVect                     getSubIOList(const std::set<IODataTypeEx> &dataTypes) const override;
         CMat                                getImageWithGraphics(const CMat &image) const override;
         CMat                                getImageWithMaskAndGraphics(const CMat &image) const override;
 
         bool                                isDataAvailable() const override;
         bool                                isComposite() const override;
+        bool                                isConnectableTo(IODataTypeEx typeTo) const override;
 
         void                                init(const std::string& taskName, int imageIndex);
 
@@ -118,10 +119,15 @@ class DATAPROCESSSHARED_EXPORT CObjectDetectionIOFactory: public CWorkflowTaskIO
             m_name = "CObjectDetectionIO";
         }
 
-        virtual WorkflowTaskIOPtr   create(IODataType dataType)
+        WorkflowTaskIOPtr   create(IODataTypeEx dataType) override
         {
             Q_UNUSED(dataType);
             return std::make_shared<CObjectDetectionIO>();
+        }
+
+        std::vector<IODataTypeEx> getValidDataTypes() const override
+        {
+            return { IODataType::OBJECT_DETECTION };
         }
 };
 

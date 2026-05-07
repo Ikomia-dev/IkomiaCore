@@ -27,17 +27,15 @@
 #include "IO/CInstanceSegIO.h"
 #include "IO/CSemanticSegIO.h"
 
-C2dImageTask::C2dImageTask() : CWorkflowTask()
+C2dImageTask::C2dImageTask() : CWorkflowTask(TaskType::IMAGE_PROCESS_2D)
 {
-    m_type = CWorkflowTask::Type::IMAGE_PROCESS_2D;
     addInput(std::make_shared<CImageIO>());
     addInput(std::make_shared<CGraphicsInput>());
     addOutput(std::make_shared<CImageIO>());
 }
 
-C2dImageTask::C2dImageTask(bool bEnableGraphics) : CWorkflowTask()
+C2dImageTask::C2dImageTask(bool bEnableGraphics) : CWorkflowTask(TaskType::IMAGE_PROCESS_2D)
 {
-    m_type = CWorkflowTask::Type::IMAGE_PROCESS_2D;
     m_bEnableGraphics = bEnableGraphics;
     addInput(std::make_shared<CImageIO>());
 
@@ -47,17 +45,15 @@ C2dImageTask::C2dImageTask(bool bEnableGraphics) : CWorkflowTask()
     addOutput(std::make_shared<CImageIO>());
 }
 
-C2dImageTask::C2dImageTask(const std::string &name) : CWorkflowTask(name)
+C2dImageTask::C2dImageTask(const std::string &name) : CWorkflowTask(TaskType::IMAGE_PROCESS_2D, name)
 {
-    m_type = CWorkflowTask::Type::IMAGE_PROCESS_2D;
     addInput(std::make_shared<CImageIO>());
     addInput(std::make_shared<CGraphicsInput>());
     addOutput(std::make_shared<CImageIO>());
 }
 
-C2dImageTask::C2dImageTask(const std::string& name, bool bEnableGraphics) : CWorkflowTask(name)
+C2dImageTask::C2dImageTask(const std::string& name, bool bEnableGraphics) : CWorkflowTask(TaskType::IMAGE_PROCESS_2D, name)
 {
-    m_type = CWorkflowTask::Type::IMAGE_PROCESS_2D;
     m_bEnableGraphics = bEnableGraphics;
     addInput(std::make_shared<CImageIO>());
     if(m_bEnableGraphics)

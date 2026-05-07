@@ -159,7 +159,7 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         double                          getElapsedTimeTo(const WorkflowVertex& id);
         double                          getTotalElapsedTime() const;
         CDataInfoPtr                    getIOInfo(const WorkflowVertex& id, size_t index, bool bInput);
-        std::vector<IODataType>         getRootTargetTypes() const;
+        std::vector<IODataTypeEx> getRootTargetTypes() const;
         static std::vector<std::string> getRequiredTasks(const std::string& path);
         MapString                       getConfig() const;
         std::string                     getLastRunFolder() const;
@@ -168,10 +168,10 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         WorkflowTaskIOPtr               getOutput(size_t index) const override;
         InputOutputVect                 getOutputs() const override;
         std::vector<CWorkflowOutput>    getExposedOutputs() const;
-        IODataType                      getOutputDataType(size_t index) const override;
+        IODataTypeEx                    getOutputDataType(size_t index) const override;
         CHardwareConfig                 getMinHardwareConfig() const;
 
-        bool                            hasOutput(const IODataType& type) const override;
+        bool                            hasOutput(const IODataTypeEx& type) const override;
         bool                            hasOutputData() const override;
 
         bool                            isRoot(const WorkflowVertex& id) const;
@@ -235,6 +235,8 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
 
         void                            load(const std::string& path);
 
+        std::string                     toJson() const;
+
         void                            notifyGraphicsChanged();
         void                            notifyVideoStart(int frameCount) override;
 
@@ -296,6 +298,8 @@ class DATAPROCESSSHARED_EXPORT CWorkflow : public CWorkflowTask
         void                            saveJSON(const std::string& path);
 
         void                            loadJSON(const std::string& path);
+
+        QJsonObject                     toJsonInternal() const;
 
     private:
 

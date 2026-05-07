@@ -892,10 +892,10 @@ CDataInfoPtr CWorkflow::getIOInfo(const WorkflowVertex &id, size_t index, bool b
     return nullptr;
 }
 
-std::vector<IODataType> CWorkflow::getRootTargetTypes() const
+std::vector<IODataTypeEx> CWorkflow::getRootTargetTypes() const
 {
     std::set<int> srcIndices;
-    std::vector<IODataType> types;
+    std::vector<IODataTypeEx> types;
     auto outEdges = boost::out_edges(m_root, m_graph);
 
     for(auto it=outEdges.first; it!=outEdges.second; ++it)
@@ -903,7 +903,7 @@ std::vector<IODataType> CWorkflow::getRootTargetTypes() const
         WorkflowVertex target = boost::target(*it, m_graph);
         WorkflowTaskPtr targetTask = m_graph[target];
         WorkflowEdgePtr edge = m_graph[*it];
-        IODataType type = targetTask->getOriginalInputDataType(edge->getTargetIndex());
+        IODataTypeEx type = targetTask->getOriginalInputDataType(edge->getTargetIndex());
         int srcIndex = edge->getSourceIndex();
 
         auto itIndex = srcIndices.find(srcIndex);
@@ -998,7 +998,7 @@ std::vector<CWorkflowOutput> CWorkflow::getExposedOutputs() const
     return m_exposedOutputs;
 }
 
-IODataType CWorkflow::getOutputDataType(size_t index) const
+IODataTypeEx CWorkflow::getOutputDataType(size_t index) const
 {
     auto taskId = reinterpret_cast<WorkflowVertex>(m_exposedOutputs[index].getTaskId());
     auto taskPtr = getTask(taskId);
@@ -1035,7 +1035,7 @@ CHardwareConfig CWorkflow::getMinHardwareConfig() const
     return minHardwareConfig;
 }
 
-bool CWorkflow::hasOutput(const IODataType &type) const
+bool CWorkflow::hasOutput(const IODataTypeEx &type) const
 {
     for (size_t i=0; i<m_exposedOutputs.size(); ++i)
     {
@@ -1044,7 +1044,7 @@ bool CWorkflow::hasOutput(const IODataType &type) const
         if (taskPtr == nullptr)
             throw CException(CoreExCode::NULL_POINTER, "Task not found for the given output", __func__, __FILE__, __LINE__);
 
-        IODataType dataType = taskPtr->getOutputDataType(m_exposedOutputs[i].getTaskOutputIndex());
+        IODataTypeEx dataType = taskPtr->getOutputDataType(m_exposedOutputs[i].getTaskOutputIndex());
         if (dataType == type)
             return true;
     }
@@ -1298,10 +1298,10 @@ WorkflowEdge CWorkflow::connect(const WorkflowVertex &src, size_t srcIndex, cons
             QString errorMsg = QObject::tr("Invalid connection between output #%1 of %2 (%3) and input #%4 of %5 (%6)")
                                         .arg(srcIndex+1)
                                         .arg(QString::fromStdString(srcTaskPtr->getName()))
-                                        .arg(Utils::Workflow::getIODataName(srcTaskPtr->getOutputDataType(srcIndex)))
+                                        .arg(srcTaskPtr->getOutputDataType(srcIndex).displayName())
                                         .arg(targetIndex+1)
                                         .arg(QString::fromStdString(targetTaskPtr->getName()))
-                                        .arg(Utils::Workflow::getIODataName(targetTaskPtr->getInputDataType(targetIndex)));
+                                        .arg(targetTaskPtr->getInputDataType(targetIndex).displayName());
             throw CException(CoreExCode::INVALID_PARAMETER, errorMsg.toStdString(), __func__, __FILE__, __LINE__);
         }
 
@@ -1562,7 +1562,7 @@ void CWorkflow::runTasksSimple(const std::vector<WorkflowVertex> &taskToExecute)
 void CWorkflow::runTasksVideo(const std::vector<WorkflowVertex> &taskToExecute)
 {
     InputOutputVect videoInputs, videoOutputs;
-    const std::set<IODataType> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
+    const std::set<IODataTypeEx> videoTypes = {IODataType::VIDEO, IODataType::VIDEO_LABEL, IODataType::VIDEO_BINARY};
 
     //Get video inputs
     auto inputs = getInputs();
@@ -1724,7 +1724,7 @@ void CWorkflow::analyzeTaskIO(const WorkflowVertex &id)
             auto srcIndex = pEdge->getSourceIndex();
             auto targetIndex = pEdge->getTargetIndex();
 
-            if(srcIndex >= srcTaskPtr->getOutputCount())
+            if (srcIndex >= srcTaskPtr->getOutputCount())
             {
                 //Invalid connection -> input does not exist, we have to reset input
                 resetTaskInput(taskPtr, targetIndex);
@@ -1745,16 +1745,18 @@ void CWorkflow::analyzeTaskIO(const WorkflowVertex &id)
             else
             {
                 //Forward output
-                taskPtr->setInput(srcTaskPtr->getOutput(srcIndex), targetIndex);
-                if(Utils::Workflow::isIODataCompatible(srcTaskPtr->getOutputDataType(srcIndex), taskPtr->getInputDataType(targetIndex)) == false)
+                auto outputPtr = srcTaskPtr->getOutput(srcIndex);
+                taskPtr->setInput(outputPtr, targetIndex);
+
+                if (outputPtr->isConnectableTo(taskPtr->getInputDataType(targetIndex)) == false)
                 {
                     //Invalid connection -> type mismatch, we have to reset input
                     resetTaskInput(taskPtr, targetIndex);
                     //Notify view to update task status to error
                     QString errorMsg = QObject::tr("Data type mismatch on input #%1 between type %2 and type %3")
                                                     .arg(pEdge->getTargetIndex()+1)
-                                                    .arg(Utils::Workflow::getIODataName(srcTaskPtr->getOutputDataType(pEdge->getSourceIndex())))
-                                                    .arg(Utils::Workflow::getIODataName(taskPtr->getInputDataType(pEdge->getTargetIndex())));
+                                                    .arg(srcTaskPtr->getOutputDataType(pEdge->getSourceIndex()).displayName())
+                                                    .arg(taskPtr->getInputDataType(pEdge->getTargetIndex()).displayName());
                     emit pSignalHandler->doSetTaskState(id, CWorkflowTask::State::_ERROR, errorMsg);
                 }
                 it++;
@@ -1815,7 +1817,7 @@ bool CWorkflow::checkConnection(const WorkflowVertex &src, size_t srcIndex, cons
     if(targetIndex >= pTargetTask->getInputCount())
         return false;
 
-    return Utils::Workflow::isIODataCompatible(pSrcTask->getOutputDataType(srcIndex), pTargetTask->getOriginalInputDataType(targetIndex));
+    return pSrcTask->getOutput(srcIndex)->isConnectableTo(pTargetTask->getOriginalInputDataType(targetIndex));
 }
 
 void CWorkflow::checkBatchModeState()
@@ -1961,8 +1963,7 @@ std::vector<std::pair<size_t, size_t>> CWorkflow::findConnectionPorts(const Work
             //Find candidates source ports
             for(size_t j=0; j<srcTaskPtr->getOutputCount(); ++j)
             {
-                auto srcDataType = srcTaskPtr->getOutputDataType(j);
-                if(Utils::Workflow::isIODataCompatible(srcDataType, targetDataType))
+                if (srcTaskPtr->getOutput(j)->isConnectableTo(targetDataType))
                     candidates.push_back(j);
             }
 
@@ -2007,8 +2008,7 @@ void CWorkflow::resetTaskInput(WorkflowTaskPtr &taskPtr, size_t index)
     if (m_pRegistry)
     {
         auto dataType = taskPtr->getOriginalInputDataType(index);
-        auto factory = m_pRegistry->getIORegistrator()->getFactory();
-        auto taskIOPtr = factory.createObject(CWorkflowTaskIO::getClassName(dataType), std::move(dataType));
+        auto taskIOPtr = m_pRegistry->getIORegistrator()->createIOObject(dataType);
 
         if(taskIOPtr)
             taskPtr->resetInput(index, taskIOPtr);
@@ -2099,24 +2099,21 @@ void CWorkflow::load(const std::string &path)
         throw CException(CoreExCode::NOT_IMPLEMENTED, "Workflow can only be loaded as JSON file", __func__, __FILE__, __LINE__);
 }
 
-void CWorkflow::saveJSON(const std::string& path)
+std::string CWorkflow::toJson() const
 {
-    if (m_name.empty() || m_name == "untitled")
-    {
-        // Set name with filename
-        m_name = Utils::File::getFileNameWithoutExtension(path);
-    }
+    QJsonDocument doc(toJsonInternal());
+    return doc.toJson(QJsonDocument::Indented).toStdString();
+}
 
-    Utils::File::createDirectory(Utils::File::getParentPath(path));
-    QFile jsonFile(QString::fromStdString(path));
-
-    if(!jsonFile.open(QFile::WriteOnly))
-        throw CException(CoreExCode::INVALID_FILE, "Could not save file: " + path, __func__, __FILE__, __LINE__);
-
+QJsonObject CWorkflow::toJsonInternal() const
+{
     int id = 0;
     std::unordered_map<WorkflowVertex, int> mapVertexToId;
     QJsonObject jsonWorkflow;
     QJsonArray jsonTasks, jsonEdges, jsonParams, jsonOutputs;
+
+    //Type
+    jsonWorkflow["type"] = QString::fromStdString(m_type.typeName());
 
     // API
     QJsonObject apiInfo;
@@ -2215,10 +2212,28 @@ void CWorkflow::saveJSON(const std::string& path)
     }
     jsonWorkflow["exposed_outputs"] = jsonOutputs;
 
-    // Minimum harware config
+    // Minimum hardware config
     CHardwareConfig hwConfig = getMinHardwareConfig();
     jsonWorkflow["hardware_config"] = hwConfig.toJson();
 
+    return jsonWorkflow;
+}
+
+void CWorkflow::saveJSON(const std::string& path)
+{
+    if (m_name.empty() || m_name == "untitled")
+    {
+        // Set name with filename
+        m_name = Utils::File::getFileNameWithoutExtension(path);
+    }
+
+    Utils::File::createDirectory(Utils::File::getParentPath(path));
+    QFile jsonFile(QString::fromStdString(path));
+
+    if(!jsonFile.open(QFile::WriteOnly))
+        throw CException(CoreExCode::INVALID_FILE, "Could not save file: " + path, __func__, __FILE__, __LINE__);
+
+    QJsonObject jsonWorkflow = toJsonInternal();
     QJsonDocument jsonDoc(jsonWorkflow);
     jsonFile.write(jsonDoc.toJson());
 }
@@ -2239,6 +2254,9 @@ void CWorkflow::loadJSON(const std::string &path)
     QJsonObject jsonWorkflow = jsonDoc.object();
     if(jsonWorkflow.isEmpty())
         throw CException(CoreExCode::INVALID_JSON_FORMAT, "Error while loading workflow: empty JSON workflow", __func__, __FILE__, __LINE__);
+
+    // Type
+    m_type = TaskTypeEx::fromTypeName(jsonWorkflow["type"].toString().toStdString());
 
     // Metadata
     QJsonObject jsonMetadata = jsonWorkflow["metadata"].toObject();

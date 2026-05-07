@@ -25,12 +25,12 @@ CWorkflowTaskIO::CWorkflowTaskIO()
 {
 }
 
-CWorkflowTaskIO::CWorkflowTaskIO(IODataType dataType)
+CWorkflowTaskIO::CWorkflowTaskIO(IODataTypeEx dataType)
 {
     m_dataType = dataType;
 }
 
-CWorkflowTaskIO::CWorkflowTaskIO(IODataType dataType, const std::string &name)
+CWorkflowTaskIO::CWorkflowTaskIO(IODataTypeEx dataType, const std::string &name)
 {
     m_dataType = dataType;
     m_name = name;
@@ -104,7 +104,7 @@ CWorkflowTaskIO::~CWorkflowTaskIO()
 std::string CWorkflowTaskIO::repr() const
 {
     std::stringstream s;
-    s << "CWorkflowTaskIO(" << Utils::Workflow::getIODataEnumName(m_dataType) << ", " << m_name << ")";
+    s << "CWorkflowTaskIO(" << m_dataType.typeName() << ", " << m_name << ")";
     return s.str();
 }
 
@@ -118,7 +118,7 @@ std::string CWorkflowTaskIO::getDescription() const
     return m_description;
 }
 
-IODataType CWorkflowTaskIO::getDataType() const
+IODataTypeEx CWorkflowTaskIO::getDataType() const
 {
     return m_dataType;
 }
@@ -167,7 +167,7 @@ std::string CWorkflowTaskIO::getSourceFilePath()
         return "";
 }
 
-InputOutputVect CWorkflowTaskIO::getSubIOList(const std::set<IODataType> &dataTypes) const
+InputOutputVect CWorkflowTaskIO::getSubIOList(const std::set<IODataTypeEx> &dataTypes) const
 {
     Q_UNUSED(dataTypes);
     return InputOutputVect();
@@ -188,12 +188,24 @@ bool CWorkflowTaskIO::isDisplayable() const
     return m_bDisplayable;
 }
 
+bool CWorkflowTaskIO::isAssignableTo(IODataTypeEx typeTo) const
+{
+    // Only same data type
+    return m_dataType == typeTo;
+}
+
+bool CWorkflowTaskIO::isConnectableTo(IODataTypeEx typeTo) const
+{
+    // Only same data type
+    return m_dataType == typeTo;
+}
+
 bool CWorkflowTaskIO::isComposite() const
 {
     return false;
 }
 
-void CWorkflowTaskIO::setDataType(IODataType type)
+void CWorkflowTaskIO::setDataType(IODataTypeEx type)
 {
     m_dataType = type;
 }
@@ -279,85 +291,6 @@ void CWorkflowTaskIO::save(const std::string &path)
     setSavePath(path);
 }
 
-std::string CWorkflowTaskIO::getClassName(IODataType ioDataType)
-{
-    switch(ioDataType)
-    {
-        case IODataType::NONE:
-            return "";
-
-        case IODataType::IMAGE:
-        case IODataType::IMAGE_BINARY:
-        case IODataType::IMAGE_LABEL:
-        case IODataType::VOLUME:
-        case IODataType::VOLUME_BINARY:
-        case IODataType::VOLUME_LABEL:
-        case IODataType::POSITION:
-        case IODataType::DESCRIPTORS:
-            return "CImageIO";
-
-        case IODataType::VIDEO:
-        case IODataType::VIDEO_BINARY:
-        case IODataType::VIDEO_LABEL:
-        case IODataType::LIVE_STREAM:
-        case IODataType::LIVE_STREAM_BINARY:
-        case IODataType::LIVE_STREAM_LABEL:
-            return "CVideoIO";
-
-        case IODataType::INPUT_GRAPHICS:
-            return "CGraphicsInput";
-
-        case IODataType::OUTPUT_GRAPHICS:
-            return "CGraphicsOutput";
-
-        case IODataType::BLOB_VALUES:
-            return "CBlobMeasureIO";
-
-        case IODataType::NUMERIC_VALUES:
-            return "CNumericIO";
-
-        case IODataType::WIDGET:
-            return "CWidgetOutput";
-
-        case IODataType::PROJECT_FOLDER:
-        case IODataType::FOLDER_PATH:
-        case IODataType::FILE_PATH:
-            return "CPathIO";
-
-        case IODataType::ARRAY:
-            return "CArrayIO";
-
-        case IODataType::DATA_DICT:
-            return "CWorkflowTaskIO";
-
-        case IODataType::OBJECT_DETECTION:
-            return "CObjectDetectionIO";
-
-        case IODataType::INSTANCE_SEGMENTATION:
-            return "CInstanceSegIO";
-
-        case IODataType::SEMANTIC_SEGMENTATION:
-            return "CSemanticSegIO";
-
-        case IODataType::KEYPOINTS:
-            return "CKeypointsIO";
-
-        case IODataType::TEXT:
-            return "CTextIO";
-
-        case IODataType::JSON:
-            return "CJsonIO";
-
-        case IODataType::SCENE_3D:
-            return "CScene3dIO";
-
-        case IODataType::DNN_DATASET:
-            return "CDatasetIO";
-
-        default: return "";
-    }
-}
-
 std::string CWorkflowTaskIO::toJson() const
 {
     return std::string();
@@ -414,7 +347,7 @@ void CWorkflowTaskIO::to_ostream(std::ostream &os) const
     os << "Description: " << m_description << std::endl;
     os << "Save path: " << m_savePath << std::endl;
     os << "Auto-save: " << m_bAutoSave << std::endl;
-    os << "Data type: " << Utils::Workflow::getIODataName(m_dataType).toStdString() << std::endl;
+    os << "Data type: " << m_dataType.displayName() << std::endl;
     os << "Save format: " << Utils::Data::getFileFormatExtension(m_saveFormat) << std::endl;
     os << "Dimension count: " << m_dimCount << std::endl;
     os << "Displayable: " << m_bDisplayable << std::endl;

@@ -1198,5 +1198,6 @@ BOOST_PYTHON_MODULE(pydataprocess)
         .def("load", &CWorkflowWrap::loadWrap, _wfLoadDocString, args("self", "path"))
         .def("save", &CWorkflow::save, _wfSaveDocString, args("self", "path"))
         .def("export_graphviz", &CWorkflow::writeGraphviz, _wfExportGraphvizDocString, args("self", "path"))
+        .def("to_json", &CWorkflow::toJson, _wfToJsonDocString, args("self"))
     ;
 }
