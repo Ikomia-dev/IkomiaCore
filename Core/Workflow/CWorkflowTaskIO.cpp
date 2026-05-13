@@ -21,6 +21,18 @@
 #include "Main/CoreTools.hpp"
 #include <ostream>
 
+// Explicit instantiation definitions compiled into ikCore.dll only.
+// The header carries matching `extern template` declarations so that all
+// other DLLs (pycore.pyd, pydataprocess.pyd, plugins…) suppress their own
+// instantiation and share the single canonical copy exported here.
+// This ensures MSVC produces one `type_info` object for each type, which is
+// required for Boost.Python's type_id-based converter registry to work
+// correctly across DLL boundaries.
+namespace Ikomia
+{
+    template class CORESHARED_EXPORT CExtensibleEnum<IODataType>;
+}
+
 CWorkflowTaskIO::CWorkflowTaskIO()
 {
 }

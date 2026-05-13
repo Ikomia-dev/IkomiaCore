@@ -15,6 +15,7 @@ add_library(pycore SHARED
     CWorkflowTaskWidgetWrap.h
     CWorkflowTaskWrap.cpp
     CWorkflowTaskWrap.h
+    ExtensibleEnumConverter.hpp
     IterableConverter.hpp
     MapConverter.hpp
     PairConverter.hpp

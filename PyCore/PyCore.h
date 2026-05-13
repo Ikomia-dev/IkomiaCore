@@ -39,6 +39,7 @@ struct incref_return_value_policy : Base
     }
 };
 
+
 // Generic override of Python __copy__ and __deepcopy__
 template<class T>
 inline PyObject * managingPyObject(T *p)

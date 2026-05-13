@@ -41,6 +41,7 @@
 #include "VectorConverter.hpp"
 #include "MapConverter.hpp"
 #include "PairConverter.hpp"
+#include "ExtensibleEnumConverter.hpp"
 
 
 template<typename T>
@@ -60,6 +61,14 @@ template<typename E>
 void exposeExtensibleEnum(const char* name)
 {
     using EE = CExtensibleEnum<E>;
+
+    // Register a from-Python rvalue converter that accepts any int-like Python
+    // object (Boost.Python enum values, plain ints, Python IntEnum subclasses).
+    // implicitly_convertible<E, EE>() alone is not sufficient: it only fires
+    // when Boost.Python recognises the object as the exact registered C++ enum
+    // wrapper type, missing the common case of passing an IODataType/TaskType
+    // enum value directly from Python.
+    extensible_enum_from_python<E>();
 
     class_<EE>(name, "Generic extensible enum", init<int>())
         .def(init<E>())
@@ -101,15 +110,18 @@ BOOST_PYTHON_MODULE(pycore)
     CvMatNumpyArrayConverter::init_numpy();
 
     // CMat <-> Numpy NdArray converters
-    to_python_converter<CMat, BoostCvMatToNumpyArrayConverter>();
-    BoostNumpyArrayToCvMatConverter();
+    if (!isConverterRegistered<CMat>())
+    {
+        to_python_converter<CMat, BoostCvMatToNumpyArrayConverter>();
+        BoostNumpyArrayToCvMatConverter();
+    }
 
     // Register smart pointers
-    register_ptr_to_python<std::shared_ptr<CProxyGraphicsItem>>();
-    register_ptr_to_python<std::shared_ptr<CWorkflowTaskParam>>();
-    register_ptr_to_python<std::shared_ptr<CWorkflowTaskIO>>();
-    register_ptr_to_python<std::shared_ptr<CWorkflowTask>>();
-    register_ptr_to_python<std::shared_ptr<CWorkflowTaskWidget>>();
+    safeRegisterPtrToPython<std::shared_ptr<CProxyGraphicsItem>>();
+    safeRegisterPtrToPython<std::shared_ptr<CWorkflowTaskParam>>();
+    safeRegisterPtrToPython<std::shared_ptr<CWorkflowTaskIO>>();
+    safeRegisterPtrToPython<std::shared_ptr<CWorkflowTask>>();
+    safeRegisterPtrToPython<std::shared_ptr<CWorkflowTaskWidget>>();
 
     // Register std::unordered_map<T>
     registerStdUMap<std::string, std::string>();

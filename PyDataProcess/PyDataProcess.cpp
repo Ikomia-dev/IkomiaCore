@@ -116,27 +116,27 @@ BOOST_PYTHON_MODULE(pydataprocess)
     CvMatNumpyArrayConverter::init_numpy();
 
     //Register smart pointers
-    register_ptr_to_python<std::shared_ptr<CTaskFactory>>();
-    register_ptr_to_python<std::shared_ptr<CTaskParamFactory>>();
-    register_ptr_to_python<std::shared_ptr<CWidgetFactory>>();
-    register_ptr_to_python<std::shared_ptr<CGraphicsInput>>();
-    register_ptr_to_python<std::shared_ptr<CGraphicsOutput>>();
-    register_ptr_to_python<std::shared_ptr<CImageIO>>();
-    register_ptr_to_python<std::shared_ptr<CVideoIO>>();
-    register_ptr_to_python<std::shared_ptr<CWidgetOutput>>();
-    register_ptr_to_python<std::shared_ptr<CPathIO>>();
-    register_ptr_to_python<std::shared_ptr<CDatasetIO>>();
-    register_ptr_to_python<std::shared_ptr<CArrayIO>>();
-    register_ptr_to_python<std::shared_ptr<CObjectDetectionIO>>();
-    register_ptr_to_python<std::shared_ptr<CSemanticSegIO>>();
-    register_ptr_to_python<std::shared_ptr<CInstanceSegIO>>();
-    register_ptr_to_python<std::shared_ptr<CKeypointsIO>>();
-    register_ptr_to_python<std::shared_ptr<C2dImageTask>>();
-    register_ptr_to_python<std::shared_ptr<C2dImageInteractiveTask>>();
-    register_ptr_to_python<std::shared_ptr<CVideoTask>>();
-    register_ptr_to_python<std::shared_ptr<CVideoOFTask>>();
-    register_ptr_to_python<std::shared_ptr<CVideoTrackingTask>>();
-    register_ptr_to_python<std::shared_ptr<CDnnTrainTask>>();
+    safeRegisterPtrToPython<std::shared_ptr<CTaskFactory>>();
+    safeRegisterPtrToPython<std::shared_ptr<CTaskParamFactory>>();
+    safeRegisterPtrToPython<std::shared_ptr<CWidgetFactory>>();
+    safeRegisterPtrToPython<std::shared_ptr<CGraphicsInput>>();
+    safeRegisterPtrToPython<std::shared_ptr<CGraphicsOutput>>();
+    safeRegisterPtrToPython<std::shared_ptr<CImageIO>>();
+    safeRegisterPtrToPython<std::shared_ptr<CVideoIO>>();
+    safeRegisterPtrToPython<std::shared_ptr<CWidgetOutput>>();
+    safeRegisterPtrToPython<std::shared_ptr<CPathIO>>();
+    safeRegisterPtrToPython<std::shared_ptr<CDatasetIO>>();
+    safeRegisterPtrToPython<std::shared_ptr<CArrayIO>>();
+    safeRegisterPtrToPython<std::shared_ptr<CObjectDetectionIO>>();
+    safeRegisterPtrToPython<std::shared_ptr<CSemanticSegIO>>();
+    safeRegisterPtrToPython<std::shared_ptr<CInstanceSegIO>>();
+    safeRegisterPtrToPython<std::shared_ptr<CKeypointsIO>>();
+    safeRegisterPtrToPython<std::shared_ptr<C2dImageTask>>();
+    safeRegisterPtrToPython<std::shared_ptr<C2dImageInteractiveTask>>();
+    safeRegisterPtrToPython<std::shared_ptr<CVideoTask>>();
+    safeRegisterPtrToPython<std::shared_ptr<CVideoOFTask>>();
+    safeRegisterPtrToPython<std::shared_ptr<CVideoTrackingTask>>();
+    safeRegisterPtrToPython<std::shared_ptr<CDnnTrainTask>>();
 
     //Register std::vector<T> <-> python list converters
     registerStdVector<uchar>();
@@ -372,11 +372,11 @@ BOOST_PYTHON_MODULE(pydataprocess)
 
     class_<CImageIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CImageIOWrap>>("CImageIO", _imageProcessIODocString)
         .def(init<>("Default constructor", args("self")))
-        .def(init<IODataType>(_ctor1imageProcessIODocString, args("self", "data_type")))
-        .def(init<IODataType, const CMat&>(_ctor2imageProcessIODocString, args("self", "data_type", "image")))
-        .def(init<IODataType, const CMat&, const std::string&>(_ctor3imageProcessIODocString, args("self", "data_type", "image", "name")))
-        .def(init<IODataType, const std::string&>(_ctor4imageProcessIODocString, args("self", "data_type", "name")))
-        .def(init<IODataType, const std::string&, const std::string&>(_ctor5imageProcessIODocString, args("self", "data_type", "name", "path")))
+        .def(init<IODataTypeEx>(_ctor1imageProcessIODocString, args("self", "data_type")))
+        .def(init<IODataTypeEx, const CMat&>(_ctor2imageProcessIODocString, args("self", "data_type", "image")))
+        .def(init<IODataTypeEx, const CMat&, const std::string&>(_ctor3imageProcessIODocString, args("self", "data_type", "image", "name")))
+        .def(init<IODataTypeEx, const std::string&>(_ctor4imageProcessIODocString, args("self", "data_type", "name")))
+        .def(init<IODataTypeEx, const std::string&, const std::string&>(_ctor5imageProcessIODocString, args("self", "data_type", "name", "path")))
         .def(init<const CImageIO&>("Copy constructor"))
         .def("__repr__", &CImageIO::repr)
         .def("set_image", &CImageIO::setImage, _setImageDocString, args("self", "image"))
@@ -431,11 +431,11 @@ BOOST_PYTHON_MODULE(pydataprocess)
     //--------------------//
     class_<CVideoIOWrap, bases<CImageIO>, std::shared_ptr<CVideoIOWrap>>("CVideoIO", _videoProcessIODocString)
         .def(init<>("Default constructor", args("self")))
-        .def(init<IODataType>(_ctor1VideoProcessIODocString, args("self", "data_type")))
-        .def(init<IODataType, const CMat&>(_ctor2VideoProcessIODocString, args("self", "data_type", "frame")))
-        .def(init<IODataType, const CMat&, const std::string&>(_ctor3VideoProcessIODocString, args("self", "data_type", "frame", "name")))
-        .def(init<IODataType, const std::string&>(_ctor4VideoProcessIODocString, args("self", "data_type", "name")))
-        .def(init<IODataType, const std::string&, const std::string&>(_ctor5VideoProcessIODocString, args("self", "data_type", "name", "path")))
+        .def(init<IODataTypeEx>(_ctor1VideoProcessIODocString, args("self", "data_type")))
+        .def(init<IODataTypeEx, const CMat&>(_ctor2VideoProcessIODocString, args("self", "data_type", "frame")))
+        .def(init<IODataTypeEx, const CMat&, const std::string&>(_ctor3VideoProcessIODocString, args("self", "data_type", "frame", "name")))
+        .def(init<IODataTypeEx, const std::string&>(_ctor4VideoProcessIODocString, args("self", "data_type", "name")))
+        .def(init<IODataTypeEx, const std::string&, const std::string&>(_ctor5VideoProcessIODocString, args("self", "data_type", "name", "path")))
         .def(init<const CVideoIO&>("Copy constructor"))
         .def("__repr__", &CVideoIO::repr)
         .def("set_video_path", &CVideoIO::setVideoPath, _setVideoPathDocString, args("self", "path"))
@@ -464,8 +464,8 @@ BOOST_PYTHON_MODULE(pydataprocess)
     //-------------------------//
     class_<CWidgetOutputWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CWidgetOutputWrap>>("CWidgetOutput", _widgetOutputDocString)
         .def(init<>("Default constructor", args("self")))
-        .def(init<IODataType>(_ctor1WidgetOutputDocString, args("self", "data_type")))
-        .def(init<IODataType, const std::string&>(_ctor2WidgetOutputDocString, args("self", "data_type", "name")))
+        .def(init<IODataTypeEx>(_ctor1WidgetOutputDocString, args("self", "data_type")))
+        .def(init<IODataTypeEx, const std::string&>(_ctor2WidgetOutputDocString, args("self", "data_type", "name")))
         .def("set_widget", &CWidgetOutputWrap::setWidget, _setWidgetDocString, args("self", "widget"))
         .def("is_data_available", &CWidgetOutput::isDataAvailable, &CWidgetOutputWrap::default_isDataAvailable, _isWidgetDataAvailableDocString, args("self"))
         .def("clear_data", &CWidgetOutput::clearData, &CWidgetOutputWrap::default_clearData, _clearWidgetDataDocString, args("self"))
@@ -476,9 +476,9 @@ BOOST_PYTHON_MODULE(pydataprocess)
     //-------------------//
     class_<CPathIOWrap, bases<CWorkflowTaskIO>, std::shared_ptr<CPathIOWrap>>("CPathIO", _pathIODocString)
         .def(init<>("Default constructor", args("self")))
-        .def(init<IODataType>(_ctor1PathIODocString, args("self", "data_type")))
-        .def(init<IODataType, const std::string&>(_ctor2PathIODocString, args("self", "data_type", "path")))
-        .def(init<IODataType, const std::string&, const std::string&>(_ctor3PathIODocString, args("self", "data_type", "path", "name")))
+        .def(init<IODataTypeEx>(_ctor1PathIODocString, args("self", "data_type")))
+        .def(init<IODataTypeEx, const std::string&>(_ctor2PathIODocString, args("self", "data_type", "path")))
+        .def(init<IODataTypeEx, const std::string&, const std::string&>(_ctor3PathIODocString, args("self", "data_type", "path", "name")))
         .def("__repr__", &CPathIO::repr)
         .def("set_path", &CPathIO::setPath, _setPathDocString, args("self", "path"))
         .def("get_path", &CPathIO::getPath, _getPathDocString, args("self"))

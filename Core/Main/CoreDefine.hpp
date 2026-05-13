@@ -136,6 +136,7 @@ namespace Ikomia
         };
     };
 
+    extern template class CExtensibleEnum<IODataType>;
     using IODataTypeEx = CExtensibleEnum<IODataType>;
 
     /**
@@ -162,6 +163,7 @@ namespace Ikomia
         };
     };
 
+    extern template class CExtensibleEnum<TaskType>;
     using TaskTypeEx = CExtensibleEnum<TaskType>;
 
 

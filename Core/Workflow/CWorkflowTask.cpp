@@ -28,6 +28,11 @@
 #include "UtilsTools.hpp"
 #include "Main/CoreTools.hpp"
 
+namespace Ikomia
+{
+    template class CORESHARED_EXPORT CExtensibleEnum<TaskType>;
+}
+
 //--------------------------------//
 //----- CSignalHandler class -----//
 //--------------------------------//
