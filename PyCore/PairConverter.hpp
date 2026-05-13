@@ -2,6 +2,7 @@
 #define PAIRCONVERTER_HPP
 
 #include "PyCoreGlobal.h"
+#include "PyCoreTools.hpp"
 
 //----------------------//
 //- std::pair converter -//
@@ -47,6 +48,8 @@ struct pair_from_python_tuple
 template <typename T1, typename T2>
 void registerStdPair()
 {
+    if (isConverterRegistered<std::pair<T1, T2>>())
+        return;
     to_python_converter<std::pair<T1, T2>, pair_to_python_tuple<T1, T2>>();
     pair_from_python_tuple<T1, T2>();
 }

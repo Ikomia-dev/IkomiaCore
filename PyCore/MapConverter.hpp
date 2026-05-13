@@ -2,6 +2,7 @@
 #define MAPCONVERTER_HPP
 
 #include "PyCoreGlobal.h"
+#include "PyCoreTools.hpp"
 
 //----------------------//
 //- std::map converter -//
@@ -55,10 +56,12 @@ struct map_from_python_dict
     }
 };
 
-//Register std::vector<T> <-> python list converters
+//Register std::map<T, U> <-> python dict converters
 template <typename T, typename U>
 void registerStdMap()
 {
+    if (isConverterRegistered<std::map<T, U>>())
+        return;
     to_python_converter<std::map<T, U>, map_to_python_dict<T, U>>();
     map_from_python_dict<T, U>();
 }
@@ -115,10 +118,12 @@ struct umap_from_python_dict
     }
 };
 
-//Register std::vector<T> <-> python list converters
+//Register std::unordered_map<T, U> <-> python dict converters
 template<typename T, typename U>
 void registerStdUMap()
 {
+    if (isConverterRegistered<std::unordered_map<T, U>>())
+        return;
     to_python_converter<std::unordered_map<T, U>, umap_to_python_dict<T, U>>();
     umap_from_python_dict<T, U>();
 }

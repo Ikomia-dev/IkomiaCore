@@ -2,6 +2,7 @@
 #define VECTORCONVERTER_HPP
 
 #include "PyCoreGlobal.h"
+#include "PyCoreTools.hpp"
 
 //Template class for bi-directionnal conversion:
 //std::vector<T> <-> python list
@@ -54,6 +55,8 @@ struct vector_from_python_list
 template<typename T>
 void registerStdVector()
 {
+    if (isConverterRegistered<std::vector<T>>())
+        return;
     to_python_converter<std::vector<T>, vector_to_python_list<T>>();
     vector_from_python_list<T>();
 }

@@ -123,7 +123,12 @@ void CNumpyImageIO::loadNumpyArray()
     try
     {
         CPyEnsureGIL gil;
-        BoostNumpyArrayToCvMatConverter();
+        static bool converterRegistered = false;
+        if (!converterRegistered)
+        {
+            BoostNumpyArrayToCvMatConverter();
+            converterRegistered = true;
+        }
 
         str path(m_fileName);
         object dataModule = import("ikomia.utils.data");

@@ -21,6 +21,7 @@
 #define PYCORETOOLS_HPP
 
 #include "Main/CoreTools.hpp"
+#include "PyCoreGlobal.h"
 
 namespace Ikomia
 {
@@ -28,6 +29,29 @@ namespace Ikomia
     {
         //Place tool function here into specific namespace
     }
+}
+
+
+// Returns true if a to-Python converter for T is already in Boost.Python's registry.
+// Use this guard before calling to_python_converter<T,...>() or any registerStd*<T>()
+// to avoid "second conversion method ignored" warnings when multiple .pyd modules
+// share the same converter set.
+template<typename T>
+inline bool isConverterRegistered()
+{
+    namespace bpc = boost::python::converter;
+    const bpc::registration* reg = bpc::registry::query(boost::python::type_id<T>());
+    return reg != nullptr && reg->m_to_python != nullptr;
+}
+
+
+// Drop-in replacement for register_ptr_to_python<P>() that skips registration if
+// a to-Python converter for P is already present (e.g. registered by another .pyd).
+template<typename P>
+inline void safeRegisterPtrToPython()
+{
+    if (!isConverterRegistered<P>())
+        boost::python::register_ptr_to_python<P>();
 }
 
 #endif // PYCORETOOLS_HPP
