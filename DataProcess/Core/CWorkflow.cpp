@@ -1298,10 +1298,10 @@ WorkflowEdge CWorkflow::connect(const WorkflowVertex &src, size_t srcIndex, cons
             QString errorMsg = QObject::tr("Invalid connection between output #%1 of %2 (%3) and input #%4 of %5 (%6)")
                                         .arg(srcIndex+1)
                                         .arg(QString::fromStdString(srcTaskPtr->getName()))
-                                        .arg(srcTaskPtr->getOutputDataType(srcIndex).displayName())
+                                        .arg(QString::fromStdString(srcTaskPtr->getOutputDataType(srcIndex).displayName()))
                                         .arg(targetIndex+1)
                                         .arg(QString::fromStdString(targetTaskPtr->getName()))
-                                        .arg(targetTaskPtr->getInputDataType(targetIndex).displayName());
+                                        .arg(QString::fromStdString(targetTaskPtr->getInputDataType(targetIndex).displayName()));
             throw CException(CoreExCode::INVALID_PARAMETER, errorMsg.toStdString(), __func__, __FILE__, __LINE__);
         }
 
@@ -1755,8 +1755,8 @@ void CWorkflow::analyzeTaskIO(const WorkflowVertex &id)
                     //Notify view to update task status to error
                     QString errorMsg = QObject::tr("Data type mismatch on input #%1 between type %2 and type %3")
                                                     .arg(pEdge->getTargetIndex()+1)
-                                                    .arg(srcTaskPtr->getOutputDataType(pEdge->getSourceIndex()).displayName())
-                                                    .arg(taskPtr->getInputDataType(pEdge->getTargetIndex()).displayName());
+                                                    .arg(QString::fromStdString(srcTaskPtr->getOutputDataType(pEdge->getSourceIndex()).displayName()))
+                                                    .arg(QString::fromStdString(taskPtr->getInputDataType(pEdge->getTargetIndex()).displayName()));
                     emit pSignalHandler->doSetTaskState(id, CWorkflowTask::State::_ERROR, errorMsg);
                 }
                 it++;
