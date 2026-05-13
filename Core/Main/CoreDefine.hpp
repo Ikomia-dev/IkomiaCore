@@ -98,7 +98,7 @@ namespace Ikomia
 
     template<>
     struct EnumTraits<IODataType> {
-        static constexpr std::initializer_list<std::tuple<IODataType, const char*, const char*>> values = {
+        static constexpr std::tuple<IODataType, const char*, const char*> values[] = {
             { IODataType::IMAGE, "IODataType.IMAGE", "Image" },
             { IODataType::IMAGE_BINARY, "IODataType.IMAGE_BINARY", "Binary image" },
             { IODataType::IMAGE_LABEL, "IODataType.IMAGE_LABEL", "Label image" },
@@ -153,7 +153,7 @@ namespace Ikomia
 
     template<>
     struct EnumTraits<TaskType> {
-        static constexpr std::initializer_list<std::tuple<TaskType, const char*, const char*>> values = {
+        static constexpr std::tuple<TaskType, const char*, const char*> values[] = {
             { TaskType::GENERIC, "TaskType.GENERIC", "Generic processing task" },
             { TaskType::IMAGE_PROCESS_2D, "TaskType.IMAGE_PROCESS_2D", "2D images processing task" },
             { TaskType::IMAGE_PROCESS_3D, "TaskType.IMAGE_PROCESS_3D", "3D images processing task" },
