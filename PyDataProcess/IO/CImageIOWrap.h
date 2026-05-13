@@ -30,11 +30,11 @@ class CImageIOWrap : public CImageIO, public wrapper<CImageIO>
     public:
 
         CImageIOWrap();
-        CImageIOWrap(IODataType dataType);
-        CImageIOWrap(IODataType dataType, const CMat& image);
-        CImageIOWrap(IODataType dataType, const CMat& image, const std::string& name);
-        CImageIOWrap(IODataType datatype, const std::string& name);
-        CImageIOWrap(IODataType datatype, const std::string& name, const std::string& path);
+        CImageIOWrap(IODataTypeEx dataType);
+        CImageIOWrap(IODataTypeEx dataType, const CMat& image);
+        CImageIOWrap(IODataTypeEx dataType, const CMat& image, const std::string& name);
+        CImageIOWrap(IODataTypeEx datatype, const std::string& name);
+        CImageIOWrap(IODataTypeEx datatype, const std::string& name, const std::string& path);
         CImageIOWrap(const CImageIO &io);
 
         size_t          getUnitElementCount() const override;

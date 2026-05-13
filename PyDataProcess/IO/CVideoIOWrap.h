@@ -30,11 +30,11 @@ class CVideoIOWrap : public CVideoIO, public wrapper<CVideoIO>
     public:
 
         CVideoIOWrap();
-        CVideoIOWrap(IODataType dataType);
-        CVideoIOWrap(IODataType dataType, const CMat &image);
-        CVideoIOWrap(IODataType dataType, const CMat& image, const std::string& name);
-        CVideoIOWrap(IODataType dataType, const std::string& name);
-        CVideoIOWrap(IODataType dataType, const std::string& name, const std::string& path);
+        CVideoIOWrap(IODataTypeEx dataType);
+        CVideoIOWrap(IODataTypeEx dataType, const CMat &image);
+        CVideoIOWrap(IODataTypeEx dataType, const CMat& image, const std::string& name);
+        CVideoIOWrap(IODataTypeEx dataType, const std::string& name);
+        CVideoIOWrap(IODataTypeEx dataType, const std::string& name, const std::string& path);
         CVideoIOWrap(const CVideoIO &io);
 
         virtual size_t  getUnitElementCount() const;

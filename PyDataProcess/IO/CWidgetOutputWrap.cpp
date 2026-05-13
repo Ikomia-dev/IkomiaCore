@@ -23,11 +23,11 @@ CWidgetOutputWrap::CWidgetOutputWrap() : CWidgetOutput()
 {
 }
 
-CWidgetOutputWrap::CWidgetOutputWrap(IODataType dataType) : CWidgetOutput(dataType)
+CWidgetOutputWrap::CWidgetOutputWrap(IODataTypeEx dataType) : CWidgetOutput(dataType)
 {
 }
 
-CWidgetOutputWrap::CWidgetOutputWrap(IODataType dataType, const std::string &name) : CWidgetOutput(dataType, name)
+CWidgetOutputWrap::CWidgetOutputWrap(IODataTypeEx dataType, const std::string &name) : CWidgetOutput(dataType, name)
 {
 }
 

@@ -4,15 +4,15 @@ CPathIOWrap::CPathIOWrap() : CPathIO()
 {
 }
 
-CPathIOWrap::CPathIOWrap(IODataType dataType) : CPathIO(dataType)
+CPathIOWrap::CPathIOWrap(IODataTypeEx dataType) : CPathIO(dataType)
 {
 }
 
-CPathIOWrap::CPathIOWrap(IODataType dataType, const std::string& path) : CPathIO(dataType, path)
+CPathIOWrap::CPathIOWrap(IODataTypeEx dataType, const std::string& path) : CPathIO(dataType, path)
 {
 }
 
-CPathIOWrap::CPathIOWrap(IODataType dataType, const std::string& path, const std::string &name) : CPathIO(dataType, path, name)
+CPathIOWrap::CPathIOWrap(IODataTypeEx dataType, const std::string& path, const std::string &name) : CPathIO(dataType, path, name)
 {
 }
 

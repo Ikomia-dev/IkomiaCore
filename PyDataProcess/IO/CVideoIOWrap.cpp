@@ -23,23 +23,23 @@ CVideoIOWrap::CVideoIOWrap() : CVideoIO()
 {
 }
 
-CVideoIOWrap::CVideoIOWrap(IODataType dataType) : CVideoIO(dataType)
+CVideoIOWrap::CVideoIOWrap(IODataTypeEx dataType) : CVideoIO(dataType)
 {
 }
 
-CVideoIOWrap::CVideoIOWrap(IODataType dataType, const CMat &image) : CVideoIO(dataType, image)
+CVideoIOWrap::CVideoIOWrap(IODataTypeEx dataType, const CMat &image) : CVideoIO(dataType, image)
 {
 }
 
-CVideoIOWrap::CVideoIOWrap(IODataType dataType, const CMat &image, const std::string& name) : CVideoIO(dataType, image, name)
+CVideoIOWrap::CVideoIOWrap(IODataTypeEx dataType, const CMat &image, const std::string& name) : CVideoIO(dataType, image, name)
 {
 }
 
-CVideoIOWrap::CVideoIOWrap(IODataType dataType, const std::string &name): CVideoIO(dataType, name)
+CVideoIOWrap::CVideoIOWrap(IODataTypeEx dataType, const std::string &name): CVideoIO(dataType, name)
 {
 }
 
-CVideoIOWrap::CVideoIOWrap(IODataType dataType, const std::string &name, const std::string &path): CVideoIO(dataType, name, path)
+CVideoIOWrap::CVideoIOWrap(IODataTypeEx dataType, const std::string &name, const std::string &path): CVideoIO(dataType, name, path)
 {
 }
 
