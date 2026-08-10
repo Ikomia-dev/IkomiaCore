@@ -35,6 +35,7 @@ void CClassificationTask::generateRandomColors()
 {
     std::srand(RANDOM_COLOR_SEED);
     double factor = 255.0 / (double)RAND_MAX;
+    m_classColors.clear();
 
     for (size_t i=0; i<m_classNames.size(); ++i)
     {
@@ -154,13 +155,13 @@ bool CClassificationTask::isWholeImageClassification() const
 void CClassificationTask::setNames(const std::vector<std::string> &names)
 {
     m_classNames = names;
-    if (m_classColors.empty())
+    if (m_classColors.size() != m_classNames.size())
         generateRandomColors();
 }
 
 void CClassificationTask::setColors(const std::vector<CColor> &colors)
 {
-    if (colors.size() < m_classNames.size())
+    if (colors.size() != m_classNames.size())
         throw CException(CoreExCode::INVALID_SIZE, "Colors count must be greater or equal of class names count", __func__, __FILE__, __LINE__);
 
     m_classColors = colors;
@@ -186,7 +187,7 @@ void CClassificationTask::readClassNames(const std::string& path)
     }
     file.close();
 
-    if (m_classColors.empty())
+    if (m_classColors.size() != m_classNames.size())
         generateRandomColors();
 }
 
@@ -224,6 +225,9 @@ void CClassificationTask::addObject(const ProxyGraphicsItemPtr &objectPtr, int c
     auto objDetectIOPtr = std::dynamic_pointer_cast<CObjectDetectionIO>(getOutput(1));
     if (objDetectIOPtr == nullptr)
         throw CException(CoreExCode::NULL_POINTER, "Invalid object detection output", __func__, __FILE__, __LINE__);
+
+    if (m_classColors.size() != m_classNames.size())
+        throw CException(CoreExCode::INVALID_SIZE, "Size mismatch, color list must have at least as many entries as class names", __func__, __FILE__, __LINE__);
 
     if (classIndex >= m_classNames.size())
         throw CException(CoreExCode::INVALID_SIZE, "Invalid class index, index overflows class names list", __func__, __FILE__, __LINE__);

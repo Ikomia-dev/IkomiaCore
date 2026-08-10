@@ -24,6 +24,9 @@ void CInstanceSegTask::addObject(int id, int type, int classIndex, double confid
     if (instanceSegIOPtr == nullptr)
         throw CException(CoreExCode::NULL_POINTER, "Invalid instance segmentation output", __func__, __FILE__, __LINE__);
 
+    if (m_classNames.size() != m_classColors.size())
+        throw CException(CoreExCode::INVALID_SIZE, "Size mismatch, color and label lists must have the same size", __func__, __FILE__, __LINE__);
+
     if (classIndex >= m_classNames.size())
         throw CException(CoreExCode::INVALID_SIZE, "Invalid class index, index overflows class names list", __func__, __FILE__, __LINE__);
 
@@ -53,6 +56,7 @@ void CInstanceSegTask::generateRandomColors()
 {
     std::srand(RANDOM_COLOR_SEED);
     double factor = 255.0 / (double)RAND_MAX;
+    m_classColors.clear();
 
     for (size_t i=0; i<m_classNames.size(); ++i)
     {
@@ -138,14 +142,14 @@ void CInstanceSegTask::readClassNames(const std::string &path)
     }
     file.close();
 
-    if (m_classColors.empty())
+    if (m_classNames.size() != m_classColors.size())
         generateRandomColors();
 }
 
 void CInstanceSegTask::setColors(const std::vector<CColor> &colors)
 {
-    if (colors.size() < m_classNames.size())
-        throw CException(CoreExCode::INVALID_SIZE, "Colors count must be greater or equal of class names count", __func__, __FILE__, __LINE__);
+    if (colors.size() != m_classNames.size())
+        throw CException(CoreExCode::INVALID_SIZE, "Colors count must match class names count", __func__, __FILE__, __LINE__);
 
     m_classColors = colors;
 }
@@ -153,6 +157,6 @@ void CInstanceSegTask::setColors(const std::vector<CColor> &colors)
 void CInstanceSegTask::setNames(const std::vector<std::string> &names)
 {
     m_classNames = names;
-    if (m_classColors.empty())
+    if (m_classNames.size() != m_classColors.size())
         generateRandomColors();
 }
